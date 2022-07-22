@@ -1,0 +1,396 @@
+---
+title: "Excess nutrients from manure"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(stringr)
+library(doParallel)
+library(janitor)
+library(countrycode)
+library(dplyr)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>% 
+  dplyr::select(iso3c, Global_Name, Region_Name, Sub_region_Name, Intermediate_Region_Name)
+
+n_exc <- read_csv(here("animal_farm/ghg/data/nitrogen_excretion_rates.csv")) %>% 
+  select(-ID_0, -Country)
+
+gleam_tables <- read_csv(here("animal_farm/ghg/data/compiled_gleam_tables.csv")) %>%
+  mutate(percentage_leach = ifelse(mms_specific == "Pasture/Range/Paddock", 30, percentage_leach)) %>%
+  mutate(percentage_leach = ifelse(mms_specific == "Daily spread", 30, percentage_leach)) %>%
+  mutate(percentage_leach = ifelse(mms_specific == "Burned for fuel", 50*30/100, percentage_leach)) #50% remains as urine, and 30% of remaining leaches
+
+map_df_list <- list.files(file.path(prep, "animal_farm/farm"), pattern = "location_df",  full = TRUE)
+
+
+pre_layers <- "/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/"
+```
+
+
+Calculate the rate that nitrogen that leaches into the soils based on excretion rates for animal system and the manure fate given the system and country.
+
+Fates of manure:
+1. Manure management system: manure held in order to later be spread on soils
+2. Spread on soils: either directly spread on fields or spread after being held in manure management system
+3. Left on pasture: some proportion is burned in some countries (assume 50% of nitrogen left behind as urine)
+
+Leaching/runoff in manure management systems depends on system and country. 
+Manure that goes through the MMS --> spread on soils, loses N due to volatization in the system and leaching, so only part of N makes it to soil
+Leaching/runoff spread on soils or left on pastures is assumed to be 30% (based on FAO data)
+
+We follow general methods described here: http://www.fao.org/3/I8153EN/i8153en.pdf
+
+The following code chunk calculates the n leaching emissions rates for each animal system (tonnes/head/year) based on Nexcretion, Nloss, and Nleach/runnoff:
+```{r}
+
+for(file in map_df_list){
+
+  ############  
+  ## Get the mapped head counts for each system.
+  ## (only really used in step 1, to check data)
+  
+     # file <- map_df_list[23]
+     
+    ## grab the names of all the parts from the file
+    animal_name <- str_split(str_split(file, pattern = "/")[[1]][11], pattern = "_")[[1]][1]
+    system_name <- str_split(str_split(file, pattern = "/")[[1]][11], pattern = "_")[[1]][2]
+    product_name <- str_split(str_split(file, pattern = "/")[[1]][11], pattern = "_")[[1]][3]
+
+    ### each animal group has slightly different map_df, so we need to specify the column types for each
+    
+ if(animal_name == "chickens" && system_name == "backyard"){
+      col_type = c("ddnnnccnnccncnnc")
+      
+    }else{
+      if(animal_name == "chickens" && system_name == "industrial") {    
+      col_type = c("ddnnnccnnccncnnc")
+      
+      }else{
+      if(animal_name %in% c("goats", "sheep", "cows", "buffaloes")) {    
+      col_type = c("ddccccn")
+        
+      }else{
+        ## this is pigs
+        (col_type = c("ddcccnnnnncc")) } } }
+    
+    ############
+    ## STEP 1: We are going to use our region animal counts (taken from maps)
+    ## and multiply by
+    ## excretion rates.  This is mostly a check to compare with FAO values.
+   
+    # summarize counts per region  
+    region_counts <- read_csv(file, col_type = col_type) %>% 
+      select(x, y, iso3c, current = contains("current")) %>% 
+      group_by(iso3c) %>% 
+      dplyr::summarise(region_count = sum(current, na.rm = TRUE)) %>% 
+      na.omit() %>% 
+      mutate(animal = animal_name,
+             system = system_name,
+             product = product_name)
+  
+    ## add on the country/animal specific excretion rates and 
+    ## multiply by number of animals to get total excretion
+    excretion <- left_join(region_counts, n_exc, by = c("iso3c", "animal"))
+  
+    excretion_to_save <- excretion %>%
+      mutate(tonnes_per_year = region_count*kg_n_yr/1000) # kg to tonnes
+    write_csv(excretion_to_save, 
+              here(sprintf("animal_farm/nutrient/data/N_excrete/tonnes_N_excrete_%s_%s_%s.csv", animal_name, system_name, product_name)))
+ 
+   ########
+  ## Calculate rate of N leaching for: mms and then soil spread, and left on pasture.
+      
+    ## This describes the proportion of waste going to each manure fate based on 
+    ## country and animal system and the fraction that leaches
+    gleam_values <- gleam_tables %>% 
+      filter(animal == animal_name) %>% 
+      filter(product == product_name) %>% 
+      filter(production_system == system_name) 
+    
+  ########  
+  ## Manure management: This is the step where manure is stored/managed to be later spread on fields.
+        ef_leach = 0.0075 # the amount that volatilizes while waiting to go into mms
+
+    mms <- gleam_values %>%
+      filter(!(mms_specific %in% c("Burned for fuel", "Pasture/Range/Paddock", "Daily spread"))) %>%  # remove categories that are not manure management
+      rowwise() %>%
+      mutate(frac_leach_mms = ((1 - ef_leach) * to_mms_percentage/100 * percentage_leach/100 )) %>% 
+      group_by(iso3c, animal, product, system = production_system) %>% 
+      dplyr::summarise(frac_leach_mms = sum(frac_leach_mms, na.rm = TRUE)) %>% 
+      ungroup()
+
+        
+    ## calculate the n leaching emissions rate for mms and gapfill
+    leach_mms_rates <- left_join(excretion, mms, by = c("iso3c", "animal", "product", "system")) %>% 
+      mutate(leach_mms_rate =  kg_n_yr/1000 * frac_leach_mms,  
+             leach_mms_rate = ifelse(leach_mms_rate == 0, NA, leach_mms_rate)) %>% 
+        ## gapfill: there are some countries where 0 emissions but there are headcounts according to our maps, so make all Os NAs because they will not matter if there are truly no heads
+      left_join(un, by = "iso3c") %>% 
+      group_by(Intermediate_Region_Name, animal, product, system) %>% 
+      mutate(leach_mms_rate = ifelse(is.na(leach_mms_rate), mean(leach_mms_rate, na.rm = TRUE), leach_mms_rate)) %>% 
+      ungroup()%>% 
+      group_by(Sub_region_Name, animal, product, system) %>% 
+      mutate(leach_mms_rate = ifelse(is.na(leach_mms_rate), mean(leach_mms_rate, na.rm = TRUE), leach_mms_rate)) %>% 
+      ungroup() %>% 
+      group_by(Region_Name, animal, product, system) %>% 
+      mutate(leach_mms_rate = ifelse(is.na(leach_mms_rate), mean(leach_mms_rate, na.rm = TRUE), leach_mms_rate)) %>% 
+      ungroup() %>% 
+      group_by(Global_Name, animal, product, system) %>% 
+      mutate(leach_mms_rate = ifelse(is.na(leach_mms_rate), mean(leach_mms_rate, na.rm = TRUE), leach_mms_rate)) %>% 
+      ungroup() %>% 
+      select(iso3c, animal, system, product, leach_mms_rate) %>%     ### for grassland categories, it will always be NA. so we want to change it back to 0 that way the rasters dont get confused when stacking all ghg at the end
+      mutate(leach_mms_rate = ifelse(is.na(leach_mms_rate), 0, leach_mms_rate))
+  
+   write_csv(leach_mms_rates, here(paste0("animal_farm/nutrient/data/mms/", animal_name, "_", system_name,"_", product_name, "_n_leach_mms.csv", sep = "")))
+   
+   ########  
+  ## Spread on soils: 2 source: In some cases, spread on fields immediately and no loss from MMS; Mostly held in manure management system
+   ## where there is loss due to leaching and volatilization
+  
+   # now calculate N for spread on soils.  This occurs after mms, during which N is lost due to leaching and volatolization.
+   # So this fraction is removed from the analysis.  Along with the portions that were not stored (e.g., left on field, etc.).
+   # Equation 1 (http://www.fao.org/3/I8153EN/i8153en.pdf), without the bedding component incorporated and N and Nex parts are 
+   # subsequently calculated.
+       gleam_values_spread <- gleam_values %>% 
+      filter(!(mms_specific %in% c("Burned for fuel", "Pasture/Range/Paddock"))) %>%  #get rid of categories that are not later spread on soil
+         filter(!(mms_specific %in% c("Daily spread"))) %>%  # accounted for later
+      rowwise() %>%
+      mutate(fraction_lost_mms = sum(frac_gas, percentage_leach, na.rm=TRUE)) %>%   #remove proportion that volatilizes and leaches during mms   
+      mutate(frac_remaining_N = (to_mms_percentage/100 * (100-fraction_lost_mms)/100)) %>% 
+      group_by(iso3c, animal, product, system =production_system) %>% 
+      dplyr::summarise(frac_to_spread = sum(frac_remaining_N, na.rm = TRUE)) %>% 
+      dplyr::mutate(spread_leach=frac_to_spread * 0.3) %>%    # assume 30% leach from this source, from FAO data
+      ungroup()
+    
+    # now add in the daily spread which doesn't lose anything to the mms step
+       daily_spread <- gleam_values %>%
+         filter(mms_specific == "Daily spread") %>%
+         dplyr::mutate(frac_to_spread = to_mms_percentage/100) %>% 
+         dplyr::mutate(spread_leach = frac_to_spread * 0.3) %>% # 30% leaching from FAO
+         dplyr::select(iso3c, animal, product, system =production_system, frac_to_spread, spread_leach)
+ 
+       gleam_values_spread2 <- rbind(gleam_values_spread, daily_spread) %>%
+         dplyr::group_by(iso3c, animal, product, system) %>%
+         dplyr::summarize(spread_leach = sum(spread_leach))
+              
+     ## calculate the n leaching emissions rate for spread on soils and gapfill
+    spread_leach_n_rates <- left_join(excretion, gleam_values_spread2, by = c("iso3c", "animal", "product", "system")) %>% 
+      mutate(leach_n_spread_rate =  kg_n_yr/1000 * spread_leach, # convert to tonnes
+             leach_n_spread_rate = ifelse(leach_n_spread_rate == 0, NA, leach_n_spread_rate)) %>% 
+        ## gapfill: there are some countries where 0 emissions but there are headcounts according to our maps, so make all Os NAs because they will not matter if there are truly no heads
+      left_join(un, by = "iso3c") %>% 
+      group_by(Intermediate_Region_Name, animal, product, system) %>% 
+      mutate(leach_n_spread_rate = ifelse(is.na(leach_n_spread_rate), mean(leach_n_spread_rate, na.rm = TRUE), leach_n_spread_rate)) %>% 
+      ungroup()%>% 
+      group_by(Sub_region_Name, animal, product, system) %>% 
+      mutate(leach_n_spread_rate = ifelse(is.na(leach_n_spread_rate), mean(leach_n_spread_rate, na.rm = TRUE), leach_n_spread_rate)) %>% 
+      ungroup() %>% 
+      group_by(Region_Name, animal, product, system) %>% 
+      mutate(leach_n_spread_rate = ifelse(is.na(leach_n_spread_rate), mean(leach_n_spread_rate, na.rm = TRUE), leach_n_spread_rate)) %>% 
+      ungroup() %>% 
+      group_by(Global_Name, animal, product, system) %>% 
+      mutate(leach_n_spread_rate = ifelse(is.na(leach_n_spread_rate), mean(leach_n_spread_rate, na.rm = TRUE), leach_n_spread_rate)) %>% 
+      ungroup() %>% 
+      select(iso3c, animal, system, product, leach_n_spread_rate) %>%     ### for grassland categories, it will always be NA. so we want to change it back to 0 that way the rasters dont get confused when stacking all ghg at the end
+      mutate(leach_n_spread_rate = ifelse(is.na(leach_n_spread_rate), 0, leach_n_spread_rate))
+  
+   write_csv(spread_leach_n_rates, here(paste0("animal_farm/nutrient/data/soil_spread/", animal_name, "_", system_name,"_", product_name, "_n_leach_soil_spread.csv", sep = "")))
+   
+   
+   ########  
+  ## Left on field: Some is removed for fire, and this has 50% N due to remaining urine that is not collected and burned
+
+       gleam_values_field <- gleam_values %>% 
+      filter(mms_specific %in% c("Burned for fuel", "Pasture/Range/Paddock")) %>%  #only the left on field categories
+      rowwise() %>%
+      mutate(frac_N_leach = (to_mms_percentage/100 * percentage_leach/100)) %>% # 30% for pasture/range/paddock leaches, and 50% (urine component left on field and not burned)*30% (30% leach is from FAO)
+      group_by(iso3c, animal, product, system =production_system) %>% 
+      dplyr::summarise(frac_N_leach = sum(frac_N_leach, na.rm = TRUE)) %>% 
+      ungroup()
+  
+        ## calculate the n leaching emissions rate for left on field and gapfill
+    field_leach_n_rates <- left_join(excretion, gleam_values_field, by = c("iso3c", "animal", "product", "system")) %>% 
+      mutate(leach_n_leave_rate =  kg_n_yr/1000 * frac_N_leach,
+             leach_n_leave_rate = ifelse(leach_n_leave_rate == 0, NA, leach_n_leave_rate)) %>% 
+        ## gapfill: there are some countries where 0 emissions but there are headcounts according to our maps, so make all Os NAs because they will not matter if there are truly no heads
+      left_join(un, by = "iso3c") %>% 
+      group_by(Intermediate_Region_Name, animal, product, system) %>% 
+      mutate(leach_n_leave_rate = ifelse(is.na(leach_n_leave_rate), mean(leach_n_leave_rate, na.rm = TRUE), leach_n_leave_rate)) %>% 
+      ungroup()%>% 
+      group_by(Sub_region_Name, animal, product, system) %>% 
+      mutate(leach_n_leave_rate = ifelse(is.na(leach_n_leave_rate), mean(leach_n_leave_rate, na.rm = TRUE), leach_n_leave_rate)) %>% 
+      ungroup() %>% 
+      group_by(Region_Name, animal, product, system) %>% 
+      mutate(leach_n_leave_rate = ifelse(is.na(leach_n_leave_rate), mean(leach_n_leave_rate, na.rm = TRUE), leach_n_leave_rate)) %>% 
+      ungroup() %>% 
+      group_by(Global_Name, animal, product, system) %>% 
+      mutate(leach_n_leave_rate = ifelse(is.na(leach_n_leave_rate), mean(leach_n_leave_rate, na.rm = TRUE), leach_n_leave_rate)) %>% 
+      ungroup() %>% 
+      select(iso3c, animal, system, product, leach_n_leave_rate) %>%     ### for grassland categories, it will always be NA. so we want to change it back to 0 that way the rasters dont get confused when stacking all ghg at the end
+      mutate(leach_n_leave_rate = ifelse(is.na(leach_n_leave_rate), 0, leach_n_leave_rate))
+  
+   write_csv(field_leach_n_rates, here(paste0("animal_farm/nutrient/data/field_leave/", animal_name, "_", system_name,"_", product_name, "_n_leach_field_leave.csv", sep = "")))
+   
+}
+
+```
+
+## Here, we apply rates calculated above to the maps describing heads of each system
+
+```{r}
+
+foreach(file = map_df_list)  %dopar%  {
+
+      #file <- map_df_list[8]
+     
+    ## grab the names of all the parts from the file
+    animal_name <- str_split(str_split(file, pattern = "/")[[1]][11], pattern = "_")[[1]][1]
+    system_name <- str_split(str_split(file, pattern = "/")[[1]][11], pattern = "_")[[1]][2]
+    product_name <- str_split(str_split(file, pattern = "/")[[1]][11], pattern = "_")[[1]][3]
+
+    ### each animal group has slightly different map_df, so we need to specifu the column types for each
+    
+ if(animal_name == "chickens" && system_name == "backyard"){
+      col_type = c("ddnnnccnnccncnnc")
+
+      
+    }else{
+      if(animal_name == "chickens" && system_name == "industrial") {    
+      col_type = c("ddnnnccnnccncnnc")
+      
+      }else{
+      if(animal_name %in% c("goats", "sheep", "cows", "buffaloes")) {    
+      col_type = c("ddccccn")
+        
+      }else{
+        ## this is pigs
+        (col_type = c("ddcccnnnnncc")) } } }
+    
+    
+    if(animal_name == "buffaloes" & product_name == "meat") {
+      print("buffalo meat is not one of our categories")
+      
+    }else{
+    
+    ## read in the map_df we want
+    map_df <- read_csv(file, col_type = col_type) %>% 
+      select(x, y, iso3c, current = contains("current")) 
+
+     # get rates for 3 manure fates:   
+        leach_mms_df <- read_csv(here(paste("animal_farm/nutrient/data/mms/",  animal_name, "_", system_name, "_", product_name, "_n_leach_mms.csv", sep = ""))) 
+                
+        leach_soil_spread_df <- read_csv(here(paste("animal_farm/nutrient/data/soil_spread/",  animal_name, "_", system_name, "_", product_name, "_n_leach_soil_spread.csv", sep = ""))) 
+        
+        leach_field_leave_df <- read_csv(here(paste("animal_farm/nutrient/data/field_leave/",  animal_name, "_", system_name, "_", product_name, "_n_leach_field_leave.csv", sep = ""))) 
+  
+    total_nutrient_leach <- left_join(map_df, leach_mms_df, by = "iso3c") %>% 
+      left_join(leach_soil_spread_df) %>%
+      left_join(leach_field_leave_df) %>%
+      rowwise() %>%
+      mutate(leach_mms_tonnes = leach_mms_rate*current,
+             leach_spread_tonnes = leach_n_spread_rate*current,
+             leach_field_tonnes = leach_n_leave_rate*current,
+             tonnes_n_leach = sum(c(leach_mms_tonnes, leach_spread_tonnes, leach_field_tonnes), na.rm=TRUE))
+    
+  # summarize raster data to country level to check and have general values:  
+  total_nutrient_leach_check <- total_nutrient_leach %>%
+    group_by(iso3c, animal, system, product) %>%
+    summarize(leach_mms_tonnes = sum(leach_mms_tonnes, na.rm=TRUE),
+              leach_spread_tonnes = sum(leach_spread_tonnes, na.rm=TRUE),
+              leach_field_tonnes = sum(leach_field_tonnes, na.rm=TRUE),
+              tonnes_n_leach = sum(tonnes_n_leach, na.rm=TRUE))
+    
+    write_csv(total_nutrient_leach_check, 
+              here(sprintf("animal_farm/nutrient/data/total_nutrient_leach/total_leach_%s_%s_%s.csv", animal_name, system_name, product_name)))
+ 
+  # make intermediate N leaching raster to save:
+    total_nutrient_leach_raster <- total_nutrient_leach %>% 
+       select(x,y, tonnes_n_leach) %>%
+      rasterFromXYZ(crs= food_crs)
+
+        writeRaster(total_nutrient_leach_raster, filename = paste("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/nutrient/N_leach/", "land_", animal_name, "_", system_name, "_", product_name, "_N_leach.tif", sep = ""), format = "GTiff", overwrite = TRUE)
+
+      }}
+    
+```
+
+## Incorporate P estimates and sum
+    Get nutrients in P2O5-eq format
+    Method: Divide our P205 data by 2.29 to get P. Sum the N and P rasters to obtain our final data payer      
+    We are assuming a 1:1 ratio of N:P2O5
+
+These are the final rasters:
+```{r}
+
+N_leach_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/nutrient/N_leach/", full=TRUE)
+
+for(N_leach in N_leach_files){ 
+   # N_leach = N_leach_files[1] # test a layer
+  
+  ## grab the names of all the parts from the file
+    animal_name <- str_split(str_split(N_leach, pattern = "/")[[1]][12], pattern = "_")[[1]][2]
+    system_name <- str_split(str_split(N_leach, pattern = "/")[[1]][12], pattern = "_")[[1]][3]
+    product_name <- str_split(str_split(N_leach, pattern = "/")[[1]][12], pattern = "_")[[1]][4]
+  
+  n_leach_raster <- raster(N_leach)  #cellStats(n_leach_raster, "sum", na.rm=TRUE)
+   p_tonnes = (n_leach_raster/2.29)
+   n_tonnes = n_leach_raster
+  map_N_P_nutrient_leach = p_tonnes + n_tonnes 
+  
+  # cellStats(map_N_P_nutrient_leach, "sum", na.rm=TRUE)
+  # cellStats(n_tonnes, "sum", na.rm=TRUE)
+  # cellStats(p_tonnes, "sum", na.rm=TRUE)
+
+   writeRaster(n_tonnes, filename = paste(pre_layers, "land_", animal_name, "_", system_name, "_", product_name, "_nutrientN.tif", sep = ""), format = "GTiff", overwrite = TRUE) ## Save N raster
+   
+    writeRaster(p_tonnes, filename = paste(pre_layers, "land_", animal_name, "_", system_name, "_", product_name, "_nutrientP.tif", sep = ""), format = "GTiff", overwrite = TRUE) ## Save P raster
+    
+     writeRaster(map_N_P_nutrient_leach, filename = paste(layers, "land_", animal_name, "_", system_name, "_", product_name, "_nutrient.tif", sep = ""), format = "GTiff", overwrite = TRUE) ## Save N + P raster
+}
+
+```
+
+## A few checks
+
+1. make sure total N leached in rasters matches about what is reported by FAO
+```{r}
+
+N_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/nutrient/N_leach", full=TRUE)
+
+N_stack <- stack(N_files)
+total_N <- calc(N_stack, fun=sum, na.rm=TRUE, progress="text")
+cellStats(total_N, sum, na.rm=TRUE)
+```
+
+3. Check that total excreted N is similar to FAO
+```{r}
+file_names <- list.files(here("animal_farm/nutrient/data/total_nutrient_leach"), full=TRUE) #where you have your files
+
+all_N <- do.call(rbind,lapply(file_names,read.csv))
+sum(all_N$tonnes_n_leach, na.rm=TRUE)
+sum(all_N$leach_field_tonnes, na.rm=TRUE)
+sum(all_N$leach_spread_tonnes, na.rm=TRUE)
+sum(all_N$leach_mms_tonnes, na.rm=TRUE)
+
+```
+
+
+3. Check contributions
+```{r}
+file_names <- list.files(here("animal_farm/nutrient/data/N_excrete"), full=TRUE) #where you have your files
+
+all_N <- do.call(rbind,lapply(file_names,read.csv))
+sum(all_N$tonnes_per_year, na.rm=TRUE)
+
+```
+

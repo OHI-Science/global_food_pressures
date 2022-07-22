@@ -1,0 +1,58 @@
+---
+title: "Forage fish for feed"
+author: "Gage Clawson (UCSB, NCEAS, OHI)"
+date: "September 29, 2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+The NPP is used to control for productivity when determining wild-caught marine fisheries disturbance pressures.  
+
+The general idea is that the same tonnes of catch in a low productivity area will have a higher disturbance than the same amount of catch would have in a high productivity area.
+
+```{r}
+#load relevant packages, etc.
+
+library(here)
+library(raster)
+library(tidyverse)
+
+# raster template
+r_template <- raster::raster(ncol=720, nrow=360, vals=c(1:259200))
+
+```
+
+
+```{r}
+
+npp_rast <- raster("/home/shares/food-systems/Food_footprint/_raw_data/CHI_data/annual_mean_npp_2015.tif")
+
+#npp_rast[is.na(npp_rast)] <- 999
+plot(npp_rast)
+
+
+## Function to gapfill NA cells using mean of surrounding cells
+gf_raster <- function(x){raster::focal(x, w = matrix(1,3,3), fun = mean, na.rm=TRUE, pad = TRUE, NAonly=TRUE)}
+
+r <- npp_rast
+
+## Repeat until critical NA cells are filled
+i <- 0
+
+while (i <= 100){
+
+r <- gf_raster(r)
+
+i <- i + 1
+print(i)
+}
+
+plot(r)
+
+npp_rast_wgs <- projectRaster(r, r_template, method="ngb")
+plot(npp_rast_wgs)
+
+writeRaster(npp_rast_wgs, "/home/shares/food-systems/Food_footprint/_raw_data/CHI_data/annal_mean_npp_2015_gf_wgs.tif", overwrite=TRUE)
+
+```

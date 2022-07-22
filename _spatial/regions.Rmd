@@ -1,0 +1,358 @@
+---
+title: "Rasterize spatial regions"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Here we establish the map and list of regions.
+
+```{r setup, include=FALSE}
+
+library(fasterize)
+library(sf)
+library(tidyverse)
+library(raster)
+library(here)
+
+map <- st_read("/home/shares/food-systems/Food_footprint/_raw_data/GADM36/gadm36.shp")
+#mapview(map)
+summary(map)
+
+## the following are in common.R and common_spatial.R, but the files created in this markdown are in those source files, so we need to explicitly specify here for this code
+
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+
+```
+
+
+## GADM36 spatial data
+We start with the GADM36 map and make some alterations.
+Exploring some things (no action taken in this code chunk).  
+```{r}
+map[grep("Jan Mayen", map$NAME_0), ]
+map[grep("Glorioso", map$NAME_4), ]
+map[grep("Prince Edward Island", map$NAME_1), ]
+map[grep("Macao", map$NAME_0), ]
+map[grep("China", map$NAME_0), ]
+# US minor outlying islands, all uninhabited
+filter(map, GID_0 == "UMI")
+## these ones showing up
+map[grep("Clipperton", map$NAME_0), ]
+filter(map, GID_0 %in% c("BVT", "HMD", "SGS", "IOT", "XCL"))
+# portugal, but reported separately in many cases
+map[grep("Madeira", map$NAME_1), ]
+# Netherlands Antiles
+map[grep("Bonaire", map$NAME_1), ]
+map[grep("Cur", map$NAME_0), ]
+map[grep("Sint Maarten", map$NAME_0), ]
+# parts of Cyprus
+map[grep("Northern Cyprus", map$NAME_0), ]
+map[grep("Cyprus", map$NAME_0), ]
+map[grep("Akrotiri and Dhekelia", map$NAME_0), ]
+# Caspian sea showing up for some reason
+map[grep("Caspian Sea", map$NAME_0), ]
+## DR of the Congo not showing up..no ID_0
+tmp <- map[grep("Congo", map$NAME_0), ]
+summary(tmp)
+map[grep("TWN", map$GID_0), ] # yep Taiwan is in there!
+iso3_map <- unique(map$GID_0)
+# checking labels
+tmp <- dplyr::select(map, GID_0, ID_0) %>%
+  st_drop_geometry() %>%
+  unique()
+# GID_0 and ID_0 are matched identifiers.
+sum(duplicated(tmp$GID_0))
+sum(duplicated(tmp$ID_0))
+```
+
+
+We use the information gathered above to make some updates to map.
+```{r}
+map <- map %>%
+  dplyr::mutate(ID_0 = as.numeric(ID_0)) %>%
+  dplyr::mutate(GID_0 = as.character(GID_0)) %>%
+    dplyr::mutate(NAME_0 = as.character(NAME_0))
+# Assign Madeira with distinct region ID
+# Because Madeira Island is often reported at finer resolution, I am going to give this region a unique identifier.
+# Otherwise it would be grouped with Portugal
+map <- map %>%
+  dplyr::mutate(GID_0 = ifelse(grepl("Madeira", map$NAME_1), "XMI", GID_0)) %>%
+  dplyr::mutate(ID_0 = ifelse(grepl("Madeira", map$NAME_1), 300, ID_0)) %>%
+  dplyr::mutate(NAME_0 = ifelse(grepl("Madeira", map$NAME_1), "Madeira Island", NAME_0))
+# Combine Cyprus and Northern Cyprus
+# Wikipedia: Northern Cyprus (Turkish: Kuzey Kıbrıs), officially the Turkish Republic of Northern Cyprus (TRNC; Turkish: Kuzey Kıbrıs Türk Cumhuriyeti), is a de facto state that comprises the northeastern portion of the island of Cyprus. Recognised only by Turkey, Northern Cyprus is considered by the international community to be part of the Republic of Cyprus.
+map <- map %>%
+  dplyr::mutate(GID_0 = ifelse(grepl("Northern Cyprus", map$NAME_0), "CYP", GID_0)) %>%
+  dplyr::mutate(ID_0 = ifelse(grepl("Northern Cyprus", map$NAME_0), 61, ID_0)) %>%
+  dplyr::mutate(NAME_0 = ifelse(grepl("Northern Cyprus", map$NAME_0), "Cyprus", NAME_0))
+# Lump Akrotiri and Dhekelia[2] with Cyprus; (abbr. SBA; Greek: Περιοχές Κυρίαρχων Βάσεων Ακρωτηρίου και Δεκέλιας, Periochés Kyríarchon Váseon Akrotiríou ke Dekélias; Turkish: Egemen Üs Bölgeleri Ağrotur ve Dikelya) is a British Overseas Territory on the island of Cyprus. These are small areas...probably doesn't matter in this context whether we exclude or lump with Cyprus.
+map <- map %>%
+  dplyr::mutate(GID_0 = ifelse(grepl("Akrotiri and Dhekelia", map$NAME_0), "CYP", GID_0)) %>%
+  dplyr::mutate(ID_0 = ifelse(grepl("Akrotiri and Dhekelia", map$NAME_0), 61, ID_0)) %>%
+  dplyr::mutate(NAME_0 = ifelse(grepl("Akrotiri and Dhekelia", map$NAME_0), "Cyprus", NAME_0))
+# Cut Caspian Sea
+dim(map)
+map <- map %>%
+  filter(!(NAME_0 %in% "Caspian Sea"))
+dim(map) # should only lose 1 line
+# Cut Antarctica
+dim(map)
+map <- map %>%
+  filter(!(GID_0 %in% "ATA"))
+dim(map)
+## Remove a few uninhabited regions that are lumped under different countries,
+## (decided it was good to cut to have a cleaner map)
+dim(map)
+map <- map %>%
+  filter(!(NAME_1 %in% "Prince Edward Island")) %>%
+  filter(!(NAME_2 %in% "Macquarie")) %>%
+  filter(!(NAME_1 %in% "Jan Mayen"))     # SJM combines Jan Mayen and Svalbard...keeping only Svalbard portion
+dim(map)
+# Cut United States Minor Outlying Islands, all of which are uninhabited
+# (Baker, Howland, Jarvis, Johnston, Kingman Reef, Midway, Navassa, Palmyra, Wake)
+dim(map)
+map <- map %>%
+  filter(!GID_0 %in% "UMI")
+dim(map)
+# Cut French Southern Territories, no permanent inhabitants
+# Crozet Amsterdam Island and Saint Paul Island, Kerguelen
+dim(map)
+map <- map %>%
+  filter(!(GID_0 %in% "ATF"))
+dim(map)
+# Cut Disputed areas in the South China Sea
+# Spratly and Paracel Islands
+dim(map)
+map <- map %>%
+  filter(!(GID_0 %in% c("XSP", "XPI")))
+dim(map)
+# cut Clipperton Island and South Georgia and the South Sandwich Islands and Heard Island and McDonald Islands and Bouvet island..uninhabited
+dim(map)
+map <- map %>%
+  filter(!(GID_0 %in% c("XCL", "SGS", "HMD", "BVT")))
+dim(map)
+# Cut Vatican city
+dim(map)
+map <- map %>%
+  filter(!(GID_0 %in% c("VAT")))
+dim(map)
+# Assign number to Democratic Republic of Congo (currently NA)
+map <- map %>%
+  dplyr::mutate(ID_0 = ifelse(NAME_0 == "Democratic Republic of the Congo", 301, ID_0))
+filter(map, ID_0==300)
+filter(map, ID_0==301)
+sort(unique(map$ID_0))
+# Was going to assign Macao to China, bur reported separately in FAO, so keep separate....
+# map <- map %>%
+#   dplyr::mutate(GID_0 = ifelse(grepl("Macao", map$NAME_0), "CHN", GID_0)) %>%
+#   dplyr::mutate(ID_0 = ifelse(grepl("Macao", map$NAME_0), 49, ID_0)) %>%
+#   dplyr::mutate(NAME_0 = ifelse(grepl("Macao", map$NAME_0), "China", NAME_0))
+```
+
+Update some subregion names.  If this is NA, use country level name.  Some regions (Nauru, Tokelau, Tuvalu) are very small, in these cases we will replace the really small subregions with the country name given the scale of our data.
+
+```{r}
+map <- map %>%
+  mutate(NAME_1 = as.character(NAME_1)) %>%
+  mutate(NAME_1 = ifelse(is.na(NAME_1), NAME_0, NAME_1)) 
+map <- map %>%
+  mutate(NAME_1 = ifelse(ID_0 %in% c(156, 231, 238), NAME_0, NAME_1))
+```
+
+Save the food systems region list.
+```{r}
+# save corresponding region data
+food_regions <- map %>%
+  st_drop_geometry() %>%
+  dplyr::select(iso3c = GID_0, ID_0, Country = NAME_0) %>%
+  unique()
+
+write_csv(food_regions, here::here("_spatial/_output/food_rgns.csv"))
+
+# save all subregions
+food_subregions <- map %>%
+  st_drop_geometry() %>%
+  dplyr::select(iso3c = GID_0, ID_0, Country = NAME_0, Subregion=NAME_1) %>%
+  unique() %>%
+  mutate(ID_subregion = row_number())
+summary(food_subregions)
+write_csv(food_subregions, here("_spatial/_output/food_subrgns.csv"))
+```
+
+
+Create a country raster from spatial data.
+```{r}
+# template raster create
+map_raster <- dplyr::select(map, ID_0)
+rgn_raster <- fasterize::fasterize(map, food_raster, field="ID_0") 
+plot(rgn_raster)
+#click(rgn_raster)
+
+# convert raster to dataframe for easier manipulation
+rgn_df <- raster_df(rgn_raster)
+rgn_df <- rgn_df %>%
+  rename(ID_0 = layer)
+rgn_df
+ 
+# Add in some regions that are cut during rasterization due to small size relative to raster cell size
+add_small_rgn <- function(latitude = 10.4866, longitude = 105.6345, ID_num = 50, rgn_df=rgn_df){
+lat <- latitude   #10.4866
+long <- longitude   #105.6345
+min_y <- if(lat<0){tmp <- rgn_df[rgn_df$y<0, ]
+min_y_loc <- which.min(abs(tmp$y - lat))
+min_y_value <- tmp$y[min_y_loc]
+min_y_value
+}else{
+  tmp <- rgn_df[rgn_df$y>=0, ]
+min_y_loc <- which.min(abs(tmp$y - lat))
+min_y_value <- tmp$y[min_y_loc]
+min_y_value
+}
+min_x <- if(long<0){tmp <- rgn_df[rgn_df$x<0, ]
+min_x_loc <- which.min(abs(tmp$x - long))
+min_x_val <- tmp$x[min_x_loc]
+min_x_val
+}else{
+  tmp <- rgn_df[rgn_df$x>=0, ]
+min_x_loc <- which.min(abs(tmp$x - long))
+min_x_val <- tmp$x[min_x_loc]
+min_x_val
+}
+loc1 <- which(rgn_df$x==min_x & round(rgn_df$y, 4)==round(min_y, 4))
+rgn_df[loc1, ]
+rgn_df$ID_0[loc1] <- ID_num
+rgn_df[loc1, ]
+rgn_df
+}
+rgn_df <- add_small_rgn(latitude = 10.4866, longitude = 105.6345, ID_num = 50, rgn_df=rgn_df) # Christmas Island
+rgn_df <- add_small_rgn(latitude = -0.5282, longitude = 166.9387, ID_num = 156, rgn_df=rgn_df) # Nauru
+rgn_df <- add_small_rgn(latitude = -9.1678, longitude = -171.8224, ID_num = 231, rgn_df=rgn_df) # Tokelau
+rgn_df <- add_small_rgn(latitude = -6.9383, longitude = 177.5932, ID_num = 238, rgn_df=rgn_df) # Tuvalu
+rgn_df <- add_small_rgn(latitude = -6.2635, longitude = 71.8870, ID_num = 34, rgn_df=rgn_df) # British Indian Ocean Territory
+rgn_df <- add_small_rgn(latitude = -12.1368, longitude = 96.8694, ID_num = 52, rgn_df=rgn_df) # Cocos Islands
+rgn_df <- add_small_rgn(latitude = 36.1393, longitude = -5.3528, ID_num = 88, rgn_df=rgn_df) # Gibraltar
+rgn_df <- add_small_rgn(latitude = 43.7382, longitude = 7.4227, ID_num = 148, rgn_df=rgn_df) # Monaco
+rgn_df <- add_small_rgn(latitude = -24.3912, longitude = -128.3074, ID_num = 180, rgn_df=rgn_df) # Pitcairn Islands
+rgn_df <- add_small_rgn(latitude = 17.9030, longitude = -62.8328, ID_num = 190, rgn_df=rgn_df) # Saint-Barthelemy
+rgn_df <- add_small_rgn(latitude = 18.0721, longitude = -63.0491, ID_num = 191, rgn_df=rgn_df) # Saint-Martin
+# these should now show up
+rgn_df[rgn_df$ID_0 %in% 50, ]
+rgn_df[rgn_df$ID_0 %in% 156, ]
+rgn_df[rgn_df$ID_0 %in% 231, ]
+rgn_df[rgn_df$ID_0 %in% 238, ]
+# join with iso3c
+rgn_food <- read_csv(here("_spatial/output/food_rgns.csv"))
+rgn_df <- left_join(rgn_df, rgn_food, by="ID_0")
+# save updated raster
+rgn_df_xyz <- rgn_df %>%
+  dplyr::select(x, y, ID_0)
+rgn_raster_update <- rasterFromXYZ(rgn_df_xyz)
+crs(rgn_raster_update) <- food_crs
+plot(rgn_raster_update)
+writeRaster(rgn_raster_update, "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/spatial/food_rgns.tif", overwrite=TRUE)
+## check that all names in csv food regions match the regions in the raster
+rgn_food <- read_csv(here("_spatial/_output/food_rgns.csv"))
+setdiff(rgn_df$ID_0, rgn_food$ID_0)
+cut <- setdiff(rgn_food$ID_0, rgn_df$ID_0)  # make sure no countries are being cut from rasterization
+dplyr::filter(rgn_food, ID_0 %in% cut) 
+## save the raster as a csv
+write_csv(rgn_df, "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/spatial/food_rgns_xy.csv")
+check <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/spatial/food_rgns_xy.csv",col_types = "ddddcc")
+head(check)
+```
+
+# Create a subregion raster
+
+```{r}
+food_subrgns <- read_csv(here("_spatial/_output/food_subrgns.csv")) %>%
+  dplyr::select(NAME_1 = Subregion, ID_subregion)
+map_subrgn <- map %>%
+  left_join(food_subrgns, by="NAME_1")
+subrgn_raster <- fasterize::fasterize(map_subrgn, food_raster, field="ID_subregion")
+plot(subrgn_raster)
+#click(rgn_raster)
+# convert raster to dataframe for easier manipulation
+rgn_df <- raster_df(subrgn_raster)
+rgn_df <- rgn_df %>%
+  rename(ID_0 = layer) 
+rgn_df
+ 
+# Add in some regions that are cut during rasterization due to small size relative to raster cell size
+add_small_rgn <- function(latitude = 10.4866, longitude = 105.6345, ID_num = 50, rgn_df=rgn_df){
+lat <- latitude   #10.4866
+long <- longitude   #105.6345
+min_y <- if(lat<0){tmp <- rgn_df[rgn_df$y<0, ]
+min_y_loc <- which.min(abs(tmp$y - lat))
+min_y_value <- tmp$y[min_y_loc]
+min_y_value
+}else{
+  tmp <- rgn_df[rgn_df$y>=0, ]
+min_y_loc <- which.min(abs(tmp$y - lat))
+min_y_value <- tmp$y[min_y_loc]
+min_y_value
+}
+min_x <- if(long<0){tmp <- rgn_df[rgn_df$x<0, ]
+min_x_loc <- which.min(abs(tmp$x - long))
+min_x_val <- tmp$x[min_x_loc]
+min_x_val
+}else{
+  tmp <- rgn_df[rgn_df$x>=0, ]
+min_x_loc <- which.min(abs(tmp$x - long))
+min_x_val <- tmp$x[min_x_loc]
+min_x_val
+}
+loc1 <- which(rgn_df$x==min_x & round(rgn_df$y, 4)==round(min_y, 4))
+rgn_df[loc1, ]
+rgn_df$ID_0[loc1] <- ID_num
+rgn_df[loc1, ]
+rgn_df
+}
+# get ID_1 that correpsonds to the ID_0 regions
+food_subrgns <- read_csv(here("_spatial/_output/food_subrgns.csv")) 
+  filter(food_subrgns, ID_0==238)
+rgn_df <- add_small_rgn(latitude = 10.4866, longitude = 105.6345, ID_num = 620, rgn_df=rgn_df) # Christmas Island
+rgn_df <- add_small_rgn(latitude = -0.5282, longitude = 166.9387, ID_num = 2012, rgn_df=rgn_df) # Nauru
+rgn_df <- add_small_rgn(latitude = -9.1678, longitude = -171.8224, ID_num = 3131, rgn_df=rgn_df) # Tokelau
+rgn_df <- add_small_rgn(latitude = -6.9383, longitude = 177.5932, ID_num = 3269, rgn_df=rgn_df) # Tuvalu
+rgn_df <- add_small_rgn(latitude = -6.2635, longitude = 71.8870, ID_num = 389, rgn_df=rgn_df) # British Indian Ocean Territory
+rgn_df <- add_small_rgn(latitude = -12.1368, longitude = 96.8694, ID_num = 622, rgn_df=rgn_df) # Cocos Islands
+rgn_df <- add_small_rgn(latitude = 36.1393, longitude = -5.3528, ID_num = 1010, rgn_df=rgn_df) # Gibraltar
+rgn_df <- add_small_rgn(latitude = 43.7382, longitude = 7.4227, ID_num = 1911, rgn_df=rgn_df) # Monaco
+rgn_df <- add_small_rgn(latitude = -24.3912, longitude = -128.3074, ID_num = 2357, rgn_df=rgn_df) # Pitcairn Islands
+rgn_df <- add_small_rgn(latitude = 17.9030, longitude = -62.8328, ID_num = 2625, rgn_df=rgn_df) # Saint-Barthelemy
+rgn_df <- add_small_rgn(latitude = 18.0721, longitude = -63.0491, ID_num = 2626, rgn_df=rgn_df) # Saint-Martin
+# check that they show up!
+rgn_df[rgn_df$ID_0 %in% 620, ]
+# save updated raster
+rgn_df_xyz <- rgn_df %>%
+  dplyr::select(x, y, ID_0)
+rgn_raster_update <- rasterFromXYZ(rgn_df_xyz)
+crs(rgn_raster_update) <- food_crs
+plot(rgn_raster_update)
+writeRaster(rgn_raster_update, "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/spatial/food_subrgns.tif", format="GTiff", overwrite=TRUE)
+## check that all names in csv food regions match the regions in the raster
+rgn_food <- read_csv(here("_spatial/_output/food_subrgns.csv"))
+setdiff(rgn_df$ID_0, rgn_food$ID_subregion)
+cut <- setdiff(rgn_food$ID_subregion, rgn_df$ID_0)  # make sure no countries are being cut from rasterization
+dplyr::filter(food_subregions, ID_subregion %in% cut) #330 subregions cut during rasterization
+```
+
+
+# Compare to GLEAM and FAO
+```{r}
+gleam <- read_csv(here("chicken_farm/data/GLEAM_rgn_to_country.csv"))
+fao <- read.csv(here("chicken_farm/data/FAOSTAT_data_9-23-2019_meat_chickens_standardized.csv"))
+food_no_fao <- setdiff(rgn_food$iso3c, fao$iso3c)
+data.frame(filter(rgn_food, iso3c %in% food_no_fao)) # some of these regions are not recognized in FAO data 
+# (see list in NA_coded_regions_land_based)
+# other regions are in the list, but do not have associated production (these will receive zero values)
+fao_no_food <- setdiff(fao$iso3c, rgn_food$iso3c)
+data.frame(filter(fao, iso3c %in% fao_no_food)) %>%
+  dplyr::select(iso3c, country) %>%
+  unique() 
+gleam_extras <- setdiff(gleam$iso3c, rgn_food$iso3c) 
+gleam[gleam$iso3c %in% gleam_extras, ]
+no_gleam <- setdiff(rgn_food$iso3c, gleam$iso3c) # some additional regions with no GLEAM data.
+data.frame(filter(rgn_food, iso3c %in% no_gleam)) # some of these regions are not recognized in FAO data 
+```

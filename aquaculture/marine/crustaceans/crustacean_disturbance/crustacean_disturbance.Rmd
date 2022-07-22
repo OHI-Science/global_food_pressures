@@ -1,0 +1,214 @@
+---
+title: "Crustacean disturbance"
+author: "Gage Clawson (NCEAS, OHI, UCSB)"
+date: "01/07/2021"
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r read in libaries and paths, eval = FALSE, include = FALSE}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(readr)
+library(tidyverse)
+library(raster)
+library(data.table)
+library(raster)
+library(rgdal)
+library(here)
+
+path_final <- "/home/shares/food-systems/Food_footprint/all_food_systems/datalayers"
+
+path_prep <- "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/crustaceans/"
+
+food_crs <- "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"
+
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+
+```
+
+For this disturbance, I will focus primarily on mud/swamp crabs, as they are primarily the species produced in this category (aside from a little bit of spiny lobster production). 
+
+I was able to find this nifty manual on mud crab aquaculture from the FAO, which basically outlines all of the information we need for disturbance. 
+
+http://www.fao.org/3/ba0110e/ba0110e.pdf
+
+**Design**: "The basic design of most earthen ponds used to culture mud crabs (Figure 8.1) is
+the same as that used to culture marine shrimp"
+
+**Stocking density and survival rate:** "Compared with penaeid crustacean, mud crabs are stocked at relatively low densities (0.5–1.5 crabs/m2) with survival rates as high as 67 percent."
+
+
+
+**Assumptions:** 
+
+Source: http://www.fao.org/3/ba0110e/ba0110e.pdf
+Note: We will use the same pond dimensions (other than stocking density), as shrimps. The paper states that mud crab earthen ponds are the same as shrimp farms, and sometimes even switch between crab and shrimp farmings. 
+
+stocking density = 0.5 - 1.5 crabs/m2: assume 1.5 crabs/m2 
+
+area: 1 - 10 hectares per pond : assume 10 hectare ponds 
+
+average weight of a crab at harvest: 400 - 427 g: assume 415 g : Taken from this paper, which does some sampling of mud crab growth in aquaculture: https://www.hatcheryfm.com/article-files/file_1326756685_2.pdf
+
+**Conversions:** 
+
+$ stocking \ density = \frac{1.5 \ crabs}{m^2} \ *  \frac{415 \ g }{1 \ crab} \ * \ \frac{1 \ kg}{1000 \ g}   = \frac{0.6225 kg}{m^2} $ 
+
+$ area = 0.10\  km^2 = 100000 \ m^2 $ 
+
+
+Steps: 
+
+1. calculate occupancy as total number of crabs. There is a 67% survival rate in earthen ponds, which means 33% don't survive... meaning there are 33% more actually occupying the ponds than is reported in the production:
+   $live \ tonnes = FAO \ production \ raster * 1.33 $
+   
+2. calculate kg/pond:
+   $ area \ m^2 * stocking\  density \frac{kg}{m^2} = kg/pond $
+   
+3. Calculate number of ponds:
+   $ \frac{Live \ weight \ (kg)}{kg / pond} = ponds$
+   
+4. calculate surface area disturbance,  Pond area will be 0.1 km2. We will also account for infrastructure (drainage canals, buildings, etc), and increase the size by 50% based on figures shown in the FAO shrimp aquaculture report:
+
+  $ disturbance \ (km^2) = ponds*area per pond*1.5 $
+  
+
+## Method 
+
+Establish the necessary parameters from above
+```{r parameters}
+
+stocking_density = (1.5*415)/1000
+pond_area_km2 = 0.1
+pond_area_m2 = 100000
+
+```
+
+###Calculate the total number of fish in the water (occupancy)
+Read in production map
+
+```{r}
+production_raster <- rasterFromXYZ(read_csv(paste0(path_prep, "updated/crustaceans_farm_updated.csv")), crs = food_crs) 
+
+#plot(production_raster)
+cellStats(production_raster, stat = "sum") # 402573.6
+
+```
+
+```{r calculate crustacean occupancy}
+# Assume all kg are live weight 
+# as live weight of crustacean, in kg
+crustacean_live_kg  <- (production_raster*1000)*1.33 # multiply by 1.33 to increase the total tonnes by 33% (67% survival rate). This means this is the actual amount of crab weight that is in the ponds 
+crustacean_live_tonnes  <- production_raster*1.33
+
+cellStats(crustacean_live_kg, "sum") # 535422888
+cellStats(crustacean_live_tonnes, "sum") # 535422.9
+
+
+```
+
+
+### Calculate the total area (from an aerial view) used for crustacean aquaculture
+
+First we determine how many ponds are required given pond dimensions, stocking densities, and kg living crabs. 
+
+We used FAO data to estimate ~ 62250 kg crustacean (harvest weight) per pond.
+
+This is based on ~100000 m2 pond.  We assume a stocking density of 0.013 kg/m2
+
+```{r}
+
+kg_per_pond <- pond_area_m2*stocking_density
+t_per_pond <- kg_per_pond/1000
+# check
+(535422.9/t_per_pond)/4 # ~ 2150.293 ponds, if harvest happens 4 times a year
+
+```
+
+Given the kg of crustacean per cell we determine the number of ponds needed as:
+
+We round this value up to the nearest whole number.
+
+```{r}
+
+ponds <- ceiling(crustacean_live_kg/kg_per_pond)
+cellStats(ponds, "sum") 
+
+```
+
+2. We the determine how much surface area the ponds disturb, and area for infrastructure.
+
+We will assume a 50% increase in area for infrastructure (buildings, drain/supply canals, etc.). 
+
+Justification: 
+Cage dimensions of 200 by 500 m2 seems reasonable based on figures. http://www.fao.org/3/ac210e/AC210E05.htm#ch5 (chapter 5 pond figures)
+
+Then increase by 20 on all edges, so 240 * 540 = ~130000
+
+So that is 30%, but then there is additional buildings, and I am sure there is disturbance beyond the canals…etc
+
+```{r}
+pond_disturbance_m2 <- pond_area_m2*1.5
+
+total_disturbance_km2 <- (ponds * pond_disturbance_m2)/1000000
+total_disturbance_prop <- total_disturbance_km2/raster::area(total_disturbance_km2)
+plot(total_disturbance_prop)
+plot(total_disturbance_km2)
+cellStats(total_disturbance_km2, "sum") # 1338.6
+
+crustacean_aquaculture_area_df <- as.data.frame(total_disturbance_prop, xy=TRUE) %>% 
+  dplyr::rename(crustacean_disturbance_prop = layer)
+
+write_csv(crustacean_aquaculture_area_df, file.path(path_prep, "crustacean_disturbance_prop.csv"))
+
+crustacean_aquaculture_area_df_km2 <- as.data.frame(total_disturbance_km2, xy = TRUE) %>%
+  dplyr::rename(crustacean_disturbance_km2 = layer)
+
+write_csv(crustacean_aquaculture_area_df_km2, file.path(path_prep, "crustacean_disturbance_km2.csv"))
+
+
+## save to datalayers folder with the correct naming conventions: 
+final_layer_dist <- read_csv(file.path(path_prep, "crustacean_disturbance_km2.csv"))
+
+final_rast <- rasterFromXYZ(final_layer_dist, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+plot(log(final_rast + 1))
+cellStats(final_rast, "sum") # 1338.6
+final_rast
+cellStats(production_raster, "sum") # 402573.6
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 1338.6
+final_rast
+plot(log(final_rast+1))
+
+writeRaster(final_rast, file.path(path_final, "marine_crustaceans_aquaculture_meat_disturbance.tif"), overwrite = TRUE)
+```
+
+
+```{r}
+philippines <- raster::crop(total_disturbance_km2, extent(115, 130, 5, 20))
+plot(philippines)
+
+viet <- raster::crop(total_disturbance_km2, extent(100, 110, 7, 25))
+plot(viet)
+
+
+```
+
+  
+

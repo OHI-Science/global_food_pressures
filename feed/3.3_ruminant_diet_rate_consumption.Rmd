@@ -1,0 +1,327 @@
+---
+title: "Ruminant diet: feeditems rates"
+author: "Juliette"
+date: "10/23/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+
+library(here)
+source(here("_workflow/common.R"))
+
+'%notin%' <- Negate('%in%')
+
+un_rgns <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>%
+  filter(!is.na(iso3c)) %>%
+  filter(iso3c %in% food_rgns$iso3c)
+
+livestock_diet_composition <- read_csv(here("feed/data/livestock_diet_composition.csv")) %>% 
+  mutate(orientation = ifelse(production_system == "Feedlot", "Meat", orientation),
+         orientation = ifelse(orientation == "Dairy", "Milk", orientation))
+
+
+tmp <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/production_system2_tifs/mixed_prod_system.tif")
+tmp <- raster::raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/production_system2_tifs/grassland_prod_system.tif")
+raster::plot(tmp)
+
+```
+
+
+## Fix the mixed and grassland diet compositions
+
+For the mixed and feedlot categories (based on our description) we assume they do not graze on fresh grass, and instead, roughage is provided as hay or other fodder.
+```{r}
+
+roughage <- data.frame(raw_name = c( "Crop residues from maize",
+                  "Crop residues from millet",
+                  "Crop residues from other grains",
+                  "Crop residues from rice",
+                  "Crop residues from sorghum",
+                  "Crop residues from sugarcane",
+                  "Crop residues from wheat",
+                  "Fodder beet",
+                  "Fresh mixture of grass and legumes",
+                  "Hay or silage from alfalfa",
+                  "Hay or silage from cultivated grass",
+                  "Hay or silage from grass and legumes",
+                  "Silage from whole grain plants.",
+                  "Silage from whole maize plant",
+                  "Hay from adjacent areas", 
+                  "Fresh grass"),
+                  roughage_category = 1)
+roughage <- roughage %>%
+  mutate(roughage_category_no_grass = 1) %>%
+  mutate(roughage_category_no_grass = ifelse(raw_name == "Fresh grass", 0, roughage_category_no_grass))
+
+fixed_mixed_int <- livestock_diet_composition %>% 
+  filter(production_system %in% c("Mixed", "Feedlot")) %>% 
+  left_join(roughage, by="raw_name") %>%
+  mutate(percent_roughage = percent * roughage_category) %>%
+  mutate(percent_roughage_no_grass = percent * roughage_category_no_grass) %>%
+  group_by(iso3c, species, orientation, production_system) %>%
+  mutate(total_roughage = sum(percent_roughage, na.rm=TRUE)) %>%
+  mutate(total_roughage_no_grass = sum(percent_roughage_no_grass, na.rm=TRUE)) %>%
+  mutate(roughage_correct = total_roughage/total_roughage_no_grass) %>%
+  mutate(percent_roughage_corrected = percent_roughage_no_grass * roughage_correct) %>%
+  mutate(new_percent = ifelse(is.na(percent_roughage_corrected), percent, percent_roughage_corrected)) %>%
+  group_by(iso3c, species, orientation, production_system) %>% 
+  mutate(test = sum(new_percent))  ## yay it looks good, all test should be 100
+
+tmp <- filter(fixed_mixed_int, iso3c=="USA" & species=="Cattle" & orientation=="Milk") %>% data.frame()
+sum(tmp$new_percent)
+
+fixed_mixed <- fixed_mixed_int %>% 
+  select(iso3c, species, orientation, production_system, raw_name, percent = new_percent)
+
+```
+
+
+For grassland/grazed animals we assume that all roughage comes from grazing.
+```{r}
+
+fixed_grass_int <- livestock_diet_composition %>% 
+  filter(production_system == "Grassland Based") 
+
+## pull out a list of everything that is considered fodder or crop residues
+unique(fixed_grass_int$raw_name)
+remove_list <- c( "Crop residues from maize",
+                  "Crop residues from millet",
+                  "Crop residues from other grains",
+                  "Crop residues from rice",
+                  "Crop residues from sorghum",
+                  "Crop residues from sugarcane",
+                  "Crop residues from wheat",
+                  "Fodder beet",
+                  "Fresh mixture of grass and legumes",
+                  "Hay or silage from alfalfa",
+                  "Hay or silage from cultivated grass",
+                  "Hay or silage from grass and legumes",
+                  "Silage from whole grain plants.",
+                  "Silage from whole maize plant",
+                  "Hay from adjacent areas")
+
+fixed_grass <- fixed_grass_int %>% 
+  mutate(raw_name = ifelse(raw_name %in% remove_list, "Fresh grass", raw_name)) %>% 
+  group_by(iso3c, species, orientation, production_system, raw_name) %>% 
+  dplyr::summarise(percent = sum(percent)) %>% 
+  ungroup()
+  
+```
+
+Add the fixed compositions to the main diet comp df
+
+```{r}
+
+livestock_diet_composition <-  rbind(fixed_grass, fixed_mixed) %>% 
+  mutate(species = ifelse(species == "Goat", "Goats", species))
+
+```
+
+
+Gapfill regions with no data with regional data:
+```{r}
+
+livestock_diet_composition_all <- livestock_diet_composition %>%
+  select(species, orientation, production_system, raw_name) %>%
+  unique() %>%
+  merge(food_rgns$iso3c) %>%
+  select(iso3c=y, species, orientation, production_system, raw_name)
+
+# quick check
+filter(livestock_diet_composition_all, iso3c=="USA" & species == "Cattle", production_system=="Grassland Based" & orientation == "Meat")
+filter(livestock_diet_composition_all, iso3c=="USA" & species == "Cattle", production_system=="Mixed" & orientation == "Meat")
+
+
+
+livestock_diet_composition_gf <- left_join(livestock_diet_composition_all, livestock_diet_composition, by=c("iso3c", "species", "orientation", "production_system", "raw_name")) %>%
+  left_join(un_rgns) %>%
+  group_by(species, orientation, production_system, raw_name, Intermediate_Region_Name) %>%
+  mutate(percent = ifelse(is.na(percent), mean(percent, na.rm=TRUE), percent)) %>%
+  group_by(species, orientation, production_system, raw_name, Sub_region_Name) %>%
+    mutate(percent = ifelse(is.na(percent), mean(percent, na.rm=TRUE), percent)) %>%
+group_by(species, orientation, production_system, raw_name, Region_Name) %>%
+    mutate(percent = ifelse(is.na(percent), mean(percent, na.rm=TRUE), percent)) %>%
+group_by(species, orientation, production_system, raw_name) %>%
+    mutate(percent = ifelse(is.na(percent), mean(percent, na.rm=TRUE), percent)) %>%
+ungroup() %>%
+  select(iso3c, species, orientation, production_system, raw_name, percent)
+
+# check that all gapfilled sum to 100
+tmp <- livestock_diet_composition_gf %>%
+ group_by(species, orientation, production_system, iso3c) %>%
+ summarize(total = sum(percent))
+summary(tmp)
+
+
+write_csv(livestock_diet_composition_gf, here("feed/data/ruminant_diet_composition_update1.csv"))
+
+```
+
+
+
+Let's do the total amount of each item needed for each ruminant and category 
+```{r}
+
+total_feed <- read_csv(here("animal_farm/farm/data/ruminants_GLEAMi_v2.csv"))
+
+rum_list <- c("Sheep", "Buffalo", "Goats", "Cattle")
+
+ruminant_total_feed <- total_feed %>% 
+  filter(Species %in% rum_list,
+         Variable %in% c("INTAKE: Total intake", "HERD: total number of animals"),
+         Production_system != "All systems") %>% 
+  mutate(Herd_type = ifelse(Production_system == "Feedlot operations", "Non-dairy", Herd_type)) %>% 
+  filter(Herd_type != "Whole herd") %>% 
+  select(-Country, - Unit) %>%  
+  pivot_wider(names_from = Variable, values_from = Value) %>% 
+  rename(kg_dm_feed_intake = 'INTAKE: Total intake',
+         count = 'HERD: total number of animals',
+         species = Species,
+         production_system = Production_system) %>% 
+  mutate(production_system = case_when(production_system == "Grassland systems" ~ "Grassland Based",
+                                      production_system == "Mixed systems" ~ "Mixed",
+                                      production_system == "Feedlot operations" ~ "Feedlot"),
+         Herd_type = case_when(Herd_type == "Dairy" ~ "Milk",
+                               Herd_type == "Non-dairy" ~ "Meat")) %>% 
+  rename(orientation = Herd_type) %>%
+  mutate(consumption_rate = kg_dm_feed_intake/count,
+         consumption_rate = ifelse(kg_dm_feed_intake == 0 & count == 0, 0, consumption_rate),
+         consumption_rate = ifelse(is.infinite(kg_dm_feed_intake), 0, consumption_rate)) %>%
+   filter(consumption_rate > 0) 
+
+
+summary(ruminant_total_feed)
+
+## some checks
+sheep_grass_milk <- filter(ruminant_total_feed, species=="Sheep" & production_system=="Grassland Based" & orientation == "Milk")
+summary(sheep_grass_milk)
+sheep_grass_meat <- filter(ruminant_total_feed, species=="Sheep" & production_system=="Grassland Based" & orientation == "Meat")
+summary(sheep_grass_meat)
+sheep_mixed_milk <- filter(ruminant_total_feed, species=="Sheep" & production_system=="Mixed" & orientation == "Milk")
+summary(sheep_mixed_milk)
+sheep_mixed_meat <- filter(ruminant_total_feed, species=="Sheep" & production_system=="Mixed" & orientation == "Meat")
+summary(sheep_mixed_meat)
+filter(ruminant_total_feed, iso3c=="USA" & species=="Sheep")
+
+goat_grass_milk <- filter(ruminant_total_feed, species=="Goats" & production_system=="Grassland Based" & orientation == "Milk")
+summary(goat_grass_milk)
+goat_grass_meat <- filter(ruminant_total_feed, species=="Goats" & production_system=="Grassland Based" & orientation == "Meat")
+summary(goat_grass_meat)
+goat_mixed_milk <- filter(ruminant_total_feed, species=="Goats" & production_system=="Mixed" & orientation == "Milk")
+summary(goat_mixed_milk)
+goat_mixed_meat <- filter(ruminant_total_feed, species=="Goats" & production_system=="Mixed" & orientation == "Meat")
+summary(goat_mixed_meat)
+
+cows_grass_milk <- filter(ruminant_total_feed, species=="Cattle" & production_system=="Grassland Based" & orientation == "Milk")
+summary(cows_grass_milk)
+cows_grass_meat <- filter(ruminant_total_feed, species=="Cattle" & production_system=="Grassland Based" & orientation == "Meat")
+summary(cows_grass_meat)
+cows_mixed_milk <- filter(ruminant_total_feed, species=="Cattle" & production_system=="Mixed" & orientation == "Milk")
+summary(cows_mixed_milk)
+cows_mixed_meat <- filter(ruminant_total_feed, species=="Cattle" & production_system=="Mixed" & orientation == "Meat")
+summary(cows_mixed_meat)
+cows_feedlot_meat <- filter(ruminant_total_feed, species=="Cattle" & production_system=="Feedlot" & orientation == "Meat")
+summary(cows_feedlot_meat)
+
+buffalo_grass_milk <- filter(ruminant_total_feed, species=="Buffalo" & production_system=="Grassland Based" & orientation == "Milk")
+summary(buffalo_grass_milk)
+buffalo_grass_meat <- filter(ruminant_total_feed, species=="Buffalo" & production_system=="Grassland Based" & orientation == "Meat")
+summary(buffalo_grass_meat)
+buffalo_mixed_milk <- filter(ruminant_total_feed, species=="Buffalo" & production_system=="Mixed" & orientation == "Milk")
+summary(buffalo_mixed_milk)
+buffalo_mixed_meat <- filter(ruminant_total_feed, species=="Buffalo" & production_system=="Mixed" & orientation == "Meat")
+summary(buffalo_mixed_meat)
+
+
+``` 
+https://pir.sa.gov.au/__data/assets/pdf_file/0007/272869/Calculating_dry_matter_intakes.pdf : sheep and cattle are 2-3% of liveweight in DM
+https://beeflambnz.com/knowledge-hub/PDF/guide-feed-planning-sheep-farmers.pdf
+
+
+Gapfill regions with no feed rates.
+```{r}
+
+# get all possible combinations of animals and regions
+
+systems <- select(ruminant_total_feed, species, production_system, orientation) %>%
+  unique()
+all_sites <- merge(un_rgns$iso3c, systems) %>%
+  rename(iso3c=x)
+
+ruminant_total_feed_gf <- left_join(all_sites, ruminant_total_feed, by=c("iso3c", "species", "production_system", "orientation")) %>%
+  left_join(un_rgns) %>%
+  group_by(species, production_system, orientation, Intermediate_Region_Name) %>%
+  mutate(consumption_rate = ifelse(is.na(consumption_rate), median(consumption_rate, na.rm=TRUE), consumption_rate)) %>%
+  group_by(species, production_system, orientation, Sub_region_Name) %>%
+    mutate(consumption_rate = ifelse(is.na(consumption_rate), median(consumption_rate, na.rm=TRUE), consumption_rate)) %>%
+group_by(species, production_system, orientation, Region_Name) %>%
+    mutate(consumption_rate = ifelse(is.na(consumption_rate), median(consumption_rate, na.rm=TRUE), consumption_rate)) %>%
+group_by(species, production_system, orientation) %>%
+    mutate(consumption_rate = ifelse(is.na(consumption_rate), median(consumption_rate, na.rm=TRUE), consumption_rate)) %>%
+ungroup() %>%
+  select(iso3c, species, production_system, orientation, consumption_rate)
+
+
+
+```
+ 
+ 
+Calculate feed amounts and rates for each feed item
+```{r}
+
+
+  combo <- left_join(livestock_diet_composition_gf, ruminant_total_feed_gf, by = c("iso3c", "species", "orientation", "production_system")) %>% 
+    rowwise() %>% 
+    mutate(percent = percent/100,
+         feeditem_kg_per_head = percent*consumption_rate) %>% 
+  select(iso3c, animal = species, product = orientation, system = production_system, feedstuff = raw_name, feeditem_kg_per_head) %>% 
+    mutate(animal = tolower(animal),
+           product = case_when(product == "Milk" ~ "milk",
+                               product == "Meat" ~ "meat"),
+           system = case_when(system == "Grassland Based" ~ "grassland",
+                              system == "Mixed" ~ "mixed",
+                              system == "Feedlot" ~"feedlot"),
+           animal = ifelse(animal == "cattle", "cows",
+                           ifelse(animal == "goat", "goats",
+                                  ifelse(animal == "buffalo", "buffaloes", animal))))
+    
+  
+
+  write_csv(combo, here("feed/data/ruminant_feed_consumption_rates.csv"))
+  
+
+
+```
+
+
+```{r}
+
+ruminant_feed_consumption_rates <- read_csv(here("feed/data/ruminant_feed_consumption_rates.csv"))
+
+tmp<- ruminant_feed_consumption_rates %>%
+  group_by(iso3c, animal, product, system) %>%
+  summarize(total_feed_per_animal = sum(feeditem_kg_per_head))
+filter(tmp, iso3c=="USA")
+test <- ruminant_feed_consumption_rates %>% 
+  filter(system == "mixed") %>% 
+  arrange(desc(feeditem_kg_per_head)) %>% 
+  mutate(feedstuff = as_factor(feedstuff))
+
+#should be around 5000 for milk c ows and feedlot, and 3000-4000 for meat cows.  This is less than a grown cow eats, but this seems
+# about right (although maybe a little low) given not all animals in the herd are eating the adult rate.
+
+ggplot(test) +
+  geom_point(aes(y = feedstuff, x = feeditem_kg_per_head)) +
+  facet_grid(cols = vars(animal), rows = vars(product))
+
+
+
+```
+ 
+
+ 

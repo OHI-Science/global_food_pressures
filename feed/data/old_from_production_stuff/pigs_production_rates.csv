@@ -1,0 +1,733 @@
+iso3c,country,animal,system,product,tonnes_per_head
+AFG,Afghanistan,pigs,backyard,meat,0
+AFG,Afghanistan,pigs,intermediate,meat,0
+AFG,Afghanistan,pigs,industrial,meat,0
+ALB,Albania,pigs,backyard,meat,0.08723391466944361
+ALB,Albania,pigs,intermediate,meat,0.12869866667530938
+ALB,Albania,pigs,industrial,meat,0.17087991209092804
+DZA,Algeria,pigs,backyard,meat,0
+DZA,Algeria,pigs,intermediate,meat,0
+DZA,Algeria,pigs,industrial,meat,0
+ASM,American Samoa,pigs,backyard,meat,0
+ASM,American Samoa,pigs,intermediate,meat,0
+ASM,American Samoa,pigs,industrial,meat,0
+AND,Andorra,pigs,backyard,meat,0
+AND,Andorra,pigs,intermediate,meat,0
+AND,Andorra,pigs,industrial,meat,0
+AGO,Angola,pigs,backyard,meat,0.04067517848243279
+AGO,Angola,pigs,intermediate,meat,0.08057911337183046
+AGO,Angola,pigs,industrial,meat,0.18030873783446147
+AIA,Anguilla,pigs,backyard,meat,0
+AIA,Anguilla,pigs,intermediate,meat,0
+AIA,Anguilla,pigs,industrial,meat,0
+ATG,Antigua & Barbuda,pigs,backyard,meat,0
+ATG,Antigua & Barbuda,pigs,intermediate,meat,0
+ATG,Antigua & Barbuda,pigs,industrial,meat,0
+ARG,Argentina,pigs,backyard,meat,0.07508809737134517
+ARG,Argentina,pigs,intermediate,meat,0.12859136453047787
+ARG,Argentina,pigs,industrial,meat,0.1731061662983689
+ARM,Armenia,pigs,backyard,meat,0.07275825229288435
+ARM,Armenia,pigs,intermediate,meat,0.12431936364546016
+ARM,Armenia,pigs,industrial,meat,0.15252340266073872
+ABW,Aruba,pigs,backyard,meat,0
+ABW,Aruba,pigs,intermediate,meat,0
+ABW,Aruba,pigs,industrial,meat,0
+AUS,Australia,pigs,backyard,meat,0.08723461386550539
+AUS,Australia,pigs,intermediate,meat,0
+AUS,Australia,pigs,industrial,meat,0.1559655695384032
+AUT,Austria,pigs,backyard,meat,0
+AUT,Austria,pigs,intermediate,meat,0.1286998275594189
+AUT,Austria,pigs,industrial,meat,0.18398876346006357
+AZE,Azerbaijan,pigs,backyard,meat,0
+AZE,Azerbaijan,pigs,intermediate,meat,0
+AZE,Azerbaijan,pigs,industrial,meat,0
+BHS,Bahamas,pigs,backyard,meat,0
+BHS,Bahamas,pigs,intermediate,meat,0
+BHS,Bahamas,pigs,industrial,meat,0
+BHR,Bahrain,pigs,backyard,meat,0
+BHR,Bahrain,pigs,intermediate,meat,0
+BHR,Bahrain,pigs,industrial,meat,0
+BGD,Bangladesh,pigs,backyard,meat,0
+BGD,Bangladesh,pigs,intermediate,meat,0
+BGD,Bangladesh,pigs,industrial,meat,0
+BRB,Barbados,pigs,backyard,meat,0
+BRB,Barbados,pigs,intermediate,meat,0
+BRB,Barbados,pigs,industrial,meat,0.17310229783072797
+BLR,Belarus,pigs,backyard,meat,0.08723443350562356
+BLR,Belarus,pigs,intermediate,meat,0.12870016210341706
+BLR,Belarus,pigs,industrial,meat,0.17087848627180444
+BEL,Belgium,pigs,backyard,meat,0
+BEL,Belgium,pigs,intermediate,meat,0
+BEL,Belgium,pigs,industrial,meat,0.15617783169801652
+BLZ,Belize,pigs,backyard,meat,0
+BLZ,Belize,pigs,intermediate,meat,0
+BLZ,Belize,pigs,industrial,meat,0
+BEN,Benin,pigs,backyard,meat,0.040675140131934955
+BEN,Benin,pigs,intermediate,meat,0.0805789633876716
+BEN,Benin,pigs,industrial,meat,0.1803069225705699
+BMU,Bermuda,pigs,backyard,meat,0
+BMU,Bermuda,pigs,intermediate,meat,0
+BMU,Bermuda,pigs,industrial,meat,0
+BTN,Bhutan,pigs,backyard,meat,0
+BTN,Bhutan,pigs,intermediate,meat,0
+BTN,Bhutan,pigs,industrial,meat,0
+BOL,Bolivia,pigs,backyard,meat,0.07508809656964557
+BOL,Bolivia,pigs,intermediate,meat,0.12859139518800652
+BOL,Bolivia,pigs,industrial,meat,0.17310634098680153
+BIH,Bosnia & Herzegovina,pigs,backyard,meat,0.08723420644646765
+BIH,Bosnia & Herzegovina,pigs,intermediate,meat,0.12870014817539369
+BIH,Bosnia & Herzegovina,pigs,industrial,meat,0.17087869070137862
+BWA,Botswana,pigs,backyard,meat,0.04067517848243278
+BWA,Botswana,pigs,intermediate,meat,0
+BWA,Botswana,pigs,industrial,meat,0
+BRA,Brazil,pigs,backyard,meat,0.0750880713495068
+BRA,Brazil,pigs,intermediate,meat,0.12859135905943514
+BRA,Brazil,pigs,industrial,meat,0.17310623797984268
+VGB,British Virgin Islands,pigs,backyard,meat,0
+VGB,British Virgin Islands,pigs,intermediate,meat,0
+VGB,British Virgin Islands,pigs,industrial,meat,0
+BRN,Brunei,pigs,backyard,meat,0
+BRN,Brunei,pigs,intermediate,meat,0
+BRN,Brunei,pigs,industrial,meat,0
+BGR,Bulgaria,pigs,backyard,meat,0.08723435724319165
+BGR,Bulgaria,pigs,intermediate,meat,0.12870077836729954
+BGR,Bulgaria,pigs,industrial,meat,0.17087833857778043
+BFA,Burkina Faso,pigs,backyard,meat,0.04067517989204993
+BFA,Burkina Faso,pigs,intermediate,meat,0
+BFA,Burkina Faso,pigs,industrial,meat,0.18030925180804863
+BDI,Burundi,pigs,backyard,meat,0.04067520427066941
+BDI,Burundi,pigs,intermediate,meat,0.0805787072774914
+BDI,Burundi,pigs,industrial,meat,0
+CPV,Cape Verde,pigs,backyard,meat,0.040675118484773495
+CPV,Cape Verde,pigs,intermediate,meat,0
+CPV,Cape Verde,pigs,industrial,meat,0
+KHM,Cambodia,pigs,backyard,meat,0.0661025878836241
+KHM,Cambodia,pigs,intermediate,meat,0.12404721233557944
+KHM,Cambodia,pigs,industrial,meat,0.17426724523652787
+CMR,Cameroon,pigs,backyard,meat,0.04067517565832812
+CMR,Cameroon,pigs,intermediate,meat,0.08057918202421865
+CMR,Cameroon,pigs,industrial,meat,0.18030864657352116
+CAN,Canada,pigs,backyard,meat,0
+CAN,Canada,pigs,intermediate,meat,0
+CAN,Canada,pigs,industrial,meat,0.17081046427175378
+CYM,Cayman Islands,pigs,backyard,meat,0
+CYM,Cayman Islands,pigs,intermediate,meat,0
+CYM,Cayman Islands,pigs,industrial,meat,0
+CAF,Central African Republic,pigs,backyard,meat,0.04067516203643153
+CAF,Central African Republic,pigs,intermediate,meat,0.08057992404105115
+CAF,Central African Republic,pigs,industrial,meat,0
+TCD,Chad,pigs,backyard,meat,0.04067562972891058
+TCD,Chad,pigs,intermediate,meat,0
+TCD,Chad,pigs,industrial,meat,0
+CHL,Chile,pigs,backyard,meat,0.07508784807651864
+CHL,Chile,pigs,intermediate,meat,0
+CHL,Chile,pigs,industrial,meat,0.1731062491769872
+HKG,Hong Kong SAR China,pigs,backyard,meat,0
+HKG,Hong Kong SAR China,pigs,intermediate,meat,0
+HKG,Hong Kong SAR China,pigs,industrial,meat,0
+MAC,Macau SAR China,pigs,backyard,meat,0
+MAC,Macau SAR China,pigs,intermediate,meat,0
+MAC,Macau SAR China,pigs,industrial,meat,0
+CHN,China,pigs,backyard,meat,0.06686080445188745
+CHN,China,pigs,intermediate,meat,0.12432124587528813
+CHN,China,pigs,industrial,meat,0.17771123701313782
+COL,Colombia,pigs,backyard,meat,0.07508807903282941
+COL,Colombia,pigs,intermediate,meat,0.1285916254992119
+COL,Colombia,pigs,industrial,meat,0.17310626240220872
+COM,Comoros,pigs,backyard,meat,0
+COM,Comoros,pigs,intermediate,meat,0
+COM,Comoros,pigs,industrial,meat,0
+COG,Congo - Brazzaville,pigs,backyard,meat,0.040675419951977654
+COG,Congo - Brazzaville,pigs,intermediate,meat,0.08057949289620053
+COG,Congo - Brazzaville,pigs,industrial,meat,0.18030695446307138
+COK,Cook Islands,pigs,backyard,meat,0.08723384129627317
+COK,Cook Islands,pigs,intermediate,meat,0
+COK,Cook Islands,pigs,industrial,meat,0
+CRI,Costa Rica,pigs,backyard,meat,0.07508725424825002
+CRI,Costa Rica,pigs,intermediate,meat,0.12859259608334983
+CRI,Costa Rica,pigs,industrial,meat,0.17310635705800653
+CIV,Côte d’Ivoire,pigs,backyard,meat,0.04067519323371997
+CIV,Côte d’Ivoire,pigs,intermediate,meat,0.08057881040106557
+CIV,Côte d’Ivoire,pigs,industrial,meat,0.18030824332837697
+HRV,Croatia,pigs,backyard,meat,0.0872343382791281
+HRV,Croatia,pigs,intermediate,meat,0.12870009167292962
+HRV,Croatia,pigs,industrial,meat,0.17087830750071317
+CUB,Cuba,pigs,backyard,meat,0.07508807053913218
+CUB,Cuba,pigs,intermediate,meat,0
+CUB,Cuba,pigs,industrial,meat,0
+CYP,Cyprus,pigs,backyard,meat,0
+CYP,Cyprus,pigs,intermediate,meat,0
+CYP,Cyprus,pigs,industrial,meat,0.15252543509039249
+CZE,Czechia,pigs,backyard,meat,0
+CZE,Czechia,pigs,intermediate,meat,0
+CZE,Czechia,pigs,industrial,meat,0.17087845428701887
+PRK,North Korea,pigs,backyard,meat,0.07252094838517965
+PRK,North Korea,pigs,intermediate,meat,0.12432139877472564
+PRK,North Korea,pigs,industrial,meat,0.15236932821258836
+COD,Congo - Kinshasa,pigs,backyard,meat,0.040675156809008774
+COD,Congo - Kinshasa,pigs,intermediate,meat,0.08057918136707208
+COD,Congo - Kinshasa,pigs,industrial,meat,0
+DNK,Denmark,pigs,backyard,meat,0
+DNK,Denmark,pigs,intermediate,meat,0
+DNK,Denmark,pigs,industrial,meat,0.19153847164957558
+DJI,Djibouti,pigs,backyard,meat,0
+DJI,Djibouti,pigs,intermediate,meat,0
+DJI,Djibouti,pigs,industrial,meat,0
+DMA,Dominica,pigs,backyard,meat,0
+DMA,Dominica,pigs,intermediate,meat,0
+DMA,Dominica,pigs,industrial,meat,0
+DOM,Dominican Republic,pigs,backyard,meat,0.07508807703136923
+DOM,Dominican Republic,pigs,intermediate,meat,0.1285912813392914
+DOM,Dominican Republic,pigs,industrial,meat,0.17310588805924776
+ECU,Ecuador,pigs,backyard,meat,0.07508809520874889
+ECU,Ecuador,pigs,intermediate,meat,0.12859140822624945
+ECU,Ecuador,pigs,industrial,meat,0.17310590071849957
+EGY,Egypt,pigs,backyard,meat,0
+EGY,Egypt,pigs,intermediate,meat,0
+EGY,Egypt,pigs,industrial,meat,0
+SLV,El Salvador,pigs,backyard,meat,0.07508794043274644
+SLV,El Salvador,pigs,intermediate,meat,0.12859081790122498
+SLV,El Salvador,pigs,industrial,meat,0.1731054610678416
+GNQ,Equatorial Guinea,pigs,backyard,meat,0
+GNQ,Equatorial Guinea,pigs,intermediate,meat,0
+GNQ,Equatorial Guinea,pigs,industrial,meat,0
+ERI,Eritrea,pigs,backyard,meat,0
+ERI,Eritrea,pigs,intermediate,meat,0
+ERI,Eritrea,pigs,industrial,meat,0
+EST,Estonia,pigs,backyard,meat,0
+EST,Estonia,pigs,intermediate,meat,0
+EST,Estonia,pigs,industrial,meat,0.17087850103826874
+ETH,Ethiopia,pigs,backyard,meat,0.04067479639779054
+ETH,Ethiopia,pigs,intermediate,meat,0
+ETH,Ethiopia,pigs,industrial,meat,0
+FLK,Falkland Islands,pigs,backyard,meat,0
+FLK,Falkland Islands,pigs,intermediate,meat,0
+FLK,Falkland Islands,pigs,industrial,meat,0
+FRO,Faroe Islands,pigs,backyard,meat,0
+FRO,Faroe Islands,pigs,intermediate,meat,0
+FRO,Faroe Islands,pigs,industrial,meat,0
+FSM,Micronesia (Federated States of),pigs,backyard,meat,0.08723464734157835
+FSM,Micronesia (Federated States of),pigs,intermediate,meat,0
+FSM,Micronesia (Federated States of),pigs,industrial,meat,0
+FJI,Fiji,pigs,backyard,meat,0.08723426597150541
+FJI,Fiji,pigs,intermediate,meat,0.12429573678582635
+FJI,Fiji,pigs,industrial,meat,0.15596294629414797
+FIN,Finland,pigs,backyard,meat,0
+FIN,Finland,pigs,intermediate,meat,0
+FIN,Finland,pigs,industrial,meat,0.17087845652981953
+FRA,France,pigs,backyard,meat,0
+FRA,France,pigs,intermediate,meat,0
+FRA,France,pigs,industrial,meat,0.18413687046224336
+GUF,French Guiana,pigs,backyard,meat,0
+GUF,French Guiana,pigs,intermediate,meat,0
+GUF,French Guiana,pigs,industrial,meat,0
+PYF,French Polynesia,pigs,backyard,meat,0
+PYF,French Polynesia,pigs,intermediate,meat,0
+PYF,French Polynesia,pigs,industrial,meat,0
+GAB,Gabon,pigs,backyard,meat,0.0406752409179291
+GAB,Gabon,pigs,intermediate,meat,0.08057898488531894
+GAB,Gabon,pigs,industrial,meat,0.1803090140231935
+GMB,Gambia,pigs,backyard,meat,0.04067439069049561
+GMB,Gambia,pigs,intermediate,meat,0
+GMB,Gambia,pigs,industrial,meat,0
+GEO,Georgia,pigs,backyard,meat,0.07275808271757407
+GEO,Georgia,pigs,intermediate,meat,0.1243195533712245
+GEO,Georgia,pigs,industrial,meat,0.15252384971934477
+DEU,Germany,pigs,backyard,meat,0
+DEU,Germany,pigs,intermediate,meat,0
+DEU,Germany,pigs,industrial,meat,0.18032053826399172
+GHA,Ghana,pigs,backyard,meat,0.04067523921234937
+GHA,Ghana,pigs,intermediate,meat,0.08057877849740684
+GHA,Ghana,pigs,industrial,meat,0.18030849414471226
+GRC,Greece,pigs,backyard,meat,0.08723468516487179
+GRC,Greece,pigs,intermediate,meat,0.12870023612147305
+GRC,Greece,pigs,industrial,meat,0.1708784768240579
+GRL,Greenland,pigs,backyard,meat,0
+GRL,Greenland,pigs,intermediate,meat,0
+GRL,Greenland,pigs,industrial,meat,0
+GRD,Grenada,pigs,backyard,meat,0
+GRD,Grenada,pigs,intermediate,meat,0
+GRD,Grenada,pigs,industrial,meat,0
+GLP,Guadeloupe,pigs,backyard,meat,0.07508807703136923
+GLP,Guadeloupe,pigs,intermediate,meat,0
+GLP,Guadeloupe,pigs,industrial,meat,0
+GUM,Guam,pigs,backyard,meat,0
+GUM,Guam,pigs,intermediate,meat,0
+GUM,Guam,pigs,industrial,meat,0
+GTM,Guatemala,pigs,backyard,meat,0.07508808490427472
+GTM,Guatemala,pigs,intermediate,meat,0
+GTM,Guatemala,pigs,industrial,meat,0.17310617957811372
+GGY,Guernsey,pigs,backyard,meat,0
+GGY,Guernsey,pigs,intermediate,meat,0
+GGY,Guernsey,pigs,industrial,meat,0
+GNB,Guinea-Bissau,pigs,backyard,meat,0.04067520137599755
+GNB,Guinea-Bissau,pigs,intermediate,meat,0.0805810828893761
+GNB,Guinea-Bissau,pigs,industrial,meat,0
+GIN,Guinea,pigs,backyard,meat,0.04067538015713367
+GIN,Guinea,pigs,intermediate,meat,0.08057603768642134
+GIN,Guinea,pigs,industrial,meat,0
+GUY,Guyana,pigs,backyard,meat,0.07508905161374489
+GUY,Guyana,pigs,intermediate,meat,0
+GUY,Guyana,pigs,industrial,meat,0
+HTI,Haiti,pigs,backyard,meat,0.07508808249932145
+HTI,Haiti,pigs,intermediate,meat,0.12859009775578595
+HTI,Haiti,pigs,industrial,meat,0
+HND,Honduras,pigs,backyard,meat,0.07508816180731458
+HND,Honduras,pigs,intermediate,meat,0.12859165210138357
+HND,Honduras,pigs,industrial,meat,0.17310592531990746
+HUN,Hungary,pigs,backyard,meat,0.08723435706593033
+HUN,Hungary,pigs,intermediate,meat,0.1286999609329993
+HUN,Hungary,pigs,industrial,meat,0.17087846741480237
+ISL,Iceland,pigs,backyard,meat,0
+ISL,Iceland,pigs,intermediate,meat,0
+ISL,Iceland,pigs,industrial,meat,0.17087899009237906
+IND,India,pigs,backyard,meat,0.07275764507102421
+IND,India,pigs,intermediate,meat,0.12432125213020216
+IND,India,pigs,industrial,meat,0.1525252470605299
+IDN,Indonesia,pigs,backyard,meat,0.0661025805485117
+IDN,Indonesia,pigs,intermediate,meat,0.12404733023126605
+IDN,Indonesia,pigs,industrial,meat,0.17426675953142945
+IRN,Iran,pigs,backyard,meat,0
+IRN,Iran,pigs,intermediate,meat,0
+IRN,Iran,pigs,industrial,meat,0
+IRQ,Iraq,pigs,backyard,meat,0
+IRQ,Iraq,pigs,intermediate,meat,0
+IRQ,Iraq,pigs,industrial,meat,0
+IRL,Ireland,pigs,backyard,meat,0
+IRL,Ireland,pigs,intermediate,meat,0
+IRL,Ireland,pigs,industrial,meat,0.18302271299111245
+IMN,Isle of Man,pigs,backyard,meat,0
+IMN,Isle of Man,pigs,intermediate,meat,0
+IMN,Isle of Man,pigs,industrial,meat,0
+ISR,Israel,pigs,backyard,meat,0.07275911255567559
+ISR,Israel,pigs,intermediate,meat,0
+ISR,Israel,pigs,industrial,meat,0.15252574658765483
+ITA,Italy,pigs,backyard,meat,0
+ITA,Italy,pigs,intermediate,meat,0
+ITA,Italy,pigs,industrial,meat,0.16649425084834626
+JAM,Jamaica,pigs,backyard,meat,0.07508784343349947
+JAM,Jamaica,pigs,intermediate,meat,0.1285919860881287
+JAM,Jamaica,pigs,industrial,meat,0.173107461505763
+JPN,Japan,pigs,backyard,meat,0.07252092059874739
+JPN,Japan,pigs,intermediate,meat,0.12432139504957943
+JPN,Japan,pigs,industrial,meat,0.15236798892647177
+JEY,Jersey,pigs,backyard,meat,0
+JEY,Jersey,pigs,intermediate,meat,0
+JEY,Jersey,pigs,industrial,meat,0
+JOR,Jordan,pigs,backyard,meat,0
+JOR,Jordan,pigs,intermediate,meat,0
+JOR,Jordan,pigs,industrial,meat,0
+KAZ,Kazakhstan,pigs,backyard,meat,0.07275773091130022
+KAZ,Kazakhstan,pigs,intermediate,meat,0.12432143527302966
+KAZ,Kazakhstan,pigs,industrial,meat,0.15236807257243773
+KEN,Kenya,pigs,backyard,meat,0.040675206963255245
+KEN,Kenya,pigs,intermediate,meat,0.0805791994024704
+KEN,Kenya,pigs,industrial,meat,0
+KIR,Kiribati,pigs,backyard,meat,0
+KIR,Kiribati,pigs,intermediate,meat,0
+KIR,Kiribati,pigs,industrial,meat,0
+KWT,Kuwait,pigs,backyard,meat,0
+KWT,Kuwait,pigs,intermediate,meat,0
+KWT,Kuwait,pigs,industrial,meat,0
+KGZ,Kyrgyzstan,pigs,backyard,meat,0.07275804386925372
+KGZ,Kyrgyzstan,pigs,intermediate,meat,0
+KGZ,Kyrgyzstan,pigs,industrial,meat,0
+LAO,Laos,pigs,backyard,meat,0.06610257076997371
+LAO,Laos,pigs,intermediate,meat,0.1240474070827236
+LAO,Laos,pigs,industrial,meat,0
+LVA,Latvia,pigs,backyard,meat,0.08723482900609043
+LVA,Latvia,pigs,intermediate,meat,0.12869986526613278
+LVA,Latvia,pigs,industrial,meat,0.1708784616863358
+LBN,Lebanon,pigs,backyard,meat,0
+LBN,Lebanon,pigs,intermediate,meat,0
+LBN,Lebanon,pigs,industrial,meat,0
+LSO,Lesotho,pigs,backyard,meat,0.04067509161950705
+LSO,Lesotho,pigs,intermediate,meat,0
+LSO,Lesotho,pigs,industrial,meat,0.18030669569753333
+LBR,Liberia,pigs,backyard,meat,0.040675102031772985
+LBR,Liberia,pigs,intermediate,meat,0
+LBR,Liberia,pigs,industrial,meat,0
+LBY,Libya,pigs,backyard,meat,0
+LBY,Libya,pigs,intermediate,meat,0
+LBY,Libya,pigs,industrial,meat,0
+LIE,Liechtenstein,pigs,backyard,meat,0
+LIE,Liechtenstein,pigs,intermediate,meat,0
+LIE,Liechtenstein,pigs,industrial,meat,0
+LTU,Lithuania,pigs,backyard,meat,0.08723429847691565
+LTU,Lithuania,pigs,intermediate,meat,0.12870006140534304
+LTU,Lithuania,pigs,industrial,meat,0.17087841162241582
+LUX,Luxembourg,pigs,backyard,meat,0
+LUX,Luxembourg,pigs,intermediate,meat,0
+LUX,Luxembourg,pigs,industrial,meat,0.17087919116138445
+MDG,Madagascar,pigs,backyard,meat,0.04067517848243279
+MDG,Madagascar,pigs,intermediate,meat,0.08057916020600267
+MDG,Madagascar,pigs,industrial,meat,0.18030864071213895
+XMI,Madeira Islands,pigs,backyard,meat,0
+XMI,Madeira Islands,pigs,intermediate,meat,0
+XMI,Madeira Islands,pigs,industrial,meat,0
+MWI,Malawi,pigs,backyard,meat,0.040675166256506516
+MWI,Malawi,pigs,intermediate,meat,0.0805790301817474
+MWI,Malawi,pigs,industrial,meat,0
+MYS,Malaysia,pigs,backyard,meat,0
+MYS,Malaysia,pigs,intermediate,meat,0.12404722623067607
+MYS,Malaysia,pigs,industrial,meat,0.17426690529826877
+MDV,Maldives,pigs,backyard,meat,0
+MDV,Maldives,pigs,intermediate,meat,0
+MDV,Maldives,pigs,industrial,meat,0
+MLI,Mali,pigs,backyard,meat,0.04067559854654201
+MLI,Mali,pigs,intermediate,meat,0.08057852238588362
+MLI,Mali,pigs,industrial,meat,0
+MLT,Malta,pigs,backyard,meat,0
+MLT,Malta,pigs,intermediate,meat,0
+MLT,Malta,pigs,industrial,meat,0.17087947439900367
+MHL,Marshall Islands,pigs,backyard,meat,0
+MHL,Marshall Islands,pigs,intermediate,meat,0
+MHL,Marshall Islands,pigs,industrial,meat,0
+MTQ,Martinique,pigs,backyard,meat,0
+MTQ,Martinique,pigs,intermediate,meat,0
+MTQ,Martinique,pigs,industrial,meat,0
+MRT,Mauritania,pigs,backyard,meat,0
+MRT,Mauritania,pigs,intermediate,meat,0
+MRT,Mauritania,pigs,industrial,meat,0
+MUS,Mauritius,pigs,backyard,meat,0.04067543236103374
+MUS,Mauritius,pigs,intermediate,meat,0
+MUS,Mauritius,pigs,industrial,meat,0
+MYT,Mayotte,pigs,backyard,meat,0
+MYT,Mayotte,pigs,intermediate,meat,0
+MYT,Mayotte,pigs,industrial,meat,0
+MEX,Mexico,pigs,backyard,meat,0.07508807100787614
+MEX,Mexico,pigs,intermediate,meat,0.12859137327319872
+MEX,Mexico,pigs,industrial,meat,0.173106242180848
+MCO,Monaco,pigs,backyard,meat,0
+MCO,Monaco,pigs,intermediate,meat,0
+MCO,Monaco,pigs,industrial,meat,0
+MNG,Mongolia,pigs,backyard,meat,0.0725218345841404
+MNG,Mongolia,pigs,intermediate,meat,0
+MNG,Mongolia,pigs,industrial,meat,0
+MNE,Montenegro,pigs,backyard,meat,0
+MNE,Montenegro,pigs,intermediate,meat,0
+MNE,Montenegro,pigs,industrial,meat,0
+MSR,Montserrat,pigs,backyard,meat,0
+MSR,Montserrat,pigs,intermediate,meat,0
+MSR,Montserrat,pigs,industrial,meat,0
+MAR,Morocco,pigs,backyard,meat,0
+MAR,Morocco,pigs,intermediate,meat,0
+MAR,Morocco,pigs,industrial,meat,0.18030804754980903
+MOZ,Mozambique,pigs,backyard,meat,0.0406751696101383
+MOZ,Mozambique,pigs,intermediate,meat,0.08057994059177102
+MOZ,Mozambique,pigs,industrial,meat,0
+MMR,Myanmar (Burma),pigs,backyard,meat,0.0661025818923999
+MMR,Myanmar (Burma),pigs,intermediate,meat,0.12404733230252295
+MMR,Myanmar (Burma),pigs,industrial,meat,0
+NAM,Namibia,pigs,backyard,meat,0.04067531235178911
+NAM,Namibia,pigs,intermediate,meat,0.08057968777637702
+NAM,Namibia,pigs,industrial,meat,0
+NRU,Nauru,pigs,backyard,meat,0
+NRU,Nauru,pigs,intermediate,meat,0
+NRU,Nauru,pigs,industrial,meat,0
+NPL,Nepal,pigs,backyard,meat,0.0727576839426909
+NPL,Nepal,pigs,intermediate,meat,0
+NPL,Nepal,pigs,industrial,meat,0.15252555081012456
+BES,"Bonaire, Sint Eustatius and Saba",pigs,backyard,meat,0
+BES,"Bonaire, Sint Eustatius and Saba",pigs,intermediate,meat,0
+BES,"Bonaire, Sint Eustatius and Saba",pigs,industrial,meat,0
+NLD,Netherlands,pigs,backyard,meat,0
+NLD,Netherlands,pigs,intermediate,meat,0
+NLD,Netherlands,pigs,industrial,meat,0.18149430127556196
+NCL,New Caledonia,pigs,backyard,meat,0.08723391338582394
+NCL,New Caledonia,pigs,intermediate,meat,0
+NCL,New Caledonia,pigs,industrial,meat,0
+NZL,New Zealand,pigs,backyard,meat,0.08723313153899172
+NZL,New Zealand,pigs,intermediate,meat,0.12430202526672633
+NZL,New Zealand,pigs,industrial,meat,0.15596537862699897
+NIC,Nicaragua,pigs,backyard,meat,0.0750881071356879
+NIC,Nicaragua,pigs,intermediate,meat,0.1285911592548526
+NIC,Nicaragua,pigs,industrial,meat,0.17310435371504074
+NER,Niger,pigs,backyard,meat,0.040675593505273576
+NER,Niger,pigs,intermediate,meat,0.08058120438789915
+NER,Niger,pigs,industrial,meat,0
+NGA,Nigeria,pigs,backyard,meat,0.0406751768156705
+NGA,Nigeria,pigs,intermediate,meat,0.08057919908259824
+NGA,Nigeria,pigs,industrial,meat,0.18030921490857768
+NIU,Niue,pigs,backyard,meat,0
+NIU,Niue,pigs,intermediate,meat,0
+NIU,Niue,pigs,industrial,meat,0
+NFK,Norfolk Island,pigs,backyard,meat,0
+NFK,Norfolk Island,pigs,intermediate,meat,0
+NFK,Norfolk Island,pigs,industrial,meat,0
+MNP,Northern Mariana Islands,pigs,backyard,meat,0
+MNP,Northern Mariana Islands,pigs,intermediate,meat,0
+MNP,Northern Mariana Islands,pigs,industrial,meat,0
+NOR,Norway,pigs,backyard,meat,0
+NOR,Norway,pigs,intermediate,meat,0
+NOR,Norway,pigs,industrial,meat,0.17087850312439914
+OMN,Oman,pigs,backyard,meat,0
+OMN,Oman,pigs,intermediate,meat,0
+OMN,Oman,pigs,industrial,meat,0
+PAK,Pakistan,pigs,backyard,meat,0
+PAK,Pakistan,pigs,intermediate,meat,0
+PAK,Pakistan,pigs,industrial,meat,0
+PLW,Palau,pigs,backyard,meat,0
+PLW,Palau,pigs,intermediate,meat,0
+PLW,Palau,pigs,industrial,meat,0
+PAN,Panama,pigs,backyard,meat,0.07508837245597631
+PAN,Panama,pigs,intermediate,meat,0
+PAN,Panama,pigs,industrial,meat,0.17310646363097712
+PNG,Papua New Guinea,pigs,backyard,meat,0.08723441422998834
+PNG,Papua New Guinea,pigs,intermediate,meat,0.12429920765038406
+PNG,Papua New Guinea,pigs,industrial,meat,0.1559686372387031
+PRY,Paraguay,pigs,backyard,meat,0.07508807703136922
+PRY,Paraguay,pigs,intermediate,meat,0.12859133246562907
+PRY,Paraguay,pigs,industrial,meat,0.17310670414919094
+PER,Peru,pigs,backyard,meat,0.0750880626041255
+PER,Peru,pigs,intermediate,meat,0
+PER,Peru,pigs,industrial,meat,0.17310535344366548
+PHL,Philippines,pigs,backyard,meat,0.10514341864340426
+PHL,Philippines,pigs,intermediate,meat,0.14734688773918628
+PHL,Philippines,pigs,industrial,meat,0.17011869849175032
+PCN,Pitcairn Islands,pigs,backyard,meat,0
+PCN,Pitcairn Islands,pigs,intermediate,meat,0
+PCN,Pitcairn Islands,pigs,industrial,meat,0
+POL,Poland,pigs,backyard,meat,0.08723436080798834
+POL,Poland,pigs,intermediate,meat,0.12870006011622848
+POL,Poland,pigs,industrial,meat,0.17087845776801067
+PRT,Portugal,pigs,backyard,meat,0.0872347884114599
+PRT,Portugal,pigs,intermediate,meat,0.12869929914306966
+PRT,Portugal,pigs,industrial,meat,0.17087848590204643
+PRI,Puerto Rico,pigs,backyard,meat,0
+PRI,Puerto Rico,pigs,intermediate,meat,0
+PRI,Puerto Rico,pigs,industrial,meat,0.1731064506852679
+QAT,Qatar,pigs,backyard,meat,0
+QAT,Qatar,pigs,intermediate,meat,0
+QAT,Qatar,pigs,industrial,meat,0
+KOR,South Korea,pigs,backyard,meat,0
+KOR,South Korea,pigs,intermediate,meat,0.124321251186531
+KOR,South Korea,pigs,industrial,meat,0.15236799336088183
+MDA,Moldova,pigs,backyard,meat,0.08723431572012261
+MDA,Moldova,pigs,intermediate,meat,0.12869906602598954
+MDA,Moldova,pigs,industrial,meat,0.17087595824876003
+REU,Réunion,pigs,backyard,meat,0.04067573334431225
+REU,Réunion,pigs,intermediate,meat,0
+REU,Réunion,pigs,industrial,meat,0
+ROU,Romania,pigs,backyard,meat,0.08723438989718472
+ROU,Romania,pigs,intermediate,meat,0.128700061405343
+ROU,Romania,pigs,industrial,meat,0.17087848621576965
+RUS,Russia,pigs,backyard,meat,0.08723439913654407
+RUS,Russia,pigs,intermediate,meat,0.12869999906123641
+RUS,Russia,pigs,industrial,meat,0.17087846455774097
+RWA,Rwanda,pigs,backyard,meat,0.04067515152251211
+RWA,Rwanda,pigs,intermediate,meat,0.08057848951495045
+RWA,Rwanda,pigs,industrial,meat,0
+SHN,St. Helena,pigs,backyard,meat,0
+SHN,St. Helena,pigs,intermediate,meat,0
+SHN,St. Helena,pigs,industrial,meat,0
+KNA,St. Kitts & Nevis,pigs,backyard,meat,0
+KNA,St. Kitts & Nevis,pigs,intermediate,meat,0
+KNA,St. Kitts & Nevis,pigs,industrial,meat,0
+LCA,St. Lucia,pigs,backyard,meat,0
+LCA,St. Lucia,pigs,intermediate,meat,0
+LCA,St. Lucia,pigs,industrial,meat,0
+SPM,St. Pierre & Miquelon,pigs,backyard,meat,0
+SPM,St. Pierre & Miquelon,pigs,intermediate,meat,0
+SPM,St. Pierre & Miquelon,pigs,industrial,meat,0
+VCT,St. Vincent & Grenadines,pigs,backyard,meat,0
+VCT,St. Vincent & Grenadines,pigs,intermediate,meat,0
+VCT,St. Vincent & Grenadines,pigs,industrial,meat,0
+WSM,Samoa,pigs,backyard,meat,0.08723458106275385
+WSM,Samoa,pigs,intermediate,meat,0
+WSM,Samoa,pigs,industrial,meat,0
+SMR,San Marino,pigs,backyard,meat,0
+SMR,San Marino,pigs,intermediate,meat,0
+SMR,San Marino,pigs,industrial,meat,0
+STP,São Tomé & Príncipe,pigs,backyard,meat,0
+STP,São Tomé & Príncipe,pigs,intermediate,meat,0
+STP,São Tomé & Príncipe,pigs,industrial,meat,0
+SAU,Saudi Arabia,pigs,backyard,meat,0
+SAU,Saudi Arabia,pigs,intermediate,meat,0
+SAU,Saudi Arabia,pigs,industrial,meat,0
+SEN,Senegal,pigs,backyard,meat,0.040675228522631626
+SEN,Senegal,pigs,intermediate,meat,0.08057898065299655
+SEN,Senegal,pigs,industrial,meat,0
+SRB,Serbia,pigs,backyard,meat,0.08723440938459533
+SRB,Serbia,pigs,intermediate,meat,0.12869999263955526
+SRB,Serbia,pigs,industrial,meat,0
+SYC,Seychelles,pigs,backyard,meat,0
+SYC,Seychelles,pigs,intermediate,meat,0
+SYC,Seychelles,pigs,industrial,meat,0
+SLE,Sierra Leone,pigs,backyard,meat,0.04067530403533149
+SLE,Sierra Leone,pigs,intermediate,meat,0
+SLE,Sierra Leone,pigs,industrial,meat,0
+SGP,Singapore,pigs,backyard,meat,0
+SGP,Singapore,pigs,intermediate,meat,0
+SGP,Singapore,pigs,industrial,meat,0.1742671952306661
+SVK,Slovakia,pigs,backyard,meat,0.08723459135001238
+SVK,Slovakia,pigs,intermediate,meat,0.1286995002863809
+SVK,Slovakia,pigs,industrial,meat,0.17087844116328285
+SVN,Slovenia,pigs,backyard,meat,0.08723416358520479
+SVN,Slovenia,pigs,intermediate,meat,0.12869940036400557
+SVN,Slovenia,pigs,industrial,meat,0.17087809501633675
+SLB,Solomon Islands,pigs,backyard,meat,0.0872335645628425
+SLB,Solomon Islands,pigs,intermediate,meat,0
+SLB,Solomon Islands,pigs,industrial,meat,0
+SOM,Somalia,pigs,backyard,meat,0
+SOM,Somalia,pigs,intermediate,meat,0
+SOM,Somalia,pigs,industrial,meat,0
+ZAF,South Africa,pigs,backyard,meat,0.040675178482432794
+ZAF,South Africa,pigs,intermediate,meat,0.08057910373683193
+ZAF,South Africa,pigs,industrial,meat,0.18030884669329303
+SSD,South Sudan,pigs,backyard,meat,0
+SSD,South Sudan,pigs,intermediate,meat,0
+SSD,South Sudan,pigs,industrial,meat,0
+ESP,Spain,pigs,backyard,meat,0
+ESP,Spain,pigs,intermediate,meat,0
+ESP,Spain,pigs,industrial,meat,0.14504177765008894
+LKA,Sri Lanka,pigs,backyard,meat,0.0727573429590294
+LKA,Sri Lanka,pigs,intermediate,meat,0.12432251019235098
+LKA,Sri Lanka,pigs,industrial,meat,0.15252595563114685
+SDN,Sudan,pigs,backyard,meat,0
+SDN,Sudan,pigs,intermediate,meat,0
+SDN,Sudan,pigs,industrial,meat,0
+SUR,Suriname,pigs,backyard,meat,0.07509043109175134
+SUR,Suriname,pigs,intermediate,meat,0
+SUR,Suriname,pigs,industrial,meat,0.17311412521450723
+SJM,Svalbard & Jan Mayen,pigs,backyard,meat,0
+SJM,Svalbard & Jan Mayen,pigs,intermediate,meat,0
+SJM,Svalbard & Jan Mayen,pigs,industrial,meat,0
+SWZ,Swaziland,pigs,backyard,meat,0.04067529186849196
+SWZ,Swaziland,pigs,intermediate,meat,0
+SWZ,Swaziland,pigs,industrial,meat,0
+SWE,Sweden,pigs,backyard,meat,0
+SWE,Sweden,pigs,intermediate,meat,0.12869972744883634
+SWE,Sweden,pigs,industrial,meat,0.19465130258971378
+CHE,Switzerland,pigs,backyard,meat,0
+CHE,Switzerland,pigs,intermediate,meat,0.12869993649837494
+CHE,Switzerland,pigs,industrial,meat,0.1708784715857363
+SYR,Syria,pigs,backyard,meat,0
+SYR,Syria,pigs,intermediate,meat,0
+SYR,Syria,pigs,industrial,meat,0
+TJK,Tajikistan,pigs,backyard,meat,0
+TJK,Tajikistan,pigs,intermediate,meat,0
+TJK,Tajikistan,pigs,industrial,meat,0
+THA,Thailand,pigs,backyard,meat,0.0661025912492637
+THA,Thailand,pigs,intermediate,meat,0.12404734218434278
+THA,Thailand,pigs,industrial,meat,0.17426684490065059
+MKD,Macedonia,pigs,backyard,meat,0.08723416943936417
+MKD,Macedonia,pigs,intermediate,meat,0.128701201357787
+MKD,Macedonia,pigs,industrial,meat,0.17087853555254226
+TLS,Timor-Leste,pigs,backyard,meat,0.06610258239708314
+TLS,Timor-Leste,pigs,intermediate,meat,0.12404590204130443
+TLS,Timor-Leste,pigs,industrial,meat,0
+TGO,Togo,pigs,backyard,meat,0.04067518377296476
+TGO,Togo,pigs,intermediate,meat,0.08057749613412747
+TGO,Togo,pigs,industrial,meat,0
+TKL,Tokelau,pigs,backyard,meat,0
+TKL,Tokelau,pigs,intermediate,meat,0
+TKL,Tokelau,pigs,industrial,meat,0
+TON,Tonga,pigs,backyard,meat,0.08723357795529099
+TON,Tonga,pigs,intermediate,meat,0
+TON,Tonga,pigs,industrial,meat,0
+TTO,Trinidad & Tobago,pigs,backyard,meat,0
+TTO,Trinidad & Tobago,pigs,intermediate,meat,0
+TTO,Trinidad & Tobago,pigs,industrial,meat,0.1731057121419769
+TUN,Tunisia,pigs,backyard,meat,0
+TUN,Tunisia,pigs,intermediate,meat,0
+TUN,Tunisia,pigs,industrial,meat,0
+TUR,Turkey,pigs,backyard,meat,0
+TUR,Turkey,pigs,intermediate,meat,0
+TUR,Turkey,pigs,industrial,meat,0
+TKM,Turkmenistan,pigs,backyard,meat,0.07275764303669385
+TKM,Turkmenistan,pigs,intermediate,meat,0
+TKM,Turkmenistan,pigs,industrial,meat,0
+TCA,Turks & Caicos Islands,pigs,backyard,meat,0
+TCA,Turks & Caicos Islands,pigs,intermediate,meat,0
+TCA,Turks & Caicos Islands,pigs,industrial,meat,0
+TUV,Tuvalu,pigs,backyard,meat,0
+TUV,Tuvalu,pigs,intermediate,meat,0
+TUV,Tuvalu,pigs,industrial,meat,0
+UGA,Uganda,pigs,backyard,meat,0.04067517450092211
+UGA,Uganda,pigs,intermediate,meat,0.08057888863634435
+UGA,Uganda,pigs,industrial,meat,0.18031075187280307
+UKR,Ukraine,pigs,backyard,meat,0.0872343948491368
+UKR,Ukraine,pigs,intermediate,meat,0.12870009101360833
+UKR,Ukraine,pigs,industrial,meat,0.1708783535566487
+ARE,United Arab Emirates,pigs,backyard,meat,0
+ARE,United Arab Emirates,pigs,intermediate,meat,0
+ARE,United Arab Emirates,pigs,industrial,meat,0
+GBR,United Kingdom,pigs,backyard,meat,0
+GBR,United Kingdom,pigs,intermediate,meat,0
+GBR,United Kingdom,pigs,industrial,meat,0.18088789870621919
+TZA,Tanzania,pigs,backyard,meat,0.04067520571595731
+TZA,Tanzania,pigs,intermediate,meat,0.08057954790622081
+TZA,Tanzania,pigs,industrial,meat,0
+USA,United States,pigs,backyard,meat,0
+USA,United States,pigs,intermediate,meat,0
+USA,United States,pigs,industrial,meat,0.17081046405387532
+VIR,U.S. Virgin Islands,pigs,backyard,meat,0
+VIR,U.S. Virgin Islands,pigs,intermediate,meat,0
+VIR,U.S. Virgin Islands,pigs,industrial,meat,0
+URY,Uruguay,pigs,backyard,meat,0.07508749221318448
+URY,Uruguay,pigs,intermediate,meat,0.12859061451587073
+URY,Uruguay,pigs,industrial,meat,0.17310708270258796
+UZB,Uzbekistan,pigs,backyard,meat,0.07275721423039583
+UZB,Uzbekistan,pigs,intermediate,meat,0.12431880990400078
+UZB,Uzbekistan,pigs,industrial,meat,0
+VUT,Vanuatu,pigs,backyard,meat,0.08723377735952616
+VUT,Vanuatu,pigs,intermediate,meat,0.12429489915144212
+VUT,Vanuatu,pigs,industrial,meat,0.15596750970764975
+VEN,Venezuela,pigs,backyard,meat,0.07508803578759887
+VEN,Venezuela,pigs,intermediate,meat,0.1285913837392693
+VEN,Venezuela,pigs,industrial,meat,0.17310626064679568
+VNM,Vietnam,pigs,backyard,meat,0.057457836533165205
+VNM,Vietnam,pigs,intermediate,meat,0.14341000790478423
+VNM,Vietnam,pigs,industrial,meat,0
+WLF,Wallis & Futuna,pigs,backyard,meat,0
+WLF,Wallis & Futuna,pigs,intermediate,meat,0
+WLF,Wallis & Futuna,pigs,industrial,meat,0
+PSE,Palestinian Territories,pigs,backyard,meat,0
+PSE,Palestinian Territories,pigs,intermediate,meat,0
+PSE,Palestinian Territories,pigs,industrial,meat,0
+ESH,Western Sahara,pigs,backyard,meat,0
+ESH,Western Sahara,pigs,intermediate,meat,0
+ESH,Western Sahara,pigs,industrial,meat,0
+YEM,Yemen,pigs,backyard,meat,0
+YEM,Yemen,pigs,intermediate,meat,0
+YEM,Yemen,pigs,industrial,meat,0
+ZMB,Zambia,pigs,backyard,meat,0.04067520023363329
+ZMB,Zambia,pigs,intermediate,meat,0.08057920730729719
+ZMB,Zambia,pigs,industrial,meat,0
+ZWE,Zimbabwe,pigs,backyard,meat,0.040675196013983214
+ZWE,Zimbabwe,pigs,intermediate,meat,0.08057915899143447
+ZWE,Zimbabwe,pigs,industrial,meat,0
+ALA,Åland,pigs,backyard,meat,0.01163127516553374
+ALA,Åland,pigs,intermediate,meat,0.025739976941354145
+ALA,Åland,pigs,industrial,meat,0.11835811400201594
+IOT,British Indian Ocean Territory,pigs,backyard,meat,0.02643889078365734
+IOT,British Indian Ocean Territory,pigs,intermediate,meat,0.04028956650078651
+IOT,British Indian Ocean Territory,pigs,industrial,meat,0.0180309696292471
+CXR,Christmas Island,pigs,backyard,meat,0.05815591513483237
+CXR,Christmas Island,pigs,intermediate,meat,0.04143400842224211
+CXR,Christmas Island,pigs,industrial,meat,0.10397698272180073
+CCK,Cocos Islands,pigs,backyard,meat,0.05815591513483237
+CCK,Cocos Islands,pigs,intermediate,meat,0.04143400842224211
+CCK,Cocos Islands,pigs,industrial,meat,0.10397698272180073
+CUW,Curaçao,pigs,backyard,meat,0.01564333960561215
+CUW,Curaçao,pigs,intermediate,meat,0.01607389021596692
+CUW,Curaçao,pigs,industrial,meat,0.03606365875929098
+GIB,Gibraltar,pigs,backyard,meat,0.04984819109860967
+GIB,Gibraltar,pigs,intermediate,meat,0.07354278829639452
+GIB,Gibraltar,pigs,industrial,meat,0.1198975718918173
+XKO,Kosovo,pigs,backyard,meat,0.04984819109860967
+XKO,Kosovo,pigs,intermediate,meat,0.07354278829639452
+XKO,Kosovo,pigs,industrial,meat,0.1198975718918173
+BLM,Saint-Barthélemy,pigs,backyard,meat,0.01564333960561215
+BLM,Saint-Barthélemy,pigs,intermediate,meat,0.01607389021596692
+BLM,Saint-Barthélemy,pigs,industrial,meat,0.03606365875929098
+MAF,Saint-Martin,pigs,backyard,meat,0.01564333960561215
+MAF,Saint-Martin,pigs,intermediate,meat,0.01607389021596692
+MAF,Saint-Martin,pigs,industrial,meat,0.03606365875929098
+SXM,Sint Maarten,pigs,backyard,meat,0.01564333960561215
+SXM,Sint Maarten,pigs,intermediate,meat,0.01607389021596692
+SXM,Sint Maarten,pigs,industrial,meat,0.03606365875929098
+TWN,Taiwan,pigs,backyard,meat,0.04063207257427927
+TWN,Taiwan,pigs,intermediate,meat,0.07104075584087488
+TWN,Taiwan,pigs,industrial,meat,0.09068807821615425

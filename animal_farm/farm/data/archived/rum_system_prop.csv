@@ -1,0 +1,1465 @@
+iso3c,animal,system,system_prop,gapfill
+ABW,sheep,grassland,0,NA
+ABW,sheep,mixed,1,NA
+AFG,sheep,grassland,0.3234827593304711,NA
+AFG,sheep,mixed,0.6765172406695289,NA
+AGO,sheep,grassland,0.712342703895305,NA
+AGO,sheep,mixed,0.28765729610469504,NA
+ALB,sheep,grassland,0.10491931192959138,NA
+ALB,sheep,mixed,0.8950806880704086,NA
+ARE,sheep,grassland,0.9149051032789177,NA
+ARE,sheep,mixed,0.08509489672108231,NA
+ARG,sheep,grassland,0.6759643637314792,NA
+ARG,sheep,mixed,0.32403563626852083,NA
+ARM,sheep,grassland,0.19028523110922818,NA
+ARM,sheep,mixed,0.8097147688907718,NA
+AUS,sheep,grassland,0.22535396835238158,NA
+AUS,sheep,mixed,0.7746460316476184,NA
+AUT,sheep,grassland,0.1448847598686265,NA
+AUT,sheep,mixed,0.8551152401313734,NA
+AZE,sheep,grassland,0.16519612683211,NA
+AZE,sheep,mixed,0.8348038731678901,NA
+BDI,sheep,grassland,6.087180315979949e-4,NA
+BDI,sheep,mixed,0.9993912819684021,NA
+BEN,sheep,grassland,0.21243268691017367,NA
+BEN,sheep,mixed,0.7875673130898263,NA
+BES,sheep,grassland,1,NA
+BES,sheep,mixed,0,NA
+BFA,sheep,grassland,0.2843989668932478,NA
+BFA,sheep,mixed,0.7156010331067523,NA
+BGD,sheep,grassland,0.00257810022795254,NA
+BGD,sheep,mixed,0.9974218997720474,NA
+BGR,sheep,grassland,0.0020064791612127686,NA
+BGR,sheep,mixed,0.9979935208387872,NA
+BHR,sheep,grassland,1,NA
+BHR,sheep,mixed,0,NA
+BHS,sheep,grassland,0.7131126494684926,NA
+BHS,sheep,mixed,0.2868873505315074,NA
+BIH,sheep,grassland,0.009361572174843782,NA
+BIH,sheep,mixed,0.9906384278251562,NA
+BLZ,sheep,grassland,0.12200573250873743,NA
+BLZ,sheep,mixed,0.8779942674912626,NA
+BOL,sheep,grassland,0.2814234913378242,NA
+BOL,sheep,mixed,0.7185765086621758,NA
+BRA,sheep,grassland,0.36635022105672205,NA
+BRA,sheep,mixed,0.633649778943278,NA
+BRN,sheep,grassland,0.15636027185729415,NA
+BRN,sheep,mixed,0.8436397281427058,NA
+BTN,sheep,grassland,0.43612200553714797,NA
+BTN,sheep,mixed,0.563877994462852,NA
+BWA,sheep,grassland,0.6930894048466559,NA
+BWA,sheep,mixed,0.30691059515334396,NA
+CAF,sheep,grassland,0.6697316671914794,NA
+CAF,sheep,mixed,0.33026833280852075,NA
+CAN,sheep,grassland,6.038378476700949e-4,NA
+CAN,sheep,mixed,0.9993961621523298,NA
+CHE,sheep,grassland,0.23778153393387647,NA
+CHE,sheep,mixed,0.7622184660661235,NA
+CHL,sheep,grassland,0.2086957196795368,NA
+CHL,sheep,mixed,0.7913042803204633,NA
+CHN,sheep,grassland,0.13368588275750345,NA
+CHN,sheep,mixed,0.8663141172424966,NA
+CIV,sheep,grassland,0.23012435963069114,NA
+CIV,sheep,mixed,0.7698756403693089,NA
+CMR,sheep,grassland,0.13724113528366003,NA
+CMR,sheep,mixed,0.8627588647163399,NA
+COD,sheep,grassland,0.4639717696774456,NA
+COD,sheep,mixed,0.5360282303225544,NA
+COG,sheep,grassland,0.7873347698238283,NA
+COG,sheep,mixed,0.21266523017617162,NA
+COL,sheep,grassland,0.4741275535762906,NA
+COL,sheep,mixed,0.5258724464237094,NA
+CPV,sheep,grassland,0.1772882293360331,NA
+CPV,sheep,mixed,0.822711770663967,NA
+CUB,sheep,grassland,0.0023976029148054375,NA
+CUB,sheep,mixed,0.9976023970851945,NA
+CUW,sheep,grassland,0,NA
+CUW,sheep,mixed,1,NA
+CYP,sheep,grassland,0.3750069935553488,NA
+CYP,sheep,mixed,0.6249930064446513,NA
+DEU,sheep,grassland,0,NA
+DEU,sheep,mixed,1,NA
+DMA,sheep,grassland,1,NA
+DMA,sheep,mixed,0,NA
+DNK,sheep,grassland,0,NA
+DNK,sheep,mixed,1,NA
+DOM,sheep,grassland,0.027615984330261432,NA
+DOM,sheep,mixed,0.9723840156697385,NA
+DZA,sheep,grassland,0.5571400047758467,NA
+DZA,sheep,mixed,0.44285999522415337,NA
+ECU,sheep,grassland,0.06574975638963387,NA
+ECU,sheep,mixed,0.9342502436103661,NA
+EGY,sheep,grassland,0.2615737805430108,NA
+EGY,sheep,mixed,0.7384262194569893,NA
+ERI,sheep,grassland,0.4876846175834341,NA
+ERI,sheep,mixed,0.5123153824165658,NA
+ESP,sheep,grassland,0.02570934935918401,NA
+ESP,sheep,mixed,0.974290650640816,NA
+EST,sheep,grassland,0,NA
+EST,sheep,mixed,1,NA
+ETH,sheep,grassland,0.37544874017383406,NA
+ETH,sheep,mixed,0.6245512598261659,NA
+FJI,sheep,grassland,0.6309168547114435,NA
+FJI,sheep,mixed,0.3690831452885564,NA
+FRA,sheep,grassland,0.0062093772777985475,NA
+FRA,sheep,mixed,0.9937906227222014,NA
+GAB,sheep,grassland,0.3147099470485735,NA
+GAB,sheep,mixed,0.6852900529514264,NA
+GBR,sheep,grassland,0.08064494153577399,NA
+GBR,sheep,mixed,0.919355058464226,NA
+GEO,sheep,grassland,0.20309840876299595,NA
+GEO,sheep,mixed,0.796901591237004,NA
+GHA,sheep,grassland,0.22981740011865898,NA
+GHA,sheep,mixed,0.770182599881341,NA
+GIN,sheep,grassland,0.5978929335354466,NA
+GIN,sheep,mixed,0.40210706646455346,NA
+GLP,sheep,grassland,0.49757005975300644,NA
+GLP,sheep,mixed,0.5024299402469936,NA
+GMB,sheep,grassland,0.1198811127168048,NA
+GMB,sheep,mixed,0.8801188872831953,NA
+GNB,sheep,grassland,0.5813310475084894,NA
+GNB,sheep,mixed,0.41866895249151065,NA
+GNQ,sheep,grassland,0.05917133857024442,NA
+GNQ,sheep,mixed,0.9408286614297555,NA
+GRC,sheep,grassland,0.1370760467285729,NA
+GRC,sheep,mixed,0.8629239532714271,NA
+GUF,sheep,grassland,8.37310975311019e-5,NA
+GUF,sheep,mixed,0.9999162689024689,NA
+GUY,sheep,grassland,0.7322646229402608,NA
+GUY,sheep,mixed,0.26773537705973915,NA
+HKG,sheep,grassland,0,NA
+HKG,sheep,mixed,1,NA
+HND,sheep,grassland,0.05973458702825619,NA
+HND,sheep,mixed,0.9402654129717437,NA
+HRV,sheep,grassland,0.11141306337799105,NA
+HRV,sheep,mixed,0.8885869366220089,NA
+HTI,sheep,grassland,0.008563264206784557,NA
+HTI,sheep,mixed,0.9914367357932155,NA
+IDN,sheep,grassland,0.005242666439878573,NA
+IDN,sheep,mixed,0.9947573335601213,NA
+IND,sheep,grassland,0.05364027407207175,NA
+IND,sheep,mixed,0.9463597259279283,NA
+IRL,sheep,grassland,0.34876350118908905,NA
+IRL,sheep,mixed,0.6512364988109108,NA
+IRN,sheep,grassland,0.5373873117120258,NA
+IRN,sheep,mixed,0.46261268828797414,NA
+IRQ,sheep,grassland,0.39814795282025217,NA
+IRQ,sheep,mixed,0.6018520471797478,NA
+ISL,sheep,grassland,0.004080670579655005,NA
+ISL,sheep,mixed,0.9959193294203451,NA
+ISR,sheep,grassland,0.29245184733058416,NA
+ISR,sheep,mixed,0.707548152669416,NA
+ITA,sheep,grassland,0.15617506102518028,NA
+ITA,sheep,mixed,0.8438249389748197,NA
+JOR,sheep,grassland,0.7153691191955057,NA
+JOR,sheep,mixed,0.28463088080449434,NA
+JPN,sheep,grassland,0.011664535997476948,NA
+JPN,sheep,mixed,0.988335464002523,NA
+KEN,sheep,grassland,0.6683856250625817,NA
+KEN,sheep,mixed,0.33161437493741835,NA
+KGZ,sheep,grassland,0.03634417606413446,NA
+KGZ,sheep,mixed,0.9636558239358656,NA
+KHM,sheep,grassland,0.14955593809909906,NA
+KHM,sheep,mixed,0.850444061900901,NA
+KOR,sheep,grassland,0,NA
+KOR,sheep,mixed,1,NA
+KWT,sheep,grassland,0.9683336024924418,NA
+KWT,sheep,mixed,0.031666397507558085,NA
+LAO,sheep,grassland,0.44947456356106813,NA
+LAO,sheep,mixed,0.5505254364389319,NA
+LBN,sheep,grassland,0.1641872781266738,NA
+LBN,sheep,mixed,0.8358127218733262,NA
+LBR,sheep,grassland,0.0021086524791897017,NA
+LBR,sheep,mixed,0.9978913475208103,NA
+LBY,sheep,grassland,0.4577682039232682,NA
+LBY,sheep,mixed,0.5422317960767318,NA
+LKA,sheep,grassland,6.593321145503966e-4,NA
+LKA,sheep,mixed,0.9993406678854496,NA
+MAR,sheep,grassland,0.26492369860970943,NA
+MAR,sheep,mixed,0.7350763013902906,NA
+MDG,sheep,grassland,0.8200757607552065,NA
+MDG,sheep,mixed,0.17992423924479353,NA
+MEX,sheep,grassland,0.19601604637434691,NA
+MEX,sheep,mixed,0.8039839536256531,NA
+MKD,sheep,grassland,0.027425485512426656,NA
+MKD,sheep,mixed,0.9725745144875733,NA
+MLI,sheep,grassland,0.6568400053947272,NA
+MLI,sheep,mixed,0.34315999460527274,NA
+MMR,sheep,grassland,0.03826721322547658,NA
+MMR,sheep,mixed,0.9617327867745235,NA
+MNE,sheep,grassland,0.0016776098204279936,NA
+MNE,sheep,mixed,0.998322390179572,NA
+MOZ,sheep,grassland,0.5011584285723206,NA
+MOZ,sheep,mixed,0.49884157142767943,NA
+MRT,sheep,grassland,0.9066400577823412,NA
+MRT,sheep,mixed,0.09335994221765877,NA
+MWI,sheep,grassland,0.11917768893536558,NA
+MWI,sheep,mixed,0.8808223110646344,NA
+MYS,sheep,grassland,0.0013012514370609421,NA
+MYS,sheep,mixed,0.998698748562939,NA
+NAM,sheep,grassland,0.9896093807310634,NA
+NAM,sheep,mixed,0.010390619268936646,NA
+NCL,sheep,grassland,0.9496159153091276,NA
+NCL,sheep,mixed,0.050384084690872376,NA
+NER,sheep,grassland,0.3774975965759679,NA
+NER,sheep,mixed,0.6225024034240321,NA
+NGA,sheep,grassland,0.036320747593132766,NA
+NGA,sheep,mixed,0.9636792524068674,NA
+NIC,sheep,grassland,4.999066438495873e-4,NA
+NIC,sheep,mixed,0.9995000933561505,NA
+NOR,sheep,grassland,7.39522379255699e-4,NA
+NOR,sheep,mixed,0.9992604776207443,NA
+NPL,sheep,grassland,0.20239028160408387,NA
+NPL,sheep,mixed,0.7976097183959161,NA
+NZL,sheep,grassland,0.2658607225388263,NA
+NZL,sheep,mixed,0.7341392774611738,NA
+OMN,sheep,grassland,0.9429876711097954,NA
+OMN,sheep,mixed,0.057012328890204536,NA
+PAK,sheep,grassland,0.391674351762551,NA
+PAK,sheep,mixed,0.608325648237449,NA
+PAN,sheep,grassland,0.008920741923830843,NA
+PAN,sheep,mixed,0.9910792580761691,NA
+PER,sheep,grassland,0.1356577178851556,NA
+PER,sheep,mixed,0.8643422821148444,NA
+PHL,sheep,grassland,0.010257469449240312,NA
+PHL,sheep,mixed,0.9897425305507597,NA
+PNG,sheep,grassland,9.839269258116182e-7,NA
+PNG,sheep,mixed,0.9999990160730743,NA
+POL,sheep,grassland,0.001145737667533409,NA
+POL,sheep,mixed,0.9988542623324667,NA
+PRI,sheep,grassland,0.017933397636668548,NA
+PRI,sheep,mixed,0.9820666023633315,NA
+PRK,sheep,grassland,0,NA
+PRK,sheep,mixed,1,NA
+PRT,sheep,grassland,0.06724907948169806,NA
+PRT,sheep,mixed,0.932750920518302,NA
+PRY,sheep,grassland,0.2044402338829405,NA
+PRY,sheep,mixed,0.7955597661170595,NA
+PSE,sheep,grassland,0.5347231840194485,NA
+PSE,sheep,mixed,0.4652768159805514,NA
+QAT,sheep,grassland,0.7822981027456999,NA
+QAT,sheep,mixed,0.21770189725430023,NA
+RUS,sheep,grassland,0.005990925703667455,NA
+RUS,sheep,mixed,0.9940090742963326,NA
+RWA,sheep,grassland,9.643615923667728e-4,NA
+RWA,sheep,mixed,0.9990356384076332,NA
+SAU,sheep,grassland,0.8314622285417258,NA
+SAU,sheep,mixed,0.16853777145827428,NA
+SDN,sheep,grassland,0.3909597833371213,NA
+SDN,sheep,mixed,0.6090402166628787,NA
+SEN,sheep,grassland,0.1594427290805474,NA
+SEN,sheep,mixed,0.8405572709194526,NA
+SJM,sheep,grassland,0.008384522430577211,NA
+SJM,sheep,mixed,0.9916154775694229,NA
+SLE,sheep,grassland,0.10530707285795475,NA
+SLE,sheep,mixed,0.8946929271420453,NA
+SLV,sheep,grassland,7.830724160829516e-5,NA
+SLV,sheep,mixed,0.9999216927583917,NA
+SOM,sheep,grassland,0.9241361413573531,NA
+SOM,sheep,mixed,0.07586385864264684,NA
+SSD,sheep,grassland,0.6808232845592017,NA
+SSD,sheep,mixed,0.3191767154407983,NA
+SUR,sheep,grassland,0.2862788585247066,NA
+SUR,sheep,mixed,0.7137211414752934,NA
+SWZ,sheep,grassland,0.2928360711215879,NA
+SWZ,sheep,mixed,0.7071639288784122,NA
+SYR,sheep,grassland,0.35784428393000606,NA
+SYR,sheep,mixed,0.642155716069994,NA
+TCA,sheep,grassland,0.2409506072868173,NA
+TCA,sheep,mixed,0.7590493927131826,NA
+TCD,sheep,grassland,0.5683061182290104,NA
+TCD,sheep,mixed,0.4316938817709895,NA
+TGO,sheep,grassland,0.14379957342909336,NA
+TGO,sheep,mixed,0.8562004265709067,NA
+THA,sheep,grassland,0.00967528799989999,NA
+THA,sheep,mixed,0.9903247120001,NA
+TJK,sheep,grassland,0.5874373813661873,NA
+TJK,sheep,mixed,0.41256261863381266,NA
+TKM,sheep,grassland,0.2946499406243461,NA
+TKM,sheep,mixed,0.7053500593756539,NA
+TTO,sheep,grassland,0.08483515314220964,NA
+TTO,sheep,mixed,0.9151648468577904,NA
+TUN,sheep,grassland,0.09621620394578764,NA
+TUN,sheep,mixed,0.9037837960542124,NA
+TUR,sheep,grassland,0.03940801390292142,NA
+TUR,sheep,mixed,0.9605919860970785,NA
+TWN,sheep,grassland,0,NA
+TWN,sheep,mixed,1,NA
+TZA,sheep,grassland,0.18880961633121113,NA
+TZA,sheep,mixed,0.8111903836687888,NA
+UGA,sheep,grassland,0.06746935928096355,NA
+UGA,sheep,mixed,0.9325306407190365,NA
+UKR,sheep,grassland,0,NA
+UKR,sheep,mixed,1,NA
+URY,sheep,grassland,0.5846373815244816,NA
+URY,sheep,mixed,0.4153626184755183,NA
+USA,sheep,grassland,0.2853605252106864,NA
+USA,sheep,mixed,0.7146394747893137,NA
+UZB,sheep,grassland,0.3023625858279468,NA
+UZB,sheep,mixed,0.6976374141720532,NA
+VEN,sheep,grassland,0.37618855768178755,NA
+VEN,sheep,mixed,0.6238114423182125,NA
+VNM,sheep,grassland,0.01790862393018114,NA
+VNM,sheep,mixed,0.9820913760698188,NA
+VUT,sheep,grassland,0.05424111980741749,NA
+VUT,sheep,mixed,0.9457588801925826,NA
+XMI,sheep,grassland,0,NA
+XMI,sheep,mixed,1,NA
+YEM,sheep,grassland,0.8069839089288996,NA
+YEM,sheep,mixed,0.1930160910711004,NA
+ZAF,sheep,grassland,0.5119411381467069,NA
+ZAF,sheep,mixed,0.488058861853293,NA
+ZMB,sheep,grassland,0.7279569979769356,NA
+ZMB,sheep,mixed,0.27204300202306436,NA
+ZWE,sheep,grassland,0.4366896370810955,NA
+ZWE,sheep,mixed,0.5633103629189046,NA
+AND,sheep,grassland,0,NA
+AND,sheep,mixed,1,NA
+ATG,sheep,grassland,0,NA
+ATG,sheep,mixed,1,NA
+BEL,sheep,grassland,0,NA
+BEL,sheep,mixed,1,NA
+BLR,sheep,grassland,0,NA
+BLR,sheep,mixed,1,NA
+BRB,sheep,grassland,0,NA
+BRB,sheep,mixed,1,NA
+COM,sheep,grassland,0,NA
+COM,sheep,mixed,1,NA
+CRI,sheep,grassland,0,NA
+CRI,sheep,mixed,1,NA
+CXR,sheep,grassland,0,NA
+CXR,sheep,mixed,1,NA
+CZE,sheep,grassland,0,NA
+CZE,sheep,mixed,1,NA
+DJI,sheep,grassland,1,NA
+DJI,sheep,mixed,0,NA
+ESH,sheep,grassland,1,NA
+ESH,sheep,mixed,0,NA
+FIN,sheep,grassland,0,NA
+FIN,sheep,mixed,1,NA
+FLK,sheep,grassland,0,NA
+FLK,sheep,mixed,1,NA
+FRO,sheep,grassland,0,NA
+FRO,sheep,mixed,1,NA
+GGY,sheep,grassland,0,NA
+GGY,sheep,mixed,1,NA
+GRD,sheep,grassland,0,NA
+GRD,sheep,mixed,1,NA
+GTM,sheep,grassland,0,NA
+GTM,sheep,mixed,1,NA
+HUN,sheep,grassland,0,NA
+HUN,sheep,mixed,1,NA
+IMN,sheep,grassland,0,NA
+IMN,sheep,mixed,1,NA
+JAM,sheep,grassland,0,NA
+JAM,sheep,mixed,1,NA
+JEY,sheep,grassland,0,NA
+JEY,sheep,mixed,1,NA
+KAZ,sheep,grassland,0,NA
+KAZ,sheep,mixed,1,NA
+KNA,sheep,grassland,0,NA
+KNA,sheep,mixed,1,NA
+LCA,sheep,grassland,0,NA
+LCA,sheep,mixed,1,NA
+LSO,sheep,grassland,0,NA
+LSO,sheep,mixed,1,NA
+LTU,sheep,grassland,0,NA
+LTU,sheep,mixed,1,NA
+LUX,sheep,grassland,0,NA
+LUX,sheep,mixed,1,NA
+LVA,sheep,grassland,0,NA
+LVA,sheep,mixed,1,NA
+MAF,sheep,grassland,1,NA
+MAF,sheep,mixed,0,NA
+MDA,sheep,grassland,0,NA
+MDA,sheep,mixed,1,NA
+MLT,sheep,grassland,0,NA
+MLT,sheep,mixed,1,NA
+MNG,sheep,grassland,0,NA
+MNG,sheep,mixed,1,NA
+MTQ,sheep,grassland,0,NA
+MTQ,sheep,mixed,1,NA
+MUS,sheep,grassland,0,NA
+MUS,sheep,mixed,1,NA
+MYT,sheep,grassland,0,NA
+MYT,sheep,mixed,1,NA
+NLD,sheep,grassland,0,NA
+NLD,sheep,mixed,1,NA
+PLW,sheep,grassland,0,NA
+PLW,sheep,mixed,1,NA
+REU,sheep,grassland,0,NA
+REU,sheep,mixed,1,NA
+ROU,sheep,grassland,0,NA
+ROU,sheep,mixed,1,NA
+SGP,sheep,grassland,0,NA
+SGP,sheep,mixed,1,NA
+SMR,sheep,grassland,0,NA
+SMR,sheep,mixed,1,NA
+SRB,sheep,grassland,0,NA
+SRB,sheep,mixed,1,NA
+STP,sheep,grassland,0,NA
+STP,sheep,mixed,1,NA
+SVK,sheep,grassland,0,NA
+SVK,sheep,mixed,1,NA
+SVN,sheep,grassland,0,NA
+SVN,sheep,mixed,1,NA
+SWE,sheep,grassland,0,NA
+SWE,sheep,mixed,1,NA
+TLS,sheep,grassland,0,NA
+TLS,sheep,mixed,1,NA
+XKO,sheep,grassland,0,NA
+XKO,sheep,mixed,1,NA
+ALA,sheep,grassland,0,gapfilled with un region general medians
+ALA,sheep,mixed,1,gapfilled with un region general medians
+ASM,sheep,grassland,0.25,gapfilled with un region general medians
+ASM,sheep,mixed,0.75,gapfilled with un region general medians
+IOT,sheep,grassland,0.25,gapfilled with un region general medians
+IOT,sheep,mixed,0.75,gapfilled with un region general medians
+CYM,sheep,grassland,0,gapfilled with un region general medians
+CYM,sheep,mixed,1,gapfilled with un region general medians
+CCK,sheep,grassland,0.25,gapfilled with un region general medians
+CCK,sheep,mixed,0.75,gapfilled with un region general medians
+COK,sheep,grassland,0.25,gapfilled with un region general medians
+COK,sheep,mixed,0.75,gapfilled with un region general medians
+PYF,sheep,grassland,0.25,gapfilled with un region general medians
+PYF,sheep,mixed,0.75,gapfilled with un region general medians
+GIB,sheep,grassland,0,gapfilled with un region general medians
+GIB,sheep,mixed,1,gapfilled with un region general medians
+KIR,sheep,grassland,0.25,gapfilled with un region general medians
+KIR,sheep,mixed,0.75,gapfilled with un region general medians
+LIE,sheep,grassland,0,gapfilled with un region general medians
+LIE,sheep,mixed,1,gapfilled with un region general medians
+MAC,sheep,grassland,0.25,gapfilled with un region general medians
+MAC,sheep,mixed,0.75,gapfilled with un region general medians
+MDV,sheep,grassland,0.25,gapfilled with un region general medians
+MDV,sheep,mixed,0.75,gapfilled with un region general medians
+MHL,sheep,grassland,0.25,gapfilled with un region general medians
+MHL,sheep,mixed,0.75,gapfilled with un region general medians
+FSM,sheep,grassland,0.25,gapfilled with un region general medians
+FSM,sheep,mixed,0.75,gapfilled with un region general medians
+MCO,sheep,grassland,0,gapfilled with un region general medians
+MCO,sheep,mixed,1,gapfilled with un region general medians
+MSR,sheep,grassland,0,gapfilled with un region general medians
+MSR,sheep,mixed,1,gapfilled with un region general medians
+NRU,sheep,grassland,0.25,gapfilled with un region general medians
+NRU,sheep,mixed,0.75,gapfilled with un region general medians
+NIU,sheep,grassland,0.25,gapfilled with un region general medians
+NIU,sheep,mixed,0.75,gapfilled with un region general medians
+NFK,sheep,grassland,0.25,gapfilled with un region general medians
+NFK,sheep,mixed,0.75,gapfilled with un region general medians
+PCN,sheep,grassland,0.25,gapfilled with un region general medians
+PCN,sheep,mixed,0.75,gapfilled with un region general medians
+BLM,sheep,grassland,0,gapfilled with un region general medians
+BLM,sheep,mixed,1,gapfilled with un region general medians
+SHN,sheep,grassland,0.25,gapfilled with un region general medians
+SHN,sheep,mixed,0.75,gapfilled with un region general medians
+WSM,sheep,grassland,0.25,gapfilled with un region general medians
+WSM,sheep,mixed,0.75,gapfilled with un region general medians
+SYC,sheep,grassland,0.25,gapfilled with un region general medians
+SYC,sheep,mixed,0.75,gapfilled with un region general medians
+SXM,sheep,grassland,0,gapfilled with un region general medians
+SXM,sheep,mixed,1,gapfilled with un region general medians
+TKL,sheep,grassland,0.25,gapfilled with un region general medians
+TKL,sheep,mixed,0.75,gapfilled with un region general medians
+TON,sheep,grassland,0.25,gapfilled with un region general medians
+TON,sheep,mixed,0.75,gapfilled with un region general medians
+TUV,sheep,grassland,0.25,gapfilled with un region general medians
+TUV,sheep,mixed,0.75,gapfilled with un region general medians
+WLF,sheep,grassland,0.25,gapfilled with un region general medians
+WLF,sheep,mixed,0.75,gapfilled with un region general medians
+GRL,sheep,grassland,0,gapfilled with un region general medians
+GRL,sheep,mixed,1,gapfilled with un region general medians
+GUM,sheep,grassland,0.25,gapfilled with un region general medians
+GUM,sheep,mixed,0.75,gapfilled with un region general medians
+MNP,sheep,grassland,0.25,gapfilled with un region general medians
+MNP,sheep,mixed,0.75,gapfilled with un region general medians
+SLB,sheep,grassland,0.25,gapfilled with un region general medians
+SLB,sheep,mixed,0.75,gapfilled with un region general medians
+SPM,sheep,grassland,0,gapfilled with un region general medians
+SPM,sheep,mixed,1,gapfilled with un region general medians
+VIR,sheep,grassland,0,gapfilled with un region general medians
+VIR,sheep,mixed,1,gapfilled with un region general medians
+AIA,sheep,grassland,0,gapfilled with un region general medians
+AIA,sheep,mixed,1,gapfilled with un region general medians
+BMU,sheep,grassland,0,gapfilled with un region general medians
+BMU,sheep,mixed,1,gapfilled with un region general medians
+VCT,sheep,grassland,0,gapfilled with un region general medians
+VCT,sheep,mixed,1,gapfilled with un region general medians
+VGB,sheep,grassland,0,gapfilled with un region general medians
+VGB,sheep,mixed,1,gapfilled with un region general medians
+ABW,goats,grassland,0,NA
+ABW,goats,mixed,1,NA
+AFG,goats,grassland,0.45343771524025434,NA
+AFG,goats,mixed,0.5465622847597457,NA
+AGO,goats,grassland,0.6529540690463742,NA
+AGO,goats,mixed,0.3470459309536258,NA
+ALB,goats,grassland,0.17961410570657566,NA
+ALB,goats,mixed,0.8203858942934245,NA
+ARE,goats,grassland,0.933587053866567,NA
+ARE,goats,mixed,0.06641294613343286,NA
+ARG,goats,grassland,0.8408833980341331,NA
+ARG,goats,mixed,0.1591166019658669,NA
+ARM,goats,grassland,0.2657609422767592,NA
+ARM,goats,mixed,0.7342390577232407,NA
+AUS,goats,grassland,0.8825098171543754,NA
+AUS,goats,mixed,0.11749018284562461,NA
+AUT,goats,grassland,0.06463054886620781,NA
+AUT,goats,mixed,0.9353694511337922,NA
+AZE,goats,grassland,0.26840141221089725,NA
+AZE,goats,mixed,0.7315985877891028,NA
+BDI,goats,grassland,0.002947829073135021,NA
+BDI,goats,mixed,0.997052170926865,NA
+BEN,goats,grassland,0.17945185153390708,NA
+BEN,goats,mixed,0.8205481484660929,NA
+BES,goats,grassland,1,NA
+BES,goats,mixed,0,NA
+BFA,goats,grassland,0.29690270605977526,NA
+BFA,goats,mixed,0.7030972939402247,NA
+BGD,goats,grassland,0.006048848077474135,NA
+BGD,goats,mixed,0.9939511519225258,NA
+BGR,goats,grassland,0.005461187892844817,NA
+BGR,goats,mixed,0.9945388121071551,NA
+BHR,goats,grassland,1,NA
+BHR,goats,mixed,0,NA
+BHS,goats,grassland,0.740976662574766,NA
+BHS,goats,mixed,0.2590233374252339,NA
+BIH,goats,grassland,0.01194024794365173,NA
+BIH,goats,mixed,0.9880597520563482,NA
+BLZ,goats,grassland,0.3948122620443411,NA
+BLZ,goats,mixed,0.6051877379556588,NA
+BOL,goats,grassland,0.2992585587971603,NA
+BOL,goats,mixed,0.7007414412028397,NA
+BRA,goats,grassland,0.4512142706427717,NA
+BRA,goats,mixed,0.5487857293572281,NA
+BRN,goats,grassland,0.15072192619714167,NA
+BRN,goats,mixed,0.8492780738028584,NA
+BTN,goats,grassland,0.3140110393143485,NA
+BTN,goats,mixed,0.6859889606856516,NA
+BWA,goats,grassland,0.7183031135558645,NA
+BWA,goats,mixed,0.2816968864441356,NA
+CAF,goats,grassland,0.8501350861741677,NA
+CAF,goats,mixed,0.1498649138258323,NA
+CAN,goats,grassland,3.2902453220787746e-4,NA
+CAN,goats,mixed,0.9996709754677922,NA
+CHE,goats,grassland,0.1560790881734705,NA
+CHE,goats,mixed,0.8439209118265296,NA
+CHL,goats,grassland,0.784886587291111,NA
+CHL,goats,mixed,0.21511341270888895,NA
+CHN,goats,grassland,0.0983461064478278,NA
+CHN,goats,mixed,0.9016538935521722,NA
+CIV,goats,grassland,0.25375303983578634,NA
+CIV,goats,mixed,0.7462469601642138,NA
+CMR,goats,grassland,0.25206716527572737,NA
+CMR,goats,mixed,0.7479328347242727,NA
+COD,goats,grassland,0.33415070540094405,NA
+COD,goats,mixed,0.665849294599056,NA
+COG,goats,grassland,0.8097746987128785,NA
+COG,goats,mixed,0.19022530128712145,NA
+COL,goats,grassland,0.8101158863643638,NA
+COL,goats,mixed,0.18988411363563626,NA
+CPV,goats,grassland,0.47068320828960214,NA
+CPV,goats,mixed,0.5293167917103978,NA
+CUB,goats,grassland,0.005161607935712738,NA
+CUB,goats,mixed,0.9948383920642874,NA
+CUW,goats,grassland,0,NA
+CUW,goats,mixed,1,NA
+CYP,goats,grassland,0.377700372596689,NA
+CYP,goats,mixed,0.6222996274033109,NA
+DEU,goats,grassland,0,NA
+DEU,goats,mixed,1,NA
+DMA,goats,grassland,1,NA
+DMA,goats,mixed,0,NA
+DNK,goats,grassland,0,NA
+DNK,goats,mixed,1,NA
+DOM,goats,grassland,0.01902521220284365,NA
+DOM,goats,mixed,0.9809747877971564,NA
+DZA,goats,grassland,0.6366491110065843,NA
+DZA,goats,mixed,0.3633508889934157,NA
+ECU,goats,grassland,0.3431076622893527,NA
+ECU,goats,mixed,0.6568923377106473,NA
+EGY,goats,grassland,0.26941088510945393,NA
+EGY,goats,mixed,0.730589114890546,NA
+ERI,goats,grassland,0.5588781137087492,NA
+ERI,goats,mixed,0.4411218862912507,NA
+ESP,goats,grassland,0.10867344979617168,NA
+ESP,goats,mixed,0.8913265502038283,NA
+EST,goats,grassland,0,NA
+EST,goats,mixed,1,NA
+ETH,goats,grassland,0.470521828393319,NA
+ETH,goats,mixed,0.5294781716066811,NA
+FJI,goats,grassland,0.46944604011030816,NA
+FJI,goats,mixed,0.5305539598896918,NA
+FRA,goats,grassland,0.011089615927217,NA
+FRA,goats,mixed,0.9889103840727831,NA
+GAB,goats,grassland,0.2532029900741524,NA
+GAB,goats,mixed,0.7467970099258475,NA
+GBR,goats,grassland,0.034349197110274586,NA
+GBR,goats,mixed,0.9656508028897255,NA
+GEO,goats,grassland,0.12051756266285886,NA
+GEO,goats,mixed,0.8794824373371412,NA
+GHA,goats,grassland,0.2231964284346886,NA
+GHA,goats,mixed,0.7768035715653114,NA
+GIN,goats,grassland,0.5807354056781944,NA
+GIN,goats,mixed,0.4192645943218055,NA
+GLP,goats,grassland,0.3307366498727258,NA
+GLP,goats,mixed,0.6692633501272742,NA
+GMB,goats,grassland,0.15631981331643807,NA
+GMB,goats,mixed,0.8436801866835619,NA
+GNB,goats,grassland,0.39213604490680515,NA
+GNB,goats,mixed,0.6078639550931948,NA
+GNQ,goats,grassland,0.004735379075200341,NA
+GNQ,goats,mixed,0.9952646209247996,NA
+GRC,goats,grassland,0.21637376716934817,NA
+GRC,goats,mixed,0.7836262328306518,NA
+GUF,goats,grassland,0.19103389955335187,NA
+GUF,goats,mixed,0.8089661004466482,NA
+GUM,goats,grassland,0,NA
+GUM,goats,mixed,1,NA
+GUY,goats,grassland,0.5875750212132845,NA
+GUY,goats,mixed,0.41242497878671547,NA
+HKG,goats,grassland,0,NA
+HKG,goats,mixed,1,NA
+HND,goats,grassland,0.10671085566061198,NA
+HND,goats,mixed,0.893289144339388,NA
+HRV,goats,grassland,0.07970799134845594,NA
+HRV,goats,mixed,0.920292008651544,NA
+HTI,goats,grassland,0.0036793311008921055,NA
+HTI,goats,mixed,0.9963206688991079,NA
+IDN,goats,grassland,0.008139289704853395,NA
+IDN,goats,mixed,0.9918607102951466,NA
+IND,goats,grassland,0.03681731258437309,NA
+IND,goats,mixed,0.963182687415627,NA
+IRL,goats,grassland,0.32260039346061076,NA
+IRL,goats,mixed,0.6773996065393892,NA
+IRN,goats,grassland,0.7463650348646971,NA
+IRN,goats,mixed,0.2536349651353029,NA
+IRQ,goats,grassland,0.31843670113746164,NA
+IRQ,goats,mixed,0.6815632988625384,NA
+ISL,goats,grassland,6.59272757181256e-10,NA
+ISL,goats,mixed,0.9999999993407273,NA
+ISR,goats,grassland,0.09992773585485179,NA
+ISR,goats,mixed,0.9000722641451483,NA
+ITA,goats,grassland,0.2890735891256243,NA
+ITA,goats,mixed,0.7109264108743757,NA
+JOR,goats,grassland,0.6411514201526965,NA
+JOR,goats,mixed,0.3588485798473035,NA
+JPN,goats,grassland,4.4787490670537085e-4,NA
+JPN,goats,mixed,0.9995521250932947,NA
+KEN,goats,grassland,0.7034265238643805,NA
+KEN,goats,mixed,0.2965734761356194,NA
+KGZ,goats,grassland,0.14886295975694813,NA
+KGZ,goats,mixed,0.8511370402430519,NA
+KHM,goats,grassland,0.1786758567817823,NA
+KHM,goats,mixed,0.8213241432182177,NA
+KOR,goats,grassland,0,NA
+KOR,goats,mixed,1,NA
+KWT,goats,grassland,0.9756897640208211,NA
+KWT,goats,mixed,0.024310235979178856,NA
+LAO,goats,grassland,0.40205042047428124,NA
+LAO,goats,mixed,0.5979495795257188,NA
+LBN,goats,grassland,0.10625203311434792,NA
+LBN,goats,mixed,0.8937479668856522,NA
+LBR,goats,grassland,0.004896181418364962,NA
+LBR,goats,mixed,0.995103818581635,NA
+LBY,goats,grassland,0.6332051723181964,NA
+LBY,goats,mixed,0.36679482768180355,NA
+LKA,goats,grassland,0.0010329231458822794,NA
+LKA,goats,mixed,0.9989670768541177,NA
+MAR,goats,grassland,0.452635153813723,NA
+MAR,goats,mixed,0.5473648461862771,NA
+MDG,goats,grassland,0.7850541279847447,NA
+MDG,goats,mixed,0.21494587201525528,NA
+MEX,goats,grassland,0.4081966093662946,NA
+MEX,goats,mixed,0.5918033906337054,NA
+MKD,goats,grassland,0.046629378602436516,NA
+MKD,goats,mixed,0.9533706213975636,NA
+MLI,goats,grassland,0.6667621829824818,NA
+MLI,goats,mixed,0.3332378170175181,NA
+MMR,goats,grassland,0.04545971900108906,NA
+MMR,goats,mixed,0.9545402809989109,NA
+MNE,goats,grassland,0.009045806480835162,NA
+MNE,goats,mixed,0.9909541935191648,NA
+MOZ,goats,grassland,0.5597860473072335,NA
+MOZ,goats,mixed,0.4402139526927665,NA
+MRT,goats,grassland,0.9013721004464755,NA
+MRT,goats,mixed,0.09862789955352447,NA
+MWI,goats,grassland,0.1281229513604718,NA
+MWI,goats,mixed,0.8718770486395282,NA
+MYS,goats,grassland,0.002069478515538952,NA
+MYS,goats,mixed,0.997930521484461,NA
+NAM,goats,grassland,0.8146907939925588,NA
+NAM,goats,mixed,0.1853092060074412,NA
+NCL,goats,grassland,0.5254258578967028,NA
+NCL,goats,mixed,0.4745741421032973,NA
+NER,goats,grassland,0.3811092577604904,NA
+NER,goats,mixed,0.6188907422395096,NA
+NGA,goats,grassland,0.0637954876741418,NA
+NGA,goats,mixed,0.9362045123258581,NA
+NIC,goats,grassland,0.018674692083583706,NA
+NIC,goats,mixed,0.9813253079164164,NA
+NOR,goats,grassland,0.0011834847188260341,NA
+NOR,goats,mixed,0.998816515281174,NA
+NPL,goats,grassland,0.02545640149201624,NA
+NPL,goats,mixed,0.9745435985079838,NA
+NZL,goats,grassland,0.24179028886701184,NA
+NZL,goats,mixed,0.7582097111329882,NA
+OMN,goats,grassland,0.957898154667413,NA
+OMN,goats,mixed,0.04210184533258696,NA
+PAK,goats,grassland,0.2797871468129761,NA
+PAK,goats,mixed,0.7202128531870239,NA
+PAN,goats,grassland,0.00761478554442004,NA
+PAN,goats,mixed,0.9923852144555799,NA
+PER,goats,grassland,0.5153292593121617,NA
+PER,goats,mixed,0.48467074068783844,NA
+PHL,goats,grassland,0.0038540658038240115,NA
+PHL,goats,mixed,0.996145934196176,NA
+PNG,goats,grassland,0.1806562969864815,NA
+PNG,goats,mixed,0.8193437030135184,NA
+POL,goats,grassland,3.3466130516813917e-4,NA
+POL,goats,mixed,0.9996653386948319,NA
+PRI,goats,grassland,0.3095512952257112,NA
+PRI,goats,mixed,0.6904487047742889,NA
+PRK,goats,grassland,0,NA
+PRK,goats,mixed,1,NA
+PRT,goats,grassland,0.11886444736072777,NA
+PRT,goats,mixed,0.8811355526392723,NA
+PRY,goats,grassland,0.3690624078106167,NA
+PRY,goats,mixed,0.6309375921893834,NA
+PSE,goats,grassland,0.6151525522176347,NA
+PSE,goats,mixed,0.38484744778236546,NA
+QAT,goats,grassland,0.845735621341499,NA
+QAT,goats,mixed,0.15426437865850096,NA
+RUS,goats,grassland,0.008280495375661593,NA
+RUS,goats,mixed,0.9917195046243384,NA
+RWA,goats,grassland,0.0029964829583602787,NA
+RWA,goats,mixed,0.9970035170416397,NA
+SAU,goats,grassland,0.813336060303223,NA
+SAU,goats,mixed,0.18666393969677694,NA
+SDN,goats,grassland,0.4584794894315379,NA
+SDN,goats,mixed,0.5415205105684621,NA
+SEN,goats,grassland,0.1660337848328249,NA
+SEN,goats,mixed,0.8339662151671752,NA
+SJM,goats,grassland,4.410178502112176e-6,NA
+SJM,goats,mixed,0.9999955898214978,NA
+SLB,goats,grassland,0.8594992954450503,NA
+SLB,goats,mixed,0.14050070455494978,NA
+SLE,goats,grassland,0.09619497217150318,NA
+SLE,goats,mixed,0.9038050278284968,NA
+SLV,goats,grassland,0.0011911914540779533,NA
+SLV,goats,mixed,0.998808808545922,NA
+SOM,goats,grassland,0.8050502449446456,NA
+SOM,goats,mixed,0.19494975505535433,NA
+SSD,goats,grassland,0.6820147121226691,NA
+SSD,goats,mixed,0.31798528787733094,NA
+SUR,goats,grassland,0.2806268937215036,NA
+SUR,goats,mixed,0.7193731062784964,NA
+SWZ,goats,grassland,0.37652440303461,NA
+SWZ,goats,mixed,0.6234755969653899,NA
+SYR,goats,grassland,0.36692465200368213,NA
+SYR,goats,mixed,0.6330753479963178,NA
+TCA,goats,grassland,0.22303498619642292,NA
+TCA,goats,mixed,0.7769650138035772,NA
+TCD,goats,grassland,0.5212315086301454,NA
+TCD,goats,mixed,0.47876849136985455,NA
+TGO,goats,grassland,0.17444163539372168,NA
+TGO,goats,mixed,0.8255583646062783,NA
+THA,goats,grassland,0.0223059524488454,NA
+THA,goats,mixed,0.9776940475511546,NA
+TJK,goats,grassland,0.575506059320454,NA
+TJK,goats,mixed,0.42449394067954604,NA
+TKM,goats,grassland,0.3014614922245546,NA
+TKM,goats,mixed,0.6985385077754455,NA
+TTO,goats,grassland,0.0596353092770313,NA
+TTO,goats,mixed,0.9403646907229687,NA
+TUN,goats,grassland,0.26563821649877684,NA
+TUN,goats,mixed,0.7343617835012232,NA
+TUR,goats,grassland,0.047151463857755094,NA
+TUR,goats,mixed,0.9528485361422449,NA
+TWN,goats,grassland,0.03160448460874523,NA
+TWN,goats,mixed,0.9683955153912549,NA
+TZA,goats,grassland,0.17990286578631695,NA
+TZA,goats,mixed,0.820097134213683,NA
+UGA,goats,grassland,0.05691427371073409,NA
+UGA,goats,mixed,0.9430857262892658,NA
+UKR,goats,grassland,0,NA
+UKR,goats,mixed,1,NA
+URY,goats,grassland,0.4295977426737575,NA
+URY,goats,mixed,0.5704022573262425,NA
+USA,goats,grassland,0.328122831788789,NA
+USA,goats,mixed,0.6718771682112111,NA
+UZB,goats,grassland,0.3153035203933326,NA
+UZB,goats,mixed,0.6846964796066674,NA
+VEN,goats,grassland,0.7669233711941176,NA
+VEN,goats,mixed,0.23307662880588245,NA
+VIR,goats,grassland,1,NA
+VIR,goats,mixed,0,NA
+VNM,goats,grassland,0.015551919615561231,NA
+VNM,goats,mixed,0.9844480803844388,NA
+VUT,goats,grassland,0.020843933826100728,NA
+VUT,goats,mixed,0.9791560661738993,NA
+XMI,goats,grassland,0,NA
+XMI,goats,mixed,1,NA
+YEM,goats,grassland,0.843310926773002,NA
+YEM,goats,mixed,0.156689073226998,NA
+ZAF,goats,grassland,0.37063863154381094,NA
+ZAF,goats,mixed,0.629361368456189,NA
+ZMB,goats,grassland,0.6710477884746135,NA
+ZMB,goats,mixed,0.3289522115253864,NA
+ZWE,goats,grassland,0.42413957760439636,NA
+ZWE,goats,mixed,0.5758604223956038,NA
+AND,goats,grassland,0,NA
+AND,goats,mixed,1,NA
+ATG,goats,grassland,0,NA
+ATG,goats,mixed,1,NA
+BEL,goats,grassland,0,NA
+BEL,goats,mixed,1,NA
+BLR,goats,grassland,0,NA
+BLR,goats,mixed,1,NA
+BRB,goats,grassland,0,NA
+BRB,goats,mixed,1,NA
+COM,goats,grassland,0,NA
+COM,goats,mixed,1,NA
+CRI,goats,grassland,0,NA
+CRI,goats,mixed,1,NA
+CXR,goats,grassland,0,NA
+CXR,goats,mixed,1,NA
+CZE,goats,grassland,0,NA
+CZE,goats,mixed,1,NA
+DJI,goats,grassland,1,NA
+DJI,goats,mixed,0,NA
+ESH,goats,grassland,1,NA
+ESH,goats,mixed,0,NA
+FIN,goats,grassland,0,NA
+FIN,goats,mixed,1,NA
+FLK,goats,grassland,0,NA
+FLK,goats,mixed,1,NA
+FRO,goats,grassland,0,NA
+FRO,goats,mixed,1,NA
+GGY,goats,grassland,0,NA
+GGY,goats,mixed,1,NA
+GRD,goats,grassland,0,NA
+GRD,goats,mixed,1,NA
+GTM,goats,grassland,0,NA
+GTM,goats,mixed,1,NA
+HUN,goats,grassland,0,NA
+HUN,goats,mixed,1,NA
+IMN,goats,grassland,0,NA
+IMN,goats,mixed,1,NA
+JAM,goats,grassland,0,NA
+JAM,goats,mixed,1,NA
+JEY,goats,grassland,0,NA
+JEY,goats,mixed,1,NA
+KAZ,goats,grassland,0,NA
+KAZ,goats,mixed,1,NA
+KNA,goats,grassland,0,NA
+KNA,goats,mixed,1,NA
+LCA,goats,grassland,0,NA
+LCA,goats,mixed,1,NA
+LSO,goats,grassland,0,NA
+LSO,goats,mixed,1,NA
+LTU,goats,grassland,0,NA
+LTU,goats,mixed,1,NA
+LUX,goats,grassland,0,NA
+LUX,goats,mixed,1,NA
+LVA,goats,grassland,0,NA
+LVA,goats,mixed,1,NA
+MAF,goats,grassland,1,NA
+MAF,goats,mixed,0,NA
+MDA,goats,grassland,0,NA
+MDA,goats,mixed,1,NA
+MLT,goats,grassland,0,NA
+MLT,goats,mixed,1,NA
+MNG,goats,grassland,0,NA
+MNG,goats,mixed,1,NA
+MTQ,goats,grassland,0,NA
+MTQ,goats,mixed,1,NA
+MUS,goats,grassland,0,NA
+MUS,goats,mixed,1,NA
+MYT,goats,grassland,0,NA
+MYT,goats,mixed,1,NA
+NLD,goats,grassland,0,NA
+NLD,goats,mixed,1,NA
+PLW,goats,grassland,0,NA
+PLW,goats,mixed,1,NA
+REU,goats,grassland,0,NA
+REU,goats,mixed,1,NA
+ROU,goats,grassland,0,NA
+ROU,goats,mixed,1,NA
+SGP,goats,grassland,0,NA
+SGP,goats,mixed,1,NA
+SMR,goats,grassland,0,NA
+SMR,goats,mixed,1,NA
+SRB,goats,grassland,0,NA
+SRB,goats,mixed,1,NA
+STP,goats,grassland,0,NA
+STP,goats,mixed,1,NA
+SVK,goats,grassland,0,NA
+SVK,goats,mixed,1,NA
+SVN,goats,grassland,0,NA
+SVN,goats,mixed,1,NA
+SWE,goats,grassland,0,NA
+SWE,goats,mixed,1,NA
+TLS,goats,grassland,0,NA
+TLS,goats,mixed,1,NA
+XKO,goats,grassland,0,NA
+XKO,goats,mixed,1,NA
+ALA,goats,grassland,0,gapfilled with un region general medians
+ALA,goats,mixed,1,gapfilled with un region general medians
+ASM,goats,grassland,0.25,gapfilled with un region general medians
+ASM,goats,mixed,0.75,gapfilled with un region general medians
+IOT,goats,grassland,0.38,gapfilled with un region general medians
+IOT,goats,mixed,0.62,gapfilled with un region general medians
+CYM,goats,grassland,0.25,gapfilled with un region general medians
+CYM,goats,mixed,0.75,gapfilled with un region general medians
+CCK,goats,grassland,0.25,gapfilled with un region general medians
+CCK,goats,mixed,0.75,gapfilled with un region general medians
+COK,goats,grassland,0.25,gapfilled with un region general medians
+COK,goats,mixed,0.75,gapfilled with un region general medians
+PYF,goats,grassland,0.25,gapfilled with un region general medians
+PYF,goats,mixed,0.75,gapfilled with un region general medians
+GIB,goats,grassland,0,gapfilled with un region general medians
+GIB,goats,mixed,1,gapfilled with un region general medians
+KIR,goats,grassland,0.25,gapfilled with un region general medians
+KIR,goats,mixed,0.75,gapfilled with un region general medians
+LIE,goats,grassland,0,gapfilled with un region general medians
+LIE,goats,mixed,1,gapfilled with un region general medians
+MAC,goats,grassland,0.25,gapfilled with un region general medians
+MAC,goats,mixed,0.75,gapfilled with un region general medians
+MDV,goats,grassland,0.25,gapfilled with un region general medians
+MDV,goats,mixed,0.75,gapfilled with un region general medians
+MHL,goats,grassland,0.25,gapfilled with un region general medians
+MHL,goats,mixed,0.75,gapfilled with un region general medians
+FSM,goats,grassland,0.25,gapfilled with un region general medians
+FSM,goats,mixed,0.75,gapfilled with un region general medians
+MCO,goats,grassland,0,gapfilled with un region general medians
+MCO,goats,mixed,1,gapfilled with un region general medians
+MSR,goats,grassland,0.25,gapfilled with un region general medians
+MSR,goats,mixed,0.75,gapfilled with un region general medians
+NRU,goats,grassland,0.25,gapfilled with un region general medians
+NRU,goats,mixed,0.75,gapfilled with un region general medians
+NIU,goats,grassland,0.25,gapfilled with un region general medians
+NIU,goats,mixed,0.75,gapfilled with un region general medians
+NFK,goats,grassland,0.25,gapfilled with un region general medians
+NFK,goats,mixed,0.75,gapfilled with un region general medians
+PCN,goats,grassland,0.25,gapfilled with un region general medians
+PCN,goats,mixed,0.75,gapfilled with un region general medians
+BLM,goats,grassland,0.25,gapfilled with un region general medians
+BLM,goats,mixed,0.75,gapfilled with un region general medians
+SHN,goats,grassland,0.38,gapfilled with un region general medians
+SHN,goats,mixed,0.62,gapfilled with un region general medians
+WSM,goats,grassland,0.25,gapfilled with un region general medians
+WSM,goats,mixed,0.75,gapfilled with un region general medians
+SYC,goats,grassland,0.38,gapfilled with un region general medians
+SYC,goats,mixed,0.62,gapfilled with un region general medians
+SXM,goats,grassland,0.25,gapfilled with un region general medians
+SXM,goats,mixed,0.75,gapfilled with un region general medians
+TKL,goats,grassland,0.25,gapfilled with un region general medians
+TKL,goats,mixed,0.75,gapfilled with un region general medians
+TON,goats,grassland,0.25,gapfilled with un region general medians
+TON,goats,mixed,0.75,gapfilled with un region general medians
+TUV,goats,grassland,0.25,gapfilled with un region general medians
+TUV,goats,mixed,0.75,gapfilled with un region general medians
+WLF,goats,grassland,0.25,gapfilled with un region general medians
+WLF,goats,mixed,0.75,gapfilled with un region general medians
+GRL,goats,grassland,0.25,gapfilled with un region general medians
+GRL,goats,mixed,0.75,gapfilled with un region general medians
+MNP,goats,grassland,0.25,gapfilled with un region general medians
+MNP,goats,mixed,0.75,gapfilled with un region general medians
+SPM,goats,grassland,0.25,gapfilled with un region general medians
+SPM,goats,mixed,0.75,gapfilled with un region general medians
+AIA,goats,grassland,0.25,gapfilled with un region general medians
+AIA,goats,mixed,0.75,gapfilled with un region general medians
+BMU,goats,grassland,0.25,gapfilled with un region general medians
+BMU,goats,mixed,0.75,gapfilled with un region general medians
+VCT,goats,grassland,0.25,gapfilled with un region general medians
+VCT,goats,mixed,0.75,gapfilled with un region general medians
+VGB,goats,grassland,0.25,gapfilled with un region general medians
+VGB,goats,mixed,0.75,gapfilled with un region general medians
+ABW,cows,grassland,0,NA
+ABW,cows,mixed,1,NA
+AFG,cows,grassland,0.33584352923065897,NA
+AFG,cows,mixed,0.6641564707693411,NA
+AGO,cows,grassland,0.5649408622101949,NA
+AGO,cows,mixed,0.4350591377898051,NA
+ALB,cows,grassland,0.0891946416261314,NA
+ALB,cows,mixed,0.9108053583738686,NA
+ARE,cows,grassland,0.8722406655151056,NA
+ARE,cows,mixed,0.12775933448489435,NA
+ARG,cows,grassland,0.18478714170440264,NA
+ARG,cows,mixed,0.8152128582955974,NA
+ARM,cows,grassland,0.1667601945338658,NA
+ARM,cows,mixed,0.8332398054661342,NA
+AUS,cows,grassland,0.6254947355319613,NA
+AUS,cows,mixed,0.37450526446803856,NA
+AUT,cows,grassland,0.01364189822081685,NA
+AUT,cows,mixed,0.9863581017791831,NA
+AZE,cows,grassland,0.11702437294496373,NA
+AZE,cows,mixed,0.8829756270550363,NA
+BDI,cows,grassland,0.0017689761801479434,NA
+BDI,cows,mixed,0.9982310238198521,NA
+BEN,cows,grassland,0.31524928863793966,NA
+BEN,cows,mixed,0.6847507113620604,NA
+BFA,cows,grassland,0.4059289306242726,NA
+BFA,cows,mixed,0.5940710693757274,NA
+BGD,cows,grassland,0.006185352314337698,NA
+BGD,cows,mixed,0.9938146476856623,NA
+BGR,cows,grassland,0.0013812218434772884,NA
+BGR,cows,mixed,0.9986187781565227,NA
+BHR,cows,grassland,1,NA
+BHR,cows,mixed,0,NA
+BHS,cows,grassland,0,NA
+BHS,cows,mixed,1,NA
+BIH,cows,grassland,0.005026804440569074,NA
+BIH,cows,mixed,0.994973195559431,NA
+BLZ,cows,grassland,0.022348494252770544,NA
+BLZ,cows,mixed,0.9776515057472295,NA
+BOL,cows,grassland,0.4331093190774853,NA
+BOL,cows,mixed,0.5668906809225147,NA
+BRA,cows,grassland,0.1195117525616727,NA
+BRA,cows,mixed,0.8804882474383272,NA
+BRN,cows,grassland,6.315756355893093e-15,NA
+BRN,cows,mixed,0.9999999999999937,NA
+BTN,cows,grassland,0.1860520460978585,NA
+BTN,cows,mixed,0.8139479539021416,NA
+BWA,cows,grassland,0.7722236039553887,NA
+BWA,cows,mixed,0.2277763960446114,NA
+CAF,cows,grassland,0.8416743660749937,NA
+CAF,cows,mixed,0.15832563392500623,NA
+CAN,cows,grassland,2.9823968851099133e-4,NA
+CAN,cows,mixed,0.999701760311489,NA
+CHE,cows,grassland,0.0397821505308587,NA
+CHE,cows,mixed,0.9602178494691415,NA
+CHL,cows,grassland,0.187848860294135,NA
+CHL,cows,mixed,0.812151139705865,NA
+CHN,cows,grassland,0.12595357723761869,NA
+CHN,cows,mixed,0.8740464227623813,NA
+CIV,cows,grassland,0.5750289131071362,NA
+CIV,cows,mixed,0.42497108689286384,NA
+CMR,cows,grassland,0.44549705330681755,NA
+CMR,cows,mixed,0.5545029466931826,NA
+COD,cows,grassland,0.41971573083782965,NA
+COD,cows,mixed,0.5802842691621704,NA
+COG,cows,grassland,0.7783600436513841,NA
+COG,cows,mixed,0.22163995634861594,NA
+COL,cows,grassland,0.1285572367263978,NA
+COL,cows,mixed,0.8714427632736023,NA
+CPV,cows,grassland,0.2679599218959755,NA
+CPV,cows,mixed,0.7320400781040245,NA
+CUB,cows,grassland,0.004669128733430429,NA
+CUB,cows,mixed,0.9953308712665695,NA
+CUW,cows,grassland,0,NA
+CUW,cows,mixed,1,NA
+CYP,cows,grassland,0.348822246303487,NA
+CYP,cows,mixed,0.651177753696513,NA
+DEU,cows,grassland,0,NA
+DEU,cows,mixed,1,NA
+DMA,cows,grassland,0.8080165629153396,NA
+DMA,cows,mixed,0.19198343708466034,NA
+DNK,cows,grassland,0,NA
+DNK,cows,mixed,1,NA
+DOM,cows,grassland,0.007901389465714032,NA
+DOM,cows,mixed,0.992098610534286,NA
+DZA,cows,grassland,0.4345055720492081,NA
+DZA,cows,mixed,0.5654944279507919,NA
+ECU,cows,grassland,0.02376889377706755,NA
+ECU,cows,mixed,0.9762311062229324,NA
+EGY,cows,grassland,0.16087059434201917,NA
+EGY,cows,mixed,0.8391294056579808,NA
+ERI,cows,grassland,0.48358902656636304,NA
+ERI,cows,mixed,0.5164109734336368,NA
+ESP,cows,grassland,0.01737409269712157,NA
+ESP,cows,mixed,0.9826259073028784,NA
+EST,cows,grassland,0,NA
+EST,cows,mixed,1,NA
+ETH,cows,grassland,0.14804662899100146,NA
+ETH,cows,mixed,0.8519533710089985,NA
+FJI,cows,grassland,0.45026299678219184,NA
+FJI,cows,mixed,0.5497370032178082,NA
+FRA,cows,grassland,0.0011298836582396767,NA
+FRA,cows,mixed,0.9988701163417603,NA
+GAB,cows,grassland,0.36959258519745886,NA
+GAB,cows,mixed,0.630407414802541,NA
+GBR,cows,grassland,0.06961497506162026,NA
+GBR,cows,mixed,0.9303850249383797,NA
+GEO,cows,grassland,0.07018560394210804,NA
+GEO,cows,mixed,0.929814396057892,NA
+GHA,cows,grassland,0.39428601858269147,NA
+GHA,cows,mixed,0.6057139814173085,NA
+GIN,cows,grassland,0.6815107204109501,NA
+GIN,cows,mixed,0.31848927958905,NA
+GLP,cows,grassland,0.1355536739979566,NA
+GLP,cows,mixed,0.8644463260020434,NA
+GMB,cows,grassland,0.14520817135853314,NA
+GMB,cows,mixed,0.8547918286414669,NA
+GNB,cows,grassland,0.5828823282015161,NA
+GNB,cows,mixed,0.41711767179848397,NA
+GNQ,cows,grassland,0,NA
+GNQ,cows,mixed,1,NA
+GRC,cows,grassland,0.07577968351620563,NA
+GRC,cows,mixed,0.9242203164837944,NA
+GUF,cows,grassland,0.030359815671753474,NA
+GUF,cows,mixed,0.9696401843282465,NA
+GUM,cows,grassland,1,NA
+GUM,cows,mixed,0,NA
+GUY,cows,grassland,0.4352172754933448,NA
+GUY,cows,mixed,0.5647827245066552,NA
+HKG,cows,grassland,0,NA
+HKG,cows,mixed,1,NA
+HND,cows,grassland,0.03950691057261684,NA
+HND,cows,mixed,0.9604930894273832,NA
+HRV,cows,grassland,0.006772158314624471,NA
+HRV,cows,mixed,0.9932278416853755,NA
+HTI,cows,grassland,0.010055715603826286,NA
+HTI,cows,mixed,0.9899442843961738,NA
+IDN,cows,grassland,0.003997109357568942,NA
+IDN,cows,mixed,0.9960028906424311,NA
+IND,cows,grassland,0.019348691442230274,NA
+IND,cows,mixed,0.9806513085577697,NA
+IRL,cows,grassland,0.36787724594360116,NA
+IRL,cows,mixed,0.6321227540563988,NA
+IRN,cows,grassland,0.39093155488404246,NA
+IRN,cows,mixed,0.6090684451159575,NA
+IRQ,cows,grassland,0.27276666598382,NA
+IRQ,cows,mixed,0.72723333401618,NA
+ISL,cows,grassland,0.0023199634733687045,NA
+ISL,cows,mixed,0.9976800365266313,NA
+ISR,cows,grassland,0.08877080236630708,NA
+ISR,cows,mixed,0.9112291976336929,NA
+ITA,cows,grassland,0.06649216754200504,NA
+ITA,cows,mixed,0.933507832457995,NA
+JOR,cows,grassland,0.8200619232015284,NA
+JOR,cows,mixed,0.17993807679847162,NA
+JPN,cows,grassland,6.872992815947511e-4,NA
+JPN,cows,mixed,0.9993127007184053,NA
+KEN,cows,grassland,0.41817781692597694,NA
+KEN,cows,mixed,0.581822183074023,NA
+KGZ,cows,grassland,0.05475223794860883,NA
+KGZ,cows,mixed,0.9452477620513913,NA
+KHM,cows,grassland,0.07171410902767189,NA
+KHM,cows,mixed,0.9282858909723282,NA
+KOR,cows,grassland,0,NA
+KOR,cows,mixed,1,NA
+KWT,cows,grassland,0.9447349545518391,NA
+KWT,cows,mixed,0.05526504544816102,NA
+LAO,cows,grassland,0.4251381462089428,NA
+LAO,cows,mixed,0.5748618537910571,NA
+LBN,cows,grassland,0.05535495980257515,NA
+LBN,cows,mixed,0.9446450401974248,NA
+LBR,cows,grassland,0.010306598263813199,NA
+LBR,cows,mixed,0.9896934017361869,NA
+LBY,cows,grassland,0.5590442165228605,NA
+LBY,cows,mixed,0.44095578347713943,NA
+LKA,cows,grassland,0.0017974087830974611,NA
+LKA,cows,mixed,0.9982025912169025,NA
+MAR,cows,grassland,0.17164364369888652,NA
+MAR,cows,mixed,0.8283563563011135,NA
+MDG,cows,grassland,0.7867936509516741,NA
+MDG,cows,mixed,0.21320634904832583,NA
+MEX,cows,grassland,0.20185736844808996,NA
+MEX,cows,mixed,0.79814263155191,NA
+MKD,cows,grassland,0.019319104721509356,NA
+MKD,cows,mixed,0.9806808952784906,NA
+MLI,cows,grassland,0.5061926482332235,NA
+MLI,cows,mixed,0.4938073517667764,NA
+MMR,cows,grassland,0.09286403472055486,NA
+MMR,cows,mixed,0.9071359652794451,NA
+MNE,cows,grassland,0.002299026447054369,NA
+MNE,cows,mixed,0.9977009735529457,NA
+MNP,cows,grassland,0,NA
+MNP,cows,mixed,1,NA
+MOZ,cows,grassland,0.5695064812577685,NA
+MOZ,cows,mixed,0.4304935187422316,NA
+MRT,cows,grassland,0.8481559471833208,NA
+MRT,cows,mixed,0.15184405281667912,NA
+MWI,cows,grassland,0.13274223083602746,NA
+MWI,cows,mixed,0.8672577691639725,NA
+MYS,cows,grassland,0.0021056161481736975,NA
+MYS,cows,mixed,0.9978943838518264,NA
+NAM,cows,grassland,0.7595501980649262,NA
+NAM,cows,mixed,0.24044980193507373,NA
+NCL,cows,grassland,0.4050022376409205,NA
+NCL,cows,mixed,0.5949977623590795,NA
+NER,cows,grassland,0.3663374738103884,NA
+NER,cows,mixed,0.6336625261896116,NA
+NGA,cows,grassland,0.06404680338685113,NA
+NGA,cows,mixed,0.9359531966131489,NA
+NIC,cows,grassland,0.006995371582026175,NA
+NIC,cows,mixed,0.9930046284179738,NA
+NOR,cows,grassland,0.0025668133074326937,NA
+NOR,cows,mixed,0.9974331866925673,NA
+NPL,cows,grassland,0.026911647213514925,NA
+NPL,cows,mixed,0.9730883527864851,NA
+NZL,cows,grassland,0.2795121573738722,NA
+NZL,cows,mixed,0.7204878426261278,NA
+OMN,cows,grassland,0.8293817833282866,NA
+OMN,cows,mixed,0.17061821667171348,NA
+PAK,cows,grassland,0.1257144959756584,NA
+PAK,cows,mixed,0.8742855040243416,NA
+PAN,cows,grassland,0.007123612959760935,NA
+PAN,cows,mixed,0.9928763870402392,NA
+PER,cows,grassland,0.1712994595000402,NA
+PER,cows,mixed,0.8287005404999599,NA
+PHL,cows,grassland,0.0062547467625675155,NA
+PHL,cows,mixed,0.9937452532374325,NA
+PNG,cows,grassland,0.12040592092570078,NA
+PNG,cows,mixed,0.8795940790742992,NA
+POL,cows,grassland,1.5945094707440322e-4,NA
+POL,cows,mixed,0.9998405490529256,NA
+PRI,cows,grassland,0.008572148479119225,NA
+PRI,cows,mixed,0.9914278515208808,NA
+PRK,cows,grassland,0,NA
+PRK,cows,mixed,1,NA
+PRT,cows,grassland,0.036840170370735795,NA
+PRT,cows,mixed,0.9631598296292642,NA
+PRY,cows,grassland,0.11486981855727761,NA
+PRY,cows,mixed,0.8851301814427224,NA
+PSE,cows,grassland,0.4345723696184601,NA
+PSE,cows,mixed,0.5654276303815399,NA
+QAT,cows,grassland,0.9182131710696566,NA
+QAT,cows,mixed,0.08178682893034342,NA
+RUS,cows,grassland,0.0029628599107135757,NA
+RUS,cows,mixed,0.9970371400892865,NA
+RWA,cows,grassland,0.006353243944584914,NA
+RWA,cows,mixed,0.9936467560554152,NA
+SAU,cows,grassland,0.7121076374310492,NA
+SAU,cows,mixed,0.2878923625689508,NA
+SDN,cows,grassland,0.29094985122491246,NA
+SDN,cows,mixed,0.7090501487750875,NA
+SEN,cows,grassland,0.2529697454601975,NA
+SEN,cows,mixed,0.7470302545398025,NA
+SJM,cows,grassland,0.005479861905564984,NA
+SJM,cows,mixed,0.994520138094435,NA
+SLB,cows,grassland,0.703942869710449,NA
+SLB,cows,mixed,0.29605713028955116,NA
+SLE,cows,grassland,0.11773487831849204,NA
+SLE,cows,mixed,0.882265121681508,NA
+SLV,cows,grassland,0.0011016580458075378,NA
+SLV,cows,mixed,0.9988983419541925,NA
+SOM,cows,grassland,0.8044608980390452,NA
+SOM,cows,mixed,0.19553910196095484,NA
+SSD,cows,grassland,0.6947224187643177,NA
+SSD,cows,mixed,0.3052775812356822,NA
+SUR,cows,grassland,0.4570366052060952,NA
+SUR,cows,mixed,0.5429633947939048,NA
+SWZ,cows,grassland,0.3739940103157208,NA
+SWZ,cows,mixed,0.6260059896842792,NA
+SYR,cows,grassland,0.37216213396858755,NA
+SYR,cows,mixed,0.6278378660314125,NA
+TCA,cows,grassland,0.2207511338413414,NA
+TCA,cows,mixed,0.7792488661586585,NA
+TCD,cows,grassland,0.47375586984419105,NA
+TCD,cows,mixed,0.526244130155809,NA
+TGO,cows,grassland,0.21519248187804513,NA
+TGO,cows,mixed,0.7848075181219548,NA
+THA,cows,grassland,0.04138525271415749,NA
+THA,cows,mixed,0.9586147472858426,NA
+TJK,cows,grassland,0.4843442372368995,NA
+TJK,cows,mixed,0.5156557627631005,NA
+TKM,cows,grassland,0.203419139770818,NA
+TKM,cows,mixed,0.7965808602291821,NA
+TTO,cows,grassland,0.03295522018018443,NA
+TTO,cows,mixed,0.9670447798198155,NA
+TUN,cows,grassland,0.03069498962161542,NA
+TUN,cows,mixed,0.9693050103783846,NA
+TUR,cows,grassland,0.02912150884265124,NA
+TUR,cows,mixed,0.9708784911573488,NA
+TWN,cows,grassland,0.009274411660592848,NA
+TWN,cows,mixed,0.9907255883394072,NA
+TZA,cows,grassland,0.17037492883610836,NA
+TZA,cows,mixed,0.8296250711638916,NA
+UGA,cows,grassland,0.06752484552198029,NA
+UGA,cows,mixed,0.9324751544780197,NA
+UKR,cows,grassland,0,NA
+UKR,cows,mixed,1,NA
+URY,cows,grassland,0.48386414072557155,NA
+URY,cows,mixed,0.5161358592744284,NA
+USA,cows,grassland,0.10890517820886028,NA
+USA,cows,mixed,0.8910948217911396,NA
+UZB,cows,grassland,0.25360608919466393,NA
+UZB,cows,mixed,0.746393910805336,NA
+VEN,cows,grassland,0.18511820097520196,NA
+VEN,cows,mixed,0.8148817990247981,NA
+VIR,cows,grassland,1,NA
+VIR,cows,mixed,0,NA
+VNM,cows,grassland,0.028747466752230947,NA
+VNM,cows,mixed,0.971252533247769,NA
+VUT,cows,grassland,0.03377678736267756,NA
+VUT,cows,mixed,0.9662232126373225,NA
+XMI,cows,grassland,0,NA
+XMI,cows,mixed,1,NA
+YEM,cows,grassland,0.4885710734816943,NA
+YEM,cows,mixed,0.5114289265183056,NA
+ZAF,cows,grassland,0.3034747196529285,NA
+ZAF,cows,mixed,0.6965252803470715,NA
+ZMB,cows,grassland,0.7024531058228358,NA
+ZMB,cows,mixed,0.2975468941771642,NA
+ZWE,cows,grassland,0.4792817667839979,NA
+ZWE,cows,mixed,0.5207182332160021,NA
+AND,cows,grassland,0,NA
+AND,cows,mixed,1,NA
+ATG,cows,grassland,0,NA
+ATG,cows,mixed,1,NA
+BEL,cows,grassland,0,NA
+BEL,cows,mixed,1,NA
+BLR,cows,grassland,0,NA
+BLR,cows,mixed,1,NA
+BRB,cows,grassland,0,NA
+BRB,cows,mixed,1,NA
+COM,cows,grassland,0,NA
+COM,cows,mixed,1,NA
+CRI,cows,grassland,0,NA
+CRI,cows,mixed,1,NA
+CXR,cows,grassland,0,NA
+CXR,cows,mixed,1,NA
+CZE,cows,grassland,0,NA
+CZE,cows,mixed,1,NA
+DJI,cows,grassland,1,NA
+DJI,cows,mixed,0,NA
+ESH,cows,grassland,1,NA
+ESH,cows,mixed,0,NA
+FIN,cows,grassland,0,NA
+FIN,cows,mixed,1,NA
+FLK,cows,grassland,0,NA
+FLK,cows,mixed,1,NA
+FRO,cows,grassland,0,NA
+FRO,cows,mixed,1,NA
+GGY,cows,grassland,0,NA
+GGY,cows,mixed,1,NA
+GRD,cows,grassland,0,NA
+GRD,cows,mixed,1,NA
+GTM,cows,grassland,0,NA
+GTM,cows,mixed,1,NA
+HUN,cows,grassland,0,NA
+HUN,cows,mixed,1,NA
+IMN,cows,grassland,0,NA
+IMN,cows,mixed,1,NA
+JAM,cows,grassland,0,NA
+JAM,cows,mixed,1,NA
+JEY,cows,grassland,0,NA
+JEY,cows,mixed,1,NA
+KAZ,cows,grassland,0,NA
+KAZ,cows,mixed,1,NA
+KNA,cows,grassland,0,NA
+KNA,cows,mixed,1,NA
+LCA,cows,grassland,0,NA
+LCA,cows,mixed,1,NA
+LSO,cows,grassland,0,NA
+LSO,cows,mixed,1,NA
+LTU,cows,grassland,0,NA
+LTU,cows,mixed,1,NA
+LUX,cows,grassland,0,NA
+LUX,cows,mixed,1,NA
+LVA,cows,grassland,0,NA
+LVA,cows,mixed,1,NA
+MAF,cows,grassland,1,NA
+MAF,cows,mixed,0,NA
+MDA,cows,grassland,0,NA
+MDA,cows,mixed,1,NA
+MLT,cows,grassland,0,NA
+MLT,cows,mixed,1,NA
+MNG,cows,grassland,0,NA
+MNG,cows,mixed,1,NA
+MTQ,cows,grassland,0,NA
+MTQ,cows,mixed,1,NA
+MUS,cows,grassland,0,NA
+MUS,cows,mixed,1,NA
+MYT,cows,grassland,0,NA
+MYT,cows,mixed,1,NA
+NLD,cows,grassland,0,NA
+NLD,cows,mixed,1,NA
+PLW,cows,grassland,0,NA
+PLW,cows,mixed,1,NA
+REU,cows,grassland,0,NA
+REU,cows,mixed,1,NA
+ROU,cows,grassland,0,NA
+ROU,cows,mixed,1,NA
+SGP,cows,grassland,0,NA
+SGP,cows,mixed,1,NA
+SMR,cows,grassland,0,NA
+SMR,cows,mixed,1,NA
+SRB,cows,grassland,0,NA
+SRB,cows,mixed,1,NA
+STP,cows,grassland,0,NA
+STP,cows,mixed,1,NA
+SVK,cows,grassland,0,NA
+SVK,cows,mixed,1,NA
+SVN,cows,grassland,0,NA
+SVN,cows,mixed,1,NA
+SWE,cows,grassland,0,NA
+SWE,cows,mixed,1,NA
+TLS,cows,grassland,0,NA
+TLS,cows,mixed,1,NA
+XKO,cows,grassland,0,NA
+XKO,cows,mixed,1,NA
+ALA,cows,grassland,0,gapfilled with un region general medians
+ALA,cows,mixed,1,gapfilled with un region general medians
+ASM,cows,grassland,0.25,gapfilled with un region general medians
+ASM,cows,mixed,0.75,gapfilled with un region general medians
+IOT,cows,grassland,0.25,gapfilled with un region general medians
+IOT,cows,mixed,0.75,gapfilled with un region general medians
+CYM,cows,grassland,0,gapfilled with un region general medians
+CYM,cows,mixed,1,gapfilled with un region general medians
+CCK,cows,grassland,0.25,gapfilled with un region general medians
+CCK,cows,mixed,0.75,gapfilled with un region general medians
+COK,cows,grassland,0.25,gapfilled with un region general medians
+COK,cows,mixed,0.75,gapfilled with un region general medians
+PYF,cows,grassland,0.25,gapfilled with un region general medians
+PYF,cows,mixed,0.75,gapfilled with un region general medians
+GIB,cows,grassland,0,gapfilled with un region general medians
+GIB,cows,mixed,1,gapfilled with un region general medians
+KIR,cows,grassland,0.25,gapfilled with un region general medians
+KIR,cows,mixed,0.75,gapfilled with un region general medians
+LIE,cows,grassland,0,gapfilled with un region general medians
+LIE,cows,mixed,1,gapfilled with un region general medians
+MAC,cows,grassland,0,gapfilled with un region general medians
+MAC,cows,mixed,1,gapfilled with un region general medians
+MDV,cows,grassland,0,gapfilled with un region general medians
+MDV,cows,mixed,1,gapfilled with un region general medians
+MHL,cows,grassland,0.25,gapfilled with un region general medians
+MHL,cows,mixed,0.75,gapfilled with un region general medians
+FSM,cows,grassland,0.25,gapfilled with un region general medians
+FSM,cows,mixed,0.75,gapfilled with un region general medians
+MCO,cows,grassland,0,gapfilled with un region general medians
+MCO,cows,mixed,1,gapfilled with un region general medians
+MSR,cows,grassland,0,gapfilled with un region general medians
+MSR,cows,mixed,1,gapfilled with un region general medians
+NRU,cows,grassland,0.25,gapfilled with un region general medians
+NRU,cows,mixed,0.75,gapfilled with un region general medians
+NIU,cows,grassland,0.25,gapfilled with un region general medians
+NIU,cows,mixed,0.75,gapfilled with un region general medians
+NFK,cows,grassland,0.25,gapfilled with un region general medians
+NFK,cows,mixed,0.75,gapfilled with un region general medians
+PCN,cows,grassland,0.25,gapfilled with un region general medians
+PCN,cows,mixed,0.75,gapfilled with un region general medians
+BLM,cows,grassland,0,gapfilled with un region general medians
+BLM,cows,mixed,1,gapfilled with un region general medians
+SHN,cows,grassland,0.25,gapfilled with un region general medians
+SHN,cows,mixed,0.75,gapfilled with un region general medians
+WSM,cows,grassland,0.25,gapfilled with un region general medians
+WSM,cows,mixed,0.75,gapfilled with un region general medians
+SYC,cows,grassland,0.25,gapfilled with un region general medians
+SYC,cows,mixed,0.75,gapfilled with un region general medians
+SXM,cows,grassland,0,gapfilled with un region general medians
+SXM,cows,mixed,1,gapfilled with un region general medians
+TKL,cows,grassland,0.25,gapfilled with un region general medians
+TKL,cows,mixed,0.75,gapfilled with un region general medians
+TON,cows,grassland,0.25,gapfilled with un region general medians
+TON,cows,mixed,0.75,gapfilled with un region general medians
+TUV,cows,grassland,0.25,gapfilled with un region general medians
+TUV,cows,mixed,0.75,gapfilled with un region general medians
+WLF,cows,grassland,0.25,gapfilled with un region general medians
+WLF,cows,mixed,0.75,gapfilled with un region general medians
+BES,cows,grassland,0,gapfilled with un region general medians
+BES,cows,mixed,1,gapfilled with un region general medians
+GRL,cows,grassland,0,gapfilled with un region general medians
+GRL,cows,mixed,1,gapfilled with un region general medians
+SPM,cows,grassland,0,gapfilled with un region general medians
+SPM,cows,mixed,1,gapfilled with un region general medians
+AIA,cows,grassland,0,gapfilled with un region general medians
+AIA,cows,mixed,1,gapfilled with un region general medians
+BMU,cows,grassland,0,gapfilled with un region general medians
+BMU,cows,mixed,1,gapfilled with un region general medians
+VCT,cows,grassland,0,gapfilled with un region general medians
+VCT,cows,mixed,1,gapfilled with un region general medians
+VGB,cows,grassland,0,gapfilled with un region general medians
+VGB,cows,mixed,1,gapfilled with un region general medians

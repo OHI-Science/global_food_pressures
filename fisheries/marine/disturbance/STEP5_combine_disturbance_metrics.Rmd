@@ -1,0 +1,127 @@
+---
+title: "New disturbance"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Here we:
+1. Combine the two metrics (habitat destruction and biomass removal) of marine fisheries disturbance by adding the two rescaled rasters and dividing by 2.  
+2. Resample the data to match the higher resolution food rasters
+3. Multiply by cell area to get km2eq and save to datalayers.
+
+```{r setup, include=FALSE}
+#load relevant packages, etc.
+
+library(here)
+library(raster)
+library(tidyverse)
+
+# raster template
+food_raster_template <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+fishery_raster_template <- raster(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/destructive_proportions", full=TRUE)[1])
+```
+
+Combine the biomass removal and habitat destruction rasters for each food group (sum and divide by 2).
+```{r}
+
+food_cats <- data.frame(filename = c("Benthic", "Demersal", "fofm", "Large pelagic", "Medium pelagic", "Reef-associated", "Small pelagic"),
+                        savename = c("benthic", "demersal", "fofm", "large-pelagic", "medium-pelagic", "reef", "small-pelagic"))
+
+biomass <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/biomass_removal", full=TRUE)
+habitat <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/benthic_habitat_destruction", full=TRUE)
+
+for(food_type in food_cats$filename){  #food_type = food_cats$filename[4]
+  cat(food_type, "\n")
+  biomass_file <- raster(grep(food_type, biomass, value=TRUE))
+  biomass_file[is.na(biomass_file)] <- 0
+  habitat_file <- raster(grep(food_type, habitat, value=TRUE))
+  habitat_file[is.na(habitat_file)] <- 0
+  cat("this should be 2 =", length(biomass_file) + length(habitat_file), "\n")
+#plot(biomass_file)
+#plot(habitat_file)
+  pressure <- (biomass_file + habitat_file)/2
+  pressure_food_scale <- resample(pressure, food_raster_template, method="ngb")
+  cat(minValue(pressure_food_scale), " to ", maxValue(pressure_food_scale), "\n", "\n") 
+  pressure_km2eq <- pressure_food_scale * area(pressure_food_scale)
+  
+#cellStats(pressure_km2eq, "sum", na.rm=TRUE)  
+  savename = food_cats$savename[food_cats$filename==food_type]
+  writeRaster(pressure_km2eq, sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/marine_%s_fisheries_meat_disturbance.tif", savename), overwrite=TRUE)
+  }
+
+```
+
+### some checks
+```{r}
+# make sure total of all rasters doesn't exceed 1
+
+marine_disturb <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers", pattern="fisheries_meat_disturbance.tif", full=TRUE)
+
+marine_disturb <- grep("freshwater", marine_disturb, invert=TRUE, value=TRUE)
+
+total_marine_disturb <- calc(stack(marine_disturb), sum, na.rm=TRUE)
+prop_total_marine_disturb <- total_marine_disturb/area(total_marine_disturb)
+prop_total_marine_disturb
+plot(prop_total_marine_disturb)
+
+```
+
+
+Compare to previous rasters
+```{r}
+
+old_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/archive_marine_fish_disturbance", full=TRUE)
+
+old_files_stack <- stack(old_files)
+old_area <- cellStats(old_files_stack, "sum", na.rm=TRUE)
+sum(old_area)
+
+marine_disturb <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers", pattern="fisheries_meat_disturbance.tif", full=TRUE)
+
+marine_disturb <- grep("freshwater", marine_disturb, invert=TRUE, value=TRUE)
+new_files <- stack(marine_disturb)
+new_area <- cellStats(new_files, "sum", na.rm=TRUE)
+sum(new_area)
+
+(new_area-old_area)/old_area
+
+(5047749 - 4817619)/4817619
+
+```
+
+
+### Scenario analysis
+
+Here we are combining the data for fisheries using a 99.99th rescaling value (vs. 99.9th) to determine our level of uncertainty.
+
+Combine the biomass removal and habitat destruction rasters for each food group (sum and divide by 2).
+```{r}
+
+food_cats <- data.frame(filename = c("Benthic", "Demersal", "fofm", "Large pelagic", "Medium pelagic", "Reef-associated", "Small pelagic"),
+                        savename = c("benthic", "demersal", "fofm", "large-pelagic", "medium-pelagic", "reef", "small-pelagic"))
+
+biomass <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/scenarios/scenarios_dataprep/fis_biomass_removal", full=TRUE)
+habitat <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/scenarios/scenarios_dataprep/fis_benthic_destructive", full=TRUE)
+
+for(food_type in food_cats$filename){  #food_type = food_cats$filename[4]
+  cat(food_type, "\n")
+  biomass_file <- raster(grep(food_type, biomass, value=TRUE))
+  biomass_file[is.na(biomass_file)] <- 0
+  habitat_file <- raster(grep(food_type, habitat, value=TRUE))
+  habitat_file[is.na(habitat_file)] <- 0
+  cat("this should be 2 =", length(biomass_file) + length(habitat_file), "\n")
+#plot(biomass_file)
+#plot(habitat_file)
+  pressure <- (biomass_file + habitat_file)/2
+  pressure_food_scale <- resample(pressure, food_raster_template, method="ngb")
+  cat(minValue(pressure_food_scale), " to ", maxValue(pressure_food_scale), "\n", "\n") 
+  pressure_km2eq <- pressure_food_scale * area(pressure_food_scale)
+  
+#cellStats(pressure_km2eq, "sum", na.rm=TRUE)  
+  savename = food_cats$savename[food_cats$filename==food_type]
+  writeRaster(pressure_km2eq, sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/scenarios/scenarios_datalayers/marine_%s_fisheries_meat_disturbance.tif", savename), overwrite=TRUE)
+  }
+
+```
+

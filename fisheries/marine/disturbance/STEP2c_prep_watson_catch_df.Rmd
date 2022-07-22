@@ -1,0 +1,300 @@
+---
+title: "Create raster of disturbance for all marine fisheries"
+author: "Gage Clawson (UCSB, NCEAS, OHI)"
+date: "October 2, 2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Here we prep the Watson fisheries data to be classified into the correct species classes, and save as a csv. 
+
+- Final output is a dataset, `/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/catch_spp_class_2017.csv` that assigns each species to a specific species grouping class for 2017. 
+
+```{r, eval = FALSE}
+#load relevant packages, etc.
+
+library(here)
+library(raster)
+library(tidyverse)
+library(doParallel)
+library(foreach)
+library(parallel)
+
+# raster template
+r <- raster::raster(ncol=720, nrow=360, vals=c(1:259200))
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+hab_raster <- raster("/home/shares/food-systems/Food_footprint/_raw_data/Halpern_chi/habitats/coral_reef.tif")
+```
+
+
+## Step 1: Classify catch into demersal destructive/nondestructive
+Get all the data together...
+```{r, eval = FALSE}
+## read in catch data
+catch <- read_csv("/home/shares/food-systems/Food_footprint/_raw_data/watson_data/v5.0/Catch2015_2019.csv")
+
+## read in taxa index 
+taxa_index <- read_csv("/home/shares/food-systems/Food_footprint/_raw_data/watson_data/v5.0/Codes_taxa.csv")
+
+## read in gear index 
+gear_index <- read_csv("/home/shares/food-systems/Food_footprint/_raw_data/watson_data/v5.0/Codes_gear.csv") %>%
+  dplyr::select(Gear, GearName = VBDesc) %>%
+  unique()
+
+taxa_gear_types <- read_csv(here("fisheries/marine/disturbance/int/taxa_gear_types.csv"))
+
+head(taxa_gear_types)
+
+## join datasets together
+catch_full <- left_join(catch, taxa_index, by="Taxonkey")
+dim(catch_full)
+catch_full <- left_join(catch_full, gear_index, by="Gear")
+dim(catch_full)
+catch_full <- left_join(catch_full, taxa_gear_types, by=c("TaxonName", "Taxonkey", "CommonName", "Descript","GearName", "Gear")) 
+dim(catch_full)
+
+
+forage_fish_list <- read_csv(here("fisheries/marine/ghg/data/master_taxa_list.csv"))
+
+
+catch_full <- catch_full %>%
+  mutate(forage_fish = ifelse(TaxonName %in% forage_fish_list$forage_fish, 1, 0)) %>%
+  mutate(forage_fish = ifelse(Descript == "krill", 1, forage_fish)) %>%
+  dplyr::select(-foragefish)
+
+```
+
+Check to see if there are any NAs to gapfill in our gear type data.
+
+```{r, eval = FALSE}
+
+check <- catch_full %>%
+  mutate(category = paste(destruction, type, sep="-"))
+
+# explore ones with no category
+check %>%
+  mutate(total_tonnes = ReportedIND + IUUIND + DiscardsIND + ReportedNIND + IUUNIND + DiscardsNIND) %>%
+  group_by(category) %>%
+  summarize(total_tonnes = sum(total_tonnes))
+
+
+# # A tibble: 4 x 2
+#   category                 total_tonnes
+#   <chr>                           <dbl>
+# 1 destructive-demersal       102286775.
+# 2 destructive-pelagic         21463146.
+# 3 non-destructive-demersal    96149597.
+# 4 non-destructive-pelagic    153890005.
+
+check2 <- catch_full %>%
+  mutate(total_tonnes = ReportedIND + IUUIND + DiscardsIND + ReportedNIND + IUUNIND + DiscardsNIND) %>%
+  filter(forage_fish == 0, IYear == 2017)
+sum(check2$total_tonnes) # 84562955 tonnes of non-forage fish (IUU, Reported, Discards)
+
+check3 <- catch_full %>%
+  mutate(total_tonnes = ReportedIND + IUUIND + ReportedNIND + IUUNIND) %>%
+  filter(forage_fish == 0, IYear == 2017)
+sum(check3$total_tonnes) # 72172118 tonnes of non-forage fish (IUU, Reported)
+
+
+
+check4 <- catch_full %>%
+  mutate(total_tonnes = ReportedIND + IUUIND + DiscardsIND + ReportedNIND + IUUNIND + DiscardsNIND) %>%
+  filter(forage_fish == 1, IYear == 2017)
+sum(check4$total_tonnes) # 41693559 tonnes of forage fish (IUU, Reported, Discards)
+
+check5 <- catch_full %>%
+  mutate(total_tonnes = ReportedIND + IUUIND + ReportedNIND + IUUNIND) %>%
+  filter(forage_fish == 1, IYear == 2017)
+sum(check5$total_tonnes) # 39054068 tonnes of forage fish (IUU, Reported, Discards)
+```
+
+For intermediate and final rasters, we need to split our species into coarser groups: 
+
+Intermediate categories
+ - Benthic
+ - Small Demersal or Small bentho-pelagic
+ - Medium Demersal or Medium bentho-pelagic
+ - Large Demersal or Large bentho-pelagic
+ - Large Pelagics (>90cm)
+ - Medium Pelagic (30-60cm)
+ - Small pelagics (<30cm)
+ - Small Reef-associated
+ - Medium Reef-associated
+ - Large Reef-associated
+ - FOFM - includes krill
+ 
+ Conversions: 
+ - pelagic >=90 cm : Large pelagics **
+ - demersal <30cm : Small Demersal **
+ - shark >=90cm : Large Demersal **
+ - pelagic <30cm : Small Pelagics **
+ - demersal 30 - 90 cm : Medium Demersal **
+ - bathydemersal <30 cm : Small Demersal **
+ - bathydemersal >= 90cm : Large Demersal **
+ - pelagic 30 - 90cm : Medium pelagics **
+ - reef-associated 30 - 90 cm : Medium Reef associated **
+ - flatfish <90 cm : Medium Demersal **
+ - cephalopods : See below
+ - demersal >=90 cm : Large Demersal **
+ - benthopelagic >=90 cm : Large Demersal **
+ - reef-associated >=90 cm : Large Reef associated **
+ - flatfish >=90 cm : Large Demersal **
+ - shrimp : Small demersal **
+ - demersal mollusc : Small Demersal **
+ - rays <90 cm : Medium Demersal **
+ - lobsters crab : Benthic **
+ - shark <90 cm : Medium Demersal **
+ - benthopelagic 30 - 90 cm : Medium Demersal **
+ - benthopelagic <30 cm : Small Demersal **
+ - reef-associated <30 cm : Small Reef associated **
+ - rays >=90 cm : Large Demersal **
+ - bathypelagic <30 cm : Small Pelagics **
+ - bathypelagic 30 - 90 cm : Medium Pelagics **
+ - bathypelagic >=90 cm : Large Pelagic **
+ - bathydemersal 30 - 90 cm : Medium Demersal **
+ - krill : FOFM 
+
+Final raster categories:
+ - Benthic
+ - Demersal or bentho-pelagic
+ - Large Pelagics (>90cm)
+ - Medium Pelagic (30-60cm) 
+ - Small pelagics (<30cm)
+ - Reef-associated
+ - FOFM
+
+Conversions: 
+ - pelagic >=90 cm : Large pelagics
+ - demersal <30cm : Demersal
+ - shark >=90cm : Demersal
+ - pelagic <30cm : Small Pelagics
+ - demersal 30 - 90 cm : Demersal
+ - bathydemersal <30 cm : Demersal
+ - bathydemersal >= 90cm : Demersal
+ - pelagic 30 - 90cm : Medium pelagics
+ - reef-associated 30 - 90 cm : Reef associated
+ - flatfish <90 cm : Demersal
+ - cephalopods : species dependent, see below 
+ - demersal >=90 cm : Demersal
+ - benthopelagic >=90 cm : Demersal
+ - reef-associated >=90 cm : Reef associated
+ - flatfish >=90 cm : Demersal
+ - shrimp : Demersal
+ - demersal mollusc : Demersal
+ - rays <90 cm : Demersal
+ - lobsters crab : Benthic
+ - shark <90 cm : Demersal
+ - benthopelagic 30 - 90 cm : Demersal
+ - benthopelagic <30 cm : Demersal
+ - reef-associated <30 cm : Reef associated
+ - rays >=90 cm : Demersal
+ - bathypelagic <30 cm : Small Pelagics
+ - bathypelagic 30 - 90 cm : Medium Pelagics
+ - bathypelagic >=90 cm : Large Pelagic 
+ - bathydemersal 30 - 90 cm : Demersal
+ - krill : FOFM 
+
+
+Reclassify the Watson species classes to intermediate supplementary classes:
+```{r, eval = FALSE}
+catch_species_class_int <- catch_full %>%
+  dplyr::mutate(species_class_int =
+                  case_when(
+                    str_detect(Descript, "demersal mollusc|demersal <30 cm|bathydemersal <30 cm|shrimp|benthopelagic <30 cm") ~ "Small demersal",
+                    str_detect(Descript, "shark >=90 cm|bathydemersal >= 90cm|demersal >=90 cm|benthopelagic >=90 cm|flatfish >=90 cm|rays >=90 cm") ~ "Large demersal",
+                    str_detect(Descript, "demersal 30 - 90 cm|flatfish <90 cm|rays <90 cm|shark <90 cm|benthopelagic 30 - 90 cm|bathydemersal 30 - 90 cm") ~ "Medium demersal",
+                    str_detect(Descript, "lobsters crab") ~ "Benthic",
+                    str_detect(Descript, "pelagic >=90 cm|bathypelagic >=90 cm") ~ "Large pelagic",
+                    str_detect(Descript, "pelagic 30 - 90 cm|bathypelagic 30 - 90 cm") ~ "Medium pelagic",
+                    str_detect(Descript, "pelagic <30 cm|bathypelagic <30 cm|krill") ~ "Small pelagic",
+                    str_detect(Descript, "reef-associated >=90 cm") ~ "Large reef-associated",
+                    str_detect(Descript, "reef-associated 30 - 90 cm") ~ "Medium reef-associated",
+                    str_detect(Descript, "reef-associated <30 cm") ~ "Small reef-associated",
+                    str_detect(CommonName, "uttlefish") & str_detect(Descript, "cephalopods") ~ "Small reef-associated",
+                    str_detect(CommonName, "Horned") & str_detect(Descript, "cephalopods") ~ "Medium reef-associated",
+                    str_detect(CommonName, "Common octopus|Octopuses") & str_detect(Descript, "cephalopods") ~ "Large reef-associated", 
+                    str_detect(CommonName, "Argentine shortfin squid|Patagonian squid|Northern shortfin squid|California market squid|Cape Hope squid|Longfin squid|Sevenstar flying squid") & str_detect(Descript, "cephalopods") ~ "Small pelagic", 
+                    str_detect(CommonName, "Jumbo flying squid|Broadtail shortfin squid|European flying squid|Japanese flying squid|Wellington flying squid|Neon flying squid|Veined Squid|Squids|Common squids|Cephalopods") & str_detect(Descript, "cephalopods") ~ "Medium pelagic", 
+                    str_detect(CommonName, "Arrow squids") & str_detect(Descript, "cephalopods") ~ "Large pelagic"
+                  )) 
+
+## take a look to see if we caught all the cases... we did
+unique(catch_species_class_int$species_class_int)
+
+test <- catch_species_class_int %>%
+  filter(Descript == "krill")
+
+unique(test$forage_fish)
+```
+
+
+Reclassify the Watson species classes to final raster classes:
+
+```{r, eval = FALSE}
+catch_species_class_fin <- catch_species_class_int %>%
+  dplyr::mutate(species_class_fin =
+                  case_when(
+                    str_detect(species_class_int, "demersal") ~ "Demersal",
+                    str_detect(species_class_int, "reef-associated") ~ "Reef-associated",
+                    TRUE  ~ species_class_int
+                  ))
+
+## take a look to see if we caught all the cases... we did
+catch_species_class_summary <- catch_species_class_fin %>%
+  filter(forage_fish == 0, IYear == 2017) %>%
+  mutate(catch_total = ReportedIND + IUUIND + DiscardsIND + ReportedNIND + IUUNIND + DiscardsNIND) %>%
+  group_by(species_class_fin) %>%
+  summarise(catch_sum = sum(catch_total))
+sum(catch_species_class_summary$catch_sum) # 84562955
+
+catch_species_class_summary_2 <- catch_species_class_fin %>%
+  filter(forage_fish == 1, IYear == 2017) %>%
+   mutate(catch = ReportedIND + IUUIND + DiscardsIND + ReportedNIND + IUUNIND + DiscardsNIND) %>%
+  group_by(species_class_fin) %>%
+  summarise(catch_sum = sum(catch))
+sum(catch_species_class_summary_2$catch_sum) # 41693559
+
+```
+
+Save the dataset
+```{r, eval = FALSE}
+
+catch_full_final <- catch_species_class_fin %>%
+  mutate(category = paste(destruction, type, sep="-"))
+
+## check no NAs
+table(catch_full_final$category)
+
+## This file will be used in a subsequent Rmd to isolate the pelagic fisheries
+save_file <- catch_full_final %>%
+  dplyr::select(Cell, ReportedIND, IUUIND, DiscardsIND, ReportedNIND, IUUNIND, DiscardsNIND, IYear, CNumber, Taxonkey, Gear, TaxonName, CommonName, Descript, species_class_int, species_class_fin, TaxLevel, ISSCAAP, ISSCAAPName, forage_fish, GearName, destruction, fish_type = type, category)
+
+write_csv(save_file, "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/catch_with_gear_cats.csv")
+
+
+catch_spp_class <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/catch_with_gear_cats.csv")
+
+catch_spp_class_fofm_2017 <- catch_spp_class %>%
+  mutate(species_class_fin = ifelse(forage_fish == 1, "forage_fish", species_class_fin)) %>%
+  filter(IYear == 2017) ## filter for correct year
+
+## save file 
+write_csv(catch_spp_class_fofm_2017, "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/catch_spp_class_2017.csv")
+  
+
+
+# catch_summary <- read_csv(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/catch_with_gear_cats.csv"))
+# 
+# catch_summary_table <- catch_summary %>%
+#   dplyr::filter(IYear == 2017) %>%
+#   dplyr::mutate(tonnes_catch = ReportedIND + IUUIND + DiscardsIND + ReportedNIND + IUUNIND + DiscardsNIND) %>%
+#   mutate(species_class_fin = ifelse(forage_fish == 1, "fofm", species_class_fin)) %>%
+#   dplyr::group_by(species_class_fin) %>%
+#   dplyr::summarise(total_tonnes = sum(tonnes_catch)) %>%
+#   dplyr::ungroup()
+
+```
+
+

@@ -1,0 +1,126 @@
+---
+title: "Gapfilling emissions intensities in matched Watson-Parker data"
+author: "Gage Clawson (UCSB, NCEAS, OHI)"
+date: "September 25, 2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+The purpose of this script is to gapfill the newly joined Watson and Seafood Carbon Emissions Tool so that every observation has an emission intensity associated with it. We will need to gapfill around 66% of the observations.  
+
+We use the data and information from:
+
+1. Watson, R. A. and Tidd, A. 2018. Mapping nearly a century and a half of global marine fishing: 1869–2015. Marine Policy, 93, pp. 171-177. [(Paper URL)](https://doi.org/10.1016/j.marpol.2018.04.023)
+
+2. [Seafood Carbon Emissions Tool](http://seafoodco2.dal.ca/(overlay:menu/5bcb48abaaea53205a2de526)
+
+## Setup
+```{r, eval = FALSE}
+#load relevant packages, etc.
+
+library(here)
+library(raster)
+library(tidyverse)
+library(countrycode)
+
+# function to project raster
+## Use correct CRS
+
+source(here("fisheries/marine/ghg/raster_crs.R"))
+
+
+raw_folder <- file.path("/home/shares/food-systems/Food_footprint/_raw_data")
+raw_folder_watson <- file.path("/home/shares/food-systems/Food_footprint/_raw_data/watson_data/v5.0/")
+ghg_folder <- file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/ghg")
+```
+
+```{r, eval = FALSE}
+## Read in joined watson-emissions data 
+catch_emissions <- read_csv(file.path(ghg_folder, "watson_v5_emissions/catch_watson_parker_matched_2017.csv"))
+
+summary(catch_emissions)
+mean(catch_emissions$ei_direct_kgco2_kgcatch, na.rm = TRUE) # 3.100707
+```
+
+
+## Methods
+
+Gapfilling the emissions intensities will occur iteratively, like this: 
+ - Assign an emissions intensity of 0 to any species with gear type == "Other"
+ - Group by species class (intermediate classes) and gear type and summarise to get mean emissions intensities (gapfilled by class/gear)
+ - Group by gear type and summarise to get mean emissions intensities (gapfilled by gear type)
+ 
+
+
+```{r, eval = FALSE}
+catch_emissions_df <- catch_emissions %>%
+  dplyr::select(IYear, CNumber, Taxonkey, Cell, TaxonName, CommonName, Descript, species_class_int, species_class_fin, ParkerGearName,  catch, FOFM_catch, forage_fish, fui_l_t, ei_direct_kgco2_kgcatch) 
+summary(catch_emissions_df)
+
+## Look at those classified at "Other" to make sure all of their emissions intensities are NA
+# other_test <- catch_emissions_df %>%
+#   filter(ParkerGearName == "Other")
+# summary(other_test) ## they are all NA
+
+catch_emissions_gf <- catch_emissions_df %>%
+  mutate(ei_direct_kgco2_kgcatch = ifelse(ParkerGearName == "Other", 0, ei_direct_kgco2_kgcatch)) %>%
+  group_by(ParkerGearName, species_class_int) %>%
+  mutate(gear_class_avg_ei = mean(ei_direct_kgco2_kgcatch, na.rm = TRUE)) %>%
+  ungroup() %>%
+  group_by(ParkerGearName) %>%
+  mutate(gear_avg_ei = mean(ei_direct_kgco2_kgcatch, na.rm = TRUE)) %>%
+  ungroup()
+
+summary(catch_emissions_gf)
+
+
+# ## Exploratory plots on whether gear or species class drive the sustainability scores...
+# plot(as.factor(catch_emissions_df$species_class_int), catch_emissions_df$ei_direct_kgco2_kgcatch)
+# plot(as.factor(catch_emissions_df$ParkerGearName), catch_emissions_df$ei_direct_kgco2_kgcatch)
+# 
+# mod_spp <- lm(ei_direct_kgco2_kgcatch ~ as.factor(ParkerGearName) + species_class_int, data = catch_emissions_df)
+# anova(mod_spp)
+# summary(mod_spp) ## 0.8256
+# 
+# mod_spp_class <- lm(ei_direct_kgco2_kgcatch ~ as.factor(species_class_int), data = catch_emissions_df)
+# anova(mod_spp_class)
+# summary(mod_spp_class) ## Rsquare 0.1606
+# 
+# mod_gear <- lm(ei_direct_kgco2_kgcatch ~ as.factor(ParkerGearName), data = catch_emissions_df)
+# anova(mod_gear)
+# summary(mod_gear) ##Rsquare 0.7731
+# # it makes more sense to use gear type after spp class and gear type together... gear type explains much more of the variance than species class
+
+
+## Now lets actually fill in the ei
+catch_emissions_gf_df <- catch_emissions_gf %>%
+  dplyr::mutate(gapfill_ei = ifelse(!is.na(ei_direct_kgco2_kgcatch), 0, NA)) %>%
+  dplyr::mutate(gapfill_method = ifelse(!is.na(ei_direct_kgco2_kgcatch), "none", NA)) %>% ## no gapfilling tag
+  
+  dplyr::mutate(ei_kgco2_kgcatch = ifelse(is.na(ei_direct_kgco2_kgcatch), gear_class_avg_ei, ei_direct_kgco2_kgcatch)) %>%
+  dplyr::mutate(gapfill_ei = ifelse(is.na(gapfill_ei) & ei_kgco2_kgcatch == gear_class_avg_ei & is.na(ei_direct_kgco2_kgcatch), 1, gapfill_ei)) %>%
+  dplyr::mutate(gapfill_method = ifelse(is.na(gapfill_method) & ei_kgco2_kgcatch == gear_class_avg_ei & is.na(ei_direct_kgco2_kgcatch), "gear_species_class_average", gapfill_method)) %>% ## gapfill with the gear/species class average
+  
+  dplyr::mutate(ei_kgco2_kgcatch = ifelse(is.na(ei_kgco2_kgcatch), gear_avg_ei, ei_kgco2_kgcatch)) %>%
+  dplyr::mutate(gapfill_ei = ifelse(is.na(gapfill_ei) & ei_kgco2_kgcatch == gear_avg_ei & is.na(ei_direct_kgco2_kgcatch), 1, gapfill_ei)) %>%
+  dplyr::mutate(gapfill_method = ifelse(is.na(gapfill_method) & ei_kgco2_kgcatch == gear_avg_ei & is.na(ei_direct_kgco2_kgcatch), "gear_average", gapfill_method)) ## gapfill with the gear average
+
+summary(catch_emissions_gf_df)
+filter(catch_emissions_gf_df, gapfill_method == "gear_species_class_average")
+
+
+
+## save a gapfilling file 
+catch_emissions_gapfill <- catch_emissions_gf_df %>%
+  dplyr::select(year = IYear, CNumber, Taxonkey, Cell, scientific_name = TaxonName, common_name = CommonName, Descript, species_class_int, species_class_fin, gear_type = ParkerGearName, gapfill_ei, gapfill_method_ei = gapfill_method)
+
+write.csv(catch_emissions_gapfill, file.path(ghg_folder, "watson_v5_emissions/all_catch_emissions_gf_2017.csv"), row.names = FALSE)
+
+## save a regular file
+catch_emissions_final <- catch_emissions_gf_df %>%
+  dplyr::select(year = IYear, CNumber, Taxonkey, Cell, scientific_name = TaxonName, common_name = CommonName, Descript, species_class_int, species_class_fin, gear_type = ParkerGearName, ei_kgco2_kgcatch, catch, FOFM_catch, forage_fish)
+
+write.csv(catch_emissions_final, file.path(ghg_folder, "watson_v5_emissions/all_catch_emissions_2017.csv"), row.names = FALSE)
+```
+

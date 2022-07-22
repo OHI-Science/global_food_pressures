@@ -1,0 +1,198 @@
+---
+title: "Model inputs"
+author: "Paul-Eric Rayner"
+date: "12/12/2019"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Script objective
+Calculate model outputs for livestock where we have water consumption ~ temperature data
+
+# Data description
+
+Cows data
+Data source: NRC
+Collected on: 12/12/19
+
+Goat data
+Data source: Dahlanuddin and Thwaites, 1993
+Collected on: 12/16/19
+
+Chickens data
+Data source: Daghir, 2008
+
+# Set-up
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source("./_workflow/common.R")
+## load libraries, read in data
+library(janitor)
+```
+
+# Data import and wrangling
+```{r}
+cows_water <- 
+  vroom::vroom(here("animal_farm/water/data/winchester_1956_cattle_water.csv")) %>% 
+  clean_names() %>% 
+  rename(livestock = cattle_class) %>% 
+  mutate(livestock = tolower(gsub(" ", 
+                                  "_", 
+                                  livestock, 
+                                  fixed = TRUE))) %>% 
+  pivot_longer(cols      = -c(wt_kg, livestock),
+               names_to  = "temperature", 
+               values_to = "water_intake") %>%
+  mutate(temperature = as.numeric(str_remove(string = temperature,
+                                             pattern = "[x]"))) %>% 
+  mutate(water_intake = water_intake * 0.001) %>%  # metric cubes unit
+  arrange() %>% 
+  group_by(livestock, 
+           temperature) %>%
+  summarise(water_intake = mean(water_intake, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  na.omit()
+
+goat_water <- 
+  vroom::vroom(here("animal_farm/water/data/dahlanuddin_1993_goat_water.csv")) %>% 
+  clean_names() %>% 
+  rename(water_intake = mean) %>% 
+  mutate(water_intake = water_intake * 0.001)
+
+leghorn_pullets_water <- 
+  tibble(temperature = c(10, 21.1, 32.2, 37.8),
+         water_intake = c(0.00012, 0.000155, 0.000255, 0.00031))
+
+broiler_chickens_water <- 
+  vroom::vroom(here("animal_farm/water/data/broiler_chickens_water_temp.csv")) %>% 
+  pivot_longer(cols      = - Age_Weeks,
+               names_to  = "Temperature", 
+               values_to = "Water_Consumption",
+               names_transform = list(Temperature = as.double)) %>%
+  clean_names() %>% 
+  group_by(temperature) %>% 
+  summarise(water_intake = mean(water_consumption) / 1000 / 1000, .groups = 'drop') 
+
+backyard_chickens_water <- 
+  bind_rows(leghorn_pullets_water,
+            broiler_chickens_water) %>% 
+  group_by(temperature) %>% 
+  summarise(water_intake = mean(water_intake), .groups = 'drop')
+```
+
+# Visualize
+```{r}
+ggplot(cows_water, aes(x = temperature, 
+                       y = water_intake, 
+                       col = livestock)) +
+       theme_classic() +
+       geom_point() +
+       geom_smooth(method = "lm", 
+                   formula = y ~ poly(x, 2, raw = TRUE), se = FALSE) +
+       labs(x   = "Temperature", 
+            y   = "Water intake",
+            col = "cows class") +
+       theme(axis.title   = element_text(size = 14),
+             axis.text    = element_text(size = 11, colour = "black"),
+             legend.title = element_text(size = 14, colour = "black"),
+             legend.text  = element_text(size = 11))
+
+ggplot(goat_water, aes(x = temperature, y = water_intake)) +
+        theme_classic() +
+        geom_point() +
+        geom_smooth(method = "lm", formula = y ~ poly(x, 2, raw = TRUE), se = FALSE) +
+        labs(lab = "Temperature", y  = "Water Intake") +
+        theme(axis.title   = element_text(size = 14),
+              axis.text    = element_text(size = 11, colour = "black"),
+              legend.title = element_text(size = 14, colour = "black"),
+              legend.text  = element_text(size = 11))
+
+ggplot(leghorn_pullets_water, aes(x = temperature, y = water_intake))+
+        theme_classic()+
+        geom_point()+
+        geom_smooth(method = "lm", formula = y ~ poly(x, 2, raw = TRUE), se = FALSE) +
+        labs(x = "Temperature", y  = "Water Intake") +
+        theme(axis.title   = element_text(size = 14),
+              axis.text    = element_text(size = 11, colour = "black"),
+              legend.title = element_text(size = 14, colour = "black"),
+              legend.text  = element_text(size = 11))
+
+ggplot(backyard_chickens_water, aes(x = temperature, y = water_intake))+
+        theme_classic()+
+        geom_point()+
+        geom_smooth(method = "lm", formula = y ~ poly(x, 2, raw = TRUE), se = FALSE) +
+        labs(x = "Temperature", y  = "Water Intake") +
+        theme(axis.title   = element_text(size = 14),
+              axis.text    = element_text(size = 11, colour = "black"),
+              legend.title = element_text(size = 14, colour = "black"),
+              legend.text  = element_text(size = 11))
+```
+
+We can see that the line fits relatively well for all cows classes except
+finishing cows, which performs better with a third polynomial.
+
+# Extract model coefficients for each livestock
+```{r}
+# cows
+model_cows_water <- function(class_name, polynomial) {
+
+    cows_water %>% 
+    filter(livestock %in% class_name) %>% 
+    lm(water_intake ~ poly(temperature,
+                           polynomial,
+                           raw = TRUE),
+       data = .) %>% 
+    broom::tidy() %>% 
+    add_column(livestock = class_name, 
+               .before   = TRUE) %>% 
+    vroom::vroom_write(here(file.path("animal_farm/water/data/", 
+                             class_name, 
+                             "_model.csv",
+                             fsep = "")))
+}
+
+map2(c("finishing_cattle", "growing_cattle", "lactating_cows"),
+     c(2, 2, 3),
+     model_cows_water)
+
+# Goat
+lm(water_intake ~ poly(temperature, 
+                       2, 
+                       raw = TRUE), 
+   data = goat_water) %>% 
+  broom::tidy() %>%  
+  add_column(livestock = "goats", 
+             .before = TRUE) %>% 
+  vroom::vroom_write(here("animal_farm/water/data/goat_model.csv"))
+
+# Layer chickens
+lm(water_intake ~ poly(temperature, 
+                       2, 
+                       raw = TRUE), 
+   data = leghorn_pullets_water) %>% 
+  broom::tidy() %>% 
+  add_column(livestock = "layer_chickens", 
+             .before = TRUE) %>% 
+  vroom::vroom_write(here("animal_farm/water/data/layer_chickens_model.csv"))
+
+# Backyard chickens
+lm(water_intake ~ poly(temperature, 
+                       2, 
+                       raw = TRUE), 
+   data = backyard_chickens_water) %>% 
+  broom::tidy() %>% 
+  add_column(livestock = "backyard_chickens", 
+             .before = TRUE) %>% 
+  vroom::vroom_write(here("animal_farm/water/data/backyard_chickens_model.csv"))
+
+# Broiler chickens
+lm(water_intake ~ poly(temperature, 
+                       2, 
+                       raw = TRUE), 
+   data = broiler_chickens_water) %>% 
+  broom::tidy() %>% 
+  add_column(livestock = "broiler_chickens", 
+             .before = TRUE) %>% 
+  vroom::vroom_write(here("animal_farm/water/data/broiler_chickens_model.csv"))
+```

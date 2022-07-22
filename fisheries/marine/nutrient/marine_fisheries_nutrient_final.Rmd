@@ -1,0 +1,115 @@
+---
+title: "Marine Fisheries Nutrient"
+output: html_document
+---
+## Script Author
+Gage Clawson
+
+## Objectives
+Create our marine fisheries nutrient raster
+
+## Inputs
+1. Watson, R. A. and Tidd, A. 2018. Mapping nearly a century and a half of global marine fishing: 1869–2015. Marine Policy, 93, pp. 171-177. [(Paper URL)](https://doi.org/10.1016/j.marpol.2018.04.023)
+
+## Outputs
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+## load libraries, read in data
+library(here)
+library(raster)
+library(tidyverse)
+
+source(here("_workflow/common.R"))
+watson_raster_template <- raster::raster(ncol=720, nrow=360, vals=c(1:259200))
+source(here("fisheries/marine/ghg/raster_crs.R"))
+
+raw_folder <- file.path("/home/shares/food-systems/Food_footprint/_raw_data")
+raw_folder_watson <- file.path("/home/shares/food-systems/Food_footprint/_raw_data/watson_data/v5.0/")
+ghg_folder <- file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/ghg")
+nutrient_folder <- file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/nutrient")
+final_folder <- file.path("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers")
+```
+
+Create our nutrient rasters
+
+```{r, eval = FALSE}
+## large pelagic
+lg_pel <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/marine_large-pelagic_fisheries_meat_disturbance.tif")*0
+
+lg_pel
+cellStats(lg_pel, "sum", na.rm = TRUE)
+plot(lg_pel)
+
+## save to final datalayers folder
+writeRaster(lg_pel, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/marine_large-pelagic_fisheries_meat_nutrient.tif"), overwrite=TRUE)
+
+## small pelagic 
+sm_pel <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/marine_small-pelagic_fisheries_meat_disturbance.tif")*0
+
+sm_pel
+plot(sm_pel)
+
+## save to final datalayers folder
+writeRaster(sm_pel, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/marine_small-pelagic_fisheries_meat_nutrient.tif"), overwrite=TRUE)
+
+
+## medium pelagic 
+md_pel <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/marine_medium-pelagic_fisheries_meat_disturbance.tif")*0
+
+md_pel
+plot(md_pel)
+
+## save to final datalayers folder
+writeRaster(md_pel, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/marine_medium-pelagic_fisheries_meat_nutrient.tif"), overwrite=TRUE)
+
+
+## demersal
+dem <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/marine_demersal_fisheries_meat_disturbance.tif")*0
+
+dem
+plot(dem)
+
+## save to final datalayers folder
+writeRaster(dem, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/marine_demersal_fisheries_meat_nutrient.tif"), overwrite=TRUE)
+
+
+## benthic
+ben <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/marine_benthic_fisheries_meat_disturbance.tif")*0
+
+ben
+plot(ben)
+
+## save to final datalayers folder
+writeRaster(ben, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/marine_benthic_fisheries_meat_nutrient.tif"), overwrite=TRUE)
+
+
+## reef-associated
+rfa <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/marine_reef_fisheries_meat_disturbance.tif")*0
+
+rfa
+plot(rfa)
+
+## save to final datalayers folder
+writeRaster(rfa, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/marine_reef_fisheries_meat_nutrient.tif"), overwrite=TRUE)
+
+
+## fofm
+fofm <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/marine_fofm_fisheries_meat_disturbance.tif")*0
+
+fofm
+plot(fofm)
+
+## save to final datalayers folder
+writeRaster(fofm, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/marine_fofm_fisheries_meat_nutrient.tif"), overwrite=TRUE)
+
+```
+
+
+
+## Gapfilling 
+There is no gapfilling. 
+
+## Data Checks

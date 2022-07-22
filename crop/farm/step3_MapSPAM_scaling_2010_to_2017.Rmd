@@ -1,0 +1,218 @@
+---
+title: "MapSPAM_scaling_2010_to_2017"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Script Description
+Rescale MapSPAM data to year 2017.
+
+# Data information
+We do this using FAOSTAT crop production data trends between year 2010 and 2017.
+
+# Preamble
+```{r setup, include = FALSE}
+# Raster templates
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+# getting packages we want
+library(janitor)
+
+# Import food_rgns xy df
+food_rgns_xy <- 
+  food_rgns_xy %>% 
+  dplyr::select(x, y, iso3c)
+
+predatalayers_path <- "/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/"
+
+```
+
+# Import and wrangle FAO data for 2010 and 2017 
+```{r}
+# SPAM names
+crop_codes_updated <- 
+  vroom(here("crop/farm/data/crop_codes_updated.csv"))  %>% 
+  dplyr::select(SPAM_short_name, item_code)
+
+scaling_coef_tidy <- 
+  vroom::vroom(here("crop/farm/data/FAOSTAT_crop_production_2010_2017.csv")) %>% 
+  clean_names() %>% 
+  dplyr::select(area_code, item_code, year, value) %>% 
+  rename(tonnes = value) %>% 
+  na.omit()
+```
+
+# Special Sudanese case
+
+Sudan was split into two countries in 2010, so now we need to scale the difference from 2010 to 2017. To do this, I am extracting production data for SPAM's 2010 map as opposed to splitting FAO data.
+
+```{r}
+SDN_SSD_2010 <- 
+  vroom::vroom(here("crop/farm/data/prod_crop_rgns_2010.csv")) %>% 
+  filter(iso3c %in% c("SSD", "SDN")) %>% 
+  group_by(iso3c, SPAM_short_name) %>% 
+  summarize(`2010` = sum(production)) %>% 
+  ungroup() 
+
+SDN_SSD_2017 <- 
+  scaling_coef_tidy %>% 
+  filter(area_code %in% c(276, 277)) %>% # Filter Sudan
+  left_join(crop_codes_updated) %>%   
+  left_join(read_csv(here("_spatial/_output/FAO_rgn_codes.csv")), 
+            by = "area_code") %>% # Add iso3c
+  group_by(SPAM_short_name, iso3c) %>% 
+  summarise(`2017` = sum(tonnes, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  na.omit()
+
+sudan_coef <- 
+  full_join(SDN_SSD_2010, SDN_SSD_2017) %>% 
+  mutate_all(~replace(., is.na(.), 0)) %>% 
+  mutate(coef = `2017` / `2010`) %>% 
+  select(!contains("tonnes"))
+```
+
+# Wrangle FAO dataset 
+```{r}
+scaling_coef_tidy <- 
+  scaling_coef_tidy %>% 
+  mutate(area_code = if_else(area_code == 206, 277, area_code)) %>% # Re-allocate former Sudan's 2010 values.
+  bind_rows(scaling_coef_tidy) %>%
+  mutate(area_code = if_else(area_code == 206, 276, area_code)) %>% 
+  unique() %>% 
+  filter(!area_code %in% 351) %>% # Remove China
+  left_join(read_csv(here("_spatial/_output/FAO_rgn_codes.csv")), 
+            by = "area_code") %>% # Add iso3c
+  left_join(crop_codes_updated) %>% # Add SPAM_short_name
+  dplyr::select(year, tonnes, iso3c, SPAM_short_name) %>% 
+  na.omit() # Remove NA created by milled rice.
+
+# Distinct area_codes
+n_distinct(scaling_coef_tidy$iso3c) # 214
+
+missing_rgns <- setdiff(food_rgns$iso3c, scaling_coef_tidy$iso3c)
+missing_rgns
+food_rgns %>% filter(iso3c %in% missing_rgns) # Nothing unusual
+```
+
+# Calculate scaling from 2010 to 2017 for all crops and countries.
+```{r}
+scaling_coef <- 
+  scaling_coef_tidy %>% 
+  group_by(SPAM_short_name, year, iso3c) %>%
+  summarize(tonnes = mean(tonnes)) %>% # Calculate mean tonnes for each crop, year and country.
+  ungroup() %>% 
+  spread(., year, tonnes) %>% 
+  filter(!iso3c %in% c("SDN", "SSD")) %>% # Replace Sudan values
+  mutate_all(~replace(., is.na(.), 0)) %>% 
+  group_by(SPAM_short_name, iso3c, `2017`, `2010`) %>%
+  summarize(coef = `2017` / `2010`, .groups = "keep") %>% 
+  ungroup() %>% 
+  bind_rows(sudan_coef)
+
+# Make sure that countries with more than 0 production in SPAM 2010 but
+# no data in 2017 have 0 value for 2017.
+scaling_coef$coef[scaling_coef$`2010` > 0 & scaling_coef$`2017` == 0] <- 0
+
+# Some countries will have data in 2017, according to the FAO, but none in 2010. We need to make sure that we manually insert these values in the scaled maps.
+
+inf_values <- 
+  scaling_coef %>% 
+  filter(`2010` == 0 & `2017` > 0) %>% 
+  select(SPAM_short_name, iso3c, tonnes = `2017`)
+inf_values
+
+scaling_coef$coef[scaling_coef$`2010` == 0 & scaling_coef$`2017` > 0] <- 0
+
+# All infinite numbers assigned a coef of 1.
+scaling_coef$coef[which(!is.finite(scaling_coef$coef))] <- 0
+```
+
+# Save
+```{r}
+vroom_write(inf_values, here("crop/farm/data/inf_values.csv"))
+write_csv(scaling_coef, here("crop/farm/data/scaling_coef.csv"))
+```
+
+-------------------------------------------------------------------------------
+
+# Map fodder crop disturbance
+```{r}
+bovine_coefs <- 
+  vroom::vroom(here("crop/farm/data/FAOSTAT_bovine_production.csv"), 
+               .name_repair = janitor::make_clean_names) %>% 
+  select("area_code", "value", "year") %>% 
+  filter(!area_code %in% 351) %>% # Remove China
+  group_by(year, area_code) %>% 
+  summarise(heads = sum(value, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(central_year = case_when(year %in% c(2014, 2015, 2016) ~ 2015,
+                                  year %in% c(2016, 2017, 2018) ~ 2017)) %>% 
+  group_by(central_year, area_code) %>% 
+  summarise(heads = mean(heads, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  pivot_wider(names_from = central_year,
+              values_from = heads) %>% 
+  group_by(area_code) %>%
+  summarize(coef = `2017` / `2015`) %>% 
+  ungroup() %>%
+  rename(ID_0 = area_code) %>% 
+  left_join(food_rgns) %>% 
+  na.omit() %>% 
+  left_join(food_rgns_xy, ., by = "iso3c") %>% 
+  select(x, y, coef) %>% 
+  mutate(coef = ifelse(is.na(coef), 1, coef)) %>% 
+  rasterFromXYZ()
+plot(bovine_coefs)
+
+fodder_irrigated <- raster(file.path(raw, "GAEZAct_2015/GAEZAct2015_Production_Foddercrops_Irrigated.tif"))
+fodder_rainfed   <- raster(file.path(raw, "GAEZAct_2015/GAEZAct2015_Production_Foddercrops_Rainfed.tif"))
+
+overlay(fodder_irrigated,
+        bovine_coefs,
+        fun = function(r1, r2) {
+             
+          return(r1 * r2 * 1000) # Convert to tonnes
+             
+             }) %>% 
+  writeRaster(.,
+              file.path(
+                prep,
+                "crop/farm/scaled_maps_2017/crop_fodd_I_scaled.tif",
+                fsep = ""),
+              format = "GTiff", 
+              overwrite = TRUE) %>% 
+  writeRaster(.,
+              file.path(
+                predatalayers_path,
+                "fodd_I_production_2017.tif",
+                fsep = ""),
+              format = "GTiff", 
+              overwrite = TRUE)
+
+overlay(fodder_rainfed,
+        bovine_coefs,
+        fun = function(r1, r2) {
+             
+          return(r1 * r2 * 1000) # Fodder map is in 1,000 tonnes, so convert to tonnes
+             
+             }) %>% 
+  writeRaster(.,
+              file.path(
+                prep,
+                "crop/farm/scaled_maps_2017/crop_fodd_rainfed_scaled.tif",
+                fsep = ""),
+              format = "GTiff", 
+              overwrite = TRUE) %>% 
+  writeRaster(.,
+              file.path(
+                predatalayers_path,
+                "fodd_rainfed_production_2017.tif",
+                fsep = ""),
+              format = "GTiff", 
+              overwrite = TRUE)
+
+```

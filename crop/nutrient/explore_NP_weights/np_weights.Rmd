@@ -1,0 +1,63 @@
+---
+title: "Exploring N vs P205"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+FAO provides N and P2O5 data. 
+
+```{r setup, include=FALSE}
+
+library(tidyverse)
+library(ggplot2)
+
+fert <- read.csv(here("crop_nutrient/explore_NP_weights/FAOSTAT_data_5-8-2020.csv")) %>%
+  dplyr::select(Area, Item, Value) %>%
+  spread(Item, Value) 
+
+names(fert)[2:3] <- c("N", "P2O5")
+
+ggplot(fert, aes(x=log(N), y=log(P2O5))) +
+  geom_point() + 
+  geom_abline(slope=1, intercept=0)
+
+mod <- lm(P2O5 ~ N, data=fert)
+summary(mod)
+
+ggplot(fert, aes(x=N, y=P2O5)) +
+  geom_point() + 
+  geom_abline(slope=1, intercept=0)
+
+fert <- fert %>%
+  mutate(ratio_N_to_P2O5 = N/P2O5) %>%
+  mutate(P = P2O5/2.29*14/31)
+
+ggplot(filter(fert, ratio_N_to_P2O5<50), aes(x=ratio_N_to_P2O5)) +
+  geom_histogram()
+
+ggplot(filter(fert, ratio_N_to_P2O5<50), aes(x=ratio_N_to_P2O5)) +
+  geom_histogram()
+
+ggplot(fert, aes(x=ratio_P2O5_to_N)) +
+  geom_histogram()
+
+summary(fert)
+
+```
+
+## PO4 eq
+https://ec.europa.eu/environment/waste/pdf/study/annex5.pdf
+```{r}
+3.07/0.42
+
+3.07*10.45
+0.42*10.45
+```
+
+## NO3eq
+https://www2.mst.dk/udgiv/publications/2005/87-7614-579-4/pdf/87-7614-580-8.pdf
+```{r}
+32.03/4.43
+
+```

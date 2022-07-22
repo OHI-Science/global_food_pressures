@@ -1,0 +1,49 @@
+Gear,VBDesc,bycatch,destruction
+100,without gear,,non-destructive
+110,grasping with hand,low,non-destructive
+120,by diving,low,non-destructive
+213,raking devices,high,destructive
+214,tongs,low,non-destructive
+221,spears and lances,low,non-destructive
+225,harpoons,low,non-destructive
+312,explosives,high,destructive
+400,Lines,,non-destructive
+420,with gorges or hooks,low,non-destructive
+421,handlines,low,non-destructive
+422,set lines,high,non-destructive
+423,drift lines,high,non-destructive
+424,troll lines,low,non-destructive
+432,pilks or jigs,low,non-destructive
+433,squid hooks,low,non-destructive
+440,pole line tuna,low,non-destructive
+450,longline tuna,high,non-destructive
+500,traps,high,non-destructive
+540,tubular traps,high,non-destructive
+551,pots,high,non-destructive
+552,conical and drum-like traps,high,non-destructive
+553,box-like traps,high,non-destructive
+560,trapping gear,high,non-destructive
+563,pound nets,low,non-destructive
+700,bagnets,low,non-destructive
+830,dredges,high,destructive
+831,hand dredges,high,destructive
+840,bottom trawls,high,destructive
+850,mid-water trawls,high,non-destructive
+900,seine nets,high,non-destructive
+920,genuine seine net,high,non-destructive
+921,beach seines,high,non-destructive
+922,boat seines,high,non-destructive
+1000,surrounding nets,low,non-destructive
+1010,lampara-like nets,low,non-destructive
+1020,purse seines,low,non-destructive
+1030,ring nets,low,non-destructive
+1050,purse seine tuna,low,non-destructive
+1100,drive-in nets,low,non-destructive
+1200,liftnets or dipnets,low,non-destructive
+1210,hand liftnets,low,non-destructive
+1320,"cast nets, with or without pockets",low,non-destructive
+1400,gillnets,high,non-destructive
+1410,set gillnets,high,non-destructive
+1420,driftnets,high,non-destructive
+1500,tangle nets,high,non-destructive
+1540,trammel nets,high,non-destructive

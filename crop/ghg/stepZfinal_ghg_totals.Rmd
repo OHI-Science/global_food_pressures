@@ -1,0 +1,122 @@
+---
+title: "Creating final crop GHG layers"
+author: "Juliette"
+date: "4/8/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+NOTE: If updates, rerun: crops/farm/step7...
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+In this markdown we create a final ghg emissions layer for each crop. This currently include emissions from crop burning residue, machinery use during field servicing, and irrigation.
+
+```{r}
+
+library(tidyverse)
+library(dplyr)
+library(readr)
+library(raster)
+library(doParallel)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+```
+
+
+```{r}
+
+machinery_list <- list.files(file.path(prep, "crop/ghg/crop_machinery_ghg/total_em_crop"), full = TRUE) 
+
+registerDoParallel(12)          
+foreach(machinery = machinery_list) %dopar% { # machinery = machinery_list[1]
+  
+# machinery <- machinery_list[26]
+ crop <- str_sub(machinery, -8, -5)
+ 
+ ## read in each layer as a raster
+ machine <- raster(machinery)
+ 
+ irrigation <-  raster(paste(file.path(prep, "crop/ghg/crop_irrigation_ghg/ghg_emissions/"), crop, ".tif", sep = ""))
+
+ pesticide <- raster(paste(file.path(prep, "crop/ghg/crop_pesticide_ghg/crop_"), crop, "_pesticide_CO2eq.tif", sep = ""))
+ 
+ fert_prod_trans <- raster(paste(file.path(prep,"crop/ghg/crop_nutrient_ghg/crop_"), crop, "_all_nutrient_CO2eq.tif", sep = ""))
+ 
+ fert_n2o <- raster(paste(prep,"crop/ghg/crop_fertilizer_N2O/co2_eq/fert_n2o_co2eq_", crop, ".tif", sep = ""))
+ 
+ ## fodder does not have emissions for crop residue burning or n2o
+ if(crop == "fodd"){
+   burning <- calc(food_rgns_tif, fun = function(x){x = 0})
+   crop_res_n2o <- calc(food_rgns_tif, fun = function(x){x = 0})
+ }else{
+   burning <- raster(paste(file.path(prep, "crop/ghg/crop_residue_burning_ghg/co2eq_emitted/"), crop, ".tif", sep = ""))
+   crop_res_n2o <- raster(paste(prep,"crop/ghg/crop_residue_N2O/co2_eq/res_n2o_co2eq_",crop, ".tif", sep = ""))}
+ 
+   ## rice paddies have their own emissions source
+   if(crop =="rice"){
+     paddy <- raster(file.path(prep, "crop/ghg/paddy_rice_CO2eq.tif"))
+   }else{
+     paddy <-  calc(food_rgns_tif, fun = function(x){x = 0})}
+   
+ ## add up all the rasters
+  ghg_stack <- raster::stack(machine, burning, irrigation, fert_prod_trans, pesticide, fert_n2o, crop_res_n2o, paddy)
+  ghg_crops <- sum(ghg_stack, na.rm= TRUE)
+  
+  names(ghg_crops) <- paste("crop_", crop ,"_ghg_tonnes_CO2eq", sep = "")
+  
+   writeRaster(ghg_crops, filename = paste0(prep, "crop/farm/stressors/land_", crop, "_crop_produce_ghg.csv", sep = ""), format="GTiff", overwrite=TRUE)
+
+   }
+
+delete_aux <- list.files(file.path(prep, "crop/farm/stressors"), pattern="aux", full=TRUE)
+file.remove(delete_aux)
+
+```
+
+
+Cotton fiber vs. seed correction.
+```{r}
+
+cotton_correction = 0.65
+
+cotton_list <- 
+  list.files(file.path(prep, "crop/farm/stressors"),
+             pattern = "land_.*_crop_produce_ghg.tif", 
+             full.names = TRUE) %>% 
+  .[grepl("cott_",.)]
+
+
+file.copy(from = cotton_list,
+to = gsub("_cott_", "_cott-seedlint_", cotton_list), overwrite=TRUE)
+
+
+cotton_seedlint_list <- 
+  list.files(file.path(prep, "crop/farm/stressors"),
+             pattern = "ghg", 
+             full.names = TRUE) %>% 
+  .[grepl("seedlint",.)]
+
+for(crop in cotton_seedlint_list){ # crop = cotton_seedlint_list[2]
+  data <- raster(crop) # raster::cellStats(data, "sum", na.rm=TRUE)
+  data_correct <- data*cotton_correction # raster::cellStats(data_correct, "sum", na.rm=TRUE)
+  writeRaster(data_correct, gsub("cott-seedlint", "cott", crop), overwrite=TRUE)
+}
+
+delete_aux <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/stressors", pattern="aux", full=TRUE)
+file.remove(delete_aux)
+
+cellStats(raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/stressors/land_cott-seedlint_crop_produce_ghg.tif"),
+          "sum", na.rm=TRUE)
+cellStats(raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/stressors/land_cott_crop_produce_ghg.tif"),
+          "sum", na.rm=TRUE)
+
+
+```
+

@@ -1,0 +1,117 @@
+---
+title: "Wrangling GHG emissions from N2O volatilization of unburned crop residue"
+author: "Juliette"
+date: "4/30/2020"
+output: html_document
+---
+
+Here we create a df for the fraction removed of crop residue from fields for each region, and dm_gross and dm_res using mapspam production maps and burning_parameters.csv
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readr)
+library(raster)
+library(dplyr)
+library(tidyverse)
+library(here)
+library(doParallel)
+
+source(here("_spatial/template_raster.R"))
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+# Data
+above_removed <- read_csv(here("crop/ghg/data/gleam_table_6.14.csv"))
+
+burn_parameters <- read_csv(here("crop/ghg/data/burning_parameters_gf.csv")) %>% 
+  dplyr::select(split_rest_names, ratio_res_prod, dm) 
+
+developed <- read_csv(here("crop/ghg/data/developed_regions.csv"))
+```
+
+
+In order to calculate the ghg metabolized from crop residues, we need to amount of dry matter (DM) in each hectare (or in our case cell). The two peices we need are:
+*dm_gross* = crop gross dry matter yield of feed material i, kg DM·ha-1
+*dm_cr*= crop residues gross dry matter yield of feed material i, kg DM·ha-1
+We will calculate these in the document using some of the burn parameters (residue:product ratio, and dry matter percentage)
+
+
+## Gapfilling for "residue removed from above ground" values
+GLEAM provides specific data for this for only a handfull of countries, and then provides a value of 0.45 for any other country. So want to create a data frame of this parameter that includes all of our regions.
+
+```{r}
+above_removed <- above_removed %>% 
+  mutate(COUNTRY = ifelse(COUNTRY == "U.K. of Great Britain and Northern Ireland", "United Kingdom", COUNTRY)) %>% 
+  dplyr::select(COUNTRY, FracReMove) %>% 
+  rename(Country = COUNTRY)
+
+frac_removed_df <- food_rgns %>% 
+  left_join(above_removed) %>% 
+  mutate(gapfilled = ifelse(is.na(FracReMove), "gapfilled with the GLEAM default value", NA),
+    FracReMove = ifelse(is.na(FracReMove), 0.45, FracReMove))
+
+write_csv(frac_removed_df, here("crop/ghg/data/frac_removed_gf.csv"))
+```
+
+
+##Calculate dm_gross and dm_res
+
+This is how we are currently calcuating each of these parameters:
+crop gross dry matter yield of feed material = (production)(dm)
+crop residue dry matter yield of feed material = (production)(res_prod)(dm)(percent not burned)
+
+```{r}
+
+crop_production <- list.files(file.path(prep, "crop/farm/scaled_maps_2017"), pattern = "A_scaled.tif", full = TRUE)
+
+registerDoParallel(9)   
+foreach(file = crop_production) %dopar% {
+  
+  #file = crop_production[13]
+  crop <- str_sub(file, -17, -14)
+  
+  prod <- raster(file, crs = food_crs) %>% 
+    raster_df() %>% 
+    mutate(split_rest_names = crop) %>% 
+    rename(production = paste0("crop_",crop, "_A_scaled")) %>% 
+    mutate(split_rest_names = ifelse(is.na(production), NA , split_rest_names)) %>% 
+    dplyr::select(-x,-y)
+
+prod_country <- left_join(prod, food_rgns_xy, by = c("cellindex")) %>% 
+  mutate(ID_0 = as.numeric(ID_0))
+    
+## Add the parameters for the mapspam crops
+  prod_burn <- left_join(prod_country, burn_parameters, by = c( "split_rest_names")) %>% 
+    left_join(developed)
+
+## Calculate dm gross and residue
+    dm_gross <- prod_burn %>% 
+      mutate(dm_gross_kg = production*dm*1000) %>% 
+      dplyr::select(x, y, dm_gross_kg) 
+   
+   dm_res <- prod_burn %>% 
+     rowwise() %>% 
+     mutate(dm_res_kg = production*ratio_res_prod*dm*(1-fraction_burned)*1000) %>% 
+     dplyr::select(x, y, dm_res_kg)
+   
+   write_csv(dm_gross, file.path(prep, paste("crop/ghg/crop_residue_N2O/dm_gross/dm_gross_", crop, ".csv", sep = "")))
+   write_csv(dm_res, file.path(prep, paste("crop/ghg/crop_residue_N2O/dm_res/dm_res_", crop, ".csv", sep = "")))
+   
+}
+
+list.files(file.path(prep, 
+                     "crop/ghg/crop_residue_N2O/dm_gross", 
+                     sep = ""),
+           pattern = "tnut|othr|spis")
+
+list.files(file.path(prep, 
+                     "crop/ghg/crop_residue_N2O/dm_res/", 
+                     sep = ""),
+           pattern = "tnut|othr|spis")
+```
+
+
+

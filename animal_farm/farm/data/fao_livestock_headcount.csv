@@ -1,0 +1,2928 @@
+iso3c,year,animal,product,fao_headcount
+AFG,2010,cows,milk,3900000
+AFG,2017,cows,milk,3388888
+AFG,2010,cows,meat,1773000
+AFG,2017,cows,meat,1588112
+AFG,2010,chickens,meat,4688000
+AFG,2017,chickens,meat,2885000
+AFG,2010,chickens,eggs,8200000
+AFG,2017,chickens,eggs,10688000
+AFG,2010,goats,meat and milk,6789000
+AFG,2017,goats,meat and milk,7598000
+AFG,2010,sheep,meat and milk,13286000
+AFG,2017,sheep,meat and milk,13866000
+ALB,2010,buffaloes,meat and milk,120
+ALB,2017,buffaloes,meat and milk,95
+ALB,2010,cows,milk,355000
+ALB,2017,cows,milk,349207
+ALB,2010,cows,meat,138000
+ALB,2017,cows,meat,126008
+ALB,2010,chickens,meat,745000
+ALB,2017,chickens,meat,3015000
+ALB,2010,chickens,eggs,4500000
+ALB,2017,chickens,eggs,4820000
+ALB,2010,goats,meat and milk,775000
+ALB,2017,goats,meat and milk,933121
+ALB,2010,sheep,meat and milk,1806000
+ALB,2017,sheep,meat and milk,1925511
+ALB,2010,pigs,meat,164000
+ALB,2017,pigs,meat,180087
+DZA,2010,cows,milk,915400
+DZA,2017,cows,milk,1073709
+DZA,2010,cows,meat,832300
+DZA,2017,cows,meat,821417
+DZA,2010,chickens,meat,106331000
+DZA,2017,chickens,meat,112018000
+DZA,2010,chickens,eggs,19669000
+DZA,2017,chickens,eggs,23000000
+DZA,2010,goats,meat and milk,4287300
+DZA,2017,goats,meat and milk,5007894
+DZA,2010,sheep,meat and milk,22868770
+DZA,2017,sheep,meat and milk,28393602
+DZA,2010,pigs,meat,5500
+DZA,2017,pigs,meat,4789
+ASM,2010,cows,milk,24
+ASM,2017,cows,milk,24
+ASM,2010,cows,meat,86
+ASM,2017,cows,meat,87
+ASM,2010,chickens,meat,31290
+ASM,2017,chickens,meat,31000
+ASM,2010,chickens,eggs,8710
+ASM,2017,chickens,eggs,9000
+ASM,2010,pigs,meat,10500
+ASM,2017,pigs,meat,10500
+AGO,2010,cows,milk,397400
+AGO,2017,cows,milk,432736
+AGO,2010,cows,meat,4090438
+AGO,2017,cows,meat,4563657
+AGO,2010,chickens,meat,16269000
+AGO,2017,chickens,meat,35580000
+AGO,2010,chickens,eggs,850000
+AGO,2017,chickens,eggs,920000
+AGO,2010,goats,meat and milk,3844786
+AGO,2017,goats,meat and milk,4512098
+AGO,2010,sheep,meat and milk,983210
+AGO,2017,sheep,meat and milk,1149221
+AGO,2010,pigs,meat,1934764
+AGO,2017,pigs,meat,2727646
+ATG,2010,cows,milk,3220
+ATG,2017,cows,milk,3500
+ATG,2010,cows,meat,1780
+ATG,2017,cows,meat,1500
+ATG,2010,chickens,meat,85000
+ATG,2017,chickens,meat,98000
+ATG,2010,chickens,eggs,65000
+ATG,2017,chickens,eggs,60000
+ATG,2010,goats,meat and milk,27000
+ATG,2017,goats,meat and milk,27000
+ATG,2010,sheep,meat and milk,14000
+ATG,2017,sheep,meat and milk,14000
+ATG,2010,pigs,meat,5000
+ATG,2017,pigs,meat,5000
+ARG,2010,cows,milk,2100000
+ARG,2017,cows,milk,1720067
+ARG,2010,cows,meat,46849744
+ARG,2017,cows,meat,51633720
+ARG,2010,chickens,meat,60000000
+ARG,2017,chickens,meat,74300000
+ARG,2010,chickens,eggs,38000000
+ARG,2017,chickens,eggs,44000000
+ARG,2010,goats,meat and milk,4037036
+ARG,2017,goats,meat and milk,4863894
+ARG,2010,sheep,meat and milk,15024744
+ARG,2017,sheep,meat and milk,14746566
+ARG,2010,pigs,meat,3179039
+ARG,2017,pigs,meat,5400000
+ARM,2010,buffaloes,meat and milk,455
+ARM,2017,buffaloes,meat and milk,715
+ARM,2010,cows,milk,273854
+ARM,2017,cows,milk,295974
+ARM,2010,cows,meat,296779
+ARM,2017,cows,meat,359797
+ARM,2010,chickens,meat,1260270
+ARM,2017,chickens,meat,1125000
+ARM,2010,chickens,eggs,2649730
+ARM,2017,chickens,eggs,2689000
+ARM,2010,goats,meat and milk,29687
+ARM,2017,goats,meat and milk,27521
+ARM,2010,sheep,meat and milk,481342
+ARM,2017,sheep,meat and milk,699561
+ARM,2010,pigs,meat,112608
+ARM,2017,pigs,meat,175549
+AUS,2010,cows,milk,1553000
+AUS,2017,cows,milk,1520376
+AUS,2010,cows,meat,25180000
+AUS,2017,cows,meat,24655145
+AUS,2010,chickens,meat,71290000
+AUS,2017,chickens,meat,78983000
+AUS,2010,chickens,eggs,11734000
+AUS,2017,chickens,eggs,16029000
+AUS,2010,goats,meat and milk,3500000
+AUS,2017,goats,meat and milk,3600000
+AUS,2010,sheep,meat and milk,68085496
+AUS,2017,sheep,meat and milk,72125334
+AUS,2010,pigs,meat,2289292
+AUS,2017,pigs,meat,2485699
+AUT,2010,cows,milk,534059
+AUT,2017,cows,milk,540820
+AUT,2010,cows,meat,1492201
+AUT,2017,cows,meat,1413571
+AUT,2010,chickens,meat,9926000
+AUT,2017,chickens,meat,9388000
+AUT,2010,chickens,eggs,5724000
+AUT,2017,chickens,eggs,7348000
+AUT,2010,goats,meat and milk,68188
+AUT,2017,goats,meat and milk,82735
+AUT,2010,sheep,meat and milk,344709
+AUT,2017,sheep,meat and milk,378381
+AUT,2010,pigs,meat,3136967
+AUT,2017,pigs,meat,2792803
+AZE,2010,buffaloes,meat and milk,277400
+AZE,2017,buffaloes,meat and milk,196651
+AZE,2010,cows,milk,1277357
+AZE,2017,cows,milk,1299033
+AZE,2010,cows,meat,1022343
+AZE,2017,cows,meat,1177306
+AZE,2010,chickens,meat,8196000
+AZE,2017,chickens,meat,14827000
+AZE,2010,chickens,eggs,12954000
+AZE,2017,chickens,eggs,15646000
+AZE,2010,goats,meat and milk,620644
+AZE,2017,goats,meat and milk,633327
+AZE,2010,sheep,meat and milk,7871193
+AZE,2017,sheep,meat and milk,7820981
+AZE,2010,pigs,meat,5347
+AZE,2017,pigs,meat,4856
+BHS,2010,cows,milk,720
+BHS,2017,cows,milk,672
+BHS,2010,cows,meat,30
+BHS,2017,cows,meat,69
+BHS,2010,chickens,meat,2886820
+BHS,2017,chickens,meat,3054000
+BHS,2010,chickens,eggs,113180
+BHS,2017,chickens,eggs,109000
+BHS,2010,goats,meat and milk,14500
+BHS,2017,goats,meat and milk,14947
+BHS,2010,sheep,meat and milk,6500
+BHS,2017,sheep,meat and milk,6702
+BHS,2010,pigs,meat,5000
+BHS,2017,pigs,meat,5012
+BHR,2010,cows,milk,6238
+BHR,2017,cows,milk,6190
+BHR,2010,cows,meat,3762
+BHR,2017,cows,meat,3632
+BHR,2010,chickens,meat,260290
+BHR,2017,chickens,meat,267000
+BHR,2010,chickens,eggs,269710
+BHR,2017,chickens,eggs,274000
+BHR,2010,goats,meat and milk,19000
+BHR,2017,goats,meat and milk,17598
+BHR,2010,sheep,meat and milk,40000
+BHR,2017,sheep,meat and milk,38901
+BGD,2010,buffaloes,meat and milk,1349000
+BGD,2017,buffaloes,meat and milk,1478000
+BGD,2010,cows,milk,4047000
+BGD,2017,cows,milk,4031801
+BGD,2010,cows,meat,19004000
+BGD,2017,cows,meat,19903199
+BGD,2010,chickens,meat,110035000
+BGD,2017,chickens,meat,82683000
+BGD,2010,chickens,eggs,118000000
+BGD,2017,chickens,eggs,192500000
+BGD,2010,goats,meat and milk,51400000
+BGD,2017,goats,meat and milk,59499229
+BGD,2010,sheep,meat and milk,1820000
+BGD,2017,sheep,meat and milk,2207149
+BRB,2010,cows,milk,3680
+BRB,2017,cows,milk,2850
+BRB,2010,cows,meat,7320
+BRB,2017,cows,meat,7930
+BRB,2010,chickens,meat,2739500
+BRB,2017,chickens,meat,2794000
+BRB,2010,chickens,eggs,860500
+BRB,2017,chickens,eggs,872000
+BRB,2010,goats,meat and milk,5200
+BRB,2017,goats,meat and milk,5484
+BRB,2010,sheep,meat and milk,12000
+BRB,2017,sheep,meat and milk,13648
+BRB,2010,pigs,meat,21500
+BRB,2017,pigs,meat,23223
+BLR,2010,cows,milk,1444600
+BLR,2017,cows,milk,1500200
+BLR,2010,cows,meat,2706400
+BLR,2017,cows,meat,2862000
+BLR,2010,chickens,meat,17000000
+BLR,2017,chickens,meat,26600000
+BLR,2010,chickens,eggs,15000000
+BLR,2017,chickens,eggs,19400000
+BLR,2010,goats,meat and milk,75000
+BLR,2017,goats,meat and milk,64700
+BLR,2010,sheep,meat and milk,52400
+BLR,2017,sheep,meat and milk,89900
+BLR,2010,pigs,meat,3781500
+BLR,2017,pigs,meat,3155700
+BEL,2010,cows,milk,500000
+BEL,2017,cows,milk,519159
+BEL,2010,cows,meat,2093000
+BEL,2017,cows,meat,1866829
+BEL,2010,chickens,meat,25435000
+BEL,2017,chickens,meat,17156000
+BEL,2010,chickens,eggs,8940000
+BEL,2017,chickens,eggs,9749000
+BEL,2010,goats,meat and milk,22000
+BEL,2017,goats,meat and milk,64000
+BEL,2010,sheep,meat and milk,120000
+BEL,2017,sheep,meat and milk,86602
+BEL,2010,pigs,meat,6430000
+BEL,2017,pigs,meat,6108077
+BLZ,2010,cows,milk,3900
+BLZ,2017,cows,milk,6500
+BLZ,2010,cows,meat,88770
+BLZ,2017,cows,meat,107187
+BLZ,2010,chickens,meat,993750
+BLZ,2017,chickens,meat,967000
+BLZ,2010,chickens,eggs,536250
+BLZ,2017,chickens,eggs,654000
+BLZ,2010,goats,meat and milk,180
+BLZ,2017,goats,meat and milk,189
+BLZ,2010,sheep,meat and milk,13100
+BLZ,2017,sheep,meat and milk,15284
+BLZ,2010,pigs,meat,17400
+BLZ,2017,pigs,meat,22926
+BEN,2010,cows,milk,482202
+BEN,2017,cows,milk,577200
+BEN,2010,cows,meat,1522798
+BEN,2017,cows,meat,1822800
+BEN,2010,chickens,meat,3323000
+BEN,2017,chickens,meat,3949000
+BEN,2010,chickens,eggs,13227000
+BEN,2017,chickens,eggs,16694000
+BEN,2010,goats,meat and milk,1605000
+BEN,2017,goats,meat and milk,1878000
+BEN,2010,sheep,meat and milk,808000
+BEN,2017,sheep,meat and milk,934000
+BEN,2010,pigs,meat,368000
+BEN,2017,pigs,meat,485000
+BMU,2010,cows,milk,390
+BMU,2017,cows,milk,418
+BMU,2010,cows,meat,260
+BMU,2017,cows,meat,224
+BMU,2010,chickens,meat,20000
+BMU,2017,chickens,meat,21000
+BMU,2010,chickens,eggs,30000
+BMU,2017,chickens,eggs,30000
+BMU,2010,goats,meat and milk,350
+BMU,2017,goats,meat and milk,367
+BMU,2010,pigs,meat,800
+BMU,2017,pigs,meat,812
+BTN,2010,buffaloes,meat and milk,928
+BTN,2017,buffaloes,meat and milk,550
+BTN,2010,cows,milk,151000
+BTN,2017,cows,milk,137375
+BTN,2010,cows,meat,201841
+BTN,2017,cows,meat,165875
+BTN,2010,chickens,meat,129000
+BTN,2017,chickens,meat,98000
+BTN,2010,chickens,eggs,220000
+BTN,2017,chickens,eggs,970000
+BTN,2010,goats,meat and milk,43134
+BTN,2017,goats,meat and milk,42689
+BTN,2010,sheep,meat and milk,12699
+BTN,2017,sheep,meat and milk,10444
+BTN,2010,pigs,meat,19711
+BTN,2017,pigs,meat,18816
+BOL,2010,cows,milk,177000
+BOL,2017,cows,milk,200000
+BOL,2010,cows,meat,8012786
+BOL,2017,cows,meat,9104000
+BOL,2010,chickens,meat,178808000
+BOL,2017,chickens,meat,198021000
+BOL,2010,chickens,eggs,16600000
+BOL,2017,chickens,eggs,24650000
+BOL,2010,goats,meat and milk,2199018
+BOL,2017,goats,meat and milk,2210000
+BOL,2010,sheep,meat and milk,8701465
+BOL,2017,sheep,meat and milk,7442000
+BOL,2010,pigs,meat,2640616
+BOL,2017,pigs,meat,2951000
+BIH,2010,cows,milk,277386
+BIH,2017,cows,milk,232354
+BIH,2010,cows,meat,184982
+BIH,2017,cows,meat,212168
+BIH,2010,chickens,meat,17235000
+BIH,2017,chickens,meat,12509000
+BIH,2010,chickens,eggs,3795000
+BIH,2017,chickens,eggs,3773000
+BIH,2010,goats,meat and milk,64250
+BIH,2017,goats,meat and milk,73287
+BIH,2010,sheep,meat and milk,1046035
+BIH,2017,sheep,meat and milk,1016735
+BIH,2010,pigs,meat,590431
+BIH,2017,pigs,meat,548011
+BWA,2010,cows,milk,346308
+BWA,2017,cows,milk,165000
+BWA,2010,cows,meat,2302534
+BWA,2017,cows,meat,935375
+BWA,2010,chickens,meat,961000
+BWA,2017,chickens,meat,150000
+BWA,2010,chickens,eggs,800000
+BWA,2017,chickens,eggs,560000
+BWA,2010,goats,meat and milk,1937971
+BWA,2017,goats,meat and milk,1199661
+BWA,2010,sheep,meat and milk,279237
+BWA,2017,sheep,meat and milk,234621
+BWA,2010,pigs,meat,3000
+BWA,2017,pigs,meat,1437
+BRA,2010,buffaloes,meat and milk,1184511
+BRA,2017,buffaloes,meat and milk,1375168
+BRA,2010,cows,milk,22924914
+BRA,2017,cows,milk,16851782
+BRA,2010,cows,meat,186616195
+BRA,2017,cows,meat,198151796
+BRA,2010,chickens,meat,953913000
+BRA,2017,chickens,meat,1065659000
+BRA,2010,chickens,eggs,285000000
+BRA,2017,chickens,eggs,361000000
+BRA,2010,goats,meat and milk,9312784
+BRA,2017,goats,meat and milk,10257806
+BRA,2010,sheep,meat and milk,17380581
+BRA,2017,sheep,meat and milk,18606767
+BRA,2010,pigs,meat,38956760
+BRA,2017,pigs,meat,41383029
+VGB,2010,cows,milk,645
+VGB,2017,cows,milk,632
+VGB,2010,cows,meat,1755
+VGB,2017,cows,meat,1768
+VGB,2010,goats,meat and milk,10000
+VGB,2017,goats,meat and milk,10000
+VGB,2010,sheep,meat and milk,6100
+VGB,2017,sheep,meat and milk,6100
+VGB,2010,pigs,meat,1500
+VGB,2017,pigs,meat,1500
+BRN,2010,buffaloes,meat and milk,4124
+BRN,2017,buffaloes,meat and milk,2942
+BRN,2010,cows,milk,127
+BRN,2017,cows,milk,122
+BRN,2010,cows,meat,725
+BRN,2017,cows,meat,648
+BRN,2010,chickens,meat,13189720
+BRN,2017,chickens,meat,15071000
+BRN,2010,chickens,eggs,1720280
+BRN,2017,chickens,eggs,1980000
+BRN,2010,goats,meat and milk,6806
+BRN,2017,goats,meat and milk,8689
+BRN,2010,sheep,meat and milk,3800
+BRN,2017,sheep,meat and milk,4538
+BRN,2010,pigs,meat,1200
+BRN,2017,pigs,meat,1300
+BGR,2010,buffaloes,meat and milk,8311
+BGR,2017,buffaloes,meat and milk,12273
+BGR,2010,cows,milk,296757
+BGR,2017,cows,milk,271329
+BGR,2010,cows,meat,242798
+BGR,2017,cows,meat,286537
+BGR,2010,chickens,meat,9110000
+BGR,2017,chickens,meat,6384000
+BGR,2010,chickens,eggs,6892000
+BGR,2017,chickens,eggs,6064000
+BGR,2010,goats,meat and milk,360822
+BGR,2017,goats,meat and milk,237543
+BGR,2010,sheep,meat and milk,1400252
+BGR,2017,sheep,meat and milk,1360087
+BGR,2010,pigs,meat,729798
+BGR,2017,pigs,meat,616426
+BFA,2010,cows,milk,1146169
+BFA,2017,cows,milk,1630000
+BFA,2010,cows,meat,7252330
+BFA,2017,cows,meat,8017073
+BFA,2010,chickens,meat,22500000
+BFA,2017,chickens,meat,27564000
+BFA,2010,chickens,eggs,16500000
+BFA,2017,chickens,eggs,15500000
+BFA,2010,goats,meat and milk,12342454
+BFA,2017,goats,meat and milk,15179490
+BFA,2010,sheep,meat and milk,8243238
+BFA,2017,sheep,meat and milk,10137973
+BFA,2010,pigs,meat,2167246
+BFA,2017,pigs,meat,2489317
+BDI,2010,cows,milk,80000
+BDI,2017,cows,milk,132000
+BDI,2010,cows,meat,516412
+BDI,2017,cows,meat,945539
+BDI,2010,chickens,meat,920000
+BDI,2017,chickens,meat,1600000
+BDI,2010,chickens,eggs,800000
+BDI,2017,chickens,eggs,700000
+BDI,2010,goats,meat and milk,2145013
+BDI,2017,goats,meat and milk,3619962
+BDI,2010,sheep,meat and milk,315295
+BDI,2017,sheep,meat and milk,527464
+BDI,2010,pigs,meat,244362
+BDI,2017,pigs,meat,618176
+CPV,2010,cows,milk,7093
+CPV,2017,cows,milk,8395
+CPV,2010,cows,meat,16907
+CPV,2017,cows,meat,21204
+CPV,2010,chickens,meat,241850
+CPV,2017,chickens,meat,680000
+CPV,2010,chickens,eggs,376150
+CPV,2017,chickens,eggs,320000
+CPV,2010,goats,meat and milk,160000
+CPV,2017,goats,meat and milk,107630
+CPV,2010,sheep,meat and milk,11000
+CPV,2017,sheep,meat and milk,12625
+CPV,2010,pigs,meat,238600
+CPV,2017,pigs,meat,66906
+KHM,2010,buffaloes,meat and milk,702074
+KHM,2017,buffaloes,meat and milk,660424
+KHM,2010,cows,milk,140000
+KHM,2017,cows,milk,123138
+KHM,2010,cows,meat,3344601
+KHM,2017,cows,meat,2776209
+KHM,2010,chickens,meat,12348000
+KHM,2017,chickens,meat,8308000
+KHM,2010,chickens,eggs,5100000
+KHM,2017,chickens,eggs,5200000
+KHM,2010,pigs,meat,2057431
+KHM,2017,pigs,meat,1955321
+CMR,2010,cows,milk,310000
+CMR,2017,cows,milk,289280
+CMR,2010,cows,meat,4533104
+CMR,2017,cows,meat,5444657
+CMR,2010,chickens,meat,40650000
+CMR,2017,chickens,meat,46550000
+CMR,2010,chickens,eggs,4350000
+CMR,2017,chickens,eggs,4550000
+CMR,2010,goats,meat and milk,5405046
+CMR,2017,goats,meat and milk,5418692
+CMR,2010,sheep,meat and milk,3739325
+CMR,2017,sheep,meat and milk,3451236
+CMR,2010,pigs,meat,2150000
+CMR,2017,pigs,meat,1933417
+CAN,2010,cows,milk,966200
+CAN,2017,cows,milk,925000
+CAN,2010,cows,meat,11703800
+CAN,2017,cows,meat,10610000
+CAN,2010,chickens,meat,138486000
+CAN,2017,chickens,meat,138310000
+CAN,2010,chickens,eggs,26514000
+CAN,2017,chickens,eggs,31659000
+CAN,2010,goats,meat and milk,30000
+CAN,2017,goats,meat and milk,30011
+CAN,2010,sheep,meat and milk,855300
+CAN,2017,sheep,meat and milk,813900
+CAN,2010,pigs,meat,12465000
+CAN,2017,pigs,meat,13935000
+CYM,2010,cows,milk,537
+CYM,2017,cows,milk,557
+CYM,2010,cows,meat,1463
+CYM,2017,cows,meat,1555
+CYM,2010,chickens,meat,4860
+CYM,2017,chickens,meat,4900
+CYM,2010,chickens,eggs,1140
+CYM,2017,chickens,eggs,1100
+CYM,2010,goats,meat and milk,2100
+CYM,2017,goats,meat and milk,2400
+CYM,2010,pigs,meat,1063
+CYM,2017,pigs,meat,1187
+CAF,2010,cows,milk,280000
+CAF,2017,cows,milk,323033
+CAF,2010,cows,meat,3613000
+CAF,2017,cows,meat,4272796
+CAF,2010,chickens,meat,5611000
+CAF,2017,chickens,meat,6705000
+CAF,2010,chickens,eggs,765000
+CAF,2017,chickens,eggs,720000
+CAF,2010,goats,meat and milk,4862000
+CAF,2017,goats,meat and milk,6845717
+CAF,2010,sheep,meat and milk,388000
+CAF,2017,sheep,meat and milk,437539
+CAF,2010,pigs,meat,1087000
+CAF,2017,pigs,meat,1096376
+TCD,2010,cows,milk,707076
+TCD,2017,cows,milk,2021302
+TCD,2010,cows,meat,18513924
+TCD,2017,cows,meat,25581901
+TCD,2010,chickens,meat,4450000
+TCD,2017,chickens,meat,5026000
+TCD,2010,chickens,eggs,1100000
+TCD,2017,chickens,eggs,1150000
+TCD,2010,goats,meat and milk,22613000
+TCD,2017,goats,meat and milk,34408101
+TCD,2010,sheep,meat and milk,18056000
+TCD,2017,sheep,meat and milk,30789484
+TCD,2010,pigs,meat,30400
+TCD,2017,pigs,meat,110000
+CHL,2010,cows,milk,504685
+CHL,2017,cows,milk,532640
+CHL,2010,cows,meat,3325315
+CHL,2017,cows,meat,2358200
+CHL,2010,chickens,meat,36275000
+CHL,2017,chickens,meat,97473000
+CHL,2010,chickens,eggs,11204000
+CHL,2017,chickens,eggs,12500000
+CHL,2010,goats,meat and milk,667052
+CHL,2017,goats,meat and milk,447141
+CHL,2010,sheep,meat and milk,3644346
+CHL,2017,sheep,meat and milk,2037516
+CHL,2010,pigs,meat,2706148
+CHL,2017,pigs,meat,2505503
+HKG,2010,buffaloes,meat and milk,280
+HKG,2017,buffaloes,meat and milk,326
+HKG,2010,cows,milk,20
+HKG,2017,cows,milk,20
+HKG,2010,cows,meat,1580
+HKG,2017,cows,meat,1565
+HKG,2010,chickens,meat,1185000
+HKG,2017,chickens,meat,1234000
+HKG,2010,chickens,eggs,65000
+HKG,2017,chickens,eggs,66000
+HKG,2010,goats,meat and milk,700
+HKG,2017,goats,meat and milk,693
+HKG,2010,sheep,meat and milk,18
+HKG,2017,sheep,meat and milk,20
+HKG,2010,pigs,meat,170000
+HKG,2017,pigs,meat,160000
+MAC,2010,chickens,meat,595000
+MAC,2017,chickens,meat,665000
+MAC,2010,chickens,eggs,105000
+MAC,2017,chickens,eggs,107000
+CHN,2010,buffaloes,meat and milk,29459910
+CHN,2017,buffaloes,meat and milk,26503470
+CHN,2010,cows,milk,12357000
+CHN,2017,cows,milk,11955000
+CHN,2010,cows,meat,56382790
+CHN,2017,cows,meat,49886430
+CHN,2010,chickens,meat,2673000000
+CHN,2017,chickens,meat,2315235000
+CHN,2010,chickens,eggs,2527000000
+CHN,2017,chickens,eggs,2890000000
+CHN,2010,goats,meat and milk,141950200
+CHN,2017,goats,meat and milk,136917700
+CHN,2010,sheep,meat and milk,145351800
+CHN,2017,sheep,meat and milk,162387700
+CHN,2010,pigs,meat,467652500
+CHN,2017,pigs,meat,442091700
+TWN,2010,buffaloes,meat and milk,3844
+TWN,2017,buffaloes,meat and milk,2037
+TWN,2010,cows,milk,53170
+TWN,2017,cows,milk,59601
+TWN,2010,cows,meat,76681
+TWN,2017,cows,meat,84392
+TWN,2010,chickens,meat,64645000
+TWN,2017,chickens,meat,55001000
+TWN,2010,chickens,eggs,36125000
+TWN,2017,chickens,eggs,39646000
+TWN,2010,goats,meat and milk,206401
+TWN,2017,goats,meat and milk,146000
+TWN,2010,sheep,meat and milk,200
+TWN,2017,sheep,meat and milk,177
+TWN,2010,pigs,meat,6130003
+TWN,2017,pigs,meat,5442381
+COL,2010,cows,milk,5500000
+COL,2017,cows,milk,6500000
+COL,2010,cows,meat,21829066
+COL,2017,cows,meat,17828158
+COL,2010,chickens,meat,119409970
+COL,2017,chickens,meat,111801000
+COL,2010,chickens,eggs,38590030
+COL,2017,chickens,eggs,52000000
+COL,2010,goats,meat and milk,1112000
+COL,2017,goats,meat and milk,834560
+COL,2010,sheep,meat and milk,1791802
+COL,2017,sheep,meat and milk,819269
+COL,2010,pigs,meat,5161804
+COL,2017,pigs,meat,5200000
+COM,2010,cows,milk,9520
+COM,2017,cows,milk,9649
+COM,2010,cows,meat,40480
+COM,2017,cows,meat,41031
+COM,2010,chickens,meat,340000
+COM,2017,chickens,meat,336000
+COM,2010,chickens,eggs,210000
+COM,2017,chickens,eggs,210000
+COM,2010,goats,meat and milk,120000
+COM,2017,goats,meat and milk,120969
+COM,2010,sheep,meat and milk,23000
+COM,2017,sheep,meat and milk,24633
+COG,2010,cows,milk,2650
+COG,2017,cows,milk,3000
+COG,2010,cows,meat,327350
+COG,2017,cows,meat,356855
+COG,2010,chickens,meat,2100000
+COG,2017,chickens,meat,2395000
+COG,2010,chickens,eggs,500000
+COG,2017,chickens,eggs,540000
+COG,2010,goats,meat and milk,320000
+COG,2017,goats,meat and milk,325910
+COG,2010,sheep,meat and milk,120000
+COG,2017,sheep,meat and milk,128166
+COG,2010,pigs,meat,88000
+COG,2017,pigs,meat,106450
+COK,2010,cows,milk,29
+COK,2017,cows,milk,25
+COK,2010,cows,meat,101
+COK,2017,cows,meat,89
+COK,2010,chickens,meat,14000
+COK,2017,chickens,meat,12000
+COK,2010,chickens,eggs,6000
+COK,2017,chickens,eggs,6000
+COK,2010,goats,meat and milk,1010
+COK,2017,goats,meat and milk,877
+COK,2010,pigs,meat,32200
+COK,2017,pigs,meat,32088
+CRI,2010,cows,milk,487917
+CRI,2017,cows,milk,835000
+CRI,2010,cows,meat,862083
+CRI,2017,cows,meat,589230
+CRI,2010,chickens,meat,21250000
+CRI,2017,chickens,meat,22329000
+CRI,2010,chickens,eggs,2650000
+CRI,2017,chickens,eggs,3175000
+CRI,2010,goats,meat and milk,5050
+CRI,2017,goats,meat and milk,5699
+CRI,2010,sheep,meat and milk,2750
+CRI,2017,sheep,meat and milk,2811
+CRI,2010,pigs,meat,438000
+CRI,2017,pigs,meat,485624
+CIV,2010,cows,milk,205681
+CIV,2017,cows,milk,305000
+CIV,2010,cows,meat,1375901
+CIV,2017,cows,meat,1351100
+CIV,2010,chickens,meat,36752000
+CIV,2017,chickens,meat,45645000
+CIV,2010,chickens,eggs,8300000
+CIV,2017,chickens,eggs,14200000
+CIV,2010,goats,meat and milk,1324377
+CIV,2017,goats,meat and milk,1460565
+CIV,2010,sheep,meat and milk,1692181
+CIV,2017,sheep,meat and milk,1842239
+CIV,2010,pigs,meat,348590
+CIV,2017,pigs,meat,344719
+HRV,2010,cows,milk,182400
+HRV,2017,cows,milk,145100
+HRV,2010,cows,meat,261600
+HRV,2017,cows,meat,305657
+HRV,2010,chickens,meat,1000
+HRV,2017,chickens,meat,6357000
+HRV,2010,chickens,eggs,5040000
+HRV,2017,chickens,eggs,3483000
+HRV,2010,goats,meat and milk,75215
+HRV,2017,goats,meat and milk,76771
+HRV,2010,sheep,meat and milk,630000
+HRV,2017,sheep,meat and milk,636808
+HRV,2010,pigs,meat,1230574
+HRV,2017,pigs,meat,1121032
+CUB,2010,cows,milk,431800
+CUB,2017,cows,milk,330200
+CUB,2010,cows,meat,3560700
+CUB,2017,cows,meat,3535300
+CUB,2010,chickens,meat,20950000
+CUB,2017,chickens,meat,14753000
+CUB,2010,chickens,eggs,10000000
+CUB,2017,chickens,eggs,10882000
+CUB,2010,goats,meat and milk,938100
+CUB,2017,goats,meat and milk,1157700
+CUB,2010,sheep,meat and milk,2361900
+CUB,2017,sheep,meat and milk,1567200
+CUB,2010,pigs,meat,1591000
+CUB,2017,pigs,meat,2069400
+CYP,2010,cows,milk,19113
+CYP,2017,cows,milk,30137
+CYP,2010,cows,meat,35602
+CYP,2017,cows,meat,36725
+CYP,2010,chickens,meat,2363000
+CYP,2017,chickens,meat,2289000
+CYP,2010,chickens,eggs,618000
+CYP,2017,chickens,eggs,601000
+CYP,2010,goats,meat and milk,307428
+CYP,2017,goats,meat and milk,257637
+CYP,2010,sheep,meat and milk,328864
+CYP,2017,sheep,meat and milk,321488
+CYP,2010,pigs,meat,463729
+CYP,2017,pigs,meat,350147
+CZE,2010,cows,milk,378415
+CZE,2017,cows,milk,364642
+CZE,2010,cows,meat,970871
+CZE,2017,cows,meat,1056600
+CZE,2010,chickens,meat,20044000
+CZE,2017,chickens,meat,15832520
+CZE,2010,chickens,eggs,3998000
+CZE,2017,chickens,eggs,4754480
+CZE,2010,goats,meat and milk,21709
+CZE,2017,goats,meat and milk,28174
+CZE,2010,sheep,meat and milk,196913
+CZE,2017,sheep,meat and milk,217141
+CZE,2010,pigs,meat,1909232
+CZE,2017,pigs,meat,1490776
+PRK,2010,cows,milk,40000
+PRK,2017,cows,milk,35856
+PRK,2010,cows,meat,537000
+PRK,2017,cows,meat,540144
+PRK,2010,chickens,meat,769000
+PRK,2017,chickens,meat,43000
+PRK,2010,chickens,eggs,15800000
+PRK,2017,chickens,eggs,15350000
+PRK,2010,goats,meat and milk,3556000
+PRK,2017,goats,meat and milk,3684000
+PRK,2010,sheep,meat and milk,166000
+PRK,2017,sheep,meat and milk,168000
+PRK,2010,pigs,meat,2248000
+PRK,2017,pigs,meat,2601000
+COD,2010,cows,milk,6594
+COD,2017,cows,milk,7913
+COD,2010,cows,meat,743185
+COD,2017,cows,meat,998767
+COD,2010,chickens,meat,17217000
+COD,2017,chickens,meat,16373000
+COD,2010,chickens,eggs,2850000
+COD,2017,chickens,eggs,2900000
+COD,2010,goats,meat and milk,4052169
+COD,2017,goats,meat and milk,4067951
+COD,2010,sheep,meat and milk,904080
+COD,2017,sheep,meat and milk,896879
+COD,2010,pigs,meat,977379
+COD,2017,pigs,meat,981088
+DNK,2010,cows,milk,568202
+DNK,2017,cows,milk,570038
+DNK,2010,cows,meat,1002848
+DNK,2017,cows,meat,975379
+DNK,2010,chickens,meat,14184000
+DNK,2017,chickens,meat,14585000
+DNK,2010,chickens,eggs,3900000
+DNK,2017,chickens,eggs,6148000
+DNK,2010,sheep,meat and milk,159626
+DNK,2017,sheep,meat and milk,154129
+DNK,2010,pigs,meat,13173060
+DNK,2017,pigs,meat,12307667
+DJI,2010,cows,milk,25148
+DJI,2017,cows,milk,25409
+DJI,2010,cows,meat,271852
+DJI,2017,cows,meat,275257
+DJI,2010,goats,meat and milk,512000
+DJI,2017,goats,meat and milk,514462
+DJI,2010,sheep,meat and milk,466000
+DJI,2017,sheep,meat and milk,468817
+DMA,2010,cows,milk,7900
+DMA,2017,cows,milk,7453
+DMA,2010,cows,meat,5600
+DMA,2017,cows,meat,6569
+DMA,2010,chickens,meat,140000
+DMA,2017,chickens,meat,149000
+DMA,2010,chickens,eggs,50000
+DMA,2017,chickens,eggs,50000
+DMA,2010,goats,meat and milk,9700
+DMA,2017,goats,meat and milk,9703
+DMA,2010,sheep,meat and milk,7600
+DMA,2017,sheep,meat and milk,7979
+DMA,2010,pigs,meat,5000
+DMA,2017,pigs,meat,5058
+DOM,2010,cows,milk,342619
+DOM,2017,cows,milk,540000
+DOM,2010,cows,meat,2557381
+DOM,2017,cows,meat,2460000
+DOM,2010,chickens,meat,171633000
+DOM,2017,chickens,meat,174400000
+DOM,2010,chickens,eggs,6800000
+DOM,2017,chickens,eggs,9600000
+DOM,2010,goats,meat and milk,225000
+DOM,2017,goats,meat and milk,224667
+DOM,2010,sheep,meat and milk,240000
+DOM,2017,sheep,meat and milk,250000
+DOM,2010,pigs,meat,660000
+DOM,2017,pigs,meat,670000
+ECU,2010,cows,milk,1088862
+ECU,2017,cows,milk,856164
+ECU,2010,cows,meat,4164674
+ECU,2017,cows,meat,3334447
+ECU,2010,chickens,meat,176930000
+ECU,2017,chickens,meat,152200000
+ECU,2010,chickens,eggs,6000000
+ECU,2017,chickens,eggs,8356000
+ECU,2010,goats,meat and milk,134825
+ECU,2017,goats,meat and milk,39583
+ECU,2010,sheep,meat and milk,792498
+ECU,2017,sheep,meat and milk,390120
+ECU,2010,pigs,meat,1489761
+ECU,2017,pigs,meat,1115473
+EGY,2010,buffaloes,meat and milk,3818236
+EGY,2017,buffaloes,meat and milk,3432581
+EGY,2010,cows,milk,1540000
+EGY,2017,cows,milk,1583448
+EGY,2010,cows,meat,3188721
+EGY,2017,cows,meat,2803841
+EGY,2010,chickens,meat,74646000
+EGY,2017,chickens,meat,109197000
+EGY,2010,chickens,eggs,29143000
+EGY,2017,chickens,eggs,35600000
+EGY,2010,goats,meat and milk,4174986
+EGY,2017,goats,meat and milk,3973692
+EGY,2010,sheep,meat and milk,5529529
+EGY,2017,sheep,meat and milk,5305337
+EGY,2010,pigs,meat,10500
+EGY,2017,pigs,meat,9766
+SLV,2010,cows,milk,230998
+SLV,2017,cows,milk,214258
+SLV,2010,cows,meat,1016424
+SLV,2017,cows,meat,671306
+SLV,2010,chickens,meat,10030000
+SLV,2017,chickens,meat,10895000
+SLV,2010,chickens,eggs,4970000
+SLV,2017,chickens,eggs,6340000
+SLV,2010,goats,meat and milk,15000
+SLV,2017,goats,meat and milk,14328
+SLV,2010,sheep,meat and milk,5100
+SLV,2017,sheep,meat and milk,5303
+SLV,2010,pigs,meat,427000
+SLV,2017,pigs,meat,255271
+GNQ,2010,cows,milk,529
+GNQ,2017,cows,milk,568
+GNQ,2010,cows,meat,4671
+GNQ,2017,cows,meat,4805
+GNQ,2010,chickens,meat,274000
+GNQ,2017,chickens,meat,304000
+GNQ,2010,chickens,eggs,66000
+GNQ,2017,chickens,eggs,69000
+GNQ,2010,goats,meat and milk,9200
+GNQ,2017,goats,meat and milk,9594
+GNQ,2010,sheep,meat and milk,39000
+GNQ,2017,sheep,meat and milk,40427
+GNQ,2010,pigs,meat,6400
+GNQ,2017,pigs,meat,6896
+ERI,2010,cows,milk,396258
+ERI,2017,cows,milk,720000
+ERI,2010,cows,meat,1660312
+ERI,2017,cows,meat,1403489
+ERI,2010,chickens,meat,700000
+ERI,2017,chickens,meat,591000
+ERI,2010,chickens,eggs,550000
+ERI,2017,chickens,eggs,608000
+ERI,2010,goats,meat and milk,1750000
+ERI,2017,goats,meat and milk,1811352
+ERI,2010,sheep,meat and milk,2271560
+ERI,2017,sheep,meat and milk,2412833
+EST,2010,cows,milk,96700
+EST,2017,cows,milk,86400
+EST,2010,cows,meat,138000
+EST,2017,cows,meat,164500
+EST,2010,chickens,meat,1191000
+EST,2017,chickens,meat,1375600
+EST,2010,chickens,eggs,578000
+EST,2017,chickens,eggs,819400
+EST,2010,goats,meat and milk,3900
+EST,2017,goats,meat and milk,5100
+EST,2010,sheep,meat and milk,76500
+EST,2017,sheep,meat and milk,80800
+EST,2010,pigs,meat,365100
+EST,2017,pigs,meat,289100
+SWZ,2010,cows,milk,135033
+SWZ,2017,cows,milk,134613
+SWZ,2010,cows,meat,484967
+SWZ,2017,cows,meat,479838
+SWZ,2010,chickens,meat,3280000
+SWZ,2017,chickens,meat,3545000
+SWZ,2010,chickens,eggs,220000
+SWZ,2017,chickens,eggs,250000
+SWZ,2010,goats,meat and milk,275000
+SWZ,2017,goats,meat and milk,249684
+SWZ,2010,sheep,meat and milk,34500
+SWZ,2017,sheep,meat and milk,38703
+SWZ,2010,pigs,meat,32000
+SWZ,2017,pigs,meat,35511
+ETH,2010,cows,milk,10676783
+ETH,2017,cows,milk,11900000
+ETH,2010,cows,meat,42705409
+ETH,2017,cows,meat,49102030
+ETH,2010,chickens,meat,40287000
+ETH,2017,chickens,meat,48158000
+ETH,2010,chickens,eggs,9000000
+ETH,2017,chickens,eggs,11000000
+ETH,2010,goats,meat and milk,22786946
+ETH,2017,goats,meat and milk,30747916
+ETH,2010,sheep,meat and milk,25509004
+ETH,2017,sheep,meat and milk,32039974
+ETH,2010,pigs,meat,31000
+ETH,2017,pigs,meat,35388
+FLK,2010,cows,milk,1700
+FLK,2017,cows,milk,1460
+FLK,2010,cows,meat,2600
+FLK,2017,cows,meat,2739
+FLK,2010,chickens,meat,2910
+FLK,2017,chickens,meat,3016
+FLK,2010,chickens,eggs,1090
+FLK,2017,chickens,eggs,984
+FLK,2010,sheep,meat and milk,700000
+FLK,2017,sheep,meat and milk,699223
+FLK,2010,pigs,meat,40
+FLK,2017,pigs,meat,46
+FRO,2010,cows,milk,633
+FRO,2017,cows,milk,551
+FRO,2010,cows,meat,1357
+FRO,2017,cows,meat,1288
+FRO,2010,sheep,meat and milk,68000
+FRO,2017,sheep,meat and milk,70418
+FJI,2010,cows,milk,31570
+FJI,2017,cows,milk,8321
+FJI,2010,cows,meat,277430
+FJI,2017,cows,meat,44247
+FJI,2010,chickens,meat,4150000
+FJI,2017,chickens,meat,4822000
+FJI,2010,chickens,eggs,550000
+FJI,2017,chickens,eggs,468000
+FJI,2010,goats,meat and milk,250500
+FJI,2017,goats,meat and milk,261779
+FJI,2010,sheep,meat and milk,11268
+FJI,2017,sheep,meat and milk,24031
+FJI,2010,pigs,meat,145700
+FJI,2017,pigs,meat,153542
+FIN,2010,cows,milk,289339
+FIN,2017,cows,milk,274954
+FIN,2010,cows,meat,636469
+FIN,2017,cows,meat,618224
+FIN,2010,chickens,meat,1222000
+FIN,2017,chickens,meat,4301000
+FIN,2010,chickens,eggs,3394000
+FIN,2017,chickens,eggs,3746000
+FIN,2010,goats,meat and milk,4890
+FIN,2017,goats,meat and milk,5278
+FIN,2010,sheep,meat and milk,125673
+FIN,2017,sheep,meat and milk,155926
+FIN,2010,pigs,meat,1366932
+FIN,2017,pigs,meat,1135598
+FRA,2010,cows,milk,3716276
+FRA,2017,cows,milk,3596837
+FRA,2010,cows,meat,15838897
+FRA,2017,cows,meat,15356731
+FRA,2010,chickens,meat,175054000
+FRA,2017,chickens,meat,106829000
+FRA,2010,chickens,eggs,56473000
+FRA,2017,chickens,eggs,61414000
+FRA,2010,goats,meat and milk,1436109
+FRA,2017,goats,meat and milk,1270737
+FRA,2010,sheep,meat and milk,7962418
+FRA,2017,sheep,meat and milk,6901456
+FRA,2010,pigs,meat,14287056
+FRA,2017,pigs,meat,12930857
+GUF,2010,cows,milk,469
+GUF,2017,cows,milk,635
+GUF,2010,cows,meat,14773
+GUF,2017,cows,meat,17947
+GUF,2010,chickens,meat,0
+GUF,2017,chickens,meat,0
+GUF,2010,chickens,eggs,121000
+GUF,2017,chickens,eggs,106000
+GUF,2010,goats,meat and milk,1984
+GUF,2017,goats,meat and milk,1640
+GUF,2010,sheep,meat and milk,1228
+GUF,2017,sheep,meat and milk,1040
+GUF,2010,pigs,meat,5164
+GUF,2017,pigs,meat,4772
+PYF,2010,cows,milk,500
+PYF,2017,cows,milk,589
+PYF,2010,cows,meat,6800
+PYF,2017,cows,meat,6778
+PYF,2010,chickens,meat,110000
+PYF,2017,chickens,meat,171000
+PYF,2010,chickens,eggs,190000
+PYF,2017,chickens,eggs,150000
+PYF,2010,goats,meat and milk,16500
+PYF,2017,goats,meat and milk,16758
+PYF,2010,sheep,meat and milk,440
+PYF,2017,sheep,meat and milk,442
+PYF,2010,pigs,meat,30000
+PYF,2017,pigs,meat,29696
+GAB,2010,cows,milk,9600
+GAB,2017,cows,milk,10100
+GAB,2010,cows,meat,27400
+GAB,2017,cows,meat,27881
+GAB,2010,chickens,meat,2660000
+GAB,2017,chickens,meat,2518000
+GAB,2010,chickens,eggs,440000
+GAB,2017,chickens,eggs,660000
+GAB,2010,goats,meat and milk,95000
+GAB,2017,goats,meat and milk,110666
+GAB,2010,sheep,meat and milk,197000
+GAB,2017,sheep,meat and milk,217189
+GAB,2010,pigs,meat,215000
+GAB,2017,pigs,meat,221882
+GMB,2010,cows,milk,50871
+GMB,2017,cows,milk,54175
+GMB,2010,cows,meat,374129
+GMB,2017,cows,meat,406405
+GMB,2010,chickens,meat,635000
+GMB,2017,chickens,meat,1098000
+GMB,2010,chickens,eggs,215000
+GMB,2017,chickens,eggs,262000
+GMB,2010,goats,meat and milk,352000
+GMB,2017,goats,meat and milk,342685
+GMB,2010,sheep,meat and milk,251000
+GMB,2017,sheep,meat and milk,65000
+GMB,2010,pigs,meat,28500
+GMB,2017,pigs,meat,13500
+GEO,2010,buffaloes,meat and milk,17000
+GEO,2017,buffaloes,meat and milk,18316
+GEO,2010,cows,milk,573600
+GEO,2017,cows,milk,509300
+GEO,2010,cows,meat,458800
+GEO,2017,cows,meat,453400
+GEO,2010,chickens,meat,3690000
+GEO,2017,chickens,meat,5269000
+GEO,2010,chickens,eggs,2500000
+GEO,2017,chickens,eggs,2777000
+GEO,2010,goats,meat and milk,71500
+GEO,2017,goats,meat and milk,60600
+GEO,2010,sheep,meat and milk,602300
+GEO,2017,sheep,meat and milk,875900
+GEO,2010,pigs,meat,135200
+GEO,2017,pigs,meat,136200
+DEU,2010,buffaloes,meat and milk,4200
+DEU,2017,buffaloes,meat and milk,8674
+DEU,2010,cows,milk,4181679
+DEU,2017,cows,milk,4199010
+DEU,2010,cows,meat,8627813
+DEU,2017,cows,meat,8082185
+DEU,2010,chickens,meat,80713000
+DEU,2017,chickens,meat,119431000
+DEU,2010,chickens,eggs,33400000
+DEU,2017,chickens,eggs,40569000
+DEU,2010,goats,meat and milk,150000
+DEU,2017,goats,meat and milk,140000
+DEU,2010,sheep,meat and milk,2088541
+DEU,2017,sheep,meat and milk,1579800
+DEU,2010,pigs,meat,26509000
+DEU,2017,pigs,meat,27577600
+GHA,2010,cows,milk,269375
+GHA,2017,cows,milk,333883
+GHA,2010,cows,meat,1184625
+GHA,2017,cows,meat,1548442
+GHA,2010,chickens,meat,33902000
+GHA,2017,chickens,meat,59643000
+GHA,2010,chickens,eggs,13850000
+GHA,2017,chickens,eggs,17800000
+GHA,2010,goats,meat and milk,4855000
+GHA,2017,goats,meat and milk,6400000
+GHA,2010,sheep,meat and milk,3759000
+GHA,2017,sheep,meat and milk,4891413
+GHA,2010,pigs,meat,536000
+GHA,2017,pigs,meat,819843
+GRC,2010,buffaloes,meat and milk,1785
+GRC,2017,buffaloes,meat and milk,4583
+GRC,2010,cows,milk,230860
+GRC,2017,cows,milk,124003
+GRC,2010,cows,meat,396332
+GRC,2017,cows,meat,486687
+GRC,2010,chickens,meat,16689000
+GRC,2017,chickens,meat,29479000
+GRC,2010,chickens,eggs,11152000
+GRC,2017,chickens,eggs,7783000
+GRC,2010,goats,meat and milk,5274759
+GRC,2017,goats,meat and milk,3998205
+GRC,2010,sheep,meat and milk,8931392
+GRC,2017,sheep,meat and milk,8827820
+GRC,2010,pigs,meat,839630
+GRC,2017,pigs,meat,716856
+GRL,2010,cows,milk,17
+GRL,2017,cows,milk,44
+GRL,2010,cows,meat,48
+GRL,2017,cows,meat,116
+GRL,2010,sheep,meat and milk,19500
+GRL,2017,sheep,meat and milk,18180
+GRD,2010,cows,milk,672
+GRD,2017,cows,milk,685
+GRD,2010,cows,meat,3778
+GRD,2017,cows,meat,3868
+GRD,2010,chickens,meat,119790
+GRD,2017,chickens,meat,122000
+GRD,2010,chickens,eggs,150210
+GRD,2017,chickens,eggs,153000
+GRD,2010,goats,meat and milk,7200
+GRD,2017,goats,meat and milk,7116
+GRD,2010,sheep,meat and milk,13200
+GRD,2017,sheep,meat and milk,13638
+GRD,2010,pigs,meat,3000
+GRD,2017,pigs,meat,2864
+GLP,2010,cows,milk,272
+GLP,2017,cows,milk,281
+GLP,2010,cows,meat,74728
+GLP,2017,cows,meat,76651
+GLP,2010,chickens,meat,134140
+GLP,2017,chickens,meat,155000
+GLP,2010,chickens,eggs,165860
+GLP,2017,chickens,eggs,140000
+GLP,2010,goats,meat and milk,18786
+GLP,2017,goats,meat and milk,14029
+GLP,2010,sheep,meat and milk,1600
+GLP,2017,sheep,meat and milk,1385
+GLP,2010,pigs,meat,16319
+GLP,2017,pigs,meat,15731
+GUM,2010,buffaloes,meat and milk,70
+GUM,2017,buffaloes,meat and milk,92
+GUM,2010,cows,milk,24
+GUM,2017,cows,milk,28
+GUM,2010,cows,meat,116
+GUM,2017,cows,meat,128
+GUM,2010,chickens,meat,134290
+GUM,2017,chickens,meat,213000
+GUM,2010,chickens,eggs,65710
+GUM,2017,chickens,eggs,76000
+GUM,2010,goats,meat and milk,700
+GUM,2017,goats,meat and milk,854
+GUM,2010,pigs,meat,5200
+GUM,2017,pigs,meat,5602
+GTM,2010,cows,milk,634400
+GTM,2017,cows,milk,676979
+GTM,2010,cows,meat,2722000
+GTM,2017,cows,meat,3171969
+GTM,2010,chickens,meat,16700000
+GTM,2017,chickens,meat,16149000
+GTM,2010,chickens,eggs,16300000
+GTM,2017,chickens,eggs,20200000
+GTM,2010,goats,meat and milk,108700
+GTM,2017,goats,meat and milk,113914
+GTM,2010,sheep,meat and milk,564400
+GTM,2017,sheep,meat and milk,586341
+GTM,2010,pigs,meat,2733400
+GTM,2017,pigs,meat,2866116
+GIN,2010,cows,milk,599883
+GIN,2017,cows,milk,720000
+GIN,2010,cows,meat,4332968
+GIN,2017,cows,meat,6409251
+GIN,2010,chickens,meat,14481000
+GIN,2017,chickens,meat,21494000
+GIN,2010,chickens,eggs,6750000
+GIN,2017,chickens,eggs,6940000
+GIN,2010,goats,meat and milk,1915578
+GIN,2017,goats,meat and milk,3044131
+GIN,2010,sheep,meat and milk,1807261
+GIN,2017,sheep,meat and milk,2538815
+GIN,2010,pigs,meat,87288
+GIN,2017,pigs,meat,133430
+GNB,2010,cows,milk,99577
+GNB,2017,cows,milk,109177
+GNB,2010,cows,meat,541923
+GNB,2017,cows,meat,611763
+GNB,2010,chickens,meat,1316000
+GNB,2017,chickens,meat,1732000
+GNB,2010,chickens,eggs,280000
+GNB,2017,chickens,eggs,315000
+GNB,2010,goats,meat and milk,689163
+GNB,2017,goats,meat and milk,810646
+GNB,2010,sheep,meat and milk,453760
+GNB,2017,sheep,meat and milk,498607
+GNB,2010,pigs,meat,394147
+GNB,2017,pigs,meat,460489
+GUY,2010,cows,milk,19910
+GUY,2017,cows,milk,39000
+GUY,2010,cows,meat,92890
+GUY,2017,cows,meat,61557
+GUY,2010,chickens,meat,21255000
+GUY,2017,chickens,meat,27838000
+GUY,2010,chickens,eggs,145000
+GUY,2017,chickens,eggs,294000
+GUY,2010,goats,meat and milk,80000
+GUY,2017,goats,meat and milk,82510
+GUY,2010,sheep,meat and milk,130000
+GUY,2017,sheep,meat and milk,131679
+GUY,2010,pigs,meat,9100
+GUY,2017,pigs,meat,12600
+HTI,2010,cows,milk,187745
+HTI,2017,cows,milk,193186
+HTI,2010,cows,meat,1267255
+HTI,2017,cows,meat,1310221
+HTI,2010,chickens,meat,5088370
+HTI,2017,chickens,meat,5268000
+HTI,2010,chickens,eggs,511630
+HTI,2017,chickens,eggs,520000
+HTI,2010,goats,meat and milk,1910000
+HTI,2017,goats,meat and milk,1985731
+HTI,2010,sheep,meat and milk,153500
+HTI,2017,sheep,meat and milk,157413
+HTI,2010,pigs,meat,1001000
+HTI,2017,pigs,meat,1039264
+HND,2010,cows,milk,558877
+HND,2017,cows,milk,500154
+HND,2010,cows,meat,2136004
+HND,2017,cows,meat,2352943
+HND,2010,chickens,meat,39259000
+HND,2017,chickens,meat,41783000
+HND,2010,chickens,eggs,4059000
+HND,2017,chickens,eggs,4500000
+HND,2010,goats,meat and milk,24500
+HND,2017,goats,meat and milk,25352
+HND,2010,sheep,meat and milk,15500
+HND,2017,sheep,meat and milk,16506
+HND,2010,pigs,meat,469636
+HND,2017,pigs,meat,462556
+HUN,2010,cows,milk,312000
+HUN,2017,cows,milk,244000
+HUN,2010,cows,meat,388000
+HUN,2017,cows,meat,608000
+HUN,2010,chickens,meat,18531000
+HUN,2017,chickens,meat,20587000
+HUN,2010,chickens,eggs,13597000
+HUN,2017,chickens,eggs,11440000
+HUN,2010,goats,meat and milk,58000
+HUN,2017,goats,meat and milk,81000
+HUN,2010,sheep,meat and milk,1223000
+HUN,2017,sheep,meat and milk,1141000
+HUN,2010,pigs,meat,3247000
+HUN,2017,pigs,meat,2907000
+ISL,2010,cows,milk,25711
+ISL,2017,cows,milk,26742
+ISL,2010,cows,meat,48070
+ISL,2017,cows,meat,54153
+ISL,2010,chickens,meat,43000
+ISL,2017,chickens,meat,0
+ISL,2010,chickens,eggs,175000
+ISL,2017,chickens,eggs,230000
+ISL,2010,goats,meat and milk,729
+ISL,2017,goats,meat and milk,1300
+ISL,2010,sheep,meat and milk,479841
+ISL,2017,sheep,meat and milk,458634
+ISL,2010,pigs,meat,40016
+ISL,2017,pigs,meat,28700
+IND,2010,buffaloes,meat and milk,107375000
+IND,2017,buffaloes,meat and milk,113276848
+IND,2010,cows,milk,42755000
+IND,2017,cows,milk,50905190
+IND,2010,cows,meat,151429992
+IND,2017,cows,meat,134194999
+IND,2010,chickens,meat,359642000
+IND,2017,chickens,meat,380201000
+IND,2010,chickens,eggs,303658000
+IND,2017,chickens,eggs,402976000
+IND,2010,goats,meat and milk,137320992
+IND,2017,goats,meat and milk,132949270
+IND,2010,sheep,meat and milk,67744000
+IND,2017,sheep,meat and milk,62351822
+IND,2010,pigs,meat,10640000
+IND,2017,pigs,meat,8775091
+IDN,2010,buffaloes,meat and milk,1999604
+IDN,2017,buffaloes,meat and milk,1395191
+IDN,2010,cows,milk,495000
+IDN,2017,cows,milk,544791
+IDN,2010,cows,meat,13086570
+IDN,2017,cows,meat,16054456
+IDN,2010,chickens,meat,1141926000
+IDN,2017,chickens,meat,2008889000
+IDN,2010,chickens,eggs,207700000
+IDN,2017,chickens,eggs,166723000
+IDN,2010,goats,meat and milk,16619599
+IDN,2017,goats,meat and milk,18410379
+IDN,2010,sheep,meat and milk,10725458
+IDN,2017,sheep,meat and milk,16462274
+IDN,2010,pigs,meat,7476666
+IDN,2017,pigs,meat,8138276
+IRN,2010,buffaloes,meat and milk,195000
+IRN,2017,buffaloes,meat and milk,126765
+IRN,2010,cows,milk,2899000
+IRN,2017,cows,milk,1771628
+IRN,2010,cows,meat,4533000
+IRN,2017,cows,meat,3107735
+IRN,2010,chickens,meat,813500000
+IRN,2017,chickens,meat,996583000
+IRN,2010,chickens,eggs,66500000
+IRN,2017,chickens,eggs,48300000
+IRN,2010,goats,meat and milk,21435000
+IRN,2017,goats,meat and milk,15711084
+IRN,2010,sheep,meat and milk,47591000
+IRN,2017,sheep,meat and milk,40029687
+IRQ,2010,buffaloes,meat and milk,295000
+IRQ,2017,buffaloes,meat and milk,209163
+IRQ,2010,cows,milk,354000
+IRQ,2017,cows,milk,404986
+IRQ,2010,cows,meat,2275000
+IRQ,2017,cows,meat,1494384
+IRQ,2010,chickens,meat,29794820
+IRQ,2017,chickens,meat,46473000
+IRQ,2010,chickens,eggs,4205180
+IRQ,2017,chickens,eggs,3600000
+IRQ,2010,goats,meat and milk,1519000
+IRQ,2017,goats,meat and milk,1282856
+IRQ,2010,sheep,meat and milk,7945000
+IRQ,2017,sheep,meat and milk,6633904
+IRL,2010,cows,milk,1070800
+IRL,2017,cows,milk,1432700
+IRL,2010,cows,meat,5535800
+IRL,2017,cows,meat,5930800
+IRL,2010,chickens,meat,10000000
+IRL,2017,chickens,meat,10804000
+IRL,2010,chickens,eggs,3800000
+IRL,2017,chickens,eggs,4700000
+IRL,2010,goats,meat and milk,10500
+IRL,2017,goats,meat and milk,8300
+IRL,2010,sheep,meat and milk,4745400
+IRL,2017,sheep,meat and milk,5197100
+IRL,2010,pigs,meat,1516300
+IRL,2017,pigs,meat,1556900
+ISR,2010,cows,milk,120000
+ISR,2017,cows,milk,114816
+ISR,2010,cows,meat,310000
+ISR,2017,cows,meat,394284
+ISR,2010,chickens,meat,33594000
+ISR,2017,chickens,meat,36672000
+ISR,2010,chickens,eggs,9005000
+ISR,2017,chickens,eggs,9615000
+ISR,2010,goats,meat and milk,100000
+ISR,2017,goats,meat and milk,89720
+ISR,2010,sheep,meat and milk,445000
+ISR,2017,sheep,meat and milk,519640
+ISR,2010,pigs,meat,223000
+ISR,2017,pigs,meat,190000
+ITA,2010,buffaloes,meat and milk,365086
+ITA,2017,buffaloes,meat and milk,400792
+ITA,2010,cows,milk,1878400
+ITA,2017,cows,milk,1791120
+ITA,2010,cows,meat,4224600
+ITA,2017,cows,meat,4158273
+ITA,2010,chickens,meat,62000000
+ITA,2017,chickens,meat,75796000
+ITA,2010,chickens,eggs,68000000
+ITA,2017,chickens,eggs,71152000
+ITA,2010,goats,meat and milk,961000
+ITA,2017,goats,meat and milk,992177
+ITA,2010,sheep,meat and milk,8012600
+ITA,2017,sheep,meat and milk,7215433
+ITA,2010,pigs,meat,9157100
+ITA,2017,pigs,meat,8570807
+JAM,2010,cows,milk,13100
+JAM,2017,cows,milk,10704
+JAM,2010,cows,meat,156900
+JAM,2017,cows,meat,120646
+JAM,2010,chickens,meat,12510000
+JAM,2017,chickens,meat,13422000
+JAM,2010,chickens,eggs,990000
+JAM,2017,chickens,eggs,745000
+JAM,2010,goats,meat and milk,490000
+JAM,2017,goats,meat and milk,563918
+JAM,2010,sheep,meat and milk,1600
+JAM,2017,sheep,meat and milk,1336
+JAM,2010,pigs,meat,197400
+JAM,2017,pigs,meat,213410
+JPN,2010,cows,milk,1029000
+JPN,2017,cows,milk,852100
+JPN,2010,cows,meat,3347000
+JPN,2017,cows,meat,2969900
+JPN,2010,chickens,meat,145934180
+JPN,2017,chickens,meat,177722000
+JPN,2010,chickens,eggs,140065820
+JPN,2017,chickens,eggs,136101000
+JPN,2010,goats,meat and milk,15000
+JPN,2017,goats,meat and milk,16083
+JPN,2010,sheep,meat and milk,12000
+JPN,2017,sheep,meat and milk,14738
+JPN,2010,pigs,meat,9800000
+JPN,2017,pigs,meat,9346000
+JOR,2010,buffaloes,meat and milk,100
+JOR,2017,buffaloes,meat and milk,96
+JOR,2010,cows,milk,38530
+JOR,2017,cows,milk,45720
+JOR,2010,cows,meat,26860
+JOR,2017,cows,meat,26924
+JOR,2010,chickens,meat,26400000
+JOR,2017,chickens,meat,27491000
+JOR,2010,chickens,eggs,2600000
+JOR,2017,chickens,eggs,1800000
+JOR,2010,goats,meat and milk,751730
+JOR,2017,goats,meat and milk,770771
+JOR,2010,sheep,meat and milk,2175690
+JOR,2017,sheep,meat and milk,3057948
+KAZ,2010,buffaloes,meat and milk,10000
+KAZ,2017,buffaloes,meat and milk,10327
+KAZ,2010,cows,milk,2371167
+KAZ,2017,cows,milk,2336753
+KAZ,2010,cows,meat,3724033
+KAZ,2017,cows,meat,4427459
+KAZ,2010,chickens,meat,13769000
+KAZ,2017,chickens,meat,16119000
+KAZ,2010,chickens,eggs,17191000
+KAZ,2017,chickens,eggs,22257000
+KAZ,2010,goats,meat and milk,2708900
+KAZ,2017,goats,meat and milk,2279165
+KAZ,2010,sheep,meat and milk,14660800
+KAZ,2017,sheep,meat and milk,16049807
+KAZ,2010,pigs,meat,1326300
+KAZ,2017,pigs,meat,815121
+KEN,2010,cows,milk,5001600
+KEN,2017,cows,milk,6000000
+KEN,2010,cows,meat,12861252
+KEN,2017,cows,meat,12338810
+KEN,2010,chickens,meat,13553000
+KEN,2017,chickens,meat,31575000
+KEN,2010,chickens,eggs,16845000
+KEN,2017,chickens,eggs,16550000
+KEN,2010,goats,meat and milk,28174158
+KEN,2017,goats,meat and milk,25684489
+KEN,2010,sheep,meat and milk,17562104
+KEN,2017,sheep,meat and milk,18759072
+KEN,2010,pigs,meat,347413
+KEN,2017,pigs,meat,554301
+KIR,2010,chickens,meat,447000
+KIR,2017,chickens,meat,569000
+KIR,2010,chickens,eggs,133000
+KIR,2017,chickens,eggs,99000
+KIR,2010,pigs,meat,13000
+KIR,2017,pigs,meat,14184
+KWT,2010,cows,milk,9637
+KWT,2017,cows,milk,12163
+KWT,2010,cows,meat,26068
+KWT,2017,cows,meat,18467
+KWT,2010,chickens,meat,23725000
+KWT,2017,chickens,meat,43597000
+KWT,2010,chickens,eggs,6834000
+KWT,2017,chickens,eggs,9415000
+KWT,2010,goats,meat and milk,178703
+KWT,2017,goats,meat and milk,197768
+KWT,2010,sheep,meat and milk,460213
+KWT,2017,sheep,meat and milk,664654
+KGZ,2010,cows,milk,664300
+KGZ,2017,cows,milk,769761
+KGZ,2010,cows,meat,634525
+KGZ,2017,cows,meat,805673
+KGZ,2010,chickens,meat,1222000
+KGZ,2017,chickens,meat,315000
+KGZ,2010,chickens,eggs,3200000
+KGZ,2017,chickens,eggs,4100000
+KGZ,2010,goats,meat and milk,942484
+KGZ,2017,goats,meat and milk,820043
+KGZ,2010,sheep,meat and milk,4095231
+KGZ,2017,sheep,meat and milk,5257732
+KGZ,2010,pigs,meat,59791
+KGZ,2017,pigs,meat,52169
+LAO,2010,buffaloes,meat and milk,1189000
+LAO,2017,buffaloes,meat and milk,1189000
+LAO,2010,cows,milk,35000
+LAO,2017,cows,milk,43210
+LAO,2010,cows,meat,1439000
+LAO,2017,cows,meat,1940790
+LAO,2010,chickens,meat,22860690
+LAO,2017,chickens,meat,34360000
+LAO,2010,chickens,eggs,2244310
+LAO,2017,chickens,eggs,2600000
+LAO,2010,goats,meat and milk,367000
+LAO,2017,goats,meat and milk,588000
+LAO,2010,pigs,meat,2752000
+LAO,2017,pigs,meat,3869000
+LVA,2010,cows,milk,165500
+LVA,2017,cows,milk,154024
+LVA,2010,cows,meat,212700
+LVA,2017,cows,meat,258290
+LVA,2010,chickens,meat,2703000
+LVA,2017,chickens,meat,1689670
+LVA,2010,chickens,eggs,2126000
+LVA,2017,chickens,eggs,2310330
+LVA,2010,goats,meat and milk,13200
+LVA,2017,goats,meat and milk,13159
+LVA,2010,sheep,meat and milk,70700
+LVA,2017,sheep,meat and milk,106629
+LVA,2010,pigs,meat,376500
+LVA,2017,pigs,meat,336386
+LBN,2010,cows,milk,40161
+LBN,2017,cows,milk,49058
+LBN,2010,cows,meat,28407
+LBN,2017,cows,meat,32960
+LBN,2010,chickens,meat,45243000
+LBN,2017,chickens,meat,70375000
+LBN,2010,chickens,eggs,3757000
+LBN,2017,chickens,eggs,2017000
+LBN,2010,goats,meat and milk,403861
+LBN,2017,goats,meat and milk,484396
+LBN,2010,sheep,meat and milk,265345
+LBN,2017,sheep,meat and milk,438242
+LBN,2010,pigs,meat,7736
+LBN,2017,pigs,meat,6171
+LSO,2010,cows,milk,109954
+LSO,2017,cows,milk,120000
+LSO,2010,cows,meat,516389
+LSO,2017,cows,meat,341573
+LSO,2010,chickens,meat,162000
+LSO,2017,chickens,meat,153000
+LSO,2010,chickens,eggs,340000
+LSO,2017,chickens,eggs,280000
+LSO,2010,goats,meat and milk,875184
+LSO,2017,goats,meat and milk,972701
+LSO,2010,sheep,meat and milk,1228558
+LSO,2017,sheep,meat and milk,2041479
+LSO,2010,pigs,meat,83976
+LSO,2017,pigs,meat,38689
+LBR,2010,cows,milk,6300
+LBR,2017,cows,milk,6672
+LBR,2010,cows,meat,33200
+LBR,2017,cows,meat,37551
+LBR,2010,chickens,meat,5765000
+LBR,2017,chickens,meat,7367000
+LBR,2010,chickens,eggs,1035000
+LBR,2017,chickens,eggs,1300000
+LBR,2010,goats,meat and milk,338300
+LBR,2017,goats,meat and milk,400016
+LBR,2010,sheep,meat and milk,263750
+LBR,2017,sheep,meat and milk,303081
+LBR,2010,pigs,meat,265300
+LBR,2017,pigs,meat,307546
+LBY,2010,cows,milk,135000
+LBY,2017,cows,milk,124980
+LBY,2010,cows,meat,60000
+LBY,2017,cows,meat,87007
+LBY,2010,chickens,meat,23100000
+LBY,2017,chickens,meat,26898000
+LBY,2010,chickens,eggs,9900000
+LBY,2017,chickens,eggs,9850000
+LBY,2010,goats,meat and milk,2700000
+LBY,2017,goats,meat and milk,2626324
+LBY,2010,sheep,meat and milk,7000000
+LBY,2017,sheep,meat and milk,7382078
+LIE,2010,cows,milk,2425
+LIE,2017,cows,milk,2246
+LIE,2010,cows,meat,3568
+LIE,2017,cows,meat,3539
+LIE,2010,chickens,meat,0
+LIE,2017,chickens,meat,0
+LIE,2010,chickens,eggs,13000
+LIE,2017,chickens,eggs,12000
+LIE,2010,goats,meat and milk,416
+LIE,2017,goats,meat and milk,361
+LIE,2010,sheep,meat and milk,3656
+LIE,2017,sheep,meat and milk,4123
+LIE,2010,pigs,meat,1690
+LIE,2017,pigs,meat,1876
+LTU,2010,cows,milk,353506
+LTU,2017,cows,milk,285751
+LTU,2010,cows,meat,405894
+LTU,2017,cows,meat,409001
+LTU,2010,chickens,meat,5202000
+LTU,2017,chickens,meat,6484000
+LTU,2010,chickens,eggs,3823000
+LTU,2017,chickens,eggs,3433000
+LTU,2010,goats,meat and milk,14700
+LTU,2017,goats,meat and milk,13409
+LTU,2010,sheep,meat and milk,52500
+LTU,2017,sheep,meat and milk,163565
+LTU,2010,pigs,meat,928200
+LTU,2017,pigs,meat,663916
+LUX,2010,cows,milk,45008
+LUX,2017,cows,milk,52701
+LUX,2010,cows,meat,153884
+LUX,2017,cows,meat,149580
+LUX,2010,chickens,meat,2980
+LUX,2017,chickens,meat,14910
+LUX,2010,chickens,eggs,87020
+LUX,2017,chickens,eggs,108090
+LUX,2010,goats,meat and milk,5084
+LUX,2017,goats,meat and milk,5406
+LUX,2010,sheep,meat and milk,9084
+LUX,2017,sheep,meat and milk,8478
+LUX,2010,pigs,meat,83774
+LUX,2017,pigs,meat,96761
+MDG,2010,cows,milk,1820000
+MDG,2017,cows,milk,1872600
+MDG,2010,cows,meat,8061130
+MDG,2017,cows,meat,8450080
+MDG,2010,chickens,meat,22750000
+MDG,2017,chickens,meat,34817000
+MDG,2010,chickens,eggs,3750000
+MDG,2017,chickens,eggs,3900000
+MDG,2010,goats,meat and milk,1419120
+MDG,2017,goats,meat and milk,1547900
+MDG,2010,sheep,meat and milk,780220
+MDG,2017,sheep,meat and milk,851000
+MDG,2010,pigs,meat,1439360
+MDG,2017,pigs,meat,1703000
+MWI,2010,cows,milk,97000
+MWI,2017,cows,milk,121309
+MWI,2010,cows,meat,972854
+MWI,2017,cows,meat,1386990
+MWI,2010,chickens,meat,11200000
+MWI,2017,chickens,meat,13090000
+MWI,2010,chickens,eggs,4800000
+MWI,2017,chickens,eggs,5255000
+MWI,2010,goats,meat and milk,3893922
+MWI,2017,goats,meat and milk,7718938
+MWI,2010,sheep,meat and milk,214230
+MWI,2017,sheep,meat and milk,283398
+MWI,2010,pigs,meat,1861503
+MWI,2017,pigs,meat,3785291
+MYS,2010,buffaloes,meat and milk,129878
+MYS,2017,buffaloes,meat and milk,119264
+MYS,2010,cows,milk,147000
+MYS,2017,cows,milk,96490
+MYS,2010,cows,meat,689859
+MYS,2017,cows,meat,647684
+MYS,2010,chickens,meat,139228000
+MYS,2017,chickens,meat,199255000
+MYS,2010,chickens,eggs,78000000
+MYS,2017,chickens,eggs,109000000
+MYS,2010,goats,meat and milk,496194
+MYS,2017,goats,meat and milk,431258
+MYS,2010,sheep,meat and milk,123475
+MYS,2017,sheep,meat and milk,137872
+MYS,2010,pigs,meat,1922321
+MYS,2017,pigs,meat,1647594
+MLI,2010,cows,milk,2434000
+MLI,2017,cows,milk,1826544
+MLI,2010,cows,meat,6462392
+MLI,2017,cows,meat,9589356
+MLI,2010,chickens,meat,29013000
+MLI,2017,chickens,meat,37500000
+MLI,2010,chickens,eggs,7737000
+MLI,2017,chickens,eggs,7500000
+MLI,2010,goats,meat and milk,15735670
+MLI,2017,goats,meat and milk,24023800
+MLI,2010,sheep,meat and milk,11300247
+MLI,2017,sheep,meat and milk,17400000
+MLI,2010,pigs,meat,74272
+MLI,2017,pigs,meat,84150
+MLT,2010,cows,milk,6362
+MLT,2017,cows,milk,6138
+MLT,2010,cows,meat,8592
+MLT,2017,cows,meat,8046
+MLT,2010,chickens,meat,669000
+MLT,2017,chickens,meat,674000
+MLT,2010,chickens,eggs,301000
+MLT,2017,chickens,eggs,330000
+MLT,2010,goats,meat and milk,5110
+MLT,2017,goats,meat and milk,5160
+MLT,2010,sheep,meat and milk,12379
+MLT,2017,sheep,meat and milk,11739
+MLT,2010,pigs,meat,70583
+MLT,2017,pigs,meat,34011
+MTQ,2010,cows,milk,244
+MTQ,2017,cows,milk,621
+MTQ,2010,cows,meat,18233
+MTQ,2017,cows,meat,13766
+MTQ,2010,chickens,meat,428000
+MTQ,2017,chickens,meat,344000
+MTQ,2010,chickens,eggs,95000
+MTQ,2017,chickens,eggs,127000
+MTQ,2010,goats,meat and milk,4461
+MTQ,2017,goats,meat and milk,6392
+MTQ,2010,sheep,meat and milk,11597
+MTQ,2017,sheep,meat and milk,14837
+MTQ,2010,pigs,meat,11093
+MTQ,2017,pigs,meat,10500
+MRT,2010,cows,milk,360000
+MRT,2017,cows,milk,415000
+MRT,2010,cows,meat,1341112
+MRT,2017,cows,meat,1521593
+MRT,2010,chickens,meat,2650000
+MRT,2017,chickens,meat,2934000
+MRT,2010,chickens,eggs,1650000
+MRT,2017,chickens,eggs,1700000
+MRT,2010,goats,meat and milk,5799842
+MRT,2017,goats,meat and milk,7438175
+MRT,2010,sheep,meat and milk,8701555
+MRT,2017,sheep,meat and milk,10973927
+MUS,2010,buffaloes,meat and milk,25
+MUS,2017,buffaloes,meat and milk,25
+MUS,2010,cows,milk,3300
+MUS,2017,cows,milk,3815
+MUS,2010,cows,meat,4191
+MUS,2017,cows,meat,0
+MUS,2010,chickens,meat,13070000
+MUS,2017,chickens,meat,14820000
+MUS,2010,chickens,eggs,1130000
+MUS,2017,chickens,eggs,1350000
+MUS,2010,goats,meat and milk,27819
+MUS,2017,goats,meat and milk,25618
+MUS,2010,sheep,meat and milk,2022
+MUS,2017,sheep,meat and milk,2934
+MUS,2010,pigs,meat,22327
+MUS,2017,pigs,meat,21446
+MEX,2010,cows,milk,2374623
+MEX,2017,cows,milk,2506130
+MEX,2010,cows,meat,30267511
+MEX,2017,cows,meat,31771738
+MEX,2010,chickens,meat,320425000
+MEX,2017,chickens,meat,353973330
+MEX,2010,chickens,eggs,185831000
+MEX,2017,chickens,eggs,202154670
+MEX,2010,goats,meat and milk,8993221
+MEX,2017,goats,meat and milk,8725172
+MEX,2010,sheep,meat and milk,8105562
+MEX,2017,sheep,meat and milk,8902451
+MEX,2010,pigs,meat,15435412
+MEX,2017,pigs,meat,17210269
+FSM,2010,buffaloes,meat and milk,150
+FSM,2017,buffaloes,meat and milk,173
+FSM,2010,cows,milk,2569
+FSM,2017,cows,milk,3145
+FSM,2010,cows,meat,12431
+FSM,2017,cows,meat,14533
+FSM,2010,chickens,meat,94840
+FSM,2017,chickens,meat,99000
+FSM,2010,chickens,eggs,90160
+FSM,2017,chickens,eggs,92000
+FSM,2010,goats,meat and milk,4100
+FSM,2017,goats,meat and milk,4617
+FSM,2010,pigs,meat,33000
+FSM,2017,pigs,meat,37437
+MNG,2010,cows,milk,508520
+MNG,2017,cows,milk,1177234
+MNG,2010,cows,meat,1667479
+MNG,2017,cows,meat,3211221
+MNG,2010,chickens,meat,122470
+MNG,2017,chickens,meat,258000
+MNG,2010,chickens,eggs,303530
+MNG,2017,chickens,eggs,437000
+MNG,2010,goats,meat and milk,13883213
+MNG,2017,goats,meat and milk,27346707
+MNG,2010,sheep,meat and milk,14480396
+MNG,2017,sheep,meat and milk,30109888
+MNG,2010,pigs,meat,24842
+MNG,2017,pigs,meat,31870
+MNE,2010,cows,milk,67259
+MNE,2017,cows,milk,60042
+MNE,2010,cows,meat,33576
+MNE,2017,cows,meat,26607
+MNE,2010,chickens,meat,81000
+MNE,2017,chickens,meat,121000
+MNE,2010,chickens,eggs,425000
+MNE,2017,chickens,eggs,667000
+MNE,2017,goats,meat and milk,29595
+MNE,2010,sheep,meat and milk,198165
+MNE,2017,sheep,meat and milk,189008
+MNE,2010,pigs,meat,11206
+MNE,2017,pigs,meat,25043
+MSR,2010,cows,milk,2500
+MSR,2017,cows,milk,2874
+MSR,2010,cows,meat,7300
+MSR,2017,cows,meat,7180
+MSR,2010,chickens,meat,20490
+MSR,2017,chickens,meat,19000
+MSR,2010,chickens,eggs,14510
+MSR,2017,chickens,eggs,16000
+MSR,2010,goats,meat and milk,7100
+MSR,2017,goats,meat and milk,7175
+MSR,2010,sheep,meat and milk,4800
+MSR,2017,sheep,meat and milk,4833
+MSR,2010,pigs,meat,1200
+MSR,2017,pigs,meat,1228
+MAR,2010,cows,milk,1485000
+MAR,2017,cows,milk,1760242
+MAR,2010,cows,meat,1410800
+MAR,2017,cows,meat,1603758
+MAR,2010,chickens,meat,129500000
+MAR,2017,chickens,meat,135343000
+MAR,2010,chickens,eggs,40500000
+MAR,2017,chickens,eggs,65150000
+MAR,2010,goats,meat and milk,5685700
+MAR,2017,goats,meat and milk,5205000
+MAR,2010,sheep,meat and milk,18023200
+MAR,2017,sheep,meat and milk,19863000
+MAR,2010,pigs,meat,8500
+MAR,2017,pigs,meat,8006
+MOZ,2010,cows,milk,395000
+MOZ,2017,cows,milk,612854
+MOZ,2010,cows,meat,882044
+MOZ,2017,cows,meat,1338483
+MOZ,2010,chickens,meat,18322000
+MOZ,2017,chickens,meat,9400000
+MOZ,2010,chickens,eggs,5600000
+MOZ,2017,chickens,eggs,9600000
+MOZ,2010,goats,meat and milk,3907483
+MOZ,2017,goats,meat and milk,3791832
+MOZ,2010,sheep,meat and milk,220391
+MOZ,2017,sheep,meat and milk,135000
+MOZ,2010,pigs,meat,1340712
+MOZ,2017,pigs,meat,1661982
+MMR,2010,buffaloes,meat and milk,2977150
+MMR,2017,buffaloes,meat and milk,3747493
+MMR,2010,cows,milk,2600000
+MMR,2017,cows,milk,3680000
+MMR,2010,cows,meat,11008909
+MMR,2017,cows,meat,13468450
+MMR,2010,chickens,meat,98983680
+MMR,2017,chickens,meat,230803000
+MMR,2010,chickens,eggs,57423320
+MMR,2017,chickens,eggs,82500000
+MMR,2010,goats,meat and milk,3421121
+MMR,2017,goats,meat and milk,4538790
+MMR,2010,sheep,meat and milk,663780
+MMR,2017,sheep,meat and milk,1314303
+MMR,2010,pigs,meat,9416208
+MMR,2017,pigs,meat,13145991
+NAM,2010,cows,milk,220000
+NAM,2017,cows,milk,249966
+NAM,2010,cows,meat,2180000
+NAM,2017,cows,meat,2702246
+NAM,2010,chickens,meat,4050000
+NAM,2017,chickens,meat,3492000
+NAM,2010,chickens,eggs,1050000
+NAM,2017,chickens,eggs,980000
+NAM,2010,goats,meat and milk,2100000
+NAM,2017,goats,meat and milk,1998978
+NAM,2010,sheep,meat and milk,2800000
+NAM,2017,sheep,meat and milk,1970577
+NAM,2010,pigs,meat,65000
+NAM,2017,pigs,meat,86839
+NRU,2010,chickens,meat,740
+NRU,2017,chickens,meat,1000
+NRU,2010,chickens,eggs,4260
+NRU,2017,chickens,eggs,4000
+NRU,2010,pigs,meat,3000
+NRU,2017,pigs,meat,3034
+NPL,2010,buffaloes,meat and milk,4836984
+NPL,2017,buffaloes,meat and milk,5177998
+NPL,2010,cows,milk,954680
+NPL,2017,cows,milk,1029529
+NPL,2010,cows,meat,6244580
+NPL,2017,cows,meat,6317958
+NPL,2010,chickens,meat,18469000
+NPL,2017,chickens,meat,57618000
+NPL,2010,chickens,eggs,7291000
+NPL,2017,chickens,eggs,12389000
+NPL,2010,goats,meat and milk,8844172
+NPL,2017,goats,meat and milk,11165099
+NPL,2010,sheep,meat and milk,801371
+NPL,2017,sheep,meat and milk,801975
+NPL,2010,pigs,meat,1064858
+NPL,2017,pigs,meat,1328036
+NLD,2010,cows,milk,1556840
+NLD,2017,cows,milk,1665000
+NLD,2010,cows,meat,2418350
+NLD,2017,cows,meat,2365000
+NLD,2010,chickens,meat,53344000
+NLD,2017,chickens,meat,58742100
+NLD,2010,chickens,eggs,47904000
+NLD,2017,chickens,eggs,46441900
+NLD,2010,goats,meat and milk,352830
+NLD,2017,goats,meat and milk,532870
+NLD,2010,sheep,meat and milk,1129500
+NLD,2017,sheep,meat and milk,798830
+NLD,2010,pigs,meat,12254970
+NLD,2017,pigs,meat,12409000
+BES,2010,cows,milk,365
+BES,2017,cows,milk,302
+BES,2010,cows,meat,295
+BES,2017,cows,meat,220
+BES,2010,chickens,meat,92190
+BES,2017,chickens,meat,90000
+BES,2010,chickens,eggs,72810
+BES,2017,chickens,eggs,72000
+BES,2010,goats,meat and milk,13680
+BES,2017,goats,meat and milk,14086
+BES,2010,sheep,meat and milk,9320
+BES,2017,sheep,meat and milk,9929
+BES,2010,pigs,meat,2710
+BES,2017,pigs,meat,2886
+NCL,2010,cows,milk,311
+NCL,2017,cows,milk,305
+NCL,2010,cows,meat,89689
+NCL,2017,cows,meat,84301
+NCL,2010,chickens,meat,450000
+NCL,2017,chickens,meat,322000
+NCL,2010,chickens,eggs,150000
+NCL,2017,chickens,eggs,160000
+NCL,2010,goats,meat and milk,4302
+NCL,2017,goats,meat and milk,2000
+NCL,2010,sheep,meat and milk,2300
+NCL,2017,sheep,meat and milk,2286
+NCL,2010,pigs,meat,37000
+NCL,2017,pigs,meat,39550
+NZL,2010,cows,milk,4680096
+NZL,2017,cows,milk,5043813
+NZL,2010,cows,meat,5183876
+NZL,2017,cows,meat,5102089
+NZL,2010,chickens,meat,15175000
+NZL,2017,chickens,meat,19988000
+NZL,2010,chickens,eggs,3350000
+NZL,2017,chickens,eggs,3775000
+NZL,2010,goats,meat and milk,95281
+NZL,2017,goats,meat and milk,98812
+NZL,2010,sheep,meat and milk,32562612
+NZL,2017,sheep,meat and milk,27526537
+NZL,2010,pigs,meat,335114
+NZL,2017,pigs,meat,273860
+NIC,2010,cows,milk,1031900
+NIC,2017,cows,milk,786109
+NIC,2010,cows,meat,2668100
+NIC,2017,cows,meat,4194528
+NIC,2010,chickens,meat,16000000
+NIC,2017,chickens,meat,18392000
+NIC,2010,chickens,eggs,3000000
+NIC,2017,chickens,eggs,4800000
+NIC,2010,goats,meat and milk,7400
+NIC,2017,goats,meat and milk,7730
+NIC,2010,sheep,meat and milk,6300
+NIC,2017,sheep,meat and milk,6706
+NIC,2010,pigs,meat,480000
+NIC,2017,pigs,meat,514606
+NER,2010,cows,milk,1351785
+NER,2017,cows,milk,2032584
+NER,2010,cows,meat,7660112
+NER,2017,cows,meat,11517977
+NER,2010,chickens,meat,14201000
+NER,2017,chickens,meat,15746000
+NER,2010,chickens,eggs,2900000
+NER,2017,chickens,eggs,3650000
+NER,2010,goats,meat and milk,12722529
+NER,2017,goats,meat and milk,16741980
+NER,2010,sheep,meat and milk,9680058
+NER,2017,sheep,meat and milk,12315737
+NER,2010,pigs,meat,40000
+NER,2017,pigs,meat,42756
+NGA,2010,cows,milk,1837052
+NGA,2017,cows,milk,2232526
+NGA,2010,cows,meat,14740910
+NGA,2017,cows,meat,18720853
+NGA,2010,chickens,meat,56313000
+NGA,2017,chickens,meat,28232000
+NGA,2010,chickens,eggs,136000000
+NGA,2017,chickens,eggs,115000000
+NGA,2010,goats,meat and milk,56524076
+NGA,2017,goats,meat and milk,78049310
+NGA,2010,sheep,meat and milk,35519760
+NGA,2017,sheep,meat and milk,42500000
+NGA,2010,pigs,meat,7471730
+NGA,2017,pigs,meat,7498342
+NIU,2010,cows,milk,71
+NIU,2017,cows,milk,72
+NIU,2010,cows,meat,42
+NIU,2017,cows,meat,41
+NIU,2010,chickens,meat,12960
+NIU,2017,chickens,meat,15000
+NIU,2010,chickens,eggs,3040
+NIU,2017,chickens,eggs,3000
+NIU,2010,pigs,meat,2093
+NIU,2017,pigs,meat,2231
+MKD,2010,buffaloes,meat and milk,640
+MKD,2017,buffaloes,meat and milk,645
+MKD,2010,cows,milk,124500
+MKD,2017,cows,milk,137461
+MKD,2010,cows,meat,135387
+MKD,2017,cows,meat,117575
+MKD,2010,chickens,meat,495000
+MKD,2017,chickens,meat,374000
+MKD,2010,chickens,eggs,1500000
+MKD,2017,chickens,eggs,1466000
+MKD,2010,goats,meat and milk,75708
+MKD,2017,goats,meat and milk,107466
+MKD,2010,sheep,meat and milk,778404
+MKD,2017,sheep,meat and milk,724555
+MKD,2010,pigs,meat,190552
+MKD,2017,pigs,meat,202197
+NOR,2010,cows,milk,238442
+NOR,2017,cows,milk,219265
+NOR,2010,cows,meat,636087
+NOR,2017,cows,meat,666027
+NOR,2010,chickens,meat,7901000
+NOR,2017,chickens,meat,11263000
+NOR,2010,chickens,eggs,3953000
+NOR,2017,chickens,eggs,4380000
+NOR,2010,goats,meat and milk,67485
+NOR,2017,goats,meat and milk,65564
+NOR,2010,sheep,meat and milk,2308291
+NOR,2017,sheep,meat and milk,2417813
+NOR,2010,pigs,meat,850383
+NOR,2017,pigs,meat,851998
+OMN,2010,cows,milk,126500
+OMN,2017,cows,milk,116739
+OMN,2010,cows,meat,206280
+OMN,2017,cows,meat,272391
+OMN,2010,chickens,meat,3711600
+OMN,2017,chickens,meat,3342000
+OMN,2010,chickens,eggs,678400
+OMN,2017,chickens,eggs,1475000
+OMN,2010,goats,meat and milk,1719120
+OMN,2017,goats,meat and milk,2257090
+OMN,2010,sheep,meat and milk,388590
+OMN,2017,sheep,meat and milk,593420
+PAK,2010,buffaloes,meat and milk,29413000
+PAK,2017,buffaloes,meat and milk,37700000
+PAK,2010,cows,milk,10112000
+PAK,2017,cows,milk,13101000
+PAK,2010,cows,meat,24173000
+PAK,2017,cows,meat,31299000
+PAK,2010,chickens,meat,216000000
+PAK,2017,chickens,meat,351346000
+PAK,2010,chickens,eggs,105000000
+PAK,2017,chickens,eggs,148000000
+PAK,2010,goats,meat and milk,59858000
+PAK,2017,goats,meat and milk,72179000
+PAK,2010,sheep,meat and milk,27757000
+PAK,2017,sheep,meat and milk,30141000
+PSE,2010,cows,milk,20914
+PSE,2017,cows,milk,19800
+PSE,2010,cows,meat,13011
+PSE,2017,cows,meat,14180
+PSE,2010,chickens,meat,6755000
+PSE,2017,chickens,meat,5567000
+PSE,2010,chickens,eggs,1545000
+PSE,2017,chickens,eggs,1735000
+PSE,2010,goats,meat and milk,219364
+PSE,2017,goats,meat and milk,215000
+PSE,2010,sheep,meat and milk,567236
+PSE,2017,sheep,meat and milk,748049
+PAN,2010,cows,milk,187500
+PAN,2017,cows,milk,145245
+PAN,2010,cows,meat,1453400
+PAN,2017,cows,meat,1377755
+PAN,2010,chickens,meat,13779000
+PAN,2017,chickens,meat,22480000
+PAN,2010,chickens,eggs,3484000
+PAN,2017,chickens,eggs,2973000
+PAN,2010,goats,meat and milk,8085
+PAN,2017,goats,meat and milk,9051
+PAN,2010,pigs,meat,276400
+PAN,2017,pigs,meat,400700
+PNG,2010,cows,milk,1750
+PNG,2017,cows,milk,1780
+PNG,2010,cows,meat,92250
+PNG,2017,cows,meat,91501
+PNG,2010,chickens,meat,2350000
+PNG,2017,chickens,meat,2889000
+PNG,2010,chickens,eggs,1650000
+PNG,2017,chickens,eggs,1680000
+PNG,2010,goats,meat and milk,3000
+PNG,2017,goats,meat and milk,3016
+PNG,2010,sheep,meat and milk,7000
+PNG,2017,sheep,meat and milk,7331
+PNG,2010,pigs,meat,1950000
+PNG,2017,pigs,meat,2125594
+PRY,2010,cows,milk,210000
+PRY,2017,cows,milk,218000
+PRY,2010,cows,meat,12095442
+PRY,2017,cows,meat,13603526
+PRY,2010,chickens,meat,6776000
+PRY,2017,chickens,meat,9814000
+PRY,2010,chickens,eggs,9600000
+PRY,2017,chickens,eggs,8000000
+PRY,2010,goats,meat and milk,133237
+PRY,2017,goats,meat and milk,155010
+PRY,2010,sheep,meat and milk,392649
+PRY,2017,sheep,meat and milk,523923
+PRY,2010,pigs,meat,1117664
+PRY,2017,pigs,meat,1313148
+PER,2010,cows,milk,787604
+PER,2017,cows,milk,889114
+PER,2010,cows,meat,4732596
+PER,2017,cows,meat,4646455
+PER,2010,chickens,meat,112622330
+PER,2017,chickens,meat,131078000
+PER,2010,chickens,eggs,18156670
+PER,2017,chickens,eggs,25560000
+PER,2010,goats,meat and milk,1968306
+PER,2017,goats,meat and milk,1885990
+PER,2010,sheep,meat and milk,14159720
+PER,2017,sheep,meat and milk,11338424
+PER,2010,pigs,meat,3254413
+PER,2017,pigs,meat,3187254
+PHL,2010,buffaloes,meat and milk,3270400
+PHL,2017,buffaloes,meat and milk,2881894
+PHL,2010,cows,milk,5700
+PHL,2017,cows,milk,5429
+PHL,2010,cows,meat,2565200
+PHL,2017,cows,meat,2542185
+PHL,2010,chickens,meat,81484000
+PHL,2017,chickens,meat,76817000
+PHL,2010,chickens,eggs,77500000
+PHL,2017,chickens,eggs,98500000
+PHL,2010,goats,meat and milk,4177700
+PHL,2017,goats,meat and milk,3710348
+PHL,2010,sheep,meat and milk,30000
+PHL,2017,sheep,meat and milk,30000
+PHL,2010,pigs,meat,13397800
+PHL,2017,pigs,meat,12427790
+POL,2010,cows,milk,2538184
+POL,2017,cows,milk,2154345
+POL,2010,cows,meat,3203910
+POL,2017,cows,meat,3988738
+POL,2010,chickens,meat,100904000
+POL,2017,chickens,meat,127480000
+POL,2010,chickens,eggs,52374000
+POL,2017,chickens,eggs,50160000
+POL,2010,goats,meat and milk,107206
+POL,2017,goats,meat and milk,44204
+POL,2010,sheep,meat and milk,261129
+POL,2017,sheep,meat and milk,261224
+POL,2010,pigs,meat,15244386
+POL,2017,pigs,meat,11352719
+PRT,2010,cows,milk,243000
+PRT,2017,cows,milk,239000
+PRT,2010,cows,meat,1204000
+PRT,2017,cows,meat,1431000
+PRT,2010,chickens,meat,5105000
+PRT,2017,chickens,meat,2955000
+PRT,2010,chickens,eggs,6500000
+PRT,2017,chickens,eggs,7800000
+PRT,2010,goats,meat and milk,419000
+PRT,2017,goats,meat and milk,340000
+PRT,2010,sheep,meat and milk,2226000
+PRT,2017,sheep,meat and milk,2225000
+PRT,2010,pigs,meat,1917000
+PRT,2017,pigs,meat,2165000
+PRI,2010,cows,milk,99000
+PRI,2017,cows,milk,87243
+PRI,2010,cows,meat,281000
+PRI,2017,cows,meat,284430
+PRI,2010,chickens,meat,12850000
+PRI,2017,chickens,meat,13998000
+PRI,2010,chickens,eggs,1150000
+PRI,2017,chickens,eggs,1168000
+PRI,2010,goats,meat and milk,3300
+PRI,2017,goats,meat and milk,2687
+PRI,2010,sheep,meat and milk,6300
+PRI,2017,sheep,meat and milk,6910
+PRI,2010,pigs,meat,50000
+PRI,2017,pigs,meat,42730
+QAT,2010,cows,milk,5200
+QAT,2017,cows,milk,5300
+QAT,2010,cows,meat,6222
+QAT,2017,cows,meat,19658
+QAT,2010,chickens,meat,6976000
+QAT,2017,chickens,meat,8752000
+QAT,2010,chickens,eggs,324000
+QAT,2017,chickens,eggs,360000
+QAT,2010,goats,meat and milk,171622
+QAT,2017,goats,meat and milk,382423
+QAT,2010,sheep,meat and milk,213804
+QAT,2017,sheep,meat and milk,932472
+KOR,2010,cows,milk,203923
+KOR,2017,cows,milk,205143
+KOR,2010,cows,meat,3147468
+KOR,2017,cows,meat,3223187
+KOR,2010,chickens,meat,87509000
+KOR,2017,chickens,meat,97841000
+KOR,2010,chickens,eggs,61691000
+KOR,2017,chickens,eggs,72710000
+KOR,2010,goats,meat and milk,243520
+KOR,2017,goats,meat and milk,294542
+KOR,2010,sheep,meat and milk,3918
+KOR,2017,sheep,meat and milk,2297
+KOR,2010,pigs,meat,9880632
+KOR,2017,pigs,meat,11272978
+MDA,2010,cows,milk,161195
+MDA,2017,cows,milk,112752
+MDA,2010,cows,meat,60427
+MDA,2017,cows,meat,69587
+MDA,2010,chickens,meat,19275000
+MDA,2017,chickens,meat,34032000
+MDA,2010,chickens,eggs,3065000
+MDA,2017,chickens,eggs,3190000
+MDA,2010,goats,meat and milk,111155
+MDA,2017,goats,meat and milk,159219
+MDA,2010,sheep,meat and milk,803747
+MDA,2017,sheep,meat and milk,710567
+MDA,2010,pigs,meat,377142
+MDA,2017,pigs,meat,439007
+REU,2010,cows,milk,25000
+REU,2017,cows,milk,24800
+REU,2010,cows,meat,2662
+REU,2017,cows,meat,6006
+REU,2010,chickens,meat,14460000
+REU,2017,chickens,meat,16611000
+REU,2010,chickens,eggs,540000
+REU,2017,chickens,eggs,603000
+REU,2010,goats,meat and milk,40000
+REU,2017,goats,meat and milk,41623
+REU,2010,sheep,meat and milk,1000
+REU,2017,sheep,meat and milk,910
+REU,2010,pigs,meat,70634
+REU,2017,pigs,meat,70333
+ROU,2010,cows,milk,1441398
+ROU,2017,cows,milk,1192543
+ROU,2010,cows,meat,1070902
+ROU,2017,cows,meat,857157
+ROU,2010,chickens,meat,39339000
+ROU,2017,chickens,meat,39428000
+ROU,2010,chickens,eggs,44504000
+ROU,2017,chickens,eggs,36262000
+ROU,2010,goats,meat and milk,917300
+ROU,2017,goats,meat and milk,1483100
+ROU,2010,sheep,meat and milk,9141500
+ROU,2017,sheep,meat and milk,9875500
+ROU,2010,pigs,meat,5793400
+ROU,2017,pigs,meat,4707700
+RUS,2010,buffaloes,meat and milk,10540
+RUS,2017,buffaloes,meat and milk,5662
+RUS,2010,cows,milk,8351185
+RUS,2017,cows,milk,7043569
+RUS,2010,cows,meat,12320143
+RUS,2017,cows,meat,11302520
+RUS,2010,chickens,meat,235365000
+RUS,2017,chickens,meat,346274000
+RUS,2010,chickens,eggs,155169000
+RUS,2017,chickens,eggs,159494000
+RUS,2010,goats,meat and milk,2136651
+RUS,2017,goats,meat and milk,2054454
+RUS,2010,sheep,meat and milk,19849656
+RUS,2017,sheep,meat and milk,22662426
+RUS,2010,pigs,meat,17230956
+RUS,2017,pigs,meat,21924642
+RWA,2010,cows,milk,340615
+RWA,2017,cows,milk,301306
+RWA,2010,cows,meat,994205
+RWA,2017,cows,meat,864881
+RWA,2010,chickens,meat,2598000
+RWA,2017,chickens,meat,3823000
+RWA,2010,chickens,eggs,940000
+RWA,2017,chickens,eggs,1450000
+RWA,2010,goats,meat and milk,2688273
+RWA,2017,goats,meat and milk,2923706
+RWA,2010,sheep,meat and milk,743201
+RWA,2017,sheep,meat and milk,664703
+RWA,2010,pigs,meat,684708
+RWA,2017,pigs,meat,1716438
+SHN,2010,cows,milk,127
+SHN,2017,cows,milk,113
+SHN,2010,cows,meat,573
+SHN,2017,cows,meat,555
+SHN,2010,chickens,meat,5279
+SHN,2017,chickens,meat,5553
+SHN,2010,chickens,eggs,2721
+SHN,2017,chickens,eggs,2447
+SHN,2010,goats,meat and milk,1100
+SHN,2017,goats,meat and milk,1101
+SHN,2010,sheep,meat and milk,800
+SHN,2017,sheep,meat and milk,800
+SHN,2010,pigs,meat,622
+SHN,2017,pigs,meat,623
+KNA,2010,cows,milk,1880
+KNA,2017,cows,milk,527
+KNA,2010,cows,meat,5120
+KNA,2017,cows,meat,1473
+KNA,2010,chickens,meat,32000
+KNA,2017,chickens,meat,49000
+KNA,2010,chickens,eggs,48000
+KNA,2017,chickens,eggs,42000
+KNA,2010,goats,meat and milk,9000
+KNA,2017,goats,meat and milk,3850
+KNA,2010,sheep,meat and milk,7000
+KNA,2017,sheep,meat and milk,6049
+KNA,2010,pigs,meat,6000
+KNA,2017,pigs,meat,7100
+LCA,2010,cows,milk,747
+LCA,2017,cows,milk,745
+LCA,2010,cows,meat,10253
+LCA,2017,cows,meat,10120
+LCA,2010,chickens,meat,358500
+LCA,2017,chickens,meat,370000
+LCA,2010,chickens,eggs,91500
+LCA,2017,chickens,eggs,92000
+LCA,2010,goats,meat and milk,9500
+LCA,2017,goats,meat and milk,13873
+LCA,2010,sheep,meat and milk,10000
+LCA,2017,sheep,meat and milk,9199
+LCA,2010,pigs,meat,20000
+LCA,2017,pigs,meat,41786
+SPM,2010,cows,milk,9
+SPM,2017,cows,milk,11
+SPM,2010,cows,meat,26
+SPM,2017,cows,meat,27
+SPM,2010,chickens,meat,35430
+SPM,2017,chickens,meat,39400
+SPM,2010,chickens,eggs,4570
+SPM,2017,chickens,eggs,4600
+SPM,2010,sheep,meat and milk,250
+SPM,2017,sheep,meat and milk,217
+VCT,2010,cows,milk,927
+VCT,2017,cows,milk,768
+VCT,2010,cows,meat,4273
+VCT,2017,cows,meat,3177
+VCT,2010,chickens,meat,190000
+VCT,2017,chickens,meat,195000
+VCT,2010,chickens,eggs,70000
+VCT,2017,chickens,eggs,55000
+VCT,2010,goats,meat and milk,8200
+VCT,2017,goats,meat and milk,9770
+VCT,2010,sheep,meat and milk,12000
+VCT,2017,sheep,meat and milk,8738
+VCT,2010,pigs,meat,8000
+VCT,2017,pigs,meat,6118
+WSM,2010,cows,milk,1500
+WSM,2017,cows,milk,1949
+WSM,2010,cows,meat,38218
+WSM,2017,cows,meat,50422
+WSM,2010,chickens,meat,387000
+WSM,2017,chickens,meat,418000
+WSM,2010,chickens,eggs,73000
+WSM,2017,chickens,eggs,84000
+WSM,2010,pigs,meat,171238
+WSM,2017,pigs,meat,168334
+STP,2010,cows,milk,360
+STP,2017,cows,milk,389
+STP,2010,cows,meat,940
+STP,2017,cows,meat,986
+STP,2010,chickens,meat,108000
+STP,2017,chickens,meat,199000
+STP,2010,chickens,eggs,122000
+STP,2017,chickens,eggs,85000
+STP,2010,goats,meat and milk,5500
+STP,2017,goats,meat and milk,5920
+STP,2010,sheep,meat and milk,3200
+STP,2017,sheep,meat and milk,3402
+STP,2010,pigs,meat,25000
+STP,2017,pigs,meat,40104
+SAU,2010,cows,milk,160493
+SAU,2017,cows,milk,259000
+SAU,2010,cows,meat,232831
+SAU,2017,cows,meat,105958
+SAU,2010,chickens,meat,128200000
+SAU,2017,chickens,meat,164057000
+SAU,2010,chickens,eggs,20000000
+SAU,2017,chickens,eggs,27000000
+SAU,2010,goats,meat and milk,3408000
+SAU,2017,goats,meat and milk,3670440
+SAU,2010,sheep,meat and milk,8741000
+SAU,2017,sheep,meat and milk,9328455
+SEN,2010,cows,milk,718590
+SEN,2017,cows,milk,646821
+SEN,2010,cows,meat,2594465
+SEN,2017,cows,meat,2931468
+SEN,2010,chickens,meat,32949000
+SEN,2017,chickens,meat,43383000
+SEN,2010,chickens,eggs,7500000
+SEN,2017,chickens,eggs,8000000
+SEN,2010,goats,meat and milk,4754845
+SEN,2017,goats,meat and milk,5714341
+SEN,2010,sheep,meat and milk,5571335
+SEN,2017,sheep,meat and milk,6014085
+SEN,2010,pigs,meat,354474
+SEN,2017,pigs,meat,416591
+SRB,2010,cows,milk,523106
+SRB,2017,cows,milk,429595
+SRB,2010,cows,meat,414932
+SRB,2017,cows,meat,469055
+SRB,2010,chickens,meat,23323000
+SRB,2017,chickens,meat,7486000
+SRB,2010,chickens,eggs,9412000
+SRB,2017,chickens,eggs,8852000
+SRB,2010,goats,meat and milk,128733
+SRB,2017,goats,meat and milk,182558
+SRB,2010,sheep,meat and milk,1475395
+SRB,2017,sheep,meat and milk,1704192
+SRB,2010,pigs,meat,3488738
+SRB,2017,pigs,meat,2910526
+SYC,2010,cows,milk,250
+SYC,2017,cows,milk,130
+SYC,2010,cows,meat,90
+SYC,2017,cows,meat,160
+SYC,2010,chickens,meat,198000
+SYC,2017,chickens,meat,135000
+SYC,2010,chickens,eggs,112000
+SYC,2017,chickens,eggs,100000
+SYC,2010,goats,meat and milk,5300
+SYC,2017,goats,meat and milk,5627
+SYC,2010,pigs,meat,4470
+SYC,2017,pigs,meat,4576
+SLE,2010,cows,milk,107000
+SLE,2017,cows,milk,123810
+SLE,2010,cows,meat,410000
+SLE,2017,cows,meat,576190
+SLE,2010,chickens,meat,4760000
+SLE,2017,chickens,meat,7200000
+SLE,2010,chickens,eggs,4700000
+SLE,2017,chickens,eggs,5300000
+SLE,2010,goats,meat and milk,803000
+SLE,2017,goats,meat and milk,900000
+SLE,2010,sheep,meat and milk,682000
+SLE,2017,sheep,meat and milk,870000
+SLE,2010,pigs,meat,47364
+SLE,2017,pigs,meat,49662
+SGP,2010,cows,milk,15
+SGP,2017,cows,milk,14
+SGP,2010,cows,meat,185
+SGP,2017,cows,meat,166
+SGP,2010,chickens,meat,694730
+SGP,2017,chickens,meat,869000
+SGP,2010,chickens,eggs,2605270
+SGP,2017,chickens,eggs,2800000
+SGP,2010,goats,meat and milk,670
+SGP,2017,goats,meat and milk,733
+SVK,2010,cows,milk,162504
+SVK,2017,cows,milk,132610
+SVK,2010,cows,meat,309461
+SVK,2017,cows,meat,313502
+SVK,2010,chickens,meat,6997000
+SVK,2017,chickens,meat,5688000
+SVK,2010,chickens,eggs,6252000
+SVK,2017,chickens,eggs,6118000
+SVK,2010,goats,meat and milk,35686
+SVK,2017,goats,meat and milk,36355
+SVK,2010,sheep,meat and milk,376978
+SVK,2017,sheep,meat and milk,368896
+SVK,2010,pigs,meat,740862
+SVK,2017,pigs,meat,585843
+SVN,2010,cows,milk,113103
+SVN,2017,cows,milk,107841
+SVN,2010,cows,meat,359775
+SVN,2017,cows,meat,380757
+SVN,2010,chickens,meat,1441000
+SVN,2017,chickens,meat,1921000
+SVN,2010,chickens,eggs,1504000
+SVN,2017,chickens,eggs,1718000
+SVN,2010,goats,meat and milk,29896
+SVN,2017,goats,meat and milk,22405
+SVN,2010,sheep,meat and milk,138108
+SVN,2017,sheep,meat and milk,119845
+SVN,2010,pigs,meat,415230
+SVN,2017,pigs,meat,265744
+SLB,2010,cows,milk,2200
+SLB,2017,cows,milk,2272
+SLB,2010,cows,meat,12300
+SLB,2017,cows,meat,13079
+SLB,2010,chickens,meat,75000
+SLB,2017,chickens,meat,87000
+SLB,2010,chickens,eggs,165000
+SLB,2017,chickens,eggs,158000
+SLB,2010,pigs,meat,54000
+SLB,2017,pigs,meat,54416
+SOM,2010,cows,milk,1176449
+SOM,2017,cows,milk,1100000
+SOM,2010,cows,meat,3623551
+SOM,2017,cows,meat,3700000
+SOM,2010,chickens,meat,2625000
+SOM,2017,chickens,meat,2846000
+SOM,2010,chickens,eggs,775000
+SOM,2017,chickens,eggs,820000
+SOM,2010,goats,meat and milk,11500000
+SOM,2017,goats,meat and milk,11576726
+SOM,2010,sheep,meat and milk,12000000
+SOM,2017,sheep,meat and milk,11000000
+SOM,2010,pigs,meat,4000
+SOM,2017,pigs,meat,3780
+ZAF,2010,cows,milk,1000000
+ZAF,2017,cows,milk,1000000
+ZAF,2010,cows,meat,12731044
+ZAF,2017,cows,meat,11953388
+ZAF,2010,chickens,meat,154000000
+ZAF,2017,chickens,meat,139618000
+ZAF,2010,chickens,eggs,43000000
+ZAF,2017,chickens,eggs,38000000
+ZAF,2010,goats,meat and milk,6274846
+ZAF,2017,goats,meat and milk,5474800
+ZAF,2010,sheep,meat and milk,24501044
+ZAF,2017,sheep,meat and milk,22688930
+ZAF,2010,pigs,meat,1594494
+ZAF,2017,pigs,meat,1480839
+SSD,2017,cows,milk,7385000
+SSD,2017,cows,meat,4452500
+SSD,2017,chickens,meat,10757803
+SSD,2017,chickens,eggs,4242197
+SSD,2017,goats,meat and milk,13564561
+SSD,2017,sheep,meat and milk,16394234
+ESP,2010,cows,milk,828300
+ESP,2017,cows,milk,726131
+ESP,2010,cows,meat,5246800
+ESP,2017,cows,meat,5739616
+ESP,2010,chickens,meat,86891230
+ESP,2017,chickens,meat,88595910
+ESP,2010,chickens,eggs,51108770
+ESP,2017,chickens,eggs,48904090
+ESP,2010,goats,meat and milk,2903779
+ESP,2017,goats,meat and milk,3059731
+ESP,2010,sheep,meat and milk,18551600
+ESP,2017,sheep,meat and milk,15963106
+ESP,2010,pigs,meat,25704040
+ESP,2017,pigs,meat,29971357
+LKA,2010,buffaloes,meat and milk,422650
+LKA,2017,buffaloes,meat and milk,283550
+LKA,2010,cows,milk,248740
+LKA,2017,cows,milk,296250
+LKA,2010,cows,meat,920930
+LKA,2017,cows,meat,704630
+LKA,2010,chickens,meat,6584000
+LKA,2017,chickens,meat,11730000
+LKA,2010,chickens,eggs,7434000
+LKA,2017,chickens,eggs,9546000
+LKA,2010,goats,meat and milk,373465
+LKA,2017,goats,meat and milk,287190
+LKA,2010,sheep,meat and milk,7910
+LKA,2017,sheep,meat and milk,10389
+LKA,2010,pigs,meat,83790
+LKA,2017,pigs,meat,95120
+SDN,2017,cows,milk,8023000
+SDN,2017,cows,meat,22903000
+SDN,2017,chickens,meat,38867000
+SDN,2017,chickens,eggs,9717000
+SDN,2017,goats,meat and milk,31659000
+SDN,2017,sheep,meat and milk,40752000
+SDN,2010,cows,milk,14679000
+SDN,2010,cows,meat,27082000
+SDN,2010,chickens,meat,36416000
+SDN,2010,chickens,eggs,6900000
+SDN,2010,goats,meat and milk,43441000
+SDN,2010,sheep,meat and milk,52079000
+SUR,2010,buffaloes,meat and milk,721
+SUR,2017,buffaloes,meat and milk,844
+SUR,2010,cows,milk,2165
+SUR,2017,cows,milk,1600
+SUR,2010,cows,meat,55985
+SUR,2017,cows,meat,34395
+SUR,2010,chickens,meat,5510000
+SUR,2017,chickens,meat,4863000
+SUR,2010,chickens,eggs,640000
+SUR,2017,chickens,eggs,1160000
+SUR,2010,goats,meat and milk,5648
+SUR,2017,goats,meat and milk,3640
+SUR,2010,sheep,meat and milk,6900
+SUR,2017,sheep,meat and milk,5823
+SUR,2010,pigs,meat,32126
+SUR,2017,pigs,meat,34754
+SWE,2010,cows,milk,348095
+SWE,2017,cows,milk,326440
+SWE,2010,cows,meat,1188605
+SWE,2017,cows,meat,1122150
+SWE,2010,chickens,meat,1647000
+SWE,2017,chickens,meat,1815000
+SWE,2010,chickens,eggs,6061000
+SWE,2017,chickens,eggs,7260000
+SWE,2010,sheep,meat and milk,564922
+SWE,2017,sheep,meat and milk,606080
+SWE,2010,pigs,meat,1519900
+SWE,2017,pigs,meat,1382300
+CHE,2010,cows,milk,595474
+CHE,2017,cows,milk,562082
+CHE,2010,cows,meat,995759
+CHE,2017,cows,meat,982530
+CHE,2010,chickens,meat,6506000
+CHE,2017,chickens,meat,8235000
+CHE,2010,chickens,eggs,2438000
+CHE,2017,chickens,eggs,3174000
+CHE,2010,goats,meat and milk,86987
+CHE,2017,goats,meat and milk,78146
+CHE,2010,sheep,meat and milk,434083
+CHE,2017,sheep,meat and milk,342419
+CHE,2010,pigs,meat,1588998
+CHE,2017,pigs,meat,1444591
+SYR,2010,buffaloes,meat and milk,7000
+SYR,2017,buffaloes,meat and milk,8000
+SYR,2010,cows,milk,518369
+SYR,2017,cows,milk,555004
+SYR,2010,cows,meat,491631
+SYR,2017,cows,meat,534996
+SYR,2010,chickens,meat,8695000
+SYR,2017,chickens,meat,5600000
+SYR,2010,chickens,eggs,16706000
+SYR,2017,chickens,eggs,11000000
+SYR,2010,goats,meat and milk,2057000
+SYR,2017,goats,meat and milk,2286000
+SYR,2010,sheep,meat and milk,15511000
+SYR,2017,sheep,meat and milk,17764032
+SYR,2010,pigs,meat,16
+SYR,2017,pigs,meat,13
+TJK,2010,buffaloes,meat and milk,15000
+TJK,2017,buffaloes,meat and milk,15277
+TJK,2010,cows,milk,951534
+TJK,2017,cows,milk,1196283
+TJK,2010,cows,meat,878463
+TJK,2017,cows,meat,1121011
+TJK,2010,chickens,meat,1468000
+TJK,2017,chickens,meat,3067000
+TJK,2010,chickens,eggs,2470000
+TJK,2017,chickens,eggs,2150000
+TJK,2010,goats,meat and milk,1582811
+TJK,2017,goats,meat and milk,1945733
+TJK,2010,sheep,meat and milk,2617373
+TJK,2017,sheep,meat and milk,3635763
+TJK,2010,pigs,meat,418
+TJK,2017,pigs,meat,160
+THA,2010,buffaloes,meat and milk,1622646
+THA,2017,buffaloes,meat and milk,1253518
+THA,2010,cows,milk,167994
+THA,2017,cows,milk,137879
+THA,2010,cows,meat,6330002
+THA,2017,cows,meat,4542121
+THA,2010,chickens,meat,151408320
+THA,2017,chickens,meat,184081000
+THA,2010,chickens,eggs,80509680
+THA,2017,chickens,eggs,93000000
+THA,2010,goats,meat and milk,380277
+THA,2017,goats,meat and milk,467502
+THA,2010,sheep,meat and milk,43139
+THA,2017,sheep,meat and milk,40984
+THA,2010,pigs,meat,7623730
+THA,2017,pigs,meat,7882009
+TLS,2010,buffaloes,meat and milk,96484
+TLS,2017,buffaloes,meat and milk,125316
+TLS,2010,cows,milk,11943
+TLS,2017,cows,milk,15629
+TLS,2010,cows,meat,149711
+TLS,2017,cows,meat,189942
+TLS,2010,chickens,meat,562000
+TLS,2017,chickens,meat,805000
+TLS,2010,chickens,eggs,140000
+TLS,2017,chickens,eggs,145000
+TLS,2010,goats,meat and milk,152360
+TLS,2017,goats,meat and milk,118874
+TLS,2010,sheep,meat and milk,41854
+TLS,2017,sheep,meat and milk,47301
+TLS,2010,pigs,meat,330436
+TLS,2017,pigs,meat,389348
+TGO,2010,cows,milk,56680
+TGO,2017,cows,milk,66438
+TGO,2010,cows,meat,252731
+TGO,2017,cows,meat,382827
+TGO,2010,chickens,meat,19800000
+TGO,2017,chickens,meat,24300000
+TGO,2010,chickens,eggs,1850000
+TGO,2017,chickens,eggs,2500000
+TGO,2010,goats,meat and milk,1915516
+TGO,2017,goats,meat and milk,3436520
+TGO,2010,sheep,meat and milk,2108400
+TGO,2017,sheep,meat and milk,1813667
+TGO,2010,pigs,meat,564900
+TGO,2017,pigs,meat,509997
+TKL,2010,chickens,meat,3000
+TKL,2017,chickens,meat,3000
+TKL,2010,chickens,eggs,2000
+TKL,2017,chickens,eggs,2000
+TKL,2010,pigs,meat,1000
+TKL,2017,pigs,meat,1000
+TON,2010,cows,milk,250
+TON,2017,cows,milk,206
+TON,2010,cows,meat,11050
+TON,2017,cows,meat,11695
+TON,2010,chickens,meat,252410
+TON,2017,chickens,meat,263000
+TON,2010,chickens,eggs,77590
+TON,2017,chickens,eggs,80000
+TON,2010,goats,meat and milk,12600
+TON,2017,goats,meat and milk,13443
+TON,2010,pigs,meat,81200
+TON,2017,pigs,meat,82040
+TTO,2010,buffaloes,meat and milk,5900
+TTO,2017,buffaloes,meat and milk,6111
+TTO,2010,cows,milk,9600
+TTO,2017,cows,milk,7300
+TTO,2010,cows,meat,22900
+TTO,2017,cows,meat,28533
+TTO,2010,chickens,meat,32063070
+TTO,2017,chickens,meat,36366000
+TTO,2010,chickens,eggs,936930
+TTO,2017,chickens,eggs,950000
+TTO,2010,goats,meat and milk,7100
+TTO,2017,goats,meat and milk,7263
+TTO,2010,sheep,meat and milk,17333
+TTO,2017,sheep,meat and milk,13572
+TTO,2010,pigs,meat,34799
+TTO,2017,pigs,meat,27579
+TUN,2010,cows,milk,610000
+TUN,2017,cows,milk,431145
+TUN,2010,cows,meat,60900
+TUN,2017,cows,meat,182729
+TUN,2010,chickens,meat,59500000
+TUN,2017,chickens,meat,67425000
+TUN,2010,chickens,eggs,20500000
+TUN,2017,chickens,eggs,23800000
+TUN,2010,goats,meat and milk,1295940
+TUN,2017,goats,meat and milk,1202946
+TUN,2010,sheep,meat and milk,7234070
+TUN,2017,sheep,meat and milk,6502557
+TUN,2010,pigs,meat,5800
+TUN,2017,pigs,meat,5460
+TUR,2010,buffaloes,meat and milk,87207
+TUR,2017,buffaloes,meat and milk,142073
+TUR,2010,cows,milk,4361840
+TUR,2017,cows,milk,5969046
+TUR,2010,cows,meat,6362118
+TUR,2017,cows,meat,8111109
+TUR,2010,chickens,meat,163984000
+TUR,2017,chickens,meat,221244980
+TUR,2010,chickens,eggs,70934000
+TUR,2017,chickens,eggs,121556020
+TUR,2010,goats,meat and milk,5128285
+TUR,2017,goats,meat and milk,10345299
+TUR,2010,sheep,meat and milk,21794508
+TUR,2017,sheep,meat and milk,30983933
+TUR,2010,pigs,meat,1896
+TUR,2017,pigs,meat,1299
+TKM,2010,cows,milk,1012000
+TKM,2017,cows,milk,1024000
+TKM,2010,cows,meat,1162600
+TKM,2017,cows,meat,1179000
+TKM,2010,chickens,meat,12426910
+TKM,2017,chickens,meat,13432000
+TKM,2010,chickens,eggs,3461090
+TKM,2017,chickens,eggs,3300000
+TKM,2010,goats,meat and milk,2800000
+TKM,2017,goats,meat and milk,2368138
+TKM,2010,sheep,meat and milk,13600000
+TKM,2017,sheep,meat and milk,14060498
+TKM,2010,pigs,meat,13900
+TKM,2017,pigs,meat,9500
+TUV,2010,chickens,meat,38450
+TUV,2017,chickens,meat,43000
+TUV,2010,chickens,eggs,10550
+TUV,2017,chickens,eggs,11000
+TUV,2010,pigs,meat,13847
+TUV,2017,pigs,meat,14366
+UGA,2010,cows,milk,3400000
+UGA,2017,cows,milk,4008162
+UGA,2010,cows,meat,8703532
+UGA,2017,cows,meat,11297085
+UGA,2010,chickens,meat,25980000
+UGA,2017,chickens,meat,28419000
+UGA,2010,chickens,eggs,8700000
+UGA,2017,chickens,eggs,8000000
+UGA,2010,goats,meat and milk,13207840
+UGA,2017,goats,meat and milk,15789546
+UGA,2010,sheep,meat and milk,1847000
+UGA,2017,sheep,meat and milk,2063727
+UGA,2010,pigs,meat,2297000
+UGA,2017,pigs,meat,2675436
+UKR,2010,cows,milk,2688600
+UKR,2017,cows,milk,2089500
+UKR,2010,cows,meat,2138100
+UKR,2017,cows,meat,1592800
+UKR,2010,chickens,meat,83160000
+UKR,2017,chickens,meat,93136000
+UKR,2010,chickens,eggs,89440000
+UKR,2017,chickens,eggs,91200000
+UKR,2010,goats,meat and milk,635500
+UKR,2017,goats,meat and milk,595900
+UKR,2010,sheep,meat and milk,1197000
+UKR,2017,sheep,meat and milk,718900
+UKR,2010,pigs,meat,7576600
+UKR,2017,pigs,meat,6669100
+ARE,2010,cows,milk,35072
+ARE,2017,cows,milk,42000
+ARE,2010,cows,meat,65788
+ARE,2017,cows,meat,64177
+ARE,2010,chickens,meat,17500000
+ARE,2017,chickens,meat,18762000
+ARE,2010,chickens,eggs,2500000
+ARE,2017,chickens,eggs,4800000
+ARE,2010,goats,meat and milk,1883630
+ARE,2017,goats,meat and milk,2329732
+ARE,2010,sheep,meat and milk,1350665
+ARE,2017,sheep,meat and milk,2128755
+GBR,2010,cows,milk,1850000
+GBR,2017,cows,milk,1897000
+GBR,2010,cows,meat,8262000
+GBR,2017,cows,meat,8107000
+GBR,2010,chickens,meat,104893000
+GBR,2017,chickens,meat,117000000
+GBR,2010,chickens,eggs,47107000
+GBR,2017,chickens,eggs,54000000
+GBR,2010,goats,meat and milk,93000
+GBR,2017,goats,meat and milk,104000
+GBR,2010,sheep,meat and milk,31084000
+GBR,2017,sheep,meat and milk,34832000
+GBR,2010,pigs,meat,4460000
+GBR,2017,pigs,meat,4969000
+TZA,2010,cows,milk,6900000
+TZA,2017,cows,milk,6774973
+TZA,2010,cows,meat,12345648
+TZA,2017,cows,meat,19916242
+TZA,2010,chickens,meat,21000000
+TZA,2017,chickens,meat,21492000
+TZA,2010,chickens,eggs,12500000
+TZA,2017,chickens,eggs,16000000
+TZA,2010,goats,meat and milk,13600000
+TZA,2017,goats,meat and milk,17938696
+TZA,2010,sheep,meat and milk,3592700
+TZA,2017,sheep,meat and milk,7206428
+TZA,2010,pigs,meat,495000
+TZA,2017,pigs,meat,518881
+USA,2010,cows,milk,9123000
+USA,2017,cows,milk,9368500
+USA,2010,cows,meat,84958200
+USA,2017,cows,meat,84256100
+USA,2010,chickens,meat,1614495000
+USA,2017,chickens,meat,1594286000
+USA,2010,chickens,eggs,341505000
+USA,2017,chickens,eggs,378787000
+USA,2010,goats,meat and milk,3038000
+USA,2017,goats,meat and milk,2627000
+USA,2010,sheep,meat and milk,5620000
+USA,2017,sheep,meat and milk,5270000
+USA,2010,pigs,meat,64925000
+USA,2017,pigs,meat,73144900
+VIR,2010,cows,milk,815
+VIR,2017,cows,milk,820
+VIR,2010,cows,meat,7285
+VIR,2017,cows,meat,7303
+VIR,2010,chickens,meat,0
+VIR,2017,chickens,meat,0
+VIR,2010,chickens,eggs,40000
+VIR,2017,chickens,eggs,43000
+VIR,2010,goats,meat and milk,4100
+VIR,2017,goats,meat and milk,4128
+VIR,2010,sheep,meat and milk,3250
+VIR,2017,sheep,meat and milk,3261
+VIR,2010,pigs,meat,2650
+VIR,2017,pigs,meat,2664
+URY,2010,cows,milk,764000
+URY,2017,cows,milk,767000
+URY,2010,cows,meat,11036000
+URY,2017,cows,meat,10972000
+URY,2010,chickens,meat,10500000
+URY,2017,chickens,meat,30017410
+URY,2010,chickens,eggs,6000000
+URY,2017,chickens,eggs,2770590
+URY,2010,goats,meat and milk,16700
+URY,2017,goats,meat and milk,17818
+URY,2010,sheep,meat and milk,7710000
+URY,2017,sheep,meat and milk,6565000
+URY,2010,pigs,meat,210000
+URY,2017,pigs,meat,175000
+UZB,2010,cows,milk,3535600
+UZB,2017,cows,milk,4957938
+UZB,2010,cows,meat,4975200
+UZB,2017,cows,meat,7513062
+UZB,2010,chickens,meat,11600000
+UZB,2017,chickens,meat,33390000
+UZB,2010,chickens,eggs,21000000
+UZB,2017,chickens,eggs,29610000
+UZB,2010,goats,meat and milk,2350700
+UZB,2017,goats,meat and milk,3830000
+UZB,2010,sheep,meat and milk,12081900
+UZB,2017,sheep,meat and milk,16811000
+UZB,2010,pigs,meat,96500
+UZB,2017,pigs,meat,75256
+VUT,2010,cows,milk,15222
+VUT,2017,cows,milk,15963
+VUT,2010,cows,meat,149778
+VUT,2017,cows,meat,159830
+VUT,2010,chickens,meat,450000
+VUT,2017,chickens,meat,713000
+VUT,2010,chickens,eggs,150000
+VUT,2017,chickens,eggs,146000
+VUT,2010,goats,meat and milk,22000
+VUT,2017,goats,meat and milk,29330
+VUT,2010,pigs,meat,90000
+VUT,2017,pigs,meat,99257
+VEN,2010,cows,milk,1931658
+VEN,2017,cows,milk,1817000
+VEN,2010,cows,meat,12202381
+VEN,2017,cows,meat,14651198
+VEN,2010,chickens,meat,102199000
+VEN,2017,chickens,meat,112118000
+VEN,2010,chickens,eggs,14801000
+VEN,2017,chickens,eggs,9500000
+VEN,2010,goats,meat and milk,1417718
+VEN,2017,goats,meat and milk,1418454
+VEN,2010,sheep,meat and milk,586950
+VEN,2017,sheep,meat and milk,603000
+VEN,2010,pigs,meat,3486492
+VEN,2017,pigs,meat,3442876
+VNM,2010,buffaloes,meat and milk,2877000
+VNM,2017,buffaloes,meat and milk,2491662
+VNM,2010,cows,milk,118000
+VNM,2017,cows,milk,301649
+VNM,2010,cows,meat,5690300
+VNM,2017,cows,meat,5353252
+VNM,2010,chickens,meat,169201000
+VNM,2017,chickens,meat,228673620
+VNM,2010,chickens,eggs,49000000
+VNM,2017,chickens,eggs,66535380
+VNM,2010,goats,meat and milk,1288351
+VNM,2017,goats,meat and milk,2556268
+VNM,2010,pigs,meat,27373300
+VNM,2017,pigs,meat,27406739
+WLF,2010,cows,milk,21
+WLF,2017,cows,milk,21
+WLF,2010,cows,meat,39
+WLF,2017,cows,meat,39
+WLF,2010,chickens,meat,54000
+WLF,2017,chickens,meat,55000
+WLF,2010,chickens,eggs,10000
+WLF,2017,chickens,eggs,10000
+WLF,2010,goats,meat and milk,7000
+WLF,2017,goats,meat and milk,7000
+WLF,2010,pigs,meat,25084
+WLF,2017,pigs,meat,25100
+ESH,2010,goats,meat and milk,175000
+ESH,2017,goats,meat and milk,179757
+ESH,2010,sheep,meat and milk,35000
+ESH,2017,sheep,meat and milk,36895
+YEM,2010,cows,milk,400000
+YEM,2017,cows,milk,396489
+YEM,2010,cows,meat,1205000
+YEM,2017,cows,meat,1296886
+YEM,2010,chickens,meat,51200000
+YEM,2017,chickens,meat,54300000
+YEM,2010,chickens,eggs,8800000
+YEM,2017,chickens,eggs,10700000
+YEM,2010,goats,meat and milk,9016000
+YEM,2017,goats,meat and milk,8954187
+YEM,2010,sheep,meat and milk,9206000
+YEM,2017,sheep,meat and milk,9035515
+ZMB,2010,cows,milk,295000
+ZMB,2017,cows,milk,285000
+ZMB,2010,cows,meat,2805000
+ZMB,2017,cows,meat,3734371
+ZMB,2010,chickens,meat,24000000
+ZMB,2017,chickens,meat,29371000
+ZMB,2010,chickens,eggs,11000000
+ZMB,2017,chickens,eggs,11000000
+ZMB,2010,goats,meat and milk,2200000
+ZMB,2017,goats,meat and milk,2756836
+ZMB,2010,sheep,meat and milk,220000
+ZMB,2017,sheep,meat and milk,257359
+ZMB,2010,pigs,meat,715000
+ZMB,2017,pigs,meat,1147897
+ZWE,2010,cows,milk,1023672
+ZWE,2017,cows,milk,960692
+ZWE,2010,cows,meat,4749948
+ZWE,2017,cows,meat,4372651
+ZWE,2010,chickens,meat,17319000
+ZWE,2017,chickens,meat,16603000
+ZWE,2010,chickens,eggs,6200000
+ZWE,2017,chickens,eggs,4900000
+ZWE,2010,goats,meat and milk,4665875
+ZWE,2017,goats,meat and milk,4692803
+ZWE,2010,sheep,meat and milk,309305
+ZWE,2017,sheep,meat and milk,349828
+ZWE,2010,pigs,meat,391174
+ZWE,2017,pigs,meat,242020

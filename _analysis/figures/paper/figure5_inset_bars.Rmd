@@ -1,0 +1,312 @@
+---
+title: 'Figure 5: Ranking Foods'
+author: "Juliette"
+date: "11/17/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(hrbrthemes)
+library(RColorBrewer)
+library(colorspace)
+library(scales)
+library(colorspace)
+library(patchwork)
+source(here("_workflow/common.R"))
+
+'%!in%' <- function(x,y)!('%in%'(x,y))
+
+summary_df_raw <- read_csv(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw_df_summary/rgn_raw_summary.csv")) 
+
+rescaling_values <- read_csv(here("_analysis/rescale_values.csv"))
+
+food_groupings <- read_csv(here("_analysis/figures/paper/data/grouping_naming_structure.csv")) 
+
+# mapspam_names <- read_csv(here("crop/farm/data/MapSPAM_names.csv"))%>% 
+#   select(sub_tier = SPAM_short_name, SPAM_full_name) %>% unique()
+
+mapspam_names <- vroom::vroom(here("crop/farm/data/crop_codes_updated.csv")) %>%
+  select(sub_tier = SPAM_super, SPAM_full_name_raw = SPAM_full_name) %>%
+  mutate(SPAM_full_name = case_when(sub_tier == "xmil" ~ "millet",
+                                    sub_tier == "xpul" ~ "pulses",
+                                    sub_tier == "xcof" ~ "coffee",
+                                    sub_tier == "xfru" ~ "other fruits",
+                                    sub_tier == "xoil" ~ "other oil crops",
+                                    T ~ SPAM_full_name_raw))  %>% 
+  select(sub_tier, SPAM_full_name) %>% 
+  unique() 
+
+
+```
+
+Groupings that we will want (this is by tier 2)
+(1) livestock  and their feed
+(2) human consumption
+(3) mariculture and their feed
+(3) fisheries marine and fresh
+
+
+## need to change salmon to salmonoide and fish meat to river fish meat
+```{r}
+summary_df_int <- summary_df_raw %>% 
+  mutate(feed_item = case_when(category == "feedcrop"|category =="feedfodd"|category =="feedfofm" ~ "feed",
+                               T ~ " ")) %>% 
+  unite(product, c("product", "feed_item"), sep = " ") %>% 
+  mutate(product = str_trim(product, side = c("right"))) %>% 
+  select(organism, product, pressure, sum) %>% 
+  ## fresh water fisheries is listed as fish and there is still salmon instead of salmonids so we will change that here 
+  mutate(organism = ifelse(organism == "fish", "freshwater fish", 
+                           ifelse(organism == "salmon", "salmonids", organism))) %>% 
+  group_by(organism, product, pressure) %>% 
+  dplyr::summarise(sum = sum(sum)) %>% 
+  unite(tier_5, c("organism", "product"), sep = " ") %>% 
+  ungroup() 
+
+## need to split the back yard chickens eggs&meat
+fix_chickens_1 <- summary_df_int %>% 
+  filter(tier_5 == "chickens eggs&meat") 
+fix_chickens_1 <- rbind(fix_chickens_1, fix_chickens_1) %>% 
+  arrange(pressure) %>% 
+  mutate(tier_5 = rep(c("chickens meat", "chickens eggs"), times = 4, each = 1))
+
+fix_chickens_2 <- summary_df_int %>% 
+  filter(tier_5 == "chickens eggs&meat feed") 
+fix_chickens_2 <- rbind(fix_chickens_2, fix_chickens_2) %>% 
+  arrange(pressure) %>% 
+  mutate(tier_5 = rep(c("chickens meat", "chickens eggs"), times = 4, each = 1))
+
+## add back
+summary_df <- summary_df_int %>% 
+  filter(tier_5 != "chickens eggs&meat",
+         tier_5 != "chickens eggs&meat feed") %>% 
+  rbind(fix_chickens_1, fix_chickens_2) %>% 
+  group_by(tier_5, pressure) %>% 
+  dplyr::summarise(sum = sum(sum)) %>% 
+  left_join(rescaling_values, by = "pressure") %>% 
+  ungroup() %>% 
+  rowwise() %>% 
+  mutate(prop_of_global = sum/global_total,
+         prop_of_global = ifelse(tier_5 == "fofm meat", prop_of_global*0.1, prop_of_global)) %>% 
+  left_join(food_groupings, by = "tier_5")
+
+## quick check
+sum(summary_df$prop_of_global) #  3.97 looks good!
+```
+
+Colors **might want to darken the colors a bit 
+```{r}
+dis <- "#D5BD75"
+ghg <- "#DA6098"
+nut <- colorspace::lighten("#795B48", 0.4)
+wat <- "#77C1D7"
+
+dis_f <- "#93875F"
+ghg_f <- "#965372"
+nut_f <- "#5A4D44"
+wat_f <- "#5B7A84"
+
+pal <- c(dis, dis_f, ghg, ghg_f, nut, nut_f, wat, wat_f)
+scales::show_col(pal, n=2)
+
+# dis_f <- colorspace::lighten(dis, amount = 0.7)
+# scales::show_col(dis)
+# scales::show_col(dis_f)
+# 
+# ghg_f <- colorspace::lighten(ghg, amount = 0.7)
+# scales::show_col(ghg)
+# scales::show_col(ghg_f)
+# 
+# nut_f <- colorspace::lighten(nut, amount = 0.7)
+# scales::show_col(nut)
+# scales::show_col(nut_f)
+# 
+# wat_f <- colorspace::lighten(wat, amount = 0.7)
+# scales::show_col(wat)
+# scales::show_col(wat_f)
+
+```
+
+
+Create DF that'll work for the plots
+```{r}
+bar_df_int <- summary_df %>% 
+  select(tier_2, tier_5, pressure, prop_of_global) %>% 
+  mutate(sub_tier = str_remove(tier_5, " feed"),
+         pressure_bar = ifelse(str_detect(tier_5, "feed"), paste(pressure, "_feed", sep = ""), pressure)) %>%
+  group_by(tier_2, sub_tier) %>% 
+  mutate(food_cat_sum = sum(prop_of_global)) %>% 
+  ungroup()  %>% 
+  mutate(fill_value = case_when(pressure_bar == "disturbance" ~ dis,
+                                pressure_bar == "ghg" ~ ghg,
+                                pressure_bar == "nutrient" ~ nut,
+                                pressure_bar == "water" ~ wat,
+                                pressure_bar == "disturbance_feed" ~ dis_f,
+                                pressure_bar == "ghg_feed" ~ ghg_f,
+                                pressure_bar == "nutrient_feed" ~ nut_f,
+                                pressure_bar == "water_feed" ~ wat_f)) %>% 
+  mutate(facet_tier = ifelse(str_detect(tier_2, "fisheries"), "fisheries", tier_2),
+         facet_tier = case_when(facet_tier == "livestock" ~ "Livestock",
+                                facet_tier == "crop human consumption" ~ "Crops for human consumption",
+                                facet_tier == "fisheries" ~ "Marine and freshwater fisheries",
+                                facet_tier == "mariculture" ~ "Mariculture")) %>% 
+  mutate(prop_of_global = prop_of_global/4)
+
+## make naming changes to make it look better
+bar_df <- bar_df_int %>% 
+  mutate(sub_tier = ifelse(facet_tier ==  "Crops for human consumption", str_remove(tier_5, " produce"), sub_tier)) %>% 
+  left_join(mapspam_names, by = "sub_tier") %>% 
+  mutate(SPAM_full_name = ifelse(sub_tier == "xfru", "other fruits",
+                                 ifelse(sub_tier == "xmil", "millet",
+                                        ifelse(sub_tier == "xoil", "other oil crops",
+                                               ifelse(sub_tier == "xpul", "pulses", 
+                                                      ifelse(sub_tier == "tnut", "tree nuts", 
+                                                             ifelse(sub_tier == "spis", "spices", SPAM_full_name))))))) %>% 
+  mutate(sub_tier = ifelse(tier_2 == "crop human consumption", SPAM_full_name, sub_tier)) %>% 
+  select(-SPAM_full_name) %>% 
+  mutate(sub_tier = ifelse(tier_2 == "marine fisheries", str_remove(sub_tier, "meat"), sub_tier),
+         sub_tier = ifelse(tier_2 == "freshwater fisheries", "freshwater fish", sub_tier),
+         sub_tier = ifelse(sub_tier == "fofm fish", "FOFM", sub_tier),
+         sub_tier = ifelse(tier_2 == "mariculture", str_remove(sub_tier, "meat"), sub_tier)) %>%
+  mutate(tier_5 = str_replace(tier_5, "bivalve", "bivalves"),
+         sub_tier = str_replace(sub_tier, "bivalve", "bivalves"),
+         sub_tier = str_replace(sub_tier, "fofm", "forage"),
+         tier_5 = str_replace(tier_5, "fofm", "forage fish")) %>%
+    mutate(tier_5 = str_replace(tier_5, "cows meat", "cattle meat"),
+         sub_tier = str_replace(sub_tier, "cows meat", "cattle meat"))
+
+  
+  # mutate(sub_tier = ifelse(tier_2 == "marine fisheries", str_replace(sub_tier, "meat", "fish"), sub_tier),
+  #        sub_tier = ifelse(tier_2 == "freshwater fisheries", "river fish*", sub_tier),
+  #        sub_tier = ifelse(sub_tier == "fofm fish", "FOFM", sub_tier),
+  #        sub_tier = ifelse(tier_2 == "mariculture", str_replace(sub_tier, "meat", ""), sub_tier)) %>% 
+  # mutate(tier_5 = str_replace(tier_5, "bivalve", "bivalves"),
+  #        sub_tier = str_replace(sub_tier, "bivalve", "bivalves**"),
+  #        sub_tier = ifelse(sub_tier == "FOFM", "forage fish", sub_tier),
+  #        tier_5 = str_replace(tier_5, "fofm", "forage fish"))
+
+plot_order <- bar_df %>% 
+  select(sub_tier, food_cat_sum) %>% 
+  unique() %>% 
+  arrange(food_cat_sum) %>% 
+  pull(sub_tier) 
+
+bar_df$sub_tier <- factor(bar_df$sub_tier, levels = plot_order)
+bar_df$facet_tier <- factor(bar_df$facet_tier, levels = c("Livestock", "Crops for human consumption", "Marine and freshwater fisheries", "Mariculture"))
+bar_df$fill_value <- factor(bar_df$fill_value, levels = c(dis, dis_f, ghg, ghg_f, nut, nut_f, wat, wat_f))
+
+
+```
+
+Make the plot using facet wrap
+```{r}
+faceted_plot <- 
+ggplot(bar_df, aes(y=sub_tier, x = prop_of_global, fill = fill_value)) + 
+  geom_vline(data = filter(bar_df, facet_tier %!in% c("Marine and freshwater fisheries", "Mariculture")), aes(xintercept = 0.05), color = "grey33", linetype = "longdash") +
+  geom_vline(data = filter(bar_df, facet_tier !=  "Mariculture"), aes(xintercept = 0.025), color = "grey33", linetype = "twodash")+
+  geom_vline(xintercept = 0.002, color = "grey33", linetype = "dotted") +
+  geom_bar(stat="identity", width = 0.5) +
+  theme_minimal() +
+   scale_fill_identity() +
+  facet_wrap(vars(facet_tier),  scales = "free", nrow=4) +
+  labs(#caption = "*only freshwater fish in plot",
+       y = "",
+       x = "Proportion of global pressures") +
+   theme(plot.caption=element_text(hjust = 0))
+
+#ggsave(here("_analysis/figures/paper/output/figure_5_inset_bars.png"), height=13, width=9, units=c("in"))
+
+```
+
+make the plots individually so can manage the size of the bars
+```{r}
+library(patchwork)
+
+livestock <- ggplot(filter(bar_df, facet_tier == "Livestock"), aes(y=sub_tier, x = prop_of_global, fill = fill_value)) + 
+#  geom_vline(data = filter(bar_df, facet_tier %!in% c("Marine and Freshwater Fisheries", "Mariculture")), aes(xintercept = 0.05), color = "grey33", linetype = "F1") +
+#  geom_vline(data = filter(bar_df, facet_tier !=  "Mariculture"), aes(xintercept = 0.025), color = "grey33", linetype = "twodash")+
+#  geom_vline(xintercept = 0.002, color = "grey33", linetype = "dotted", size = 1) +
+  geom_bar(stat="identity", width = 0.5) +
+  theme_minimal() +
+  scale_fill_identity() +
+  labs(x = "",
+       y = "Livestock") +
+  theme(axis.title.y = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.text.x = element_text(size = 14),
+        axis.title.x = element_text(size = 14))
+
+crops_human <- ggplot(filter(bar_df, facet_tier == "Crops for human consumption"), aes(y=sub_tier, x = prop_of_global, fill = fill_value)) + 
+#  geom_vline(data = filter(bar_df, facet_tier %!in% c("Marine and Freshwater Fisheries", "Mariculture")), aes(xintercept = 0.05), color = "grey33", linetype = "F1") +
+#  geom_vline(data = filter(bar_df, facet_tier !=  "Mariculture"), aes(xintercept = 0.025), color = "grey33", linetype = "twodash")+
+#  geom_vline(xintercept = 0.002, color = "grey33", linetype = "dotted", size = 1) +
+  geom_bar(stat="identity", width = 0.5) +
+  theme_minimal() +
+   scale_fill_identity() +
+  labs(y = "Crops",
+       x = "") +
+  theme(axis.title.y = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.text.x = element_text(size = 14),
+        axis.title.x = element_text(size = 14))
+
+fisheries <- ggplot(filter(bar_df, facet_tier == "Marine and freshwater fisheries"), aes(y=sub_tier, x = prop_of_global, fill = fill_value)) + 
+#  geom_vline(data = filter(bar_df, facet_tier !=  "Mariculture"), aes(xintercept = 0.025), color = "grey33", linetype = "twodash")+
+#  geom_vline(xintercept = 0.002, color = "grey33", linetype = "dotted", size = 1) +
+  geom_bar(stat="identity", width = 0.5) +
+  theme_minimal() +
+   scale_fill_identity() +
+  labs(y = "Marine and freshwater fisheries",
+       x = "") +
+  theme(axis.title.y = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.text.x = element_text(size = 14),
+        axis.title.x = element_text(size = 14))
+
+mariculture <- ggplot(filter(bar_df, facet_tier == "Mariculture"), aes(y=sub_tier, x = prop_of_global, fill = fill_value)) + 
+#  geom_vline(xintercept = 0.002, color = "grey33", linetype = "dotted", size = 1) +
+  geom_bar(stat="identity", width = 0.5) +
+  theme_minimal() +
+   scale_fill_identity() +
+  labs(y = "Mariculture",
+       x = "Proportion of global environmental pressures") +
+  theme(axis.title.y = element_text(size = 14),
+        axis.text.y = element_text(size = 14),
+        axis.text.x = element_text(size = 14),
+        axis.title.x = element_text(size = 14))  ## mariculture x axis tick is being cut off... can't figure out why
+
+## if we want bolded x axis: face = "bold"
+```
+
+Combine
+```{r}
+figure_4 <- livestock/ crops_human /fisheries / mariculture + 
+  plot_layout(heights = c(10,25,8,6))
+
+#ggsave(here("_analysis/figures/paper/output/figure_5_inset_bars.png"), height=13, width=9, units=c("in"))
+ggsave(here("_analysis/figures/paper/output/figure_5_inset_bars_no_lines.png"), height=13, width=9, units=c("in"))
+ggsave(here("_analysis/figures/paper/output/figure_5_inset_bars_no_lines.pdf"), height=13, width=9, units=c("in"))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

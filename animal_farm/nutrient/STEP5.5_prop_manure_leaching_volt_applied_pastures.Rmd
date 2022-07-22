@@ -1,0 +1,227 @@
+---
+title: "STEP5 Calculating leaching and volatization from manure applied to pastures"
+author: "Juliette"
+date: "4/1/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(countrycode)
+library(stringr)
+library(vroom)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>% 
+  dplyr::select(iso3c, Global_Name, Region_Name, Sub_region_Name, Intermediate_Region_Name)
+
+```
+
+
+
+Volatization
+```{r}
+
+bouw_2002_tb_5 <- vroom::vroom(here::here("crop/nutrient/data/bouwman_2002_tbl5.csv"))
+
+volatize <- left_join(food_rgns_xy, bouw_2002_tb_5) %>% 
+  select(x,y, iso3c, volt = prop_nh3_n_grassland)
+
+```
+Denitrification
+```{r}
+
+denitr <- food_rgns_tif
+denitr[denitr > 0] <- 9.125*0.008
+
+denitr <- raster_df(denitr) %>% 
+  right_join(food_rgns_xy) %>% 
+  rename(denitri = food_rgns)
+
+```
+
+## Leaching
+Calculate how much N is left to leach
+```{r}
+
+files <- list.files(file.path(prep, "animal_farm/nutrient/STEP4_N_prop_manure_applied/applied_to_pastures/"), full.names = TRUE)
+
+for(file in files){
+
+  ############  
+  ## Get the mapped head counts for each system.
+  ## (only really used in step 1, to check data)
+  
+     # file <- files[3]
+  
+    ## grab the names of all the parts from the file
+    animal_name <- str_split(str_split(file, pattern = "//")[[1]][3], pattern = "_")[[1]][1]
+    system_name <- str_split(str_split(file, pattern = "//")[[1]][3], pattern = "_")[[1]][2]
+    product_name <- str_split(str_split(file, pattern = "//")[[1]][3], pattern = "_")[[1]][3]
+    
+    N_applied_pasture <- read_csv(file, col_types= c("ddcn")) %>% 
+      left_join(volatize) %>% 
+      left_join(denitr) %>% 
+      mutate(withdraw = (1-volt)*0.6,
+             leaching = (1 - (withdraw+volt+denitri)),
+             leaching = ifelse(leaching <0, 0, leaching),
+             prop_leach = leaching*prop_N_applied_pastures)
+
+    prop_leached_gf <- left_join(N_applied_pasture, un, by = "iso3c") %>% 
+      group_by(Intermediate_Region_Name) %>% 
+      mutate(prop_leach = ifelse(is.na(prop_leach), mean(prop_leach, na.rm = TRUE), prop_leach)) %>% 
+      ungroup()%>% 
+      group_by(Sub_region_Name) %>% 
+      mutate(prop_leach = ifelse(is.na(prop_leach), mean(prop_leach, na.rm = TRUE), prop_leach)) %>% 
+      ungroup() %>% 
+      group_by(Region_Name) %>% 
+      mutate(prop_leach = ifelse(is.na(prop_leach), mean(prop_leach, na.rm = TRUE), prop_leach)) %>% 
+      ungroup() %>% 
+      group_by(Global_Name) %>% 
+      mutate(prop_leach = ifelse(is.na(prop_leach), mean(prop_leach, na.rm = TRUE), prop_leach)) %>% 
+      ungroup() %>% 
+      select(x,y, iso3c, N_prop_leach_applied_pastures = prop_leach)
+    
+    write_csv(prop_leached_gf,
+                file.path(paste0(prep, "animal_farm/nutrient/STEP5.5_N_leached_prop_applied_pastures/",
+                                 animal_name, "_",
+                                 system_name,"_",
+                                 product_name,
+                                 "_n_leached_prop_applied_pastures.csv")))
+
+    
+}
+
+```
+
+Check to see if anything weird happened
+```{r}
+df_list <- list.files(file.path(prep,"animal_farm/nutrient/STEP5.5_N_leached_prop_applied_pastures/"), full.names = TRUE)
+
+df_check <- data.frame(iso3c = NA, animal = NA, system = NA, product = NA, N_prop_leach_applied = NA)
+  
+for(df in df_list){
+  
+#  df <- df_list[23]
+    ## grab the names of all the parts from the file
+    animal_name <- str_split(str_split(df, pattern = "//")[[1]][3], pattern = "_")[[1]][1]
+    system_name <- str_split(str_split(df, pattern = "//")[[1]][3], pattern = "_")[[1]][2]
+    product_name <- str_split(str_split(df, pattern = "//")[[1]][3], pattern = "_")[[1]][3]
+     
+  ## values are the same throughout the country so a median or mean function won't make a difference
+    country_sum <- read_csv(df) %>% 
+      group_by(iso3c) %>%
+      mutate(animal = animal_name,
+             system = system_name,
+             product = product_name) %>% 
+       select(iso3c, N_prop_leach_applied = N_prop_leach_applied_pastures , animal, system, product)
+  
+    df_check <- rbind(df_check, country_sum) %>% 
+      filter(!is.na(iso3c)) 
+    
+}
+
+## look at it
+
+ggplot(df_check, aes(x = animal, y = N_prop_leach_applied, color = system) ) +
+  geom_point(position = "jitter") +
+  labs(title = "Proportion of all manure leached from on applied to pastures")
+
+
+```
+
+
+Let's look at just the USA cows-mixed-milk, cows-grassland-milk, chicken-industrial
+
+```{r}
+df_list <- list.files(file.path(prep, "animal_farm/nutrient/STEP5.5_N_leached_prop_applied_pastures/"), full.names = TRUE)
+df_list <- str_subset(pattern = "cows", df_list)
+df_file <- df_list[4]
+
+    ## grab the names of all the parts from the file
+    category_name <- str_split(df_file, pattern = "//")[[1]][3]
+  
+  ## values are the same throughout the country so a median or mean function won't make a difference
+    country_sum_mixed <- read_csv(df_file, col_types = "ddcn") %>% 
+      group_by(iso3c) %>% 
+      dplyr::summarise(prop_applied_leaching = mean(N_prop_leach_applied_pastures, na.rm = TRUE)) %>% 
+      mutate(category = category_name,
+             animal_system_product = word(category, 1,3, sep="_")) %>% 
+       select(iso3c,prop_applied_leaching, animal_system_product) %>% 
+      filter(iso3c == "USA")
+    
+    df_file <- df_list[2]
+
+    ## grab the names of all the parts from the file
+    category_name <- str_split(df_file, pattern = "//")[[1]][3]
+  
+  ## values are the same throughout the country so a median or mean function won't make a difference
+    country_sum_pasture <- read_csv(df_file, col_types = "ddcn") %>% 
+      group_by(iso3c) %>% 
+      dplyr::summarise(prop_applied_leaching = mean(N_prop_leach_applied_pastures, na.rm = TRUE)) %>% 
+      mutate(category = category_name,
+             animal_system_product = word(category, 1,3, sep="_")) %>% 
+       select(iso3c,prop_applied_leaching, animal_system_product) %>% 
+      filter(iso3c == "USA")
+    
+  country_sum <- rbind(country_sum_pasture, country_sum_mixed)  
+
+write_csv(country_sum, here::here("animal_farm/nutrient/data/check/usa_cows_leached_applied_pastures.csv"))
+
+```
+
+
+## prop volatized
+Calculate how much N is volatized
+```{r}
+files <- list.files(file.path(prep, "animal_farm/nutrient/STEP4_N_prop_manure_applied/applied_to_pastures/"), full.names = TRUE)
+
+for(file in files){
+
+  ############  
+  ## Get the mapped head counts for each system.
+  ## (only really used in step 1, to check data)
+  
+     # file <- files[6]
+  
+    ## grab the names of all the parts from the file
+    animal_name <- str_split(str_split(file, pattern = "//")[[1]][3], pattern = "_")[[1]][1]
+    system_name <- str_split(str_split(file, pattern = "//")[[1]][3], pattern = "_")[[1]][2]
+    product_name <- str_split(str_split(file, pattern = "//")[[1]][3], pattern = "_")[[1]][3]
+    
+    prop_volt_df <- read_csv(file, col_types= c("ddcn")) %>% 
+      left_join(volatize) %>% 
+      mutate(prop_volatized = volt*prop_N_applied_pastures)
+
+    prop_volt_gf <- left_join(prop_volt_df, un, by = "iso3c") %>% 
+      group_by(Intermediate_Region_Name) %>% 
+      mutate(prop_volatized = ifelse(is.na(prop_volatized), mean(prop_volatized, na.rm = TRUE), prop_volatized)) %>% 
+      ungroup()%>% 
+      group_by(Sub_region_Name) %>% 
+      mutate(prop_volatized = ifelse(is.na(prop_volatized), mean(prop_volatized, na.rm = TRUE), prop_volatized)) %>% 
+      ungroup() %>% 
+      group_by(Region_Name) %>% 
+      mutate(prop_volatized = ifelse(is.na(prop_volatized), mean(prop_volatized, na.rm = TRUE), prop_volatized)) %>% 
+      ungroup() %>% 
+      group_by(Global_Name) %>% 
+      mutate(prop_volatized = ifelse(is.na(prop_volatized), mean(prop_volatized, na.rm = TRUE), prop_volatized)) %>% 
+      ungroup() %>% 
+      mutate(prop_volatized = ifelse(is.na(prop_volatized), 0, prop_volatized)) %>% 
+      select(x,y, iso3c, N_prop_volt_applied_pastures = prop_volatized)
+    
+    write_csv(prop_volt_gf,
+                file.path(paste0(prep, "animal_farm/nutrient/STEP5.5_N_volatizing_prop_applied_pasture/",
+                                 animal_name, "_",
+                                 system_name,"_",
+                                 product_name,
+                                 "_n_volatized_prop_applied_pastures.csv")))
+
+    
+}
+
+```

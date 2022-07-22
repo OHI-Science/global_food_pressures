@@ -1,0 +1,417 @@
+---
+title: "Create Pressures Summary DF"
+author: "Gage"
+date: "05/10/2022"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+This script gets:
+ - total production for each group: crops include all production including human food, animal feed, other.
+ Feed crops are counted twice (crops) so these files should only be used to calculate efficiency.
+ - rescaled pressures for each group.
+    Rescaled crop pressures are calculated in _analysis/figures/paper/data_prep/crop_pressures_rescaled.Rmd because
+    the "other" portion is not included in the total pressures and has to be calculated a bit differently.
+
+
+```{r setup, include=FALSE}
+
+library(ggplot2)
+library(tidyverse)
+library(here)
+library(countrycode)
+library(cowplot)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+```
+
+Get production data for each group.
+
+### Livestock
+
+```{r}
+## Livestock animal products
+livestock_cats <- read_csv(here("_analysis/paper_stats/data/FAO_livestock_categories.csv")) %>%
+  filter(!is.na(category1_production))
+table(livestock_cats$category1_production)
+table(livestock_cats$category2_production)
+
+## read in tonnes of production
+livestock <- read_csv(here("_analysis/paper_stats/data/FAOSTAT_data_12-18-2020_livestock_primary.csv")) %>%
+  filter(Area != "China") %>%
+  filter(!(is.na(Value))) %>%
+  filter(Item %in% livestock_cats$Item) %>%
+  left_join(livestock_cats, by="Item") %>%
+  group_by(Area, category1_production, category2_production) %>%
+  summarize(tonnes = sum(Value)) %>%
+  ungroup()
+
+
+livestock_iso3c <- livestock %>%
+    mutate(Area = iconv(Area, "UTF-8", "UTF-8",sub=''),
+         Area = ifelse(Area == "Eswatini", "Swaziland", Area),
+         Area = ifelse(Area == "Netherlands Antilles (former)", "Bonaire, Sint Eustatius and Saba", Area),
+         Area = ifelse(Area == "French Guyana", "French Guiana", Area),
+         Area = ifelse(Area == "China, mainland", "China", Area))
+
+## add standardized country names
+livestock_iso3c$iso3c<- countrycode(as.character(livestock_iso3c$Area), origin="country.name", destination = "iso3c")
+
+## make sure all countries have an iso3c code
+check <- filter(livestock_iso3c, is.na(iso3c))
+unique(check$Area) # these are all higher level area, safe to delete NAs
+
+livestock_iso3c <- livestock_iso3c %>%
+  select(iso3c, category1_production, category2_production, tonnes)
+
+```
+
+### Marine fisheries
+
+```{r}
+
+## human component of fofm replaces the total (feed is counted below)
+human_fofm <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/catch_human_x_fofm.csv") %>% 
+  mutate(category1_production = "fofm_meat",
+         category2_production = "marine_fisheries") %>% 
+  select(iso3c, category1_production, category2_production, tonnes = catch)
+
+marine_fish <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/catch_extracted_final.csv") %>%
+  mutate(category1_production = recode(species_class_final, "Benthic" = "benthic_meat",
+             "Demersal" = "demersal_meat",
+             "forage_fish" = "fofm_meat",
+             "Large pelagic" = "large-pelagic_meat",
+             "Medium pelagic" = "medium-pelagic_meat",
+             "Reef-associated" = "reef_meat",
+             "Small pelagic" = "small-pelagic_meat")) %>%
+#  group_by(country_corrected, iso3c) %>%
+#  summarize(tonnes = sum(catch_tonnes, na.rm=TRUE)) %>%
+  mutate(category2_production = "marine_fisheries") %>%
+  select(iso3c, category1_production, category2_production, tonnes=catch) %>% 
+  filter(category1_production != "fofm_meat") %>% 
+  rbind(human_fofm)
+
+```
+
+### Crops (includes crops for human food, feed, and other)
+```{r}
+fao_prod <- read_csv(here("feed/data/MAPSPAMcrop_production.csv"))
+
+crop_tonnes <- fao_prod %>% 
+  mutate(tonnes = tonnes_producing_crop) %>%
+  mutate(category2_production = "human_crop") %>%
+  mutate(category1_production = paste(SPAM_super, "produce", sep = "_")) %>%
+  select(iso3c = iso3c_producing, category1_production, category2_production, tonnes) %>% 
+  filter(!category1_production %in% c("othr_produce", "teas_produce", "toba_produce", "xcof_produce"))
+
+
+```
+
+
+### Mariculture: 
+```{r}
+library(countrycode)
+
+mariculture <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/production_extracted_final.csv") %>%
+ # filter(!(aq_group %in% "bivalves")) %>%
+  mutate(aq_group = ifelse(aq_group=="marine_fish_general", "marine-fish-general", aq_group),
+         aq_group = ifelse(aq_group=="salmonids", "salmon", aq_group),
+         aq_group = ifelse(aq_group=="shrimps_prawns", "shrimp", aq_group)) %>%
+  select(Country, species = aq_group, tonnes=total_tonnes) %>% 
+  mutate(category1_production = paste(species, "_meat", sep = ""),
+         category2_production = "mariculture",
+         iso3c = countrycode(as.character(Country), origin="country.name", destination = "iso3c"),
+         iso3c = ifelse(Country == "High Seas", "HSX",
+                        ifelse(Country == "Kosovo", "XKO",
+                               ifelse(Country == "Madeira Island", "XMI",
+                                      ifelse(Country == "Micronesia", "FSM",
+                                             ifelse(Country == "Saint-Martin", "MAF", iso3c))))))  %>% 
+  select(iso3c, category1_production, category2_production, tonnes)
+
+```
+
+
+### Feed: Crops
+```{r}
+
+livestock_cats <- read_csv(here("_analysis/paper_stats/data/raster_livestock_cats.csv"))
+table(livestock_cats$category2_production, livestock_cats$category1_production)
+
+mapspam_feed <- read_csv(here("feed/data/tonnes_feedproduced_per_country_system.csv")) %>% 
+  left_join(livestock_cats, by="animal_system") %>%
+  filter(!(is.na(category2_production))) %>%
+    mutate(feed_source = "crops") %>%
+  group_by(iso3c_producing, feed_source, category1_production, category2_production) %>%
+  summarize(tonnes = sum(consumed_tonnes, na.rm=TRUE)) %>%
+  dplyr::select(iso3c=iso3c_producing, category1_production, category2_production, feed_source, tonnes) %>%
+  ungroup() 
+
+
+```
+
+### Feed: fodder
+
+```{r}
+
+# remove old files in folder that are created here
+do.call(file.remove, list(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/fodder_tonnes", full.names = TRUE)))
+
+fodder_prod <- sum(stack(raster(file.path(prep, "crop/farm/scaled_maps_2017/crop_fodd_I_scaled.tif")), raster(file.path(prep, "crop/farm/scaled_maps_2017/crop_fodd_H_scaled.tif"))), na.rm=TRUE)
+
+fodder_props <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers", pattern="_x_land_fodd", full=TRUE)
+
+for(fodder_prop in fodder_props){ #fodder_prop = fodder_props[1]
+  fodder_raster <- raster(fodder_prop)
+  saveName <- basename(fodder_prop)
+  saveName <- gsub("_x_land_fodd_crop_feed", "", saveName)
+  saveName <- gsub("_land_", "", saveName)
+  fodder_tonnes <- fodder_raster * fodder_prod
+  writeRaster(fodder_tonnes, sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/fodder_tonnes/%s", saveName), overwrite=TRUE)
+}
+
+
+lf <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/fodder_tonnes", full=TRUE) 
+# lf <- lf[!str_detect(lf, ".tif.aux.xml")] # for if it write .tif.aux.xml files 
+
+fodd_tonnes_stack <- stack(lf)
+
+rgns_eez_land <- raster(file.path(prep, "spatial/land_eez_rgns.tif"))
+# plot(rgns_eez_land)
+
+country_sum <- zonal(fodd_tonnes_stack, rgns_eez_land, fun="sum", progress="text", na.rm=TRUE) %>% 
+    data.frame() %>%
+    rename(ID_0 = zone) %>%
+    left_join(food_rgns, by="ID_0") %>%
+    select(-ID_0)
+
+country_fodder <- country_sum %>%
+   pivot_longer(cols=c(-Country, -iso3c), "animal_system") %>%
+   mutate(animal_system = gsub("^land_", "", animal_system)) %>%
+     mutate(animal_system = gsub("eggs.meat", "eggs&meat", animal_system)) %>%
+   left_join(livestock_cats, by="animal_system") %>%
+  mutate(feed_source = "fodder") %>%
+  select(iso3c, category1_production, category2_production, feed_source, tonnes=value)
+
+```
+
+Feed: FOFM
+
+```{r}
+fofm <- read_csv(here("feed/data/FMFO_bySource_2021Apr.csv")) %>%
+  mutate(feed_source = "feedfofm") %>%
+  rename(animal_system = system) %>%
+  left_join(livestock_cats, by="animal_system") %>%
+  filter(!is.na(category2_production)) %>%
+  select(iso3c, category1_production, category2_production, feed_source, tonnes) %>% 
+  group_by(iso3c, category1_production, category2_production, feed_source) %>% 
+  dplyr::summarise(tonnes = sum(tonnes))
+
+```
+
+# Calculate total tonnes of feed per country for each animal group:
+```{r}
+
+total_feed <- rbind(country_fodder, fofm, mapspam_feed) %>%
+  group_by(iso3c, category1_production, category2_production) %>%
+  summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+  mutate(category1_production = paste("feed_", category1_production, sep="")) %>%
+  mutate(category2_production = paste("feed_", category2_production, sep="")) %>%
+  filter(category1_production != "feed_NA")
+
+```
+
+
+Freshwater fish: 
+```{r}
+fresh_fish <- read_csv(here("fisheries/freshwater/data/fw_catch_per_iso3c.csv")) %>% 
+  select(-ID_0, - Country) %>% 
+  rename(tonnes = fw_catch_tonnes) %>% 
+  mutate(category1_production  = "fish_meat",
+         category2_production = "freshwater_fisheries")
+
+setdiff(food_rgns$iso3c, fresh_fish$iso3c)
+setdiff(fresh_fish$iso3c, food_rgns$iso3c)
+```
+
+## Join products
+```{r}
+
+product_tonnes <- rbind(livestock_iso3c, marine_fish, crop_tonnes, fresh_fish, mariculture, total_feed)
+
+## deal with feed backyard chickens
+product_tonnes_feed_chickens <- product_tonnes %>%
+  filter(category1_production == "feed_chickens_backyard_eggs&meat") %>%
+  mutate(tonnes = tonnes/2) 
+
+product_tonnes_feed_chickens_eggs <- product_tonnes_feed_chickens %>%
+  mutate(category1_production = "chickens_eggs")
+product_tonnes_feed_chickens_meat <- product_tonnes_feed_chickens %>%
+  mutate(category1_production = "chickens_meat")
+
+product_tonnes <- product_tonnes %>%
+  filter(category1_production != "feed_chickens_backyard_eggs&meat") %>% 
+  rbind(product_tonnes_feed_chickens_eggs, product_tonnes_feed_chickens_meat) %>% 
+  mutate(category1_production = ifelse(category1_production == "bivalves_meat", "bivalve_meat", category1_production)) 
+
+write_csv(product_tonnes, here("_efficiency/data/product_tonnes.csv"))
+
+```
+
+### Get product tonnes with crop portion for feed/other removed
+```{r}
+
+## deal with feed
+total_feed_v2 <- rbind(country_fodder, fofm, mapspam_feed) %>%
+  select(iso3c, category1_production, category2_production, feed_source, tonnes) %>%
+  mutate(category1_production = paste("feed_", feed_source, "_", category1_production, sep="")) %>%
+  mutate(category2_production = paste("feed_", feed_source, "_", category2_production, sep="")) %>%
+  select(-feed_source) %>%
+  filter(category1_production != "feed_fodder_NA")
+
+## only crops going to humans
+fao_prod <- read_csv(here("feed/data/MAPSPAMcrop_production.csv"))
+human_crop_prop <- read_csv("feed/data/human_crop_prop_consume.csv")
+
+crop_tonnes_v2 <- left_join(human_crop_prop, fao_prod, by=c("iso3c_producing", "SPAM_super")) %>%
+  rowwise() %>%
+  mutate(tonnes = human_feed_prop*tonnes_producing_crop) %>%
+  #group_by(iso3c_producing) %>%
+  #summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+  mutate(category2_production = "human_crop") %>%
+  mutate(category1_production = paste(SPAM_super, "produce", sep = "_")) %>%
+  select(iso3c = iso3c_producing, category1_production, category2_production, tonnes)
+
+
+product_tonnes_v2 <- rbind(livestock_iso3c, marine_fish, crop_tonnes_v2, fresh_fish, mariculture, total_feed_v2)
+
+## deal with feed backyard chickens
+product_tonnes_feed_chickens <- product_tonnes_v2 %>%
+  filter(category1_production == "feed_chickens_backyard_eggs&meat") %>%
+  mutate(tonnes = tonnes/2) 
+
+product_tonnes_feed_chickens_eggs <- product_tonnes_feed_chickens %>%
+  mutate(category1_production = "chickens_eggs")
+product_tonnes_feed_chickens_meat <- product_tonnes_feed_chickens %>%
+  mutate(category1_production = "chickens_meat")
+
+product_tonnes_v2 <- product_tonnes_v2 %>%
+  filter(category1_production != "feed_chickens_backyard_eggs&meat") %>% 
+  rbind(product_tonnes_feed_chickens_eggs, product_tonnes_feed_chickens_meat) %>% 
+  mutate(category1_production = ifelse(category1_production == "bivalves_meat", "bivalve_meat", category1_production)) 
+
+write_csv(product_tonnes_v2, here("_efficiency/data/product_tonnes_human_crop_consumption.csv"))
+
+check <- read_csv(here("_efficiency/data/product_tonnes_human_crop_consumption.csv"))
+table(check$category1_production)
+
+stats <- check %>%
+  filter(!(str_detect(category1_production, "feed_"))) %>%
+  group_by(category2_production) %>%
+  summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+  mutate(global_tonnes = sum(tonnes),
+         prop_global_tonnes = tonnes/global_tonnes)
+
+stats <- check %>%
+  filter(!(str_detect(category1_production, "feed_crop|feed_fodder"))) %>%
+  group_by(category2_production) %>%
+  summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+  mutate(global_tonnes = sum(tonnes),
+         prop_global_tonnes = tonnes/global_tonnes)
+0.00369+0.0124
+tmp <- stats %>%
+filter(str_detect(category2_production, "feed_|marine_fisheries|mariculture")) 
+sum(tmp$prop_global_tonnes)
+```
+
+### Get costs
+pressures for all production.  In this case, we replace the pressures with the ones calculated in analysis/figures/paper/dataprep/
+crop_pressure_rescaled.Rmd which calculates pressures for all crops (feed, food, other)
+```{r}
+
+pressures <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw_df_summary/rgn_raw_summary.csv")
+
+pressures <- pressures %>%
+  mutate(feed = case_when(category %in% c("feedfofm", "feedfodd", "feedcrop") ~ "feed_",
+                          T ~ "")) %>% 
+  group_by(iso3c, organism, product, feed, pressure) %>%
+  summarize(pressure_value = sum(sum, na.rm=TRUE)) %>%
+  mutate(category1_production = paste(organism, product, sep="_")) %>% 
+  unite(category1_production, c(feed, category1_production), sep = "")
+
+## divide backyard chicken pressures equally between meat/eggs. 
+pressures_chickens <- pressures %>%
+  filter(category1_production == "chickens_eggs&meat") %>%
+  mutate(pressure_value = pressure_value/2) 
+
+pressures_chickens_eggs <- pressures_chickens %>%
+  mutate(product = "eggs",
+         category1_production = "chickens_eggs")
+
+pressures_chickens_meat <- pressures_chickens %>%
+  mutate(product = "meat",
+         category1_production = "chickens_meat")
+
+## for backyard chicken feed
+pressures_chickens <- pressures %>%
+  filter(category1_production == "feed_chickens_eggs&meat") %>%
+  mutate(pressure_value = pressure_value/2) 
+
+pressures_feed_chickens_eggs <- pressures_chickens %>%
+  mutate(product = "eggs",
+         category1_production = "feed_chickens_eggs")
+
+pressures_feed_chickens_meat <- pressures_chickens %>%
+  mutate(product = "meat",
+         category1_production = "feed_chickens_meat")
+
+## update the backyards:
+pressures_chicken_update <- pressures %>%
+  filter(category1_production != "chickens_eggs&meat",
+         category1_production != "feed_chickens_eggs&meat") %>%
+  rbind(pressures_chickens_meat) %>%
+  rbind(pressures_chickens_eggs) %>%
+  rbind(pressures_feed_chickens_meat) %>%
+  rbind(pressures_feed_chickens_eggs)
+
+
+setdiff(pressures_chicken_update$category1_production, product_tonnes$category1_production) # 
+setdiff(product_tonnes$category1_production, pressures_chicken_update$category1_production) # ofib_produce (not a food item)
+
+```
+
+## combine and rescale pressures
+```{r}
+
+category_list <- product_tonnes %>%
+  select(category1_production, category2_production) %>%
+  unique()
+
+rescaling_values <- read_csv(here("_analysis/rescale_values.csv")) 
+
+pressures_summary_int <- pressures_chicken_update %>%
+  left_join(rescaling_values, by="pressure") %>%
+  rowwise() %>%
+  mutate(pressure_rescaled = pressure_value/global_total) %>%
+  left_join(category_list, by="category1_production") 
+
+## the crop specific one'
+crops_scaled_raw <- read_csv(here::here("_analysis/figures/paper/data_prep/crops_rescaled.csv"))
+crops_scaled_pressures <- crops_scaled_raw %>%
+  unite(category1_production, c("organism", "product"), sep = "_", remove = FALSE) %>% 
+  mutate(pressure_value = NA,
+         global_total = NA,
+         category2_production = "human_crop") %>% 
+  rename(pressure_rescaled = prop_global) %>% 
+    select(-system)
+
+pressures_summary <- pressures_summary_int %>% 
+  filter(category2_production != "human_crop") %>% 
+  rbind(crops_scaled_pressures) %>% 
+  ungroup()
+
+write_csv(pressures_summary , here("_efficiency/data/pressures_summary.csv"))
+```
+
+

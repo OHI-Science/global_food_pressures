@@ -1,0 +1,269 @@
+---
+title: "steps_1_thru_4_nutrient"
+author: "Haley Epperly"
+date: '2022-05-09'
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+Objective: Calculate trade for nutrient pressure. Repeat steps 1 - 4 (pressure_rates, FBS_produced_stressors, traded_stressors, and combining), which calculate cumulative stressors for trade, but do it for only nutrient.
+
+## Step 1
+* for each SPAM crop and pressure divide by the raster describing total tonnes of production in 2017 = pressure/tonne_crop
+* zonal average for each region/crop/pressure_rate
+
+
+```{r}
+
+library(rgdal)
+library(sp)
+library(raster)
+library(tidyverse)
+library(here)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+rgns_ezz_land <- raster(file.path(prep, "spatial/land_eez_rgns.tif"))
+plot(rgns_ezz_land)
+
+```
+
+
+get sum of each crop and pressure in each country
+```{r}
+
+# list all crop pressure rasters
+crop_pressures <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers", pattern="crop_produce", full=TRUE)
+crop_pressures <- grep("_x_", crop_pressures, invert=TRUE, value=TRUE)  # get rid of feed proportions
+
+#stack crop pressure rasters
+crop_pressures_stack <- stack(crop_pressures)
+
+#calculate sum of raster values (pressures per crop) for each country based on country borders raster (rgns_ezz_land)
+crop_pressure_country_sum <- zonal(crop_pressures_stack, rgns_ezz_land, fun="sum", progress="text", na.rm=TRUE) 
+
+#join crop pressures per country data with food_rgns data to include the iso3c code for each country in the pressures data 
+#reformat so the type of pressure (e.g., nutrient) is a variable (long format)
+crop_pressure_country_sum_df <- crop_pressure_country_sum  %>% 
+    data.frame() %>%
+    rename(ID_0 = zone) %>%
+    left_join(food_rgns, by="ID_0") %>%
+  select(-ID_0) %>%
+  pivot_longer(cols=starts_with("land"), names_to = c("pressure")) %>%
+  mutate(pressure = gsub("land_", "", pressure)) %>%
+  mutate(pressure = gsub("_crop_produce", "", pressure)) %>%
+  separate(pressure, c("SPAM_super", "pressure"), sep="_") %>%
+  rename("pressure_value" = "value")
+
+```
+
+
+DO NOT SUM ALL 4 PRESSURES - ONLY LOOK AT nutrient
+Rescale the data using the global totals
+```{r}
+
+#read in total pressures worldwide for each of the 4 pressures
+global_total_pressures <- read_csv(here("_analysis/rescale_values.csv"))
+
+nutrient_pressure_df <- crop_pressure_country_sum_df %>%
+  left_join(global_total_pressures, by="pressure") %>%
+  mutate(rescaled_pressure = pressure_value/global_total) %>%
+  filter(pressure == "nutrient")
+
+```
+
+
+Determine rate for each crop and country:
+nutrient pressure / tonnes production
+```{r}
+
+#read in dataframe with tons of crops produced in each country by crop and country
+# file created here: feed/1.1_MAPSPAM_production.Rmd
+crop_production <- read_csv(here("feed/data/MAPSPAMcrop_production.csv")) %>%
+  rename("iso3c"= iso3c_producing) %>%
+  group_by(iso3c, SPAM_super) %>%
+  summarize(tonnes_producing_crop  = sum(tonnes_producing_crop)) %>%
+  ungroup()
+
+#join tons of production per country data with rescaled nutrient pressure data per country per crop
+#convert NAs in tonnes_producing_crop to 0
+#if nutrient pressure = 0 and tons of crops produced = 0 for a country and crop, then put 0
+#otherwise, calculate the proportion of nutrient pressure (multiplied by 1 million) per tons of crop produced
+stressor_rates <- left_join(nutrient_pressure_df, crop_production, by=c("iso3c", "SPAM_super")) %>%
+  mutate(tonnes_producing_crop = ifelse(is.na(tonnes_producing_crop), 0, tonnes_producing_crop)) %>% # Gibralter and Saint-Martin have NA's for production
+mutate(nutrient_pressure_rate = ifelse(rescaled_pressure == 0 & tonnes_producing_crop ==0, 0, rescaled_pressure*1000000/tonnes_producing_crop))
+
+summary(stressor_rates)
+
+#some nutrient_pressure_rate values are "Inf" when tons of crop are 0, so they should be 0 - note from Mel below on why that might be
+#"some weird ones, but I think these are when there is a difference between FAO reporting and what is in the SPAM maps. This should be fine."
+filter(stressor_rates, nutrient_pressure_rate=="Inf") %>% data.frame()
+
+#change Inf values to 0
+stressor_rates <- stressor_rates %>%
+  mutate(nutrient_pressure_rate = ifelse(nutrient_pressure_rate == "Inf", 0, nutrient_pressure_rate))
+
+summary(stressor_rates)
+write_csv(stressor_rates, here("_analysis/export_import_stressors/data/nutrient_stressor_rates.csv"))
+
+```
+
+
+
+
+## Step 2
+
+This step determines production nutrient stress based on the FAO Food Balance Sheets. Skipped steps where we consolidate data to determine the proportional amount of local production and total imports for each crop and country (see step_2_FBS_produced_stressors for code).
+
+
+Determine the locally used pressures vs. exported pressures
+```{r}
+
+#read in nutrient pressure rate data per crop and country (from step 1)
+stressor_rates <- read_csv(
+here("_analysis/export_import_stressors/data/nutrient_stressor_rates.csv")) %>%
+  select(iso3c, SPAM_super, nutrient_pressure_rate)
+
+#read in dataframe with tons of crop produced and proportion of tons exported for each crop and country
+#calculated for each crop and country
+export_prop <- read_csv(here("_analysis/export_import_stressors/data/fbs_export_prop.csv"))
+
+#join nutrient pressure rate and proportion of exports data by country and crop, subset to data with production > 0 tons, calculate nutrient pressure from tons of crops produced, calculate proportion of nutrient pressure from produced and not-exported crops (i.e., used), calculate proportion of nutrient pressure from produced and exported crops (exported), subset to variables of interest. 
+stressor_production <- left_join(stressor_rates, export_prop, by = c("iso3c", "SPAM_super")) %>%
+  filter(produced > 0) %>%
+  mutate(produced_all_nutrient = produced * nutrient_pressure_rate) %>%
+  mutate(produced_used_nutrient = 
+           produced * nutrient_pressure_rate * (1-export_prop)) %>%
+  mutate(produced_exported_nutrient = produced * nutrient_pressure_rate * export_prop) %>%
+  select(country, iso3c, SPAM_super, produced_used_nutrient, produced_exported_nutrient, produced_all_nutrient)
+
+# these should be in the same ballpark (with tmp x 1,000,000)
+sum(stressor_production$produced_all_nutrient)
+tmp <- nutrient_pressure_df %>%  #created in step 1
+  filter(SPAM_super != "ofib")
+sum(tmp$rescaled_pressure, na.rm=TRUE) * 1000000
+
+#save data
+write_csv(stressor_production, here("_analysis/export_import_stressors/data/produced_nutrient_stress.csv"))
+
+```
+
+
+
+
+## Step 3
+
+Link tonnes of production per country and crop with stressor production per tonne and gapfill:
+```{r}
+
+#tonnes of production per country and crop
+#from step 3 in full code (step3_traded_stressors)
+standardized_imports <- read_csv(here("_analysis/export_import_stressors/data/tons_crops_imported_by_country.csv"))
+
+#read in proportion of nutrient pressure from each crop and each country
+stressor_rates <- read_csv(here("_analysis/export_import_stressors/data/nutrient_stressor_rates.csv")) %>%
+  select(iso3c_producing = iso3c, SPAM_super, nutrient_pressure_rate)
+
+#joind dataframes
+import_stressors <- left_join(standardized_imports, stressor_rates, by=c("iso3c_producing", "SPAM_super"))
+summary(import_stressors)
+
+#below from Mel:
+## Some import data, where there is no pressure.  Probably because of complex trade relationships.  These are gapfilled with \mean of other countries that provide trade to the importing country weighted by import tonnes.  In some cases, there were no trade countries with non zero data and we gapfilled these with the global average values for a SPAM crop category, weighted by total trade. 
+import_stressors_gf <- import_stressors %>%
+  group_by(iso3c_consuming, SPAM_super) %>%
+  mutate(nutrient_pressure_rate = ifelse(is.na(nutrient_pressure_rate), 0, nutrient_pressure_rate)) %>%
+  mutate(nutrient_pressure_rate_gf = weighted.mean(nutrient_pressure_rate[nutrient_pressure_rate>0], tonnes_imported[nutrient_pressure_rate>0])) %>%
+  group_by(SPAM_super) %>%
+  mutate(nutrient_pressure_rate_gf2 = weighted.mean(nutrient_pressure_rate[nutrient_pressure_rate>0], tonnes_imported[nutrient_pressure_rate>0])) %>%
+  ungroup() %>%
+  mutate(nutrient_pressure_rate = ifelse(nutrient_pressure_rate==0, nutrient_pressure_rate_gf, nutrient_pressure_rate)) %>%
+    mutate(nutrient_pressure_rate = ifelse(is.na(nutrient_pressure_rate), nutrient_pressure_rate_gf2, nutrient_pressure_rate)) %>%
+  select(iso3c_consuming, iso3c_producing, SPAM_super, tonnes_imported, nutrient_pressure_rate)
+
+summary(import_stressors_gf)
+
+filter(import_stressors_gf, iso3c_consuming == "ARM", SPAM_super == "maiz")
+
+```
+
+Now determine the imported pressures.
+```{r}
+
+#calculate imported nutrient stress as tonnes of crops imported times nutrient pressure per crop tonne
+bilateral_trade <- import_stressors_gf %>%
+  mutate(imported_nutrient_stress = tonnes_imported * nutrient_pressure_rate) 
+write_csv(bilateral_trade, here("_analysis/export_import_stressors/data/bilateral_trade_crop_nutrient.csv"))
+
+#same as above but sum across all crops for each country (export - import combo)
+bilateral_trade <- import_stressors_gf %>%
+  mutate(imported_nutrient_stress = tonnes_imported * nutrient_pressure_rate) %>%
+  group_by(iso3c_consuming, iso3c_producing) %>%
+  summarize(total_nutrient_stress = sum(imported_nutrient_stress))
+write_csv(bilateral_trade, here("_analysis/export_import_stressors/data/bilateral_trade_nutrient.csv"))
+
+#same as above but sum across all producing countries
+stressor_imported <- import_stressors_gf %>%
+  mutate(imported_nutrient_stress = tonnes_imported * nutrient_pressure_rate) %>%
+  group_by(iso3c_consuming, SPAM_super) %>%
+  summarize(imported_nutrient_stress = sum(imported_nutrient_stress)) %>%
+  rename(iso3c = iso3c_consuming) %>%
+  ungroup()
+
+```
+
+
+The imported stressors can either be used or exported.  This is calculated here:
+```{r}
+
+export_prop <- read_csv(here("_analysis/export_import_stressors/data/fbs_export_prop.csv")) %>%
+  select(iso3c, SPAM_super, export_prop)
+
+stressor_imported_used_export <- left_join(stressor_imported, export_prop, by = c("iso3c", "SPAM_super")) %>%
+  mutate(imported_used_nutrient_stress = imported_nutrient_stress * (1-export_prop)) %>%
+  mutate(imported_exported_nutrient_stress = imported_nutrient_stress * export_prop) %>%
+  select(iso3c, SPAM_super, imported_used_nutrient_stress, imported_exported_nutrient_stress)
+
+
+write_csv(stressor_imported_used_export, here("_analysis/export_import_stressors/data/imported_nutrient_stress.csv"))
+```
+
+
+
+
+## Step 4
+
+Combine the pressures from production and importing.
+
+```{r}
+
+produced <- read_csv(here("_analysis/export_import_stressors/data/produced_nutrient_stress.csv"))
+imported <- read_csv(here("_analysis/export_import_stressors/data/imported_nutrient_stress.csv"))
+
+total_stressors <- left_join(produced, imported, by=c("iso3c", "SPAM_super")) %>%
+  rowwise() %>%
+  mutate(exported_nutrient_stress = sum(c(produced_exported_nutrient, imported_exported_nutrient_stress), na.rm=TRUE)) %>%
+  mutate(imported_used_nutrient_stress = ifelse(is.na(imported_used_nutrient_stress), 0, imported_used_nutrient_stress)) %>%
+  select(country, iso3c, SPAM_super, exported_nutrient_stress, produced_ds_nutrient_stress = produced_used_nutrient, imported_ds_nutrient_stress=imported_used_nutrient_stress) %>%
+  pivot_longer(cols=c(-country, -iso3c, -SPAM_super), names_to = "nutrient_pressure")
+  
+
+total_summarized_stress <- total_stressors %>%
+  group_by(country, iso3c, nutrient_pressure) %>%
+  summarize(value = sum(value, na.rm=TRUE)) %>%
+  ungroup() %>%
+  pivot_wider(id_cols = c("country", "iso3c"), names_from="nutrient_pressure") %>%
+  mutate(prop_ds_produced_nutrient = produced_ds_nutrient_stress/(produced_ds_nutrient_stress + imported_ds_nutrient_stress),
+         prop_ds_imported_nutrient = imported_ds_nutrient_stress/(produced_ds_nutrient_stress + imported_ds_nutrient_stress),
+         prop_exported_nutrient = exported_nutrient_stress/(imported_ds_nutrient_stress + produced_ds_nutrient_stress + exported_nutrient_stress)) %>%
+  arrange(-exported_nutrient_stress)
+
+filter(total_summarized_stress, iso3c=="USA")
+
+
+write_csv(total_summarized_stress, here("_analysis/export_import_stressors/data/nutrient_stress_imports_exports.csv"))
+```
+

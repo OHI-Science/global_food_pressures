@@ -1,0 +1,517 @@
+crop_number,SPAM_short_name,SPAM_full_name,FAONAMES,item_code,GROUP
+1,whea,wheat,wheat,15,cereals
+2,rice,rice,rice,27,cereals
+3,maiz,maize,maize,56,cereals
+4,barl,barley,barley,44,cereals
+5,pmil,pearl millet,millet,79,cereals
+6,smil,small millet,millet,79,cereals
+7,sorg,sorghum,sorghum,83,cereals
+8,ocer,other cereals,other cereals ++,68,cereals
+8,ocer,other cereals,other cereals ++,71,cereals
+8,ocer,other cereals,other cereals ++,75,cereals
+8,ocer,other cereals,other cereals ++,89,cereals
+8,ocer,other cereals,other cereals ++,92,cereals
+8,ocer,other cereals,other cereals ++,94,cereals
+8,ocer,other cereals,other cereals ++,97,cereals
+8,ocer,other cereals,other cereals ++,101,cereals
+8,ocer,other cereals,other cereals ++,103,cereals
+8,ocer,other cereals,other cereals ++,108,cereals
+9,pota,potato,potato,116,roots&tubers or starchy roots
+10,swpo,sweet potato,sweet potato,122,roots&tubers or starchy roots
+11,yams,yams,yam,137,roots&tubers or starchy roots
+12,cass,cassava,cassava,125,roots&tubers or starchy roots
+13,orts,other roots,yautia ++,135,roots&tubers or starchy roots
+13,orts,other roots,yautia ++,136,roots&tubers or starchy roots
+13,orts,other roots,yautia ++,149,roots&tubers or starchy roots
+14,bean,bean,"beans, dry",176,pulses
+15,chic,chickpea,chickpea,191,pulses
+16,cowp,cowpea,cowpea,195,pulses
+17,pige,pigeonpea,pigeon pea,197,pulses
+18,lent,lentil,lentils,201,pulses
+19,opul,other pulses,broad beans ++,181,pulses
+19,opul,other pulses,broad beans ++,187,pulses
+19,opul,other pulses,broad beans ++,203,pulses
+19,opul,other pulses,broad beans ++,205,pulses
+19,opul,other pulses,broad beans ++,210,pulses
+19,opul,other pulses,broad beans ++,211,pulses
+20,soyb,soybean,soybean,236,oilcrops
+21,grou,groundnut,"groundnut, with shell",242,oilcrops
+22,cnut,coconut,coconut,249,oilcrops
+23,oilp,oilpalm,palmoil,254,oilcrops
+24,sunf,sunflower,sunflower seed,267,oilcrops
+25,rape,rapeseed,rapeseed,270,oilcrops
+25,rape,rapeseed,rapeseed,292,oilcrops
+26,sesa,sesameseed,sesame seed,289,oilcrops
+28,sugc,sugarcane,sugar cane,156,sugar crops
+29,sugb,sugarbeet,sugarbeet,157,sugar crops
+30,cott,cotton,seed cotton,328,fibres
+32,acof,arabica coffee,coffee,656,stimulant
+33,rcof,robusta coffee,coffee,656,stimulant
+34,coco,cocoa,cocoa,661,stimulant
+35,teas,tea,tea,667,stimulant
+36,toba,tobacco,tobacco leaves,826,stimulant
+37,bana,banana,banana,486,fruits
+38,plnt,plantain,plantain,489,fruits
+40,temf,temperate fruit,apples ++,592,fruits
+40,temf,temperate fruit,apples ++,619,fruits
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",161,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",671,NA
+27,ooil,other oil crops,olives ++,260,oilcrops
+27,ooil,other oil crops,olives ++,261,oilcrops
+27,ooil,other oil crops,olives ++,262,oilcrops
+27,ooil,other oil crops,olives ++,263,oilcrops
+27,ooil,other oil crops,olives ++,264,oilcrops
+27,ooil,other oil crops,olives ++,265,oilcrops
+27,ooil,other oil crops,olives ++,266,oilcrops
+27,ooil,other oil crops,olives ++,268,oilcrops
+27,ooil,other oil crops,olives ++,269,oilcrops
+27,ooil,other oil crops,olives ++,271,oilcrops
+27,ooil,other oil crops,olives ++,272,oilcrops
+27,ooil,other oil crops,olives ++,273,oilcrops
+27,ooil,other oil crops,olives ++,274,oilcrops
+27,ooil,other oil crops,olives ++,275,oilcrops
+27,ooil,other oil crops,olives ++,276,oilcrops
+27,ooil,other oil crops,olives ++,277,oilcrops
+27,ooil,other oil crops,olives ++,278,oilcrops
+27,ooil,other oil crops,olives ++,279,oilcrops
+27,ooil,other oil crops,olives ++,280,oilcrops
+27,ooil,other oil crops,olives ++,281,oilcrops
+27,ooil,other oil crops,olives ++,282,oilcrops
+27,ooil,other oil crops,olives ++,283,oilcrops
+27,ooil,other oil crops,olives ++,284,oilcrops
+27,ooil,other oil crops,olives ++,285,oilcrops
+27,ooil,other oil crops,olives ++,286,oilcrops
+27,ooil,other oil crops,olives ++,287,oilcrops
+27,ooil,other oil crops,olives ++,288,oilcrops
+27,ooil,other oil crops,olives ++,290,oilcrops
+27,ooil,other oil crops,olives ++,291,oilcrops
+27,ooil,other oil crops,olives ++,293,oilcrops
+27,ooil,other oil crops,olives ++,294,oilcrops
+27,ooil,other oil crops,olives ++,295,oilcrops
+27,ooil,other oil crops,olives ++,296,oilcrops
+27,ooil,other oil crops,olives ++,297,oilcrops
+27,ooil,other oil crops,olives ++,298,oilcrops
+27,ooil,other oil crops,olives ++,299,oilcrops
+27,ooil,other oil crops,olives ++,300,oilcrops
+27,ooil,other oil crops,olives ++,301,oilcrops
+27,ooil,other oil crops,olives ++,302,oilcrops
+27,ooil,other oil crops,olives ++,303,oilcrops
+27,ooil,other oil crops,olives ++,304,oilcrops
+27,ooil,other oil crops,olives ++,305,oilcrops
+27,ooil,other oil crops,olives ++,306,oilcrops
+27,ooil,other oil crops,olives ++,307,oilcrops
+27,ooil,other oil crops,olives ++,308,oilcrops
+27,ooil,other oil crops,olives ++,309,oilcrops
+27,ooil,other oil crops,olives ++,310,oilcrops
+27,ooil,other oil crops,olives ++,312,oilcrops
+27,ooil,other oil crops,olives ++,313,oilcrops
+27,ooil,other oil crops,olives ++,314,oilcrops
+27,ooil,other oil crops,olives ++,315,oilcrops
+27,ooil,other oil crops,olives ++,316,oilcrops
+27,ooil,other oil crops,olives ++,317,oilcrops
+27,ooil,other oil crops,olives ++,318,oilcrops
+27,ooil,other oil crops,olives ++,319,oilcrops
+27,ooil,other oil crops,olives ++,320,oilcrops
+27,ooil,other oil crops,olives ++,321,oilcrops
+27,ooil,other oil crops,olives ++,322,oilcrops
+27,ooil,other oil crops,olives ++,323,oilcrops
+27,ooil,other oil crops,olives ++,324,oilcrops
+27,ooil,other oil crops,olives ++,325,oilcrops
+27,ooil,other oil crops,olives ++,326,oilcrops
+27,ooil,other oil crops,olives ++,327,oilcrops
+27,ooil,other oil crops,olives ++,329,oilcrops
+27,ooil,other oil crops,olives ++,330,oilcrops
+27,ooil,other oil crops,olives ++,331,oilcrops
+27,ooil,other oil crops,olives ++,332,oilcrops
+27,ooil,other oil crops,olives ++,333,oilcrops
+27,ooil,other oil crops,olives ++,334,oilcrops
+27,ooil,other oil crops,olives ++,335,oilcrops
+27,ooil,other oil crops,olives ++,336,oilcrops
+27,ooil,other oil crops,olives ++,337,oilcrops
+27,ooil,other oil crops,olives ++,338,oilcrops
+27,ooil,other oil crops,olives ++,339,oilcrops
+31,ofib,other fibre crops,other fibres ++,773,fibres
+31,ofib,other fibre crops,other fibres ++,774,fibres
+31,ofib,other fibre crops,other fibres ++,775,fibres
+31,ofib,other fibre crops,other fibres ++,776,fibres
+31,ofib,other fibre crops,other fibres ++,777,fibres
+31,ofib,other fibre crops,other fibres ++,778,fibres
+31,ofib,other fibre crops,other fibres ++,779,fibres
+31,ofib,other fibre crops,other fibres ++,780,fibres
+31,ofib,other fibre crops,other fibres ++,781,fibres
+31,ofib,other fibre crops,other fibres ++,782,fibres
+31,ofib,other fibre crops,other fibres ++,783,fibres
+31,ofib,other fibre crops,other fibres ++,784,fibres
+31,ofib,other fibre crops,other fibres ++,785,fibres
+31,ofib,other fibre crops,other fibres ++,786,fibres
+31,ofib,other fibre crops,other fibres ++,787,fibres
+31,ofib,other fibre crops,other fibres ++,788,fibres
+31,ofib,other fibre crops,other fibres ++,789,fibres
+31,ofib,other fibre crops,other fibres ++,790,fibres
+31,ofib,other fibre crops,other fibres ++,791,fibres
+31,ofib,other fibre crops,other fibres ++,792,fibres
+31,ofib,other fibre crops,other fibres ++,793,fibres
+31,ofib,other fibre crops,other fibres ++,794,fibres
+31,ofib,other fibre crops,other fibres ++,795,fibres
+31,ofib,other fibre crops,other fibres ++,796,fibres
+31,ofib,other fibre crops,other fibres ++,797,fibres
+31,ofib,other fibre crops,other fibres ++,798,fibres
+31,ofib,other fibre crops,other fibres ++,799,fibres
+31,ofib,other fibre crops,other fibres ++,800,fibres
+31,ofib,other fibre crops,other fibres ++,801,fibres
+31,ofib,other fibre crops,other fibres ++,802,fibres
+31,ofib,other fibre crops,other fibres ++,803,fibres
+31,ofib,other fibre crops,other fibres ++,804,fibres
+31,ofib,other fibre crops,other fibres ++,805,fibres
+31,ofib,other fibre crops,other fibres ++,806,fibres
+31,ofib,other fibre crops,other fibres ++,807,fibres
+31,ofib,other fibre crops,other fibres ++,808,fibres
+31,ofib,other fibre crops,other fibres ++,809,fibres
+31,ofib,other fibre crops,other fibres ++,810,fibres
+31,ofib,other fibre crops,other fibres ++,811,fibres
+31,ofib,other fibre crops,other fibres ++,812,fibres
+31,ofib,other fibre crops,other fibres ++,813,fibres
+31,ofib,other fibre crops,other fibres ++,814,fibres
+31,ofib,other fibre crops,other fibres ++,815,fibres
+31,ofib,other fibre crops,other fibres ++,816,fibres
+31,ofib,other fibre crops,other fibres ++,817,fibres
+31,ofib,other fibre crops,other fibres ++,818,fibres
+31,ofib,other fibre crops,other fibres ++,819,fibres
+31,ofib,other fibre crops,other fibres ++,820,fibres
+31,ofib,other fibre crops,other fibres ++,821,fibres
+39,trof,tropical fruit,oranges ++,490,fruits
+39,trof,tropical fruit,oranges ++,491,fruits
+39,trof,tropical fruit,oranges ++,492,fruits
+39,trof,tropical fruit,oranges ++,493,fruits
+39,trof,tropical fruit,oranges ++,494,fruits
+39,trof,tropical fruit,oranges ++,495,fruits
+39,trof,tropical fruit,oranges ++,496,fruits
+39,trof,tropical fruit,oranges ++,497,fruits
+39,trof,tropical fruit,oranges ++,498,fruits
+39,trof,tropical fruit,oranges ++,499,fruits
+39,trof,tropical fruit,oranges ++,500,fruits
+39,trof,tropical fruit,oranges ++,501,fruits
+39,trof,tropical fruit,oranges ++,502,fruits
+39,trof,tropical fruit,oranges ++,503,fruits
+39,trof,tropical fruit,oranges ++,504,fruits
+39,trof,tropical fruit,oranges ++,505,fruits
+39,trof,tropical fruit,oranges ++,506,fruits
+39,trof,tropical fruit,oranges ++,507,fruits
+39,trof,tropical fruit,oranges ++,508,fruits
+39,trof,tropical fruit,oranges ++,509,fruits
+39,trof,tropical fruit,oranges ++,510,fruits
+39,trof,tropical fruit,oranges ++,511,fruits
+39,trof,tropical fruit,oranges ++,512,fruits
+39,trof,tropical fruit,oranges ++,567,fruits
+39,trof,tropical fruit,oranges ++,568,fruits
+39,trof,tropical fruit,oranges ++,569,fruits
+39,trof,tropical fruit,oranges ++,570,fruits
+39,trof,tropical fruit,oranges ++,571,fruits
+39,trof,tropical fruit,oranges ++,572,fruits
+39,trof,tropical fruit,oranges ++,573,fruits
+39,trof,tropical fruit,oranges ++,574,fruits
+39,trof,tropical fruit,oranges ++,575,fruits
+39,trof,tropical fruit,oranges ++,576,fruits
+39,trof,tropical fruit,oranges ++,577,fruits
+39,trof,tropical fruit,oranges ++,578,fruits
+39,trof,tropical fruit,oranges ++,579,fruits
+39,trof,tropical fruit,oranges ++,580,fruits
+39,trof,tropical fruit,oranges ++,581,fruits
+39,trof,tropical fruit,oranges ++,582,fruits
+39,trof,tropical fruit,oranges ++,583,fruits
+39,trof,tropical fruit,oranges ++,584,fruits
+39,trof,tropical fruit,oranges ++,585,fruits
+39,trof,tropical fruit,oranges ++,586,fruits
+39,trof,tropical fruit,oranges ++,587,fruits
+39,trof,tropical fruit,oranges ++,588,fruits
+39,trof,tropical fruit,oranges ++,589,fruits
+39,trof,tropical fruit,oranges ++,590,fruits
+39,trof,tropical fruit,oranges ++,591,fruits
+39,trof,tropical fruit,oranges ++,600,fruits
+39,trof,tropical fruit,oranges ++,601,fruits
+39,trof,tropical fruit,oranges ++,602,fruits
+39,trof,tropical fruit,oranges ++,603,fruits
+40,temf,temperate fruit,apples ++,515,fruits
+40,temf,temperate fruit,apples ++,516,fruits
+40,temf,temperate fruit,apples ++,517,fruits
+40,temf,temperate fruit,apples ++,518,fruits
+40,temf,temperate fruit,apples ++,519,fruits
+40,temf,temperate fruit,apples ++,520,fruits
+40,temf,temperate fruit,apples ++,521,fruits
+40,temf,temperate fruit,apples ++,522,fruits
+40,temf,temperate fruit,apples ++,523,fruits
+40,temf,temperate fruit,apples ++,524,fruits
+40,temf,temperate fruit,apples ++,525,fruits
+40,temf,temperate fruit,apples ++,526,fruits
+40,temf,temperate fruit,apples ++,527,fruits
+40,temf,temperate fruit,apples ++,528,fruits
+40,temf,temperate fruit,apples ++,529,fruits
+40,temf,temperate fruit,apples ++,530,fruits
+40,temf,temperate fruit,apples ++,531,fruits
+40,temf,temperate fruit,apples ++,532,fruits
+40,temf,temperate fruit,apples ++,533,fruits
+40,temf,temperate fruit,apples ++,534,fruits
+40,temf,temperate fruit,apples ++,535,fruits
+40,temf,temperate fruit,apples ++,536,fruits
+40,temf,temperate fruit,apples ++,537,fruits
+40,temf,temperate fruit,apples ++,538,fruits
+40,temf,temperate fruit,apples ++,539,fruits
+40,temf,temperate fruit,apples ++,540,fruits
+40,temf,temperate fruit,apples ++,541,fruits
+40,temf,temperate fruit,apples ++,542,fruits
+40,temf,temperate fruit,apples ++,543,fruits
+40,temf,temperate fruit,apples ++,544,fruits
+40,temf,temperate fruit,apples ++,545,fruits
+40,temf,temperate fruit,apples ++,546,fruits
+40,temf,temperate fruit,apples ++,547,fruits
+40,temf,temperate fruit,apples ++,548,fruits
+40,temf,temperate fruit,apples ++,549,fruits
+40,temf,temperate fruit,apples ++,550,fruits
+40,temf,temperate fruit,apples ++,551,fruits
+40,temf,temperate fruit,apples ++,552,fruits
+40,temf,temperate fruit,apples ++,553,fruits
+40,temf,temperate fruit,apples ++,554,fruits
+40,temf,temperate fruit,apples ++,555,fruits
+40,temf,temperate fruit,apples ++,556,fruits
+40,temf,temperate fruit,apples ++,557,fruits
+40,temf,temperate fruit,apples ++,558,fruits
+40,temf,temperate fruit,apples ++,559,fruits
+40,temf,temperate fruit,apples ++,560,fruits
+41,vege,vegetables,cabbages and other brassicas ++,358,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,359,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,360,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,361,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,362,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,363,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,364,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,365,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,366,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,367,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,368,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,369,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,370,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,371,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,372,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,373,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,374,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,375,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,376,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,377,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,378,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,379,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,380,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,381,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,382,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,383,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,384,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,385,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,386,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,387,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,388,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,389,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,390,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,391,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,392,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,393,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,394,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,395,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,396,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,397,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,398,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,399,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,400,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,401,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,402,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,403,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,404,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,405,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,406,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,407,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,408,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,409,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,410,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,411,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,412,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,413,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,414,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,415,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,416,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,417,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,418,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,419,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,420,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,421,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,422,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,423,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,424,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,425,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,426,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,427,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,428,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,429,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,430,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,431,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,432,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,433,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,434,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,435,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,436,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,437,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,438,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,439,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,440,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,441,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,442,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,443,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,444,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,445,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,446,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,447,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,448,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,449,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,450,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,451,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,452,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,453,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,454,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,455,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,456,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,457,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,458,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,459,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,460,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,461,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,462,vegetables
+41,vege,vegetables,cabbages and other brassicas ++,463,vegetables
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",216,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",217,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",218,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",219,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",220,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",221,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",222,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",223,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",224,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",225,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",226,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",227,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",228,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",229,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",230,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",231,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",232,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",233,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",234,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",677,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",678,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",679,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",680,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",681,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",682,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",683,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",684,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",685,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",686,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",687,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",688,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",689,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",690,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",691,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",692,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",693,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",694,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",695,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",696,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",697,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",698,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",699,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",700,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",701,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",702,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",703,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",704,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",705,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",706,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",707,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",708,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",709,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",710,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",711,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",712,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",713,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",714,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",715,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",716,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",717,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",718,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",719,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",720,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",721,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",722,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",723,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",724,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",725,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",726,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",727,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",728,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",729,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",730,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",731,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",732,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",733,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",734,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",735,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",736,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",737,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",738,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",739,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",740,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",741,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",742,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",743,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",744,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",745,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",746,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",747,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",748,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",749,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",750,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",751,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",752,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",753,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",754,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",755,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",756,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",757,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",758,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",759,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",760,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",761,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",762,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",763,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",764,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",765,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",766,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",767,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",768,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",769,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",770,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",771,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",772,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",822,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",823,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",824,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",825,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",827,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",828,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",829,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",830,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",831,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",832,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",833,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",834,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",835,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",836,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",837,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",838,NA
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)",839,NA

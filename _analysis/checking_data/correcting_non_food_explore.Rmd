@@ -1,0 +1,110 @@
+---
+title: "Looking at our feed vs. FAO feed proportions"
+output: html_document
+date: '2022-05-05'
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+library(raster)
+library(sf)
+library(tidyverse)
+library(here)
+```
+
+FAO Food Balance Sheet data for Maize.
+
+```{r}
+
+cut_items <- read_csv(here("feed/data/FAOSTAT_FBS_Items_discard_5-9-2022.csv")) %>%
+  filter(cut=="yes") %>%
+  pull("Item Code")
+
+fao <- read_csv(here("_analysis/checking_data/data/FAOSTAT_FBS_5-5-2022.csv")) %>%
+  select(Area, Element, item_code = "Item Code", Item, Year, Unit, Value) %>%
+  mutate(Element = ifelse(Element == "Tourist consumption", "Food", Element)) %>%
+  filter(!(item_code %in% cut_items))
+
+table(fao$Item)
+ so <- filter(fao, Item == "Sunflowerseed Oil")
+ ss <- filter(fao, Item == "Sunflower seed")
+#all of these are 0 except Djibouti...which is just weird
+ setdiff(so$Area, ss$Area)
+#[1] "Central African Republic" "Comoros"                  "Djibouti"                 "Kiribati"                
+#[5] "Liberia"                  "Mauritania"      
+co <- filter(fao, Item == "Cottonseed Oil")
+cs <- filter(fao, Item == "Cottonseed")
+setdiff(co$Area, cs$Area) # these were all zero too
+
+crop_translate <- read_csv(here("feed/data/MapSPAM_to_FAO_v2.csv")) %>%
+  filter(!is.na(FAO_item_code_NFB)) %>%
+    filter(is.na(non_food)) %>%
+  select(SPAM_super, item_code = FAO_item_code_NFB) %>%
+  unique()
+setdiff(fao$item_code, crop_translate$item_code)
+filter(fao, item_code %in% c(2541, 2542, 2630)) # coffee, sugars, ok
+
+fao_spam <- fao %>%
+  left_join(crop_translate, by="item_code") %>% 
+    filter(Element %in% c("Domestic supply quantity", "Feed", "Food", "Losses", "Seed", "Processing", "Other uses (non-food)")) %>%
+  group_by(SPAM_super, Element, Year, Unit) %>%
+  dplyr::summarize(Value = sum(Value, na.rm=TRUE)) %>%
+  filter(!is.na(Value)) %>%
+  pivot_wider(names_from=Element, values_from=Value, values_fill=0) %>%
+  rename(domestic_supply = `Domestic supply quantity`, Other = `Other uses (non-food)`) %>%
+  rowwise() %>%
+  mutate(feed_prop = Feed/domestic_supply *100, 
+         food_prop = Food/domestic_supply * 100,
+         losses_prop = Losses/domestic_supply * 100,
+         other_prop = Other/domestic_supply *100,
+         processing_prop = Processing/domestic_supply * 100,
+         seed_prop = Seed/domestic_supply * 100) %>%
+  arrange(-other_prop)
+
+write_csv(fao_spam, here("_analysis/checking_data/data/FAO_prop_uses_by_spam_crop.csv"))
+
+
+
+```
+
+Our feed proportions.
+```{r}
+feed <- read_csv(here("feed/data/proportion_feed_per_country_system.csv"))
+
+feed_by_country <- feed %>%
+  group_by(iso3c_producing, SPAM_super) %>%
+  summarize(prop_feed = sum(total_prop)) 
+
+tonnes_fao <- read_csv(here("feed/data/MAPSPAMcrop_production.csv"))
+
+3.4
+sum(test$tonnes_producing_crop, na.rm=TRUE)
+sum(test$tonnes_feed, na.rm=TRUE)
+
+feed_comp <- read_csv(here("feed/data/livestock_diet_composition.csv"))
+filter()
+feed_comp <- read_csv(here("feed/data/aquaculture_diet_composition.csv"))
+table(feed_comp$raw_name)
+```
+
+
+Exploring the weird yam issue and oilpalm
+```{r}
+yams <- read_csv(here("_analysis/checking_data/data/FAOSTAT_FBS_yams_5-11-2022.csv")) %>%
+  select(Area, Element, Value) %>%
+  pivot_wider(names_from = Element, values_from = Value) %>% 
+  arrange(Production) 
+
+write_csv(yams, here("_analysis/checking_data/data/yams_wide.csv"))
+
+
+op <- read_csv(here("_analysis/checking_data/data/FAOSTAT_FBS_palm_5-11-2022.csv")) %>%
+  select(Area, Element, Value) %>%
+  pivot_wider(names_from = Element, values_from = Value) %>% 
+  arrange(Production) 
+
+write_csv(op, here("_analysis/checking_data/data/oilpalm_wide.csv"))
+
+```
+

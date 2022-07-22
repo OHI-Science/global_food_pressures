@@ -1,0 +1,615 @@
+---
+title: "Summarizing relevant rescaled rasters"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+We combine the rescaled data in various ways that will be of general interest.
+
+```{r setup, include=FALSE}
+library(rgdal)
+library(sp)
+library(raster)
+library(tidyverse)
+library(here)
+
+categories <- read_csv(here("_analysis/food_system_categories.csv"))
+
+```
+
+## 1. Combine all systems for each stressor, true values (N=4 rasters)
+
+I think it will be best to use actual values per km2. 
+This means using:
+- equal area raster
+- pressure per km2
+- non-rescaled data
+
+```{r}
+
+stressor_sum <- function(stressor = "disturbance"){
+
+  all_rasters <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_km2", pattern=".tif", full=TRUE)
+  
+  stressor_rasts <- grep(stressor, all_rasters, value=TRUE)  
+  
+  # farm first:
+food_files_farm <- grep("farm", stressor_rasts, value=TRUE)
+stack_files_farm <- stack(food_files_farm)
+
+raster::calc(stack_files_farm, fun=sum, na.rm=TRUE, 
+filename = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/stressor_per_km2/stressor/tmp_farm_%s.tif", stressor), overwrite=TRUE, progress="text")
+
+# food second:
+food_files_feed <- grep("feedcrop|feedfodd|feedfofm", stressor_rasts, value=TRUE)
+stack_files_feed <- stack(food_files_feed)
+
+raster::calc(stack_files_feed, fun=sum, na.rm=TRUE, 
+filename = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/stressor_per_km2/stressor/tmp_feed_%s.tif", stressor), overwrite=TRUE, progress="text")  
+  
+# wildcaught third:
+food_files_fish <- grep("wildcaught", stressor_rasts, value=TRUE)
+stack_files_fish <- stack(food_files_fish)
+
+raster::calc(stack_files_fish, fun=sum, na.rm=TRUE, filename = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/stressor_per_km2/stressor/tmp_fish_%s.tif", stressor), overwrite=TRUE, progress="text")  
+
+## combine farm, feed, fish
+farm <-   raster(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/stressor_per_km2/stressor/tmp_farm_%s.tif", stressor))
+feed <- raster(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/stressor_per_km2/stressor/tmp_feed_%s.tif", stressor))
+fish <- raster(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/stressor_per_km2/stressor/tmp_fish_%s.tif", stressor))
+
+stressor_rasts_stack <- stack(farm, feed, fish)
+
+calc(stressor_rasts_stack, fun=sum, na.rm=TRUE, 
+       filename = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/stressor_per_km2/stressor/%s.tif", stressor), overwrite=TRUE)
+
+delete_files <- as.list(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/stressor_per_km2/stressor", pattern = "tmp", full=TRUE))  
+do.call(file.remove, delete_files)    
+}
+
+
+
+stressor_sum("ghg")
+stressor_sum("disturbance")
+stressor_sum("water")
+stressor_sum("nutrient")
+
+aux_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/stressor_per_km2/stressor", full=TRUE, pattern = ".aux.xml")
+file.remove(aux_files)
+
+
+```
+
+## 2. Combine all systems for each stressor, rescaled values (N=4 rasters)
+
+I think it will be best to use actual values per km2. 
+This means using:
+- equal area raster
+- rescaled data
+
+
+
+```{r}
+
+rescaled_stressor_sum <- function(stressor = "disturbance"){
+
+  all_rasters <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell_rescaled", pattern=".tif", full=TRUE)
+  
+stressor_rasts <- grep(stressor, all_rasters, value=TRUE)  
+
+    # farm first:
+food_files_farm <- grep("farm", stressor_rasts, value=TRUE)
+stack_files_farm <- stack(food_files_farm)
+
+raster::calc(stack_files_farm, fun=sum, na.rm=TRUE, 
+filename = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/stressors/tmp_farm_%s.tif", stressor), overwrite=TRUE, progress="text")
+
+# food second:
+food_files_feed <- grep("feedcrop|feedfodd|feedfofm", stressor_rasts, value=TRUE)
+stack_files_feed <- stack(food_files_feed)
+
+raster::calc(stack_files_feed, fun=sum, na.rm=TRUE, 
+filename = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/stressors/tmp_feed_%s.tif", stressor), overwrite=TRUE, progress="text")  
+  
+# wildcaught third:
+food_files_fish <- grep("wildcaught", stressor_rasts, value=TRUE)
+stack_files_fish <- stack(food_files_fish)
+
+raster::calc(stack_files_fish, fun=sum, na.rm=TRUE, filename = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/stressors/tmp_fish_%s.tif", stressor), overwrite=TRUE, progress="text")  
+
+## combine farm, feed, fish
+farm <-   raster(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/stressors/tmp_farm_%s.tif", stressor))
+feed <- raster(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/stressors/tmp_feed_%s.tif", stressor))
+fish <- raster(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/stressors/tmp_fish_%s.tif", stressor))
+
+stressor_rasts_stack <- stack(farm, feed, fish)
+
+  calc(stressor_rasts_stack, fun=sum, na.rm=TRUE, 
+       filename = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/stressors/%s.tif", stressor), overwrite=TRUE)
+
+  delete_files <- as.list(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/stressors", pattern = "tmp", full=TRUE))  
+do.call(file.remove, delete_files)      
+}
+
+
+rescaled_stressor_sum("ghg")
+rescaled_stressor_sum("disturbance")
+rescaled_stressor_sum("water")
+rescaled_stressor_sum("nutrient")
+
+aux_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/stressors", full=TRUE, pattern = ".aux.xml")
+file.remove(aux_files)
+
+
+## These should be close to 1e6 (can be a little different due to changes in CRS)
+files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/stressors/", full=TRUE)
+for(file in files){ # file=files[1]
+  check_raster <- raster(file) 
+  totalsum <- cellStats(check_raster, sum, na.rm=TRUE)
+  cat(sprintf("checking sum of cells for %s: %s\n", basename(file), totalsum))
+}
+
+
+```
+
+
+## 3. Combine all rescaled stressor to get cumulative stress (N=1 rasters)
+Sum the rescaled rasters for each pressure to get cumulative pressure.
+
+```{r}
+all_stressors <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/stressors", full=TRUE)
+
+  stressor_rasts_stack <- stack(all_stressors)
+  
+  calc(stressor_rasts_stack, fun=sum, na.rm=TRUE, 
+       filename = "/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/cumulative_stress/all_systems_cumulative_stress.tif", overwrite=TRUE)
+
+ aux_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/cumulative_stress", full=TRUE, pattern = ".aux.xml")
+file.remove(aux_files)   
+  
+check <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/cumulative_stress/all_systems_cumulative_stress.tif")
+cellStats(check, sum, na.rm=TRUE)
+cellStats(check, max, na.rm=TRUE)
+```
+
+
+## 4. Combine rescaled rasters for each animal/product
+
+This means using:
+- equal area raster
+- rescaled data
+
+Categories (includes feed and fodder and fofm):
+livestock categories
+combined human consumed crops
+marine wildcaught fisheries
+freshwater fisheries
+all aquaculture
+
+
+
+```{r}
+
+cats <- read_csv(here("_analysis/food_system_categories.csv"))
+
+# get list of categories to cycle through:
+livestock <- filter(cats, subcategory=="livestock") %>%
+  select(organism, product) %>%
+  unique()
+
+marine_fish <- filter(cats, origin == "marine" & subcategory == "fisheries") %>%
+  select(organism, product = subcategory) %>%
+  unique()
+  
+crops <- data.frame(organism = "farm", product="crop")
+
+fresh_fish <- data.frame(organism = "wildcaught", product="freshwater")
+mariculture <- data.frame(organism = "aquaculture", product="marine")
+
+combined_cats <- rbind(livestock, crops, marine_fish, fresh_fish, mariculture)
+
+## function
+rescaled_animal_product <- function(search1 = "chickens", search2="eggs"){
+
+all_rasters <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell_rescaled", pattern=search1, full=TRUE)
+
+if(search1=="chickens" & search2 == "eggs" | search2=="meat"){  
+subset_rasts <- grep(search2, all_rasters, value=TRUE)
+subset_rasts <- grep("eggs&meat", subset_rasts, invert=TRUE, value=TRUE)
+cat(sprintf("checking: %s, %s, N= %s \n", search1, search2, length(subset_rasts)))
+}else{
+subset_rasts <- grep(search2, all_rasters, value=TRUE)
+cat(sprintf("checking: %s, %s, N= %s \n", search1, search2, length(subset_rasts)))
+}
+
+stack_files <- stack(subset_rasts)
+
+raster::calc(stack_files, fun=sum, na.rm=TRUE, 
+filename = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/animal_product/cpi/%s_%s.tif", search1, search2), overwrite=TRUE)
+}
+
+
+for(i in 1:dim(combined_cats)[1]){
+  org <- pull(combined_cats[i,1])
+  product <- pull(combined_cats[i,2])
+## function
+rescaled_animal_product(search1 = org, search2=product)
+}
+
+
+
+aux_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/animal_product/cpi", full=TRUE, pattern = ".aux.xml")
+file.remove(aux_files)   
+
+```
+checking: sheep, meat, N= 24 
+checking: sheep, milk, N= 24 
+checking: goats, meat, N= 24 
+checking: goats, milk, N= 24 
+checking: cows, meat, N= 36 
+checking: cows, milk, N= 24 
+checking: buffaloes, milk, N= 24 
+checking: pigs, meat, N= 48 
+checking: chickens, eggs&meat, N= 12 
+checking: chickens, eggs, N= 16 
+checking: chickens, meat, N= 16 
+checking: farm, crop, N= 108 
+checking: fofm, fisheries, N= 4 
+checking: reef, fisheries, N= 4 
+checking: benthic, fisheries, N= 4 
+checking: demersal, fisheries, N= 4 
+checking: medium-pelagic, fisheries, N= 4 
+checking: small-pelagic, fisheries, N= 4 
+checking: large-pelagic, fisheries, N= 4 
+checking: wildcaught, freshwater, N= 4 
+checking: aquaculture, marine, N= 64 
+
+
+## 5. Combine rescaled rasters for each animal/product
+(for SIplots)
+
+This means using:
+- equal area raster
+- rescaled data
+
+Categories (includes feed and fodder and fofm):
+livestock categories
+combined human consumed crops
+marine wildcaught fisheries
+freshwater fisheries
+all aquaculture
+
+
+Combining data for the SI pressure plots for each animal/product.
+Will need to do crops separately.
+
+```{r}
+
+cats <- read_csv(here("_analysis/food_system_categories.csv"))
+
+# get list of categories to cycle through:
+livestock <- filter(cats, subcategory=="livestock") %>%
+  select(organism, product) %>%
+  unique()
+
+marine_fish <- filter(cats, origin == "marine" & subcategory == "fisheries") %>%
+  select(organism, product = subcategory) %>%
+  unique()
+  
+fresh_fish <- data.frame(organism = "wildcaught", product="freshwater")
+
+mariculture <- filter(cats, origin == "marine" & subcategory == "aquaculture") %>%
+  select(organism, product = subcategory) %>%
+  unique()
+
+combined_cats <- rbind(livestock, marine_fish, fresh_fish, mariculture) %>% data.frame()
+
+## function
+rescaled_animal_product <- function(search1 = "fofm", search2="fisheries"){
+
+all_rasters <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell_rescaled", pattern=search1, full=TRUE)
+
+if(search1=="chickens" & search2 == "eggs" | search2=="meat"){  
+subset_rasts <- grep(search2, all_rasters, value=TRUE)
+subset_rasts <- grep("eggs&meat", subset_rasts, invert=TRUE, value=TRUE)
+cat(sprintf("checking: %s, %s, N= %s \n", search1, search2, length(subset_rasts)))
+}else{
+subset_rasts <- grep(search2, all_rasters, value=TRUE)
+cat(sprintf("checking cpi: %s, %s, N= %s \n", search1, search2, length(subset_rasts)))
+}
+
+stack_files <- stack(subset_rasts)
+
+raster::calc(stack_files, fun=sum, na.rm=TRUE, 
+filename = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/cpi_%s_%s.tif", search1, search2), overwrite=TRUE)
+
+pressure_list <- c("ghg", "nutrient", "disturbance", "water")
+
+
+for(pressure in pressure_list){ # pressure = "ghg"
+
+    subset_pressure_rasts <- grep(pressure, subset_rasts, value=TRUE)
+  
+  if(length(subset_pressure_rasts)==1){
+ file.copy(from = subset_pressure_rasts, 
+           to = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/%s_%s_%s.tif", pressure, search1, search2), 
+           overwrite = TRUE)
+  }else{
+  subset_pressure_stack <- stack(subset_pressure_rasts)
+raster::calc(subset_pressure_stack, fun=sum, na.rm=TRUE, 
+filename = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/%s_%s_%s.tif", pressure, search1, search2), overwrite=TRUE)
+cat(sprintf("checking: %s, %s, %s, N= %s \n", pressure, search1, search2, length(subset_pressure_rasts)))
+}
+}  
+}
+
+
+library(foreach)
+library(doParallel)
+
+registerDoParallel(6)
+
+foreach(i=1:dim(combined_cats)) %dopar% {
+#for(i in 1:dim(combined_cats)[1]){
+  org <- combined_cats[i,1]
+  product <- combined_cats[i,2]
+## function
+rescaled_animal_product(search1 = org, search2=product)
+}
+
+stopCluster()
+
+aux_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps", full=TRUE, pattern = ".aux.xml")
+file.remove(aux_files) 
+
+
+
+```
+
+FOFM needs to be added up.
+
+```{r}
+
+
+all_rasters <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell_rescaled", pattern="fofm", full=TRUE)
+stack_files <- stack(all_rasters)
+
+raster::calc(stack_files, fun=sum, na.rm=TRUE, 
+filename = "/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/cpi_fofm_fisheries.tif", overwrite=TRUE)
+
+aux_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps", full=TRUE, pattern = ".aux.xml")
+file.remove(aux_files) 
+
+
+pressure_list <- c("ghg", "nutrient", "disturbance", "water")
+
+for(pressure in pressure_list){ # pressure = "ghg"
+
+    subset_pressure_rasts <- grep(stressor, all_rasters, value=TRUE)
+  subset_pressure_stack <- stack(subset_pressure_rasts)
+raster::calc(subset_pressure_stack, fun=sum, na.rm=TRUE, 
+filename = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/%s_fofm_fisheries.tif", pressure), overwrite=TRUE)
+cat(sprintf("checking: %s, N= %s \n", pressure, length(subset_pressure_rasts)))
+}
+
+aux_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps", full=TRUE, pattern = ".aux.xml")
+file.remove(aux_files) 
+
+```
+
+
+We have to go back to the beginning for crops:
+
+```{r}
+
+crop_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers", full=TRUE, pattern = "_crop_")
+
+crop_farm_files <- grep("_x_", crop_files, value=TRUE, invert=TRUE)
+
+
+registerDoParallel(6)
+
+foreach(file=crop_farm_files) %dopar% {
+
+#for(file in crop_farm_files){ # 
+  
+  # file = crop_farm_files[1] 
+  
+  stressor_raster <- raster(file)
+  
+  name <- basename(file)
+  name <- gsub(".tif", "", name)
+  
+  raster_area <- area(stressor_raster)
+  #plot(raster_area)
+  
+if(grepl("disturbance", file)){
+  
+   stressor_area_adjust <-  stressor_raster/raster_area
+   stressor_area_adjust[stressor_area_adjust >1] <- 1
+
+   writeRaster(stressor_area_adjust,
+               sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/crop_manipulation/crop_tif_latlong_per_km2/%s_per_area.tif", name),
+               overwrite=TRUE)
+
+}else{
+  
+   stressor_area_adjust <- stressor_raster/raster_area
+   
+   writeRaster(stressor_area_adjust,
+               sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/crop_manipulation/crop_tif_latlong_per_km2/%s_per_area.tif", name),
+               overwrite=TRUE)
+
+  }
+}
+
+stopCluster()
+
+aux_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/crop_manipulation/crop_tif_latlong_per_km2", full=TRUE, pattern = ".aux.xml")
+file.remove(aux_files) 
+
+
+```
+
+
+Next: project rasters to equal area gall peters so we can more easily scale data and such.
+```{r}
+
+gall_peters <- "+proj=cea +lon_0=0 +x_0=0 +y_0=0 +lat_ts=45 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+#raster template 
+template_eq_area <- raster(res=0.083333333333333333)
+extent(template_eq_area) <- c(-180, 180, -90, 90)
+template_eq_area <- projectRaster(template_eq_area, crs=gall_peters, res=3000) 
+
+
+```
+
+
+```{r}
+
+rasters_to_new_crs <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/crop_manipulation/crop_tif_latlong_per_km2", pattern=".tif", full=TRUE)
+
+
+registerDoParallel(6)
+
+foreach(rast=rasters_to_new_crs) %dopar% {
+
+#for(rast in rasters_to_new_crs){ # rast <- rasters_to_new_crs[1]
+  
+rast_name <- basename(rast)
+ getraster <- raster(rast)
+ highres_raster <- disaggregate(getraster, fact=2)
+ projectRaster(highres_raster, template_eq_area, method="ngb", over=TRUE, progress="text",
+                       filename=sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/crop_manipulation/crop_tif_equal_area_proj_per_km2/hi_res_gall_peter_%s", rast_name), overwrite=TRUE)
+
+ gp_raster <- raster(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/crop_manipulation/crop_tif_equal_area_proj_per_km2/hi_res_gall_peter_%s", rast_name))
+#plot(gp_raster)
+ 
+ aggregate(gp_raster, fact=2, fun=mean, filename=sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/crop_manipulation/crop_tif_equal_area_proj_per_km2/gall_peter_%s", rast_name), overwrite=TRUE)
+}
+
+stopCluster()
+
+aux_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/crop_manipulation/crop_tif_equal_area_proj_per_km2", full=TRUE, pattern = ".aux.xml")
+file.remove(aux_files) 
+
+```
+
+
+Delete the hi_res version which is just a temp file.
+```{r}
+remove <- list.files(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/crop_manipulation/crop_tif_equal_area_proj_per_km2"), full=TRUE, pattern="hi_res")
+file.remove(remove)
+```
+
+
+convert to total per cell
+```{r}
+per_km_rasts <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/crop_manipulation/crop_tif_equal_area_proj_per_km2", full=TRUE)
+
+registerDoParallel(6)
+
+foreach(rast=per_km_rasts) %dopar% {
+
+#for(rast in per_km_rasts){ # rast = per_km_rasts[1]
+ save_name <- basename(rast)
+ save_name <- gsub("_per_area", "_per_cell", save_name)
+    new_raster <- raster(rast)
+  per_cell_rast <- new_raster*6000*6000/1000000
+writeRaster(per_cell_rast, sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/crop_manipulation/crop_tif_equal_area_proj_per_cell/%s", save_name), overwrite=TRUE)
+#check <- raster(sprintf("/home/shares/food-systems/Food_footprint/final_data/_tif_equal_area_proj_per_cell/%s", save_name))
+#cellStats(check, "sum", na.rm=TRUE)
+}
+
+stopCluster()
+
+aux_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/crop_manipulation/crop_tif_equal_area_proj_per_cell", full=TRUE, pattern = ".aux.xml")
+file.remove(aux_files) 
+
+
+```
+
+Rescale
+
+```{r}
+
+rescaling_data <- read_csv(here("_analysis/rescale_values.csv"))
+
+pressure_list <- c("ghg", "nutrient", "disturbance", "water")
+
+for(stressor in pressure_list){ # stressor = "nutrient"
+  
+  resc_num <- rescaling_data$global_total[rescaling_data$pressure==stressor] 
+  
+stressor_system_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/crop_manipulation/crop_tif_equal_area_proj_per_cell", pattern=stressor, full=TRUE)
+  
+
+  for(stressor_raster_filename in stressor_system_files){ #stressor_raster_filename= stressor_system_files[1]
+file_name <- basename(stressor_raster_filename)
+file_name <- gsub("_per_cell.tif", "", file_name)
+file_name <- paste0(file_name, "_rescaled.tif")
+
+stressor_raster <- raster(stressor_raster_filename)
+rescaled_raster = raster::calc(stressor_raster, fun=function(x){ifelse(x>0, 
+                                      (x/resc_num) * 1000000, 
+                                       0)})
+writeRaster(rescaled_raster, sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/crop_manipulation/crop_tif_equal_area_proj_per_cell_rescaled/%s", file_name),
+              overwrite=TRUE)
+}
+}
+
+aux_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/crop_manipulation/crop_tif_equal_area_proj_per_cell_rescaled", full=TRUE, pattern = ".aux.xml")
+file.remove(aux_files) 
+
+```
+
+apply function from above to get the final rasters
+```{r}
+
+cats <- read_csv(here("_analysis/food_system_categories.csv"))
+
+crops <- filter(cats, system == "crop") %>%
+  select(organism, product = system) %>%
+  unique()
+
+
+## function
+rescaled_animal_product <- function(search1 = "bana", search2="crop"){
+
+crop_rasters <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/crop_manipulation/crop_tif_equal_area_proj_per_cell_rescaled", pattern=search1, full=TRUE)
+
+stack_files <- stack(crop_rasters)
+
+raster::calc(stack_files, fun=sum, na.rm=TRUE, 
+filename = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/cpi_%s_%s.tif", search1, search2), overwrite=TRUE)
+
+pressure_list <- c("ghg", "nutrient", "disturbance", "water")
+
+for(pressure in pressure_list){ # pressure = "ghg"
+
+    subset_pressure_rasts <- grep(pressure, crop_rasters, value=TRUE)
+  
+ file.copy(from = subset_pressure_rasts, 
+           to = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/%s_%s_%s.tif", pressure, search1, search2), 
+           overwrite = TRUE)
+}
+}
+
+
+registerDoParallel(6)
+
+foreach(i=1:dim(crops)[1]) %dopar% {
+#for(i in 1:dim(crops)[1]){ #i=1
+  org <- pull(crops[i,1])
+  product <- pull(crops[i,2])
+## function
+rescaled_animal_product(search1 = org, search2=product)
+}
+
+stopCluster()
+
+aux_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps", full=TRUE, pattern = ".aux.xml")
+file.remove(aux_files) 
+
+```

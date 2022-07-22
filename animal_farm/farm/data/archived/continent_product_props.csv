@@ -1,0 +1,13 @@
+﻿animal,system,product,Africa,Americas,Asia,Europe,Oceania
+sheep,grassland,meat,1,1,0.5,0.5,1
+sheep,grassland,milk,0,0,0.5,0.5,0
+sheep,mixed,meat,1,1,0.5,0.5,1
+sheep,mixed,milk,0,0,0.5,0.5,0
+goats,grassland,meat,0.75,0.75,0.5,0,1
+goats,grassland,milk,0.25,0.25,0.5,1,0
+goats,mixed,meat,0.75,0.75,0.5,0,1
+goats,mixed,milk,0.25,0.25,0.5,1,0
+cows,grassland,meat,0.5,0.5,0,0,0.5
+cows,grassland,milk,0.5,0.5,1,1,0.5
+cows,mixed,meat,0.5,0.5,0,0,0.5
+cows,mixed,milk,0.5,0.5,1,1,0.5

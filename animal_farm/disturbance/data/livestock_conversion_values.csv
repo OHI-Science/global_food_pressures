@@ -1,0 +1,11 @@
+animal,system,product,value,units,notes,reference
+chicken,industrial,meat,35,kg/m2,from chicken and salmon,
+chicken,industrial,eggs,9,heads/m2,indoor only raised value,https://internationanimals.files.wordpress.com/2015/11/fao_report.pdf
+breeder pigs,industrial and intermediate,meat,1.945,m2/head,"sows only, ""sow when gilts and/or sows are kept in groups must be at least 1.64 m2 and 2.25 m2, respectively"" used the average",http://www.fao.org/3/a-i4002e.pdf
+extra barn space,industrial and intermediate,all,1.1,percent,10% additional building area ,
+extra large ruminant barn space,mixed,all,2.5,percent,60% additional building area,
+extra farm space,industrial and intermediate,all,2.5,percent,60% of farm space that is unaccounted for,
+market pigs,industrial,meat,0.55,m2/head,assuming midpoint of slaughter weight,https://eur-lex.europa.eu/eli/dir/2008/120/oj
+market pigs,intermediate,meat,0.4,m2/head,assuming midpoint of slaughter weight,https://eur-lex.europa.eu/eli/dir/2008/120/oj
+breeder pigs,both,meat,0.9,proportion,,faostat data
+market pigs,both,meat,0.1,proportion,,faostat data

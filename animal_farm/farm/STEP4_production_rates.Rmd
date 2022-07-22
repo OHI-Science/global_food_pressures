@@ -1,0 +1,136 @@
+---
+title: "STEP 4: Calculate Gleam Production Rates for milk/meat in dairy/non-dairy systems"
+author: "Juliette"
+date: "9/15/2020"
+output: html_document
+---
+
+# Objectives
+This markdown This markdown creates a data file with production/head of animal using the GLEAM data. We are not differentiating between grassland and mixed systems.
+
+# Input
+**Reference** GLEAM
+**Description** Herd and emissions data
+**Resolution** Country level
+**Time Range** 2010
+**Format** CSV file (after we scraped and wrangled)
+
+## Output: ruminants_production_rates.csv
+
+**
+
+## Setup
+Here we are exploring the production rate/head for each country for each of our categories. We want to determine if the production rate differs between system (grassland, mixed, etc).
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(stringr)
+source(here("_workflow/common.R"))
+
+'%notin%' <- Negate('%in%')
+
+ruminants_raw <- read_csv(here("animal_farm/farm/data/ruminants_GLEAMi_v2.csv"))
+
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>% 
+  dplyr::select(iso3c, Global_Name, Region_Name, Sub_region_Name, Intermediate_Region_Name, Region_Name)
+
+```
+
+## Methods
+
+Ruminants (cows, buffalo, sheep, goats)
+**Note** we are lumping Feedlot cows in with mixed so we need to add them together
+
+```{r}
+ruminants <- ruminants_raw %>% 
+  select(-Unit) %>% 
+  ## combining the feedlot head counts and production in with the mixed
+  mutate(Production_system = ifelse(Production_system == "Feedlot operations", "Mixed systems", Production_system),
+         Herd_type = ifelse(Herd_type == "Feedlot", "Non-dairy", Herd_type)) %>% 
+  group_by(Country, iso3c, Species, Production_system, Herd_type, Variable) %>% 
+  dplyr::summarise(Value = sum(Value)) %>%
+  ungroup() %>% 
+  filter(Herd_type != "Whole herd",
+         Production_system == "All systems") %>% 
+  filter(Variable %in% c("HERD: total number of animals", "PROD: Milk - fresh weight", "PROD: Meat - carcass weight")) %>%
+  pivot_wider(names_from = Variable, values_from = Value) %>% 
+  select(animal = Species, herd_type = Herd_type, country = Country, iso3c, system = Production_system, count = 'HERD: total number of animals', kg_milk_year = 'PROD: Milk - fresh weight', kg_cw_year = 'PROD: Meat - carcass weight') %>% 
+  mutate(tonnes_milk_head = (kg_milk_year/1000)/count,
+         tonnes_meat_head = (kg_cw_year/1000)/count,
+         tonnes_milk_head = ifelse(is.na(tonnes_milk_head), 0, tonnes_milk_head),
+         tonnes_meat_head = ifelse(is.na(tonnes_meat_head), 0, tonnes_meat_head)) %>% 
+  mutate(animal = tolower(animal),
+         animal = ifelse(animal == "cattle", "cows", 
+                         ifelse(animal == "buffalo", "buffaloes", animal)),
+         herd_type = tolower(herd_type)) %>% 
+  select(country, iso3c, animal, system_1 = herd_type, system_2 = system, tonnes_milk_head, tonnes_meat_head)%>% 
+  pivot_longer(cols = 6:7, names_to = "product", values_to = "tonnes_per_head") %>% 
+  mutate(product = ifelse(product == "tonnes_meat_head", "meat", "milk"))
+  
+```
+
+Ruminants
+
+We need to add in and gapfill missing countries using the UN Regions
+
+```{r}
+
+rum_miss_list <- setdiff(food_rgns$iso3c, ruminants$iso3c)
+
+rum_miss <- as_tibble(rum_miss_list) %>% 
+  rename(iso3c = value) %>% 
+  slice(rep(1:n(), each =4)) %>% 
+  mutate(animal = rep(c("cows", "buffaloes", "goats", "sheep"), times = 11)) %>% 
+  slice(rep(1:n(), each =2)) %>% 
+  mutate(system_1 = rep(c("dairy", "non-dairy"), times = 44)) %>% 
+  slice(rep(1:n(), each =2)) %>% 
+  mutate(product = rep(c("milk", "meat"), times = 88),
+         system_2 = "All systems") %>% 
+  left_join(food_rgns, by = "iso3c") %>% 
+  select(iso3c, country = Country, animal, system_1, system_2, product) %>% 
+  mutate(tonnes_per_head = NA)
+
+
+ruminants_gf_missing <- rbind(ruminants, rum_miss) %>%
+  group_by(system_1, system_2, product) %>%
+  mutate(gapfilled = ifelse(is.na(tonnes_per_head), "rate gf with global mean", NA), 
+  tonnes_per_head = ifelse(is.na(tonnes_per_head), mean(tonnes_per_head, na.rm = TRUE), tonnes_per_head)) %>%
+  ungroup() %>%
+  select(iso3c, country , animal, system_1, system_2, product, tonnes_per_head, gapfilled)
+
+## gapfill the countries that have 0 animals according to GLEAM
+ruminants_gf <- ruminants_gf_missing %>% 
+  group_by(iso3c, animal) %>% 
+  mutate(gf_int = sum(tonnes_per_head)) %>% 
+  ungroup() %>% 
+  group_by(animal, system_1, product) %>% 
+  mutate(gapfilled = ifelse(gf_int == 0, "rate gf with global mean", gapfilled),
+         tonnes_per_head =  ifelse(gf_int == 0, mean(tonnes_per_head, na.rm = TRUE), tonnes_per_head)) %>% 
+  ungroup() %>% 
+  group_by(iso3c, animal, product) %>% 
+  mutate(gf_int_prod = sum(tonnes_per_head)) %>% 
+  ungroup() %>% 
+  group_by(animal, system_1, product) %>% 
+  mutate(gapfilled = ifelse(gf_int == 0, "rate gf with global mean", gapfilled),
+         tonnes_per_head =  ifelse(gf_int == 0, mean(tonnes_per_head, na.rm = TRUE), tonnes_per_head)) %>% 
+  select(-gf_int, -gf_int_prod)
+  
+
+```
+
+Save
+```{r}
+write_csv(ruminants_gf, here("animal_farm/farm/data/ruminants_production_rates.csv"))
+```
+
+check
+```{r}
+gf <- ruminants_gf %>% 
+  group_by(iso3c, animal, product) %>% 
+  mutate(check = sum(tonnes_per_head))
+```
+
+
+

@@ -1,0 +1,7 @@
+﻿animal,system,Africa,Americas,Asia,Europe,Oceania
+sheep,grassland,0.25,0,0.25,0,0.25
+sheep,mixed,0.75,1,0.75,1,0.75
+goats,grassland,0.38,0.25,0.25,0,0.25
+goats,mixed,0.62,0.75,0.75,1,0.75
+cows,grassland,0.25,0,0,0,0.25
+cows,mixed,0.75,1,1,1,0.75

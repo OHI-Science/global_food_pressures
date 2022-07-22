@@ -1,0 +1,84 @@
+---
+title: "Creating grassland and mixed ID raster with HYDE and NPP data"
+author: "Juliette"
+date: "10/5/2020"
+output: html_document
+---
+
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+```
+
+
+Grab the HYDE data 
+```{r}
+graze <- raster(file.path(raw, "HYDE/baseline/2017AD_lu/grazing2017AD.asc"), crs = food_crs)
+plot(graze)
+```
+
+We want to figure out the distribution of the proportion of cells grazed wise
+```{r}
+
+graze_prop <- graze/area(graze)
+
+# plot histogram
+hist(graze_prop,
+     main = "Distribution of proportion of grazed in each cell (with 0)",
+     xlab = "Proportion", ylab = "Frequency",
+     col = "hotpink4")
+
+graze_prop[graze_prop == 0] <- NA
+hist(graze_prop,
+     main = "Distribution of proportion of grazed in each cell (remove 0)",
+     xlab = "Proportion", ylab = "Frequency",
+     col = "darkseagreen")
+
+```
+
+We are going to use the proportion grazed as the factor for determining how many animals in that cell are grassland, and then 1-grazed for how many are mixed
+
+
+```{r}
+
+graze_prop <- graze/area(graze)
+
+grassland <- resample(graze_prop, food_rgns_tif, method = "ngb")
+grassland[grassland < 0] <- 0
+grassland[grassland > 1] <- 1
+
+## we want to make any cells where npp is less than 0, 100% mixed
+npp <- raster(file.path(prep, "animal_farm/disturbance/npp_2013_2015_rasters/mean_npp_2013_2015.tif"))  
+npp[npp <= 10] <- 0
+npp[npp > 10] <- 1
+plot(npp)
+
+grassland_adj <- grassland*npp
+plot(grassland_adj)
+
+mixed <- 1- grassland
+
+plot(mixed)
+
+# check <- mixed +grassland
+# plot(check)
+```
+
+
+
+```{r}
+
+writeRaster(grassland_adj, file.path(prep, ("animal_farm/farm/production_system2_tifs/grassland_prod_system.tif"), sep = ""), format = "GTiff", overwrite = TRUE ) 
+
+writeRaster(mixed, file.path(prep, ("animal_farm/farm/production_system2_tifs/mixed_prod_system.tif"), sep = ""), format = "GTiff", overwrite = TRUE ) 
+
+
+```
+
+

@@ -1,0 +1,160 @@
+---
+title: "Rasterizing prodution per each region"
+author: "Gage Clawson (NCEAS, UCSB, OHI)"
+date: "12/14/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+```{r}
+
+library(here)
+library(dplyr)
+library(sf)
+library(raster)
+library(mapview)
+
+source(here::here("_spatial/template_raster.R"))
+
+
+```
+
+
+# Global regions
+
+```{r}
+
+# this file includes ocean regions:
+gadm <- raster("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/gadm36mol_pyfill_10km.tif")
+
+gadm_latlon <- raster::projectRaster(gadm, food_raster, method="ngb", over=TRUE)
+plot(gadm_latlon)
+
+gadm_codes <- read.csv("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/gadm_reg_codes.csv") %>% 
+  mutate(reg_id = as.numeric(reg_id))
+
+```
+
+# read in points and converted to spatial dataframe
+```{r}
+
+farms <- read.csv(here::here("aquaculture/marine/tuna/tuna_farms/data/global_tuna_farm_lat_lon.csv"))
+
+farms_sf <-  st_as_sf(farms, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_sf)
+```
+
+
+# determine subregions where points are located
+
+```{r}
+
+farms_sf$reg_id <- raster::extract(gadm_latlon, farms_sf) 
+
+farms_sf <- farms_sf %>%
+  left_join(gadm_codes, by="reg_id") %>%
+  dplyr::mutate(NAME_1 = as.character(NAME_1))
+
+farms_sf$check <-  paste(farms_sf$iso3c, farms_sf$GID_0, sep=":")
+table(farms_sf$check)
+
+## no mismatches
+```
+
+
+# FAO tuna production data per country
+```{r}
+
+fao <- read.csv(here::here("aquaculture/marine/tuna/tuna_farms/data/fao_mariculture_tuna.csv")) %>%
+  dplyr::filter(year == 2017) %>%
+  dplyr::select(iso3c, fao_tonnes_production)
+
+setdiff(fao$iso3c, farms_sf$iso3c)
+setdiff(farms_sf$iso3c, fao$iso3c)
+
+```
+
+
+# join country production to farms by iso3c
+
+```{r}
+
+farms_sf_correct <- farms_sf %>%
+  left_join(fao, by="iso3c")
+
+summary(farms_sf_correct) # make sure no production NA values
+
+```
+
+
+# get areas with no regional production data and calculate production per farm
+
+```{r}
+
+## calculate farm production
+farms_prod <- farms_sf_correct %>%
+  group_by(NAME_0) %>%
+  add_tally() %>%
+  ungroup() %>%
+  mutate(tonnes_per_farm = fao_tonnes_production/n) %>%
+  dplyr::select(iso3c, tonnes_per_farm, geometry) 
+
+```
+
+# combine and check it all matches ok
+
+```{r}
+
+farm_production <- farms_prod
+
+test <- farm_production %>%
+  dplyr::group_by(iso3c) %>%
+  dplyr::summarize(total_tonnes = sum(tonnes_per_farm, na.rm=TRUE)) %>%
+  left_join(fao, by = "iso3c") %>%
+  mutate(difference = fao_tonnes_production - total_tonnes)
+
+
+farms_sf_prod <- st_as_sf(farm_production)
+mapview(farms_sf_prod)
+
+## write the production data so that we can use it for the nutrient layer. 
+st_write(farms_sf_prod, "aquaculture/marine/tuna/tuna_nutrient/prod_data_by_cell_iso3c.shp")
+
+```
+
+## convert to raster, with the value of each cell equalling the sum tonnes per farm for all farms landing in cell.
+
+```{r}
+
+farms_sf <- st_as_sf(farm_production)
+mapview(farms_sf)
+
+sum(farms_sf$tonnes_per_farm) # 37072.56
+
+tuna_raster_check <- rasterize(farms_sf, food_raster, field = "tonnes_per_farm", fun=sum)
+plot(log(tuna_raster_check+1))
+cellStats(tuna_raster_check, stat = "sum", na.rm = TRUE) # 37072.56
+
+mapview(tuna_raster_check)
+
+tuna_raster <- rasterize(farms_sf, food_raster, field = "tonnes_per_farm", fun=sum, background=0)
+mapview(log(tuna_raster+1)) 
+
+plot(log(tuna_raster+1))
+
+tuna_raster_df <- as.data.frame(tuna_raster, xy=TRUE) %>%
+  dplyr::select(x,y, tonnes_production=layer)
+
+cellStats(tuna_raster, stat = "sum") # 37072.56
+sum(tuna_raster_df$tonnes_production) # 37072.56
+sum(farms_sf$tonnes_per_farm, na.rm = TRUE) # 37072.56
+sum(fao$fao_tonnes_production) # 37072.56
+
+write_csv(tuna_raster_df, "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/tuna/tuna_farm.csv")
+
+```

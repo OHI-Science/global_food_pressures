@@ -1,0 +1,11 @@
+﻿Cattle Class,Wt_kg,4,10,14,21,27,32
+Growing Cattle,180,15,16,19,22,25,36
+Growing Cattle,275,20,22,25,30,34,48
+Growing Cattle,365,23,26,30,35,40,57
+Finishing Cattle,275,23,25,28,33,38,54
+Finishing Cattle,365,28,30,34,41,47,66
+Finishing Cattle,455,33,36,41,48,55,78
+Wintering Pregnant Cows,410,25,27,31,37,NA,NA
+Lactating Cows,410,43,48,55,64,68,61
+Mature Bull,635,30,33,38,44,51,72
+Mature Bull,725,33,36,41,48,55,78

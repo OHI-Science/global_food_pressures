@@ -1,0 +1,124 @@
+﻿Item Code,Item,Description,HS Code,HS07 Code,HS12 Code,CPC Code,cut
+2501,Population,,,,,S2501,yes
+2901,Grand Total,,,,,S2901,yes
+2903,Vegetal Products,,,,,S2903,yes
+2941,Animal Products,,,,,S2941,yes
+2905,Cereals - Excluding Beer,,,,,S2905,yes
+2511,Wheat and products,"Default composition: 15 Wheat, 16 Flour, wheat, 17 Bran, wheat, 18 Macaroni, 19 Germ, wheat, 20 Bread, 21 Bulgur, 22 Pastry, 23 Starch, wheat, 24 Gluten, wheat, 41 Cereals, breakfast, 110 Wafers, 114 Mixes and doughs, 115 Food preparations, flour, malt extract",,,,S2511,
+2807,Rice and products,"Default composition: 27 Rice, paddy, 28 Rice, husked, 29 Rice, milled/husked, 31 Rice, milled, 32 Rice, broken, 33 Gluten, rice, 34 Starch, rice, 35 Bran, rice, 38 Flour, rice",,,,S2807,
+2513,Barley and products,"Default composition: 44 Barley, 45 Barley, pot, 46 Barley, pearled, 47 Bran, barley, 48 Flour, barley and grits, 49 Malt, 50 Malt extract",,,,S2513,
+2514,Maize and products,"Default composition: 56 Maize, 57 Germ, maize, 58 Flour, maize, 59 Bran, maize, 63 Gluten, maize, 64 Starch, maize, 846 Feed and meal, gluten",,,,S2514,
+2515,Rye and products,"Default composition: 71 Rye, 72 Flour, rye, 73 Bran, rye",,,,S2515,
+2516,Oats,"Default composition: 75 Oats, 76 Oats rolled, 77 Bran, oats",,,,S2516,
+2517,Millet and products,"Default composition: 79 Millet, 80 Flour, millet, 81 Bran, millet",,,,S2517,
+2518,Sorghum and products,"Default composition: 83 Sorghum, 84 Flour, sorghum, 85 Bran, sorghum",,,,S2518,
+2520,"Cereals, Other","Default composition: 68 Popcorn, 89 Buckwheat, 90 Flour, buckwheat, 91 Bran, buckwheat, 92 Quinoa, 94 Fonio, 95 Flour, fonio, 96 Bran, fonio, 97 Triticale, 98 Flour, triticale, 99 Bran, triticale, 101 Canary seed, 103 Grain, mixed, 104 Flour, mixed grain, 105 Bran, mixed grains, 108 Cereals, nes, 111 Flour, cereals, 112 Bran, cereals nes, 113 Cereal preparations, nes",,,,S2520,
+2907,Starchy Roots,,,,,S2907,yes
+2532,Cassava and products,"Default composition: 125 Cassava, 126 Flour, cassava, 127 Tapioca, cassava, 128 Cassava dried, 129 Starch, cassava",,,,S2532,
+2531,Potatoes and products,"Default composition: 116 Potatoes, 117 Flour, potatoes, 118 Potatoes, frozen, 119 Starch, potatoes, 121 Tapioca, potatoes",,,,S2531,
+2533,Sweet potatoes,Default composition: 122 Sweet potatoes,,,,S2533,
+2535,Yams,Default composition: 137 Yams,,,,S2535,
+2534,"Roots, Other","Default composition: 135 Yautia (cocoyam), 136 Taro (cocoyam), 149 Roots and tubers, nes, 150 Flour, roots and tubers nes, 151 Roots and tubers dried",,,,S2534,
+2908,Sugar Crops,,,,,S2908,yes
+2536,Sugar cane,Default composition: 156 Sugar cane,,,,S2536,
+2537,Sugar beet,Default composition: 157 Sugar beet,,,,S2537,
+2909,Sugar & Sweeteners,,,,,S2909,yes
+2541,Sugar non-centrifugal,Default composition: 163 Sugar non-centrifugal,,,,S2541,yes
+2542,Sugar (Raw Equivalent),"Default composition: 158 Sugar, cane, raw, centrifugal, 159 Sugar, beet, raw, centrifugal, 162 Sugar Raw Centrifugal, 164 Sugar refined, 168 Sugar confectionery, 171 Sugar flavoured",,,,S2542,yes
+2543,"Sweeteners, Other","Default composition: 154 Fructose chemically pure, 155 Maltose chemically pure, 160 Maple sugar and syrups, 161 Sugar crops, nes, 165 Molasses, 166 Fructose and syrup, other, 167 Sugar, nes, 172 Glucose and dextrose, 173 Lactose, 175 Isoglucose, 633 Beverages, non alcoholic",,,,S2543,yes
+2745,Honey,"Default composition: 1182 Honey, natural",,,,S2745,yes
+2911,Pulses,,,,,S2911,yes
+2546,Beans,"Default composition: 176 Beans, dry",,,,S2546,
+2547,Peas,"Default composition: 187 Peas, dry",,,,S2547,
+2549,"Pulses, Other and products","Default composition: 181 Broad beans, horse beans, dry, 191 Chick peas, 195 Cow peas, dry, 197 Pigeon peas, 201 Lentils, 203 Bambara beans, 205 Vetches, 210 Lupins, 211 Pulses, nes, 212 Flour, pulses, 213 Bran, pulses",,,,S2549,
+2912,Treenuts,,,,,S2912,yes
+2551,Nuts and products,"Default composition: 216 Brazil nuts, with shell, 217 Cashew nuts, with shell, 220 Chestnut, 221 Almonds, with shell, 222 Walnuts, with shell, 223 Pistachios, 224 Kola nuts, 225 Hazelnuts, with shell, 226 Areca nuts, 229 Brazil nuts, shelled, 230 Cashew nuts, shelled, 231 Almonds shelled, 232 Walnuts, shelled, 233 Hazelnuts, shelled, 234 Nuts, nes, 235 Nuts, prepared (exc. groundnuts)",,,,S2551,
+2913,Oilcrops,,,,,S2913,yes
+2555,Soyabeans,"Default composition: 236 Soybeans, 239 Soya sauce, 240 Soya paste, 241 Soya curd",,,,S2555,
+2552,Groundnuts,"Default composition: 242 Groundnuts, with shell, 243 Groundnuts, shelled, 246 Groundnuts, prepared, 247 Peanut butter",,,,S2552,
+2557,Sunflower seed,Default composition: 267 Sunflower seed,,,,S2557,
+2558,Rape and Mustardseed,"Default composition: 270 Rapeseed, 292 Mustard seed, 295 Flour, mustard",,,,S2558,
+2559,Cottonseed,Default composition: 329 Cottonseed,,,,S2559,
+2560,Coconuts - Incl Copra,"Default composition: 249 Coconuts, 250 Coconuts, desiccated, 251 Copra",,,,S2560,
+2561,Sesame seed,Default composition: 289 Sesame seed,,,,S2561,
+2562,Palm kernels,"Default composition: 254 Oil, palm fruit, 256 Palm kernels",,,,S2562,
+2563,Olives (including preserved),"Default composition: 260 Olives, 262 Olives preserved",,,,S2563,
+2570,"Oilcrops, Other","Default composition: 263 Karite nuts (sheanuts), 265 Castor oil seed, 275 Tung nuts, 277 Jojoba seed, 280 Safflower seed, 296 Poppy seed, 299 Melonseed, 305 Tallowtree seed, 310 Kapok fruit, 311 Kapokseed in shell, 312 Kapokseed shelled, 333 Linseed, 336 Hempseed, 339 Oilseeds nes, 343 Flour, oilseeds",,,,S2570,
+2914,Vegetable Oils,,,,,S2914,yes
+2571,Soyabean Oil,"Default composition: 237 Oil, soybean",,,,S2571,yes
+2572,Groundnut Oil,"Default composition: 244 Oil, groundnut",,,,S2572,yes
+2573,Sunflowerseed Oil,"Default composition: 268 Oil, sunflower",,,,S2573,yes
+2574,Rape and Mustard Oil,"Default composition: 271 Oil, rapeseed, 293 Oil, mustard",,,,S2574,yes
+2575,Cottonseed Oil,"Default composition: 331 Oil, cottonseed",,,,S2575,yes
+2576,Palmkernel Oil,"Default composition: 258 Oil, palm kernel",,,,S2576,yes
+2577,Palm Oil,"Default composition: 257 Oil, palm, 1276 Fatty acids, 1277 Fatty substance residues",,,,S2577,yes
+2578,Coconut Oil,"Default composition: 252 Oil, coconut (copra)",,,,S2578,yes
+2579,Sesameseed Oil,"Default composition: 290 Oil, sesame",,,,S2579,yes
+2580,Olive Oil,"Default composition: 261 Oil, olive, virgin, 274 Oil, olive residues",,,,S2580,yes
+2581,Ricebran Oil,"Default composition: 36 Oil, rice bran",,,,S2581,yes
+2582,Maize Germ Oil,"Default composition: 60 Oil, maize",,,,S2582,yes
+2586,"Oilcrops Oil, Other","Default composition: 264 Butter of karite nuts, 266 Oil, castor beans, 276 Oil, tung nuts, 278 Oil, jojoba, 281 Oil, safflower, 297 Oil, poppy, 306 Vegetable tallow, 307 Oil, stillingia, 313 Oil, kapok, 334 Oil, linseed, 337 Oil, hempseed, 340 Oil, vegetable origin nes, 664 Cocoa, butter, 1241 Margarine, liquid, 1242 Margarine, short, 1273 Castor oil, hydrogenated (opal wax), 1274 Oil, boiled etc, 1275 Oil, hydrogenated",,,,S2586,yes
+2918,Vegetables,,,,,S2918,yes
+2601,Tomatoes and products,"Default composition: 388 Tomatoes, 389 Juice, tomato, concentrated, 390 Juice, tomato, 391 Tomatoes, paste, 392 Tomatoes, peeled",,,,S2601,
+2602,Onions,"Default composition: 403 Onions, dry",,,,S2602,
+2605,"Vegetables, other","Default composition: 358 Cabbages and other brassicas, 366 Artichokes, 367 Asparagus, 372 Lettuce and chicory, 373 Spinach, 378 Cassava leaves, 393 Cauliflowers and broccoli, 394 Pumpkins, squash and gourds, 397 Cucumbers and gherkins, 399 Eggplants (aubergines), 401 Chillies and peppers, green, 402 Onions, shallots, green, 406 Garlic, 407 Leeks, other alliaceous vegetables, 414 Beans, green, 417 Peas, green, 420 Vegetables, leguminous nes, 423 String beans, 426 Carrots and turnips, 430 Okra, 446 Maize, green, 447 Sweet corn frozen, 448 Sweet corn prep or preserved, 449 Mushrooms and truffles, 450 Mushrooms, dried, 451 Mushrooms, canned, 459 Chicory roots, 461 Carobs, 463 Vegetables, fresh nes, 464 Vegetables, dried nes, 465 Vegetables, canned nes, 466 Juice, vegetables nes, 469 Vegetables, dehydrated, 471 Vegetables in vinegar, 472 Vegetables, preserved nes, 473 Vegetables, frozen, 474 Vegetables, temporarily preserved, 475 Vegetables, preserved, frozen, 476 Vegetables, homogenized preparations, 567 Watermelons, 568 Melons, other (inc.cantaloupes), 658 Coffee, substitutes containing coffee",,,,S2605,
+2919,Fruits - Excluding Wine,,,,,S2919,yes
+2611,"Oranges, Mandarines","Default composition: 490 Oranges, 491 Juice, orange, single strength, 492 Juice, orange, concentrated, 495 Tangerines, mandarins, clementines, satsumas, 496 Juice, tangerine",,,,S2611,
+2612,"Lemons, Limes and products","Default composition: 497 Lemons and limes, 498 Juice, lemon, single strength, 499 Juice, lemon, concentrated",,,,S2612,
+2613,Grapefruit and products,"Default composition: 507 Grapefruit (inc. pomelos), 509 Juice, grapefruit, 510 Juice, grapefruit, concentrated",,,,S2613,
+2614,"Citrus, Other","Default composition: 512 Fruit, citrus nes, 513 Juice, citrus, single strength, 514 Juice, citrus, concentrated",,,,S2614,
+2615,Bananas,Default composition: 486 Bananas,,,,S2615,
+2616,Plantains,Default composition: 489 Plantains,,,,S2616,
+2617,Apples and products,"Default composition: 515 Apples, 518 Juice, apple, single strength, 519 Juice, apple, concentrated",,,,S2617,
+2618,Pineapples and products,"Default composition: 574 Pineapples, 575 Pineapples canned, 576 Juice, pineapple, 580 Juice, pineapple, concentrated",,,,S2618,
+2619,Dates,Default composition: 577 Dates,,,,S2619,
+2620,Grapes and products (excl wine),"Default composition: 560 Grapes, 561 Raisins, 562 Juice, grape, 563 Grapes, must",,,,S2620,
+2625,"Fruits, other","Default composition: 521 Pears, 523 Quinces, 526 Apricots, 527 Apricots, dry, 530 Cherries, sour, 531 Cherries, 534 Peaches and nectarines, 536 Plums and sloes, 537 Plums dried (prunes), 538 Juice, plum, single strength, 539 Juice, plum, concentrated, 541 Fruit, stone nes, 542 Fruit, pome nes, 544 Strawberries, 547 Raspberries, 549 Gooseberries, 550 Currants, 552 Blueberries, 554 Cranberries, 558 Berries nes, 567 Watermelons, 568 Melons, other (inc.cantaloupes), 569 Figs, 570 Figs dried, 571 Mangoes, mangosteens, guavas, 572 Avocados, 583 Juice, mango, 587 Persimmons, 591 Cashewapple, 592 Kiwi fruit, 600 Papayas, 603 Fruit, tropical fresh nes, 604 Fruit, tropical dried nes, 619 Fruit, fresh nes, 620 Fruit, dried nes, 622 Juice, fruit nes, 623 Fruit, prepared nes, 624 Flour, fruit, 625 Fruits, nuts, peel, sugar preserved, 626 Fruit, cooked, homogenized preparations",,,,S2625,
+2922,Stimulants,,,,,S2922,yes
+2630,Coffee and products,"Default composition: 656 Coffee, green, 657 Coffee, roasted, 659 Coffee, extracts",,,,S2630,yes
+2633,Cocoa Beans and products,"Default composition: 661 Cocoa, beans, 662 Cocoa, paste, 665 Cocoa, powder & cake, 666 Chocolate products nes",,,,S2633,
+2635,Tea (including mate),"Default composition: 667 Tea, 671 Mat?, 672 Tea, mate extracts",,,,S2635,yes
+2923,Spices,,,,,S2923,yes
+2640,Pepper,Default composition: 687 Pepper (piper spp.),,,,S2640,
+2641,Pimento,"Default composition: 689 Chillies and peppers, dry",,,,S2641,
+2642,Cloves,Default composition: 698 Cloves,,,,S2642,
+2645,"Spices, Other","Default composition: 692 Vanilla, 693 Cinnamon (canella), 702 Nutmeg, mace and cardamoms, 711 Anise, badian, fennel, coriander, 720 Ginger, 723 Spices, nes",,,,S2645,
+2924,Alcoholic Beverages,,,,,S2924,yes
+2655,Wine,"Default composition: 564 Wine, 565 Vermouths & similar",,,,S2655,yes
+2656,Beer,Default composition: 51 Beer of barley,,,,S2656,yes
+2657,"Beverages, Fermented","Default composition: 26 Beverages, fermented wheat, 39 Beverages, fermented rice, 66 Beer of maize, 82 Beer of millet, 86 Beer of sorghum, 517 Cider etc",,,,S2657,yes
+2658,"Beverages, Alcoholic","Default composition: 634 Beverages, distilled alcoholic",,,,S2658,yes
+2659,"Alcohol, Non-Food",Default composition: 632 Alcohol non food,,,,S2659,yes
+2943,Meat,,,,,S2943,yes
+2731,Bovine Meat,"Default composition: 867 Meat, cattle, 870 Meat, cattle, boneless (beef & veal), 872 Meat, beef, dried, salted, smoked, 873 Meat, extracts, 874 Meat, beef and veal sausages, 875 Meat, beef, preparations, 876 Meat, beef, canned, 877 Meat, homogenized preparations, 947 Meat, buffalo",,,,S2731,yes
+2732,Mutton & Goat Meat,"Default composition: 977 Meat, sheep, 1017 Meat, goat",,,,S2732,yes
+2733,Pigmeat,"Default composition: 1035 Meat, pig, 1038 Meat, pork, 1039 Bacon and ham, 1041 Meat, pig sausages, 1042 Meat, pig, preparations",,,,S2733,yes
+2734,Poultry Meat,"Default composition: 1058 Meat, chicken, 1060 Fat, liver prepared (foie gras), 1061 Meat, chicken, canned, 1069 Meat, duck, 1073 Meat, goose and guinea fowl, 1080 Meat, turkey",,,,S2734,yes
+2735,"Meat, Other","Default composition: 1089 Meat, bird nes, 1097 Meat, horse, 1108 Meat, ass, 1111 Meat, mule, 1127 Meat, camel, 1141 Meat, rabbit, 1151 Meat, other rodents, 1158 Meat, other camelids, 1163 Meat, game, 1164 Meat, dried nes, 1166 Meat, nes, 1172 Meat, nes, preparations, 1176 Snails, not sea",,,,S2735,yes
+2945,Offals,,,,,S2945,yes
+2736,"Offals, Edible","Default composition: 868 Offals, edible, cattle, 878 Liver prep., 948 Offals, edible, buffaloes, 978 Offals, sheep,edible, 1018 Offals, edible, goats, 1036 Offals, pigs, edible, 1059 Offals, liver chicken, 1074 Offals, liver geese, 1075 Offals, liver duck, 1081 Offals, liver turkeys, 1098 Offals, horses, 1128 Offals, edible, camels, 1159 Offals, other camelids, 1167 Offals, nes",,,,S2736,yes
+2946,Animal fats,,,,,S2946,yes
+2740,"Butter, Ghee","Default composition: 886 Butter, cow milk, 887 Ghee, butteroil of cow milk, 952 Butter, buffalo milk, 953 Ghee, of buffalo milk, 983 Butter and ghee, sheep milk, 1022 Butter of goat mlk",,,,S2740,yes
+2743,Cream,Default composition: 885 Cream fresh,,,,S2743,yes
+2737,"Fats, Animals, Raw","Default composition: 869 Fat, cattle, 871 Fat, cattle butcher, 949 Fat, buffaloes, 979 Fat, sheep, 994 Grease incl. lanolin wool, 1019 Fat, goats, 1037 Fat, pigs, 1040 Fat, pig butcher, 1043 Lard, 1065 Fat, poultry, 1066 Fat, poultry, rendered, 1129 Fat, camels, 1160 Fat, other camelids, 1168 Oils, fats of animal nes, 1221 Lard stearine oil, 1222 Degras, 1225 Tallow, 1243 Fat, nes, prepared",,,,S2737,yes
+2781,"Fish, Body Oil","Default composition: 1509 Frwt Bdy Oil, 1522 Dmrs Bdy Oil, 1535 Pelg Bdy Oil, 1548 Marn Bdy Oil, 1582 Aq M Oils",,,,S2781,yes
+2782,"Fish, Liver Oil","Default composition: 1510 Frwt Lvr Oil, 1523 Demersal Liver Oils, 1536 Pelg Lvr Oil, 1549 Marine nes Liver Oils",,,,S2782,yes
+2949,Eggs,,,,,S2949,yes
+2744,Eggs,"Default composition: 916 Egg albumine, 1062 Eggs, hen, in shell, 1063 Eggs, liquid, 1064 Eggs, dried, 1091 Eggs, other bird, in shell",,,,S2744,yes
+2948,Milk - Excluding Butter,,,,,S2948,yes
+2848,Milk - Excluding Butter,"Default composition: 882 Milk, whole fresh cow, 888 Milk, skimmed cow, 889 Milk, whole condensed, 890 Whey, condensed, 891 Yoghurt, 892 Yoghurt, concentrated or not, 893 Buttermilk, curdled, acidified milk, 894 Milk, whole evaporated, 895 Milk, skimmed evaporated, 896 Milk, skimmed condensed, 897 Milk, whole dried, 898 Milk, skimmed dried, 899 Milk, dry buttermilk, 900 Whey, dry, 901 Cheese, whole cow milk, 903 Whey, fresh, 904 Cheese, skimmed cow milk, 905 Whey, cheese, 907 Cheese, processed, 908 Milk, reconstituted, 909 Milk, products of natural constituents nes, 910 Ice cream and edible ice, 917 Casein, 951 Milk, whole fresh buffalo, 954 Milk, skimmed buffalo, 955 Cheese, buffalo milk, 982 Milk, whole fresh sheep, 984 Cheese, sheep milk, 985 Milk, skimmed sheep, 1020 Milk, whole fresh goat, 1021 Cheese of goat mlk, 1023 Milk, skimmed goat, 1130 Milk, whole fresh camel",,,,S2848,yes
+2960,"Fish, Seafood",,,,,S2960,yes
+2761,Freshwater Fish,"Default composition: 1501 Frwtr Diad F, 1502 Frwtr Fz Whl, 1503 Frwtr Fillet, 1504 Frwtr Fz Flt, 1505 Frwtr Cured, 1506 Frwtr Canned, 1507 Frwtr Pr nes, 1508 Frwtr Meals",,,,S2761,yes
+2762,Demersal Fish,"Default composition: 1514 Dmrsl Fresh, 1515 Dmrsl Fz Whl, 1516 Dmrsl Fillet, 1517 Dmrsl Fz Flt, 1518 Dmrsl Cured, 1519 Dmrsl Canned, 1520 Dmrsl Pr nes, 1521 Dmrsl Meals",,,,S2762,yes
+2763,Pelagic Fish,"Default composition: 1527 Pelagic Frsh, 1528 Pelgc Fz Whl, 1529 Pelgc Fillet, 1530 Pelgc Fz Flt, 1531 Pelgc Cured, 1532 Pelgc Canned, 1533 Pelgc Pr nes, 1534 Pelgc Meals",,,,S2763,yes
+2764,"Marine Fish, Other","Default composition: 1540 Marine nes F, 1541 Marin Fz Whl, 1542 Marin Fillet, 1543 Marin Fz Flt, 1544 Marin Cured, 1545 Marin Canned, 1546 Marin Pr nes, 1547 Marin Meals",,,,S2764,yes
+2765,Crustaceans,"Default composition: 1553 Crstaceans F, 1554 Crstc Frozen, 1555 Crstc Cured, 1556 Crstc Canned, 1557 Crstc Pr nes, 1558 Crstc Meals",,,,S2765,yes
+2766,Cephalopods,"Default composition: 1570 Cephlp Fresh, 1571 Cphlp Frozen, 1572 Cphlp Cured, 1573 Cphlp Canned, 1574 Cphlp Pr nes, 1575 Cphlp Meals",,,,S2766,yes
+2767,"Molluscs, Other","Default composition: 1562 Mlluscs Frsh, 1563 Molsc Frozen, 1564 Molsc Cured, 1565 Molsc Canned, 1566 Molsc Meals",,,,S2767,yes
+2961,"Aquatic Products, Other",,,,,S2961,yes
+2768,"Meat, Aquatic Mammals","Default composition: 1580 Aq M Meat, 1583 Aq M Prep Ns",,,,S2768,yes
+2769,"Aquatic Animals, Others","Default composition: 1587 Aqutc Anim F, 1588 Aq A Cured, 1589 Aquatic Animals Meals, 1590 Aq A Prep Ns",,,,S2769,yes
+2775,Aquatic Plants,"Default composition: 1594 Aquatic plants, fresh, 1595 Aquatic plants, dried, 1596 Aquatic plants, other preparations",,,,S2775,yes
+2928,Miscellaneous (GIFT),,,,,S2928,yes
+2680,Infant food,Default composition: 109 Infant food,,,,S2680,yes
+2899,Miscellaneous (GIFT),,,,,S2899,yes

@@ -1,0 +1,696 @@
+---
+title: "Data_Check_MRF"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+
+library(here)
+library(sp)
+library(raster)
+library(tidyverse)
+library(countrycode)
+
+```
+
+# GHG: Enteric fermentation
+
+Make sure our base values are similar to what FAO reports
+```{r GHG enteric fermentation 1}
+
+gleam <- read_csv(here("animal_farm/ghg/data/enteric_fermentation_gleam.csv"))
+fao <- read_csv(here("animal_farm/ghg/data/FAOSTAT_enteric_fermentation_2-5-2021.csv"))
+
+cows_gleam <- filter(gleam, species=="cows" & product=="meat") %>% data.frame() 
+
+cows_fao <- filter(fao, Item =='Cattle, non-dairy' & Unit == 'kg CH4/head') %>% 
+  mutate(tonnes_CO2 = Value * 25 * 0.001) %>% data.frame() 
+
+summary(cows_gleam)  
+summary(cows_fao)
+
+## milk
+cows_milk_gleam <- filter(gleam, species=="cows" & product=="milk") %>% data.frame() 
+
+cows_fao <- filter(fao, Item =='Cattle, dairy' & Unit == 'kg CH4/head') %>% 
+  mutate(tonnes_CO2 = Value * 25 * 0.001) %>% data.frame() 
+
+summary(cows_milk_gleam)  
+summary(cows_fao)
+
+## goats
+goats_gleam <- filter(gleam, species=="goats") %>% data.frame() 
+
+goats_fao <- filter(fao, Item =='Goats' & Unit == 'kg CH4/head') %>% 
+  mutate(tonnes_CO2 = Value * 25 * 0.001) %>% data.frame() 
+
+summary(goats_gleam)  
+summary(goats_fao)
+
+## sheep
+sheep_gleam <- filter(gleam, species=="sheep") %>% data.frame() 
+
+sheep_fao <- filter(fao, Item =='Sheep' & Unit == 'kg CH4/head') %>% 
+  mutate(tonnes_CO2 = Value * 25 * 0.001) %>% data.frame() 
+
+summary(sheep_gleam)  
+summary(sheep_fao)
+
+## pigs
+pigs_gleam <- filter(gleam, species=="pigs") %>% data.frame() 
+
+pigs_fao <- filter(fao, Item %in% c('Swine, breeding',"Swine, market") & Unit == 'kg CH4/head') %>% 
+  mutate(tonnes_CO2 = Value * 25 * 0.001) %>% data.frame() 
+
+summary(pigs_gleam)  
+summary(pigs_fao)
+
+## buffalo
+buff_gleam <- filter(gleam, species=="buffaloes") %>% data.frame() 
+
+buff_fao <- filter(fao, Item %in% c("Buffaloes") & Unit == 'kg CH4/head') %>% 
+  mutate(tonnes_CO2 = Value * 25 * 0.001) %>% data.frame() 
+
+summary(buff_gleam)  
+summary(buff_fao)
+
+```
+
+
+```{r GHG enteric fermentation 2}
+
+fao <- read_csv(here("animal_farm/ghg/data/FAOSTAT_enteric_fermentation_2-5-2021.csv")) %>%
+  filter(Area != "China") %>%
+  filter(Element == "Emissions (CH4) (Enteric)") %>%
+  mutate(Item = ifelse(Item %in% c("Swine, breeding", "Swine, market"), "Pigs", Item)) %>%
+  mutate(tonnes_CO2_fao = Value*1000*25) %>%
+  group_by(Item) %>%
+  summarize(tonnes_CO2_fao = sum(tonnes_CO2_fao))
+
+sum(fao$tonnes_CO2_fao)
+enteric_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/ghg/", pattern = "_enteric_fermentation.tif", full=TRUE)
+
+check<- stack(enteric_files)
+check_df <- data.frame(cellStats(check, "sum", na.rm=TRUE))
+
+gleam_enteric <- check_df
+
+names(gleam_enteric)[1] <- "tonnes_CO2eq"
+gleam_enteric$system <- row.names(gleam_enteric)
+
+sum(gleam_enteric$tonnes_CO2eq)
+gleam_enteric <- gleam_enteric %>%
+  separate(system, sep="_", c("animal", "rearing", "product", "stressor1", "stressor2")) %>%
+  group_by(animal, product) %>%
+  summarize(tonnes_CO2eq = sum(tonnes_CO2eq))
+
+```
+
+
+
+## check livestock animal counts
+1.  Livestock should be included in mixed numbers, but seem to be additionally added.  
+2. I think we need an industrial chicken adjustment, added a script and dataset to animal_farm/farm with this correction
+
+## Chickens
+```{r livestock count chickens}
+## these are the files used in enteric fermentation...I'm assuming they are used everywhere
+
+gleam_files <- 
+  list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm",
+             pattern = "location_df", 
+             full.names = TRUE)
+
+## do chickens and cows from these data
+fao <- read_csv(here("_analysis/checking_data/data/FAOSTAT_data_12-14-2020_manure_pasture.csv")) %>%
+  filter(Area != "China")%>%
+  mutate(Area = ifelse(Area == "Netherlands Antilles (former)", "Bonaire, Sint Eustatius and Saba", Area))
+
+fao$iso3c <- countrycode(as.character(fao$Area), origin="country.name", destination = "iso3c")
+
+# livestock counts
+fao_live <- read_csv(here("_analysis/checking_data/data/FAOSTAT_livestock_2-8-2021.csv")) %>%
+  filter(Area != "China")
+
+fao_live$iso3c <- countrycode(as.character(fao_live$Area), origin="country.name", destination = "iso3c")
+
+fao_live_chickens <- fao_live %>%
+  filter(Item == "Chickens") %>%
+  mutate(fao_livestock = Value * 1000) %>%
+  select(iso3c, fao_livestock)
+
+## this is the manure counts
+fao_subset <- filter(fao, Item %in% c("Chickens, broilers", "Chickens, layers")) %>%
+  filter(Element=="Stocks") %>%
+  select(iso3c, fao_manure_count = Value) %>%
+  group_by(iso3c) %>%
+  summarize(fao_manure_count = sum(fao_manure_count, na.rm=TRUE))
+
+
+chickens_ind_meat <-
+    vroom::vroom("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/chickens_industrial_meat_location_df.csv", 
+    col_select = c(x, y, contains("current"), iso3c)) %>% 
+    rename(current_count = 3)
+
+chickens_ind_eggs <-
+    vroom::vroom("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/chickens_industrial_eggs_location_df.csv", 
+    col_select = c(x, y, contains("current"), iso3c)) %>% 
+    rename(current_count = 3)
+sum(chickens_ind_eggs$current_count, na.rm=TRUE)
+
+chickens_by <-
+    vroom::vroom("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/chickens_backyard_eggs&meat_location_df.csv", 
+    col_select = c(x, y, contains("current"), iso3c)) %>% 
+    rename(current_count = 3)
+
+## chickens_by %>% group_by(iso3c) %>% summarize(mapped_count = sum(map_head_count, na.rm=TRUE)) %>% data.frame()
+## rbind(chickens_ind_eggs, chickens_ind_meat)%>% group_by(iso3c) %>% summarize(mapped_count = sum(map_head_count, na.rm=TRUE)) %>% data.frame()
+
+chickens_industrial <- rbind(chickens_ind_eggs, chickens_ind_meat) %>%
+  group_by(iso3c) %>%
+  summarize(ind_chickens = sum(current_count, na.rm=TRUE))
+
+chickens_by_iso <- chickens_by %>%
+  group_by(iso3c) %>%
+  summarize(by_chickens = sum(current_count, na.rm=TRUE))
+
+all_chickens <- rbind(chickens_ind_eggs, chickens_ind_meat, chickens_by) %>%
+  group_by(iso3c) %>%
+  summarize(our_count_all = sum(current_count, na.rm=TRUE)) %>%
+  left_join(chickens_by_iso) %>%
+  left_join(chickens_industrial) %>%
+  left_join(fao_live_chickens)%>%
+  left_join(fao_subset) %>%
+  arrange(-our_count_all) %>%
+  mutate(prop_by = by_chickens/fao_manure_count) %>%
+  data.frame()
+  
+all_chickens %>% arrange(-prop_by) %>%data.frame()
+all_chickens %>% filter(is.na(fao_livestock))
+
+plot(all_chickens$fao_livestock, all_chickens$fao_manure_count)
+plot(all_chickens$our_count_all, all_chickens$fao_manure_count)
+abline(0,1, col="red")
+
+```
+
+
+# cows
+```{r livestock heads cows}
+## cows, meat
+fao_subset <- filter(fao, Item == "Cattle, non-dairy") %>%
+  filter(Element=="Stocks") %>%
+  select(iso3c, fao_count = Value)
+
+cows_feedlot <-  
+    vroom::vroom("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/cows_feedlot_meat_location_df.csv", 
+    col_select = c(x, y, contains("current"), iso3c)) %>% 
+    rename(current_count = 3)
+cows_mixed <- 
+    vroom::vroom("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/cows_mixed_meat_location_df.csv", 
+    col_select = c(x, y, contains("current"), iso3c)) %>% 
+    rename(current_count = 3)
+cows_grassland <- 
+    vroom::vroom("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/cows_grassland_meat_location_df.csv", 
+    col_select = c(x, y, contains("current"), iso3c)) %>% 
+    rename(current_count = 3)
+sum(cows_feedlot$current_count, na.rm=TRUE)
+sum(cows_mixed$current_count, na.rm=TRUE)
+sum(cows_grassland$current_count, na.rm=TRUE)
+
+cows_meat <- rbind(cows_feedlot, cows_mixed, cows_grassland) %>%
+  group_by(iso3c) %>%
+  summarize(our_count = sum(current_count, na.rm=TRUE)) %>%
+  left_join(fao_subset, by="iso3c") %>%
+  arrange(-our_count)
+
+cows_meat <- rbind(cows_mixed, cows_grassland) %>%
+  group_by(iso3c) %>%
+  summarize(our_count = sum(current_count, na.rm=TRUE)) %>%
+  left_join(fao_subset, by="iso3c") %>%
+  arrange(-our_count)
+
+
+plot(cows_meat$our_count, cows_meat$fao_count) 
+abline(0,1, col="red")
+sum(cows_meat$our_count, na.rm=TRUE)
+sum(cows_meat$fao_count, na.rm=TRUE)
+
+## cows, milk
+fao_subset <- filter(fao, Item == "Cattle, dairy") %>%
+  filter(Element=="Stocks") %>%
+  select(iso3c, fao_count = Value)
+
+cows_mixed <- head_count <- 
+    vroom::vroom("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/cows_mixed_milk_location_df.csv", 
+    col_select = c(x, y, contains("current"), iso3c)) %>% 
+    rename(current_count = 3)
+cows_grassland <- head_count <- 
+    vroom::vroom("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/cows_grassland_milk_location_df.csv", 
+    col_select = c(x, y, contains("current"), iso3c)) %>% 
+    rename(current_count = 3)
+
+
+cows_milk <- rbind(cows_mixed, cows_grassland) %>%
+  group_by(iso3c) %>%
+  summarize(our_count = sum(current_count, na.rm=TRUE)) %>%
+  left_join(fao_subset, by="iso3c")
+
+plot(cows_milk$our_count, cows_milk$fao_count)
+abline(0,1, col="red")
+sum(cows_milk$our_count, na.rm=TRUE)
+sum(cows_milk$fao_count, na.rm=TRUE)
+
+```
+
+
+## Pigs
+
+Pigs look good and based on my analysis the FAO data appears to include all classes of pigs!
+```{r livestock count pigs}
+## these are the files used in enteric fermentation...I'm assuming they are used everywhere
+
+gleam_files <- 
+  list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm",
+             pattern = "location_df", 
+             full.names = TRUE)
+
+## fao manure data
+fao <- read_csv(here("_analysis/checking_data/data/FAOSTAT_data_12-14-2020_manure_pasture.csv")) %>%
+  filter(Area != "China") %>%
+  mutate(Area = ifelse(Area == "Netherlands Antilles (former)", "Bonaire, Sint Eustatius and Saba", Area))
+table(fao$Item)
+
+fao$iso3c <- countrycode(as.character(fao$Area), origin="country.name", destination = "iso3c")
+
+## pigs
+fao_subset <- filter(fao, Item %in% c("Swine, breeding", "Swine, market")) %>%
+  filter(Element=="Stocks") %>%
+  select(iso3c, fao_count = Value) %>%
+    group_by(iso3c) %>%
+    summarize(fao_count = sum(fao_count, na.rm=TRUE))
+
+## our mapped counts
+pigs_ind_meat <-
+    vroom::vroom("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/pigs_industrial_meat_location_df.csv", 
+    col_select = c(x, y, contains("current"), iso3c)) %>% 
+    rename(current_count = 3)
+pigs_int_meat <-
+    vroom::vroom("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/pigs_intermediate_meat_location_df.csv", 
+    col_select = c(x, y, contains("current"), iso3c)) %>% 
+    rename(current_count = 3)
+pigs_by_meat <-
+    vroom::vroom("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/pigs_backyard_meat_location_df.csv", 
+    col_select = c(x, y, contains("current"), iso3c)) %>% 
+    rename(current_count = 3)
+
+pigs_meat <- rbind(pigs_ind_meat, pigs_int_meat, pigs_by_meat) %>%
+  group_by(iso3c) %>%
+  summarize(our_count = sum(current_count, na.rm=TRUE)) %>%
+  left_join(fao_subset, by="iso3c")
+
+plot(pigs_meat$our_count, pigs_meat$fao_count)
+abline(0,1, col="red")
+
+
+### check against 2010 values
+
+## fao 2010 values
+fao <- read_csv(here("_analysis/checking_data/data/FAOSTAT_2010_livestock_manure_2-9-2021.csv")) %>%
+  filter(Area != "China") %>%
+  mutate(Area = ifelse(Area == "Netherlands Antilles (former)", "Bonaire, Sint Eustatius and Saba", Area))
+table(fao$Item)
+
+fao$iso3c <- countrycode(as.character(fao$Area), origin="country.name", destination = "iso3c")
+
+## pigs
+fao_subset <- filter(fao, Item %in% c("Swine, breeding", "Swine, market")) %>%
+  filter(Element=="Stocks") %>%
+  select(iso3c, fao_count = Value) %>%
+    group_by(iso3c) %>%
+    summarize(fao_count = sum(fao_count, na.rm=TRUE))
+
+
+## our mapped counts
+pigs_ind_meat <-
+    vroom::vroom("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/pigs_industrial_meat_location_df.csv", 
+    col_select = c(x, y, contains("map_counts"), iso3c)) %>% 
+    rename(map_count = 3)
+pigs_int_meat <-
+    vroom::vroom("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/pigs_intermediate_meat_location_df.csv", 
+    col_select = c(x, y, contains("map_counts"), iso3c)) %>% 
+    rename(map_count = 3)
+pigs_by_meat <-
+    vroom::vroom("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/pigs_backyard_meat_location_df.csv", 
+    col_select = c(x, y, contains("map_counts"), iso3c)) %>% 
+    rename(map_count = 3)
+
+
+pigs_meat <- rbind(pigs_ind_meat, pigs_int_meat, pigs_by_meat) %>%
+  group_by(iso3c) %>%
+  summarize(map_count = sum(map_count, na.rm=TRUE)) %>%
+  left_join(fao_subset, by="iso3c")
+
+pigs_meat <- rbind(pigs_ind_meat, pigs_int_meat) %>%
+  group_by(iso3c) %>%
+  summarize(map_count = sum(map_count, na.rm=TRUE)) %>%
+  left_join(fao_subset, by="iso3c")
+
+plot(pigs_meat$map_count, pigs_meat$fao_count)
+abline(0,1, col="red")
+
+
+```
+
+
+## Goats
+
+Goats look good!
+```{r livestock count pigs}
+## these are the files used in enteric fermentation...I'm assuming they are used everywhere
+
+gleam_files <- 
+  list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm",
+             pattern = "location_df", 
+             full.names = TRUE)
+
+## fao manure data
+fao <- read_csv(here("_analysis/checking_data/data/FAOSTAT_data_12-14-2020_manure_pasture.csv")) %>%
+  filter(Area != "China") %>%
+  mutate(Area = ifelse(Area == "Netherlands Antilles (former)", "Bonaire, Sint Eustatius and Saba", Area))
+table(fao$Item)
+
+fao$iso3c <- countrycode(as.character(fao$Area), origin="country.name", destination = "iso3c")
+
+## goats
+fao_subset <- filter(fao, Item %in% c("Goats")) %>%
+  filter(Element=="Stocks") %>%
+  select(iso3c, fao_count = Value) %>%
+    group_by(iso3c) %>%
+    summarize(fao_count = sum(fao_count, na.rm=TRUE))
+
+## our mapped counts
+goats_grassland_meat <-
+    vroom::vroom("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/goats_grassland_meat_location_df.csv", 
+    col_select = c(x, y, contains("current"), iso3c)) %>% 
+    rename(current_count = 3)
+goats_grassland_milk <-
+    vroom::vroom("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/goats_grassland_milk_location_df.csv", 
+    col_select = c(x, y, contains("current"), iso3c)) %>% 
+    rename(current_count = 3)
+goats_mixed_milk <-
+    vroom::vroom("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/goats_mixed_milk_location_df.csv", 
+    col_select = c(x, y, contains("current"), iso3c)) %>% 
+    rename(current_count = 3)
+goats_mixed_meat <-
+    vroom::vroom("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/goats_mixed_meat_location_df.csv", 
+    col_select = c(x, y, contains("current"), iso3c)) %>% 
+    rename(current_count = 3)
+
+goats <- rbind(goats_grassland_meat, goats_mixed_meat, goats_grassland_milk, goats_mixed_milk) %>%
+  group_by(iso3c) %>%
+  summarize(our_count = sum(current_count, na.rm=TRUE)) %>%
+  left_join(fao_subset, by="iso3c")
+
+plot(goats$our_count, goats$fao_count)
+abline(0,1, col="red")
+
+
+```
+
+
+## Sheep
+
+Sheep look good!
+```{r livestock count pigs}
+## these are the files used in enteric fermentation...I'm assuming they are used everywhere
+
+gleam_files <- 
+  list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm",
+             pattern = "location_df", 
+             full.names = TRUE)
+
+## fao manure data
+fao <- read_csv(here("_analysis/checking_data/data/FAOSTAT_data_12-14-2020_manure_pasture.csv")) %>%
+  filter(Area != "China") %>%
+  mutate(Area = ifelse(Area == "Netherlands Antilles (former)", "Bonaire, Sint Eustatius and Saba", Area))
+table(fao$Item)
+
+fao$iso3c <- countrycode(as.character(fao$Area), origin="country.name", destination = "iso3c")
+
+## sheep
+fao_subset <- filter(fao, Item %in% c("Sheep")) %>%
+  filter(Element=="Stocks") %>%
+  select(iso3c, fao_count = Value) %>%
+    group_by(iso3c) %>%
+    summarize(fao_count = sum(fao_count, na.rm=TRUE))
+
+## our mapped counts
+sheep_grassland_meat <-
+    vroom::vroom("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/sheep_grassland_meat_location_df.csv", 
+    col_select = c(x, y, contains("current"), iso3c)) %>% 
+    rename(current_count = 3)
+sheep_grassland_milk <-
+    vroom::vroom("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/sheep_grassland_milk_location_df.csv", 
+    col_select = c(x, y, contains("current"), iso3c)) %>% 
+    rename(current_count = 3)
+sheep_mixed_milk <-
+    vroom::vroom("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/sheep_mixed_milk_location_df.csv", 
+    col_select = c(x, y, contains("current"), iso3c)) %>% 
+    rename(current_count = 3)
+sheep_mixed_meat <-
+    vroom::vroom("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/sheep_mixed_meat_location_df.csv", 
+    col_select = c(x, y, contains("current"), iso3c)) %>% 
+    rename(current_count = 3)
+
+sheep <- rbind(sheep_grassland_meat, sheep_mixed_meat, sheep_grassland_milk, sheep_mixed_milk) %>%
+  group_by(iso3c) %>%
+  summarize(our_count = sum(current_count, na.rm=TRUE)) %>%
+  left_join(fao_subset, by="iso3c")
+
+plot(sheep$our_count, sheep$fao_count)
+abline(0,1, col="red")
+
+
+```
+
+
+## Checking fertilizer N2O emissions
+This here is just the theory and comparing our values to FAO.
+```{r}
+
+## USA, 2017 values
+FAO_leach <- 3531744846.3/11772482821 #30%, which is what we use.
+FAO_vol <- 1177248282.1/11772482821 #10%, what we use
+
+# FAO reports in gigagrams, this is the emissions from these sources
+direct <- 184.9962*1e6/11772482821*28/44 # 0.01 is what we use
+leaches <- 41.6241*1e6/3531744846.3*28/44 # 0.0075 is what we use
+vol <- 18.4996*1e6/1177248282.1*28/44 # 0.01 is what we use.
+
+# co2 eq
+75987.1722/245.1199  # FAO is 310 vs. our value of 298
+
+## appears that FAO and GLEAM use the same values models
+
+fert_ghg <- stack(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/ghg/crop_fertilizer_N2O/co2_eq", full=TRUE))
+tonnes <- cellStats(fert_ghg, sum, na.rm=TRUE)
+sum(tonnes)
+sum(tonnes*310/298)
+
+fert_fao <- read_csv(here("_analysis/checking_data/data/FAOSTAT_syn_fert_ghg_2-11-2021.csv")) %>%
+  filter(Area != "China") %>%
+  mutate(Area = ifelse(Area == "Netherlands Antilles (former)", "Bonaire, Sint Eustatius and Saba", Area))
+table(fert_fao$Element)
+
+fert_fao$iso3c <- countrycode(as.character(fert_fao$Area), origin="country.name", destination = "iso3c")
+
+fert_subset <- fert_fao %>%
+  filter(Element %in% c("Emissions (CO2eq) (Synthetic fertilizers)"))
+
+sum(fert_subset$Value)*1000
+
+```
+
+## manure: methane
+Test 1: look at animal emission rates and compare GLEAM and FAO.
+```{r}
+fao <- read_csv(here("_analysis/checking_data/data/FAOSTAT_manure_CH4_2-16-2021.csv")) %>%
+  filter(Area != "China") %>%
+  filter(Element == "Implied emission factor for CH4 (Manure management)") %>%
+  mutate(Value = Value * 0.001 * 21 * 25/21) %>%
+  select(Area, Item, Value)
+  
+tmp <- filter(fao, Item == "Buffaloes")
+# hist(tmp$Value, main = "fao: Buffaloes")
+
+## our values seem somewhat higher, but nothing too crazy at first glance
+
+```
+
+Test 2: global compare of FAO and GLEAM for animal systems:
+```{r}
+gleam <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/ghg/", pattern= "_methane_manure", full=TRUE)
+
+gleam_stack <- stack(gleam)
+global_totals <- cellStats(gleam_stack, "sum", na.rm=TRUE)
+global_totals_df <- data.frame(global_totals)
+global_totals_df$system <- row.names(global_totals_df)
+
+global_totals_df <- global_totals_df %>%
+  separate(system, into=c("animal", "system", "product"), sep="_")
+
+tmp <- global_totals_df %>%
+  group_by(animal) %>%
+  summarize(CO2 = sum(global_totals))
+
+sum(tmp$CO2)
+
+fao <- read_csv(here("_analysis/checking_data/data/FAOSTAT_manure_CH4_2-16-2021.csv")) %>%
+  filter(Area != "China") %>%
+  filter(Element == "Emissions (CO2eq) from CH4 (Manure management)") %>%
+  mutate(Value = Value * 1000 * 25/21) %>%
+  group_by(Item) %>%
+  summarize(Value = sum(Value, na.rm=TRUE)) %>%
+  select(Item, Value)
+fao
+sum(fao$Value)
+```
+
+Test 3: compare FAO and GLEAM country values for animal system
+```{r}
+## cows, dairy
+fao_ch4 <- function(fao_system = "Cattle, dairy"){
+
+  fao <- read_csv(here("_analysis/checking_data/data/FAOSTAT_manure_CH4_2-16-2021.csv")) %>%
+  filter(Area != "China") %>%
+  mutate(Area = ifelse(Area == "Netherlands Antilles (former)", "Bonaire, Sint Eustatius and Saba", Area)) %>%
+  filter(Item == fao_system) %>% 
+  filter(Element == "Emissions (CO2eq) from CH4 (Manure management)") %>%
+  mutate(Value = Value * 1000 * 25/21) 
+ 
+fao$iso3c <- countrycode(as.character(fao$Area), origin="country.name", destination = "iso3c") 
+
+fao <- fao %>%
+  dplyr::select(iso3c, Area, Value) 
+return(fao)
+}
+
+rgns_eez_land <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/spatial/land_eez_rgns.tif")
+rgn_names <- read_csv(here("_spatial/_output/food_rgns.csv"))
+gleam_stack <- stack(gleam)
+gleam_zonal <- zonal(gleam_stack, rgns_eez_land, fun="sum", na.rm=TRUE, progress="text")
+
+gleam_df <- data.frame(gleam_zonal) %>%
+  rename(ID_0=zone) %>%
+  left_join(rgn_names, by="ID_0") %>%
+  pivot_longer(cols=contains("_methane_manure")) %>%
+   separate(name, into=c("animal", "system", "product"), sep="_")
+
+## cows, meat
+fao_cows_meat <- fao_ch4(fao_system = "Cattle, non-dairy")
+gleam_cows_meat <- gleam_df %>%
+  filter(animal == "cows" & product=="meat") %>%
+  group_by(iso3c, Country) %>%
+  summarize(tonnes_gleam_co2 = sum(value, na.rm=TRUE)) %>%
+  left_join(fao_cows_meat, by="iso3c")
+plot(log(gleam_cows_meat$Value+1), log(gleam_cows_meat$tonnes_gleam_co2+1), main="cows, meat")
+abline(0, 1, col = "red")
+
+#cows milk
+fao_cows_dairy <- fao_ch4(fao_system = "Cattle, dairy")
+gleam_cows_milk <- gleam_df %>%
+  filter(animal == "cows" & product=="milk") %>%
+  group_by(iso3c, Country) %>%
+  summarize(tonnes_gleam_co2 = sum(value, na.rm=TRUE)) %>%
+  left_join(fao_cows_dairy, by="iso3c")
+plot(log(gleam_cows_milk$Value+1), log(gleam_cows_milk$tonnes_gleam_co2+1), main="cows, milk")
+abline(0, 1, col = "red")
+
+#chickens, broilers
+fao_cows_dairy <- fao_ch4(fao_system = "Chickens, broilers")
+gleam_cows_milk <- gleam_df %>%
+  filter(animal == "chickens" & product=="meat") %>%
+  group_by(iso3c, Country) %>%
+  summarize(tonnes_gleam_co2 = sum(value, na.rm=TRUE)) %>%
+  left_join(fao_cows_dairy, by="iso3c")
+plot(log(gleam_cows_milk$Value+1), log(gleam_cows_milk$tonnes_gleam_co2+1), main="chickens, meat")
+abline(0, 1, col = "red")
+dplyr::filter(gleam_cows_milk, tonnes_gleam_co2 == 0) %>% data.frame()
+
+#chickens, eggs
+fao_cows_dairy <- fao_ch4(fao_system = "Chickens, layers")
+gleam_cows_milk <- gleam_df %>%
+  filter(animal == "chickens" & product=="eggs") %>%
+  group_by(iso3c, Country) %>%
+  summarize(tonnes_gleam_co2 = sum(value, na.rm=TRUE)) %>%
+  left_join(fao_cows_dairy, by="iso3c")
+plot(log(gleam_cows_milk$Value+1), log(gleam_cows_milk$tonnes_gleam_co2+1), main="chickens, eggs")
+abline(0, 1, col = "red")
+plot(gleam_cows_milk$Value, gleam_cows_milk$tonnes_gleam_co2, main="chickens, eggs")
+abline(0, 1, col = "red")
+
+#pigs
+fao_cows_dairy <- fao_ch4(fao_system = "Swine, market")
+gleam_cows_milk <- gleam_df %>%
+  filter(animal == "pigs" & product=="meat") %>%
+  group_by(iso3c, Country) %>%
+  summarize(tonnes_gleam_co2 = sum(value, na.rm=TRUE)) %>%
+  left_join(fao_cows_dairy, by="iso3c")
+plot(log(gleam_cows_milk$Value+1), log(gleam_cows_milk$tonnes_gleam_co2+1), main="pigs, meat")
+abline(0, 1, col = "red")
+
+#pigs
+fao_cows_dairy <- fao_ch4(fao_system = "Goats")
+gleam_cows_milk <- gleam_df %>%
+  filter(animal == "goats" & product %in% c("meat", "milk")) %>%
+  group_by(iso3c, Country) %>%
+  summarize(tonnes_gleam_co2 = sum(value, na.rm=TRUE)) %>%
+  left_join(fao_cows_dairy, by="iso3c")
+plot(log(gleam_cows_milk$Value+1), log(gleam_cows_milk$tonnes_gleam_co2+1), main="goats")
+abline(0, 1, col = "red")
+
+#sheep
+fao_cows_dairy <- fao_ch4(fao_system = "Sheep")
+gleam_cows_milk <- gleam_df %>%
+  filter(animal == "sheep" & product %in% c("meat", "milk")) %>%
+  group_by(iso3c, Country) %>%
+  summarize(tonnes_gleam_co2 = sum(value, na.rm=TRUE)) %>%
+  left_join(fao_cows_dairy, by="iso3c")
+plot(log(gleam_cows_milk$Value+1), log(gleam_cows_milk$tonnes_gleam_co2+1), main="sheep")
+abline(0, 1, col = "red")
+
+```
+
+
+## Crop water consumption
+
+Mostly want to look at the relative contributions of green vs. blue water to the water footprint to make sure we are in the ballpark of M&K, or if we need to make adjustments.
+
+M&K values (after removing gray water and adjusting the blue and green values): 
+87% green
+13% blue
+NOTE: We get exactly 13% blue water use from our data...so yay!
+
+M&K: Total water use for crops (remvoing gray water which is 10%) is 6664 billion m3 for 1996-2005 production.  We get 10000 billion m3, which is higher, but is consistent with increases in production (about 44% increase from 2000 to 2017).
+```{r}
+
+crop_water_files_all <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers", pattern="water.tif", full=TRUE)
+
+crop_water_rasts_all <- stack(crop_water_files_all)
+
+crop_water_sum_all <- calc(crop_water_rasts_all, fun=sum, na.rm=TRUE, progress="text")
+cellStats(crop_water_sum_all, stat="sum", na.rm=TRUE)
+
+
+## now just the blue water
+crop_water_files_blue <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers", pattern="blue_water.tif", full=TRUE)
+
+crop_water_rasts_blue <- stack(crop_water_files_blue)
+
+crop_water_sum_blue <- calc(crop_water_rasts_blue, fun=sum, na.rm=TRUE, progress="text")
+cellStats(crop_water_sum_blue, stat="sum", na.rm=TRUE)
+
+```

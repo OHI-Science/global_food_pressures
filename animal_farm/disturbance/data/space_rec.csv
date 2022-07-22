@@ -1,0 +1,7 @@
+﻿animal,system,area,unit,meters_sq,reference
+cows,mixed,91.66666667,sq.ft,8.516108333,(2/3 averge of enclosed housing) https://extension.unh.edu/resources/files/Resource000471_Rep493.pdf
+buffaloes,mixed,91.66666667,sq.ft,8.516108333,(2/3 averge of enclosed housing) https://extension.unh.edu/resources/files/Resource000471_Rep493.pdf
+goats,mixed,23.33333333,sq.ft,2.167736667,(2/3 averge of enclosed housing) https://extension.unh.edu/resources/files/Resource000471_Rep493.pdf
+sheep,mixed,23.33333333,sq.ft,2.167736667,(2/3 averge of enclosed housing) https://extension.unh.edu/resources/files/Resource000471_Rep493.pdf
+chickens,backyard,3.5,sq.ft,0.3251605,(2/3 averge of enclosed housing) https://extension.unh.edu/resources/files/Resource000471_Rep493.pdf
+pigs,backyard,100,sq.ft,9.2903,(2/3 averge of exercise yard area) https://extension.unh.edu/resources/files/Resource000471_Rep493.pdf

@@ -1,0 +1,60 @@
+---
+title: "Combining imports and exports"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+This script combines the pressures from production and importing.
+
+```{r}
+
+library(here)
+library(tidyverse)
+library(countrycode)
+
+focus_year = 2017
+
+
+```
+
+```{r}
+
+produced <- read_csv(here("_analysis/export_import_stressors/data/produced_cum_stress.csv"))
+imported <- read_csv(here("_analysis/export_import_stressors/data/imported_cum_stress.csv"))
+
+total_stressors <- left_join(produced, imported, by=c("iso3c", "SPAM_super")) %>%
+  rowwise() %>%
+  mutate(exported_cumstress = sum(c(produced_exported_cumstress, imported_exported_cumstress), na.rm=TRUE)) %>%
+  mutate(imported_used_cumstress = ifelse(is.na(imported_used_cumstress), 0, imported_used_cumstress)) %>%
+  select(country, iso3c, SPAM_super, exported_cumstress, produced_ds_cumstress = produced_used_cumstress, imported_ds_cumstress=imported_used_cumstress) %>%
+  pivot_longer(cols=c(-country, -iso3c, -SPAM_super), names_to = "cumulative_pressure")
+  
+
+total_summarized_stress <- total_stressors %>%
+  group_by(country, iso3c, cumulative_pressure) %>%
+  summarize(value = sum(value, na.rm=TRUE)) %>%
+  ungroup() %>%
+  pivot_wider(id_cols = c("country", "iso3c"), names_from="cumulative_pressure") %>%
+  mutate(prop_ds_produced = produced_ds_cumstress/(produced_ds_cumstress + imported_ds_cumstress),
+         prop_ds_imported = imported_ds_cumstress/(produced_ds_cumstress + imported_ds_cumstress),
+         prop_exported = exported_cumstress/(imported_ds_cumstress + produced_ds_cumstress + exported_cumstress)) %>%
+  arrange(-exported_cumstress)
+
+filter(total_summarized_stress, iso3c=="USA")
+
+
+write_csv(total_summarized_stress, here("_analysis/export_import_stressors/data/cumulative_stress_imports_exports.csv"))
+```
+
+
+
+Determine which countries do not have trade data.  These will be excluded.
+
+```{r}
+
+rgns <- read_csv(here("_spatial/_output/food_rgns.csv"))
+## these countries are missing trade data, but have the proportion of import/export data
+data.frame(iso3c_consuming = setdiff(rgns$iso3c, total_summarized_stress$iso3c))
+
+```

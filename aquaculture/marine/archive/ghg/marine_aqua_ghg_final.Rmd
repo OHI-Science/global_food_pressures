@@ -1,0 +1,24 @@
+---
+title: "Marine Aquaculture GHG"
+output: html_document
+---
+## Script Author
+
+## Objectives
+
+## Inputs
+
+## Outputs
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+source(here("_workflow/common.R"))
+## load libraries, read in data
+
+```
+
+These following sections are not to be forgotten about! To do at the end.
+## Gapfilling 
+
+## Data Checks

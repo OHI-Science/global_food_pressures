@@ -1,0 +1,319 @@
+---
+title: "Location of crustacean Farms"
+author: "Gage Clawson (NCEAS, UCSB, OHI)"
+date: "12/14/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+This script standardizes location of crustacean farms to be lat/long point data.
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(raster)
+library(tidyverse)
+library(stringr)
+library(rgdal)
+library(PBSmapping)
+library(maptools)
+library(sf)
+library(lwgeom)
+library(data.table)
+library(here)
+library(mapview)
+library(janitor)
+library(rnaturalearth)
+library(spatialEco)
+
+
+path <- "/home/shares/food-systems/Food_footprint/_raw_data/Aquaculture_locations"
+
+fao_crustacean_spp <- read_csv("aquaculture/marine/crustaceans/crustacean_farms/data/fao_mariculture_crustaceans_taxa_production.csv") %>%
+  dplyr::filter(year == 2017)
+fao_crustacean <- read_csv("aquaculture/marine/crustaceans/crustacean_farms/data/fao_mariculture_crustaceans.csv") %>%
+  dplyr::filter(year == 2017)
+
+unique(fao_crustacean$country)
+
+```
+
+
+# Raster
+
+Standard raster used for this analysis 
+
+```{r}
+
+source(here::here("_spatial/template_raster.R"))
+
+```
+
+# Global regions
+
+```{r}
+
+gadm <- raster("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/gadm36mol_pyfill_10km.tif")
+
+gadm_latlon <- projectRaster(gadm, food_raster)
+
+gadm_codes <- read.csv("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/gadm_reg_codes.csv") %>% 
+  mutate(reg_id = as.numeric(reg_id))
+
+```
+
+```{r}
+
+gadm_df <- tabularaster::as_tibble(gadm_latlon, value = TRUE, cells = TRUE) %>% 
+  mutate(cellvalue = round(cellvalue, 0))
+
+gadm_reg <- dplyr::left_join(gadm_df, gadm_codes, by = c("cellvalue" = "reg_id"))
+
+```
+
+
+Now we will map crustacean farms. Workflow will be as follows: 
+
+ - Try to obtain exact locations of farms from published source or dataset (such as FAO or a research paper)
+ - If there are no exact locations, but the source lists a city or state, place a point in that particular city or state
+ -  If there is enough information to know there are a specific number of crustacean farms, equally allocate the farms across the coastline. If there are estimates of farms per state/province, equally allocate them across the state/province, to be even more precise.
+ - If there are not exact numbers of farms in the country, but you know there are a lot, randomly place points along the coast line (a non-exact number, like we did for Taiwan bivalve/shrimp). 
+ - Lastly, if there is no evidence of marine crustacean farm locations, place a point on the coast of the country (preferably with some intuition/knowledge of where they might be, i.e. what we've done for Russia for bivalves).
+
+
+ 
+## Indonesia
+Can't find any infomration on crab farm locations in Indonesia. I will place one farm, randomly on the coast of Indonesia. 
+
+```{r}
+
+farms_idn <- data.frame(lat = c(0.3359943014669836),
+                        lon = c(117.55582991782983)) %>%
+  mutate(iso3c = "IDN")
+
+write_csv(farms_idn, here("aquaculture/marine/crustaceans/crustacean_farms/data/crustacean_sites/farms_idn.csv"))
+
+## visualize it 
+farms_idn <-  st_as_sf(farms_idn, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_idn)
+```
+
+## China 
+
+Can't find any datasets of marine crustacean farm locations in China. I will place one farm randomly on the coast of China.
+
+```{r}
+
+farms_chn <- data.frame(lat = c(29.378009267567716),
+                        lon = c(121.95043909100868)) %>%
+  mutate(iso3c = "CHN")
+
+write_csv(farms_chn, here("aquaculture/marine/crustaceans/crustacean_farms/data/crustacean_sites/farms_chn.csv"))
+
+## visualize it 
+farms_chn <-  st_as_sf(farms_chn, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_chn)
+```
+
+
+## Bangladesh
+
+https://www.researchgate.net/publication/318250461_Mud_crab_aquaculture_and_fisheries_in_coastal_Bangladesh
+
+"Mud crabs have already gained popularity among coastal communities in greater Khulna and Chittagong regions (Azam et al. 1998) and are being recognized as a candidate species for culture in brackishwater environments (Ballao et al. 1999). There are about 300,000 people directly or indirectly connected with mud crab farming activities."
+
+
+ - I'll place points in the Khulna and Chittagong regions, since I can't find any other information on mud crab aquaculture locations in Bangladesh. 
+ 
+ - Khulna: 21.876081791221054, 89.49499697244659
+ - Chittagong: 22.325919306644522, 91.76441856678511
+```{r}
+
+farms_bgd <- data.frame(lat = c(21.876081791221054, 22.325919306644522),
+                        lon = c(89.49499697244659, 91.76441856678511)) %>%
+  mutate(iso3c = "BGD")
+
+write_csv(farms_bgd, here("aquaculture/marine/crustaceans/crustacean_farms/data/crustacean_sites/farms_bgd.csv"))
+
+## visualize it 
+farms_bgd <-  st_as_sf(farms_bgd, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_bgd)
+```
+
+## Myanmar 
+
+http://www.fao.org/3/ad497e/ad497e05.htm
+"Mud crab farming is also important in Myanmar. Mud crab (Scylla serrata, and related species) culture in mangroves or tidal flats is practiced mainly in the Ayeyarwaddy delta area, in Rakhine and southern parts of Myanmar."
+
+ - I'll place points in Ayeyarwaddy region and Rakhine state.
+ - Ayeyarwaddy: 15.930407995930784, 94.76647475697742
+ - Rakhine: 18.615093163569437, 94.24290607527016
+ 
+
+```{r}
+
+farms_mmr <- data.frame(lat = c(15.930407995930784, 18.615093163569437),
+                        lon = c(94.76647475697742, 94.24290607527016)) %>%
+  mutate(iso3c = "MMR")
+
+write_csv(farms_mmr, here("aquaculture/marine/crustaceans/crustacean_farms/data/crustacean_sites/farms_mmr.csv"))
+
+## visualize it 
+farms_mmr <-  st_as_sf(farms_mmr, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_mmr)
+```
+
+
+## Viet nam 
+
+https://aciar.gov.au/sites/default/files/legacy/node/693/ias36_pdf_18085.pdf
+"In addition to harvesting wild stock, mud crabs are now being farmed in
+many coastal provinces in Vietnam, including Quang Ninh, Hai Phong,
+Thanh Hoa, Ninh Binh, Nghe An, Thua Thien–Hue, Ba Ria–Vung Tau,
+Ho Chi Minh City, Ben Tre, Tra Vinh, Soc Trang, Minh Hai, Kien Giang
+and Bac Lieu."
+
+"It is difficult to know how many people participate in this industry.
+Apparently, no formal surveys have been conducted, there are no known
+official statistics, and crab farming is typically undertaken together with
+other activities, such as shrimp and/or fish aquaculture, other primary
+production such as rice growing, or even as a sideline to paid employment."
+
+"Table 4 gives the sole set of official statistics on crab aquaculture area and
+production in Vietnam in 2004. The statistics cover both mud crabs and
+blue swimmer crabs, and were collated by the Vietnamese Ministry of
+Fisheries from reports of provincial fishery departments. "
+
+ - Table on page 20: This is a table from 2004, but it will have to do. It also has production estimates, which is nice. I will randomly place a point along the coast in each province, and allocate the production accordingly in step 3.. 
+  - NOTE: for the production, we are assuming that not reported within a province == 0 production, due to the lack of data. 
+  
+  
+  - Quang Ninh: prod = 0: 21.186050529545593, 107.60858937642442
+  - Hai Phong: prod = 1650: 20.840947248646557, 106.77685003845498
+  - Thai Binh: prod = 0: 20.454148639095266, 106.59728856581118
+  - Nam Dinh: prod = 0: 20.146554460540862, 106.3298019452741
+  - Ninh Binh: prod = 1005: 19.955496263213185, 106.03097468374126
+  - Thanh Hoa: prod = 970: 19.726817666482322, 105.87661730467457
+  - Nghe An: prod = 0: 18.982876968029743, 105.6165097440173
+  - Ha Tinh: prod = 200: 18.456817613512555, 105.92726656633255
+  - Quang Binh: prod = 110: 17.56001328746647, 106.58039999954293
+  - Quang Tri: prod = 20: 16.905826522213328, 107.19194145855845
+  - TT Hue: prod = 82: 16.495115996149718, 107.74891583338649
+  - Da Nang: prod = 0: 16.167986126005765, 108.15075180169012
+  - Quang Nam: prod = 135: 15.699026568754403, 108.48016289264334
+  - Quang Ngai: prod = 0: 15.010595152983287, 108.92174225624275
+  - Binh Dinh: prod = 130: 14.17668770026659, 109.19617116389627
+  - Phu Yen: prod = 0: 13.335760529041393, 109.29183511586322
+  - Khanh Hoa: prod = 0: 12.299111935360338, 109.23699322130719
+  - Ninh Thuân: prod = 5: 11.62183927318579, 109.1546891359726
+  - Binh Thuân: prod = 0: 10.830102342204183, 108.03702110643216
+  - Long An: prod = 250: 10.510731358280973, 106.7310999868549
+  - Tien Giang: prod = 0: 10.30006571666483, 106.78122716883196
+  - Ben Tre: prod = 637: 10.037866832581582, 106.69637036338817
+  - Tra Vinh: prod = 1196: 9.592223563185232, 106.54126727713718
+  - Soc Trang: prod = 0: 9.389580381208823, 106.1857446280396
+  - Bac Lieu: prod = 3466: 9.147921315425062, 105.59613926925006
+  - Ca Mau: prod = 0: 8.674166818318303, 105.12379673906345
+  - Kien Giang: prod = 170: 10.087872204898957, 104.88743812284027
+  - Can Tho: prod = 0: 10.055231, 105.789267
+ 
+ 
+```{r}
+
+farms_vnm <- data.frame(lat = c(21.186050529545593, 20.840947248646557, 20.454148639095266, 20.146554460540862, 19.955496263213185, 19.726817666482322, 18.982876968029743, 18.456817613512555, 17.56001328746647, 16.905826522213328, 16.495115996149718, 16.167986126005765, 15.699026568754403, 15.010595152983287, 14.17668770026659, 13.335760529041393, 12.299111935360338, 11.62183927318579, 10.830102342204183, 10.510731358280973, 10.30006571666483, 10.037866832581582, 9.592223563185232, 9.389580381208823, 9.147921315425062, 8.674166818318303, 10.087872204898957, 10.055231),
+                        lon = c(107.60858937642442, 106.77685003845498, 106.59728856581118, 106.3298019452741, 106.03097468374126, 105.87661730467457, 105.6165097440173, 105.92726656633255, 106.58039999954293, 107.19194145855845, 107.74891583338649, 108.15075180169012, 108.48016289264334, 108.92174225624275, 109.19617116389627, 109.29183511586322, 109.23699322130719, 109.1546891359726, 108.03702110643216, 106.7310999868549, 106.78122716883196, 106.69637036338817, 106.54126727713718, 106.1857446280396, 105.59613926925006, 105.12379673906345,  104.88743812284027, 105.789267),
+                        prod = c(0, 1650, 0, 0, 1005, 970, 0, 200, 110, 20, 82, 0, 135, 0, 130, 0, 0, 5, 0, 250, 0, 637, 1196, 0, 3466, 0, 170, 0), sub_rgn = c("Quang Ninh", "Hai Phong", "Thai Binh", "Nam Dinh", "Ninh Binh", "Thanh Hoa", "Nghe An", "Ha Tinh", "Quang Binh", "Quang Tri", "TT Hue", "Da Nang", "Quang Nam", "Quang Ngai", "Binh Dinh", "Phu Yen", "Khanh Hoa", "Ninh Thuân", "Binh Thuân", "Long An", "Tien Giang", "Ben Tre", "Tra Vinh", "Soc Trang", "Bac Lieu", "Ca Mau", "Kien Giang", "Can Tho")) %>%
+  mutate(iso3c = "VNM")
+
+write_csv(farms_vnm, here("aquaculture/marine/crustaceans/crustacean_farms/data/crustacean_sites/farms_vnm.csv"))
+
+## visualize it 
+farms_vnm_map <-  st_as_sf(farms_vnm, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_vnm_map)
+```
+
+
+## Philippines
+
+All former reports can be found here: 
+https://psa.gov.ph/content/fisheries-statistics-philippines
+
+Fisheries statistics of the Philippines: https://psa.gov.ph/sites/default/files/Fisheries%20Statistics%20of%20the%20Philippines%2C%202017-2019.pdf
+
+Table 125: TABLE 125 Volume of Mud Crab Production in Aquaculture by Region and Province,
+ Philippines: 2017 - 2019
+ 
+ - I've saved the table in Aurora as a .csv.
+ 
+ - I'll place a point in each location listed in the table, and use the production estimates to allocate the FAO production equally (although the number is almost the same as reported in the FAO, off by 3 tonnes). 
+ 
+
+Consider using this data for future iterations... 
+https://openstat.psa.gov.ph/PXWeb/pxweb/en/DB/search/?searchquery=aquaculture&rxid=bdf9d8da-96f1-4100-ae09-18cb3eaeb313
+
+
+```{r}
+phl_mudcrab_prod <- read_csv(file.path("/home/shares/food-systems/Food_footprint/_raw_data/Aquaculture_locations/Philippines/phl_mudcrab_production.csv")) %>%
+  dplyr::select(-X6) %>%
+  mutate(`2017` = as.numeric(`2017`), 
+         `2018` = as.numeric(`2018`),
+         `2019` = as.numeric(`2019`)) %>%
+  pivot_longer(cols = c(`2017`, `2018`, `2019`), names_to = "year", values_to = "prod") %>%
+  dplyr::filter(!is.na(prod), 
+                year == 2017)
+
+## now we need to find coordinates for each province. I will randomly select a lat lon point along the coast of each province: 
+
+provinces <- data.frame(Province = unique(sort(phl_mudcrab_prod$Province))) %>%
+  mutate(lat_lon = c("9.190611500208238, 125.52994229122065", "11.737731148020183, 122.36341263788152", "13.21836252920181, 123.77011641931539", "11.096612509189843, 122.04466274447995", "14.588280500720717, 120.39232212075018", "10.062398891617871, 124.08857333922121", "14.759345796261423, 120.79195178365572", "14.278379190276917, 122.80695157663077", "13.728018225223346, 123.21602051808212", "11.544441602769396, 122.87251489793287", "13.600373850277089, 124.08856214435265", "7.226273453773761, 125.8615542691359", "7.29064081849023, 125.70838297490391", "6.8067269257546394, 125.38044959114181", "7.021850825639651, 126.44668668618641", "10.249781995409927, 125.64231490812028", "11.457019560196713, 125.50124809292508", "18.35920136671901, 121.62457647441146", "14.294681717859676, 120.71661934172276", "10.565159685797113, 122.51279683720878", "16.5330902343553, 120.31511351999148", "8.187575265346036, 124.12440346213432", "10.86506672011331, 124.72028684317488", "17.08773382905305, 120.43638606220428", "17.205031284221167, 120.4139227279512", "10.891325726593882, 122.7831164266059", "6.994603962157642, 123.99059538388416", "13.344206870917525, 121.82133665840661", "12.576951933159716, 123.28286940887746", "14.510536378070825, 121.08748285435844", "8.483931963597566, 123.80942490173003", "8.846965587470466, 125.16333794567215", "9.943820309588942, 122.44630440874657", "12.509837523018708, 124.65010656730024", "13.415437014491157, 121.0922973705213", "10.038412865363988, 118.7206892394855", "14.855971440318308, 120.58766325017285", "16.124387999329027, 120.09336724359946", "14.664908885542868, 121.61549543341468", "12.585717059110207, 122.27016916837972", "12.007625357698121, 124.69126813617964", "12.818661572681938, 123.83950186846029", "6.373081834977807, 124.08215994073517", "9.555721530351239, 125.78630860627861", "9.013346905513, 126.23742298508941", "6.9053988560744335, 122.0691745144182", "8.18224915422801, 122.95491554623727", "7.81172076996685, 123.42354992829671", "7.703880319874889, 122.52615049321432", "15.272079732639275, 120.00987788280406")) %>%
+  separate(lat_lon, into = c("lat", "lon"), sep = ",")
+
+
+## Now join together with our larger dataset
+
+phl_lat_lon <- phl_mudcrab_prod %>%
+  left_join(provinces, by = "Province") %>%
+  dplyr::select(lat, lon, prod, "sub_rgn" = "Province") %>%
+  mutate(iso3c = "PHL")
+
+
+write_csv(phl_lat_lon, here("aquaculture/marine/crustaceans/crustacean_farms/data/crustacean_sites/farms_phl.csv"))
+
+## visualize it 
+farms_phl_map <-  st_as_sf(phl_lat_lon, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_phl_map)
+```
+
+ 
+# Join cell count dataframes
+
+```{r}
+farm_files <- list.files(here::here("aquaculture/marine/crustaceans/crustacean_farms/data/crustacean_sites"), full=TRUE)
+all_farms = plyr::ldply(farm_files, read_csv)
+
+all_farms_sf <- st_as_sf(all_farms, coords = c("lon", "lat"), 
+                         crs = crs(gadm_latlon), agr = "constant")
+
+mapview(all_farms_sf)
+
+write.csv(all_farms, here::here("aquaculture/marine/crustaceans/crustacean_farms/data/global_crustacean_farm_lat_lon.csv"), row.names = FALSE)
+
+
+```
+

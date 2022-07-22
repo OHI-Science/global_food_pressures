@@ -1,0 +1,140 @@
+---
+title: "stepX_crop_ghg_pest_mapping"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Script Description
+Map pesticide emissions
+
+# Data information
+pesticide_df.csv produced in stepX_crop_ghg_pest.Rmd
+
+# Preamble
+```{r setup, include = FALSE}
+# getting packages we want
+library(here)
+library(janitor)
+
+# Raster templates
+source(here("_spatial/template_raster.R"))
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+# Import food_rgns xy df
+food_rgns_xy <- 
+  food_rgns_xy %>% 
+  select(x, y, iso3c)
+
+# Import pesticide_df
+pesticide_df <- 
+  vroom::vroom(here("crop/ghg/data/pesticide_df.csv")) 
+``` 
+
+# Map pesticide emissions
+
+```{r}
+
+pesticide_CO2eq <- function(crop) {  # crop="maiz"
+
+    # Produce a raster for each production system so that they can be allocated separately  
+  pesticide_raster_I <- 
+    pesticide_df %>% 
+    filter(split_rest_names %in% crop, 
+           prod_system %in% "I") %>% 
+    select(iso3c, 
+           allocated_pesticide) %>% 
+    left_join(food_rgns_xy, ., by = "iso3c") %>% 
+    dplyr::select(-iso3c) %>% 
+    rasterFromXYZ(crs = food_crs)
+  
+  pesticide_raster_H <- 
+    pesticide_df %>% 
+    filter(split_rest_names %in% crop, 
+           prod_system %in% "H") %>%
+    dplyr::select(iso3c, 
+                  allocated_pesticide) %>% 
+    left_join(food_rgns_xy, ., by = "iso3c") %>% 
+    dplyr::select(-iso3c) %>% 
+    rasterFromXYZ(crs = food_crs)
+  
+  # Overlay and calculate total pesticide application at the cell-level
+  pesticide_total <- 
+    overlay(
+      pesticide_raster_I,
+      pesticide_raster_H,
+      raster(file.path(prep,"crop/farm/cell_allocation/crop_",
+                       crop,
+                       "_H_harvested_area_allocation.tif", 
+                       fsep = "")),
+      check <-raster(file.path(prep,"crop/farm/cell_allocation/crop_",
+                       crop,
+                       "_I_harvested_area_allocation.tif", 
+                       fsep = "")),
+      fun = function(r1, r2, r3, r4) {
+        
+        r5 <- r1 * r4
+        r6 <- r2 * r3
+        r5[is.na(r5)] <- 0
+        r6[is.na(r6)] <- 0
+        return(r5 + r6)
+        
+        }
+      )
+  
+  names(pesticide_total) <- "tonnes_CO2eq"
+
+  writeRaster(pesticide_total, 
+              file.path(prep,
+                        "crop/ghg/crop_pesticide_ghg/crop_",
+                        crop,
+                        "_pesticide_CO2eq.tif", 
+                        fsep = ""), 
+              format    = "GTiff", 
+              overwrite = TRUE)
+}
+plan(multisession, workers = 12)
+
+options <- furrr_options(seed = 54232)
+
+future_map(unique(pesticide_df$split_rest_names), 
+           pesticide_CO2eq, 
+           .options = options)
+
+delete_aux <- list.files(file.path(prep, "crop/ghg/crop_pesticide_ghg"), pattern="aux", full=TRUE)
+file.remove(delete_aux)
+```
+
+# Map check
+```{r}
+# Test
+test <- raster(file.path(prep,
+                         "crop/ghg/crop_pesticide_ghg/crop_",
+                         "rice",
+                         "_pesticide_CO2eq.tif", 
+                         fsep = ""))
+plot(test)
+plot(log(test + 1))
+
+```
+
+# Check numbers
+```{r}
+ghg_pest <- 
+  list.files(file.path(prep, "crop/ghg/crop_pesticide_ghg"), 
+             pattern = "_CO2eq", 
+             full = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum")
+
+plot(ghg_pest)
+
+ghg_pest <- cellStats(ghg_pest, "sum")
+
+df_total <- sum(pesticide_df$allocated_pesticide)
+
+# this should be close to one
+df_total / ghg_pest
+
+```

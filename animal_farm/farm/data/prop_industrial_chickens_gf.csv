@@ -1,0 +1,245 @@
+iso3c,ID_0,Country,gleam_country,Species,Variable,Unit,Broilers,Layers,prop_broilers,prop_layers,Global_Name,Region_Name,Sub_region_Name,Intermediate_Region_Name,gapfilled
+AFG,1,Afghanistan,Afghanistan,Chickens,HERD: total number of animals,heads/year,280950.15749143437,18867.294442762846,0.9370707264669044,0.06292927353309562,World,Asia,Southern Asia,Southern Asia,NA
+CYP,61,Cyprus,Cyprus,Chickens,HERD: total number of animals,heads/year,2287204.1183000077,138081.48350210526,0.9430658874156909,0.05693411258430906,World,Asia,Western Asia,Western Asia,NA
+ALA,3,Åland,NA,NA,NA,NA,NA,NA,0.8976887051993764,0.10231129480062362,World,Europe,Northern Europe,Northern Europe,prop gf with regional average
+ALB,4,Albania,Albania,Chickens,HERD: total number of animals,heads/year,1290709.1327228677,252825.98107113785,0.8362032850359379,0.1637967149640621,World,Europe,Southern Europe,Southern Europe,NA
+DZA,5,Algeria,Algeria,Chickens,HERD: total number of animals,heads/year,63397511.4673179,8325896.762721064,0.8839166045202793,0.11608339547972063,World,Africa,Northern Africa,Northern Africa,NA
+ASM,6,American Samoa,American Samoa,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Oceania,Polynesia,Polynesia,NA
+AND,7,Andorra,Andorra,Chickens,HERD: total number of animals,heads/year,19227.39592954937,0,1,0,World,Europe,Southern Europe,Southern Europe,NA
+AGO,8,Angola,Angola,Chickens,HERD: total number of animals,heads/year,11949969.068597168,377106.8412502476,0.9694082486383492,0.030591751361650814,World,Africa,Sub-Saharan Africa,Middle Africa,NA
+AIA,9,Anguilla,Anguilla,Chickens,HERD: total number of animals,heads/year,344277.09065676905,0,1,0,World,Americas,Latin America and the Caribbean,Caribbean,NA
+ATG,11,Antigua and Barbuda,Antigua & Barbuda,Chickens,HERD: total number of animals,heads/year,63487.50329101062,16960.679398681317,0.7891726222815653,0.21082737771843463,World,Americas,Latin America and the Caribbean,Caribbean,NA
+ARG,12,Argentina,Argentina,Chickens,HERD: total number of animals,heads/year,65635988.55301412,5905536.761482808,0.9174530213673522,0.08254697863264777,World,Americas,Latin America and the Caribbean,South America,NA
+ARM,13,Armenia,Armenia,Chickens,HERD: total number of animals,heads/year,161268.32471342786,683011.4001605562,0.19101290717066377,0.8089870928293363,World,Asia,Western Asia,Western Asia,NA
+ABW,14,Aruba,Aruba,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Americas,Latin America and the Caribbean,Caribbean,NA
+AUS,15,Australia,Australia,Chickens,HERD: total number of animals,heads/year,70433651.60349375,2905641.039102848,0.9603808417779147,0.03961915822208526,World,Oceania,Australia and New Zealand,Australia and New Zealand,NA
+AUT,16,Austria,Austria,Chickens,HERD: total number of animals,heads/year,8406742.276069576,1897285.925581481,0.8158694940996501,0.18413050590034982,World,Europe,Western Europe,Western Europe,NA
+AZE,17,Azerbaijan,Azerbaijan,Chickens,HERD: total number of animals,heads/year,9050633.902239092,1814689.7730679812,0.8329833673347339,0.16701663266526617,World,Asia,Western Asia,Western Asia,NA
+BHS,18,Bahamas,Bahamas,Chickens,HERD: total number of animals,heads/year,2309183.9279606845,134120.50419220357,0.9451069206001378,0.05489307939986214,World,Americas,Latin America and the Caribbean,Caribbean,NA
+BHR,19,Bahrain,Bahrain,Chickens,HERD: total number of animals,heads/year,352055.0284417753,34933.63514241295,0.9097295646366829,0.09027043536331715,World,Asia,Western Asia,Western Asia,NA
+BGD,20,Bangladesh,Bangladesh,Chickens,HERD: total number of animals,heads/year,16865559.725906402,8040110.230902615,0.6771775164110969,0.32282248358890303,World,Asia,Southern Asia,Southern Asia,NA
+BRB,21,Barbados,Barbados,Chickens,HERD: total number of animals,heads/year,2887464.846009023,133227.25790806246,0.9558951216063034,0.044104878393696555,World,Americas,Latin America and the Caribbean,Caribbean,NA
+BLR,22,Belarus,Belarus,Chickens,HERD: total number of animals,heads/year,18087517.70091862,2408327.304047998,0.8824968034514115,0.1175031965485885,World,Europe,Eastern Europe,Eastern Europe,NA
+BEL,23,Belgium,Belgium,Chickens,HERD: total number of animals,heads/year,27527836.675071724,1923276.7121453055,0.9346959591354503,0.06530404086454962,World,Europe,Western Europe,Western Europe,NA
+BLZ,24,Belize,Belize,Chickens,HERD: total number of animals,heads/year,1171913.9815535569,58877.16115814151,0.9521631582199865,0.04783684178001349,World,Americas,Latin America and the Caribbean,Central America,NA
+BEN,25,Benin,Benin,Chickens,HERD: total number of animals,heads/year,2535677.2486994285,162963.7828835248,0.9396126491162352,0.0603873508837648,World,Africa,Sub-Saharan Africa,Western Africa,NA
+BMU,26,Bermuda,Bermuda,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Americas,Northern America,Northern America,NA
+BTN,27,Bhutan,Bhutan,Chickens,HERD: total number of animals,heads/year,46521.12862978545,83367.43871599698,0.35816184272738477,0.6418381572726152,World,Asia,Southern Asia,Southern Asia,NA
+BOL,28,Bolivia,Bolivia,Chickens,HERD: total number of animals,heads/year,130397781.62580572,4075751.2701587,0.9696910523403003,0.030308947659699766,World,Americas,Latin America and the Caribbean,South America,NA
+BES,29,"Bonaire, Sint Eustatius and Saba","Bonaire, Sint Eustatius and Saba",Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Americas,Latin America and the Caribbean,Caribbean,NA
+BIH,30,Bosnia and Herzegovina,Bosnia & Herzegovina,Chickens,HERD: total number of animals,heads/year,12465643.026253786,1037074.6012953948,0.9231951204267589,0.07680487957324111,World,Europe,Southern Europe,Southern Europe,NA
+BWA,31,Botswana,Botswana,Chickens,HERD: total number of animals,heads/year,3021895.6177318483,386565.0896306867,0.8865866082024426,0.11341339179755736,World,Africa,Sub-Saharan Africa,Southern Africa,NA
+BRA,33,Brazil,Brazil,Chickens,HERD: total number of animals,heads/year,977036191.5508705,69296666.82024759,0.9337718716698572,0.06622812833014285,World,Americas,Latin America and the Caribbean,South America,NA
+IOT,34,British Indian Ocean Territory,NA,NA,NA,NA,NA,NA,0.9047378700969368,0.09526212990306315,World,Africa,Sub-Saharan Africa,Eastern Africa,prop gf with regional average
+VGB,35,British Virgin Islands,British Virgin Islands,Chickens,HERD: total number of animals,heads/year,114503.80575694561,0,1,0,World,Americas,Latin America and the Caribbean,Caribbean,NA
+BRN,36,Brunei,Brunei,Chickens,HERD: total number of animals,heads/year,10822374.456444765,1349282.943216134,0.8891455042717744,0.11085449572822556,World,Asia,South-eastern Asia,South-eastern Asia,NA
+BGR,37,Bulgaria,Bulgaria,Chickens,HERD: total number of animals,heads/year,6963124.663080444,906588.5510276112,0.8848003063946006,0.11519969360539946,World,Europe,Eastern Europe,Eastern Europe,NA
+BFA,38,Burkina Faso,Burkina Faso,Chickens,HERD: total number of animals,heads/year,403914.2574170105,80396.61123373256,0.8339979206791043,0.16600207932089572,World,Africa,Sub-Saharan Africa,Western Africa,NA
+BDI,39,Burundi,Burundi,Chickens,HERD: total number of animals,heads/year,422597.543608253,17556.23500752742,0.960113406131059,0.03988659386894104,World,Africa,Sub-Saharan Africa,Eastern Africa,NA
+KHM,40,Cambodia,Cambodia,Chickens,HERD: total number of animals,heads/year,3535721.8524641893,879258.4886054969,0.8008465676672831,0.19915343233271685,World,Asia,South-eastern Asia,South-eastern Asia,NA
+CMR,41,Cameroon,Cameroon,Chickens,HERD: total number of animals,heads/year,12047446.944128335,254179.9042510473,0.9793377000144877,0.020662299985512323,World,Africa,Sub-Saharan Africa,Middle Africa,NA
+CAN,42,Canada,Canada,Chickens,HERD: total number of animals,heads/year,119809028.0457057,11981369.054893512,0.9090876928935285,0.09091230710647154,World,Americas,Northern America,Northern America,NA
+CPV,43,Cape Verde,Cape Verde,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Africa,Sub-Saharan Africa,Western Africa,NA
+CYM,45,Cayman Islands,Cayman Islands,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Americas,Latin America and the Caribbean,Caribbean,NA
+CAF,46,Central African Republic,Central African Republic,Chickens,HERD: total number of animals,heads/year,1621630.0507253082,62808.084279696785,0.9627127390585288,0.037287260941471244,World,Africa,Sub-Saharan Africa,Middle Africa,NA
+TCD,47,Chad,Chad,Chickens,HERD: total number of animals,heads/year,44752.39726819619,3044.4429717851976,0.9363045139281286,0.06369548607187142,World,Africa,Sub-Saharan Africa,Middle Africa,NA
+CHL,48,Chile,Chile,Chickens,HERD: total number of animals,heads/year,32593789.02281191,3446704.1941737416,0.9043657872986784,0.09563421270132154,World,Americas,Latin America and the Caribbean,South America,NA
+CHN,49,China,China,Chickens,HERD: total number of animals,heads/year,1412903266.5050933,658960711.6672765,0.6819478891425304,0.31805211085746954,World,Asia,Eastern Asia,Eastern Asia,NA
+CXR,50,Christmas Island,NA,NA,NA,NA,NA,NA,0.9603808417779147,0.03961915822208528,World,Oceania,Australia and New Zealand,Australia and New Zealand,prop gf with regional average
+CCK,52,Cocos Islands,NA,NA,NA,NA,NA,NA,0.9603808417779147,0.03961915822208528,World,Oceania,Australia and New Zealand,Australia and New Zealand,prop gf with regional average
+COL,53,Colombia,Colombia,Chickens,HERD: total number of animals,heads/year,84860384.71960124,11977959.341734806,0.8763097463320093,0.12369025366799058,World,Americas,Latin America and the Caribbean,South America,NA
+COM,54,Comoros,Comoros,Chickens,HERD: total number of animals,heads/year,73162.35772704784,15353.3826449594,0.826546300348013,0.17345369965198695,World,Africa,Sub-Saharan Africa,Eastern Africa,NA
+COK,55,Cook Islands,Cook Islands,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Oceania,Polynesia,Polynesia,NA
+CRI,56,Costa Rica,Costa Rica,Chickens,HERD: total number of animals,heads/year,11601787.92299542,1833309.399650002,0.8635432735898473,0.13645672641015275,World,Americas,Latin America and the Caribbean,Central America,NA
+CIV,57,Côte d'Ivoire,Côte d’Ivoire,Chickens,HERD: total number of animals,heads/year,10515045.726789683,1590412.281613632,0.8686202306009729,0.13137976939902699,World,Africa,Sub-Saharan Africa,Western Africa,NA
+HRV,58,Croatia,Croatia,Chickens,HERD: total number of animals,heads/year,1775036.9474862209,650059.5355246228,0.7319448772126581,0.26805512278734195,World,Europe,Southern Europe,Southern Europe,NA
+CUB,59,Cuba,Cuba,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Americas,Latin America and the Caribbean,Caribbean,NA
+CUW,60,Curaçao,NA,NA,NA,NA,NA,NA,0.7063762084608551,0.29362379153914486,World,Americas,Latin America and the Caribbean,Caribbean,prop gf with regional average
+CZE,62,Czech Republic,Czechia,Chickens,HERD: total number of animals,heads/year,16419511.357002573,2042275.3155176335,0.8893782410259623,0.1106217589740378,World,Europe,Eastern Europe,Eastern Europe,NA
+COD,301,Democratic Republic of the Congo,Congo - Kinshasa,Chickens,HERD: total number of animals,heads/year,1399588.6595773813,131090.50751930528,0.9143579462390209,0.08564205376097919,World,Africa,Sub-Saharan Africa,Middle Africa,NA
+DNK,64,Denmark,Denmark,Chickens,HERD: total number of animals,heads/year,10949876.725255847,784625.7747955195,0.9331351478435422,0.06686485215645785,World,Europe,Northern Europe,Northern Europe,NA
+DJI,65,Djibouti,Djibouti,Chickens,HERD: total number of animals,heads/year,12851027.704557767,0,1,0,World,Africa,Sub-Saharan Africa,Eastern Africa,NA
+DOM,67,Dominican Republic,Dominican Republic,Chickens,HERD: total number of animals,heads/year,62798116.92121396,5759688.867635071,0.9159878470239506,0.08401215297604943,World,Americas,Latin America and the Caribbean,Caribbean,NA
+DMA,66,Dominica,Dominica,Chickens,HERD: total number of animals,heads/year,86825.85860452818,18857.4527524812,0.8215664090162852,0.17843359098371486,World,Americas,Latin America and the Caribbean,Caribbean,NA
+ECU,68,Ecuador,Ecuador,Chickens,HERD: total number of animals,heads/year,47601062.64717638,8916009.11805884,0.8422421962147152,0.15775780378528487,World,Americas,Latin America and the Caribbean,South America,NA
+EGY,69,Egypt,Egypt,Chickens,HERD: total number of animals,heads/year,0,2404389.6054220386,0,1,World,Africa,Northern Africa,Northern Africa,NA
+SLV,70,El Salvador,El Salvador,Chickens,HERD: total number of animals,heads/year,6759371.157677529,1214668.631145032,0.8476721130928306,0.15232788690716936,World,Americas,Latin America and the Caribbean,Central America,NA
+GNQ,71,Equatorial Guinea,Equatorial Guinea,Chickens,HERD: total number of animals,heads/year,112712.96414686013,46773.570758061964,0.706724014124791,0.29327598587520903,World,Africa,Sub-Saharan Africa,Middle Africa,NA
+ERI,72,Eritrea,Eritrea,Chickens,HERD: total number of animals,heads/year,64882.65323257322,8227.154413121703,0.887468526069824,0.11253147393017604,World,Africa,Sub-Saharan Africa,Eastern Africa,NA
+EST,73,Estonia,Estonia,Chickens,HERD: total number of animals,heads/year,1056317.7298232103,129468.29491695392,0.8908164776648269,0.10918352233517317,World,Europe,Northern Europe,Northern Europe,NA
+ETH,74,Ethiopia,Ethiopia,Chickens,HERD: total number of animals,heads/year,1297648.3931918389,81659.99714755833,0.9407964181763118,0.059203581823688324,World,Africa,Sub-Saharan Africa,Eastern Africa,NA
+FLK,75,Falkland Islands,Falkland Islands,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Americas,Latin America and the Caribbean,South America,NA
+FRO,76,Faroe Islands,Faroe Islands,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Europe,Northern Europe,Northern Europe,NA
+FJI,77,Fiji,Fiji,Chickens,HERD: total number of animals,heads/year,2011969.4747756447,128950.22028924586,0.9397687729313278,0.06023122706867219,World,Oceania,Melanesia,Melanesia,NA
+FIN,78,Finland,Finland,Chickens,HERD: total number of animals,heads/year,3155054.44852521,359587.57632289507,0.8976887051993764,0.10231129480062359,World,Europe,Northern Europe,Northern Europe,NA
+FRA,79,France,France,Chickens,HERD: total number of animals,heads/year,85699688.73053639,15067572.607116481,0.8504715479303564,0.14952845206964366,World,Europe,Western Europe,Western Europe,NA
+GUF,80,French Guiana,French Guiana,Chickens,HERD: total number of animals,heads/year,57561.544235151356,26530.51762511766,0.6845062775461266,0.3154937224538733,World,Americas,Latin America and the Caribbean,South America,NA
+PYF,81,French Polynesia,French Polynesia,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Oceania,Polynesia,Polynesia,NA
+GAB,83,Gabon,Gabon,Chickens,HERD: total number of animals,heads/year,769786.2028872839,41266.93985164193,0.9491193145343306,0.05088068546566938,World,Africa,Sub-Saharan Africa,Middle Africa,NA
+GMB,84,Gambia,Gambia,Chickens,HERD: total number of animals,heads/year,119053.93340376954,9685.292005997595,0.9247681351571749,0.0752318648428251,World,Africa,Sub-Saharan Africa,Western Africa,NA
+GEO,85,Georgia,Georgia,Chickens,HERD: total number of animals,heads/year,419333.7574422109,55507.869578766535,0.8831023515629679,0.11689764843703208,World,Asia,Western Asia,Western Asia,NA
+DEU,86,Germany,Germany,Chickens,HERD: total number of animals,heads/year,68823631.92479433,11666191.597627806,0.8550600425359618,0.1449399574640382,World,Europe,Western Europe,Western Europe,NA
+GHA,87,Ghana,Ghana,Chickens,HERD: total number of animals,heads/year,5829168.667281264,791238.3773595425,0.880484935137025,0.11951506486297497,World,Africa,Sub-Saharan Africa,Western Africa,NA
+GIB,88,Gibraltar,NA,NA,NA,NA,NA,NA,0.8607037255019048,0.13929627449809523,World,Europe,Southern Europe,Southern Europe,prop gf with regional average
+GRC,89,Greece,Greece,Chickens,HERD: total number of animals,heads/year,18478469.198666524,2396341.2790523474,0.8852041659678718,0.11479583403212826,World,Europe,Southern Europe,Southern Europe,NA
+GRL,90,Greenland,Greenland,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Americas,Northern America,Northern America,NA
+GRD,91,Grenada,Grenada,Chickens,HERD: total number of animals,heads/year,44853.401618166594,42102.94973532292,0.515815129315067,0.48418487068493304,World,Americas,Latin America and the Caribbean,Caribbean,NA
+GLP,92,Guadeloupe,Guadeloupe,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Americas,Latin America and the Caribbean,Caribbean,NA
+GUM,93,Guam,Guam,Chickens,HERD: total number of animals,heads/year,0,36905.752765708836,0,1,World,Oceania,Micronesia,Micronesia,NA
+GTM,94,Guatemala,Guatemala,Chickens,HERD: total number of animals,heads/year,8604668.923999665,3158591.3828381873,0.7314867391821522,0.26851326081784765,World,Americas,Latin America and the Caribbean,Central America,NA
+GGY,95,Guernsey,Guernsey,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Europe,Northern Europe,Northern Europe,NA
+GNB,97,Guinea-Bissau,Guinea-Bissau,Chickens,HERD: total number of animals,heads/year,276889.57874828187,26949.899494949834,0.9113021795233083,0.08869782047669168,World,Africa,Sub-Saharan Africa,Western Africa,NA
+GIN,96,Guinea,Guinea,Chickens,HERD: total number of animals,heads/year,710782.247932253,852328.9884742969,0.45472275509085114,0.545277244909149,World,Africa,Sub-Saharan Africa,Western Africa,NA
+GUY,98,Guyana,Guyana,Chickens,HERD: total number of animals,heads/year,12513534.115718393,77796.44138894795,0.9938214280821153,0.006178571917884781,World,Americas,Latin America and the Caribbean,South America,NA
+HTI,99,Haiti,Haiti,Chickens,HERD: total number of animals,heads/year,902136.9478057794,73234.28889474455,0.9249164972892979,0.075083502710702,World,Americas,Latin America and the Caribbean,Caribbean,NA
+HND,101,Honduras,Honduras,Chickens,HERD: total number of animals,heads/year,23297184.879699536,1415030.8283395413,0.9427396213655087,0.057260378634491314,World,Americas,Latin America and the Caribbean,Central America,NA
+HKG,102,Hong Kong,Hong Kong SAR China,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Asia,Eastern Asia,Eastern Asia,NA
+HUN,103,Hungary,Hungary,Chickens,HERD: total number of animals,heads/year,20534524.50337433,2791117.4513140838,0.8803412374786507,0.11965876252134934,World,Europe,Eastern Europe,Eastern Europe,NA
+ISL,104,Iceland,Iceland,Chickens,HERD: total number of animals,heads/year,170266.34970344353,11828.531325328708,0.9350419338616129,0.06495806613838705,World,Europe,Northern Europe,Northern Europe,NA
+IND,105,India,India,Chickens,HERD: total number of animals,heads/year,257572901.4029894,79530180.94240497,0.7640775623020892,0.23592243769791071,World,Asia,Southern Asia,Southern Asia,NA
+IDN,106,Indonesia,Indonesia,Chickens,HERD: total number of animals,heads/year,724818201.7199013,108138516.01014799,0.8701751078917472,0.12982489210825274,World,Asia,South-eastern Asia,South-eastern Asia,NA
+IRN,107,Iran,Iran,Chickens,HERD: total number of animals,heads/year,592983620.1213598,75003350.48767444,0.8877173451163419,0.11228265488365807,World,Asia,Southern Asia,Southern Asia,NA
+IRQ,108,Iraq,Iraq,Chickens,HERD: total number of animals,heads/year,16789452.995740984,2936414.564116137,0.8511388888115698,0.1488611111884301,World,Asia,Western Asia,Western Asia,NA
+IRL,109,Ireland,Ireland,Chickens,HERD: total number of animals,heads/year,10411099.408936447,997055.9719197892,0.9126014733641403,0.08739852663585963,World,Europe,Northern Europe,Northern Europe,NA
+IMN,110,Isle of Man,Isle of Man,Chickens,HERD: total number of animals,heads/year,43038.09841987294,0,1,0,World,Europe,Northern Europe,Northern Europe,NA
+ISR,111,Israel,Israel,Chickens,HERD: total number of animals,heads/year,34632088.91386716,1489588.9253012012,0.9587619121145593,0.041238087885440713,World,Asia,Western Asia,Western Asia,NA
+ITA,112,Italy,Italy,Chickens,HERD: total number of animals,heads/year,82921148.50389346,18826087.60290817,0.8149719999947038,0.18502800000529626,World,Europe,Southern Europe,Southern Europe,NA
+JAM,113,Jamaica,Jamaica,Chickens,HERD: total number of animals,heads/year,11546723.990927592,127611.12503700792,0.9890690884089408,0.010930911591059288,World,Americas,Latin America and the Caribbean,Caribbean,NA
+JPN,114,Japan,Japan,Chickens,HERD: total number of animals,heads/year,123769706.63760899,65783117.26902407,0.6529562793460335,0.3470437206539665,World,Asia,Eastern Asia,Eastern Asia,NA
+JEY,115,Jersey,Jersey,Chickens,HERD: total number of animals,heads/year,10496.470949801573,0,1,0,World,Europe,Northern Europe,Northern Europe,NA
+JOR,116,Jordan,Jordan,Chickens,HERD: total number of animals,heads/year,17827218.808967505,1266022.108280556,0.9336926552297948,0.0663073447702052,World,Asia,Western Asia,Western Asia,NA
+KAZ,117,Kazakhstan,Kazakhstan,Chickens,HERD: total number of animals,heads/year,9262051.111382937,7641297.490536792,0.5479417912691593,0.4520582087308406,World,Asia,Central Asia,Central Asia,NA
+KEN,118,Kenya,Kenya,Chickens,HERD: total number of animals,heads/year,1333290.8667865503,1645607.7584638656,0.4475784625515645,0.5524215374484355,World,Africa,Sub-Saharan Africa,Eastern Africa,NA
+KIR,119,Kiribati,Kiribati,Chickens,HERD: total number of animals,heads/year,206577.62987605948,17994.69174768111,0.9198712841476951,0.08012871585230477,World,Oceania,Micronesia,Micronesia,NA
+XKO,120,Kosovo,NA,NA,NA,NA,NA,NA,0.8607037255019048,0.13929627449809523,World,Europe,Southern Europe,Southern Europe,prop gf with regional average
+KWT,121,Kuwait,Kuwait,Chickens,HERD: total number of animals,heads/year,12732416.030199628,4544790.645317948,0.7369487596766391,0.26305124032336086,World,Asia,Western Asia,Western Asia,NA
+KGZ,122,Kyrgyzstan,Kyrgyzstan,Chickens,HERD: total number of animals,heads/year,249643.4854896149,688643.1085421025,0.2660631485918641,0.7339368514081359,World,Asia,Central Asia,Central Asia,NA
+LAO,123,Laos,Laos,Chickens,HERD: total number of animals,heads/year,2720648.496843146,457218.09650553495,0.8561242005997046,0.1438757994002954,World,Asia,South-eastern Asia,South-eastern Asia,NA
+LVA,124,Latvia,Latvia,Chickens,HERD: total number of animals,heads/year,1349416.6108395099,469665.04858171585,0.7418120037936349,0.2581879962063651,World,Europe,Northern Europe,Northern Europe,NA
+LBN,125,Lebanon,Lebanon,Chickens,HERD: total number of animals,heads/year,26907478.48333562,1781801.5895330072,0.9378931229711109,0.062106877028888986,World,Asia,Western Asia,Western Asia,NA
+LSO,126,Lesotho,Lesotho,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Africa,Sub-Saharan Africa,Southern Africa,NA
+LBR,127,Liberia,Liberia,Chickens,HERD: total number of animals,heads/year,522321.9457415917,26625.980029866303,0.951496346411278,0.04850365358872205,World,Africa,Sub-Saharan Africa,Western Africa,NA
+LBY,128,Libya,Libya,Chickens,HERD: total number of animals,heads/year,22977118.301396407,1813721.9608422192,0.9268390283807816,0.07316097161921849,World,Africa,Northern Africa,Northern Africa,NA
+LIE,129,Liechtenstein,Liechtenstein,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Europe,Western Europe,Western Europe,NA
+LTU,130,Lithuania,Lithuania,Chickens,HERD: total number of animals,heads/year,5660149.452586074,608612.1323004743,0.9029134982948168,0.09708650170518311,World,Europe,Northern Europe,Northern Europe,NA
+LUX,131,Luxembourg,Luxembourg,Chickens,HERD: total number of animals,heads/year,0,22242.516039256698,0,1,World,Europe,Western Europe,Western Europe,NA
+MAC,132,Macao,Macau SAR China,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Asia,Eastern Asia,Eastern Asia,NA
+MKD,133,Macedonia,Macedonia,Chickens,HERD: total number of animals,heads/year,171199.17345883683,337820.7498910412,0.33633098746345536,0.6636690125365446,World,Europe,Southern Europe,Southern Europe,NA
+MDG,134,Madagascar,Madagascar,Chickens,HERD: total number of animals,heads/year,8883690.169661673,368231.8479069588,0.9601994215680032,0.039800578431996844,World,Africa,Sub-Saharan Africa,Eastern Africa,NA
+MWI,135,Malawi,Malawi,Chickens,HERD: total number of animals,heads/year,1674385.0234733403,152209.85664275155,0.9166701613479408,0.08332983865205931,World,Africa,Sub-Saharan Africa,Eastern Africa,NA
+MYS,136,Malaysia,Malaysia,Chickens,HERD: total number of animals,heads/year,161570322.01472554,21204415.409071993,0.8839860710076931,0.11601392899230695,World,Asia,South-eastern Asia,South-eastern Asia,NA
+MDV,137,Maldives,Maldives,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Asia,Southern Asia,Southern Asia,NA
+MLI,138,Mali,Mali,Chickens,HERD: total number of animals,heads/year,1576630.018927537,64978.64469575645,0.9604177011637243,0.03958229883627573,World,Africa,Sub-Saharan Africa,Western Africa,NA
+MLT,139,Malta,Malta,Chickens,HERD: total number of animals,heads/year,479605.7256341595,104748.38027314917,0.8207450256373068,0.1792549743626933,World,Europe,Southern Europe,Southern Europe,NA
+MHL,140,Marshall Islands,Marshall Islands,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Oceania,Micronesia,Micronesia,NA
+MTQ,141,Martinique,Martinique,Chickens,HERD: total number of animals,heads/year,62393.51788568948,75726.5597713052,0.4517338749304543,0.5482661250695455,World,Americas,Latin America and the Caribbean,Caribbean,NA
+MRT,142,Mauritania,Mauritania,Chickens,HERD: total number of animals,heads/year,776680.2623085644,172745.95072904744,0.8180522631913008,0.18194773680869927,World,Africa,Sub-Saharan Africa,Western Africa,NA
+MUS,143,Mauritius,Mauritius,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Africa,Sub-Saharan Africa,Eastern Africa,NA
+MYT,144,Mayotte,Mayotte,Chickens,HERD: total number of animals,heads/year,120099.95689747778,0,1,0,World,Africa,Sub-Saharan Africa,Eastern Africa,NA
+MEX,145,Mexico,Mexico,Chickens,HERD: total number of animals,heads/year,244189281.35632795,98822268.431136,0.7118981314408566,0.2881018685591433,World,Americas,Latin America and the Caribbean,Central America,NA
+FSM,146,Micronesia,Micronesia (Federated States of),Chickens,HERD: total number of animals,heads/year,49040.42061667714,14451.349788513815,0.7723901901571121,0.22760980984288798,World,Oceania,Micronesia,Micronesia,NA
+MDA,147,Moldova,Moldova,Chickens,HERD: total number of animals,heads/year,9139070.941677645,922802.4935608594,0.90828720918621,0.09171279081378998,World,Europe,Eastern Europe,Eastern Europe,NA
+MCO,148,Monaco,Monaco,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Europe,Western Europe,Western Europe,NA
+MNG,149,Mongolia,Mongolia,Chickens,HERD: total number of animals,heads/year,118685.26506152937,62708.34001979568,0.6542968535650342,0.34570314643496586,World,Asia,Eastern Asia,Eastern Asia,NA
+MNE,150,Montenegro,Montenegro,Chickens,HERD: total number of animals,heads/year,0,47000.24794048094,0,1,World,Europe,Southern Europe,Southern Europe,NA
+MSR,151,Montserrat,Montserrat,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Americas,Latin America and the Caribbean,Caribbean,NA
+MAR,152,Morocco,Morocco,Chickens,HERD: total number of animals,heads/year,110858047.1782926,7035142.278256207,0.9403261349473533,0.05967386505264672,World,Africa,Northern Africa,Northern Africa,NA
+MOZ,153,Mozambique,Mozambique,Chickens,HERD: total number of animals,heads/year,1847117.303718969,122636.30948062509,0.937740279464994,0.06225972053500603,World,Africa,Sub-Saharan Africa,Eastern Africa,NA
+MMR,154,Myanmar,Myanmar (Burma),Chickens,HERD: total number of animals,heads/year,20697486.485560074,1480593.894176891,0.9332406651601083,0.06675933483989163,World,Asia,South-eastern Asia,South-eastern Asia,NA
+NAM,155,Namibia,Namibia,Chickens,HERD: total number of animals,heads/year,1716028.8447454758,47810.913046329275,0.9728938454669006,0.027106154533099395,World,Africa,Sub-Saharan Africa,Southern Africa,NA
+NRU,156,Nauru,Nauru,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Oceania,Micronesia,Micronesia,NA
+NPL,157,Nepal,Nepal,Chickens,HERD: total number of animals,heads/year,1585937.3881751345,2184127.757991028,0.42066577809348965,0.5793342219065104,World,Asia,Southern Asia,Southern Asia,NA
+NLD,158,Netherlands,Netherlands,Chickens,HERD: total number of animals,heads/year,60925299.234628014,16371620.846167114,0.7881982771234021,0.21180172287659801,World,Europe,Western Europe,Western Europe,NA
+NCL,159,New Caledonia,New Caledonia,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Oceania,Melanesia,Melanesia,NA
+NZL,160,New Zealand,New Zealand,Chickens,HERD: total number of animals,heads/year,10550594.872545743,684013.5207625659,0.939115499462359,0.060884500537641,World,Oceania,Australia and New Zealand,Australia and New Zealand,NA
+NIC,161,Nicaragua,Nicaragua,Chickens,HERD: total number of animals,heads/year,10633100.778354904,438103.4575374283,0.9604285633068609,0.039571436693139235,World,Americas,Latin America and the Caribbean,Central America,NA
+NER,162,Niger,Niger,Chickens,HERD: total number of animals,heads/year,439772.53532642033,34367.755245362714,0.9275156405630127,0.07248435943698728,World,Africa,Sub-Saharan Africa,Western Africa,NA
+NGA,163,Nigeria,Nigeria,Chickens,HERD: total number of animals,heads/year,16245393.973466877,9032411.836074473,0.6426742137300103,0.35732578626998956,World,Africa,Sub-Saharan Africa,Western Africa,NA
+NIU,164,Niue,Niue,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Oceania,Polynesia,Polynesia,NA
+NFK,165,Norfolk Island,Norfolk Island,Chickens,HERD: total number of animals,heads/year,1539965.481149792,0,1,0,World,Oceania,Australia and New Zealand,Australia and New Zealand,NA
+PRK,166,North Korea,North Korea,Chickens,HERD: total number of animals,heads/year,1557410.1128529597,1803449.6711711017,0.46339633693025545,0.5366036630697445,World,Asia,Eastern Asia,Eastern Asia,NA
+MNP,168,Northern Mariana Islands,Northern Mariana Islands,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Oceania,Micronesia,Micronesia,NA
+NOR,169,Norway,Norway,Chickens,HERD: total number of animals,heads/year,2498240.6209355923,345220.5135426412,0.8785914428874414,0.12140855711255856,World,Europe,Northern Europe,Northern Europe,NA
+OMN,170,Oman,Oman,Chickens,HERD: total number of animals,heads/year,0,1225851.47772942,0,1,World,Asia,Western Asia,Western Asia,NA
+PAK,171,Pakistan,Pakistan,Chickens,HERD: total number of animals,heads/year,119377299.82306188,20591752.2722706,0.8528835341526382,0.14711646584736193,World,Asia,Southern Asia,Southern Asia,NA
+PLW,172,Palau,Palau,Chickens,HERD: total number of animals,heads/year,185283.4218486395,0,1,0,World,Oceania,Micronesia,Micronesia,NA
+PSE,173,Palestina,Palestinian Territories,Chickens,HERD: total number of animals,heads/year,729436.6437102691,292409.8615017517,0.7138416973485855,0.28615830265141456,World,Asia,Western Asia,Western Asia,NA
+PAN,174,Panama,Panama,Chickens,HERD: total number of animals,heads/year,12914388.660468863,696227.0080349027,0.948846766010296,0.05115323398970385,World,Americas,Latin America and the Caribbean,Central America,NA
+PNG,175,Papua New Guinea,Papua New Guinea,Chickens,HERD: total number of animals,heads/year,1295987.8117198602,150209.27204424964,0.8961349917444928,0.10386500825550715,World,Oceania,Melanesia,Melanesia,NA
+PRY,177,Paraguay,Paraguay,Chickens,HERD: total number of animals,heads/year,1315037.9636031713,3102314.3661194574,0.2976982285870197,0.7023017714129802,World,Americas,Latin America and the Caribbean,South America,NA
+PER,178,Peru,Peru,Chickens,HERD: total number of animals,heads/year,86725855.77193378,6225470.408260449,0.9330244046632338,0.06697559533676618,World,Americas,Latin America and the Caribbean,South America,NA
+PHL,179,Philippines,Philippines,Chickens,HERD: total number of animals,heads/year,30655647.089368526,3133464.2600900433,0.9072640819794673,0.09273591802053277,World,Asia,South-eastern Asia,South-eastern Asia,NA
+PCN,180,Pitcairn Islands,Pitcairn Islands,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Oceania,Polynesia,Polynesia,NA
+POL,181,Poland,Poland,Chickens,HERD: total number of animals,heads/year,80401489.26259957,13256167.87425441,0.8584614618868344,0.14153853811316566,World,Europe,Eastern Europe,Eastern Europe,NA
+PRT,182,Portugal,Portugal,Chickens,HERD: total number of animals,heads/year,29373664.71718449,2674182.0861207936,0.916556575468746,0.08344342453125399,World,Europe,Southern Europe,Southern Europe,NA
+XMI,300,Madeira Island,Madeira Islands,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Africa,Northern Africa,Macronesia,NA
+PRI,183,Puerto Rico,Puerto Rico,Chickens,HERD: total number of animals,heads/year,10370507.931295447,632551.7730995025,0.9425112841251927,0.057488715874807306,World,Americas,Latin America and the Caribbean,Caribbean,NA
+QAT,184,Qatar,Qatar,Chickens,HERD: total number of animals,heads/year,805440.7467448588,1782516.8746524968,0.3112264049787511,0.6887735950212489,World,Asia,Western Asia,Western Asia,NA
+COG,185,Republic of Congo,Congo - Brazzaville,Chickens,HERD: total number of animals,heads/year,1617628.7629853904,49786.721783338806,0.970141382134133,0.029858617865866965,World,Africa,Sub-Saharan Africa,Middle Africa,NA
+REU,186,Reunion,Réunion,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Africa,Sub-Saharan Africa,Eastern Africa,NA
+ROU,187,Romania,Romania,Chickens,HERD: total number of animals,heads/year,45134434.27776463,6886354.04626685,0.8676230355570056,0.13237696444299432,World,Europe,Eastern Europe,Eastern Europe,NA
+RUS,188,Russia,Russia,Chickens,HERD: total number of animals,heads/year,217595734.89707187,30128549.849972997,0.8783786987992004,0.12162130120079963,World,Europe,Eastern Europe,Eastern Europe,NA
+RWA,189,Rwanda,Rwanda,Chickens,HERD: total number of animals,heads/year,229119.42466902907,26593.688083357956,0.8960018600645276,0.10399813993547231,World,Africa,Sub-Saharan Africa,Eastern Africa,NA
+BLM,190,Saint-Barthélemy,NA,NA,NA,NA,NA,NA,0.7063762084608551,0.29362379153914486,World,Americas,Latin America and the Caribbean,Caribbean,prop gf with regional average
+MAF,191,Saint-Martin,NA,NA,NA,NA,NA,NA,0.7063762084608551,0.29362379153914486,World,Americas,Latin America and the Caribbean,Caribbean,prop gf with regional average
+SHN,192,Saint Helena,St. Helena,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Africa,Sub-Saharan Africa,Western Africa,NA
+KNA,193,Saint Kitts and Nevis,St. Kitts & Nevis,Chickens,HERD: total number of animals,heads/year,19655.387513395766,11864.856860042411,0.623579794640145,0.37642020535985493,World,Americas,Latin America and the Caribbean,Caribbean,NA
+LCA,194,Saint Lucia,St. Lucia,Chickens,HERD: total number of animals,heads/year,188056.4403680814,47272.95946430693,0.7991200440829886,0.20087995591701144,World,Americas,Latin America and the Caribbean,Caribbean,NA
+SPM,195,Saint Pierre and Miquelon,St. Pierre & Miquelon,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Americas,Northern America,Northern America,NA
+VCT,196,Saint Vincent and the Grenadines,St. Vincent & Grenadines,Chickens,HERD: total number of animals,heads/year,56486.22949254068,37751.99910013495,0.5993982520266823,0.4006017479733177,World,Americas,Latin America and the Caribbean,Caribbean,NA
+WSM,197,Samoa,Samoa,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Oceania,Polynesia,Polynesia,NA
+SMR,198,San Marino,San Marino,Chickens,HERD: total number of animals,heads/year,62359.20767934979,0,1,0,World,Europe,Southern Europe,Southern Europe,NA
+STP,199,São Tomé and Príncipe,São Tomé & Príncipe,Chickens,HERD: total number of animals,heads/year,116960.71855144655,10397.714829181365,0.9183586469055693,0.08164135309443063,World,Africa,Sub-Saharan Africa,Middle Africa,NA
+SAU,200,Saudi Arabia,Saudi Arabia,Chickens,HERD: total number of animals,heads/year,108213923.01865564,7392906.63037511,0.9360512985883349,0.06394870141166518,World,Asia,Western Asia,Western Asia,NA
+SEN,201,Senegal,Senegal,Chickens,HERD: total number of animals,heads/year,8943555.006145686,681461.9706427339,0.9291988811774421,0.07080111882255789,World,Africa,Sub-Saharan Africa,Western Africa,NA
+SRB,202,Serbia,Serbia,Chickens,HERD: total number of animals,heads/year,0,2415149.326738674,0,1,World,Europe,Southern Europe,Southern Europe,NA
+SYC,203,Seychelles,Seychelles,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Africa,Sub-Saharan Africa,Eastern Africa,NA
+SLE,204,Sierra Leone,Sierra Leone,Chickens,HERD: total number of animals,heads/year,1644129.4826917408,134815.08136776587,0.924216254912339,0.075783745087661,World,Africa,Sub-Saharan Africa,Western Africa,NA
+SGP,205,Singapore,Singapore,Chickens,HERD: total number of animals,heads/year,2689002.7207059194,200999.87363657297,0.9304499331488307,0.06955006685116927,World,Asia,South-eastern Asia,South-eastern Asia,NA
+SXM,206,Sint Maarten,NA,NA,NA,NA,NA,NA,0.7063762084608551,0.29362379153914486,World,Americas,Latin America and the Caribbean,Caribbean,prop gf with regional average
+SVK,207,Slovakia,Slovakia,Chickens,HERD: total number of animals,heads/year,7135118.149881709,1261735.4904291988,0.849737110532454,0.15026288946754596,World,Europe,Eastern Europe,Eastern Europe,NA
+SVN,208,Slovenia,Slovenia,Chickens,HERD: total number of animals,heads/year,2118422.063847784,145731.56265603224,0.9356353027682741,0.06436469723172586,World,Europe,Southern Europe,Southern Europe,NA
+SLB,209,Solomon Islands,Solomon Islands,Chickens,HERD: total number of animals,heads/year,36598.724701721294,18392.808821744857,0.6655338077834069,0.3344661922165932,World,Oceania,Melanesia,Melanesia,NA
+SOM,210,Somalia,Somalia,Chickens,HERD: total number of animals,heads/year,2060139.5903784155,235489.45111572754,0.8974183342085374,0.10258166579146248,World,Africa,Sub-Saharan Africa,Eastern Africa,NA
+ZAF,211,South Africa,South Africa,Chickens,HERD: total number of animals,heads/year,118881408.39792654,5253013.974314554,0.9576828580346363,0.042317141965363764,World,Africa,Sub-Saharan Africa,Southern Africa,NA
+KOR,213,South Korea,South Korea,Chickens,HERD: total number of animals,heads/year,84767477.29866391,29051014.78711106,0.7447601505279312,0.2552398494720688,World,Asia,Eastern Asia,Eastern Asia,NA
+SSD,214,South Sudan,South Sudan,Chickens,HERD: total number of animals,heads/year,6282052.414021086,605729.3997062042,0.9120574059853361,0.08794259401466387,World,Africa,Sub-Saharan Africa,Eastern Africa,NA
+ESP,215,Spain,Spain,Chickens,HERD: total number of animals,heads/year,92800459.23269932,11416210.331481997,0.8904569645218668,0.10954303547813318,World,Europe,Southern Europe,Southern Europe,NA
+LKA,217,Sri Lanka,Sri Lanka,Chickens,HERD: total number of animals,heads/year,7909772.734201738,1371018.1039073726,0.8522735693732425,0.14772643062675755,World,Asia,Southern Asia,Southern Asia,NA
+SDN,218,Sudan,Sudan,Chickens,HERD: total number of animals,heads/year,6808467.634552507,656520.171831302,0.9120534167155815,0.08794658328441847,World,Africa,Northern Africa,Northern Africa,NA
+SUR,219,Suriname,Suriname,Chickens,HERD: total number of animals,heads/year,4850075.665134201,226484.28649089413,0.9553862677385712,0.04461373226142884,World,Americas,Latin America and the Caribbean,South America,NA
+SJM,220,Svalbard and Jan Mayen,Svalbard & Jan Mayen,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Europe,Northern Europe,Northern Europe,NA
+SWZ,221,Swaziland,Swaziland,Chickens,HERD: total number of animals,heads/year,2439462.368841578,66824.28564673258,0.9733373333305422,0.026662666669457883,World,Africa,Sub-Saharan Africa,Southern Africa,NA
+SWE,222,Sweden,Sweden,Chickens,HERD: total number of animals,heads/year,4596268.963880796,781482.6849999318,0.8546822657452801,0.14531773425472,World,Europe,Northern Europe,Northern Europe,NA
+CHE,223,Switzerland,Switzerland,Chickens,HERD: total number of animals,heads/year,5730088.063116214,1416336.4895066672,0.8018118740249145,0.19818812597508542,World,Europe,Western Europe,Western Europe,NA
+SYR,224,Syria,Syria,Chickens,HERD: total number of animals,heads/year,12863316.190222753,2073228.4646850287,0.8611975853462323,0.13880241465376777,World,Asia,Western Asia,Western Asia,NA
+TWN,225,Taiwan,NA,NA,NA,NA,NA,NA,0.6529562793460335,0.3470437206539665,World,Asia,Eastern Asia,Eastern Asia,prop gf with regional average
+TJK,226,Tajikistan,Tajikistan,Chickens,HERD: total number of animals,heads/year,0,682244.5124007822,0,1,World,Asia,Central Asia,Central Asia,NA
+TZA,227,Tanzania,Tanzania,Chickens,HERD: total number of animals,heads/year,7924519.122624994,455203.72428188706,0.9456779499038072,0.05432205009619281,World,Africa,Sub-Saharan Africa,Eastern Africa,NA
+THA,228,Thailand,Thailand,Chickens,HERD: total number of animals,heads/year,106272628.53756168,9934809.85269277,0.9145079696247229,0.08549203037527704,World,Asia,South-eastern Asia,South-eastern Asia,NA
+TLS,229,Timor-Leste,Timor-Leste,Chickens,HERD: total number of animals,heads/year,93368.05323371054,49730.33861591668,0.6524745109073269,0.347525489092673,World,Asia,South-eastern Asia,South-eastern Asia,NA
+TGO,230,Togo,Togo,Chickens,HERD: total number of animals,heads/year,5631905.064916821,185962.0649044555,0.9680360412579295,0.03196395874207052,World,Africa,Sub-Saharan Africa,Western Africa,NA
+TKL,231,Tokelau,Tokelau,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Oceania,Polynesia,Polynesia,NA
+TON,232,Tonga,Tonga,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Oceania,Polynesia,Polynesia,NA
+TTO,233,Trinidad and Tobago,Trinidad & Tobago,Chickens,HERD: total number of animals,heads/year,29881992.08367461,514722.2635928744,0.9830665164098848,0.01693348359011524,World,Americas,Latin America and the Caribbean,Caribbean,NA
+TUN,234,Tunisia,Tunisia,Chickens,HERD: total number of animals,heads/year,23563522.17567663,1798336.2862507512,0.9290928821738214,0.07090711782617867,World,Africa,Northern Africa,Northern Africa,NA
+TUR,235,Turkey,Turkey,Chickens,HERD: total number of animals,heads/year,163167030.1481626,23010029.34297983,0.8764078162697884,0.1235921837302117,World,Asia,Western Asia,Western Asia,NA
+TKM,236,Turkmenistan,Turkmenistan,Chickens,HERD: total number of animals,heads/year,3785213.939037726,3228337.020242937,0.5397000693391915,0.46029993066080865,World,Asia,Central Asia,Central Asia,NA
+TCA,237,Turks and Caicos Islands,Turks & Caicos Islands,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Americas,Latin America and the Caribbean,Caribbean,NA
+TUV,238,Tuvalu,Tuvalu,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Oceania,Polynesia,Polynesia,NA
+UGA,239,Uganda,Uganda,Chickens,HERD: total number of animals,heads/year,2984530.21321427,107573.55435424087,0.9652102379349217,0.03478976206507837,World,Africa,Sub-Saharan Africa,Eastern Africa,NA
+UKR,240,Ukraine,Ukraine,Chickens,HERD: total number of animals,heads/year,31555093.67094594,2175768.4754640684,0.9354962091979724,0.06450379080202777,World,Europe,Eastern Europe,Eastern Europe,NA
+ARE,241,United Arab Emirates,United Arab Emirates,Chickens,HERD: total number of animals,heads/year,11623183.744943004,1725340.815982449,0.8707467025207443,0.12925329747925574,World,Asia,Western Asia,Western Asia,NA
+GBR,242,United Kingdom,United Kingdom,Chickens,HERD: total number of animals,heads/year,112431858.41849536,9743762.956990685,0.9202478952241635,0.07975210477583644,World,Europe,Northern Europe,Northern Europe,NA
+USA,243,United States,United States,Chickens,HERD: total number of animals,heads/year,1522596610.4264126,192115760.96043822,0.88796035757002445,0.11203964242997556,World,Americas,Northern America,Northern America,NA
+URY,245,Uruguay,Uruguay,Chickens,HERD: total number of animals,heads/year,7185273.537110902,1746878.1237456144,0.8044280717488284,0.19557192825117165,World,Americas,Latin America and the Caribbean,South America,NA
+UZB,246,Uzbekistan,Uzbekistan,Chickens,HERD: total number of animals,heads/year,1639743.4727771715,7091196.16194328,0.1878083621442508,0.8121916378557491,World,Asia,Central Asia,Central Asia,NA
+VUT,247,Vanuatu,Vanuatu,Chickens,HERD: total number of animals,heads/year,322365.78667155886,51874.35475050551,0.8613875183100624,0.13861248168993748,World,Oceania,Melanesia,Melanesia,NA
+VEN,249,Venezuela,Venezuela,Chickens,HERD: total number of animals,heads/year,87487641.00282429,4356350.309511416,0.9525679334351153,0.047432066564884884,World,Americas,Latin America and the Caribbean,South America,NA
+VNM,250,Vietnam,Vietnam,Chickens,HERD: total number of animals,heads/year,0,7495779.286762988,0,1,World,Asia,South-eastern Asia,South-eastern Asia,NA
+VIR,251,"Virgin Islands, U.S.",U.S. Virgin Islands,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Americas,Latin America and the Caribbean,Caribbean,NA
+WLF,252,Wallis and Futuna,Wallis & Futuna,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Oceania,Polynesia,Polynesia,NA
+ESH,253,Western Sahara,Western Sahara,Chickens,HERD: total number of animals,heads/year,0,0,0,0,World,Africa,Northern Africa,Northern Africa,NA
+YEM,254,Yemen,Yemen,Chickens,HERD: total number of animals,heads/year,0,3209666.8115251465,0,1,World,Asia,Western Asia,Western Asia,NA
+ZMB,255,Zambia,Zambia,Chickens,HERD: total number of animals,heads/year,0,938426.9822934996,0,1,World,Africa,Sub-Saharan Africa,Eastern Africa,NA
+ZWE,256,Zimbabwe,Zimbabwe,Chickens,HERD: total number of animals,heads/year,0,1283141.8770353938,0,1,World,Africa,Sub-Saharan Africa,Eastern Africa,NA

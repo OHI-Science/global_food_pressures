@@ -1,0 +1,26 @@
+isscaap;species;order;continent;region;country;economic;equation;frac_n_retention_nat;frac_p_retention_nat;frac_n_recycled;frac_p_recycled;weight_gain_factor;Frac_Fish_N;Frac_Fish_P
+Carps, barbels and other cyprinids;Bighead carp;Other;;;;;herb_omn;0.135;0.2;0.6;0.6;0.95;0.024;0.005
+Carps, barbels and other cyprinids;Catla;Other;;;;;herb_omn;0.135;0.2;0.6;0.6;0.95;0.024;0.005
+Carps, barbels and other cyprinids;Roho labeo;Other;;;;;herb_omn;0.135;0.2;0.6;0.6;0.95;0.024;0.005
+Carps, barbels and other cyprinids;Silver carp;Other;;;;;herb_omn;0.135;0.2;0.6;0.6;0.95;0.024;0.005
+Carps, barbels and other cyprinids;Other;Other;;;;;herb_omn;0.135;0.2;0.6;0.6;0.95;0.024;0.005
+Miscellaneous coastal fishes;Other;ACANTHUROIDEI;;;;;herb_omn;0.19;0.2;0.5;0.5;0.95;0.024;0.007
+Miscellaneous coastal fishes;Other;MUGILIFORMES;;;;;herb_omn;0.19;0.2;0.5;0.5;0.95;0.024;0.007
+Miscellaneous diadromous fishes;Milkfish;Other;;;;;herb_omn;0.135;0.2;0.5;0.5;0.95;0.024;0.007
+Miscellaneous freshwater fishes;Other;SILURIFORMES;;;;;herb_omn;0.205;0.2;0.5;0.5;0.95;0.024;0.007
+Miscellaneous freshwater fishes;Grass-eaters nei;Other;;;;;herb_omn;0.19;0.2;0.5;0.5;0.95;0.024;0.007
+Tilapias and other cichlids;Other;Other;;;;;herb_omn;0.235;0.2;0.1;0.1;0.95;0.024;0.007
+Carps, barbels and other cyprinids;Black carp;Other;;;;;carn;;;0;0;0.95;0.024;0.005
+Cods, hakes, haddocks;Other;Other;;;;;carn;;;0;0;0.95;0.028;0.004
+Flounders, halibuts, soles;Other;Other;;;;;carn;;;0;0;0.95;0.028;0.004
+Marine fishes not identified;Other;Other;;;;;carn;;;0;0;0.95;0.028;0.004
+Miscellaneous coastal fishes;Other;Other;;;;;carn;;;0;0;0.95;0.028;0.004
+Miscellaneous demersal fishes;Other;Other;;;;;carn;;;0;0;0.95;0.028;0.004
+Miscellaneous diadromous fishes;Other;Other;;;;;carn;;;0;0;0.95;0.028;0.004
+Miscellaneous freshwater fishes;Other;Other;;;;;carn;;;0;0;0.95;0.028;0.004
+Miscellaneous pelagic fishes;Other;Other;;;;;carn;;;0;0;0.95;0.028;0.004
+River eels;Other;Other;;;;;carn;;;0;0;0.95;0.028;0.004
+Salmons, trouts, smelts;;Other;;;;;carn;;;0;0;0.95;0.028;0.004
+Shads;Other;Other;;;;;carn;;;0;0;0.95;0.028;0.004
+Sturgeons, paddlefishes;Other;Other;;;;;carn;;;0;0;0.95;0.028;0.004
+Tunas, bonitos, billfishes;Other;Other;;;;;carn;;;0;0;0.667;0.028;0.004

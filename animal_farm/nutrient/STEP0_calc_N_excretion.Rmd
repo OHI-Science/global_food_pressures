@@ -1,0 +1,144 @@
+---
+title: "Calculate N excretion rates"
+author: "Juliette"
+date: "4/14/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(stringr)
+library(janitor)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>% 
+  dplyr::select(iso3c, Global_Name, Region_Name, Sub_region_Name, Intermediate_Region_Name)
+
+# n_exc_old <- read_csv(here("animal_farm/ghg/data/nitrogen_excretion_rates.csv")) %>% 
+#   select(-ID_0, -Country)
+```
+
+FAO wrangle
+```{r}
+
+fao_raw <- read_csv(file.path(paste0(raw, "FAO_data/v2021/agri_environmental_indictors/FAOSTAT_data_4-14-2021.csv", sep = "")))
+
+fao <- fao_raw %>% 
+  select(iso3c = 'Area Code',
+         country = Area,
+         Element,
+         animal = Item, 
+         year = Year,
+         Value) %>% 
+  filter(year == 2017) %>% 
+  pivot_wider(names_from = Element, values_from = Value) %>% 
+  rename(kg_N = 'Amount excreted in manure (N content)') %>% 
+  mutate(tonnes_N  = kg_N/1000,
+         tonnes_N_head = tonnes_N/Stocks) %>% 
+  select(iso3c, country, animal, stocks = Stocks, tonnes_N_head)
+
+## we don't differentiate between market and breeder pigs so we'll weigh the excretion rates in each country by proportion of each
+pigs <- fao %>% 
+  filter(str_detect(animal, "Swine")) %>% 
+  group_by(iso3c) %>% 
+  mutate(total_count = sum(stocks)) %>% 
+  ungroup() %>% 
+  mutate(prop_count = stocks/total_count,
+         weighted = prop_count*tonnes_N_head) %>% 
+  group_by(iso3c, country) %>% 
+  dplyr::summarise(tonnes_N_head_weighted = sum(weighted)) %>% 
+  ungroup() %>% 
+  mutate(animal = "pigs", 
+         product = "meat") %>% 
+  select(country, animal, product, tonnes_N_head = tonnes_N_head_weighted)
+
+## wrangle animal and product, add back in pigs, gapfil
+cows_buff_chick <- fao %>% 
+  filter(!str_detect(animal, "Swine")) %>% 
+  mutate(animal_fix = case_when(str_detect(animal, "Cattle") ~ "cows",
+                                str_detect(animal, "Chickens") ~ "chickens",
+                                animal == "Buffaloes" ~ "buffaloes",
+                                animal == "Goats" ~ "goats",
+                                animal == "Sheep" ~ "sheep"),
+         product = case_when(str_detect(animal, "non-dairy") ~ "meat",
+                             str_detect(animal, "dairy") ~ "milk",
+                             str_detect(animal, "layers") ~ "eggs",
+                             str_detect(animal, "broilers") ~ "meat",
+                             animal_fix == "buffaloes" ~ "milk")) %>% 
+  select(country, animal = animal_fix, product, tonnes_N_head)
+
+backyard_chick <- cows_buff_chick %>% 
+  filter(animal == "chickens") %>% 
+  group_by(country) %>% 
+  dplyr::summarise(tonnes_N_head = mean(tonnes_N_head, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(product = "eggs&meat",
+         animal = "chickens")
+
+goats_sheep <- cows_buff_chick %>% 
+  filter(animal %in% c("goats", "sheep")) %>% 
+  select(-product) %>% 
+  slice(rep(1:n(), each = 2)) %>% 
+  mutate(product = rep(c("milk", "meat"), times = 395))
+
+excretion_rate <- cows_buff_chick %>% 
+  filter(!animal %in% c("goats", "sheep")) %>% 
+  rbind(pigs, goats_sheep, backyard_chick) %>% 
+  filter(country != "China") %>% 
+  mutate(country = ifelse(country == "Eswatini", "Swaziland", country),
+         country = ifelse(country == "Netherlands Antilles (former)", "Bonaire, Sint Eustatius and Saba", country),
+         country = ifelse(country == "French Guyana", "French Guiana", country),
+         country = ifelse(country == "China, mainland", "China", country),
+         iso3c = countrycode(country, origin="country.name", destination = "iso3c"))
+
+excretion_rate <- left_join(food_rgns, excretion_rate) %>% 
+  select(-ID_0, -country) %>% 
+  rename(country = Country)
+
+rum_add_on <- filter(excretion_rate, is.na(animal)) %>% 
+  select(iso3c, country)  %>% 
+  slice(rep(1:n(), each = 3)) %>% 
+  mutate(animal = rep(c("goats", "cows", "sheep"), times = 28)) %>% 
+  slice(rep(1:n(), each = 2)) %>% 
+  mutate(product = rep(c("milk", "meat"), times = 84),
+         tonnes_N_head = NA)
+
+chick_add_on <- filter(excretion_rate, is.na(animal)) %>% 
+  select(iso3c, country) %>% 
+  slice(rep(1:n(), each = 3)) %>% 
+  mutate(product = rep(c("eggs", "meat", "eggs&meat"), times = 28),
+         animal = "chickens",
+         tonnes_N_head = NA)
+
+buff_pigs_add_on<- filter(excretion_rate, is.na(animal)) %>% 
+  select(iso3c, country) %>% 
+  slice(rep(1:n(), each = 2)) %>% 
+  mutate(animal = rep(c("buffaloes", "pigs"), times = 28),
+         product = case_when(animal == "buffaloes" ~ "milk",
+                             animal == "pigs" ~ "meat"),
+         tonnes_N_head = NA)
+
+excretion_rate_gf <- excretion_rate %>% 
+  filter(!is.na(animal)) %>% 
+  rbind(rum_add_on, chick_add_on, buff_pigs_add_on) %>% 
+  left_join(un) %>%
+  group_by(animal, product, Intermediate_Region_Name) %>% 
+  mutate(tonnes_N_head = ifelse(is.na(tonnes_N_head), mean(tonnes_N_head, na.rm = TRUE), tonnes_N_head)) %>% 
+  ungroup() %>%
+  group_by(animal, product, Sub_region_Name) %>% 
+  mutate(tonnes_N_head = ifelse(is.na(tonnes_N_head), mean(tonnes_N_head, na.rm = TRUE), tonnes_N_head)) %>% 
+  ungroup()%>%
+  group_by(animal, product, Region_Name) %>% 
+  mutate(tonnes_N_head = ifelse(is.na(tonnes_N_head), mean(tonnes_N_head, na.rm = TRUE), tonnes_N_head)) %>% 
+  ungroup() %>% 
+  select(iso3c, country, animal, product, tonnes_N_head)
+  
+
+write_csv(excretion_rate_gf, here::here("animal_farm/nutrient/data/excretion_rate_gf.csv"))
+
+```
+

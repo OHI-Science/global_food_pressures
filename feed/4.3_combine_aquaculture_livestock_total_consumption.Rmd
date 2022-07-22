@@ -1,0 +1,34 @@
+---
+title: "Combining livestock and aquaculture feedstuff consumption"
+author: "Juliette"
+date: "10/21/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+Combine the tonnes of feedstuff data for aquaculture and livestock.
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(stringi)
+library(countrycode)
+
+scenario_year <- 2017
+
+```
+
+
+
+```{r}
+
+livestock_feedstuff <- read_csv(here("feed/data/total_livestock_feedstuff_consumption.csv")) %>%
+  select(-kg_feedstuff)
+aquaculture_feedstuff <- read_csv(here("feed/data/total_aquaculture_feedstuff_consumption.csv"))   
+all_feedstuff <- rbind(livestock_feedstuff, aquaculture_feedstuff)
+
+write_csv(all_feedstuff, here("feed/data/total_feedstuff_consumption.csv"))
+
+
+```
+

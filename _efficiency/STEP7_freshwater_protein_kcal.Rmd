@@ -1,0 +1,110 @@
+---
+title: "Wrangle FAO freshwater"
+author: "Juliette"
+date: "3/5/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+source(here("_workflow/common.R"))
+
+'%!in%' <- function(x,y)!('%in%'(x,y))
+
+fsb_raw <- read_csv(file.path(raw, "FAO_data/v2021/food_supply_livestock_fish_primary/FAOSTAT_data_3-15-2021.csv"))
+pop_raw <- read_csv(file.path(raw, "FAO_data/v2021/food_supply_livestock_fish_primary/population_data.csv"))
+
+prod_to_live_fish_raw <- read_csv(here("_efficiency/data/fao_prod_weight_to_live_fish.csv")) 
+
+```
+
+
+```{r}
+
+pop <- pop_raw  %>% 
+  filter(Element == "Total Population - Both sexes") %>% 
+  mutate(pop_size = Value*1000) %>% 
+  select(iso3c = 'Area Code', Year, pop_size)
+
+fsb <- fsb_raw %>% 
+  select(iso3c = 'Country Code', Item, Element, Year, Value) %>% 
+    filter(Item == "Freshwater Fish",
+           Element %in% c("Food supply quantity (g/capita/day)", "Protein supply quantity (g/capita/day)", "Food supply (kcal/capita/day)")) %>% 
+  left_join(pop) %>% 
+  mutate(value_fixed = ifelse(Element == "Food supply quantity (g/capita/day)",
+                              Value*pop_size*365/1000000,
+                              Value*pop_size*365)) %>% 
+   mutate(source = case_when(Element == "Food supply (kcal/capita/day)" ~ "calories",
+                             Element == "Protein supply quantity (g/capita/day)" ~ "g_protein",
+                             Element == "Food supply quantity (g/capita/day)" ~ "tonnes_food")) %>% 
+  select(iso3c, Year, source, value_fixed) %>% 
+  pivot_wider(names_from = "source", values_from = "value_fixed") 
+
+ggplot(fsb, aes(x = tonnes_food, y = calories))+
+  geom_point() +
+  labs(title = "kcals/ tonne freshwater fish")
+
+ggplot(fsb, aes(x = tonnes_food, y = g_protein))+
+  geom_point()+
+  labs(title = "g protein/ tonne freshwater fish")
+  
+
+```
+
+Calculate Freshwater conversion factor
+need to convert kcals to million kcals; and g protein to tonnes proteins
+```{r}
+freshwater_cf <- fsb %>% 
+  filter(tonnes_food != 0,
+         calories != 0,
+         g_protein != 0) %>% 
+  mutate(cf_calories_all = (calories/1000000)/tonnes_food,
+         cf_protein_all = (g_protein/1000000)/tonnes_food) %>% 
+  dplyr::summarise(cf_calories = mean(cf_calories_all),
+                   cf_protein = mean(cf_protein_all)) %>% 
+                   # sd_cal = sd(cf_calories_all),
+                   # sd_pro = sd(cf_protein_all)) 
+  pivot_longer(cols = c(cf_calories, cf_protein), names_to = "cf_name", values_to = "cf")
+
+tonnes_to_cal <- freshwater_cf %>% 
+  filter(cf_name == "cf_calories") %>% 
+  pull(cf)
+
+tonnes_to_pro <- freshwater_cf %>% 
+  filter(cf_name == "cf_protein") %>% 
+  pull(cf)
+
+```
+
+```{r}
+fresh_fish <- read_csv(here("fisheries/freshwater/data/fw_catch_per_iso3c.csv")) %>% 
+  select(-ID_0, - Country) %>% 
+  rename(freshwater_tonnes = fw_catch_tonnes) 
+```
+
+Calculate an average from marine fishies for edibe weight
+```{r}
+
+prod_to_live_fish <- prod_to_live_fish_raw %>% 
+  filter(is.na(presentation) | presentation == "whole") %>% 
+  select(-'gutted, head on') %>% 
+  rename(gutt_head_off = 'gutted, head off') %>% 
+  dplyr::summarise(product_to_live_cf = mean(gutt_head_off, na.rm = TRUE)) %>% 
+  mutate(live_to_edible = 1/product_to_live_cf)
+
+edible_con <- pull(prod_to_live_fish, live_to_edible)
+
+```
+
+
+Calculate calories and protein
+```{r}
+fresh_fish_prot_cal <- fresh_fish %>% 
+  mutate(million_kcal = tonnes_to_cal*edible_con*freshwater_tonnes,
+         tonnes_protein = tonnes_to_pro*edible_con*freshwater_tonnes) 
+
+write_csv(fresh_fish_prot_cal, here::here("_efficiency", "data", "freshwater_fisheries_protein_calories.csv"))  
+  
+```

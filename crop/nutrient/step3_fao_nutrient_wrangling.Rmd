@@ -1,0 +1,157 @@
+---
+title: "fao_nutrient_wrangling"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Script Description
+# Clean FAO data describing nutrient application in each country.
+# Data information
+# FAOSTAT category selection: 2017 | Fertilizer by Nutrient | Agricultural use | All countries
+# Extracted: 11/4/2020
+
+# Preamble
+```{r setup, include = FALSE}
+# getting packages we want
+library(here)
+library(janitor)
+library(vroom)
+library(cowplot)
+
+# Raster templates
+source(here("_spatial/template_raster.R"))
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+# Import food_rgns xy df
+food_rgns_xy <- 
+  food_rgns_xy %>% 
+  select(x, y, iso3c)
+``` 
+
+## Integrate iso3c codes
+```{r}
+# Import country-level fertilizer data
+fao_nutrient <- 
+  vroom::vroom(here("crop/nutrient/data/FAOSTAT_2017_nutrient_agri_use.csv"), 
+               .name_repair = make_clean_names) %>%  
+  rename(nutrient = item, country_application = value) %>% 
+  mutate(nutrient = recode(nutrient,
+                           "Nutrient nitrogen N (total)"     = "N",
+                           "Nutrient phosphate P2O5 (total)" = "P2O5",
+                           "Nutrient potash K2O (total)"     = "K2O"))
+
+
+```
+
+# Match FAOSTAT regions with food_rgns list
+```{r}
+# Remove China and re-allocate Serbia data to Kosovo and Serbia  
+fao_nutrient <- 
+  fao_nutrient %>%   # SRB without XKO
+  mutate(area_code = if_else(area_code %in% 272, 275, area_code)) %>%  # XKO
+  bind_rows(fao_nutrient) %>%
+  mutate(area_code = if_else(area_code %in% 272, 286, area_code)) %>%
+  unique() %>% 
+  filter(!area_code %in% 351) # Code 351 values are for all of China, including MAC, HKG, TWN.
+
+# Global tonnes of each fertilizer
+sum_before_wrangling <- 
+  fao_nutrient %>% 
+  group_by(nutrient) %>% 
+  summarize(global_tonnes = sum(country_application))
+sum_before_wrangling
+```
+  
+# Add iso3c column and split serbia data into serbia and kosovo
+```{r}  
+# Convert fao rgns to iso3c
+fao_rgn_codes <- vroom::vroom(here("_spatial/_output/FAO_rgn_codes.csv"))
+
+fao_nutrient <- 
+  left_join(fao_nutrient, fao_rgn_codes, by = "area_code") %>% 
+  dplyr::select(nutrient, country_application, iso3c) %>% 
+  unique()
+
+# Allocate fertilizer data to Serbia and Kosovo
+SRB_XKO <- 
+  vroom::vroom(here("crop/farm/data/prod_crop_rgns_2017.csv")) %>% 
+  filter(iso3c %in% c("XKO", "SRB") & prod_system %in% "A") %>% 
+  group_by(iso3c) %>% 
+  summarize(production = sum(production)) %>% 
+  ungroup() %>% 
+  mutate(relative_proportion = production / sum(production))
+
+fao_nutrient$country_application[fao_nutrient$iso3c %in% "SRB"] <- 
+  fao_nutrient$country_application[fao_nutrient$iso3c %in% "SRB"] * 
+  SRB_XKO$relative_proportion[SRB_XKO$iso3c %in% "SRB"]
+
+fao_nutrient$country_application[fao_nutrient$iso3c %in% "XKO"] <- 
+  fao_nutrient$country_application[fao_nutrient$iso3c %in% "XKO"] * 
+  SRB_XKO$relative_proportion[SRB_XKO$iso3c %in% "XKO"]
+```
+
+## Fill data for missing_rgns
+```{r}
+# Extract iso3c codes not included in fao_nutrient dataset
+missing_rgns <- setdiff(unique(food_rgns$iso3c), unique(fao_nutrient$iso3c))
+duplicated(fao_rgn_codes$area_code)
+length(missing_rgns) # 72 missing rgns
+
+# I gave these autonomous regions the same area_codes as POR and GBR respectively.
+fao_nutrient$country_application[fao_nutrient$iso3c %in% c("XMI", "GGY")] <- 0
+
+# Calculate global tonnes of each fertilizer
+sum_before_allocating <- 
+  fao_nutrient %>% 
+  group_by(nutrient) %>% 
+  summarize(global_tonnes_before = sum(country_application))
+sum_before_allocating
+
+fao_nutrient <- 
+  expand_grid(iso3c = missing_rgns,
+              nutrient = c("N", "P2O5", "K2O"),
+              country_application = NA,
+              reported_by_fao = "No") %>% 
+  bind_rows(fao_nutrient) %>% 
+  mutate(reported_by_fao = if_else(is.na(reported_by_fao),
+                                   "Yes",
+                                   reported_by_fao))
+fao_nutrient %>% group_by(nutrient) %>%
+  summarize(total = sum(country_application, na.rm=TRUE))
+
+```
+
+
+# Remove the proportion of fertilizer used for grasslands from the FAO data.
+This will get counted with the grazing animal.
+
+```{r}
+fubc_grass <- vroom(here("crop/nutrient/data/fubc_2017_grassland.csv"))
+  
+fao_nutrient_adjusted <- 
+  left_join(fao_nutrient, fubc_grass) %>% 
+  mutate(country_application = country_application - (country_application * grassland)) %>% 
+  select(- grassland)
+
+fao_nutrient_grassland <- 
+  left_join(fao_nutrient, fubc_grass) %>% 
+  mutate(country_application = country_application * grassland) %>% 
+  select(- grassland)
+
+fao_nutrient_adjusted %>%
+  group_by(nutrient) %>%
+  summarize(total = sum(country_application, na.rm=TRUE))
+
+```
+
+# Save
+
+```{r}
+write_csv(fao_nutrient_adjusted, here("crop/nutrient/data/fao_nutrient_application.csv"))
+
+write_csv(fao_nutrient_grassland, here("crop/nutrient/data/fao_nutrient_grassland_1.csv"))
+```
+
+

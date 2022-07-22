@@ -1,0 +1,245 @@
+IMAGE_region,nh3_n_total_loss,prop_nh3_n_total,iso3c,region
+canada,140,0.088832487,CAN,Canada
+usa,803,0.072017937,SPM,Saint Pierre and Miquelon
+usa,803,0.072017937,USA,United States of America
+central_america,223,0.153899241,AIA,Anguilla
+central_america,223,0.153899241,ATG,Antigua and Barbuda
+central_america,223,0.153899241,ABW,Aruba
+central_america,223,0.153899241,BHS,Bahamas
+central_america,223,0.153899241,BRB,Barbados
+central_america,223,0.153899241,BLZ,Belize
+central_america,223,0.153899241,BMU,Bermuda
+central_america,223,0.153899241,BES,Bonaire/ Sint Eustatius and Saba
+central_america,223,0.153899241,VGB,British Virgin Islands
+central_america,223,0.153899241,CYM,Cayman Islands
+central_america,223,0.153899241,CRI,Costa Rica
+central_america,223,0.153899241,CUB,Cuba
+central_america,223,0.153899241,CUW,Curaçao
+central_america,223,0.153899241,DOM,Dominican Republic
+central_america,223,0.153899241,DMA,Dominica
+central_america,223,0.153899241,SLV,El Salvador
+central_america,223,0.153899241,GRD,Grenada
+central_america,223,0.153899241,GLP,Guadeloupe
+central_america,223,0.153899241,GTM,Guatemala
+central_america,223,0.153899241,HTI,Haiti
+central_america,223,0.153899241,HND,Honduras
+central_america,223,0.153899241,JAM,Jamaica
+central_america,223,0.153899241,MTQ,Martinique
+central_america,223,0.153899241,MEX,Mexico
+central_america,223,0.153899241,MSR,Montserrat
+central_america,223,0.153899241,NIC,Nicaragua
+central_america,223,0.153899241,PAN,Panama
+central_america,223,0.153899241,PRI,Puerto Rico
+central_america,223,0.153899241,BLM,Saint Barthélemy
+central_america,223,0.153899241,MAF,Saint Martin (French Part)
+central_america,223,0.153899241,KNA,Saint Kitts and Nevis
+central_america,223,0.153899241,LCA,Saint Lucia
+central_america,223,0.153899241,VCT,Saint Vincent and the Grenadines
+central_america,223,0.153899241,SXM,Sint Maarten (Dutch part)
+central_america,223,0.153899241,TTO,Trinidad and Tobago
+central_america,223,0.153899241,TCA,Turks and Caicos Islands
+central_america,223,0.153899241,VIR,United States Virgin Islands
+south_america,392,0.1708061,ARG,Argentina
+south_america,392,0.1708061,BOL,Bolivia (Plurinational State of)
+south_america,392,0.1708061,BRA,Brazil
+south_america,392,0.1708061,CHL,Chile
+south_america,392,0.1708061,COL,Colombia
+south_america,392,0.1708061,ECU,Ecuador
+south_america,392,0.1708061,FLK,Falkland Islands (Malvinas)
+south_america,392,0.1708061,GUF,French Guiana
+south_america,392,0.1708061,GUY,Guyana
+south_america,392,0.1708061,PRY,Paraguay
+south_america,392,0.1708061,PER,Peru
+south_america,392,0.1708061,SUR,Suriname
+south_america,392,0.1708061,URY,Uruguay
+south_america,392,0.1708061,VEN,Venezuela (Bolivarian Republic of)
+north_africa,230,0.1910299,DZA,Algeria
+north_africa,230,0.1910299,EGY,Egypt
+north_africa,230,0.1910299,LBY,Libya
+north_africa,230,0.1910299,MAR,Morocco
+north_africa,230,0.1910299,TUN,Tunisia
+north_africa,230,0.1910299,ESH,Western Sahara
+western_africa,23,0.147435897,BEN,Benin
+western_africa,23,0.147435897,BFA,Burkina Faso
+western_africa,23,0.147435897,CMR,Cameroon
+western_africa,23,0.147435897,CPV,Cabo Verde
+western_africa,23,0.147435897,CAF,Central African Republic
+western_africa,23,0.147435897,TCD,Chad
+western_africa,23,0.147435897,CIV,Côte d’Ivoire
+western_africa,23,0.147435897,COD,Democratic Republic of the Congo
+western_africa,23,0.147435897,GNQ,Equatorial Guinea
+western_africa,23,0.147435897,GAB,Gabon
+western_africa,23,0.147435897,GMB,Gambia
+western_africa,23,0.147435897,GHA,Ghana
+western_africa,23,0.147435897,GNB,Guinea-Bissau
+western_africa,23,0.147435897,GIN,Guinea
+western_africa,23,0.147435897,LBR,Liberia
+western_africa,23,0.147435897,MLI,Mali
+western_africa,23,0.147435897,MRT,Mauritania
+western_africa,23,0.147435897,NER,Niger
+western_africa,23,0.147435897,NGA,Nigeria
+western_africa,23,0.147435897,COG,Congo
+western_africa,23,0.147435897,SHN,Saint Helena
+western_africa,23,0.147435897,STP,Sao Tome and Principe
+western_africa,23,0.147435897,SEN,Senegal
+western_africa,23,0.147435897,SLE,Sierra Leone
+western_africa,23,0.147435897,TGO,Togo
+eastern_africa,17,0.154545455,IOT,British Indian Ocean Territory
+eastern_africa,17,0.154545455,BDI,Burundi
+eastern_africa,17,0.154545455,COM,Comoros
+eastern_africa,17,0.154545455,DJI,Djibouti
+eastern_africa,17,0.154545455,ERI,Eritrea
+eastern_africa,17,0.154545455,ETH,Ethiopia
+eastern_africa,17,0.154545455,KEN,Kenya
+eastern_africa,17,0.154545455,MDG,Madagascar
+eastern_africa,17,0.154545455,MUS,Mauritius
+eastern_africa,17,0.154545455,MYT,Mayotte
+eastern_africa,17,0.154545455,REU,Réunion
+eastern_africa,17,0.154545455,RWA,Rwanda
+eastern_africa,17,0.154545455,SYC,Seychelles
+eastern_africa,17,0.154545455,SOM,Somalia
+eastern_africa,17,0.154545455,SSD,South Sudan
+eastern_africa,17,0.154545455,SDN,Sudan
+eastern_africa,17,0.154545455,UGA,Uganda
+southern_africa,54,0.105675147,AGO,Angola
+southern_africa,54,0.105675147,BWA,Botswana
+southern_africa,54,0.105675147,LSO,Lesotho
+southern_africa,54,0.105675147,MWI,Malawi
+southern_africa,54,0.105675147,MOZ,Mozambique
+southern_africa,54,0.105675147,NAM,Namibia
+southern_africa,54,0.105675147,ZAF,South Africa
+southern_africa,54,0.105675147,SWZ,Eswatini
+southern_africa,54,0.105675147,TZA,United Republic of Tanzania
+southern_africa,54,0.105675147,ZMB,Zambia
+southern_africa,54,0.105675147,ZWE,Zimbabwe
+oecd_europe,607,0.063962065,ALA,Åland Islands
+oecd_europe,607,0.063962065,AND,Andorra
+oecd_europe,607,0.063962065,AUT,Austria
+oecd_europe,607,0.063962065,BEL,Belgium
+oecd_europe,607,0.063962065,HRV,Croatia
+oecd_europe,607,0.063962065,DNK,Denmark
+oecd_europe,607,0.063962065,EST,Estonia
+oecd_europe,607,0.063962065,FRO,Faroe Islands
+oecd_europe,607,0.063962065,FIN,Finland
+oecd_europe,607,0.063962065,FRA,France
+oecd_europe,607,0.063962065,DEU,Germany
+oecd_europe,607,0.063962065,GIB,Gibraltar
+oecd_europe,607,0.063962065,GRC,Greece
+oecd_europe,607,0.063962065,GRL,Greenland
+oecd_europe,607,0.063962065,GGY,Guernsey
+oecd_europe,607,0.063962065,ISL,Iceland
+oecd_europe,607,0.063962065,IRL,Ireland
+oecd_europe,607,0.063962065,IMN,Isle of Man
+oecd_europe,607,0.063962065,ITA,Italy
+oecd_europe,607,0.063962065,JEY,Jersey
+oecd_europe,607,0.063962065,XKO,Kosovo
+oecd_europe,607,0.063962065,LVA,Latvia
+oecd_europe,607,0.063962065,LIE,Liechtenstein
+oecd_europe,607,0.063962065,LTU,Lithuania
+oecd_europe,607,0.063962065,LUX,Luxembourg
+oecd_europe,607,0.063962065,MKD,North Macedonia
+oecd_europe,607,0.063962065,MLT,Malta
+oecd_europe,607,0.063962065,MCO,Monaco
+oecd_europe,607,0.063962065,NLD,Netherlands
+oecd_europe,607,0.063962065,NOR,Norway
+oecd_europe,607,0.063962065,PRT,Portugal
+oecd_europe,607,0.063962065,XMI,Madeira Island
+oecd_europe,607,0.063962065,SMR,San Marino
+oecd_europe,607,0.063962065,SVN,Slovenia
+oecd_europe,607,0.063962065,ESP,Spain
+oecd_europe,607,0.063962065,SJM,Svalbard and Jan Mayen Islands
+oecd_europe,607,0.063962065,SWE,Sweden
+oecd_europe,607,0.063962065,CHE,Switzerland
+oecd_europe,607,0.063962065,GBR,United Kingdom of Great Britain and Northern Ireland
+eastern_europe,136,0.066503667,BGR,Bulgaria
+eastern_europe,136,0.066503667,CZE,Czechia
+eastern_europe,136,0.066503667,HUN,Hungary
+eastern_europe,136,0.066503667,POL,Poland
+eastern_europe,136,0.066503667,ROU,Romania
+eastern_europe,136,0.066503667,SVK,Slovakia
+former_ussr,217,0.082509506,ALB,Albania
+former_ussr,217,0.082509506,ARM,Armenia
+former_ussr,217,0.082509506,AZE,Azerbaijan
+former_ussr,217,0.082509506,BLR,Belarus
+former_ussr,217,0.082509506,BIH,Bosnia and Herzegovina
+former_ussr,217,0.082509506,GEO,Georgia
+former_ussr,217,0.082509506,KAZ,Kazakhstan
+former_ussr,217,0.082509506,KGZ,Kyrgyzstan
+former_ussr,217,0.082509506,MDA,Republic of Moldova
+former_ussr,217,0.082509506,MNE,Montenegro
+former_ussr,217,0.082509506,RUS,Russian Federation
+former_ussr,217,0.082509506,SRB,Serbia
+former_ussr,217,0.082509506,TJK,Tajikistan
+former_ussr,217,0.082509506,TKM,Turkmenistan
+former_ussr,217,0.082509506,UKR,Ukraine
+former_ussr,217,0.082509506,UZB,Uzbekistan
+middle_east,443,0.185123276,CYP,Cyprus
+middle_east,443,0.185123276,BHR,Bahrain
+middle_east,443,0.185123276,IRN,Iran (Islamic Republic of)
+middle_east,443,0.185123276,IRQ,Iraq
+middle_east,443,0.185123276,ISR,Israel
+middle_east,443,0.185123276,JOR,Jordan
+middle_east,443,0.185123276,KWT,Kuwait
+middle_east,443,0.185123276,LBN,Lebanon
+middle_east,443,0.185123276,OMN,Oman
+middle_east,443,0.185123276,PSE,State of Palestine
+middle_east,443,0.185123276,QAT,Qatar
+middle_east,443,0.185123276,SAU,Saudi Arabia
+middle_east,443,0.185123276,SYR,Syrian Arab Republic
+middle_east,443,0.185123276,TUR,Turkey
+middle_east,443,0.185123276,ARE,United Arab Emirates
+middle_east,443,0.185123276,YEM,Yemen
+south_asia,2859,0.22092574,AFG,Afghanistan
+south_asia,2859,0.22092574,BGD,Bangladesh
+south_asia,2859,0.22092574,BTN,Bhutan
+south_asia,2859,0.22092574,IND,India
+south_asia,2859,0.22092574,MDV,Maldives
+south_asia,2859,0.22092574,NPL,Nepal
+south_asia,2859,0.22092574,PAK,Pakistan
+south_asia,2859,0.22092574,LKA,Sri Lanka
+east_asia,4147,0.170342986,CHN,China
+east_asia,4147,0.170342986,HKG,Hong Kong Special Administrative Region
+east_asia,4147,0.170342986,MAC,Macao Special Administrative Region
+east_asia,4147,0.170342986,MNG,Mongolia
+east_asia,4147,0.170342986,PRK,Democratic People's Republic of Korea
+east_asia,4147,0.170342986,KOR,Republic of Korea
+east_asia,4147,0.170342986,TWN,Taiwan
+southeast_asia,756,0.179316888,BRN,Brunei Darussalam
+southeast_asia,756,0.179316888,KHM,Cambodia
+southeast_asia,756,0.179316888,IDN,Indonesia
+southeast_asia,756,0.179316888,LAO,Lao People's Democratic Republic
+southeast_asia,756,0.179316888,MYS,Malaysia
+southeast_asia,756,0.179316888,MMR,Myanmar
+southeast_asia,756,0.179316888,PHL,Philippines
+southeast_asia,756,0.179316888,SGP,Singapore
+southeast_asia,756,0.179316888,THA,Thailand
+southeast_asia,756,0.179316888,TLS,Timor-Leste
+southeast_asia,756,0.179316888,VNM,Viet Nam
+oceania,133,0.161016949,ASM,American Samoa
+oceania,133,0.161016949,AUS,Australia
+oceania,133,0.161016949,CXR,Christmas Island
+oceania,133,0.161016949,CCK,Cocos (Keeling) Islands
+oceania,133,0.161016949,COK,Cook Islands
+oceania,133,0.161016949,FJI,Fiji
+oceania,133,0.161016949,PYF,French Polynesia
+oceania,133,0.161016949,GUM,Guam
+oceania,133,0.161016949,KIR,Kiribati
+oceania,133,0.161016949,MHL,Marshall Islands
+oceania,133,0.161016949,FSM,Micronesia (Federated States of)
+oceania,133,0.161016949,NRU,Nauru
+oceania,133,0.161016949,NCL,New Caledonia
+oceania,133,0.161016949,NZL,New Zealand
+oceania,133,0.161016949,NIU,Niue
+oceania,133,0.161016949,NFK,Norfolk Island
+oceania,133,0.161016949,MNP,Northern Mariana Islands
+oceania,133,0.161016949,PLW,Palau
+oceania,133,0.161016949,PNG,Papua New Guinea
+oceania,133,0.161016949,PCN,Pitcairn
+oceania,133,0.161016949,WSM,Samoa
+oceania,133,0.161016949,SLB,Solomon Islands
+oceania,133,0.161016949,TKL,Tokelau
+oceania,133,0.161016949,TON,Tonga
+oceania,133,0.161016949,TUV,Tuvalu
+oceania,133,0.161016949,VUT,Vanuatu
+oceania,133,0.161016949,WLF,Wallis and Futuna Islands
+japan,64,0.138228942,JPN,Japan

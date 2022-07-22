@@ -1,0 +1,444 @@
+---
+title: "Location of Tuna farms"
+author: "Gage Clawson (NCEAS, UCSB, OHI)"
+date: "12/11/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+This script standardizes location of tuna farms to be lat/long point data.
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(raster)
+library(tidyverse)
+library(stringr)
+library(rgdal)
+library(PBSmapping)
+library(maptools)
+library(sf)
+library(lwgeom)
+library(data.table)
+library(here)
+library(mapview)
+library(janitor)
+library(rnaturalearth)
+library(spatialEco)
+
+
+path <- "/home/shares/food-systems/Food_footprint/_raw_data/Aquaculture_locations"
+
+fao_tuna_spp <- read_csv("aquaculture/marine/tuna/tuna_farms/data/fao_mariculture_tuna_taxa_production.csv") %>%
+  dplyr::filter(year == 2017)
+fao_tuna <- read_csv("aquaculture/marine/tuna/tuna_farms/data/fao_mariculture_tuna.csv") %>%
+  dplyr::filter(year == 2017)
+
+unique(fao_tuna$country)
+ 
+# Need to map these 7 countries
+# [1] "Australia" "Croatia"   "Japan"     "Malta"     "Mexico"    "Spain"     "Turkey"   
+
+```
+
+# Raster
+
+Standard raster used for this analysis 
+
+```{r}
+
+source(here::here("_spatial/template_raster.R"))
+
+```
+
+# Global regions
+
+```{r}
+
+gadm <- raster("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/gadm36mol_pyfill_10km.tif")
+
+gadm_latlon <- projectRaster(gadm, food_raster)
+
+gadm_codes <- read.csv("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/gadm_reg_codes.csv") %>% 
+  mutate(reg_id = as.numeric(reg_id))
+
+```
+
+```{r}
+
+gadm_df <- tabularaster::as_tibble(gadm_latlon, value = TRUE, cells = TRUE) %>% 
+  mutate(cellvalue = round(cellvalue, 0))
+
+gadm_reg <- dplyr::left_join(gadm_df, gadm_codes, by = c("cellvalue" = "reg_id"))
+
+```
+
+
+
+Now we will map the remaining countries with marine tuna farms. Workflow will be as follows: 
+
+ - Try to obtain exact locations of farms from published source or dataset (such as FAO or a research paper)
+ - If there are no exact locations, but the source lists a city or state, place a point in that particular city or state
+ -  If there is enough information to know there are a specific number of tuna farms, equally allocate the farms across the coastline. If there are estimates of farms per state/province, equally allocate them across the state/province, to be even more precise.
+ - If there are not exact numbers of farms in the country, but you know there are a lot, randomly place points along the coast line (a non-exact number, like we did for Taiwan bivalve/shrimp). 
+ - Lastly, if there is no evidence of marine tuna farm locations, place a point on the coast of the country (preferably with some intuition/knowledge of where they might be, i.e. what we've done for Russia for bivalves).
+
+
+##  Europe - EMODNET: Spain, Malta
+https://www.emodnet-humanactivities.eu/search-results.php?dataname=Finfish+Production
+https://www.emodnet-humanactivities.eu/view-data.php
+
+```{r}
+
+## read in shapefile
+eu <- st_read(file.path(path,"EMODnet_HA_Aquaculture_Marine_Finfish_20190104/EMODnet_HA_Aquaculture_Marine_Finfish_20190104.shp"))
+mapview(eu)
+
+unique(eu$COUNTRY)
+# [1] "Spain"          "United Kingdom" "Greece"         "Finland"        "Norway"         "Ireland"        "Malta"          "Denmark"       
+# [9] "Cyprus"  
+
+unique(eu$FARM_TYPE)
+
+unique(eu$SPECIES_DE)
+
+unique(eu$STATUS)
+
+eu_spp <- eu %>%
+  dplyr::filter(str_detect(SPECIES_DE, "Tuna|tuna"))
+
+unique(eu_spp$COUNTRY)
+# [1] "Spain" "Malta"
+
+eu_na <- eu_spp %>%
+  dplyr::filter(STATUS == "n.a.")
+unique(eu_na$COUNTRY)
+
+
+eu_active <- eu_spp %>%
+  dplyr::filter(STATUS == "Active")
+
+unique(eu_active$COUNTRY)
+
+## we will use both "Active" and "n.a." as the status of the farms. I choose this because all of the denmark points are n.a. for salmon and bivalve, and they correspond with the HELCOM data that we used for other spp groups. This indicates to me that the farms denoted as "n.a." are probably actually active. 
+
+eu_active_na <- eu_spp %>%
+  dplyr::filter(STATUS %in% c("Active", "n.a."))
+
+unique(eu_active_na$COUNTRY)
+
+# [1] "Spain"     "Malta"   
+
+## Now filter for countries that we want: Spain, Greece, Norway, Cyprus, Malta... the others are not included in FAO 2017
+eu_fao_countries <- eu_active_na %>%
+  dplyr::filter(COUNTRY %in% c("Spain", "Malta"))
+
+unique(eu_fao_countries$COUNTRY)
+mapview(eu_fao_countries)
+
+
+eu_pts <- st_centroid(eu_fao_countries)
+
+eu_pts_latlon <- st_transform(eu_pts, crs = "+init=epsg:4326") %>%
+  dplyr::select(COUNTRY, geometry)
+
+eu_countries <- eu_pts_latlon %>%
+  dplyr::select(COUNTRY)
+
+farms_eu <- data.frame(do.call(rbind, st_geometry(eu_pts_latlon)))
+names(farms_eu) <- c("lon", "lat")
+
+farms_eu_final <- cbind(farms_eu, eu_countries) %>%
+  dplyr::select(-geometry) %>%
+  mutate(iso3c = case_when(
+    COUNTRY == "Spain" ~ "ESP",
+    COUNTRY == "Malta" ~ "MLT"
+  )) %>%
+  dplyr::select(-COUNTRY)
+
+ write_csv(farms_eu_final, here("aquaculture/marine/tuna/tuna_farms/data/tuna_sites/farms_ESP_MLT.csv"))
+
+```
+
+
+## Croatia, Turkey
+http://www.fao.org/fishery/naso-maps/selected-aquaculture-sites/mediterranean-basin/en/
+
+ - It says both Tuna and Finfish, but we'll assume Croatia and Turkey are tuna...
+```{r}
+## read in thailand shp file
+med_file <- file.path(path, "FAO_NASO/NASO/Point/Mediterranean.kml")
+
+med_aqua <- read_sf(med_file)
+
+med_countries <- france_aqua %>%
+  dplyr::mutate(country = sub("_.*", "", Name)) %>%
+  dplyr::mutate(country = sub(" fishpen A", "", country))
+
+unique(med_countries$country)
+
+## We need to filter for just the appropriate species of finfish aquaculture, France, Israel
+
+med_tuna <- med_countries %>%
+  dplyr::filter(country %in% c("Croatia", "Turkey"))
+  
+
+
+mapview(med_tuna)
+
+med_tuna_mol <- st_transform(med_tuna, crs = "+init=epsg:3035") # convert to equal area projection to find centroids.
+med_pts <- st_centroid(med_tuna_mol)
+
+med_pts_latlon <- st_transform(med_pts, crs = "+init=epsg:4326")
+
+mapview(med_pts_latlon)
+
+
+countries <- med_pts_latlon %>%
+  dplyr::select(country)
+
+
+farms_med <- data.frame(do.call(rbind, st_geometry(med_pts_latlon)))
+names(farms_med) <- c("lon", "lat")
+farms_med <- farms_med %>%
+  cbind(countries) %>%
+  mutate(iso3c = ifelse(country == "Croatia", "HRV", "TUR")) %>%
+  dplyr::select(-country, -geometry)
+
+
+write_csv(farms_med, here("aquaculture/marine/tuna/tuna_farms/data/tuna_sites/farms_hrv_tur.csv"))
+
+
+farms_med <-  st_as_sf(farms_med, coords = c("lon", "lat"),
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_med)
+```
+
+## Australia
+https://www.pir.sa.gov.au/aquaculture/marine_aquaculture/species
+"Southern Bluefin Tuna
+The farming of Southern Bluefin Tuna (Thunnus maccoyi) generates the highest farm-gate sales in South Australia’s industry. Tuna farming is unique to South Australia. Its development in 1991 drew attention to the potential of South Australia’s aquaculture. All of Australia’s Southern Bluefin Tuna are farmed in waters off Port Lincoln.
+
+Southern Bluefin Tuna are mostly found in the world’s southern oceans."
+
+This shows leases: https://www.aginsight.sa.gov.au/?Bookmark=Ox473rlD
+
+Source: https://www.pir.sa.gov.au/aquaculture/aquaculture_public_register
+
+ - To download the appropriate data, go here: https://www.aginsight.sa.gov.au/?Bookmark=Ox473rlD. Filter for the appropriate layers, i.e. Tuna leases. Click "Select focus", and draw a circle (or square) around your area of interest. You will then be prompted to download an excel or csv file which will contain the lease holder information, and a url to the lease. 
+ - We will scrape the coordinates from each lease document url that is shown in the download from the aquaculture public register to obtain the lat lon points needed. 
+
+```{r}
+south_au <- read_csv(file.path("/home/shares/food-systems/Food_footprint/_raw_data/Aquaculture_locations/Australia/south_au_leases.csv")) 
+
+tuna_leases <- south_au %>%
+  dplyr::filter(str_detect(`Registration Category`, "Tuna|Miscellaneous"))
+
+## now we need to look at each link and make sure they are tuna (because some of them are listed as "Miscellaneous")
+
+unique(tuna_leases$`Lease Document`)
+
+# row 1 : tuna
+# row 2 : tuna
+# row 3 : tuna
+# row 4 : tuna
+# row 5 : tuna
+# row 6 : doesn't indicate tuna, filter out 
+# row 7 : tuna
+# row 8 : tuna
+# row 9 : tuna
+# row 10: tuna
+# row 11: tuna
+# row 12: tuna
+# row 13: doesn't indicate tuna, filter out 
+# row 14: tuna
+# row 15: tuna
+# row 16: tuna
+# row 17: tuna
+
+## Filter out rows 6 and 13
+tuna_leases_df <- tuna_leases[c(-6, -13), ]
+
+tuna_links <- c(tuna_leases_df$`Lease Document`) 
+
+
+#install.packages("rvest")
+library("rvest")
+
+coords_list <- list()
+
+for(i in seq_along(tuna_links)){
+
+  # i = 2
+# Read the webpage into R
+webpage <- read_html(tuna_links[i])
+
+# Parse the webpage for coords
+coords <- html_nodes(webpage, "dd div")
+
+# Extract the coords
+coord_numbers <- html_text(coords)
+
+coords_df <- as.data.frame(coord_numbers) %>%
+  dplyr::filter(str_detect(coord_numbers, "°")) ## filter for coordinates
+
+## Format to lat lon: decimal degrees. Right now they are in degrees mins secs 
+lat_lon_df <- do.call("cbind", split(coords_df, rep(c(1, 2), length.out = nrow(coords_df)))) %>%
+  dplyr::rename("lat" = "coord_numbers") %>%
+  dplyr::rename("lon" = "coord_numbers") 
+
+## covert to appropriate coordinate system
+lat_lon_df_clean <- data.frame(lapply(lat_lon_df, function(x) {
+                gsub("[^0-9.]", " ", x)
+             })) %>%
+  separate(lat, into = c("lat_d", "lat_m", "lat_s"), sep = "  ") %>%
+  separate(lon, into = c("lon_d", "lon_m", "lon_s"), sep = "  ") %>%
+  mutate_each(funs(as.numeric)) %>%
+  transmute(lat = lat_d + lat_m/60 + lat_s/60^2,
+            lon = lon_d + lon_m/60 + lon_s/60^2)
+
+coords_list[[i]] <- lat_lon_df_clean
+
+
+}
+
+## unlist the list to get our coordinates 
+lat_lon_final <- coords_list %>%
+    bind_rows() %>%
+  mutate(lat = -lat) %>% ## change lat to have a negative in front of it (because it S)
+  mutate(iso3c = "AUS")
+## now that we have coordinates, place them on a map and save
+
+
+farms_aus_map <-  st_as_sf(lat_lon_final, coords = c("lon", "lat"),
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_aus_map)
+
+
+write_csv(lat_lon_final, here("aquaculture/marine/tuna/tuna_farms/data/tuna_sites/farms_AUS.csv"))
+```
+
+
+## Japan
+http://www.fao.org/fishery/countrysector/naso_japan/en
+Currently 92 firms are operating the Atlantic bluefin tuna aquaculture, and the total number of aquaculture firms and cages are regulated by the government since 2012.
+
+I'll place 92 farms along Japan's coast
+
+```{r}
+world <- rnaturalearth::ne_coastline(scale = 110) # world map with 10m resolution
+plot(world)
+
+japan <- ne_countries(scale = 10, country = "Japan", returnclass = "sf")
+
+#info of our spatial vector object
+japan
+mapview(japan)
+plot(japan)
+
+world <- st_as_sf(world)
+
+japan_world_crs <- st_transform(japan, crs(world))
+
+japan_world_crop <- st_crop(world, japan_world_crs)
+
+japan_world_crop <- japan_world_crop[-c(2,3,4), ]
+plot(japan_world_crop)
+mapview(japan_world_crop)
+
+japan_crop <- as(japan_world_crop, "Spatial")
+
+
+japan_points_lines <- sample.line(japan_crop, n = 92) ## equally place the number of farms along the coastline 
+class(japan_points_lines)
+plot(japan_points_lines)
+
+
+japan_points <- st_as_sf(japan_points_lines)
+mapview(japan_points)
+
+
+
+## now prep dataframe for lat lon points
+jpn_pts <- st_centroid(japan_points)
+
+jpn_pts_latlon <- st_transform(jpn_pts, crs = "+init=epsg:4326") %>%
+  dplyr::select(geometry)
+
+farms_jpn <- data.frame(do.call(rbind, st_geometry(jpn_pts_latlon)))
+names(farms_jpn) <- c("lon", "lat")
+
+farms_jpn_final <- farms_jpn %>%
+  mutate(iso3c = "JPN")
+
+## visualize it 
+farms_jpn <-  st_as_sf(farms_jpn, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_jpn)
+
+## write to farms folder 
+write_csv(farms_jpn_final, here("aquaculture/marine/tuna/tuna_farms/data/tuna_sites/farms_jpn.csv"))
+```
+
+
+
+
+## Mexico 
+https://www.gob.mx/inapesca/acciones-y-programas/atun-aleta-azul
+Only located in Baja California and Baja California Sur 
+
+ - 8 commercial farms in Baja California
+ - 3 commercial farms in Baja California Sur 
+ 
+ 
+ Seafood Watch:
+ https://www.seafoodwatch.org/recommendation/tuna/tuna-pacific-bluefin-mexico-marine-net-pen?species=386
+ 
+ "In Mexico, the tuna farming industry is primarily located 15 km north of Ensenada, Baja California, in Salsipuedes Bay, with some farms in Todos Los Santos Bay and others off the coast of Ensenada." 
+ 
+ "Mexico’s current National Aquaculture Charter indicates that 6 aquaculture companies were operating 13 net pens with a maximum capacity of 6,800 MT in 2011 (SAGARPA 2013), though personal communication with an industry expert indicates that the active companies have been consolidated into two." 
+ 
+ 
+**Based on this, I will place 13 farms in Salsipuedes Bay.**
+
+```{r}
+
+farms_mex <- data.frame(lat = c(31.972882899404116, 31.96836856413186, 31.963417102445995, 31.95861101663323, 31.955698114940013, 31.952930772763118, 31.95030900327055, 31.945939221180044, 31.932974311561416, 31.929769220541903, 31.95016334721594, 31.959630510399904, 31.96764042474878),
+                          lon = c(-116.81987407899483, -116.8094027351974, -116.80339458711688, -116.7956698252991, -116.79343822744065, -116.79000499996607, -116.78777340210759, -116.78193691540082, -116.77575710594658, -116.77180889435084, -116.77060726473474, -116.78262356089573, -116.79395321156183), 
+                          iso3c = "MEX")
+
+
+farms_mex_map <-  st_as_sf(farms_mex, coords = c("lon", "lat"),
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_mex_map)
+
+
+write_csv(farms_mex, here("aquaculture/marine/tuna/tuna_farms/data/tuna_sites/farms_MEX.csv"))
+
+
+```
+
+
+# Join cell count dataframes
+
+```{r}
+farm_files <- list.files(here::here("aquaculture/marine/tuna/tuna_farms/data/tuna_sites"), full=TRUE)
+all_farms = plyr::ldply(farm_files, read_csv)
+
+all_farms_sf <- st_as_sf(all_farms, coords = c("lon", "lat"), 
+                         crs = crs(gadm_latlon), agr = "constant")
+
+mapview(all_farms_sf)
+
+write.csv(all_farms, here::here("aquaculture/marine/tuna/tuna_farms/data/global_tuna_farm_lat_lon.csv"), row.names = FALSE)
+
+```
+

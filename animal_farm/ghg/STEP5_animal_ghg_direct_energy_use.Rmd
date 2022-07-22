@@ -1,0 +1,439 @@
+---
+title: "ghg_direct_energy_use"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+  
+# Set-up
+```{r setup, include = FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+
+## load libraries, read in data
+library(janitor)
+library(doParallel)
+library(here)
+library(countrycode)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+
+food_rgns_FAO <- rename(food_rgns, "area_code" = "ID_0")
+
+```
+
+--------------------------------------------------------------------------------
+  
+# GLEAM direct energy use analysis
+
+CO2 emissions arising from the energy use on-farm for heating, ventilation, etc.
+
+
+# Import data and wrangle
+First we will convert this to energy per animal vs. energy per unit of product (which is the way GLEAM rates are reported).
+
+Organize the emission rates first:
+```{r}
+
+GLEAM_em <- read_csv(here("animal_farm/ghg/data/de_em_factors.csv"))
+
+
+feedlot <- filter(GLEAM_em, animal=="cows" & system=="mixed" & product=="meat") %>%
+  mutate(system = "feedlot")
+
+GLEAM_em <- rbind(GLEAM_em, feedlot)
+table(GLEAM_em$animal, GLEAM_em$system)
+
+fao_production <- read_csv(here("animal_farm/ghg/data/FAOSTAT_livestock_production_3-3-2021.csv")) %>%
+  filter(Area != "China")%>%
+  mutate(Area = ifelse(Area == "Netherlands Antilles (former)", "Bonaire, Sint Eustatius and Saba", Area))
+
+fao_production$iso3c <- countrycode(as.character(fao_production$Area), origin="country.name", destination = "iso3c")
+fao_production <- fao_production %>%
+  mutate(iso3c = ifelse(Area == "French Guyana", "GUF", iso3c))
+
+fao_count <- read_csv(here("animal_farm/ghg/data/FAOSTAT_livestock_counts_3-3-2021.csv")) %>%
+  filter(Area != "China")%>%
+  mutate(Area = ifelse(Area == "Netherlands Antilles (former)", "Bonaire, Sint Eustatius and Saba", Area))
+
+fao_count$iso3c <- countrycode(as.character(fao_count$Area), origin="country.name", destination = "iso3c")
+fao_count <- fao_count %>%
+  mutate(iso3c = ifelse(Area == "French Guyana", "GUF", iso3c)) 
+
+```
+
+Get rate data for layers:
+```{r}
+
+eggs_production <- fao_production %>%
+  filter(Item == "Eggs, hen, in shell" & (Element %in% c("Yield"))) %>%
+  select(iso3c, Area, Element, Value) %>%
+  mutate(kg_eggs_per_chicken = Value * 100 * 0.001 * 0.001) %>%  #units are 100mg/animal, to grams, to kg
+  mutate(animal = "chickens", system="industrial", product = "eggs") %>%
+  select(iso3c, animal, system, product, kg_eggs_per_chicken) %>%
+  left_join(GLEAM_em, by=c("iso3c", "animal", "system", "product")) %>%
+  mutate(kgCO2eq_per_animal = kg_eggs_per_chicken * value) %>%
+  select(iso3c, animal, system, product, kgCO2eq_per_animal)
+  
+summary(eggs_production)
+
+## backyards are zero, produce these data:
+chickens_backyard <- eggs_production %>%
+  mutate(system = "backyard") %>%
+  mutate(product = "eggs&meat") %>%
+  mutate(kgCO2eq_per_animal = 0)
+
+```
+
+
+Get rate data for milk production:
+```{r}
+
+milk_production_mixed <- fao_production %>%
+  filter(str_detect(Item, "Milk, ")) %>%
+  filter(Unit == "hg/An") %>%
+  mutate(animal = gsub("Milk, whole fresh ", "", Item)) %>%
+  filter(animal %in% c("cow", "goat", "sheep", "buffalo")) %>%
+  mutate(animal = plyr::revalue(animal, c("cow" = "cows", "goat"="goats", "buffalo"="buffaloes"))) %>%
+  mutate(product = "milk") %>%
+  mutate(system = "mixed") %>%
+  mutate(kg_milk_per_animal = Value * 0.1) %>%  # convert hg to kg
+  select(iso3c, animal, system, product, kg_milk_per_animal)
+
+## assume same production for grazed
+milk_production_grassland <- milk_production_mixed %>%
+  mutate(system = "grassland")
+
+milk_production <- rbind(milk_production_mixed, milk_production_grassland)  %>%
+  left_join(GLEAM_em, by=c("iso3c", "animal", "system", "product")) %>%
+  mutate() %>%
+  mutate(kgCO2eq_per_animal = kg_milk_per_animal * value) %>%
+  select(iso3c, animal, system, product, kgCO2eq_per_animal)
+  
+summary(milk_production)
+
+```
+
+Get rate data for meat production:
+```{r}
+
+meat_production_mixed <- fao_production %>%
+  filter(str_detect(Item, "Meat, ")) %>%
+  filter(Element == "Production") %>%
+  mutate(animal = gsub("Meat, ", "", Item)) %>%
+  filter(animal %in% c("chicken", "cattle", "goat", "sheep", "buffalo", "pig")) %>%
+  mutate(animal = plyr::revalue(animal, c("cattle" = "cows", "goat"="goats", "buffalo"="buffaloes", "chicken"= "chickens", "pig" = "pigs"))) %>%
+  mutate(product = "meat") %>%
+  mutate(system = ifelse((animal == "chickens" | animal == "pigs"), "industrial", "mixed")) %>%
+  mutate(kg_meat = Value * 1000) %>% 
+  select(iso3c, animal, system, product, kg_meat) %>%
+  filter(!is.na(kg_meat)) %>%
+  filter(kg_meat>0)
+
+filter(meat_production_mixed, iso3c=="SGP")
+
+## determine weight at slaughter
+cw_to_sw <- read_csv(here("animal_farm/ghg/data/fao_tcf_carc.csv")) %>%
+  mutate(conversion_to_lw = Live_Weight/Carcass_Weight) %>%
+  mutate(animal = plyr::revalue(Livestock, c("Cattle" = "cows", "Goats"="goats", "Buffaloes"="buffaloes", "Chickens"= "chickens", "Goats = goats", "Sheep"= "sheep", "Pigs"="pigs"))) %>%
+  filter(animal %in% c("cows", "goats", "sheep", "chickens", "buffaloes", "pigs")) %>%
+  filter(conversion_to_lw>0) %>%
+  select(iso3c, animal, conversion_to_lw)
+
+
+## convert carcass weight to slaughter weight
+meat_production_mixed <- left_join(meat_production_mixed, cw_to_sw) %>%
+  group_by(animal) %>%
+  mutate(conversion_to_lw = ifelse(is.na(conversion_to_lw), mean(conversion_to_lw, na.rm=TRUE), conversion_to_lw)) %>%
+  mutate(kg_meat_lw = kg_meat * conversion_to_lw) %>%
+  select(iso3c, animal, system, product, kg_meat_lw)
+
+
+# associate with livestock heads to get a rate of production per head
+   fao_totals <- select(fao_count, c(iso3c, Item, Value, Unit)) %>%
+     mutate(Value = ifelse(Unit=="1000 Head", Value*1000, Value)) %>%
+     filter(Item %in% c("Cattle", "Chickens", "Goats", "Sheep", "Buffaloes", "Pigs")) %>%
+  mutate(animal = plyr::revalue(Item, c("Cattle" = "cows", "Goats"="goats", "Buffaloes"="buffaloes", "Chickens"= "chickens", "Sheep" = "sheep", "Pigs"="pigs"))) %>%
+     select(iso3c, total_count = Value, animal) %>%
+     filter(!is.na(total_count))
+     
+  fao_nonmeat <- fao_production %>%
+    filter(Element %in% c("Milk Animals", "Laying")) %>%
+    mutate(Value = ifelse(Unit == "1000 Head", Value*1000, Value)) %>%
+    mutate(animal = gsub("Milk, whole fresh ", "", Item)) %>%
+    mutate(animal = ifelse(Item == "Eggs, hen, in shell", "chickens", animal)) %>%
+    mutate(animal = plyr::revalue(animal, c("cow" = "cows", "goat"="goats", "buffalo"="buffaloes", "chickens"= "chickens", "sheep" = "sheep"))) %>%
+    filter(animal %in% c("chickens", "cows", "sheep", "buffaloes", "goats")) %>%
+    select(iso3c, nonmeat_count = Value, animal)
+  
+  fao_meat_count <- left_join(fao_totals, fao_nonmeat, by=c("iso3c", "animal")) %>%
+    mutate(nonmeat_count = ifelse(is.na(nonmeat_count), 0, nonmeat_count)) %>%
+    mutate(meat_count = total_count-nonmeat_count) %>%
+    mutate(meat_count = ifelse(meat_count<0, 0, meat_count)) %>%
+    mutate(nonmeat_count = ifelse(nonmeat_count > total_count, total_count, nonmeat_count)) %>%
+    mutate(prop_nonmeat = nonmeat_count/total_count) 
+
+filter(fao_meat_count, iso3c=="USA")
+  
+write_csv(fao_meat_count, here("animal_farm/ghg/data/fao_meat_nonmeat_livstock_heads.csv"))
+  
+## join count and production
+rate_meat_mixed <- left_join(meat_production_mixed, fao_meat_count, by=c("iso3c", "animal")) %>%
+  mutate(kg_meat_per_animal = kg_meat_lw/meat_count) %>%
+  filter(kg_meat_per_animal != "Inf") %>%
+  filter(kg_meat_per_animal < 750) %>%  # these seem like outliers, gapfill with different values  
+  select(iso3c, animal, system, product, kg_meat_per_animal)
+
+rate_meat_mixed %>% group_by(animal) %>% summarize(mean(kg_meat_per_animal))
+summary(rate_meat_mixed)
+
+## assume same production for grazed
+rate_meat_grassland <- rate_meat_mixed %>%
+  filter(animal %in% c("cows", "goats", "sheep", "buffaloes")) %>%
+  mutate(system = "grassland")
+
+rate_meat_intermediate <- rate_meat_mixed %>%
+  filter(animal %in% c("pigs")) %>%
+  mutate(system = "intermediate")
+
+meat_production <- rbind(rate_meat_mixed, rate_meat_grassland, rate_meat_intermediate)  %>%
+  left_join(GLEAM_em, by=c("iso3c", "animal", "system", "product")) %>%
+  mutate(value = ifelse((animal == "buffaloes" & product == "meat"), 0, value)) %>%   # no data for meat, just use zero for now
+  mutate(kgCO2eq_per_animal = kg_meat_per_animal * value) %>%
+  select(iso3c, animal, system, product, kgCO2eq_per_animal)
+
+## backyards are zero, produce these data:
+pigs_backyard <- meat_production %>%
+  filter(animal == "pigs" & system == "industrial") %>%
+  mutate(system = "backyard") %>%
+  mutate(product = "meat") %>%
+  mutate(kgCO2eq_per_animal = 0)
+
+## assume feedlots the same as mixed:
+cows_feedlot <- meat_production %>%
+  filter(animal == "cows" & system == "mixed") %>%
+  mutate(system = "feedlot") 
+
+```
+
+Join everything together:
+```{r}
+
+livestock_emission_rates <- rbind(eggs_production, chickens_backyard, milk_production, meat_production, pigs_backyard, cows_feedlot) 
+
+# make sure all categories make sense and nothing is missing:
+table(livestock_emission_rates$animal, livestock_emission_rates$system, livestock_emission_rates$product)
+
+write_csv(livestock_emission_rates, here("animal_farm/ghg/data/livestock_direct_energy_rates.csv"))
+```
+
+-------------------------------------------------------------------------------
+
+# Map direct energy use
+
+```{r}
+
+un <- 
+  vroom::vroom(here("_spatial/_output/UNSD_Methodology.csv")) %>% 
+  dplyr::select(iso3c, Intermediate_Region_Name, Sub_region_Name, Region_Name) %>%
+  filter(Intermediate_Region_Name != "Antarctica") %>%
+  clean_names() 
+
+national_DE_rates <- read_csv(here("animal_farm/ghg/data/livestock_direct_energy_rates.csv"))
+
+gleam_files <- 
+  list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm",
+             pattern = "location_df", 
+             full.names = TRUE)
+
+registerDoParallel(6)
+
+foreach::foreach(gleam_file = gleam_files) %dopar% { # gleam_file = gleam_files[6]
+
+  gleam_livestock_name <- 
+    str_extract(gleam_file, "buffaloes|chickens|cows|sheep|goats|pigs")
+  
+  gleam_prod_system_name <- 
+    str_extract(gleam_file, "grassland|industrial|mixed|intermediate|backyard|feedlot")
+  
+  gleam_product_name <- 
+    str_extract(gleam_file, "meat|milk|eggs&meat|eggs")
+  
+  gleam_full_name <- paste(gleam_livestock_name, 
+                           gleam_prod_system_name, 
+                           gleam_product_name, 
+                           sep = "_")
+
+  # Gapfill national rates
+  direct_energy_rates <- 
+    national_DE_rates %>% 
+    filter(
+      animal %in% gleam_livestock_name &
+      system %in% gleam_prod_system_name &
+      product %in% gleam_product_name
+      ) %>% 
+    mutate(tonnes_per_head = kgCO2eq_per_animal * 0.001) %>%
+    right_join(un, by = "iso3c") %>% 
+    group_by(intermediate_region_name) %>% 
+    mutate(tonnes_per_head = ifelse(is.na(tonnes_per_head), median(tonnes_per_head, na.rm = TRUE), tonnes_per_head)) %>% 
+    group_by(sub_region_name) %>%
+    mutate(tonnes_per_head = ifelse(is.na(tonnes_per_head), 
+                                    median(tonnes_per_head, na.rm = TRUE), 
+                                    tonnes_per_head)) %>%
+    group_by(region_name) %>%
+    mutate(tonnes_per_head = ifelse(is.na(tonnes_per_head), 
+                                    median(tonnes_per_head, na.rm = TRUE), 
+                                    tonnes_per_head)) %>%
+    group_by(animal) %>%
+    mutate(tonnes_per_head = ifelse(is.na(tonnes_per_head), 
+                                    mean(tonnes_per_head, na.rm = TRUE), 
+                                    tonnes_per_head)) %>%
+    ungroup() %>% 
+    select(iso3c, tonnes_per_head) 
+
+  # Produce rastermap 
+  head_count <- 
+    vroom::vroom(gleam_file, col_select = c(x, y, contains("current"), iso3c)) %>% 
+    rename(current_count = 3)
+  
+  raster_map <- 
+    left_join(head_count, direct_energy_rates, by="iso3c") %>% 
+    mutate(direct_energy_co2eq = tonnes_per_head * current_count) %>%
+    select(x, y, direct_energy_co2eq) %>% 
+    rasterFromXYZ(., crs = food_crs)
+
+# plot(raster_map)  
+  
+  # Save
+  writeRaster(raster_map, 
+              file.path(prep, 
+                        "animal_farm/ghg/",
+                        gleam_full_name, 
+                        "_direct_energy.tif",
+                        fsep = ""), 
+              format = "GTiff", 
+              overwrite = TRUE)
+  
+}
+
+```
+
+## Data checks
+
+```{r}
+
+map(list.files(file.path(prep,
+                         "animal_farm/ghg", 
+                         fsep = ),
+               pattern = "direct_energy", 
+               full.names = TRUE), 
+    ~ plot(raster(.x),
+    legend = TRUE,
+    legend.args = list(
+    text = "CO2-eq", # unit of measurement for the stressor
+    cex  = 1, 
+    side = 3, 
+    line = 1),
+    main = Hmisc::capitalize(gsub(pattern = "_", 
+                                  replacement = " ",
+                                  str_extract(.x, pattern = "(?<=/ghg/).*(?=direct)")))))
+
+
+## totals for each system
+de_rasts <- list.files(file.path(prep,
+                         "animal_farm/ghg", 
+                         fsep = ),
+               pattern = "direct_energy", 
+               full.names = TRUE)
+
+de_df <- data.frame(rast_filename = basename(de_rasts), system = basename(gsub("_direct_energy.tif", "", de_rasts)),
+                    our_total_co2eq = NA)
+
+for(de in de_rasts){ # de = de_rasts[1]
+  de_rast <- raster(de)
+  
+  de_df$our_total_co2eq[de_df$rast_filename == basename(de)] = cellStats(de_rast, "sum", na.rm=TRUE)
+    
+}
+
+# Compare different systems totals
+p <-  ggplot(de_df, aes(x = system, y = our_total_co2eq)) +
+  geom_point() + 
+  theme_classic() + 
+  theme(axis.text.x = element_text(angle = 90)) 
+plotly::ggplotly(p)
+
+```
+
+# Error check GLEAM 2010 vs GLEAM 2017 (our data)
+```{r}
+
+feedlot_df <- 
+  vroom::vroom(here("animal_farm/farm/data/ruminants_GLEAMi_v2.csv")) %>% 
+  filter(Production_system %in% "Feedlot operations")
+
+
+GLEAM_direct_energy <- 
+  vroom::vroom(here("animal_farm/farm/data/ruminants_GLEAMi_v2.csv")) %>% 
+  filter(!Herd_type == "Whole herd") %>%
+  bind_rows(feedlot_df) %>% 
+  bind_rows(vroom::vroom(here("animal_farm/farm/data/chickens_GLEAMi_v2.csv"))) %>%
+  bind_rows(vroom::vroom(here("animal_farm/farm/data/pigs_GLEAMi_v2.csv"))) %>%
+  clean_names() %>% 
+  mutate(product = case_when(production_system == "Broilers" ~ "meat",
+                             production_system == "Layers" ~ "eggs",
+                             production_system == "Backyard" &  species == "Chickens" ~ "eggs&meat",
+                             herd_type == "Dairy" ~ "milk",
+                             TRUE ~ "meat"),
+         production_system = if_else(production_system %in% c("Broilers", "Layers"),
+                                     "industrial",
+                                     production_system)) %>%
+  filter(!str_detect(variable, pattern = "indirect") &
+          str_detect(variable, pattern = "(direct|number)") &
+         !str_detect(production_system, pattern = "All")) %>% 
+  select(-c(variable, herd_type)) %>% 
+  mutate(species = case_when(species == "Cattle" ~ "cows", 
+                             species == "Buffalo" ~ "buffaloes",
+                             TRUE ~ tolower(species)),
+         production_system = tolower(gsub("([A-Za-z]+).*",
+                                          "\\1", 
+                                          production_system)))
+
+GLEAM_direct_energy$production_system <- 
+  tolower(gsub("([A-Za-z]+).*",
+               "\\1", 
+               GLEAM_direct_energy$production_system))
+
+
+GLEAM_2010 <- 
+  GLEAM_direct_energy %>% 
+  pivot_wider(names_from   = unit,
+              values_from  = value,
+              names_repair = make_clean_names) %>% 
+  mutate(system = paste(species, 
+                           production_system, 
+                           product, 
+                           sep = "_")) %>% 
+  group_by(system) %>% 
+  summarise(gleam_tonnes_co2eq = sum(kg_co2_eq_year, na.rm = TRUE)  * 0.001)
+
+compare <- left_join(GLEAM_2010, de_df, by = c("system")) %>% 
+  separate(system, into = c("animal", "system", "product"), sep="_") %>%
+  group_by(animal, product) %>%
+  summarize(gleam_tonnes_co2eq = sum(gleam_tonnes_co2eq, na.rm=TRUE),
+            our_total_co2eq = sum(our_total_co2eq, na.rm=TRUE))
+  
+  
+  
+#  filter(full_name %in% "goats_grassland_meat") %>% 
+  ggplot(data= compare, aes(x = our_total_co2eq, y = gleam_tonnes_co2eq)) + 
+  geom_point() +
+  geom_abline() + 
+  theme_bw()
+
+sum(compare$our_total_co2eq, na.rm = T) / sum(compare$gleam_tonnes_co2eq, na.rm = T)
+
+
+```

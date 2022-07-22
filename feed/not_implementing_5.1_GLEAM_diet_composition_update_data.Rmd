@@ -1,0 +1,143 @@
+---
+title: "Food Balance Sheets Feed"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+NOTE: not currently using this method, but keeping here for now.
+GLEAM feed composition data was causing some artifacts (e.g. orders of magnitude higher rice in feed in some countries) that were reverberating through the analysis.  Given this: we considered using FAO Food Balance Sheets feed data to estimate feed composition for crops.
+
+```{r setup, include=FALSE}
+
+library(here)
+library(tidyverse)
+library(countrycode)
+
+aurora <- "/home/shares/food-systems/Food_footprint/"
+ref_year <- 2017
+
+feed_cats <- read_csv(here("feed/data/MapSPAM_to_FAO_v2.csv")) %>%
+  dplyr::filter(!is.na(FAO_item_code_NFB)) %>%
+  dplyr::select(SPAM_super, FAO_item_code_NFB) %>%
+  unique()
+feed_cats[duplicated(feed_cats$FAO_item_code_NFB), ] # mostly FAO_item_code is unique, but be aware of duplicates: occurs when MAPSPAM reports crops with more specificity (e.g. millet = small millet and pearl millet in MapSPAM)
+
+
+```
+
+```{r}
+
+fbs <- read_csv(file.path(aurora, "_raw_data/FAO_FoodBalanceSheets/d2020/FoodBalanceSheets_E_All_Data_(Normalized).csv")) %>%
+  filter(Year == ref_year & Element == "Feed" & Value > 0) 
+
+fbs %>% group_by(Item) %>%
+  summarize(tonnes = sum(Value, na.rm=TRUE)) %>% data.frame()
+
+fbs <- fbs %>%
+  rename(FAO_item_code_NFB = `Item Code`) %>%
+  filter(FAO_item_code_NFB %in% feed_cats$FAO_item_code_NFB) 
+table(fbs$Item) # make sure these basically make sense...they seem reasonable to me.
+
+```
+
+Summarize by MapSPAM crop.
+
+```{r}
+
+dim(fbs)
+
+fbs <- fbs %>%
+  left_join(feed_cats, by="FAO_item_code_NFB")
+dim(fbs)
+
+fbs %>%
+  group_by(SPAM_super) %>%
+  summarize(tonnes = sum(Value, na.rm=TRUE)) %>%
+  data.frame()
+
+spam_feed <- fbs %>%
+  group_by(Area, SPAM_super) %>%
+  summarize(tonnes = sum(Value)) %>%
+  group_by(Area) %>%
+  mutate(country_tonnes = sum(tonnes)) %>%
+  mutate(percent = tonnes/country_tonnes) %>%
+  ungroup()
+
+
+```
+
+Add in the iso3c and clean names
+```{r}
+
+iconv(x, "UTF-8", "UTF-8",sub='')
+
+spam_feed_iso <- spam_feed %>% 
+  filter(Area != "China") %>% 
+  mutate(Area = iconv(Area, "UTF-8", "UTF-8",sub=''),
+         Area = ifelse(Area == "Eswatini", "Swaziland", Area),
+         Area = ifelse(Area == "Netherlands Antilles (former)", "Bonaire, Sint Eustatius and Saba", Area),
+         Area = ifelse(Area == "French Guyana", "French Guiana", Area),
+         Area = ifelse(Area == "China, mainland", "China", Area))
+
+spam_feed_iso$iso3c <- countrycode(spam_feed_iso$Area, origin="country.name", destination = "iso3c")
+
+check_na <- filter(spam_feed_iso, is.na(iso3c))
+unique(check_na$Area) ## all larger areas
+
+```
+
+
+Gapfill missing countries with weighted values from UN geopolitical regions.
+
+```{r}
+
+regions <- read_csv(here("_spatial/_output/food_rgns.csv"))
+un_geo <- read_csv(here("_spatial/_output/UNSD_Methodology.csv"))
+
+missing_regions <- setdiff(regions$iso3c, spam_feed_iso$iso3c)
+missing_regions <- data.frame(iso3c = missing_regions) %>%
+  left_join(un_geo, by="iso3c") %>%
+  select(iso3c, Sub_region_Code)
+
+unique(missing_regions$Sub_region_Code)
+
+spam_feed_gf_1 <- spam_feed_iso %>%
+  left_join(un_geo) %>%
+  group_by(Sub_region_Code, SPAM_super) %>%
+  summarize(tonnes = sum(tonnes)) %>%
+  group_by(Sub_region_Code) %>%
+  mutate(total_tonnes = sum(tonnes)) %>%
+  ungroup() %>%
+  mutate(percent=tonnes/total_tonnes) %>%
+  select(Sub_region_Code, SPAM_super, percent)
+  
+feed_percents_gf <- left_join(missing_regions, spam_feed_gf_1) %>%
+  select(iso3c, SPAM_super, percent)
+
+```
+
+
+Combine and clean
+
+```{r}
+
+feed_percents <- spam_feed_iso %>%
+  select(iso3c, SPAM_super, percent) %>%
+  rbind(feed_percents_gf) %>%
+  filter(!is.na(iso3c))
+
+## should be no extras in either case:
+setdiff(regions$iso3c, feed_percents$iso3c)
+setdiff(feed_percents$iso3c, regions$iso3c)
+
+# should all equal 1
+all_one <- feed_percents %>%
+  group_by(iso3c) %>%
+  summarize(total = sum(percent))
+filter(all_one, total != 1)
+summary(all_one)
+
+write_csv(feed_percents, here("feed/data/feed_percents_FAO_fbs_update.csv"))
+
+```

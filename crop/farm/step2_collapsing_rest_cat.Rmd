@@ -1,0 +1,301 @@
+---
+title: "Collapsing rest cat"
+output: html_document
+---
+
+From issue #268
+
+# libraries
+```{r}
+library(here)
+library(tidyverse)
+library(countrycode)
+library(janitor)
+library(vroom)
+
+# Raster templates
+source(here("_spatial/template_raster.R"))
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+```
+
+# Allocate `rest` category codes to treenuts, spices, and others. 
+```{r}
+item_definitions <- 
+  vroom(here("crop/farm/data/FAO_crop_definitions.csv")) %>% 
+  clean_names() %>% 
+  select(item_code, item, description)
+
+crop_codes <- 
+  vroom(here("crop/farm/data/crop_codes.csv")) %>% 
+  filter(SPAM_super %in% "rest") %>% 
+  left_join(., item_definitions)
+
+categories <- 
+  vroom(here("_analysis/paper_stats/int/other_cat.csv")) %>% 
+  select(item_code = FAO_item_code, 
+         category, 
+         contains("product"))
+
+rest_df <- 
+  left_join(crop_codes, categories) %>% 
+  mutate(SPAM_super = case_when(item_code == 671 ~ "other", # Mate
+                                item_code == 161 ~ "other", # sugar crop nes
+                                item_code == 771 ~ "other", 
+                                TRUE ~ category), 
+         SPAM_super = case_when(SPAM_super %in% "tree_nut" ~ "tnut",
+                                SPAM_super %in% "other" ~ "othr",
+                                SPAM_super %in% "spice" ~ "spis",
+                                TRUE ~ SPAM_super))  
+
+rest_df <- rest_df[!is.na(rest_df$category),]
+
+vroom_write(rest_df, 
+            here("crop/farm/data/rest_category_codes.csv"))
+
+rest_df <- 
+  rest_df %>% 
+  select(contains("SPAM"), "item_code")
+```
+
+# Update crop_codes.csv with new codes
+```{r}
+# Replace rest category with new categories
+crop_codes_updated <- 
+  vroom(here("crop/farm/data/crop_codes.csv")) %>% 
+  filter(!SPAM_short_name %in% "rest") %>% 
+  bind_rows(rest_df) %>% 
+  mutate(split_rest_names = if_else(SPAM_short_name == "rest",
+                                    SPAM_super,
+                                    SPAM_short_name))
+
+# Save
+vroom_write(crop_codes_updated,
+            here("crop/farm/data/crop_codes_updated.csv"))
+```
+
+-------------------------------------------------------------------------------
+
+# New crop codes
+```{r}
+prod <- 
+  crop_codes_updated %>% 
+  select(SPAM_short_name) %>% 
+  unique()
+
+distinct_vars <- expand_grid(prod_system = "_A",
+                             SPAM_short_name   = toupper(unique(prod$SPAM_short_name)))
+prod_list <- c()
+
+for(i in 1:nrow(distinct_vars)) {
+  
+  
+  prod_list[[i]] <- 
+    sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/MapSPAM_correct_extent/spam2010V2r0_global_P_%s_A.tif",
+            distinct_vars$SPAM_short_name[i])
+  
+}
+
+prod_crop <- 
+  lapply(prod_list, raster) %>% 
+  stack()
+
+prod_crop_rgns_2010 <- 
+  zonal(prod_crop, 
+        food_rgns_tif, 
+        fun      = "sum", 
+        progress = "text", 
+        na.rm    = TRUE) %>% 
+  as_tibble() %>% 
+  rename(ID_0 = zone) %>% 
+  pivot_longer(cols      = starts_with("spam"),
+               names_to  = "SPAM_short_name", 
+               values_to = "production") %>% 
+  mutate(SPAM_short_name = tolower(substr(SPAM_short_name, start = 23, stop = 26))) %>% 
+  left_join(food_rgns) %>% 
+  select(iso3c, SPAM_short_name, production)
+
+vroom_write(prod_crop_rgns_2010,
+            here("crop/farm/data/prod_crop_rgns_2010.csv"))
+```
+
+-------------------------------------------------------------------------------
+
+
+# Create df with the proportion of each rest category in each country
+
+```{r}
+FAO_production_2017 <- 
+  vroom::vroom(here("crop/farm/data/FAOSTAT_crop_production_2010_2017.csv")) %>% 
+  clean_names() %>% 
+  filter(year == 2017) %>% 
+  dplyr::select(area_code, item_code, value) %>% 
+  rename(tonnes = value) %>% 
+  na.omit() 
+```
+
+# Match FAOSTAT regions with food_rgns list
+```{r}
+# Remove China and re-allocate Serbia data to Kosovo and Serbia  
+FAO_production_2017 <- 
+  FAO_production_2017 %>%   # SRB without XKO
+  mutate(area_code = if_else(area_code %in% 272, 275, area_code)) %>%  # XKO
+  bind_rows(FAO_production_2017) %>%
+  mutate(area_code = if_else(area_code %in% 272, 286, area_code)) %>%
+  unique() %>% 
+  filter(!area_code %in% 351) %>% # Code 351 values are for all of China, including MAC, HKG, TWN.
+  left_join(read_csv(here("_spatial/_output/FAO_rgn_codes.csv")), 
+            by = "area_code")
+```
+
+```{r}
+SRB_XKO <-  
+  vroom::vroom(here("crop/farm/data/prod_crop_rgns_2010.csv")) %>%  
+  filter(iso3c %in% c("XKO", "SRB")) %>%  
+  group_by(iso3c) %>%  
+  summarize(production = sum(production)) %>%  
+  ungroup() %>%  
+  mutate(relative_proportion = production / sum(production)) 
+
+FAO_production_2017$tonnes[FAO_production_2017$iso3c %in% "SRB"] <-
+  FAO_production_2017$tonnes[FAO_production_2017$iso3c %in% "SRB"] *
+  SRB_XKO$relative_proportion[SRB_XKO$iso3c %in% "SRB"] 
+
+FAO_production_2017$tonnes[FAO_production_2017$iso3c %in% "SRB"] <-
+  FAO_production_2017$tonnes[FAO_production_2017$iso3c %in% "XKO"] *
+  SRB_XKO$relative_proportion[SRB_XKO$iso3c %in% "XKO"]
+```
+
+```{r}
+crop_codes_updated <- vroom(here("crop/farm/data/crop_codes_updated.csv")) 
+
+rest_category_proportion <- 
+  left_join(FAO_production_2017, 
+            crop_codes_updated) %>% 
+  filter(SPAM_super %in% c("tnut", "spis", "othr")) %>% 
+  group_by(iso3c, SPAM_super) %>% 
+  summarise(tonnes = sum(tonnes)) %>% 
+  ungroup() %>% 
+  group_by(iso3c) %>% 
+  mutate(prop = tonnes / sum(tonnes)) %>% 
+  ungroup()
+
+rest_category_proportion <- 
+  expand_grid(iso3c      = unique(food_rgns$iso3c),
+              SPAM_super = unique(rest_category_proportion$SPAM_super)) %>% 
+  left_join(., rest_category_proportion) %>% 
+  group_by(iso3c) %>% 
+  mutate(prop = case_when(all(is.na(prop)) ~ 1/3,
+                          TRUE ~ prop),
+         prop = if_else(is.na(prop), 0, prop)) %>% 
+  ungroup()
+
+rest_category_proportion %>% 
+  group_by(iso3c) %>% 
+  summarise(sum = sum(prop)) %>% 
+  .$sum # all equal to ~1
+
+vroom_write(rest_category_proportion,
+            here("crop/farm/data/rest_category_proportion.csv"))
+```
+
+# Physical area of rest crop categories
+```{r}
+rest_category_proportion <- 
+  vroom(here("crop/farm/data/rest_category_proportion.csv")) %>% 
+  select(- tonnes)
+
+rest_physical_file_paths <- 
+  list.files(file.path(prep,"spatial/MapSPAM_correct_extent"), 
+             pattern = "A_REST", 
+             full.names = TRUE) 
+
+variable_grid <- 
+  expand_grid(rest_physical_file_paths, 
+              unique(rest_category_proportion$SPAM_super))
+
+rest_physical <- function(file_path, crop) {
+  
+  crop_map <- 
+    rest_category_proportion %>% 
+    filter(SPAM_super %in% crop) %>% 
+    left_join(food_rgns_xy, .) %>% 
+    select(x, y, prop) %>% 
+    rasterFromXYZ(., crs = food_crs)
+    
+  overlay(raster(file_path),
+          crop_map,
+          fun = function(r1, r2) {
+              
+              return(r1 * r2)
+              
+              }) %>%
+    
+    writeRaster(.,
+                file.path(prep, 
+                          "spatial/MapSPAM_correct_extent/spam2010V2r0_global_A_",
+                          toupper(crop),
+                          str_extract(file_path, "(_A|_L|_S|_R|_H|_I)\\.tif"), 
+                          fsep = ""),
+                format = "GTiff", 
+                overwrite = TRUE
+                )
+}
+
+map2(variable_grid$rest_physical_file_paths,
+     variable_grid$`unique(rest_category_proportion$SPAM_super)`,
+     rest_physical)
+
+r1 <- 
+  raster(file.path(prep,
+                   "spatial/MapSPAM_correct_extent/spam2010V2r0_global_A_TNUT_A.tif", 
+                   fsep = "")) %>% 
+  cellStats(., stat = "sum")
+
+r2 <- raster(file.path(prep,
+                       "spatial/MapSPAM_correct_extent/spam2010V2r0_global_A_SPIS_A.tif", 
+                       fsep = "")) %>% 
+  cellStats(., stat = "sum")
+
+r3 <- raster(file.path(prep,
+                       "spatial/MapSPAM_correct_extent/spam2010V2r0_global_A_OTHR_A.tif", 
+                       fsep = "")) %>% 
+  cellStats(., stat = "sum")
+
+r1 + r2 + r3
+
+
+cellStats(raster(file.path(prep, 
+                    "spatial/MapSPAM_correct_extent/spam2010V2r0_global_A_REST_A.tif", 
+                    fsep = "")),
+          stat = "sum")
+```
+
+# SI Table update
+```{r}
+vroom::vroom(here("crop/farm/data/SI_SPAM_crops_tbl.csv")) 
+
+crop_codes_updated <- vroom(here("crop/farm/data/crop_codes_updated.csv")) 
+
+# Replace number ranges with separate numbers.
+get_numbers <- function(x, y){
+    item_code <- (x:y)
+    return(as.vector(item_code))
+}
+
+MapSPAM_ranges <- 
+  MapSPAM_ranges %>% 
+    filter(str_detect(item_code, pattern = ":")) %>% 
+    separate(item_code,
+             into = c("x", "y"),
+             sep = ":") %>% 
+    mutate(x = as.integer(x),
+           y = as.integer(y)) %>% 
+    mutate(item_code = map2(x, y , get_numbers)) %>% 
+    unnest(item_code) %>%
+    dplyr::select(-c(x, y)) 
+
+# Sort by first column
+
+```
+

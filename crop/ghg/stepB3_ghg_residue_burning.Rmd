@@ -1,0 +1,315 @@
+---
+title: "Calculating GHG emissions from crop burning"
+author: "Juliette"
+date: "3/16/2020"
+output: html_document
+---
+
+In this markdown we are calculating the total carbon emitted, converted to CH4, CO, NO2, NOx, and the carbon equivalant of these 4 emission types.
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Read in libraries and paths
+```{r}
+#Load libraries
+library(readr)
+library(dplyr)
+library(tidyverse)
+library(doParallel)
+library(raster)
+library(rgdal)
+library(here)
+
+source(here("_spatial/template_raster.R"))
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+#Files we will need:
+burn_parameters <- read_csv("crop/ghg/data/burning_parameters_gf.csv") %>% 
+  dplyr::select(-gapfilled)
+
+developed <- read_csv("crop/ghg/data/developed_regions.csv")
+
+```
+
+Total carbon released = annual production (tonnes of biomass per year) * ratio of residue to crop product (fraction) * average dry matter fraction of residue (tonnes dry matter/tonnes of biomass) * fraction burned in field * fraction oxidised * carbon fraction (tonnes carbon/tonnes of dry matter)
+
+tc = prod * ratio_res_prod * dm * frac_ox * carbon_res * fraction_burned
+
+```{r}
+crop_production <- list.files(file.path(prep, "crop/farm/scaled_maps_2017"), pattern = "A_scaled.tif", full = TRUE)
+
+crop_production <- 
+  crop_production[!grepl(pattern = c("rest|toba|cof|teas"), 
+                         x = crop_production)]
+
+registerDoParallel(6)   
+foreach(file = crop_production) %dopar% {
+  
+  #file = crop_production[40]
+  crop <- str_sub(file, -17, -14)
+  
+  prod <- raster(file, crs = food_crs) %>% 
+    raster_df() %>% 
+    mutate(split_rest_names = crop) %>% 
+    rename(production = paste0("crop_",crop, "_A_scaled")) %>% 
+    mutate(split_rest_names = ifelse(is.na(production), NA , split_rest_names)) %>% 
+    dplyr::select(-x,-y)
+
+prod_country <- left_join(prod, food_rgns_xy, by = c("cellindex")) %>% 
+  mutate(ID_0 = as.numeric(ID_0))
+    
+## Add the parameters for the mapspam crops
+  prod_burn <- left_join(prod_country, burn_parameters, by =  "split_rest_names") %>% 
+    left_join(developed)
+
+## Calculate GHG emissions
+   c02_eq <- prod_burn %>% 
+     mutate(tc = production*ratio_res_prod*dm*frac_ox*carb_frac*fraction_burned) %>% 
+     dplyr::select(x, y, tc)
+   
+   write_csv(c02_eq, file.path(prep, paste("crop/ghg/crop_residue_burning_ghg/total_carbon_emitted/", crop, ".csv", sep = "")))
+}
+```
+
+
+Now we need to convert the total carbon released from each crop to the emission from 4 different GHG
+CH4 Emission = Carbon Released * Emission Ratio * 16/12
+CO Emission = Carbon Released * Emission Ratio * 28/12
+N2O Emission = Carbon Releaed * Emission Ratio * N/C Ratio * 44/28
+NOx Emission = Carbon Released * Emission Ratio * N/C Ratio * 46/14
+
+Calculating CH4
+```{r}
+em_ratios <- read_csv(here("crop/ghg/data/ghg_em_ratio.csv"))
+burn_ghg <- list.files(file.path(prep, "crop/ghg/crop_residue_burning_ghg/total_carbon_emitted/"), full = TRUE)
+
+registerDoParallel(6)   
+foreach(file = burn_ghg) %dopar% {
+  
+  #file = burn_ghg[39]
+  crop <- str_sub(file, -8, -5)
+  
+  em_ratio <- as.numeric(em_ratios$ratio[em_ratios$compound == "ch4"])
+  
+  ch4_em <- read_csv(file.path(file), col_types = "ddc") %>% 
+    mutate(tc = as.numeric(tc),
+           ch4_emitted = tc*em_ratio*16/12) %>% 
+    dplyr::select(x,y,ch4_emitted)
+  
+   write_csv(ch4_em, file.path(prep, paste("crop/ghg/crop_residue_burning_ghg/ch4_emitted/", crop, ".csv", sep = "")))
+}
+```
+
+Calculating CO
+```{r}
+em_ratios <- read_csv(here("crop/ghg/data/ghg_em_ratio.csv"))
+burn_ghg <- list.files(file.path(prep, "crop/ghg/crop_residue_burning_ghg/total_carbon_emitted/"), full = TRUE)
+
+foreach(file = burn_ghg) %dopar% {
+  
+ # file = burn_ghg[41]
+  crop <- str_sub(file, -8, -5)
+  
+  em_ratio <- as.numeric(em_ratios$ratio[em_ratios$compound == "co"])
+  
+  co_em <- read_csv(file.path(file), col_types = "ddc") %>% 
+    mutate(tc = as.numeric(tc),
+           ch4_emitted = tc*em_ratio*28/12) %>% 
+    dplyr::select(x,y,ch4_emitted)
+  
+   write_csv(co_em, file.path(prep, paste("crop/ghg/crop_residue_burning_ghg/co_emitted/", crop, ".csv", sep = "")))
+}
+```
+
+Calculating N2O
+```{r}
+em_ratios <- read_csv(here("crop/ghg/data/ghg_em_ratio.csv"))
+burn_ghg <- list.files(file.path(prep, "crop/ghg/crop_residue_burning_ghg/total_carbon_emitted/"), full = TRUE)
+
+registerDoParallel(6)   
+foreach(file = burn_ghg) %dopar% {
+  
+# file = burn_ghg[1]
+  crop <- str_sub(file, -8, -5)
+  
+  nc_ratio <- burn_parameters %>% 
+    select(split_rest_names, n_c_ratio) %>% 
+    rename(crop = split_rest_names)
+  
+  em_ratio <- as.numeric(em_ratios$ratio[em_ratios$compound == "n2o"])
+  
+  n2o_em <- read_csv(file.path(file), col_types = "ddc") %>% 
+    mutate(crop = crop) %>% 
+    left_join(nc_ratio) %>% 
+    mutate(tc = as.numeric(tc),
+           em_ratio = em_ratio,
+           n2o_emitted = tc*em_ratio*n_c_ratio*44/28) %>% 
+    dplyr::select(x,y,n2o_emitted)
+
+   write_csv(n2o_em, file.path(prep, paste("crop/ghg/crop_residue_burning_ghg/n2o_emitted/", crop, ".csv", sep = "")))
+}
+```
+
+Calculating Nox
+```{r}
+em_ratios <- read_csv(here("crop/ghg/data/ghg_em_ratio.csv"))
+burn_ghg <- list.files(file.path(prep, "crop/ghg/crop_residue_burning_ghg/total_carbon_emitted/"), full = TRUE)
+
+registerDoParallel(6)   
+foreach(file = burn_ghg) %dopar% {
+  
+  # file = burn_ghg[1]
+ crop <- str_sub(file, -8, -5)
+  
+  nc_ratio <- burn_parameters %>% 
+    dplyr::select(split_rest_names, n_c_ratio) %>% 
+    rename(crop = split_rest_names)
+  
+  em_ratio <- as.numeric(em_ratios$ratio[em_ratios$compound == "nox"])
+  
+  nox_em <- read_csv(file.path(file), col_types = "ddc") %>% 
+    mutate(crop = crop) %>% 
+    left_join(nc_ratio) %>% 
+    mutate(tc = as.numeric(tc),
+           em_ratio = em_ratio,
+           nox_emitted = tc*em_ratio*n_c_ratio*44/28) %>% 
+    dplyr::select(x,y,nox_emitted)
+  
+   write_csv(nox_em, file.path(prep, paste("crop/ghg/crop_residue_burning_ghg/nox_emitted/", crop, ".csv", sep = "")))
+}
+```
+
+Now we want to convert CH4 nd NO2 values to carbon equivilant and sum those up in one raster per crop
+
+CH4
+```{r}
+ch4 <- list.files(file.path(prep, "crop/ghg/crop_residue_burning_ghg/ch4_emitted/"), full = TRUE)
+eq_factors <- read_csv(here("crop/ghg/data/co2_eq_factors.csv"))
+
+registerDoParallel(6)   
+foreach(file = ch4) %dopar% {
+  
+ # file = ch4[41]
+ crop <- str_sub(file, -8, -5)
+ 
+ eq_fac <- as.numeric(eq_factors$gwp[eq_factors$source == "ch4"])
+  
+  ch4_eq <- read_csv(file.path(file), col_types = "ddc") %>% 
+    mutate(eq_fac = eq_fac,
+           ch4_emitted = as.numeric(ch4_emitted),
+           co2eq = ch4_emitted*eq_fac) %>% 
+    dplyr::select(x, y, co2eq)
+  
+  ch4_eq_rast <- rasterFromXYZ(ch4_eq, crs = food_crs)
+  
+   writeRaster(ch4_eq_rast, file.path(prep, paste("crop/ghg/crop_residue_burning_ghg/co2eq_ch4/", crop, ".tif", sep = "")),  format="GTiff", overwrite=TRUE)
+}
+```
+
+```{r}
+n2o <- list.files(file.path(prep, "crop/ghg/crop_residue_burning_ghg/n2o_emitted/"), full = TRUE)
+eq_factors <- read_csv(here("crop/ghg/data/co2_eq_factors.csv"))
+
+registerDoParallel(6)   
+foreach(file = n2o) %dopar% {
+  
+ #  file = n2o[38]
+ crop <- str_sub(file, -8, -5)
+ 
+ eq_fac <- as.numeric(eq_factors$gwp[eq_factors$source == "n2o"])
+  
+  n2o_eq <- read_csv(file.path(file), col_types = "ddc") %>% 
+    mutate(eq_fac = eq_fac,
+           n2o_emitted = as.numeric(n2o_emitted),
+           co2eq = n2o_emitted*eq_fac) %>% 
+    dplyr::select(x, y, co2eq)
+   
+     n2o_eq_rast <- rasterFromXYZ(n2o_eq, crs = food_crs)
+  
+   writeRaster(n2o_eq_rast, file.path(prep, paste("crop/ghg/crop_residue_burning_ghg/co2eq_n2o/", crop, ".tif", sep = "")),  format="GTiff", overwrite=TRUE)
+}
+
+list.files(file.path(prep, 
+                     "crop/ghg/crop_residue_burning_ghg/", 
+                     sep = ""))
+
+```
+
+```{r}
+ch4_list <- list.files(file.path(prep, "crop/ghg/crop_residue_burning_ghg/co2eq_ch4"), full = TRUE)
+  
+registerDoParallel(6)           
+foreach(ch4 = ch4_list) %dopar% {
+  
+# ch4 = ch4_list[38]
+ crop <- str_sub(ch4, -8, -5)
+ 
+ ch4 <- raster(ch4)
+ n2o <-  raster(paste(file.path(prep, "crop/ghg/crop_residue_burning_ghg/co2eq_n2o/"), crop, ".tif", sep = ""))
+ 
+  crop_stack <- raster::stack(ch4,n2o)
+  
+  crop_add <- sum(crop_stack, na.rm= TRUE)
+ 
+   writeRaster(crop_add, filename = paste(prep, "crop/ghg/crop_residue_burning_ghg/co2eq_emitted/",crop,".tif", sep = ""), format="GTiff", overwrite=TRUE)
+}
+```
+
+Lets look at it!
+```{r}
+plot(raster(file.path(prep, "crop/ghg/crop_residue_burning_ghg/co2eq_ch4/whea.tif")), main ="Wheat burning: co2-eq from ch4")
+
+plot(raster(file.path(prep, "crop/ghg/crop_residue_burning_ghg/co2eq_ch4/maiz.tif")), main ="Corn burning: co2-eq from ch4")
+
+plot(raster(file.path(prep, "crop/ghg/crop_residue_burning_ghg/co2eq_ch4/othr.tif")), main ="tnut burning: co2-eq from ch4")
+
+```
+
+# list files
+```{r}
+list.files(file.path(prep, 
+                     "crop/ghg/crop_residue_burning_ghg/ch4_emitted", 
+                     sep = ""),
+           pattern = "tnut|othr|spis")
+
+list.files(file.path(prep, 
+                     "crop/ghg/crop_residue_burning_ghg/co_emitted", 
+                     sep = ""),
+           pattern = "tnut|othr|spis")
+
+list.files(file.path(prep, 
+                     "crop/ghg/crop_residue_burning_ghg/co2eq_ch4", 
+                     sep = ""),
+           pattern = "tnut|othr|spis")
+
+list.files(file.path(prep, 
+                     "crop/ghg/crop_residue_burning_ghg/co2eq_emitted", 
+                     sep = ""),
+           pattern = "tnut|othr|spis")
+
+list.files(file.path(prep, 
+                     "crop/ghg/crop_residue_burning_ghg/co2eq_n2o", 
+                     sep = ""),
+           pattern = "tnut|othr|spis")
+
+list.files(file.path(prep, 
+                     "crop/ghg/crop_residue_burning_ghg/nox_emitted", 
+                     sep = ""),
+           pattern = "tnut|othr|spis")
+
+list.files(file.path(prep, 
+                     "crop/ghg/crop_residue_burning_ghg/total_carbon_emitted", 
+                     sep = ""),
+           pattern = "tnut|othr|spis")
+
+list.files(file.path(prep, 
+                     "crop/ghg/crop_residue_burning_ghg/n2o_emitted", 
+                     sep = ""),
+           pattern = "tnut|othr|spis")
+```
+

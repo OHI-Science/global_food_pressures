@@ -1,0 +1,245 @@
+iso3c,ID_0,Country,FracReMove,gapfilled
+AFG,1,Afghanistan,0.45,gapfilled with the GLEAM default value
+CYP,61,Cyprus,0.45,gapfilled with the GLEAM default value
+ALA,3,Åland,0.45,gapfilled with the GLEAM default value
+ALB,4,Albania,0.45,gapfilled with the GLEAM default value
+DZA,5,Algeria,0.45,gapfilled with the GLEAM default value
+ASM,6,American Samoa,0.45,gapfilled with the GLEAM default value
+AND,7,Andorra,0.45,gapfilled with the GLEAM default value
+AGO,8,Angola,0.45,gapfilled with the GLEAM default value
+AIA,9,Anguilla,0.45,gapfilled with the GLEAM default value
+ATG,11,Antigua and Barbuda,0.45,gapfilled with the GLEAM default value
+ARG,12,Argentina,0.45,gapfilled with the GLEAM default value
+ARM,13,Armenia,0.45,gapfilled with the GLEAM default value
+ABW,14,Aruba,0.45,gapfilled with the GLEAM default value
+AUS,15,Australia,0.45,gapfilled with the GLEAM default value
+AUT,16,Austria,0.34,NA
+AZE,17,Azerbaijan,0.45,gapfilled with the GLEAM default value
+BHS,18,Bahamas,0.45,gapfilled with the GLEAM default value
+BHR,19,Bahrain,0.45,gapfilled with the GLEAM default value
+BGD,20,Bangladesh,0.45,gapfilled with the GLEAM default value
+BRB,21,Barbados,0.45,gapfilled with the GLEAM default value
+BLR,22,Belarus,0.45,gapfilled with the GLEAM default value
+BEL,23,Belgium,0.5,NA
+BLZ,24,Belize,0.45,gapfilled with the GLEAM default value
+BEN,25,Benin,0.45,gapfilled with the GLEAM default value
+BMU,26,Bermuda,0.45,gapfilled with the GLEAM default value
+BTN,27,Bhutan,0.45,gapfilled with the GLEAM default value
+BOL,28,Bolivia,0.45,gapfilled with the GLEAM default value
+BES,29,"Bonaire, Sint Eustatius and Saba",0.45,gapfilled with the GLEAM default value
+BIH,30,Bosnia and Herzegovina,0.45,gapfilled with the GLEAM default value
+BWA,31,Botswana,0.45,gapfilled with the GLEAM default value
+BRA,33,Brazil,0.45,gapfilled with the GLEAM default value
+IOT,34,British Indian Ocean Territory,0.45,gapfilled with the GLEAM default value
+VGB,35,British Virgin Islands,0.45,gapfilled with the GLEAM default value
+BRN,36,Brunei,0.45,gapfilled with the GLEAM default value
+BGR,37,Bulgaria,0.45,gapfilled with the GLEAM default value
+BFA,38,Burkina Faso,0.45,gapfilled with the GLEAM default value
+BDI,39,Burundi,0.45,gapfilled with the GLEAM default value
+KHM,40,Cambodia,0.45,gapfilled with the GLEAM default value
+CMR,41,Cameroon,0.45,gapfilled with the GLEAM default value
+CAN,42,Canada,0.47,NA
+CPV,43,Cape Verde,0.45,gapfilled with the GLEAM default value
+CYM,45,Cayman Islands,0.45,gapfilled with the GLEAM default value
+CAF,46,Central African Republic,0.45,gapfilled with the GLEAM default value
+TCD,47,Chad,0.45,gapfilled with the GLEAM default value
+CHL,48,Chile,0.45,gapfilled with the GLEAM default value
+CHN,49,China,0.45,gapfilled with the GLEAM default value
+CXR,50,Christmas Island,0.45,gapfilled with the GLEAM default value
+CCK,52,Cocos Islands,0.45,gapfilled with the GLEAM default value
+COL,53,Colombia,0.45,gapfilled with the GLEAM default value
+COM,54,Comoros,0.45,gapfilled with the GLEAM default value
+COK,55,Cook Islands,0.45,gapfilled with the GLEAM default value
+CRI,56,Costa Rica,0.45,gapfilled with the GLEAM default value
+CIV,57,Côte d'Ivoire,0.45,gapfilled with the GLEAM default value
+HRV,58,Croatia,0.45,gapfilled with the GLEAM default value
+CUB,59,Cuba,0.45,gapfilled with the GLEAM default value
+CUW,60,Curaçao,0.45,gapfilled with the GLEAM default value
+CZE,62,Czech Republic,0.45,gapfilled with the GLEAM default value
+COD,301,Democratic Republic of the Congo,0.45,gapfilled with the GLEAM default value
+DNK,64,Denmark,0.45,gapfilled with the GLEAM default value
+DJI,65,Djibouti,0.45,gapfilled with the GLEAM default value
+DOM,67,Dominican Republic,0.45,gapfilled with the GLEAM default value
+DMA,66,Dominica,0.45,gapfilled with the GLEAM default value
+ECU,68,Ecuador,0.45,gapfilled with the GLEAM default value
+EGY,69,Egypt,0.45,gapfilled with the GLEAM default value
+SLV,70,El Salvador,0.45,gapfilled with the GLEAM default value
+GNQ,71,Equatorial Guinea,0.45,gapfilled with the GLEAM default value
+ERI,72,Eritrea,0.45,gapfilled with the GLEAM default value
+EST,73,Estonia,0.45,gapfilled with the GLEAM default value
+ETH,74,Ethiopia,0.45,gapfilled with the GLEAM default value
+FLK,75,Falkland Islands,0.45,gapfilled with the GLEAM default value
+FRO,76,Faroe Islands,0.45,gapfilled with the GLEAM default value
+FJI,77,Fiji,0.45,gapfilled with the GLEAM default value
+FIN,78,Finland,0.45,gapfilled with the GLEAM default value
+FRA,79,France,0.45,gapfilled with the GLEAM default value
+GUF,80,French Guiana,0.45,gapfilled with the GLEAM default value
+PYF,81,French Polynesia,0.45,gapfilled with the GLEAM default value
+GAB,83,Gabon,0.45,gapfilled with the GLEAM default value
+GMB,84,Gambia,0.45,gapfilled with the GLEAM default value
+GEO,85,Georgia,0.45,gapfilled with the GLEAM default value
+DEU,86,Germany,0.63,NA
+GHA,87,Ghana,0.45,gapfilled with the GLEAM default value
+GIB,88,Gibraltar,0.45,gapfilled with the GLEAM default value
+GRC,89,Greece,0.52,NA
+GRL,90,Greenland,0.45,gapfilled with the GLEAM default value
+GRD,91,Grenada,0.45,gapfilled with the GLEAM default value
+GLP,92,Guadeloupe,0.45,gapfilled with the GLEAM default value
+GUM,93,Guam,0.45,gapfilled with the GLEAM default value
+GTM,94,Guatemala,0.45,gapfilled with the GLEAM default value
+GGY,95,Guernsey,0.45,gapfilled with the GLEAM default value
+GNB,97,Guinea-Bissau,0.45,gapfilled with the GLEAM default value
+GIN,96,Guinea,0.45,gapfilled with the GLEAM default value
+GUY,98,Guyana,0.45,gapfilled with the GLEAM default value
+HTI,99,Haiti,0.45,gapfilled with the GLEAM default value
+HND,101,Honduras,0.45,gapfilled with the GLEAM default value
+HKG,102,Hong Kong,0.45,gapfilled with the GLEAM default value
+HUN,103,Hungary,0.45,gapfilled with the GLEAM default value
+ISL,104,Iceland,0.45,gapfilled with the GLEAM default value
+IND,105,India,0.45,gapfilled with the GLEAM default value
+IDN,106,Indonesia,0.45,gapfilled with the GLEAM default value
+IRN,107,Iran,0.45,gapfilled with the GLEAM default value
+IRQ,108,Iraq,0.45,gapfilled with the GLEAM default value
+IRL,109,Ireland,0.45,gapfilled with the GLEAM default value
+IMN,110,Isle of Man,0.45,gapfilled with the GLEAM default value
+ISR,111,Israel,0.45,gapfilled with the GLEAM default value
+ITA,112,Italy,0.45,gapfilled with the GLEAM default value
+JAM,113,Jamaica,0.45,gapfilled with the GLEAM default value
+JPN,114,Japan,0.45,gapfilled with the GLEAM default value
+JEY,115,Jersey,0.45,gapfilled with the GLEAM default value
+JOR,116,Jordan,0.45,gapfilled with the GLEAM default value
+KAZ,117,Kazakhstan,0.45,gapfilled with the GLEAM default value
+KEN,118,Kenya,0.45,gapfilled with the GLEAM default value
+KIR,119,Kiribati,0.45,gapfilled with the GLEAM default value
+XKO,120,Kosovo,0.45,gapfilled with the GLEAM default value
+KWT,121,Kuwait,0.45,gapfilled with the GLEAM default value
+KGZ,122,Kyrgyzstan,0.45,gapfilled with the GLEAM default value
+LAO,123,Laos,0.45,gapfilled with the GLEAM default value
+LVA,124,Latvia,0.45,gapfilled with the GLEAM default value
+LBN,125,Lebanon,0.45,gapfilled with the GLEAM default value
+LSO,126,Lesotho,0.45,gapfilled with the GLEAM default value
+LBR,127,Liberia,0.45,gapfilled with the GLEAM default value
+LBY,128,Libya,0.45,gapfilled with the GLEAM default value
+LIE,129,Liechtenstein,0.73,NA
+LTU,130,Lithuania,0.45,gapfilled with the GLEAM default value
+LUX,131,Luxembourg,0.45,gapfilled with the GLEAM default value
+MAC,132,Macao,0.45,gapfilled with the GLEAM default value
+MKD,133,Macedonia,0.45,gapfilled with the GLEAM default value
+MDG,134,Madagascar,0.45,gapfilled with the GLEAM default value
+MWI,135,Malawi,0.45,gapfilled with the GLEAM default value
+MYS,136,Malaysia,0.45,gapfilled with the GLEAM default value
+MDV,137,Maldives,0.45,gapfilled with the GLEAM default value
+MLI,138,Mali,0.45,gapfilled with the GLEAM default value
+MLT,139,Malta,0.45,gapfilled with the GLEAM default value
+MHL,140,Marshall Islands,0.45,gapfilled with the GLEAM default value
+MTQ,141,Martinique,0.45,gapfilled with the GLEAM default value
+MRT,142,Mauritania,0.45,gapfilled with the GLEAM default value
+MUS,143,Mauritius,0.45,gapfilled with the GLEAM default value
+MYT,144,Mayotte,0.45,gapfilled with the GLEAM default value
+MEX,145,Mexico,0.45,gapfilled with the GLEAM default value
+FSM,146,Micronesia,0.45,gapfilled with the GLEAM default value
+MDA,147,Moldova,0.45,gapfilled with the GLEAM default value
+MCO,148,Monaco,0.45,gapfilled with the GLEAM default value
+MNG,149,Mongolia,0.45,gapfilled with the GLEAM default value
+MNE,150,Montenegro,0.45,gapfilled with the GLEAM default value
+MSR,151,Montserrat,0.45,gapfilled with the GLEAM default value
+MAR,152,Morocco,0.45,gapfilled with the GLEAM default value
+MOZ,153,Mozambique,0.45,gapfilled with the GLEAM default value
+MMR,154,Myanmar,0.45,gapfilled with the GLEAM default value
+NAM,155,Namibia,0.45,gapfilled with the GLEAM default value
+NRU,156,Nauru,0.45,gapfilled with the GLEAM default value
+NPL,157,Nepal,0.45,gapfilled with the GLEAM default value
+NLD,158,Netherlands,0.45,gapfilled with the GLEAM default value
+NCL,159,New Caledonia,0.45,gapfilled with the GLEAM default value
+NZL,160,New Zealand,0.45,gapfilled with the GLEAM default value
+NIC,161,Nicaragua,0.45,gapfilled with the GLEAM default value
+NER,162,Niger,0.45,gapfilled with the GLEAM default value
+NGA,163,Nigeria,0.45,gapfilled with the GLEAM default value
+NIU,164,Niue,0.45,gapfilled with the GLEAM default value
+NFK,165,Norfolk Island,0.45,gapfilled with the GLEAM default value
+PRK,166,North Korea,0.45,gapfilled with the GLEAM default value
+MNP,168,Northern Mariana Islands,0.45,gapfilled with the GLEAM default value
+NOR,169,Norway,0.65,NA
+OMN,170,Oman,0.45,gapfilled with the GLEAM default value
+PAK,171,Pakistan,0.45,gapfilled with the GLEAM default value
+PLW,172,Palau,0.45,gapfilled with the GLEAM default value
+PSE,173,Palestina,0.45,gapfilled with the GLEAM default value
+PAN,174,Panama,0.45,gapfilled with the GLEAM default value
+PNG,175,Papua New Guinea,0.45,gapfilled with the GLEAM default value
+PRY,177,Paraguay,0.45,gapfilled with the GLEAM default value
+PER,178,Peru,0.45,gapfilled with the GLEAM default value
+PHL,179,Philippines,0.45,gapfilled with the GLEAM default value
+PCN,180,Pitcairn Islands,0.45,gapfilled with the GLEAM default value
+POL,181,Poland,0.53,NA
+PRT,182,Portugal,0.71,NA
+XMI,300,Madeira Island,0.45,gapfilled with the GLEAM default value
+PRI,183,Puerto Rico,0.45,gapfilled with the GLEAM default value
+QAT,184,Qatar,0.45,gapfilled with the GLEAM default value
+COG,185,Republic of Congo,0.45,gapfilled with the GLEAM default value
+REU,186,Reunion,0.45,gapfilled with the GLEAM default value
+ROU,187,Romania,0.45,gapfilled with the GLEAM default value
+RUS,188,Russia,0.45,gapfilled with the GLEAM default value
+RWA,189,Rwanda,0.45,gapfilled with the GLEAM default value
+BLM,190,Saint-Barthélemy,0.45,gapfilled with the GLEAM default value
+MAF,191,Saint-Martin,0.45,gapfilled with the GLEAM default value
+SHN,192,Saint Helena,0.45,gapfilled with the GLEAM default value
+KNA,193,Saint Kitts and Nevis,0.45,gapfilled with the GLEAM default value
+LCA,194,Saint Lucia,0.45,gapfilled with the GLEAM default value
+SPM,195,Saint Pierre and Miquelon,0.45,gapfilled with the GLEAM default value
+VCT,196,Saint Vincent and the Grenadines,0.45,gapfilled with the GLEAM default value
+WSM,197,Samoa,0.45,gapfilled with the GLEAM default value
+SMR,198,San Marino,0.45,gapfilled with the GLEAM default value
+STP,199,São Tomé and Príncipe,0.45,gapfilled with the GLEAM default value
+SAU,200,Saudi Arabia,0.45,gapfilled with the GLEAM default value
+SEN,201,Senegal,0.45,gapfilled with the GLEAM default value
+SRB,202,Serbia,0.45,gapfilled with the GLEAM default value
+SYC,203,Seychelles,0.45,gapfilled with the GLEAM default value
+SLE,204,Sierra Leone,0.45,gapfilled with the GLEAM default value
+SGP,205,Singapore,0.45,gapfilled with the GLEAM default value
+SXM,206,Sint Maarten,0.45,gapfilled with the GLEAM default value
+SVK,207,Slovakia,0.45,gapfilled with the GLEAM default value
+SVN,208,Slovenia,0.47,NA
+SLB,209,Solomon Islands,0.45,gapfilled with the GLEAM default value
+SOM,210,Somalia,0.45,gapfilled with the GLEAM default value
+ZAF,211,South Africa,0.45,gapfilled with the GLEAM default value
+KOR,213,South Korea,0.45,gapfilled with the GLEAM default value
+SSD,214,South Sudan,0.45,gapfilled with the GLEAM default value
+ESP,215,Spain,0.45,gapfilled with the GLEAM default value
+LKA,217,Sri Lanka,0.45,gapfilled with the GLEAM default value
+SDN,218,Sudan,0.45,gapfilled with the GLEAM default value
+SUR,219,Suriname,0.45,gapfilled with the GLEAM default value
+SJM,220,Svalbard and Jan Mayen,0.45,gapfilled with the GLEAM default value
+SWZ,221,Swaziland,0.45,gapfilled with the GLEAM default value
+SWE,222,Sweden,0.64,NA
+CHE,223,Switzerland,0.72,NA
+SYR,224,Syria,0.45,gapfilled with the GLEAM default value
+TWN,225,Taiwan,0.45,gapfilled with the GLEAM default value
+TJK,226,Tajikistan,0.45,gapfilled with the GLEAM default value
+TZA,227,Tanzania,0.45,gapfilled with the GLEAM default value
+THA,228,Thailand,0.45,gapfilled with the GLEAM default value
+TLS,229,Timor-Leste,0.45,gapfilled with the GLEAM default value
+TGO,230,Togo,0.45,gapfilled with the GLEAM default value
+TKL,231,Tokelau,0.45,gapfilled with the GLEAM default value
+TON,232,Tonga,0.45,gapfilled with the GLEAM default value
+TTO,233,Trinidad and Tobago,0.45,gapfilled with the GLEAM default value
+TUN,234,Tunisia,0.45,gapfilled with the GLEAM default value
+TUR,235,Turkey,0.45,gapfilled with the GLEAM default value
+TKM,236,Turkmenistan,0.45,gapfilled with the GLEAM default value
+TCA,237,Turks and Caicos Islands,0.45,gapfilled with the GLEAM default value
+TUV,238,Tuvalu,0.45,gapfilled with the GLEAM default value
+UGA,239,Uganda,0.45,gapfilled with the GLEAM default value
+UKR,240,Ukraine,0.45,gapfilled with the GLEAM default value
+ARE,241,United Arab Emirates,0.45,gapfilled with the GLEAM default value
+GBR,242,United Kingdom,0.52,NA
+USA,243,United States,0.45,gapfilled with the GLEAM default value
+URY,245,Uruguay,0.45,gapfilled with the GLEAM default value
+UZB,246,Uzbekistan,0.45,gapfilled with the GLEAM default value
+VUT,247,Vanuatu,0.45,gapfilled with the GLEAM default value
+VEN,249,Venezuela,0.45,gapfilled with the GLEAM default value
+VNM,250,Vietnam,0.45,gapfilled with the GLEAM default value
+VIR,251,"Virgin Islands, U.S.",0.45,gapfilled with the GLEAM default value
+WLF,252,Wallis and Futuna,0.45,gapfilled with the GLEAM default value
+ESH,253,Western Sahara,0.45,gapfilled with the GLEAM default value
+YEM,254,Yemen,0.45,gapfilled with the GLEAM default value
+ZMB,255,Zambia,0.45,gapfilled with the GLEAM default value
+ZWE,256,Zimbabwe,0.45,gapfilled with the GLEAM default value

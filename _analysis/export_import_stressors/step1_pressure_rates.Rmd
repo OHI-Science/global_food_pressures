@@ -1,0 +1,100 @@
+---
+title: "Calculate preessures per production"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+* for each SPAM crop and pressure divide by the raster describing total tonnes of production in 2017 = pressure/tonne_crop
+* zonal average for each region/crop/pressure_rate
+
+```{r}
+
+library(rgdal)
+library(sp)
+library(raster)
+library(tidyverse)
+library(here)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+rgns_ezz_land <- raster(file.path(prep, "spatial/land_eez_rgns.tif"))
+plot(rgns_ezz_land)
+
+
+```
+
+
+## get sum of each crop and pressure in each country
+```{r}
+
+# list all crop pressure rasters
+crop_pressures <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers", pattern="crop_produce", full=TRUE)
+crop_pressures <- grep("_x_", crop_pressures, invert=TRUE, value=TRUE)  # get rid of feed proportions
+
+crop_pressures_stack <- stack(crop_pressures)
+
+crop_pressure_country_sum <- zonal(crop_pressures_stack, rgns_ezz_land, fun="sum", progress="text", na.rm=TRUE) 
+  
+crop_pressure_country_sum_df <- crop_pressure_country_sum  %>% 
+    data.frame() %>%
+    rename(ID_0 = zone) %>%
+    left_join(food_rgns, by="ID_0") %>%
+  select(-ID_0) %>%
+  pivot_longer(cols=starts_with("land"), names_to = c("pressure")) %>%
+  mutate(pressure = gsub("land_", "", pressure)) %>%
+  mutate(pressure = gsub("_crop_produce", "", pressure)) %>%
+  separate(pressure, c("SPAM_super", "pressure"), sep="_") %>%
+  rename("pressure_value" = "value")
+
+
+```
+
+Rescale the data using the global totals (only repeating this to update cumulative outputs from this script):
+
+```{r}
+
+global_total_pressures <- read_csv(here("_analysis/rescale_values.csv"))
+
+cumulative_pressure_df <- crop_pressure_country_sum_df %>%
+  left_join(global_total_pressures, by="pressure") %>%
+  mutate(rescaled_pressure = pressure_value/global_total) %>%
+  group_by(iso3c, Country, SPAM_super) %>%
+  summarize(cumulative_pressure = sum(rescaled_pressure)) %>%
+  ungroup()
+
+```
+
+## Determine rate
+
+for each crop and country:
+cumulative pressures / tonnes production
+```{r}
+
+# file created here: feed/1.1_MAPSPAM_production.Rmd
+crop_production <- read_csv(here("feed/data/MAPSPAMcrop_production.csv")) %>%
+  rename("iso3c"= iso3c_producing) %>%
+  group_by(iso3c, SPAM_super) %>%
+  summarize(tonnes_producing_crop  = sum(tonnes_producing_crop)) %>%
+  ungroup()
+
+
+stressor_rates <- left_join(cumulative_pressure_df, crop_production, by=c("iso3c", "SPAM_super")) %>%
+  mutate(tonnes_producing_crop = ifelse(is.na(tonnes_producing_crop), 0, tonnes_producing_crop)) %>% # Gibralter and Saint-Martin have NA's for production
+mutate(cumulative_pressure_rate = ifelse(cumulative_pressure == 0 & tonnes_producing_crop ==0, 0, cumulative_pressure*1000000/tonnes_producing_crop))
+
+summary(stressor_rates)
+
+#some weird ones, but I think these are when there is a difference between FAO reporting and what is in the SPAM maps. This should be fine.
+filter(stressor_rates, cumulative_pressure_rate=="Inf") %>% data.frame()
+
+stressor_rates <- stressor_rates %>%
+  mutate(cumulative_pressure_rate = ifelse(cumulative_pressure_rate == "Inf", 0, cumulative_pressure_rate))
+
+summary(stressor_rates)
+write_csv(stressor_rates, here("_analysis/export_import_stressors/data/cumulative_stressor_rates.csv"))
+
+```
+

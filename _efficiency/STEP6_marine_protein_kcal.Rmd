@@ -1,0 +1,48 @@
+---
+title: "Calculate protien and calories for marine fisheries catch"
+author: "Juliette"
+date: "3/5/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+source(here("_workflow/common.R"))
+
+'%!in%' <- function(x,y)!('%in%'(x,y))
+
+edible_tonnes <- read_csv(here("_efficiency/data/fisheries_edible_tonnes.csv"))
+
+## units are kcal/100 g edible weight and g/100 g 
+## 1,000,000 grams in a ton
+nutrional_info <- read_csv(here("_efficiency/data/fisheries_nutrional_info.csv")) %>% 
+  mutate(kcal_per_tonne = calories_mean*10000,
+         g_protein_per_tonne = protein_mean*10000) %>% 
+    select(TaxonName, kcal_per_tonne, g_protein_per_tonne) 
+
+
+
+```
+
+Calculate protein and tonnes
+
+```{r}
+
+calc_protein_tonnes <- left_join(edible_tonnes, nutrional_info, by = "TaxonName") %>% 
+  mutate(million_kcal = (edible_tonnes*kcal_per_tonne)/1000000,
+         tonnes_protein = (edible_tonnes*g_protein_per_tonne)/1000000) %>% 
+  group_by(iso3c, species_class_final) %>% 
+  dplyr::summarise(million_kcal = sum(million_kcal, na.rm = TRUE),
+                   tonnes_protein = sum(tonnes_protein, na.rm = TRUE),
+                   tonnes_product = sum(rgn_catch, na.rm = TRUE)) %>% 
+  ungroup()
+
+write_csv(calc_protein_tonnes, here("_efficiency/data/marine_fisheries_protein_calories.csv"))
+
+test <- read.csv(here("_efficiency/data/marine_fisheries_protein_calories.csv"))
+
+sum(test$million_kcal)
+sum(calc_protein_tonnes$million_kcal)
+```

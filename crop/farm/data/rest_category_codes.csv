@@ -1,0 +1,39 @@
+SPAM_short_name	SPAM_full_name	item_code	SPAM_super	item	description	category	product_description_FAOSTAT
+rest	rest of crops	216	tnut	Brazil nuts, with shell	Brazil, Para or cream nut (Bertholletia excelsa).	tree_nut	Brazil nuts
+rest	rest of crops	217	tnut	Cashew nuts, with shell	Anacardium occidentale. Produced mainly in East Africa, India and Brazil.	tree_nut	Cashew nuts
+rest	rest of crops	220	tnut	Chestnut	Castanea spp.: C. vesca; C. vulgaris; C. sativa. Produced mainly in Europe and Asia.	tree_nut	Chestnuts
+rest	rest of crops	221	tnut	Almonds, with shell	Prunus amygdalus; P. communis; Amygdalus communis. Produced mainly in Mediterranean countries, the United States and Asia.	tree_nut	Almonds
+rest	rest of crops	222	tnut	Walnuts, with shell	Jugland spp.: J. regia. Produced in temperate zones of the Northern Hemisphere, particularly in the United States.	tree_nut	Walnuts
+rest	rest of crops	223	tnut	Pistachios	Pistacia vera. Produced mainly in the Near East and the United States.	tree_nut	Pistachios
+rest	rest of crops	224	tnut	Kola nuts	Kola, cola, Sudan cola nut (Cola nitida; C. vera; C. acuminata). Produced mainly in Africa. Kola nuts, containing 2.4 to 2.6% caffeine, are commonly chewed by the local population. Much used in Europe and America in the production of beverages.	tree_nut	Kolanuts
+rest	rest of crops	225	tnut	Hazelnuts, with shell	Corylus avellana. Produced mainly in Mediterranean countries and the United States.	tree_nut	Hazelnuts (Filberts)
+rest	rest of crops	226	tnut	Areca nuts	Areca, betel nut (Areca catechu). Produced mainly in the Far East. Areca nuts are used mainly as masticatory. These nuts contain alkaloids (arecoline and arecaidine).	tree_nut	Areca nuts
+rest	rest of crops	229	tnut	NA	NA	tree_nut	Brazil Nuts, Shelled
+rest	rest of crops	230	tnut	NA	NA	tree_nut	Cashew Nuts, Shelled
+rest	rest of crops	231	tnut	NA	NA	tree_nut	Almonds, Shelled
+rest	rest of crops	232	tnut	NA	NA	tree_nut	Walnuts, Shelled
+rest	rest of crops	233	tnut	NA	NA	tree_nut	Hazelnuts, Shelled
+rest	rest of crops	234	tnut	Nuts nes	Including inter alia: pecan nut (Carya illinoensis); butter or swarri nut (Caryocar nuciferum); pili nut, Java almond, Chinese olives (Canarium spp.); paradise or sapucaia nut (Lecythis zabucajo); Queensland, macadamia nut (Macadamia ternifolia); pignolia nut (Pinus pinea). Other nuts that are not identified separately because of their minor relevance at the international level. Because of their limited local importance, some countries report nuts under this heading that are classified individually by FAO.	tree_nut	Nuts nes
+rest	rest of crops	677	othr	Hops	Humulus lupulus. Hop cones, fresh or dried, whether or not ground, powdered or in the form of pellets. Includes lupuline, a yellow resinous powder that covers the hop cones. Mainly used in the brewing industry to give flavour to beer.	other	Hops
+rest	rest of crops	687	spis	Pepper (piper spp.)	Black, white pepper (Piper nigrum); long pepper (P. longum). Perennial climbing vines. Includes whole, crushed or ground berries. Black pepper is produced from partially ripe berries, while white pepper is from fully ripe berries which have had the outer hull removed.	spice	Pepper
+rest	rest of crops	689	spis	Chillies and peppers, dry	Red and cayenne pepper, paprika, chillies (Capsicum frutescens; C. annuum); allspice, Jamaica pepper (Pimenta officinalis). Uncrushed or unground fresh pimentos are considered to be vegetables.	spice	Pimento
+rest	rest of crops	692	spis	Vanilla	Vanilla planifolia; V. pompona. The fruit (or bean) of a climbing plant of the orchid family. Includes whole, crushed or ground.	spice	Vanilla
+rest	rest of crops	693	spis	Cinnamon (cannella)	Ceylon cinnamon (Cinnamomum zeylanicum); Chinese, common cinnamon, cassia (C. cassia). The inner bark of young branches of certain trees of the Laurus family. Includes cinnamon- tree flowers, cinnamon fruit and cinnamon waste (chips), whether whole, crushed or ground.	spice	Cinnamon (canella)
+rest	rest of crops	698	spis	Cloves	Eugenia caryophyllata; Caryophyllus aromaticus. The whole fruit of the clove tree, including the flowers picked before maturity and dried in the sun, and the stems of the clove flowers.	spice	Cloves
+rest	rest of crops	702	spis	Nutmeg, mace and cardamoms	Nutmeg, mace (Myristica fragrans); cluster cardamon (Elettaria cardamomum); other cardamons (Aframomum angustifolium; A. hambury; Amomun aromaticum; A. cardamomum); Malaguetta pepper, grains of paradise (Aframomum melegueta). Nutmeg is the inner brown kernel of the fruit of the nutmeg tree. Mace is the net-like membrane between the outer shell and the kernel. Cardamon seeds are enclosed in the capsule produced by perennial herbs of the Zingiberaceae family.	spice	Nutmeg, mace, cardamoms
+rest	rest of crops	711	spis	Anise, badian, fennel, coriander	Include: anise (Pimpinella anisum); badian or star anise (Illicium verum); caraway (Carum carvi); coriander (Coriandrum sativum); cumin (Cuminum cyminum); fennel (Foeniculum vulgare); juniper berries (Juniperus communis). Seeds and berries from the various plants listed. They are normally used as spices, but also have industrial (e.g. in distilleries) and medicinal applications.	spice	Anise, badian, fennel
+rest	rest of crops	720	spis	Ginger	Zingiber officinale. Rhizome of a perennial herb. It also is used for making beverages. Includes fresh, provisionally preserved or dried, whereas ginger preserved in sugar or syrup is excluded.	spice	Ginger
+rest	rest of crops	723	spis	Spices nes	Including inter alia: bay leaves (Laurus nobilis); dill seed (Anethum graveolens); fenugreek seed (Trigonella foenum-graecum); saffron (Crocus sativus); thyme (Thymus vulgaris); turmeric (Curcuma longa). Other spices that are not identified separately because of their minor relevance at the international level. Because of their limited local importance, some countries report spices under this heading that are classified individually by FAO. This heading also includes curry powder and other mixtures of different spices.	spice	Spices nes
+rest	rest of crops	737	othr	NA	NA	other	Oil of citronella
+rest	rest of crops	748	spis	Peppermint	Mentha spp.: M. piperita. Leaves and flowers are used in the perfumery, food and other industries.	spice	Peppermint, Spearmint
+rest	rest of crops	753	othr	NA	NA	other	Essential oils nes
+rest	rest of crops	754	othr	Pyrethrum, dried	Chrysanthemum cinerariifolium. Includes leaves, stems and flowers. For insecticides, fungicides and similar products.	other	Pyrethrum, dried flowers
+rest	rest of crops	755	othr	NA	NA	other	Pyrethrum Extract
+rest	rest of crops	756	othr	NA	NA	other	Pyrethrum Marc
+rest	rest of crops	771	othr	NA	NA	flax	Flax, raw or retted
+rest	rest of crops	828	othr	NA	NA	other	Cigarettes
+rest	rest of crops	829	othr	NA	NA	other	Cigars and Cheroots
+rest	rest of crops	831	othr	NA	NA	other	Tobacco Products nes
+rest	rest of crops	836	othr	Rubber, natural	Hevea brasiliensis Latex. The liquid secreted by the rubber tree. Includes stabilized or concentrated latex and prevulcanized rubber latex. In trade figures, liquid weight is converted to dry weight at 60%.	other	Natural rubber
+rest	rest of crops	837	othr	NA	NA	other	Rubber, Natural (Dry)
+rest	rest of crops	839	othr	Gums, natural	Including inter alia: balata (Manilkara bidentata); ceara (Manihot glaziovii); chicle gum (Achras zapota); guayule (Parthenium argentatum); gutta-percha (Palachium gutta); jelutong (Dieva costulana). Extracted from the latex of trees of various species. Although similar to rubber in many ways, natural gums are usually less elastic.	other	Natural gums

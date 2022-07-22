@@ -1,0 +1,62 @@
+---
+title: "Creating a file for salmon farming water usage"
+author: "Gage Clawson"
+date: "12/21/2020"
+output: html_document
+---
+
+This markdown creates a water useage impact layer for salmon aquaculture. This impact is zero, so we will use the salmon occupany layer to create the water impact one. The occupancy layer is created from the spatial production data. We can assume that the areas with 0 mean that there is no farm/salmon so no water impact (if there was one)
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readr)
+library(raster)
+library(tidyverse)
+
+path_prep <- "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/salmon"
+food_crs <- "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"
+path_final <- "/home/shares/food-systems/Food_footprint/all_food_systems/datalayers"
+
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+
+
+```
+
+
+```{r}
+occupancy <- read_csv(file.path(path_prep, "salmon_disturbance_km2.csv"))
+
+water <- occupancy %>% 
+  mutate(salmon_water_m3 = ifelse(salmon_disturbance_km2 == 0, NA,
+                                  ifelse(salmon_disturbance_km2 > 0, 0, salmon_disturbance_km2))) %>% 
+  dplyr::select(x,y,salmon_water_m3)
+           
+write_csv(water, file.path(path_prep, "salmon_water.csv"))
+
+## save to datalayers folder with the correct naming conventions: 
+final_layer_water <- read_csv(file.path(path_prep, "salmon_water.csv"))
+
+final_rast <- rasterFromXYZ(final_layer_water, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+cellStats(final_rast, "sum") # 0
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 0
+final_rast
+
+writeRaster(final_rast, file.path(path_final, "marine_salmon_aquaculture_meat_water.tif"), overwrite = T)
+```
+
+
+
+
+

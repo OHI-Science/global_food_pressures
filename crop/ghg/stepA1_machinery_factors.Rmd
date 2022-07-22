@@ -1,0 +1,223 @@
+---
+title: "Caculating GHG emissions values from farming machinery for different production systems and types"
+author: "Juliette"
+date: "3/23/2020"
+output: html_document
+---
+
+In this markdown we create a df of carbon emission factors from on farm maintaince for each of our crops.
+
+All values taken from https://www.sciencedirect.com/science/article/pii/S0160412004000832#TBL4
+The emission factors are in kg CE/ha
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Read in libraries and paths
+```{r}
+#Load libraries
+library(readr)
+library(dplyr)
+library(tidyverse)
+
+#Files we will need:
+crops <- vroom::vroom(here("crop/farm/data/crop_codes_updated.csv")) %>% 
+  left_join(., vroom::vroom("crop/ghg/data/mapspam_crops.csv")[c("SPAM_short_name","GROUP")])
+act_em <- read_csv(here("crop/ghg/data/farm_mach_activites_em.csv"))
+```
+
+Create a df with all the ghg emission averages for each category of 
+
+Set up the df to fill in with the em values
+```{r}
+setup <- crops %>% 
+  dplyr::select(split_rest_names) %>% 
+  slice(rep(1:n(), each = 4)) %>% 
+  group_by(split_rest_names) %>% 
+  mutate(id = row_number()) %>% 
+  ungroup() %>% 
+  mutate(input = case_when(id == 1 ~ "high irrigated",
+                           id == 2 ~ "high rain",
+                           id == 3 ~ "low",
+                           id == 4 ~ "subsistence")) %>% 
+  left_join(crops, by = c("split_rest_names")) %>% 
+   dplyr::select(split_rest_names, input, GROUP) 
+```
+
+Filling in the GHG values
+
+We will start with the first three since those are the most straight forward and not crop specific (except one):
+
+Fertilizer anad Herbicide/pesticide
+```{r}
+### Fertilizer
+fertilizer_ir <- (as.numeric(act_em$value[act_em$action == "fertilizer spraying"]))*(as.numeric(act_em$irrigated[act_em$action == "fertilizer spraying"])) + (as.numeric(act_em$value[act_em$action == "fertilizer spreading"]))*(as.numeric(act_em$irrigated[act_em$action == "fertilizer spreading"]))
+
+fertilizer_rain_hi <- (as.numeric(act_em$value[act_em$action == "fertilizer spraying"]))*(as.numeric(act_em$rain[act_em$action == "fertilizer spraying"])) + (as.numeric(act_em$value[act_em$action == "fertilizer spreading"]))*(as.numeric(act_em$rain[act_em$action == "fertilizer spreading"]))  
+
+### Herbicide/pesticide
+herbicide_ir <- as.numeric(act_em$value[act_em$action == "spray herbicide"])*(as.numeric(act_em$irrigated[act_em$action == "spray herbicide"]))
+
+herbicide_rain <- as.numeric(act_em$value[act_em$action == "spray herbicide"])*(as.numeric(act_em$rain[act_em$action == "spray herbicide"]))
+
+### Add it to the df
+setup_fert_herb <- setup %>% 
+  mutate(fertilizer_em = case_when(input == "high irrigated" ~ fertilizer_ir,
+                                  input == "high rain" ~ fertilizer_rain_hi,
+                                  input == "low" | input == "subsistence" ~ 0)) %>% 
+  mutate(herbicide_em = case_when(input == "high irrigated" ~ herbicide_ir,
+                                  input == "high rain" ~ herbicide_rain,
+                                  input == "low" | input == "subsistence" ~ 0))
+```  
+  
+Tilling/seed prep
+Pathways are the same for high irrigation and rain, but I will separate out in case we change that in the future. So there is a little code repetition here
+```{r}
+## Tilling
+till_ir <- (as.numeric(act_em$value[act_em$action == "moldboard plowing"]))*(as.numeric(act_em$irrigated[act_em$action == "moldboard plowing"])) + (as.numeric(act_em$value[act_em$action == "average of reduced tilling"]))*(as.numeric(act_em$irrigated[act_em$action == "average of reduced tilling"]))
+
+till_rain <- (as.numeric(act_em$value[act_em$action == "moldboard plowing"]))*(as.numeric(act_em$rain[act_em$action == "moldboard plowing"])) + (as.numeric(act_em$value[act_em$action == "average of reduced tilling"]))*(as.numeric(act_em$rain[act_em$action == "average of reduced tilling"]))
+
+## Seeding
+seed_ir <- (as.numeric(act_em$value[act_em$action == "plant/sow/drill"]))*(as.numeric(act_em$irrigated[act_em$action == "plant/sow/drill"])) + (as.numeric(act_em$value[act_em$action == "no-till planting"]))*(as.numeric(act_em$irrigated[act_em$action == "no-till planting"]))
+
+seed_rain <- (as.numeric(act_em$value[act_em$action == "plant/sow/drill"]))*(as.numeric(act_em$rain[act_em$action == "plant/sow/drill"])) + (as.numeric(act_em$value[act_em$action == "no-till planting"]))*(as.numeric(act_em$rain[act_em$action == "no-till planting"]))
+
+## potatoes have their own seeding pathway
+seed_ir_pota <- (as.numeric(act_em$value[act_em$action == "potato planter"]))*(as.numeric(act_em$irrigated[act_em$action == "potato planter"]))
+
+seed_rain_pota <- (as.numeric(act_em$value[act_em$action == "potato planter"]))*(as.numeric(act_em$rain[act_em$action == "potato planter"]))
+
+### combine
+## irrigated high
+till_seed_ir <- till_ir + seed_ir
+## rain high
+till_seed_rain <- till_rain + seed_rain
+
+## irrigated high potatoes
+till_seed_ir_pota <- till_ir + seed_ir_pota
+## rain high potaotes
+till_seed_rain_pota <- till_rain + seed_rain_pota
+
+### Add it to the df
+setup_till_seed <- setup_fert_herb %>% 
+  mutate(till_seed_em = case_when(input == "high irrigated" ~ till_seed_ir,
+                                  input == "high rain" ~ till_seed_rain,
+                                  input == "low" | input == "subsistence" ~ 0)) %>% 
+  mutate(till_seed_em = ifelse(input == "high irrigated" & split_rest_names == "pota", till_seed_ir_pota,
+                               ifelse(input == "high rain" & split_rest_names == "pota", till_seed_rain_pota,
+                                      till_seed_em)))
+```
+
+The harvesting portion of this is the more complicated one. We identified 7 different combinations of machinery usage, some are crop specific and some not
+
+1) windrower + rake + baler 
+2) forage harvesting + baler
+3) forage harvesting 
+4) windrower + rake
+5) corn silage
+6) corn harvesting combine + shred corn stalk
+7) soybean harvesting combine
+
+We're going to read in all the values here so it's easier to follow
+```{r}
+windrower <- as.numeric(act_em$value[act_em$action == "windrower"])
+rake <- as.numeric(act_em$value[act_em$action == "rake"])
+baler <- as.numeric(act_em$value[act_em$action == "baler (rectangle and large round, averaged)"])
+forage_harvesting <- as.numeric(act_em$value[act_em$action == "forage harvesting"])
+baler <- as.numeric(act_em$value[act_em$action == "baler (rectangle and large round, averaged)"])
+corn_silage <- as.numeric(act_em$value[act_em$action == "corn silage"])
+corn_combine <- as.numeric(act_em$value[act_em$action == "corn harvesting combine"])
+shed_corn <- as.numeric(act_em$value[act_em$action == "shred corn stalk"])
+soybean_combine <- as.numeric(act_em$value[act_em$action == "soybean harvesting combine"])
+```
+
+calculate for high irrigation and high rain
+```{r}
+## windrower + rake + baler
+harv_1_ir <- windrower*(as.numeric(act_em$irrigated[act_em$action == "windrower"])) + rake*(as.numeric(act_em$irrigated[act_em$action == "rake"])) + baler*(as.numeric(act_em$irrigated[act_em$action == "baler (rectangle and large round, averaged)"]))
+
+harv_1_rain <- windrower*(as.numeric(act_em$rain[act_em$action == "windrower"])) + rake*(as.numeric(act_em$rain[act_em$action == "rake"])) + baler*(as.numeric(act_em$rain[act_em$action == "baler (rectangle and large round, averaged)"]))
+
+## forage harvesting + baler
+harv_2_ir <- forage_harvesting*(as.numeric(act_em$irrigated[act_em$action == "forage harvesting"])) + baler*(as.numeric(act_em$irrigated[act_em$action == "baler (rectangle and large round, averaged)"]))
+
+harv_2_rain <- harv_2_ir <- forage_harvesting*(as.numeric(act_em$rain[act_em$action == "forage harvesting"])) + baler*(as.numeric(act_em$rain[act_em$action == "baler (rectangle and large round, averaged)"]))
+
+## forage harvesting
+harv_3_ir <- forage_harvesting*(as.numeric(act_em$irrigated[act_em$action == "forage harvesting"]))
+
+harv_3_rain <- forage_harvesting*(as.numeric(act_em$rain[act_em$action == "forage harvesting"]))
+
+## windrower + rake
+harv_4_ir <-  windrower*(as.numeric(act_em$irrigated[act_em$action == "windrower"])) + rake*(as.numeric(act_em$irrigated[act_em$action == "rake"])) 
+harv_4_rain <-  windrower*(as.numeric(act_em$irrigated[act_em$action == "windrower"])) + rake*(as.numeric(act_em$rain[act_em$action == "rake"])) 
+
+## corn silage
+harv_5_ir <- corn_silage*(as.numeric(act_em$irrigated[act_em$action == "corn silage"]))
+
+harv_5_rain <- corn_silage*(as.numeric(act_em$rain[act_em$action == "corn silage"]))
+
+##corn combine and shred corn stalk
+harv_6_ir <- corn_combine*(as.numeric(act_em$irrigated[act_em$action == "corn harvesting combine"])) + shed_corn*(as.numeric(act_em$irrigated[act_em$action == "shred corn stalk"]))
+
+harv_6_rain <- corn_combine*(as.numeric(act_em$rain[act_em$action == "corn harvesting combine"])) + shed_corn*(as.numeric(act_em$rain[act_em$action == "shred corn stalk"]))
+
+##soybean combine
+harv_7_ir <- soybean_combine*(as.numeric(act_em$irrigated[act_em$action == "soybean harvesting combine"]))
+
+harv_7_rain <- soybean_combine*(as.numeric(act_em$rain[act_em$action == "soybean harvesting combine"]))
+```
+
+Some of the path ways are crop specific:
+harv_1 (windrower + rake + baler): cereals 
+harv_2 (forage harvesting + baler): cereals
+harv_3 (forage harvesting): cereals, corn, soybeans
+harv_4 (windrower + rake): cereals, soybean
+harv_5 (corn silage): corn
+harv_6 (corn harvesting combine + shred corn stalk): corn
+harv_7 (soybean harvesting combine): soybean
+
+Calculate averages for each crop and input type, and then use an average off all the non-specialized equipment pathways as a value for the rest of crops
+```{r}
+harv_cereals_ir <- mean(c(harv_1_ir, harv_2_ir, harv_3_ir, harv_4_ir))
+harv_cereals_rain <- mean(c(harv_1_rain, harv_2_rain, harv_3_rain, harv_4_rain))
+
+harv_corn_ir <- mean(c(harv_3_ir, harv_5_ir, harv_6_ir))
+harv_corn_rain <- mean(c(harv_3_rain, harv_5_rain, harv_6_rain))
+
+harv_soy_ir <- mean(c(harv_3_ir, harv_4_ir, harv_7_ir))
+harv_soy_rain <- mean(c(harv_3_rain, harv_4_rain, harv_7_rain))
+
+harv_rest_ir <- mean(c(harv_1_ir, harv_2_ir, harv_3_ir, harv_4_ir, harv_5_ir))
+harv_rest_rain <- mean(c(harv_1_rain, harv_2_rain, harv_3_rain, harv_4_rain, harv_5_rain))
+```
+
+
+Add a harvesting emissions column for each specific input and crop (where applicable)
+```{r}
+machinery_em <- setup_till_seed %>% 
+  mutate(harvesting_em = case_when(input == "high irrigated" & split_rest_names == "maiz" ~ harv_corn_ir,
+                                   input == "high rain" & split_rest_names == "maiz" ~ harv_corn_rain,
+                                   
+                                   input == "high irrigated" & split_rest_names == "soyb" ~ harv_soy_ir,
+                                   input == "high rain" & split_rest_names == "soyb" ~ harv_soy_rain,
+
+                                   input == "high irrigated" & GROUP == "cereals" ~ harv_cereals_ir,
+                                   input == "high rain" & GROUP == "cereals" ~ harv_cereals_rain,
+                                   
+                                   input == "low" | input == "subsistence" ~ 0
+                                   )) %>% 
+  
+  mutate(gapfill_desc = case_when(is.na(harvesting_em) ~ "harvesting_em gapfilled with the average of all pathways except those with soybean or corn combines")) %>% 
+  
+  mutate(harvesting_em = ifelse(input == "high irrigated" & is.na(harvesting_em), harv_rest_ir,
+                                ifelse(input == "high rain" & is.na(harvesting_em), harv_rest_rain,
+                                       harvesting_em))) %>% 
+  rowwise() %>% 
+  mutate(all_em  = sum(c(fertilizer_em, herbicide_em, till_seed_em, harvesting_em))) %>% 
+  mutate(units = "kg_co2eq/hectare")
+
+write_csv(machinery_em, here("crop/ghg/data/machinery_em.csv"))
+```

@@ -1,0 +1,137 @@
+---
+title: "explore_GWP*"
+author: "Juliette"
+date: "6/18/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(plotly)
+library(countrycode)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+
+rgns_ezz_land <- raster(file.path(prep, "spatial/land_eez_rgns.tif"))
+```
+
+```{r}
+enteric_fao_raw <- read_csv(file.path(raw, "FAO_data/v2021/enteric_fermentation/FAOSTAT_data_6-23-2021.csv"))
+```
+
+Look at cows enteric fermentation change from 2007- 2017
+```{r}
+
+enteric_fao <- enteric_fao_raw %>% 
+  filter(Year %in% c("1997", "2017"),
+         Element == "Emissions (CH4) (Enteric)",
+         Item == "Cattle, non-dairy") %>% 
+  select(Area, Year, Value) %>% 
+  pivot_wider(names_from = "Year", values_from = "Value") %>% 
+  rename(year_1997 = `1997`,
+         year_2017 = `2017`) %>% 
+  mutate(decade_change = year_1997/year_2017,
+         iso3c = countrycode(Area, origin="country.name", destination = "iso3c"),
+         decade_change= ifelse(year_2017 == 0, 0, decade_change),
+         iso3c = ifelse(Area== "Netherlands Antilles (former)", "BES", iso3c)) 
+
+enteric_change_raster <- enteric_fao %>% 
+  right_join(food_rgns_xy) %>% 
+  select(x,y, decade_change) %>% 
+  rasterFromXYZ(crs = food_crs)
+
+plot(enteric_change_raster)
+
+## side note: no gapfilling has been done so there will be some missing countries in the end. for now at least
+
+```
+
+Grab the cows meat enteric fermentation rasters we created
+
+```{r}
+cows_mixed_meat <- raster(file.path(prep, "animal_farm/ghg/cows_mixed_meat_enteric_fermentation.tif"))
+cows_grass_meat <- raster(file.path(prep, "animal_farm/ghg/cows_grassland_meat_enteric_fermentation.tif"))
+cows_feedlot_meat <- raster(file.path(prep, "animal_farm/ghg/cows_feedlot_meat_enteric_fermentation.tif"))
+
+cows_meat_2017_co2eq <- sum(stack(cows_mixed_meat, cows_grass_meat, cows_feedlot_meat), na.rm = TRUE)
+
+```
+
+Do the math
+
+```{r}
+
+gwp_100 <- 25
+
+## our values are already co2eq, back calculate to get the amount of methane
+cows_meat_2017 <- cows_meat_2017_co2eq/25
+
+cow_meat_methane_zonal <- zonal(cows_meat_2017, rgns_ezz_land, fun="sum", progress="text", na.rm=TRUE) %>% 
+    data.frame() %>%
+    rename(ID_0 = zone,
+           methane = sum) %>%
+    left_join(food_rgns, by="ID_0")
+
+
+co2_eq <- (4*cows_meat_2017 - 3.75*cows_meat_2017*enteric_change_raster)*gwp_100
+
+# summary(co2_eq)
+# plot(co2_eq)
+
+zonal_stat_gwp_star <- zonal(co2_eq, rgns_ezz_land, fun="sum", progress="text", na.rm=TRUE) %>% 
+    data.frame() %>%
+    rename(ID_0 = zone,
+           gwp_star = sum) %>%
+    left_join(food_rgns, by="ID_0")
+
+zonal_stat_gwp <- zonal(cows_meat_2017_co2eq, rgns_ezz_land, fun="sum", progress="text", na.rm=TRUE) %>% 
+    data.frame() %>%
+    rename(ID_0 = zone,
+           gwp_reg = sum) %>%
+    left_join(food_rgns, by="ID_0")
+
+combine <- left_join(zonal_stat_gwp_star, zonal_stat_gwp) %>% 
+  mutate(difference = gwp_reg - gwp_star) %>% 
+  select(country = Country, iso3c, gwp_reg, gwp_star, difference)
+
+m <- ggplot(combine, aes(x = gwp_reg, y = gwp_star, color = iso3c)) +
+  geom_point()+
+  geom_abline(intercept=0, slope=1, color="red") +
+  geom_text(data = filter(combine, iso3c %in% c("USA", "CHN", "BRA", "ARG", "IND", "AUS", "COL")), aes(label = country)) +
+  theme(legend.position = "none")
+
+ggplotly(m)
+```
+
+Calculate it globally
+```{r}
+
+global_star <- dplyr::summarise(zonal_stat_gwp_star, sum = sum(gwp_star), na.rm = TRUE) %>% 
+  pull(sum)
+global_reg <- cellStats(cows_meat_2017_co2eq, stat = "sum", na.rm = TRUE)
+
+global_star
+global_reg
+```
+
+Combine the country values and make into a table
+```{r}
+
+cows_meat_2017_co2eq_df <- raster_df(cows_meat_2017_co2eq) %>% 
+  select(-x,-y) %>% 
+  right_join(food_rgns_xy, by = "cellindex") %>% 
+  rename(co2eq_GWP_100 = layer) %>% 
+  group_by(iso3c, Country) %>% 
+  dplyr::summarise(co2eq_GWP_100 = sum(co2eq_GWP_100, na.rm = TRUE))
+
+combined_ems <- left_join(zonal_stat_gwp_star, cows_meat_2017_co2eq_df) %>% 
+  select(Country, ISO3c = iso3c, tonnes_co2eq_GWP_100 = co2eq_GWP_100, tonnes_co2eq_GWP_100_star= gwp_star)
+
+write_csv(combined_ems, here::here("_analysis/SI_tables/output/SI_gwp_table.csv"))
+
+
+```
+

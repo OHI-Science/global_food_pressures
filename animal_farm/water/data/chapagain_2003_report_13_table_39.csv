@@ -1,0 +1,18 @@
+Animal,Age group,Industrial system,Grazing system
+Beef cattle,Young calves,2,0
+Beef cattle,Adult cows,11,5
+Dairy cattle,"Calves, 0-1 yr",0,0
+Dairy cattle,"Heifers, 1-3 yr",11,4
+Dairy cattle,"Milking cows, 3-10 yr",22,5
+Swine,Piglet,5,0
+Swine,Adult,50,25
+Sheep,5lbs lamb,2,0
+Sheep,Adult,5,5
+Goats,5lbs kid,0,0
+Goats,Adult,5,5
+Broiler chicken,Chick,0.01,0.01
+Broiler chicken,Adult,0.09,0.09
+Laying hen,Chick,0.01,0.01
+Laying hen,Laying eggs,0.15,0.15
+Horses,Foal,0,5
+Horses,Mature horses,5,5

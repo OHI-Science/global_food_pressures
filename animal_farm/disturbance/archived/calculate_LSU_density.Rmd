@@ -1,0 +1,82 @@
+---
+title: "Figuring out disturbance"
+author: "Juliette"
+date: "9/28/2020"
+output: html_document
+---
+
+## Setup
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(readxl)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+lsu_raw <- read_csv(here("animal_farm/disturbance/data/LSU_Coeffs_by_Country.csv"))
+fao_code <- read_xlsx(here("animal_farm/disturbance/data/fao_codes_country.xlsx")) %>% 
+  select('Short name', iso3c = ISO3, AreaCode = FAOSTAT)
+
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv"))
+
+```
+
+## Methods
+
+Wrangle the LSU df a bit first and gapfill
+
+```{r}
+lsu <- lsu_raw %>% 
+  select(Country = AreaName, animal = ItemName, lsu_value = Value, AreaCode) %>% 
+  left_join(fao_code) %>% 
+  na.omit() %>% 
+  mutate(animal = ifelse(animal == "Cattle", "cows", tolower(animal))) %>% 
+  filter(animal %in% c("cows", "chickens", "buffaloes", "goats", "sheep", "pigs")) %>% 
+  select(iso3c, animal, lsu_value)  ## every animal has 196 countries, so we can pull out all the NAs and create a row for each animal and gapfil
+
+missing <- setdiff(food_rgns$iso3c, lsu$iso3c) %>% 
+  as_tibble() %>% 
+  rename(iso3c = value) %>% 
+  left_join(food_rgns) %>% 
+  slice(rep(1:n(), each =6)) %>% 
+  mutate(animal = rep(c("cows", "chickens", "buffaloes", "goats", "sheep", "pigs"), times = 48)) %>% 
+  mutate(lsu_value = NA) %>% 
+  select(iso3c, animal, lsu_value)
+  
+lsu_gf <- lsu %>% 
+  rbind(missing) %>% 
+  left_join(un) %>% 
+  group_by(Intermediate_Region_Name) %>% 
+  mutate(lsu_value = ifelse(is.na(lsu_value), mean(lsu_value, na.rm = TRUE), lsu_value)) %>% 
+  ungroup() %>% 
+  group_by(Sub_region_Name) %>% 
+  mutate(lsu_value = ifelse(is.na(lsu_value), mean(lsu_value, na.rm = TRUE), lsu_value)) %>% 
+  ungroup() %>% 
+  select(iso3c, animal, lsu_value)
+
+write_csv(lsu_gf, here("animal_farm/disturbance/data/lsu_gf.csv"))
+
+```
+
+Calculate the LSU density/ km2 in each cell
+
+```{r}
+cows_milk <- raster()
+cows_meat
+
+sheep_milk
+sheep_meat
+
+goats_milk
+goats_meat
+
+buffaloes_milk
+
+```
+
+
+
+
+

@@ -1,0 +1,258 @@
+---
+title: "STEP12_explore_plots_graphs"
+author: "Juliette"
+date: "5/13/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+source(here("_workflow/common.R"))
+
+pressures <- read_csv(here::here("_efficiency/data/all_food_pressures.csv"))
+
+```
+
+
+"a scatter plot of each food, cumulate pressure on the x-axis, Kcal (or protein) content on the y-axis.  Could even potentiallly have each dot be a pie chart with four wedges, each wedge one of the four pressures.  Another way to think about efficiency . . ."
+
+```{r}
+
+## crops
+scatter_protein_crops <- ggplot(filter(pressures, grouping == "produce")) +
+  geom_point(aes(x = tonnes_protein, y = cumulative_pressure)) +
+  facet_wrap(vars(product), scales = "free") +
+  theme_minimal() +
+  labs(title = "Crops Human Consumption Protein")
+ggsave(here("_efficiency/output/efficiency_scatterplots/crop_protein.png"),width = 10, height = 5, units=c("in"))
+
+
+scatter_kcals_crops <- ggplot(filter(pressures, grouping == "produce")) +
+  geom_point(aes(x = million_kcal, y = cumulative_pressure)) +
+  facet_wrap(vars(product), scales = "free") +
+  theme_minimal() +
+  labs(title = "Crops Human Consumption Kcals")
+ggsave(here("_efficiency/output/efficiency_scatterplots/crop_calories.png"), width = 10, height = 5,units=c("in"))
+
+## livestock
+scatter_protein_livestock <- ggplot(filter(pressures, grouping == "livestock")) +
+  geom_point(aes(x = tonnes_protein, y = cumulative_pressure)) +
+  facet_wrap(vars(product), scales = "free") +
+  theme_minimal() +
+  labs(title = "Livestock Protein")
+ggsave(here("_efficiency/output/efficiency_scatterplots/livestock_protein.png"), width = 10, height = 5,units=c("in"))
+
+scatter_kcals_livestock <- ggplot(filter(pressures, grouping == "livestock")) +
+  geom_point(aes(x = million_kcal, y = cumulative_pressure)) +
+  facet_wrap(vars(product), scales = "free") +
+  theme_minimal() +
+  labs(title = "Livestock Kcals")
+ggsave(here("_efficiency/output/efficiency_scatterplots/livestock_calories.png"),width = 10, height = 5, units=c("in"))
+
+## fisheries
+scatter_protein_livestock <- ggplot(filter(pressures, str_detect(grouping, "fisheries"))) +
+  geom_point(aes(x = tonnes_protein, y = cumulative_pressure)) +
+  facet_wrap(vars(product), scales = "free") +
+  theme_minimal() +
+  labs(title = "Fisheries Protein")
+ggsave(here("_efficiency/output/efficiency_scatterplots/fisheries_protein.png"), width = 10, height = 5,units=c("in"))
+
+scatter_kcals_livestock <- ggplot(filter(pressures, str_detect(grouping, "fisheries"))) +
+  geom_point(aes(x = million_kcal, y = cumulative_pressure)) +
+  facet_wrap(vars(product), scales = "free") +
+  theme_minimal() +
+  labs(title = "Fisheries Kcals")
+ggsave(here("_efficiency/output/efficiency_scatterplots/fisheries_calories.png"), width = 10, height = 5,units=c("in"))
+
+## mariculture
+scatter_protein_mariculture <- ggplot(filter(pressures, grouping == "mariculture")) +
+  geom_point(aes(x = tonnes_protein, y = cumulative_pressure)) +
+  facet_wrap(vars(product), scales = "free") +
+  theme_minimal() +
+  labs(title = "Mariculture Protein")
+ggsave(here("_efficiency/output/efficiency_scatterplots/mariculture_protein.png"), units=c("in"),width = 10, height = 5)
+
+scatter_kcals_mariculture <- ggplot(filter(pressures, grouping == "mariculture")) +
+  geom_point(aes(x = million_kcal, y = cumulative_pressure)) +
+  facet_wrap(vars(product), scales = "free") +
+  theme_minimal() +
+  labs(title = "Mariculture Kcals")
+ggsave(here("_efficiency/output/efficiency_scatterplots/mariculture_calories.png"), width = 10, height = 5, units=c("in"))
+ 
+ 
+```
+
+
+### digging to see if we can unearth cool things about the pressures, products,etc
+Data
+```{r}
+product_tonnes <- read_csv(here("_efficiency/data/product_tonnes.csv"))
+pressures_summary <- read_csv(here("_efficiency/data/pressures_summary.csv"))
+
+crop_cal_pro <- read_csv(here::here("_efficiency", "data", "crops_protein_calories.csv"))
+livestock_cal_pro <- read_csv(here::here("_efficiency", "data", "livestock_protein_calories.csv"))
+mari_cal_pro <- read_csv(here::here("_efficiency", "data", "mariculture_protein_calories.csv"))
+
+```
+
+
+## Side analysis for pressures 
+
+Crops first
+```{r}
+pressures_country <- pressures_summary %>% 
+  filter(product == "produce") %>% 
+  left_join(product_tonnes) %>% 
+  group_by(category1_production, pressure) %>% 
+  dplyr::summarise(pressure_sum = sum(pressure_rescaled),
+                   tonnes_sum = sum(tonnes, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(eff = pressure_sum/tonnes_sum)
+
+ggplot(pressures_country, aes(x = eff, y = pressure, color= pressure)) +
+  geom_point() +
+  facet_wrap(vars(category1_production)) #,scales = "free"
+
+## kcals and protein
+crop_cal_pro_global  <- pressures_summary %>% 
+  filter(product == "produce") %>% 
+  select(-product) %>% 
+  rename(product = organism) %>% 
+  left_join(crop_cal_pro) %>% 
+  group_by(category1_production, pressure) %>% 
+  dplyr::summarise(pressure_sum = sum(pressure_rescaled),
+                   tonnes_sum = sum(tonnes, na.rm = TRUE),
+                   kcals_sum = sum(million_kcal, na.rm = TRUE),
+                   protein_sum = sum(tonnes_protein, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(eff_t = pressure_sum/tonnes_sum,
+         eff_c = pressure_sum/kcals_sum,
+         eff_p = pressure_sum/protein_sum)
+
+ggplot(crop_cal_pro_global, aes(x = eff_t, y = pressure, color= pressure)) +
+  geom_point() +
+  facet_wrap(vars(category1_production))
+
+ggplot(crop_cal_pro_global, aes(x = eff_c, y = pressure, color= pressure)) +
+  geom_point() +
+  facet_wrap(vars(category1_production))
+
+ggplot(crop_cal_pro_global, aes(x = eff_p, y = pressure, color= pressure)) +
+  geom_point() +
+  facet_wrap(vars(category1_production))
+
+```
+
+Now livestock
+```{r}
+
+## livestock 
+pressures_livestock  <- pressures_summary %>% 
+  filter(category2_production %in% c("cows_meat", "large_ruminant_milk", "large_ruminant_meat", "small_ruminant_milk", "small_ruminant_meat", "chickens_eggs&meat", "chickens_eggs", "chickens_meat", "pigs_meat")) %>% 
+  left_join(product_tonnes) %>% 
+  group_by(category1_production, pressure) %>% 
+  dplyr::summarise(pressure_sum = sum(pressure_rescaled),
+                   tonnes_sum = sum(tonnes, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(eff = pressure_sum/tonnes_sum)
+
+ggplot(pressures_livestock, aes(x = eff, y = pressure, color= pressure)) +
+  geom_point() +
+  facet_wrap(vars(category1_production))
+
+## kcals and protein
+livestock_cal_pro_global  <- pressures_summary %>% 
+  filter(category2_production %in% c("cows_meat", "large_ruminant_milk", "large_ruminant_meat", "small_ruminant_milk", "small_ruminant_meat", "chickens_eggs&meat", "chickens_eggs", "chickens_meat", "pigs_meat")) %>% 
+  unite(product, c("organism", "product")) %>% 
+  left_join(livestock_cal_pro) %>% 
+  group_by(category1_production, pressure) %>% 
+  dplyr::summarise(pressure_sum = sum(pressure_rescaled),
+                   tonnes_sum = sum(tonnes, na.rm = TRUE),
+                   kcals_sum = sum(million_kcal, na.rm = TRUE),
+                   protein_sum = sum(tonnes_protein, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(eff_t = pressure_sum/tonnes_sum,
+         eff_c = pressure_sum/kcals_sum,
+         eff_p = pressure_sum/protein_sum)
+
+ggplot(livestock_cal_pro_global, aes(x = eff_t, y = pressure, color= pressure)) +
+  geom_point() +
+  facet_wrap(vars(category1_production))
+
+ggplot(livestock_cal_pro_global, aes(x = eff_c, y = pressure, color= pressure)) +
+  geom_point() +
+  facet_wrap(vars(category1_production))
+
+ggplot(livestock_cal_pro_global, aes(x = eff_p, y = pressure, color= pressure)) +
+  geom_point() +
+  facet_wrap(vars(category1_production))
+```
+
+
+Mariculture
+
+```{r}
+
+## mariculture 
+pressures_mari  <- pressures_summary %>% 
+  filter(category2_production == "mariculture") %>% 
+  left_join(product_tonnes) %>% 
+  group_by(category1_production, pressure) %>% 
+  dplyr::summarise(pressure_sum = sum(pressure_rescaled),
+                   tonnes_sum = sum(tonnes, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(eff = pressure_sum/tonnes_sum)
+
+ggplot(pressures_mari, aes(x = eff, y = pressure, color= pressure)) +
+  geom_point() +
+  facet_wrap(vars(category1_production))
+
+## kcals and protein
+mari_cal_pro_global  <- pressures_summary %>% 
+  filter(category2_production == "mariculture") %>% 
+  select(-product) %>% 
+  left_join(mari_cal_pro) %>% 
+  group_by(category1_production, pressure) %>% 
+  dplyr::summarise(pressure_sum = sum(pressure_rescaled),
+                   tonnes_sum = sum(tonnes_product, na.rm = TRUE),
+                   kcals_sum = sum(million_kcals, na.rm = TRUE),
+                   protein_sum = sum(tonnes_protein, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(eff_t = pressure_sum/tonnes_sum,
+         eff_c = pressure_sum/kcals_sum,
+         eff_p = pressure_sum/protein_sum)
+
+ggplot(mari_cal_pro_global, aes(x = eff_t, y = pressure, color= pressure)) +
+  geom_point() +
+  facet_wrap(vars(category1_production))
+
+ggplot(mari_cal_pro_global, aes(x = eff_c, y = pressure, color= pressure)) +
+  geom_point() +
+  facet_wrap(vars(category1_production))
+
+ggplot(mari_cal_pro_global, aes(x = eff_p, y = pressure, color= pressure)) +
+  geom_point() +
+  facet_wrap(vars(category1_production))
+```
+
+
+## addressing direct ms question
+In Niger pulses are 2 fold less efficient than millet
+```{r}
+pressure_nig <- pressures_summary %>% 
+  filter(iso3c == "NER",
+         organism %in% c("xmil", "xpul")) %>% 
+  group_by(organism) %>% 
+  mutate(organism_sum_press = sum(pressure_rescaled))%>% 
+  left_join(product_tonnes) %>% 
+  ungroup() %>% 
+  mutate(eff = pressure_rescaled/tonnes)
+
+ggplot(pressure_nig, aes(x = eff, y = pressure, color= pressure)) +
+  geom_point() +
+  facet_wrap(vars(category1_production))
+  
+```
+

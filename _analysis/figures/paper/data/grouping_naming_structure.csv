@@ -1,0 +1,69 @@
+tier_1,tier_2,tier_3,tier_4,tier_5
+mariculture,mariculture,salmonids,salmonids,salmonids meat
+feed,mariculture,tuna,tuna,tuna meat feed
+feed,mariculture,salmonids,salmonids,salmonids meat feed
+feed,mariculture,marine-fish-general,marine-fish-general,marine-fish-general meat feed
+feed,mariculture,shrimp,shrimp,shrimp meat feed
+feed,mariculture,crustaceans,crustaceans,crustaceans meat feed
+feed,mariculture,bivalve,bivalve,bivalve meat feed
+feed,livestock,pigs,pigs,pigs meat feed
+feed,livestock,chickens,chickens,chickens meat feed
+feed,livestock,chickens,chickens,chickens eggs feed
+feed,livestock,shoats,goats,goats meat feed
+feed,livestock,shoats,goats,goats milk feed
+feed,livestock,shoats,sheep,sheep meat feed
+feed,livestock,shoats,sheep,sheep milk feed
+feed,livestock,cows,cows,cows meat feed
+feed,livestock,cows,cows,cows milk feed
+feed,livestock,buffaloes,buffaloes,buffaloes milk feed
+crop human consumption,crop human consumption,starches and roots,starches and roots,yams produce
+crop human consumption,crop human consumption,pulses and beans,pulses and beans,xpul produce
+crop human consumption,crop human consumption,oil crops and seeds,oil crops and seeds,xoil produce
+crop human consumption,crop human consumption,rest of cereals and grains,rest of cereals and grains,xmil produce
+crop human consumption,crop human consumption,fruits and vegetables,fruits and vegetables,xfru produce
+crop human consumption,crop human consumption,wheat,wheat,whea produce
+crop human consumption,crop human consumption,fruits and vegetables,fruits and vegetables,vege produce
+crop human consumption,crop human consumption,starches and roots,starches and roots,swpo produce
+crop human consumption,crop human consumption,sugar,sugar,sugc produce
+crop human consumption,crop human consumption,sugar,sugar,sugb produce
+crop human consumption,crop human consumption,soy,soy,soyb produce
+crop human consumption,crop human consumption,rest of cereals and grains,rest of cereals and grains,sorg produce
+crop human consumption,crop human consumption,rice,rice,rice produce
+crop human consumption,crop human consumption,rest produce,rest produce,rest produce
+crop human consumption,crop human consumption,starches and roots,starches and roots,pota produce
+crop human consumption,crop human consumption,fruits and vegetables,fruits and vegetables,plnt produce
+crop human consumption,crop human consumption,starches and roots,starches and roots,orts produce
+crop human consumption,crop human consumption,oil crops and seeds,oil crops and seeds,oilp produce
+crop human consumption,crop human consumption,rest of cereals and grains,rest of cereals and grains,ocer produce
+crop human consumption,crop human consumption,rest of cereals and grains,rest of cereals and grains,maiz produce
+crop human consumption,crop human consumption,fruits and vegetables,fruits and vegetables,coco produce
+crop human consumption,crop human consumption,oil crops and seeds,oil crops and seeds,cnut produce
+crop human consumption,crop human consumption,starches and roots,starches and roots,cass produce
+crop human consumption,crop human consumption,rest of cereals and grains,rest of cereals and grains,barl produce
+crop human consumption,crop human consumption,fruits and vegetables,fruits and vegetables,bana produce
+crop human consumption,crop human consumption,tree nuts,tree nuts,tnut produce
+crop human consumption,crop human consumption,spices,spices,spis produce
+mariculture,mariculture,bivalve,bivalve,bivalve meat 
+mariculture,mariculture,crustaceans,crustaceans,crustaceans meat
+mariculture,mariculture,marine-fish-general,marine-fish-general,marine-fish-general meat
+marine fisheries,marine fisheries,large-pelagic,large-pelagic,large-pelagic meat
+marine fisheries,marine fisheries,medium-pelagic,medium-pelagic,medium-pelagic meat
+marine fisheries,marine fisheries,small-pelagic,small-pelagic,small-pelagic meat
+marine fisheries,marine fisheries,demersal ,demersal ,demersal meat
+marine fisheries,marine fisheries,benthic,benthic,benthic meat
+marine fisheries,marine fisheries,reef ,reef ,reef meat
+marine fisheries,marine fisheries,fofm,fofm,fofm meat
+freshwater fisheries,freshwater fisheries,freshwater fish,freshwater fish,freshwater fish meat
+livestock,livestock,pigs,pigs,pigs meat 
+livestock,livestock,chickens,chickens,chickens meat 
+livestock,livestock,chickens,chickens,chickens eggs 
+livestock,livestock,shoats,goats,goats meat 
+livestock,livestock,shoats,goats,goats milk 
+livestock,livestock,shoats,sheep,sheep meat 
+livestock,livestock,shoats,sheep,sheep milk 
+livestock,livestock,cows,cows,cows meat 
+livestock,livestock,cows,cows,cows milk 
+livestock,livestock,buffaloes,buffaloes,buffaloes milk
+mariculture,mariculture,salmonids,salmonids,salmonids meat
+mariculture,mariculture,shrimp,shrimp,shrimp meat
+mariculture,mariculture,tuna,tuna,tuna meat

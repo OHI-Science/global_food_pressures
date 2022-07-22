@@ -1,0 +1,143 @@
+---
+title: "Checking final data layers"
+author: "Juliette"
+date: "11/20/2020"
+output: html_document
+---
+
+## All of the tif files in our "datalayers" folder are mapped below.
+
+
+```{r setup, include=FALSE, echo = FALSE, results = "hide"}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(RColorBrewer)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+```
+
+
+Clear out listed files in tif folders. Want to make sure we have a clean start.
+```{r, include=FALSE, echo = FALSE, results = "hide"}
+
+do.call(file.remove, list(list.files(paste(layers, "_map_checks/not_logged", sep = ""), full.names = TRUE)))
+
+do.call(file.remove, list(list.files(paste(layers, "_map_checks/logged", sep = ""), full.names = TRUE)))
+
+```
+
+Make the nonlogged pngs
+```{r}
+
+files_list <- list.files(sprintf(layers), full = TRUE, pattern = ".tif")
+files_list <- grep("_tif_version_per_km2", files_list, value=TRUE, invert=TRUE) 
+
+## assign colors
+map_cols <- brewer.pal(9, "YlOrBr")[4:9]
+map_cols = colorRampPalette(map_cols)(10000) 
+map_cols = c("NA", paste0(map_cols, "BF"))
+              
+  
+for(file in files_list) {
+  
+  #file <- files_list[1]
+  raster_data <-raster(file)
+  
+  name <- basename(file)
+  name <- gsub(".tif", "", name)
+  
+  if(str_detect(name, "_x_")){
+    unit <- "prop feeditem to food category"
+  }else{
+    if(str_detect(name, "_water")){
+       unit <- "m3"
+      }else{
+        if(str_detect(name, "_ghg")){
+           unit <- "co2eq"
+        }else{
+          if(str_detect(name, "_nutrient")){
+            unit <- "po4eq"
+          }else{
+            unit <- "km2 eq"
+          }}}}
+  
+  
+png((paste(layers, "_map_checks/not_logged/", name, ".png", sep ="")), res=500, width=6, height=3, unit = "in")
+
+par(oma=c(1,1,1,0)) # bottom, left, top, and right
+par(mfrow=c(1, 1), mar=c(1, 0, 1, 2), new = TRUE)
+
+# plot(water, border="#f2f8fc", col="#f2f8fc", lwd=0.5, main=sprintf(name), cex=0.75)
+# plot(land, border="#c5b89c", col="#f6f2e9", lwd=0.5, add=TRUE)
+plot(raster_data, 
+     main = sprintf(name),
+     legend = TRUE,
+     legend.args = list(text = unit, # unit of measurement for the stressor
+                        cex  = 1, 
+                        side = 3, 
+                        line = 1))
+dev.off()
+
+}
+```
+
+
+
+Make the logged pngs
+
+```{r}
+
+#Do the same thing but with logged values 
+
+files_list <- list.files(sprintf(layers), full = TRUE, pattern = ".tif")
+files_list <- grep("_tif_version_per_km2", files_list, value=TRUE, invert=TRUE) 
+
+## assign colors
+map_cols <- brewer.pal(9, "YlOrBr")[4:9]
+map_cols = colorRampPalette(map_cols)(10000) 
+map_cols = c("NA", paste0(map_cols, "BF"))
+              
+ for(file in files_list) {
+  
+  #file <- files_list[1]
+  raster_data <-raster(file)
+  
+  name <- basename(file)
+  name <- gsub(".tif", "", name)
+  
+  if(str_detect(name, "_x_")){
+    unit <- "prop feeditem to food category"
+  }else{
+    if(str_detect(name, "water")){
+       unit <- "m3"
+      }else{
+        if(str_detect(name, "ghg")){
+           unit <- "co2eq"
+        }else{
+          if(str_detect(name, "nutrient")){
+            unit <- "po4eq"
+          }else{
+            unit <- "km2 eq"
+          }}}}
+  
+  
+png((paste(layers, "_map_checks/logged/", name, "_logged.png", sep ="")), res=500, width=6, height=3, unit = "in")
+
+par(oma=c(1,1,1,0)) # bottom, left, top, and right
+par(mfrow=c(1, 1), mar=c(1, 0, 1, 2), new = TRUE)
+
+# plot(water, border="#f2f8fc", col="#f2f8fc", lwd=0.5, main=sprintf(name), cex=0.75)
+# plot(land, border="#c5b89c", col="#f6f2e9", lwd=0.5, add=TRUE)
+plot(log(1+raster_data), 
+     main = paste(name, " logged", sep = ""),
+     legend = TRUE,
+     legend.args = list(text = unit, # unit of measurement for the stressor
+                        cex  = 1, 
+                        side = 3, 
+                        line = 1))
+dev.off()
+
+}
+```

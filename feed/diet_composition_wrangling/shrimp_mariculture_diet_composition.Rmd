@@ -1,0 +1,177 @@
+---
+title: "Shrimp mariculture diets"
+author: "Juliette Verstaen"
+date: "10/29/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Determining the percent composition of shrimp diet.
+
+1. Filter out the production data that gage gave me by shrimp and prawns
+2. We have diet compositions of 5 species, look to see how different they are
+3. Look to see how much of total production do these species account for 
+ 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(here)
+library(readxl)
+
+diet <- read_excel(here("feed/diet_composition_wrangling/Final_DietCrop_Numbers.xlsx"), sheet = "% type of crop input")
+shrimp_prod <- read_csv(here('aquaculture/marine/shrimp/shrimp_farms/data/fao_mariculture_shrimp_taxa_production.csv'))
+
+```
+
+
+```{r}
+
+all_shrimp <- unique(shrimp_prod$species)
+## there are 10 species
+
+over_k_shrimp_global <- shrimp_prod %>% 
+  group_by(species) %>% 
+  dplyr::summarise(sum_global = sum(value, na.rm = TRUE)) %>% 
+  filter(sum_global > 1000) %>% 
+  select(species) %>% 
+  unique() %>% 
+  pull()
+
+## there are 10 species where global production is 1000 tonnes or more. This is the same as per country, so I think that we can figure out diet composition for all shrimp from these species
+
+```
+
+Explore the diet compositon for the species we have from Halley
+```{r}
+diet_shrimp <- diet %>% 
+  filter(ISSCAAP_Group == "Shrimps, prawns") %>% 
+  select(common_name, crop, prop_crop_inputs)
+
+##compare the diet compositions
+
+ggplot(diet_shrimp) +
+  geom_col(aes(x = prop_crop_inputs, y = common_name , fill = crop)) +
+  theme_minimal() + ggtitle("Diet compositon crop breakdown")
+## ok so there are for sure some differences, so we should probably account for that with a weighted proportion of raised species in each country. 
+
+```
+
+Do we have diet composition data for the 13 species with the most production
+
+```{r}
+
+setdiff(diet_shrimp$common_name, shrimp_prod$species)
+setdiff(shrimp_prod$species, diet_shrimp$common_name)
+
+```
+
+
+Now we need to figure out how to assign diet compositions to the species we don't have info one. 
+
+Things to explore further: 
+1. can we cut out out some species using a higher production cutoff? 
+    There seems to be some species with high production that we dont have diet comp for
+
+2. is there a bigger grouping we can use? freshwater, brackish, and marine seem like big ones. Check what categories the Halley species fall into, do we have info on all? Do their diet comps look similar? if so that seems the best. Can also look at the differences in shrimp and prawns see if that's a bigger/better distinction. Prawns are typically larger so maybe their diet is different
+    diet comp data info:
+      * 5 species total
+      * 4 are prawns, 1 is shrimp
+      * giant river prawn and oriental river prawn = freshwater only 
+      * whiteleg shrimp and giant tiger prawn = freshwater, brackish, and marine depending on country
+      * fleshy prawn = brackish
+
+Neither the distinction between shrimp/prawns, or the habitats seem to be indicators of diet composition. We should probably talk about how we can gapfill of thats what we want to do.
+
+3. look at the location of the countries that production is coming from for the species we have diet composition for. maybe we want to gapfill by what the country's aquaculture feed is like
+
+```{r}
+matching <- c("Whiteleg shrimp", "Giant tiger prawn", "Fleshy prawn")
+
+explore_country_origin <- shrimp_prod %>% 
+  filter(species %in% matching)
+
+ggplot(explore_country_origin) +
+  geom_col(aes(x = value, y = country , fill = species)) +
+  theme_minimal()
+
+```
+
+
+Which countries and which species are countries raising?
+
+```{r}
+
+ggplot(shrimp_prod)  +
+  geom_col(aes(x = value, y = country , fill = species)) +
+  theme_minimal() +
+  ggtitle("Tonnes shrimp/prawns aquaculture production")
+
+## we have white left shrimp diet and giant tiger prawn which are the 2 largest produced. We have diet composition for fleshy prawns, giant tiger prawns, Fleshy prawns are only in China
+
+```
+
+
+## Create a diet compositon for all shrimp using weighted proportions
+```{r}
+
+species_prop <- shrimp_prod %>% 
+  mutate(diet_species = case_when(str_detect(species, "shrimp") | str_detect(species, "shrimps") ~ "Whiteleg shrimp",
+                                  species == "Fleshy prawn" ~ "Fleshy prawn",
+                                  str_detect(species, "prawn") | str_detect(species, "prawns") ~ "Giant tiger prawn")) %>% 
+  group_by(diet_species, iso3c) %>% 
+  dplyr::summarise(species_rgn_tonnes = sum(value)) %>% 
+  ungroup() %>% 
+  group_by(iso3c) %>% 
+  mutate(rgn_tonnes = sum(species_rgn_tonnes)) %>% 
+  ungroup() %>% 
+  rowwise() %>% 
+  mutate(prop = species_rgn_tonnes/rgn_tonnes) %>% 
+  ungroup() %>% 
+  select(iso3c, common_name = diet_species, prop)
+  
+prop_fofm <- 0.07 # from Halley spreadsheet, tab 1
+
+weighted_diet <- diet_shrimp %>% 
+  filter(common_name %in% matching) %>% 
+  left_join(species_prop, by ="common_name") %>% 
+  rowwise() %>% 
+  mutate(weight_prop_int = prop_crop_inputs*prop) %>% 
+  group_by(iso3c, crop) %>% 
+  dplyr::summarise(weighted_crop_prop = sum(weight_prop_int) * (1-prop_fofm)) %>% 
+  ungroup()
+
+check <- weighted_diet %>% 
+  group_by(iso3c) %>% 
+  dplyr::summarise(perc_check = sum(weighted_crop_prop))
+  ## all per_check values should be 0.93, after incorporating fofm!
+```
+
+Adding in fofm component to diet.  This will be later adjusted to match Halley final tonnes. 
+```{r}
+fofm_addition <- dplyr::select(weighted_diet, iso3c) %>% 
+  unique() %>%
+  mutate(crop = "fofm") %>%
+  mutate(weighted_crop_prop = prop_fofm)
+
+weighted_diet <- rbind(weighted_diet, fofm_addition)
+unique(weighted_diet$crop)
+
+check <- weighted_diet %>% 
+  group_by(iso3c) %>% 
+  dplyr::summarise(perc_check = sum(weighted_crop_prop))
+  ## all per_check values should be 1, after incorporating fofm!
+
+
+## need to make sure these are added to the feed_category_table.csv, product_to_fao_spam.csv
+weighted_diet %>% select(crop) %>% unique()
+
+shrimp_diet_comp <- weighted_diet %>% 
+  rename(raw_name = crop, prop_diet = weighted_crop_prop) %>% 
+  mutate(production_system ="aquaculture",
+         species = "shrimp")
+
+write_csv(shrimp_diet_comp, here("feed/data/shrimp_aquaculture_diet_composition.csv"))
+
+```

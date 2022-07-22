@@ -1,0 +1,129 @@
+---
+title: "paddy_rice"
+output: html_document
+---
+
+GHG emissions from rice cultivation consist of methane gas (CH4) emitted by anaerobic
+decomposition of organic matter in paddy fields. The FAOSTAT data are computed at Tier
+1 following IPCC, 1997 Vol. 3, Ch. 4 and IPCC, 2002.
+
+# Preamble
+```{r setup, include = FALSE}
+# getting packages we want
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+library(janitor)
+
+# Import food_rgns xy df
+food_rgns_xy <- 
+  food_rgns_xy %>% 
+  select(x, y, iso3c)
+```
+
+# Import FAOSTAT datasets
+```{r}
+production <- 
+  vroom::vroom(here("crop/ghg/data/FAOSTAT_rice_paddy_production.csv"), 
+               .name_repair = make_clean_names, 
+               col_select = c(area_code, value, area))
+
+emissions <- 
+  vroom::vroom(here("crop/ghg/data/FAOSTAT_rice_paddy_emissions.csv"), 
+               .name_repair = make_clean_names, 
+               col_select = c(area_code, value, area)) %>% 
+  mutate(tCO2eq = value * 1000) %>% 
+  select(-value)
+```
+
+# Calculate
+```{r}
+rice_emissions <- 
+  left_join(production, emissions) %>% 
+  rename(rice_tonnes = value) %>% 
+  filter(!area_code %in% 351) %>% 
+  na.omit()
+
+ggplot(rice_emissions, aes(rice_tonnes, tCO2eq)) +
+  geom_point() +
+  geom_abline() + 
+  theme_classic()
+
+rice_df <- 
+  rice_emissions %>% 
+  mutate(tCO2eq_per_tonne = tCO2eq / rice_tonnes) %>% 
+  na.omit()
+n_distinct(rice_df$area)
+``` 
+
+# Gapfill countries
+```{r}
+# Convert FAO rgns to iso3c
+rice_df_gf <- 
+  vroom::vroom(here("_spatial/_output/FAO_rgn_codes.csv")) %>% 
+  left_join(rice_df, by = "area_code") %>%
+  select(-c(ID_0, country, area, area_code))
+
+n_distinct(rice_df_gf$iso3c)
+
+# Add UN `region` column to dataframe
+rice_df_gf <- 
+  vroom::vroom(here("_spatial/_output/UNSD_Methodology.csv"),
+               .name_repair = make_clean_names) %>% 
+  dplyr::select(iso3c, region_name) %>% 
+  left_join(rice_df_gf, ., by = "iso3c")
+
+rice_df_gf$tCO2eq_per_tonne[which(!is.finite(rice_df_gf$tCO2eq_per_tonne))] <- NA 
+
+# 1) Calculate rice emissions per crop tonnes for each country
+rice_df_gf_final <- 
+  rice_df_gf %>%  
+  group_by(region_name) %>% 
+  mutate(rgn_median = median(tCO2eq_per_tonne, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(tCO2eq_per_tonne_gf = if_else(is.na(tCO2eq_per_tonne),
+                                       rgn_median,
+                                       tCO2eq_per_tonne)) %>% 
+  select(iso3c, tCO2eq_per_tonne_gf)
+duplicated(rice_df_gf_final)
+```
+
+# Map rice emissions
+```{r}
+rice_raster <- 
+  rice_df_gf_final %>% 
+  left_join(food_rgns_xy, ., by = "iso3c") %>% 
+  dplyr::select(-iso3c) %>% 
+  rasterFromXYZ(crs = food_crs)
+plot(rice_raster)
+
+# Overlay and calculate total rice application at the cell-level
+rice_total <- 
+  overlay(
+  rice_raster,
+  raster(file.path(prep,
+            "crop/farm/scaled_maps_2017/crop_rice_A_scaled.tif", 
+            fsep = ""), crs = food_crs),
+  fun = function(r1, r2) {
+    r1 * r2
+  })
+
+writeRaster(rice_total,
+            file.path(prep,
+                      "crop/ghg/paddy_rice_CO2eq.tif", 
+                      fsep = ""), 
+            format    = "GTiff", 
+            overwrite = TRUE)
+```
+
+Tests 
+```{r}
+plot(rice_total)
+plot(log(rice_total) + 1)
+raster_total <- cellStats(rice_total, stat = "sum")
+raw_total <- rice_emissions %>% 
+  summarise(sum(tCO2eq, na.rm = TRUE))
+raster_total / raw_total # approx 1.
+```
+

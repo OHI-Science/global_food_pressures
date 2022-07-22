@@ -1,0 +1,203 @@
+---
+title: "GHG emissions from N2O volatilization of unburned crop residue"
+author: "Juliette"
+date: "4/30/2020"
+output: html_document
+---
+
+Calculate CO2-eq emissions from crop residue left on fields. We used methods from Global Livestock Environmental Assessment Model Version 2.0
+
+We will use equations 6.7 and 6.8 in the GLEAM document
+NOTEs:
+1. The equation doesn't make sense as described in the GLEAM document. DMYG for crop residue should be the crop parameter used when calculating the aove ground nitrogen. The equation is written correctly below
+2. the units are in ha for the gleam equations, however our data is per cell. The math still works out, as the parameters are not dependent on area but weight of production
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readr)
+library(raster)
+library(dplyr)
+library(tidyverse)
+library(here)
+library(doParallel)
+
+source(here("_spatial/template_raster.R"))
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+## Data
+parameters <- read_csv(here("crop/ghg/data/crop_res_N2O_gf.csv")) %>% 
+  rename(split_rest_names = SPAM_short)
+
+parameters <- parameters %>% 
+  mutate(split_rest_names = if_else(split_rest_names == "rest", "tnut", split_rest_names)) %>% 
+  bind_rows(parameters) %>% 
+  mutate(split_rest_names = if_else(split_rest_names == "rest", "spis", split_rest_names)) %>% 
+  bind_rows(parameters) %>% 
+  mutate(split_rest_names = if_else(split_rest_names == "rest", "othr", split_rest_names)) %>% 
+  bind_rows(parameters) %>% 
+  unique()
+
+frac_removed <- read_csv(here("crop/ghg/data/frac_removed_df.csv")) %>% 
+  dplyr::select(iso3c, FracReMove)
+
+conversion <- read_csv(here("crop/ghg/data/co2_eq_factors.csv"))
+```
+
+## Equations for calculating total nitrogen left behind on the field (Equation 6.7)
+
+n_cr = (dm_cr * nag,i * (1 - frac_remove)) + (ag_bg_ratio,i * (dm_gross + dm_cr) * nbg,i)
+
+**n_cr** = annual amount of N in crop residues (above and below ground) of feed material i, kg N·ha-1
+
+These are calcualted from the burn parameters:
+**dm_gross** = crop gross dry matter yield of feed material i, kg DM·ha-1
+**dm_cr**= crop residues gross dry matter yield of feed material i, kg DM·ha-1
+
+**nag,i** = nitrogen content of above-ground residues for feed material i, kg N·kg DM-1. Values are given in Tables 6.12 and 6.13 (Supplement S1).
+
+**frac_remove** = fraction of above-ground residues of feed material i removed annually for purpose such as feed, bedding and construction, fraction. A default value of 0.45 is used with the exception of few countries, whose values are given in Table 6.14 (Supplement S1).
+
+**ag_bg_ratio,i** = fraction of below-ground residues to above ground biomass (DMYGcri + DMYGcropi) for feed material i, fraction. Values are given in Tables 6.12 and 6.13 (Supplement S1)
+
+**nbg,i** = nitrogen content of below-ground residues for feed material i, kg N·kg DM-1. Values are given in Tables 6.12 and 6.13 (Supplement S1).
+
+Tables:
+GLEAM provides values in the supplement, and some are different for local (aka backyard) livestock, so will need to address this when do the rest of the livestock systems.
+
+## Caculating total nitrogen 
+
+```{r}
+## we do not include these 4 crops in our analysis, so we do not have the parameters for them. Need to remove them to make the loop run properly
+dm_res <- list.files(file.path(prep, "crop/ghg/crop_residue_N2O/dm_res"), full = TRUE)
+dm_res <- grep(dm_res, pattern= 'acof|rest', inv=T, value=T)
+dm_res <- grep(dm_res, pattern= 'rcof', inv=T, value=T)
+dm_res <- grep(dm_res, pattern= 'teas', inv=T, value=T)
+dm_res <- grep(dm_res, pattern= 'toba', inv=T, value=T)
+
+registerDoParallel(6)   
+foreach(file = dm_res) %dopar% {
+  
+  #file = dm_res[19]
+  crop <- str_sub(file, -8, -5)
+  
+   res <- read_csv(file, col_types = "ddn")
+   gross <-  read_csv(paste(file.path(prep, "crop/ghg/crop_residue_N2O/dm_gross/dm_gross_"), crop, ".csv", sep = ""), col_types = "ddn")
+  
+  #create one spatial file with the gross and residue dry mass in each cell and the ISO3 value
+  dm_frac_rem <- res %>% 
+    left_join(gross, by = c("x", "y")) %>% 
+    left_join(food_rgns_xy) %>% 
+    left_join(frac_removed)
+  
+  # save crop specific parameters
+  nag <- as.numeric(parameters$nag[parameters$split_rest_names == crop])
+  ag_bg_ratio <- as.numeric(parameters$ag_bg_frac[parameters$split_rest_names == crop])
+  nbg <- as.numeric(parameters$nbg[parameters$split_rest_names == crop])
+
+  # Do the math
+   crop_res_N <- dm_frac_rem %>% 
+      mutate(crop_res_N_kg = ((dm_res_kg * nag *(1-FracReMove)) + (ag_bg_ratio * (dm_gross_kg + dm_res_kg) * nbg))) %>%
+      dplyr::select(x, y, crop_res_N_kg)
+  
+   write_csv(crop_res_N, file.path(prep, paste("crop/ghg/crop_residue_N2O/crop_res_nitrogen/crop_res_N_", crop, ".csv", sep = "")))
+   
+}
+
+
+```
+
+
+## Calculating total N2O (Equation 6.8)
+
+crop_residue_n2o = crop_res_N_kg* (ef_dir + frac_vol * ef_vol + frac_leach* ef_leach) *44/28
+
+**crop_residue_n2o** = total nitrous oxide emissions from crop residues per hectare of feed material i, kg N2O·ha-1
+
+**crop_res_N_kg** = annual amount of N in crop residues (above and below ground) of feed material i, kg N·ha-1
+
+**ef_dir** = emission factor for direct nitrous oxide emissions, kg N2O-N·kg N-1. Default value of 0.01 is used
+(0.03 for rice feed materials).
+
+**frac_vol** = fraction of nitrogen from synthetic fertilizers or crop residues that volatilizes as NH3 and NOx,
+fraction. Default value of 0.2 is used.
+
+**ef_vol** = emission factor for N2O emissions from N volatilized as NH3 and NOx, kg N2O-N·kg N volatilized-1.
+Default value of 0.01 is used.
+
+**frac_leach** = fraction of nitrogen lost due to leaching and runoff, fraction. Default value of 0.3 is used.
+
+**ef_leach **= emission factor for N2O emissions from leaching and runoff, kg N2O-N·kg N leached-1. Default value
+of 0.0075 is used.
+
+```{r}
+ef_dir <- 0.01
+ef_dir_rice <- 0.03
+frac_vol <- 0.2
+ef_vol <- 0.1
+frac_leach <- 0.3
+ef_leach <- 0.0075
+```
+
+Calcualte the N2O emissions!
+```{r}
+crop_res_list <- list.files(file.path(prep, "crop/ghg/crop_residue_N2O/crop_res_nitrogen"), full = TRUE)
+crop_res_list <- crop_res_list[!grepl(pattern = "cof|teas|toba", x = crop_res_list)]
+
+registerDoParallel(6)   
+foreach(file = crop_res_list) %dopar% {
+  
+  #file = crop_res_list[37]
+  crop <- str_sub(file, -8, -5)
+  
+  crop_residue_nitrogen <- read_csv(file, col_types = "ddn") 
+  
+  crop_residue_n2o <- crop_residue_nitrogen %>% 
+    mutate(crop = crop) %>% 
+    mutate(ef_dir = ifelse(crop == "rice", ef_dir_rice, ef_dir),
+           frac_vol = frac_vol,
+           ef_vol = ef_vol,
+           frac_leach =frac_leach,
+           ef_leach = ef_leach) %>% 
+    mutate(crop_residue_n2o_tonnes =  (crop_res_N_kg*(ef_dir + frac_vol*ef_vol + frac_leach*ef_leach)*44/28)/1000) %>% 
+    dplyr::select(x,y,crop_residue_n2o_tonnes)
+   
+crop_residue_n2o_rast <- rasterFromXYZ(crop_residue_n2o, crs = food_crs)
+
+   writeRaster(crop_residue_n2o_rast, filename = paste(prep, "crop/ghg/crop_residue_N2O/crop_residue_N2O/crop_res_N2O_", crop, ".tif", sep = ""), format="GTiff", overwrite = TRUE)
+   
+}
+
+```
+
+## Calculate the CO2 equivilant
+```{r}
+n2o_list <- list.files(file.path(prep, "crop/ghg/crop_residue_N2O/crop_residue_N2O"), full = TRUE)
+n2o_list <- n2o_list[!grepl(pattern = "cof|teas|toba", x = n2o_list)]
+
+foreach(file = n2o_list) %dopar% {
+
+  #  file <- n2o_list[12]
+    crop <- str_sub(file, -8, -5)
+    
+    co2_eq <- as.numeric(conversion$gwp[conversion$source == "n2o"])
+  
+    co2_eq_raster <- raster(file)*co2_eq
+
+    writeRaster(co2_eq_raster, filename =
+                  paste(prep, "crop/ghg/crop_residue_N2O/co2_eq/res_n2o_co2eq_",crop,".tif", sep = ""), format="GTiff", overwrite=TRUE)
+    
+}
+
+
+```
+
+
+
+
+
+
+

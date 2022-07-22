@@ -1,0 +1,166 @@
+---
+title: "STEP 14: Creating country summary dfs by livestock"
+author: "Juliette"
+date: "9/15/2020"
+output: html_document
+---
+
+# Objectives
+This markdown creates a summary df for each of our animals.
+
+# Inputs
+All the maps we created of our animals, systems, products
+
+# Output 
+
+csv files for each animal with the regional totals
+
+
+## Set up
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(countrycode)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+```
+
+## Methods
+Grab and consolidate all our map counts into country df
+```{r}
+library(doParallel)
+file_list <- list.files(file.path(prep, "animal_farm/farm"), pattern = "location_df", full = TRUE)
+
+registerDoParallel(4)
+foreach(file = file_list) %dopar%  {
+  
+      ## grab the names of all the parts from the file
+ # file <- file_list[5]
+  
+    animal_name <- str_split(str_split(file, pattern = "/")[[1]][11], pattern = "_")[[1]][1]
+    system_name <- str_split(str_split(file, pattern = "/")[[1]][11], pattern = "_")[[1]][2]
+    product_name <- str_split(str_split(file, pattern = "/")[[1]][11], pattern = "_")[[1]][3]
+    
+  if(animal_name == "chickens" ) {    
+      col_type = c("ddnnnccnnccncnnc")
+      
+      }else{
+      if(animal_name %in% c("goats", "sheep")) {    
+      col_type = c("ddccccn")
+      
+      }else{
+      if(animal_name == "cows") {    
+      col_type = c("ddccccn")
+      
+      }else{
+        if(animal_name == "buffaloes") {
+          col_type = c("ddccccn")
+      }else{
+        ## this is pigs
+        (col_type = c("ddcccnnnnncc")) } } } } 
+ 
+  df <- read_csv(file, col_types = col_type)
+  
+  df <- df %>% 
+    select(iso3c, current_count = contains("current")) %>% 
+    group_by(iso3c) %>% 
+    dplyr::summarise(rgn_count = sum(current_count, na.rm = TRUE)) %>% 
+    ungroup() %>% 
+    mutate(animal = animal_name, system = system_name, product = product_name)
+    
+write_csv(df, paste0(prep, "animal_farm/farm/rgn_df/region_counts_", animal_name, "_", system_name, "_", product_name, ".csv"))  
+   
+}
+
+```
+
+combine all similar animals into one df
+```{r}
+chicken_counts <- rbind(read_csv(file.path(prep, "animal_farm/farm/rgn_df/region_counts_chickens_industrial_meat.csv")),
+                        read_csv(file.path(prep, "animal_farm/farm/rgn_df/region_counts_chickens_industrial_eggs.csv")),
+                        read_csv(file.path(prep, "animal_farm/farm/rgn_df/region_counts_chickens_backyard_eggs&meat.csv")))
+
+cow_counts <- rbind(read_csv(file.path(prep, "animal_farm/farm/rgn_df/region_counts_cows_grassland_meat.csv")),
+                        read_csv(file.path(prep, "animal_farm/farm/rgn_df/region_counts_cows_grassland_milk.csv")),
+                        read_csv(file.path(prep, "animal_farm/farm/rgn_df/region_counts_cows_mixed_meat.csv")),
+                        read_csv(file.path(prep, "animal_farm/farm/rgn_df/region_counts_cows_mixed_milk.csv")))
+
+goats_counts <- rbind(read_csv(file.path(prep, "animal_farm/farm/rgn_df/region_counts_goats_grassland_meat.csv")),
+                        read_csv(file.path(prep, "animal_farm/farm/rgn_df/region_counts_goats_grassland_milk.csv")),
+                        read_csv(file.path(prep, "animal_farm/farm/rgn_df/region_counts_goats_mixed_meat.csv")),
+                        read_csv(file.path(prep, "animal_farm/farm/rgn_df/region_counts_goats_mixed_milk.csv")))
+
+sheep_counts <- rbind(read_csv(file.path(prep, "animal_farm/farm/rgn_df/region_counts_sheep_grassland_meat.csv")),
+                        read_csv(file.path(prep, "animal_farm/farm/rgn_df/region_counts_sheep_grassland_milk.csv")),
+                        read_csv(file.path(prep, "animal_farm/farm/rgn_df/region_counts_sheep_mixed_meat.csv")),
+                        read_csv(file.path(prep, "animal_farm/farm/rgn_df/region_counts_sheep_mixed_milk.csv")))
+
+pigs_counts <- rbind(read_csv(file.path(prep, "animal_farm/farm/rgn_df/region_counts_pigs_backyard_meat.csv")),
+                        read_csv(file.path(prep, "animal_farm/farm/rgn_df/region_counts_pigs_intermediate_meat.csv")),
+                        read_csv(file.path(prep, "animal_farm/farm/rgn_df/region_counts_pigs_industrial_meat.csv")))
+
+buffaloes_count <- rbind(read_csv(file.path(prep, "animal_farm/farm/rgn_df/region_counts_buffaloes_grassland_milk.csv")),
+                        read_csv(file.path(prep, "animal_farm/farm/rgn_df/region_counts_buffaloes_grassland_milk.csv")))
+
+
+write_csv(chicken_counts, file.path(prep, "animal_farm/farm/rgn_df/chicken_counts.csv"))
+write_csv(cow_counts, file.path(prep, "animal_farm/farm/rgn_df/cow_counts.csv"))
+write_csv(goats_counts, file.path(prep, "animal_farm/farm/rgn_df/goats_counts.csv"))
+write_csv(sheep_counts, file.path(prep, "animal_farm/farm/rgn_df/sheep_counts.csv"))
+write_csv(pigs_counts, file.path(prep, "animal_farm/farm/rgn_df/pigs_counts.csv"))
+write_csv(buffaloes_count, file.path(prep, "animal_farm/farm/rgn_df/buffaloes_counts.csv"))
+```
+
+
+We will also create tif files of chickens and pigs here, since we already have it for ruminants
+
+
+Grab all the livestock head count rasters and ID where areas have <10 heads per cell
+
+```{r}
+source(here("_workflow/common_spatial.R"))
+file_list <- list.files(file.path(paste(prep, "animal_farm/farm/", sep = "")), pattern = "df.csv", full.names = TRUE)
+chicken_list <-  Filter(function(x) any(grepl("chickens", x)), file_list)  
+pigs_list <- Filter(function(x) !any(grepl("pigs", x)), file_list)  
+
+
+#backyard
+df_chick_back <- read_csv(file.path(prep,"animal_farm/farm/chickens_backyard_eggs&meat_location_df.csv"), col_type = c("ddnnnccnnccncnnc")) %>% 
+  select(x,y, current_count) %>% 
+  rasterFromXYZ(crs = food_crs)
+writeRaster(df_chick_back, file.path(paste(prep, "animal_farm/farm/location_tifs/", "chickens_backyard_eggs&meat_location_df", ".tif", sep = "")), format = "GTiff", overwrite = TRUE)   
+
+## ind eggs  
+df_chick_ind_eggs<- read_csv(file.path(prep,"animal_farm/farm/chickens_industrial_eggs_location_df.csv"), col_type = c("ddnnnccnnccncnnc"))%>% 
+  select(x,y, current_count) %>% 
+  rasterFromXYZ(crs = food_crs)
+writeRaster(df_chick_ind_eggs, file.path(paste(prep, "animal_farm/farm/location_tifs/", "chickens_industrial_eggs_location_df", ".tif", sep = "")), format = "GTiff", overwrite = TRUE)   
+
+## ind meat
+df_chick_ind_meat <- read_csv(file.path(prep,"animal_farm/farm/chickens_industrial_meat_location_df.csv"), col_type = c("ddnnnccnnccncnnc"))%>% 
+  select(x,y, current_count) %>% 
+  rasterFromXYZ(crs = food_crs)
+writeRaster(df_chick_ind_eggs, file.path(paste(prep, "animal_farm/farm/location_tifs/", "chickens_industrial_meat_location_df", ".tif", sep = "")), format = "GTiff", overwrite = TRUE)   
+
+#pigs back
+pigs_back <- read_csv(file.path(prep,"animal_farm/farm/pigs_backyard_meat_location_df.csv"), col_type = c("ddcccnnnnncc")) %>% 
+  select(x,y, current_count) %>% 
+  rasterFromXYZ(crs = food_crs)
+writeRaster(df_chick_back, file.path(paste(prep, "animal_farm/farm/location_tifs/", "pigs_backyard_meat_location_df", ".tif", sep = "")), format = "GTiff", overwrite = TRUE)   
+#pigs inter
+pigs_back <- read_csv(file.path(prep,"animal_farm/farm/pigs_intermediate_meat_location_df.csv"), col_type = c("ddcccnnnnncc")) %>% 
+  select(x,y, current_count) %>% 
+  rasterFromXYZ(crs = food_crs)
+writeRaster(df_chick_back, file.path(paste(prep, "animal_farm/farm/location_tifs/", "pigs_intermediate_meat_location_df", ".tif", sep = "")), format = "GTiff", overwrite = TRUE)   
+#pigs indu
+pigs_back <- read_csv(file.path(prep,"animal_farm/farm/pigs_industrial_meat_location_df.csv"), col_type = c("ddcccnnnnncc")) %>% 
+  select(x,y, current_count) %>% 
+  rasterFromXYZ(crs = food_crs)
+writeRaster(df_chick_back, file.path(paste(prep, "animal_farm/farm/location_tifs/", "pigs_industrial_meat_location_df", ".tif", sep = "")), format = "GTiff", overwrite = TRUE)   
+
+
+```
+
+

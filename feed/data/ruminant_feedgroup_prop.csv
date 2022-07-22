@@ -1,0 +1,13 @@
+Species,feedgroup,mean_prop
+Buffalo,Adult females,0.36
+Buffalo,Meat animals (non feedlot),0.2
+Buffalo,Replacement animals and adult males,0.44
+Cattle,Adult females,0.35666666666666663
+Cattle,Meat animals (non feedlot),0.32666666666666666
+Cattle,Replacement animals and adult males,0.31666666666666665
+Goat,Adult females,0.4
+Goat,Meat animals (non feedlot),0.44
+Goat,Replacement animals and adult males,0.16
+Sheep,Adult females,0.45
+Sheep,Meat animals (non feedlot),0.35
+Sheep,Replacement animals and adult males,0.2

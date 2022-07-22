@@ -1,0 +1,34 @@
+---
+title: "Untitled"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+Saving a backup of complete files.
+```{r setup, include=FALSE}
+
+file.copy(from=list.files("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers", full=TRUE), 
+          to = "/home/shares/food-systems/Food_footprint/all_food_systems/archive_datalayers_Jun2_2022")
+ 
+
+
+```
+
+Moving files to another project.
+
+```{r}
+
+file.copy(from=list.files("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers", full=TRUE), 
+          to = "/home/shares/food-systems/social_justice_projects/_raw_data/nceas_food_systems_vJune_2022/datalayers")
+
+file.copy(from=list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw", full=TRUE), 
+          to = "/home/shares/food-systems/social_justice_projects/_raw_data/nceas_food_systems_vJune_2022/raw")
+
+file.copy(from="/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/cumulative_stress/all_systems_cumulative_stress.tif", 
+          to = "/home/shares/food-systems/social_justice_projects/_raw_data/nceas_food_systems_vJune_2022/analysis/stressor_summary/equal_area/cumulative_stress")
+
+file.copy(from=list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/stressors", full=TRUE), 
+          to = "/home/shares/food-systems/social_justice_projects/_raw_data/nceas_food_systems_vJune_2022/analysis/stressor_summary/equal_area/rescaled/stressors")
+
+
+```

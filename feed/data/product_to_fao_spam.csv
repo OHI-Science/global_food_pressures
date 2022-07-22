@@ -1,0 +1,79 @@
+product,crop,FAO_Item_Code,FAO_Item_Code_NFB,SPAM_long_name,SPAM_short_name
+soybean,soybean,236,2555,soybean,soyb
+soy protein concentrate,soybean,238,2555,soybean,soyb
+soy other,soybean,238,2555,soybean,soyb
+pea protein,pea,187,2547,other pulses,opul
+pea other,pea,187,2547,other pulses,opul
+pea,pea,187,2547,other pulses,opul
+maize,maize,56,2514,maize,maiz
+bran of maize,maize,59,2514,maize,maiz
+germ of maize,maize,57,2514,maize,maiz
+flour of maize,maize,58,2514,maize,maiz
+maize gluten,maize,63,2514,maize,maiz
+starch of maize,maize,64,2514,maize,maiz
+oil of maize,maize,60,2582,maize,maiz
+cake of maize,maize,61,2514,maize,maiz
+wheat,wheat,15,2511,wheat,whea
+bran of wheat,wheat,17,2511,wheat,whea
+flour of wheat,wheat,16,2511,wheat,whea
+germ of wheat,wheat,19,2511,wheat,whea
+wheat gluten,wheat,24,2511,wheat,whea
+wheat starch,wheat,23,2511,wheat,whea
+cake of soya beans,soybean,238,2555,soybean,soyb
+oil of soya bean,soybean,237,2571,soybean,soyb
+oil of soya beans,soybean,237,2571,soybean,soyb
+cake of rapeseed,rapeseed,272,2558,rapeseed,rape
+oil of rapeseed,rapeseed,271,2574,rapeseed,rape
+sorghum,sorghum,83,2518,sorghum,sorg
+barley,barley,44,2513,barley,barl
+rapeseed,rapeseed,270,2558,rapeseed,rape
+faba bean,faba bean,181,2549,other pulses,opul
+fish meal,pelagic fish,NA,NA,NA,NA
+fish oil,pelagic fish,NA,NA,NA,NA
+cake of coconuts,coconut,253,2560,coconut,cnut
+oil of coconuts,coconut,252,2578,coconut,cnut
+dessicated coconut,coconut,250,2560,coconut,cnut
+copra,coconut,251,2560,coconut,cnut
+coconut,coconut,249,2560,coconut,cnut
+groundnut,shelled groundnuts,243,2556,groundnut,grou
+cake of groundnuts,shelled groundnuts,245,2556,groundnut,grou
+oil of groundnuts,shelled groundnuts,244,2572,groundnut,grou
+cake of linseed,linseed,335,2570,other oil crops,ooil
+oil of linseed,linseed,334,2586,other oil crops,ooil
+linseed,linseed,333,2570,other oil crops,ooil
+cake of palm kernels,oil palm fruit,259,2577,oilpalm,oilp
+oil of palm kernels,oil palm fruit,258,2576,oilpalm,oilp
+oil of palm,oil palm fruit,257,2577,oilpalm,oilp
+palm kernels,oil palm fruit,256,2562,oilpalm,oilp
+oil palm fruit,oil palm fruit,254,2562,oilpalm,oilp
+cake of safflower,safflower,282,2570,other oil crops,ooil
+oil of safflower,safflower,281,2586,other oil crops,ooil
+cake of sesame seed,sesame seed,291,2561,sesameseed,sesa
+oil of sesame seed,sesame seed,290,2579,sesameseed,sesa
+sesame seed,sesame seed,289,2561,sesameseed,sesa
+cake of sunflower seed,sunflower seed,269,2557,sunflower,sunf
+oil of sunflower seed,sunflower seed,268,2573,sunflower,sunf
+sunflower seed,sunflower seed,267,2557,sunflower,sunf
+"olive oil, residues",olives,274,2580,other oil crops,ooil
+olive residues,olives,273,2563,other oil crops,ooil
+olives,olives,260,2563,other oil crops,ooil
+"olive oil, virgin",olives,261,2580,other oil crops,ooil
+cottonseed,cottonseed,329,2559,cotton,cott
+cotton lint,cottonseed,767,2559,cotton,cott
+cotton waste,cottonseed,769,2559,cotton,cott
+oil of cottonseed,cottonseed,331,2575,cotton,cott
+cake of cottonseed,cottonseed,332,2575,cotton,cott
+cotton linters,cottonseed,770,2559,cotton,cott
+sugar beets,sugar beets,157,2537,sugarbeet,sugb
+raw centrifugal beet sugar,sugar beets,162,2542,sugarbeet,sugb
+molasses,sugar beets,165,2543,sugarbeet,sugb
+dry beet pulp,sugar beets,169,2537,sugarbeet,sugb
+paddy rice,paddy rice,27,2805,rice,rice
+husked rice,paddy rice,28,2805,rice,rice
+rice bran,paddy rice,35,2805,rice,rice
+millet,millet,79,2517,pearl millet,pmil
+banana,banana,486,2615,banana,bana
+mixed grain,mixed grain,103,2520,other cereals,ocer
+cake,other oil crops,,,other oil crops,ooil
+pulses,other pulses,,,other pulses,opul
+cassava,cassava,125,2532,cassava,cass

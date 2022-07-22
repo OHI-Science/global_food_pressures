@@ -1,0 +1,477 @@
+---
+title: "Calculate efficiency rates for figures"
+author: "Gage"
+date: "05/10/2022"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(ggplot2)
+library(tidyverse)
+library(here)
+library(countrycode)
+library(cowplot)
+library(vroom)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+pressures_summary <- read_csv(here::here("_efficiency/data/pressures_summary.csv"))
+product_tonnes <- read_csv(here::here("_efficiency/data/product_tonnes.csv"))
+
+
+'%!in%' <- function(x,y)!('%in%'(x,y))
+
+livestock_cal_pro <- read_csv(here::here("_efficiency", "data", "livestock_protein_calories.csv"))
+crop_cal_pro <- read_csv(here::here("_efficiency", "data", "crops_protein_calories.csv"))
+marine_cal_pro <- read_csv(here::here("_efficiency", "data", "marine_fisheries_protein_calories.csv"))
+fresh_cal_pro <- read_csv(here::here("_efficiency", "data", "freshwater_fisheries_protein_calories.csv")) %>% 
+  mutate(organism = "fish")
+mari_cal_pro <- read_csv(here::here("_efficiency", "data", "mariculture_protein_calories.csv"))
+
+```
+
+# Summary 
+
+In this script we will calculate all pressure efficiencies for tonnes, protein, and kcals for each food group. 
+
+
+# Methods
+
+
+## Tonnes efficiencies
+
+
+### Crops
+
+```{r}
+
+pressures_summary_crops <- pressures_summary %>%
+  filter(product == "produce") %>%
+  group_by(iso3c, category1_production) %>%
+  summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+  ungroup() %>%
+  separate(col=category1_production, c("organism", "product"), sep="_") %>%
+  filter(product == "produce")
+
+tmp <- filter(pressures_summary_crops, iso3c=="USA") %>% data.frame()
+
+product_crops <- product_tonnes %>%
+  group_by(iso3c, category1_production) %>%
+  summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+  ungroup() %>%
+#  filter(grepl("feed", category1_production))
+ # filter(., !grepl("feed",category1_production)) %>%
+  separate(col=category1_production, c("organism", "product"), sep="_") %>%
+  filter(product == "produce")  
+tmp <- filter(product_crops, iso3c=="USA") %>% data.frame()
+
+#setdiff(product_crops$organism, pressures_summary_crops$organism)
+
+cp_rate_crops_int <- left_join(pressures_summary_crops, product_crops, by=c("iso3c", "organism", "product")) %>%
+  filter(!is.na(tonnes)) %>%
+    filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>%
+    filter(tonnes>0) %>%
+  rowwise() %>%
+  mutate(pressure_per_tonne = cumulative_pressure/tonnes * 1000000) %>% 
+  ungroup() %>% 
+  ## remove other fibre crops
+  filter(organism != "ofib")
+
+long_name <- vroom::vroom(here::here("crop/farm/data/crop_codes_updated.csv")) %>%
+  select(organism = SPAM_super,
+         long = SPAM_full_name) %>%
+  mutate(long = ifelse(organism == "tnut", "tree nuts",
+                       ifelse(organism == "spis", "spices",
+                              ifelse(organism == "xfru", "fruits",
+                                     ifelse(organism == "xmil", "millet",
+                                            ifelse(organism == "xoil", "oil",
+                                                   ifelse(organism == "xpul", "pulses", long))))))) %>%
+  unique()
+
+cp_rate_crops_tonnes <- cp_rate_crops_int %>%
+  left_join(long_name) %>%
+  mutate(long = ifelse(organism == "xfru", "other fruits",
+                          ifelse(organism == "xmil", "millet",
+                                 ifelse(organism == "xoil", "other oil crops",
+                                        ifelse(organism == "xpul", "pulses", long))))) %>%
+  dplyr::select(-product) %>%
+  rename(product = organism) %>%
+  rename(plot_names = long)
+```
+
+### Fisheries 
+
+
+```{r}
+fisheries_list <- c("fish", "demersal", "reef", "large-pelagic", "small-pelagic", "medium-pelagic", "benthic", "fofm")
+
+pressures_summary_fisheries <- pressures_summary %>%
+  group_by(iso3c, category1_production) %>%
+  summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+  ungroup() %>%
+  separate(col=category1_production, c("organism", "product"), sep="_") %>%
+  filter(organism %in% fisheries_list)
+
+tmp <- filter(pressures_summary_fisheries, iso3c=="USA") %>% data.frame()
+
+product_fisheries <- product_tonnes %>%
+  group_by(iso3c, category1_production) %>%
+  summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+  ungroup() %>%
+  filter(., !grepl("feed",category1_production)) %>%
+  separate(col=category1_production, c("organism", "product"), sep="_") %>%
+  filter(organism %in% fisheries_list)
+
+tmp <- filter(product_fisheries, iso3c=="USA") %>% data.frame()
+
+cp_rate_fisheries_tonnes <- left_join(pressures_summary_fisheries, product_fisheries, by=c("iso3c", "organism", "product")) %>%
+  filter(!is.na(tonnes)) %>%
+    filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>%
+    filter(tonnes>0) %>%
+  rowwise() %>%
+  mutate(pressure_per_tonne = cumulative_pressure/tonnes * 1000000) %>%
+  dplyr::select(-product) %>%
+  rename(product = organism) %>%
+    mutate(plot_names = ifelse(product == "fofm", "forage fish",
+                           ifelse(product == "fish", "freshwater fish", product)), 
+           product = ifelse(product == "fofm", "forage fish",
+                           ifelse(product == "fish", "freshwater fish", product)))
+```
+
+
+
+### Mariculture 
+
+```{r}
+
+mariculture_list <- c("salmon", "shrimp", "tuna", "crustaceans", "marine-fish-general", "bivalve")
+
+pressures_summary_mariculture <- pressures_summary %>%
+  group_by(iso3c, category1_production) %>%
+  summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+  ungroup() %>%
+  separate(col=category1_production, c("organism", "product"), sep="_") %>%
+  filter(organism %in% mariculture_list)
+
+tmp <- filter(pressures_summary_mariculture, iso3c=="USA") %>% data.frame()
+
+product_mariculture <- product_tonnes %>%
+  group_by(iso3c, category1_production) %>%
+  summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+  ungroup() %>%
+  filter(., !grepl("feed",category1_production)) %>%
+  separate(col=category1_production, c("organism", "product"), sep="_") %>%
+  filter(organism %in% mariculture_list) 
+
+tmp <- filter(product_mariculture, iso3c=="USA") %>% data.frame()
+
+cp_rate_mariculture_tonnes <- left_join(pressures_summary_mariculture, product_mariculture, by=c("iso3c", "organism", "product")) %>%
+  filter(!is.na(tonnes)) %>%
+    filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>%
+    filter(tonnes>0) %>%
+  mutate(iso3c = ifelse(iso3c == "HKG", "CHN", iso3c)) %>% 
+  group_by(iso3c, organism, product) %>% 
+  dplyr::summarise(cumulative_pressure = sum(cumulative_pressure),
+                   tonnes = sum(tonnes)) %>% 
+  rowwise() %>%
+  mutate(pressure_per_tonne = cumulative_pressure/tonnes * 1000000) %>%
+  dplyr::select(-product) %>%
+  rename(product = organism) %>%
+  mutate(plot_names = product)
+
+
+```
+
+
+### Livestock 
+
+groups:  cows_meat, cows_milk, buffalo_milk, goats_milk, goats_meat, sheep_milk, sheep_meat, chickens_eggs, chickens_meat, pigs_meat
+
+```{r}
+categories <- read_csv(here("_analysis/figures/paper/data/grouping_naming_structure.csv"))
+
+livestock_list <- c("cows_meat", "cows_milk", "buffaloes_milk", "goats_milk", "goats_meat", "sheep_milk", "sheep_meat", "chickens_eggs", "chickens_meat", "pigs_meat")
+
+pressures_summary_livestock <- pressures_summary %>%
+  group_by(iso3c, category1_production) %>%
+  summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+  ungroup() %>%
+  filter(category1_production %in% livestock_list) 
+
+tmp <- filter(pressures_summary_livestock, iso3c=="USA") %>% data.frame()
+
+product_livestock <- product_tonnes %>%
+  group_by(iso3c, category1_production) %>%
+  summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+  ungroup() %>%
+  filter(., !grepl("feed",category1_production))%>%
+  filter(category1_production %in% livestock_list)
+
+tmp <- filter(product_livestock, iso3c=="USA") %>% data.frame()
+
+cp_rate_livestock_tonnes <- left_join(pressures_summary_livestock, product_livestock, by=c("iso3c", "category1_production")) %>%
+  filter(!is.na(tonnes)) %>%
+    filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>%
+    filter(tonnes>0) %>%
+  rowwise() %>%
+  mutate(pressure_per_tonne = cumulative_pressure/tonnes * 1000000) %>% 
+  rename(product = category1_production) %>%
+  mutate(product = ifelse(product == "cows_meat", "cattle_meat", product)) %>%
+  mutate(plot_names = as.factor(str_replace(product, "_", " ")))
+```
+
+### Feed 
+Need to adjust pressure/tonne to reflect tonnes of final animal product. 
+
+```{r}
+categories <- read_csv(here("_analysis/figures/paper/data/grouping_naming_structure.csv"))
+
+pressures_summary_feed <- pressures_summary %>% 
+  filter(str_detect(category1_production, "feed_")) %>% 
+  group_by(iso3c, category1_production) %>%
+  summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+  ungroup() 
+
+product_feed <- product_tonnes %>%
+  group_by(iso3c, category1_production) %>%
+  summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+  ungroup() %>%
+  filter(str_detect(category1_production, "feed_")) 
+
+cp_rate_feed_tonnes <- left_join(pressures_summary_feed, product_feed, by=c("iso3c", "category1_production")) %>%
+  filter(!is.na(tonnes)) %>%
+    filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>%
+    filter(tonnes>0) %>%
+  rowwise() %>%
+  mutate(pressure_per_tonne = cumulative_pressure/tonnes * 1000000) %>%
+  mutate(product = category1_production) %>%
+  mutate(category1_production = str_replace(category1_production, "_", " "),
+         category1_production = str_replace(category1_production, "_", " ")) %>%
+  mutate(category1_production = str_remove(category1_production, "feed ")) %>%
+  separate(category1_production, into = c("animal", "prod"), sep = " ", remove = TRUE) %>%
+  mutate(prod = ifelse(animal %in% c("buffaloes", "chickens", "cows", "pigs", "goats", "sheep"), prod, NA)) %>%
+  unite(category1_production,  c("animal", "prod"), sep = " ", na.rm = TRUE) %>%
+  mutate(category1_production = paste(category1_production, "feed", sep = " ")) %>%
+  rename(plot_names = category1_production) %>%
+  mutate(plot_names = str_replace(plot_names, "cows meat", "cattle meat"), 
+         product = str_replace(product, "cows_meat", "cattle_meat"))
+  
+```
+
+Save the tonnes CP rates 
+
+```{r}
+
+all_tonnes <- rbind(cp_rate_crops_tonnes, cp_rate_fisheries_tonnes, cp_rate_mariculture_tonnes, cp_rate_livestock_tonnes, cp_rate_feed_tonnes)
+
+write_csv(all_tonnes, here::here("_efficiency/data/all_pressure_per_tonnes.csv"))
+
+```
+
+
+## Protein and Kcal efficiencies 
+
+### Livestock 
+
+```{r}
+
+live_prod_list <- pull(livestock_cal_pro, product) %>%  unique()
+
+## remove feed for now until we clean that up
+pressures_raw <- read_csv(here("_efficiency/data/pressures_summary.csv")) 
+
+pressures <- pressures_raw %>% 
+  unite(product, c(organism, product)) %>% 
+  filter(product %in% live_prod_list,
+         !str_detect(category1_production, "feed")) %>% 
+  group_by(iso3c, product) %>% 
+  summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+  ungroup()
+
+## finish up prepping the data
+cp_rate_livestock_pro_cal <- left_join(pressures, livestock_cal_pro) %>%
+  filter(!is.na(tonnes)) %>%
+  filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>%
+  filter(tonnes >= 10) %>% 
+  rowwise() %>%
+  mutate(pressure_per_tonne_protein = cumulative_pressure/tonnes_protein * 1000000,
+         pressure_per_mill_kcal = cumulative_pressure/million_kcal * 1000000) %>% 
+  mutate(product = ifelse(product == "cows_meat", "cattle_meat", product)) %>%
+  select(-tonnes, -product_tonnes_to_mill_kcal, -product_tonnes_to_tonnes_protein) %>% 
+    mutate(plot_names = as.factor(str_replace(product, "_", " ")))
+
+```
+
+
+### Crops
+
+```{r}
+
+long_name <- vroom::vroom(here::here("crop/farm/data/crop_codes_updated.csv")) %>% 
+  select(organism = SPAM_super,
+         long = SPAM_full_name) %>% 
+  mutate(long = ifelse(organism == "tnut", "tree nuts",
+                       ifelse(organism == "spis", "spices",
+                              ifelse(organism == "xfru", "other fruits",
+                                     ifelse(organism == "xmil", "millet",
+                                            ifelse(organism == "xoil", "other oil crops",
+                                                   ifelse(organism == "xpul", "pulses", long))))))) %>% 
+  unique() %>% 
+  rename(product = organism)
+
+spam_names_df <- vroom::vroom(here::here("crop/farm/data/crop_codes_updated.csv")) 
+spam_names <- unique(spam_names_df$SPAM_super)
+
+pressures_crop <- pressures_raw %>% 
+  filter(organism %in% spam_names) %>% 
+  group_by(iso3c, organism) %>% 
+  summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+  ungroup() %>% 
+  rename(product = organism)
+
+cp_rate_crops_pro_cal <- left_join(crop_cal_pro, pressures_crop, by = c("iso3c", "product")) %>%
+  filter(!is.na(tonnes)) %>%
+  filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>%
+  filter(tonnes >= 10) %>% 
+  rowwise() %>%
+  mutate(
+         pressure_per_tonne_protein = cumulative_pressure/tonnes_protein * 1000000,
+         pressure_per_mill_kcal = cumulative_pressure/million_kcal * 1000000) %>%
+  dplyr::select(-tonnes) %>%
+    left_join(long_name) %>%
+  rename(plot_names = long)
+  
+```
+
+
+### Fisheries
+Some wrangling
+```{r}
+fresh_cal_pro_2 <- fresh_cal_pro %>% 
+  mutate(organism = "freshwater fish",
+         species_class_final = "Freshwater fish") %>%
+  rename(tonnes_product = freshwater_tonnes) 
+
+fisheries_cal_pro <- marine_cal_pro %>% 
+  mutate(organism = case_when(species_class_final == "Demersal" ~ "demersal",
+                              species_class_final == "Large pelagic" ~ "large-pelagic",
+                              species_class_final == "Medium pelagic" ~ "medium-pelagic",
+                              species_class_final == "Small pelagic" ~ "small-pelagic",
+                              species_class_final == "Reef-associated" ~ "reef",
+                              species_class_final == "Benthic" ~ "benthic",
+                              species_class_final == "forage_fish" ~ "fofm")) %>% 
+  rbind(fresh_cal_pro_2)
+
+fish_cat <- pull(fisheries_cal_pro,organism) %>% 
+  unique()
+
+pressures_fisheries <- pressures_raw %>% 
+  mutate(organism = ifelse(organism == "fish", "freshwater fish", organism)) %>% 
+  filter(organism %in% fish_cat) %>% 
+  group_by(iso3c, organism) %>% 
+  summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+  ungroup()
+
+cp_rate_fish_pro_cal <- left_join(fisheries_cal_pro, pressures_fisheries, by = c("iso3c", "organism")) %>%
+  filter(!is.na(million_kcal)) %>%
+  filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>%
+    mutate(organism = ifelse(organism == "fofm", "forage fish", organism)) %>% 
+  #filter(tonnes_prod >= 10) %>% 
+  rowwise() %>%
+  mutate(
+         pressure_per_tonne_protein = cumulative_pressure/tonnes_protein * 1000000,
+         pressure_per_mill_kcal = cumulative_pressure/million_kcal * 1000000) %>%
+   dplyr::select(-tonnes_product, -species_class_final) %>%
+  mutate(plot_names = organism) %>%
+  rename(product = organism)
+  
+```
+
+
+
+### Mariculture
+Some wrangling
+```{r}
+
+pressures_mari <- pressures_raw %>% 
+  filter(category2_production == "mariculture") %>% 
+  group_by(iso3c, organism) %>% 
+  summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+  ungroup()
+
+cp_rate_mari_pro_cal <- left_join(mari_cal_pro, pressures_mari, by = c("iso3c", "organism")) %>%
+  filter(!is.na(million_kcals)) %>%
+  filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>% 
+  rowwise() %>%
+  mutate(pressure_per_tonne_protein = cumulative_pressure/tonnes_protein * 1000000,
+         pressure_per_mill_kcal = cumulative_pressure/million_kcals * 1000000) %>%
+  select(-tonnes_product) %>%
+  rename(product = organism) %>%
+  mutate(plot_names = product) %>%
+  rename(million_kcal = million_kcals)
+  
+```
+
+
+Save the calories and protein CP rates 
+
+
+```{r}
+all_cal_prot <- rbind(cp_rate_livestock_pro_cal, cp_rate_mari_pro_cal, cp_rate_fish_pro_cal, cp_rate_crops_pro_cal) %>%
+   ungroup() %>% 
+  filter(!is.infinite(pressure_per_tonne_protein))
+
+write_csv(all_cal_prot, here::here("_efficiency/data/all_pressure_per_cal_prot.csv"))
+
+```
+
+
+
+Combine them into one df we can use for plotting figures and supplementary data
+
+```{r}
+
+all_cal_prot_cp <- read_csv(here::here("_efficiency/data/all_pressure_per_cal_prot.csv"))
+
+all_tonnes_cp <- read_csv(here::here("_efficiency/data/all_pressure_per_tonnes.csv"))
+
+name_fig <- unique(all_cal_prot$product)
+name_si <- unique(all_tonnes_cp$product)
+
+setdiff(name_fig, name_si)
+setdiff(name_si, name_fig)
+
+combine <- left_join(all_tonnes_cp, all_cal_prot_cp) %>% 
+  left_join(food_rgns) %>% 
+  select(country = Country, iso3c, product, plot_names, tonnes, cumulative_pressure, pressure_per_tonne, million_kcal, tonnes_protein, pressure_per_tonne_protein, pressure_per_mill_kcal) %>% 
+  mutate(country = ifelse(iso3c == "HSX", "High Seas", country)) 
+
+
+chk <- combine %>% 
+  filter(is.na(million_kcal),
+         !str_detect(product, "feed")) %>% 
+  mutate(remove = "yes")
+
+combine_rm_na <- left_join(combine, chk) %>% 
+  filter(is.na(remove)) %>% 
+  select(-remove)
+
+## This is the data we will use for the SI_data and for all of the efficiency figures
+write_csv(combine_rm_na, here::here("_analysis/SI_data/output/efficiency_df.csv"))
+
+```
+

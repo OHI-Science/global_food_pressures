@@ -1,0 +1,100 @@
+---
+title: "step2b_fubc_2017_grassland"
+output: html_document
+---
+
+# Preamble
+```{r setup, include=FALSE}
+library(tidyverse)
+library(here)
+library(tidyr)
+library(janitor)
+library(RCurl)
+
+# Raster templates
+source(here("_spatial/template_raster.R"))
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+```
+
+# Save dataset locally
+```{r}
+# vroom(getURL("https://raw.githubusercontent.com/cdkuempel/food_chicken_salmon/master/crop_nutrient/data/IFA_2017_FUBC_pc_archive.csv?token=AKMNQN6Z2UXICZWMA56LYMTBTPODO"), 
+#         .name_repair = make_clean_names, 
+#         col_select = c(fubc_2017_country = country, nutrient = fertilizer, grassland = grass)) %>% 
+#   write_csv(., here("crop/nutrient/data/fubc_2017_percentages.csv"))
+```
+
+Source: [IFA 2017 FUBC](https://www.fertilizer.org/images/Library_Downloads/2017_IFA_AgCom_17_134%20rev_FUBC%20assessment%202014.pdf)
+
+# Extract proportion of fertilizer that goes to grasslands in each country.
+
+```{r}
+# Read-in IFA 2014/15 data
+fubc_2017_grass <- 
+  vroom(here("crop/nutrient/data/fubc_2017_percentages.csv")) %>%
+  filter(!nutrient %in% "N+P+K") %>% 
+  mutate(grassland = as.numeric(gsub("%", "", grassland)) / 100) %>% 
+  filter(!fubc_2017_country == "World")
+```
+
+## Match iso3c codes with fubc_2017_country names
+
+```{r}
+other_fubc_countries <- 
+  unique(fubc_2017_grass$fubc_2017_country)[unique(fubc_2017_grass$fubc_2017_country) %in% c("EU-28", "USA", "New-Zealand", "ROW", "World", "China") == FALSE]
+
+EU_countries <- 
+  c("Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czech Republic",
+    "Denmark","Estonia","Finland","France","Germany","Greece","Hungary",
+    "Ireland","Italy","Latvia","Lithuania","Luxembourg","Malta","Netherlands",
+    "Poland","Portugal","Slovakia","Slovenia","Spain","Sweden","Romania",
+    "United Kingdom","Guernsey","Faroe Islands","Gibraltar","Åland",
+    "Svalbard and Jan Mayen")
+
+china_countries <- c("China", "Macao", "Hong Kong")
+
+rest_of_the_world <- 
+  food_rgns$Country[!food_rgns$Country %in% c(other_fubc_countries, 
+                                              china_countries, 
+                                              EU_countries,
+                                              "United States",
+                                              "New Zealand")]
+
+# Renaming 
+country_match <- 
+  tibble(fubc_2017_country = c(rep("EU-28", 33),
+                               rep("China", 3),
+                               "USA",
+                               "New-Zealand",
+                               other_fubc_countries,
+                               rep("ROW", length(rest_of_the_world))),
+         Country = c(EU_countries,
+                     china_countries,
+                     "United States",
+                     "New Zealand",
+                     other_fubc_countries,
+                     rest_of_the_world))
+
+# Merge with country names list and populate iso3c for ROW
+setdiff(fubc_2017_grass$fubc_2017_country, country_match$fubc_2017_country)
+setdiff(country_match$fubc_2017_country, fubc_2017_grass$fubc_2017_country)
+```
+
+# Match country names
+```{r}
+fubc_2017_grass <- 
+  left_join(fubc_2017_grass, country_match) %>% 
+  left_join(., food_rgns) %>% 
+  select(-Country, -fubc_2017_country, -ID_0)
+
+244 * 3 == 
+  length(unique(fubc_2017_grass$iso3c)) * 
+  length(unique(fubc_2017_grass$nutrient)) # TRUE 
+
+244 * 3 == nrow(fubc_2017_grass) # TRUE
+```
+
+```{r}
+write_csv(fubc_2017_grass, here("crop/nutrient/data/fubc_2017_grassland.csv"))
+```

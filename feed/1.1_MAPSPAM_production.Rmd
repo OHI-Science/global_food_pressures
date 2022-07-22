@@ -1,0 +1,95 @@
+---
+title: "MAPSPAM_tonnes_production.Rmd"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+## Determine total crop grown in each region
+This should be run if there are changes to the MAPSPAM production data.
+
+Calculates total crop production using the MAPSPAM data adjusted to 2017 production.  These data include all growing systems (intensive, irrigated, etc.) and are in units of metric tonnes.
+
+This is used in subsequent script to estimate the proportion of each crop going to animal feed in each country.
+
+```{r}
+
+
+library(here)
+library(tidyverse)
+library(countrycode)
+
+focus_year = 2017
+
+## quick check to make sure categories are aligned
+mapspam_crops <- read_csv(here("feed/data/MapSPAM_crop_info.csv")) %>%
+  select(SPAM_short_name, SPAM_super) %>%
+  unique()
+
+
+```
+
+Extract by region the crop production from the raster maps.
+```{r}
+
+regions <- read_csv(here("_spatial/_output/food_rgns.csv"))
+
+crop_tonnes <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/scaled_maps_2017", pattern = "_A", full=TRUE)
+crop_tonnes <- grep("rest", crop_tonnes, invert=TRUE, value=TRUE)
+
+crop_stack <- raster::stack(crop_tonnes)
+zones <- raster::raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/spatial/land_eez_rgns.tif")
+
+crop_production <- raster::zonal(crop_stack, zones, fun="sum", na.rm=TRUE, progress="text")
+
+crop_production_df <- data.frame(crop_production) %>%
+  gather("SPAM_short_name", "tonnes_producing_crop", -1) %>%
+  rename("ID_0" = zone) %>%
+  left_join(regions, by="ID_0") %>%
+  mutate(SPAM_short_name = gsub("crop_", "", SPAM_short_name)) %>%
+  mutate(SPAM_short_name = gsub("_A_scaled", "", SPAM_short_name)) %>%
+  dplyr::select(iso3c_producing=iso3c, SPAM_short_name, tonnes_producing_crop)
+
+```
+
+Combine the super categories
+
+```{r}
+crop_production_df <- left_join(crop_production_df, mapspam_crops, by="SPAM_short_name") 
+
+# check that all crop categories add up: if not, adjust the crop code datasheet
+crop_production_df <- crop_production_df %>%
+  group_by(iso3c_producing, SPAM_super) %>%
+  summarize(tonnes_producing_crop = sum(tonnes_producing_crop)) %>%
+#  filter(!(SPAM_super %in% c("toba", "ofib", "rcof", "acof", "teas"))) %>%
+  ungroup()
+
+```
+
+Check and save: should be about equal to 2017 FAO production
+
+```{r}
+
+check <- crop_production_df %>%
+  group_by(SPAM_super) %>% summarize(our_tonnes = sum(tonnes_producing_crop, na.rm=TRUE)) %>% data.frame()
+  
+fao_translate <- vroom::vroom(here("crop/farm/data/crop_codes_updated.csv")) %>%
+  select(SPAM_super, item_code) %>%
+  unique()
+
+fao <- read_csv(here("crop/farm/data/FAOSTAT_crop_production_2010_2017.csv")) %>% 
+  filter(Year == 2017) %>%
+  filter(Area != "China") %>%
+  select(Area, item_code = `Item Code`, Value) %>%
+  left_join(fao_translate, by="item_code") %>%
+  group_by(SPAM_super) %>%
+  summarize(total = sum(Value, na.rm=TRUE)) 
+  
+compare <- check %>% left_join(fao, by="SPAM_super") %>%
+  mutate(prop = our_tonnes/total)
+compare
+sum(compare$our_tonnes, na.rm=TRUE)/sum(compare$total) # this all looks reasonable! Some small differences due to gapfilling and other things.
+
+write_csv(crop_production_df, here("feed/data/MAPSPAMcrop_production.csv"))
+
+```

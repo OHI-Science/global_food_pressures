@@ -1,0 +1,207 @@
+---
+title: "STEP 3: Proportional change 2010-2017"
+author: "Juliette"
+date: "9/4/2020"
+output: html_document
+---
+
+# Objective
+This markdown calculates the proportional change from 2010-2017 for the headcounts of our animals of interest using FAOSTAT data. 
+
+# Inputs
+**Reference** For step 1 use a calculated df: fao_livestock_headcount.csv which uses http://www.fao.org/faostat/en/#data/QL for step 1; http://www.fao.org/faostat/en/#data/QA for step 2
+**Description** 
+Head count data
+**Resolution** Country level
+**Time Range** Avaliable 1961-2018; we downloaded 2010 and 2017
+**Format** CSV file
+
+## Outputs: 
+For everything but backyard chickens: prop_change_2010_2017.csv
+For backyard chickens: prop_change_backyard_chickens_2010_2017.csv
+
+**
+
+
+1. Calculating the proportional change from 2010 to 2016 for pigs, sheep, goats, dairy cows, meat cows, buffaloes, broilers, and layers using  FAOSTAT headcount data from the manure section. 
+
+2. Calculating the 2010 to 2016 for all chickens using the live chicken data from the livestock section of FAOSTAT. This will only be used to calculate proportional change for backyard chickens. 
+
+## Methods
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(ggplot2)
+library(countrycode)
+source(here("_workflow/common.R"))
+
+'%notin%' <- Negate('%in%')
+
+# un gapfilling regions
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>% 
+  dplyr::select(iso3c, Global_Name, Region_Name, Sub_region_Name, Intermediate_Region_Name, Region_Name)
+
+fao_livestock_headcount <- read_csv(here("animal_farm/farm/data/fao_livestock_headcount_chicken_adjusted.csv"))
+```
+
+
+
+# Step 1: Proportional change using the fao stocks manure data
+
+Little bit of wrangling and cleaning
+```{r}
+fao_count <- fao_livestock_headcount %>%
+  mutate(animal = ifelse(animal == "cows" & product == "milk", "dairy cow",
+                         ifelse(animal == "cows" & product == "meat", "meat cow", 
+                                ifelse(animal == "chickens" & product == "meat", "broiler chicken",
+                                       ifelse(animal == "chickens" & product == "eggs", "layer chicken",
+                                              ifelse(animal == "chickens" & product == "eggs&meat", "backyard chicken",animal)))))) %>% 
+  select(iso3c, year, animal, fao_headcount)  %>% 
+  pivot_wider(names_from = "year", values_from = "fao_headcount") %>% 
+  rename(counts_2017 = '2017', counts_2010 = '2010') %>% 
+  mutate(prop_change = counts_2017/counts_2010) %>% 
+  # There is some weirdness in broiler chickens for HRV, a prop change of 6,357. We will make this NA and gapfill
+  mutate(prop_change = ifelse(iso3c == "HRV", NA, prop_change)) %>% 
+  left_join(food_rgns, by = "iso3c") %>% 
+  rename(country = Country) %>% 
+  select(-ID_0)
+
+```
+
+
+We need to gapfill for the countries where there is a year of data missing and that fao has no data for. We can use the UN regions for this.
+```{r}
+
+## grab the countries that are not included in FAO so we can gapfil them at the same time. this isn't the same for all animals
+animals <- unique(fao_count$animal)
+
+dairy <- fao_count %>%  filter(animal == "dairy cow")
+meat <- fao_count %>%  filter(animal == "meat cow")
+goat <- fao_count %>%  filter(animal == "goats")
+sheep <- fao_count %>%  filter(animal == "sheep")
+pig <- fao_count %>%  filter(animal == "pigs")
+broiler <- fao_count %>%  filter(animal == "broiler chicken")
+layer <- fao_count %>%  filter(animal == "layer chicken")
+by_chick <- fao_count %>%  filter(animal == "backyard chicken")
+buffalo <- fao_count %>%  filter(animal == "buffaloes")
+
+missing_dairy <- setdiff(food_rgns$iso3c, dairy$iso3c) %>% 
+  as_tibble() %>% 
+  rename(iso3c = value) %>% 
+  mutate(animal = "dairy cow",
+         counts_2010 = NA, 
+         counts_2017 = NA, 
+         prop_change = NA) %>% 
+  left_join(food_rgns, by = "iso3c") %>% 
+  select(-ID_0, country = Country)
+
+missing_meat <- setdiff(food_rgns$iso3c, meat$iso3c) %>% 
+  as_tibble() %>% 
+  rename(iso3c = value) %>% 
+  mutate(animal = "meat cow",
+         counts_2010 = NA, 
+         counts_2017 = NA, 
+         prop_change = NA) %>% 
+  left_join(food_rgns, by = "iso3c") %>% 
+  select(-ID_0, country = Country)
+
+missing_sheep <- setdiff(food_rgns$iso3c, sheep$iso3c) %>% 
+  as_tibble() %>% 
+  rename(iso3c = value) %>% 
+  mutate(animal = "sheep",
+         counts_2010 = NA, 
+         counts_2017 = NA, 
+         prop_change = NA) %>% 
+  left_join(food_rgns, by = "iso3c") %>% 
+  select(-ID_0, country = Country)
+
+missing_goats <- setdiff(food_rgns$iso3c, goat$iso3c) %>% 
+  as_tibble() %>% 
+  rename(iso3c = value) %>% 
+  mutate(animal = "goats",
+         counts_2010 = NA, 
+         counts_2017 = NA, 
+         prop_change = NA) %>% 
+  left_join(food_rgns, by = "iso3c") %>% 
+  select(-ID_0, country = Country)
+
+missing_pigs <- setdiff(food_rgns$iso3c, pig$iso3c) %>% 
+  as_tibble() %>% 
+  rename(iso3c = value) %>% 
+  mutate(animal = "pigs",
+         counts_2010 = NA, 
+         counts_2017 = NA, 
+         prop_change = NA) %>% 
+  left_join(food_rgns, by = "iso3c") %>% 
+  select(-ID_0, country = Country)
+
+missing_broiler <- setdiff(food_rgns$iso3c, broiler$iso3c) %>% 
+  as_tibble() %>% 
+  rename(iso3c = value) %>% 
+  mutate(animal = "broiler chicken",
+         counts_2010 = NA, 
+         counts_2017 = NA, 
+         prop_change = NA) %>% 
+  left_join(food_rgns, by = "iso3c") %>% 
+  select(-ID_0, country = Country)
+
+missing_layer <- setdiff(food_rgns$iso3c, layer$iso3c) %>% 
+  as_tibble() %>% 
+  rename(iso3c = value) %>% 
+  mutate(animal = "layer chicken",
+         counts_2010 = NA, 
+         counts_2017 = NA, 
+         prop_change = NA) %>% 
+  left_join(food_rgns, by = "iso3c") %>% 
+  select(-ID_0, country = Country)
+
+missing_backyard_chick <- setdiff(food_rgns$iso3c, by_chick$iso3c) %>% 
+  as_tibble() %>% 
+  rename(iso3c = value) %>% 
+  mutate(animal = "backyard chicken",
+         counts_2010 = NA, 
+         counts_2017 = NA, 
+         prop_change = NA) %>% 
+  left_join(food_rgns, by = "iso3c") %>% 
+  select(-ID_0, country = Country)
+
+missing_buffalo <- setdiff(food_rgns$iso3c, buffalo$iso3c) %>% 
+  as_tibble() %>% 
+  rename(iso3c = value) %>% 
+  mutate(animal = "buffaloes",
+         counts_2010 = NA, 
+         counts_2017 = NA, 
+         prop_change = NA) %>% 
+  left_join(food_rgns, by = "iso3c") %>% 
+  select(-ID_0, country = Country)
+
+missing_rgns <- rbind(missing_dairy, missing_meat, missing_sheep, missing_goats, missing_pigs, missing_broiler, missing_layer, missing_buffalo, missing_backyard_chick)
+```
+
+
+Gapfill
+```{r}
+fao_count_gf <- fao_count %>% 
+  rbind(missing_rgns) %>%
+  left_join(un, by = "iso3c") %>% 
+  group_by(Intermediate_Region_Name, animal) %>% 
+  mutate(prop_change = ifelse(is.na(prop_change), mean(prop_change, na.rm = TRUE), prop_change)) %>% 
+  ungroup() %>% 
+  group_by(Sub_region_Name, animal) %>% 
+  mutate(prop_change = ifelse(is.na(prop_change), mean(prop_change, na.rm = TRUE), prop_change)) %>% 
+  ungroup() %>% 
+  group_by(Region_Name, animal) %>% 
+  mutate(prop_change = ifelse(is.na(prop_change), mean(prop_change, na.rm = TRUE), prop_change)) %>% 
+  ungroup() %>% 
+  select(-Global_Name, -Region_Name, -Sub_region_Name, -Intermediate_Region_Name) %>% 
+  filter(country != "Sudan (former)") %>% 
+  relocate(country, .after = iso3c)
+```
+
+
+Save
+```{r}
+write_csv(fao_count_gf, here("animal_farm/farm/data/prop_change_2010_2017.csv"))
+```

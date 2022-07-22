@@ -1,0 +1,161 @@
+---
+title: "Caculating GHG emissions from on farm maintence machinery usage"
+author: "Juliette"
+date: "3/23/2020"
+output: html_document
+---
+
+In this markdown we apply the machinery_em_.csv df to the MapSPAM cropland area by production system type to calculate the total emissions from on farm machinery maintenance for each crop.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Read in libraries and paths
+```{r}
+#Load libraries
+library(readr)
+library(dplyr)
+library(tidyverse)
+library(doParallel)
+library(raster)
+library(rgdal)
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+#Files we will need:
+mach_em <- 
+  read_csv(here("crop/ghg/data/machinery_em.csv")) %>% 
+  dplyr::select(split_rest_names, input, all_em)
+mach_em <- 
+  mach_em %>% 
+  mutate(split_rest_names = if_else(split_rest_names == "rest", "tnut", split_rest_names)) %>% 
+  bind_rows(mach_em) %>%
+  mutate(split_rest_names = if_else(split_rest_names == "rest", "spis", split_rest_names)) %>% 
+  bind_rows(mach_em) %>%
+  mutate(split_rest_names = if_else(split_rest_names == "rest", "othr", split_rest_names)) %>% 
+  unique() 
+```
+
+Data:
+Physical area (A) is measured in a hectare and represents the actual area where a crop is grown, not counting how often production was harvested from it. Physical area is calculated for each production system and crop, and the sum of all physical areas of the four production systems constitute the total physical area for that crop. The sum of the physical areas of all crops in a pixel may not be larger than the pixel size.
+
+*_A	all technologies together, ie complete crop
+*_H	rainfed high inputs portion of crop
+*_I	irrigated portion of crop
+*_L	rainfed low inputs portion of crop
+*_R	rainfed portion of crop (= A - I, or H + L + S)
+*_S	rainfed subsistence portion of crop
+
+For our purposed here we used the physical area rasters for _H and _I and excluded _L and _S since those two production types were determined to both have 0 values for machinery use.
+
+Methods:
+Since the emisions factor from machinery_em is in kg CO2eq/hectare and our maps are in number of hectares in each cell, it is an easy direct conversion. We will also convert to tonnes for consistency with other GHG impact layers.
+
+Calculate emissions for all high irrigated crops
+```{r}
+# List files in the physical area folder.
+crops_irrigated <- list.files(file.path(prep,"crop/farm/MapSPAM_correct_extent"), pattern="I.tif", full=TRUE)
+crops_irrigated <-  Filter(function(x) any(grepl("_A_", x)), crops_irrigated)
+##remove coffee, tea, tobacco, should probably do this in the machinery wrangling code
+crops_irrigated <-  Filter(function(x) !any(grepl("RCOF", x)), crops_irrigated)
+crops_irrigated <-  Filter(function(x) !any(grepl("ACOF", x)), crops_irrigated)
+crops_irrigated <-  Filter(function(x) !any(grepl("TOBA", x)), crops_irrigated)
+crops_irrigated <-  Filter(function(x) !any(grepl("TEAS", x)), crops_irrigated)
+crops_irrigated <-  Filter(function(x) !any(grepl("REST", x)), crops_irrigated)
+foreach(file = crops_irrigated) %dopar% {
+  
+ #file = crops_irrigated[37] 
+ crop <- tolower(str_sub(file, -10, -7))
+ 
+ irrigated_em <- (as.numeric(mach_em$all_em[mach_em$input == "high irrigated" & mach_em$split_rest_names == crop]))
+ 
+ emissions <- raster(file)*irrigated_em
+ 
+   writeRaster(emissions, filename = paste(prep, "crop/ghg/crop_machinery_ghg/irrigated/",crop,".tif", sep = ""), format="GTiff", overwrite=TRUE)
+}
+```
+
+
+Calculate emissions for all high rain crops
+```{r}
+# List files in the physical area folder.
+crops_rain <- list.files(file.path(prep,"spatial/MapSPAM_correct_extent"), pattern="H.tif", full=TRUE)
+crops_rain <-  Filter(function(x) any(grepl("_A_", x)), crops_irrigated)
+##remove coffee, tea, tobacco, should probably do this in the machinery wrangling code
+crops_rain <-  Filter(function(x) !any(grepl("RCOF", x)), crops_rain)
+crops_rain <-  Filter(function(x) !any(grepl("ACOF", x)), crops_rain)
+crops_rain <-  Filter(function(x) !any(grepl("TOBA", x)), crops_rain)
+crops_rain <-  Filter(function(x) !any(grepl("TEAS", x)), crops_rain)
+crops_rain <-  Filter(function(x) !any(grepl("REST", x)), crops_rain)
+foreach(file = crops_rain) %dopar% {
+  
+ #file = crops_irrigated[41]
+ crop <- tolower(str_sub(file, -10, -7))
+ 
+ rain_em <- (as.numeric(mach_em$all_em[mach_em$input == "high rain" & mach_em$split_rest_names == crop]))
+ 
+ emissions <- raster(file)*rain_em
+ 
+   writeRaster(emissions, filename = paste(prep, "crop/ghg/crop_machinery_ghg/rain_high/",crop,".tif", sep = ""), format="GTiff", overwrite=TRUE)
+}
+```
+
+Caculate total emissions for each crop, basically add the irrigated and rain emission rasters from above 
+```{r}
+rain_list <- list.files(paste(prep, "crop/ghg/crop_machinery_ghg/rain_high", sep = ""), pattern="tif", full=TRUE)
+          
+foreach(rain = rain_list) %dopar% {
+  
+ #rain = rain_list[37]
+ crop <- str_sub(rain, -8, -5)
+ 
+ irrigated <-  raster(paste(prep, "crop/ghg/crop_machinery_ghg/irrigated/", crop, ".tif", sep = ""))
+ rain = raster(rain)
+ 
+  mach_stack <- raster::stack(irrigated, rain)
+  crop_add <- sum(mach_stack, na.rm= TRUE)/1000 ## we want it in tonnes
+ 
+   writeRaster(crop_add, filename = paste(prep, "crop/ghg/crop_machinery_ghg/total_em_crop/",crop,".tif", sep = ""), format="GTiff", overwrite=TRUE)
+}
+```
+
+Save map of wheat and corn to post to issues
+```{r}
+wheat <- raster(file.path(prep, "crop/ghg/crop_machinery_ghg/total_em_crop/whea.tif"))
+plot(wheat, main = "wheat machinery em")
+corn <- raster(file.path(prep, "crop/ghg/crop_machinery_ghg/total_em_crop/maiz.tif"))
+plot(corn, main = "corn machinery em")
+soy <- raster(file.path(prep, "crop/ghg/crop_machinery_ghg/total_em_crop/soyb.tif"))
+plot(soy, main = "soy machinery em")
+```
+
+
+
+Doing the machinery ghg emissions for fodder separately
+
+Combine the wheat and corn emissions for irrigated and rain high input to estiamte the machinery use for fodder crops
+units are kg co2eq/hectare
+```{r}
+fodd_mach_em <- mach_em %>% 
+  filter(split_rest_names %in% c("whea", "maiz"),
+         input %in% c("high irrigated", "high rain")) %>% 
+  group_by(input) %>% 
+  dplyr::summarise(em_factor = mean(all_em)) %>% 
+  ungroup() %>% 
+  mutate(crop = "fodder")
+```
+
+Grab the fodder crop area files
+units of the raw files are in 1,000 hectares
+```{r}
+fodd_irrigated_raster <- raster(file.path(raw, "GAEZAct_2015/GAEZAct2015_HarvArea_Foddercrops_Irrigated.tif"))
+fodd_rain_raster <- raster(file.path(raw, "GAEZAct_2015/GAEZAct2015_HarvArea_Foddercrops_Rainfed.tif"))
+irrigated_factor <- as.numeric(fodd_mach_em$em_factor[fodd_mach_em$input == "high irrigated"])
+rain_factor <- as.numeric(fodd_mach_em$em_factor[fodd_mach_em$input == "high rain"])
+fodd_irr_emissions <- fodd_irrigated_raster*irrigated_factor /1000 / 1000 # convert hectares and convert to tonnes.
+fodd_rain_emissions <- fodd_rain_raster*rain_factor /1000 / 1000
+fodd_emisisons <- fodd_irr_emissions+fodd_rain_emissions
+writeRaster(fodd_emisisons, filename = paste(prep, "crop/ghg/crop_machinery_ghg/total_em_crop/fodd.tif", sep = ""), format="GTiff", overwrite=TRUE)
+```
+

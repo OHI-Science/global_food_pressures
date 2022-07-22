@@ -1,0 +1,563 @@
+---
+title: "Deconstructing trade"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+This script should be updated if any of the following files have been updated:
+* FAO Detailed Trade Matrix
+* FAO Food Balance Sheets
+* Crop production data 
+
+This summarizes FAO trade data by SPAM crop category (vs. FAO crop category) to get a dataset that describes for each country the country of origin for each crop. This is presented as a proportion so for each country/crop the total will sum to 1.  
+
+Output: feed_consumption/data/FAO_MAPSPAMcrop_trade_data.csv"
+
+```{r}
+
+library(here)
+library(tidyverse)
+library(countrycode)
+
+focus_year = 2017
+
+
+```
+
+Get tonnes production from MAPSPAM data adjusted to 2017 production.  These data include all growing systems (intensive, irrigated, etc.) and are in units of metric tonnes.  This is used to adjust some of the trade values and for gapfilling when trade data are not available. 
+
+MAPSPAMcrop_production.csv created in 1.1.
+
+```{r}
+
+crop_production_df <- read_csv( here("feed/data/MAPSPAMcrop_production.csv"))
+
+crop_production_gf <- crop_production_df %>%
+  group_by(SPAM_super) %>%
+  mutate(global_tonnes = sum(tonnes_producing_crop, na.rm=TRUE)) %>%
+  ungroup() %>%
+  mutate(prop_global_tonnes = ifelse(tonnes_producing_crop==0 & global_tonnes==0, 0, tonnes_producing_crop/global_tonnes))
+
+summary(crop_production_gf)
+
+crop_production_gf <- crop_production_gf %>%
+ # filter(prop_global_tonnes > 0) %>%
+  filter(!(SPAM_super %in% c("toba", "ofib", "xcof", "teas", "othr"))) %>%
+  dplyr::select(iso3c_producing, SPAM_super, imports_per=prop_global_tonnes)
+
+```
+
+# Production vs. import
+Consolidate data to determine the proportional amount of local production and total imports for each crop and country.
+
+
+```{r}
+
+feed_products <- read_csv(here("feed/data/MapSPAM_to_FAO_v2.csv")) %>%
+  filter(!is.na(FAO_item_code_NFB)) %>%
+    filter(is.na(non_food)) %>%
+  select(SPAM_super, FAO_Item_Code_NFB = FAO_item_code_NFB) %>%
+  unique()
+
+
+feed_products[duplicated(feed_products$FAO_Item_Code_NFB), ] # mostly FAO_item_code is unique, but be aware of duplicates: occurs when MAPSPAM reports crops with more specificity (e.g. millet = small millet and pearl millet in MapSPAM)
+summary(feed_products)
+
+
+
+```
+
+```{r}
+
+fbs <- read_csv(file.path("/home/shares/food-systems/Food_footprint/_raw_data/FAO_FoodBalanceSheets/d2021/FAOSTAT_FBS_6-3-2021.csv")) %>%
+  filter(Year == focus_year) %>%
+  dplyr::select(consuming_area_code=`Area Code (FAO)`, consuming_country = Area, Element, FAO_Item_Code_NFB = `Item Code`, Item, Value)
+
+## provides China average that we want to delete
+dim(fbs)
+fbs <- fbs %>%
+  filter(!(consuming_country %in% "China")) 
+dim(fbs)
+
+# food balance sheet contains some derived oil products, these result in double counting because they are already counted in the primary product
+discards <- read_csv(here("feed/data/FAOSTAT_FBS_Items_discard_5-9-2022.csv")) %>%
+  filter(cut=="yes") %>%
+  pull(`Item Code`)
+
+check <- filter(fbs, FAO_Item_Code_NFB %in% discards)
+table(check$Item) # this should be non-crop items and Oils (counted in main product already)
+
+
+fbs <- fbs %>% 
+  filter(!(FAO_Item_Code_NFB %in% discards))
+table(fbs$Item)
+# make sure that all relevant product codes match up
+setdiff(feed_products$FAO_Item_Code_NFB, fbs$FAO_Item_Code_NFB) #duplicates
+missing <- setdiff(fbs$FAO_Item_Code_NFB, feed_products$FAO_Item_Code_NFB) # make sure nothing here
+missing2 <- filter(fbs, FAO_Item_Code_NFB %in% missing) %>% 
+  select(FAO_Item_Code_NFB, Item) %>%
+  unique() %>% 
+  data.frame()
+missing2
+
+# convert products to MAPSPAM crop and combine
+fbs <- fbs %>%
+  filter(FAO_Item_Code_NFB %in% feed_products$FAO_Item_Code_NFB) %>%
+  left_join(feed_products, by = "FAO_Item_Code_NFB") %>%
+  group_by(consuming_area_code, consuming_country, SPAM_super, Element) %>%
+  summarize(Value = sum(Value, na.rm=TRUE)) %>%
+  ungroup()
+
+# some cleaning
+local_prod <- fbs %>%
+  spread(Element, Value) %>%
+  rename(supply = `Domestic supply quantity`, imports=`Import Quantity`, exports=`Export Quantity`, production=Production) %>%
+  replace(is.na(.), 0) %>%
+  mutate(local_crop_prod_tonnes = production - exports) %>%            #local crop production for use within country 
+  mutate(supply2 = production+imports-exports) %>%     # a version of supply without stock variation variable
+  mutate(local_crop_prod_tonnes = ifelse(local_crop_prod_tonnes < 0, 0, local_crop_prod_tonnes)) %>%
+  mutate(local_crop_prod_per = ifelse(local_crop_prod_tonnes == 0, 0, local_crop_prod_tonnes/supply2)) %>%
+  mutate(external_crop_prod_per = ifelse(supply2 == 0, 0, imports/supply2)) %>%
+  mutate(external_crop_prod_per = ifelse(external_crop_prod_per < 0, 0, external_crop_prod_per)) %>%
+      mutate(external_crop_prod_per = ifelse(external_crop_prod_per > 1, 1, external_crop_prod_per)) %>%
+  dplyr::select(consuming_area_code, consuming_country, SPAM_super, local_crop_prod_per, external_crop_prod_per)
+
+summary(local_prod)
+filter(local_prod, consuming_country == "Sudan" & SPAM_super == "maiz")
+filter(local_prod, consuming_country == "Afghanistan" & SPAM_super == "sorg")
+filter(local_prod, consuming_country == "Ethiopia" & SPAM_super == "barl")
+filter(local_prod, consuming_country == "Myanmar")
+
+```
+
+
+Get iso3c codes
+
+```{r}
+
+local_prod_iso <- local_prod %>%
+    mutate(consuming_country = iconv(consuming_country, "UTF-8", "UTF-8",sub=''),
+         consuming_country = ifelse(consuming_country == "Eswatini", "Swaziland", consuming_country),
+         consuming_country = ifelse(consuming_country == "Netherlands Antilles (former)", "Bonaire, Sint Eustatius and Saba", consuming_country),
+         consuming_country = ifelse(consuming_country == "French Guyana", "French Guiana", consuming_country),
+         consuming_country = ifelse(consuming_country == "China, mainland", "China", consuming_country))
+
+## add standardized country names
+local_prod_iso$iso3c_consuming <- countrycode(as.character(local_prod_iso$consuming_country), origin="country.name", destination = "iso3c")
+
+## make sure all countries have an iso3c code
+check <- filter(local_prod_iso, is.na(iso3c_consuming))
+unique(check$consuming_country) # these are all higher level area, safe to delete NAs
+
+local_prod_iso <- local_prod_iso %>%
+  filter(!is.na(iso3c_consuming)) %>%
+  mutate(iso3c_producing = iso3c_consuming)
+
+summary(local_prod_iso)
+
+```
+
+
+Join MAPSPAM crop production data with fbs data.  If there is no local production according to MAPSPAM,
+local production will be zero and external production will be one.  And, if both local_crop_prod_per and external_crop_prod_per are 0, assuming that external_crop_prod_per == 1.
+
+```{r}
+
+local_prod_gf <- left_join(local_prod_iso, crop_production_df, by=c("iso3c_producing", "SPAM_super")) %>%
+  mutate(local_crop_prod_per = ifelse(tonnes_producing_crop == 0, 0, local_crop_prod_per)) %>%
+  mutate(external_crop_prod_per = ifelse(tonnes_producing_crop == 0, 1, external_crop_prod_per)) %>%
+  mutate(external_crop_prod_per = ifelse(local_crop_prod_per ==0 & external_crop_prod_per==0, 1, external_crop_prod_per)) %>%
+  dplyr::select(iso3c_consuming, SPAM_super, local_crop_prod_per, external_crop_prod_per)
+
+summary(local_prod_gf)
+filter(local_prod_gf, iso3c_consuming=="SDN")
+filter(local_prod_gf, iso3c_consuming=="IRQ") %>% data.frame()
+filter(local_prod_gf, iso3c_consuming == "AFG" & SPAM_super == "sorg")
+filter(local_prod_gf, iso3c_consuming == "ETH" & SPAM_super == "barl")
+filter(local_prod_gf, iso3c_consuming == "MMR")
+
+tmp <- local_prod_gf %>%
+  rowwise() %>%
+  mutate(total = local_crop_prod_per + external_crop_prod_per)
+summary(tmp)
+
+```
+
+
+# Import data
+FAO provides a trade matrix showing tonnes of each crop imported into each country.
+
+FAO codes:
+```{r}
+
+feed_products_full <- read_csv(here("feed/data/MapSPAM_to_FAO_v2.csv"))
+
+feed_products <- feed_products_full %>%
+  dplyr::filter(is.na(non_food)) %>%
+  dplyr::filter(SPAM_super != "othr") %>%
+  dplyr::select(FAO_Item_Code=FAO_item_code, SPAM_super) %>%
+  dplyr::filter(!is.na(FAO_Item_Code)) %>%
+  unique()
+
+
+```
+
+Get FAO import data and convert to MAPSPAM crops:
+```{r}
+
+import_data <- read_csv("/home/shares/food-systems/Food_footprint/_raw_data/FAO_detailed_trade/d2020/Trade_DetailedTradeMatrix_E_All_Data_(Normalized).csv")
+
+# cut "Unspecified Area" for exporting countries.  This has the effect of spreading the imports among the countries with existing data
+imports <- import_data %>%
+  filter(Year == focus_year) %>%
+  filter(!(`Partner Countries` %in% c("Unspecified Area"))) %>%
+    filter(!(`Partner Countries` %in% c("China"))) %>%                 #combination of all china regions
+  dplyr::filter(Element == "Import Quantity") %>%
+  dplyr::select(consuming_area_code = `Reporter Country Code`,
+                consuming_country = `Reporter Countries`,
+                producing_area_code = `Partner Country Code`, 
+                producing_country = `Partner Countries`,
+                FAO_Item_Code = `Item Code`, Element, Value, Item)
+
+
+# make sure that all relevant product codes match up
+extra_products <- setdiff(feed_products$FAO_Item_Code, imports$FAO_Item_Code) 
+extra_products_description <- feed_products_full %>%
+  dplyr::filter(FAO_item_code %in% extra_products)
+unique(extra_products_description$product_description_FAOSTAT)
+# in the master list, but not in the trade data
+
+extra_imports <- setdiff(imports$FAO_Item_Code, feed_products_full$FAO_item_code)
+# These are in the trade data, but not our master list, this is mostly non-crop products:
+import_data %>%
+  select(Item, `Item Code`) %>%
+  filter(`Item Code` %in% extra_imports) %>%
+  unique() %>% data.frame()
+
+intersect(imports$FAO_Item_Code, feed_products$FAO_Item_Code) # shared food codes 
+
+# convert products to MAPSPAM categories 
+imports <- imports %>%
+  filter(FAO_Item_Code %in% feed_products$FAO_Item_Code) %>%
+  left_join(feed_products, by = "FAO_Item_Code") %>%
+  dplyr::group_by(consuming_area_code, consuming_country, producing_area_code, producing_country, SPAM_super) %>%
+  summarize(Value = sum(Value)) %>%
+  ungroup()
+
+```
+
+Assign iso3c region ids:
+
+```{r}
+
+# not catching Eswatini
+imports <- imports %>%
+  mutate(producing_country = ifelse(producing_country == "Eswatini", "Swaziland", producing_country),
+                producing_country = ifelse(grepl("Ivoire", imports$producing_country), "Ivory Coast", producing_country),
+         consuming_country = ifelse(consuming_country == "Eswatini", "Swaziland", consuming_country),
+                consuming_country = ifelse(grepl("Ivoire", imports$consuming_country), "Ivory Coast", consuming_country))
+
+
+## add standardized country names
+imports$iso3c_producing <- countrycode(as.character(imports$producing_country), origin="country.name", destination = "iso3c")
+imports$iso3c_consuming <- countrycode(as.character(imports$consuming_country), origin="country.name", destination = "iso3c")
+
+imports <- imports %>%
+  mutate(iso3c_producing = ifelse(imports$producing_country == "Netherlands Antilles (former)", "BES", iso3c_producing)) %>%
+    mutate(iso3c_consuming = ifelse(imports$consuming_country == "Netherlands Antilles (former)", "BES", iso3c_consuming))
+
+## make sure all countries have an iso3c code
+filter(imports, is.na(iso3c_consuming))
+filter(imports, is.na(iso3c_producing))
+
+## make sure no duplicated regions (should all be one)
+tmp <- imports %>%
+  mutate(check = paste(consuming_area_code, iso3c_consuming, sep="_")) %>%
+  group_by(iso3c_consuming) %>%
+  summarize(check_n = length(unique(check)))
+data.frame(tmp)
+sum(tmp$check_n>1)
+
+```
+
+Clean the imports data
+```{r}
+
+imports <- imports %>% 
+   dplyr::select(iso3c_consuming, iso3c_producing, SPAM_super, imports_tonnes = Value) %>%   
+  filter(iso3c_producing != iso3c_consuming) # A few countries have this, but it seems like they shouldn't, maybe it reflects imports from territories?  cut.
+
+filter(imports, iso3c_consuming=="FJI" & SPAM_super=="xpul")
+
+```
+
+If there is no production for a country/crop according to MAPSPAM, then there will be no exports for that country/crop.
+
+```{r}
+
+imports <- left_join(imports, crop_production_df, by=c("iso3c_producing", "SPAM_super")) %>%
+  mutate(tonnes_producing_crop = ifelse(is.na(tonnes_producing_crop), 0, tonnes_producing_crop)) %>%
+  mutate(correction = ifelse(tonnes_producing_crop==0, 0, 1)) %>%
+  mutate(imports_tonnes = imports_tonnes*correction) %>%
+  select(iso3c_consuming, iso3c_producing, SPAM_super, imports_tonnes)
+
+filter(imports, iso3c_consuming=="AFG" & SPAM_super=="orts")
+```
+
+
+Determine which fbs regions/crops should be gapfilled because there is no fbs data but there is trade matrix data.
+In these cases, we use the proportion of imported to production to determine fbs proportional values.
+```{r}
+
+imports_rgn_crop_list <- imports %>%
+  group_by(iso3c_consuming, SPAM_super) %>%
+  summarize(total_import_tonnes = sum(imports_tonnes)) %>%
+  ungroup() %>%
+  mutate(major_group_imports = paste(iso3c_consuming, SPAM_super))
+
+local_prod_rgn_crop_list <- local_prod_gf %>%
+  mutate(major_group_prod = paste(iso3c_consuming, SPAM_super))
+
+missing_local_prod <- setdiff(imports_rgn_crop_list$major_group_imports, local_prod_rgn_crop_list$major_group_prod)
+
+
+crop_production_tonnes <- crop_production_df %>%
+  rename(iso3c_consuming = iso3c_producing)
+
+more_local_gf <-filter(imports_rgn_crop_list, major_group_imports %in% missing_local_prod) %>%
+  left_join(crop_production_tonnes, by=c("iso3c_consuming", "SPAM_super")) %>%
+  mutate(local_crop_prod_per = tonnes_producing_crop/ (tonnes_producing_crop + total_import_tonnes)) %>%
+  mutate(external_crop_prod_per = total_import_tonnes/ (tonnes_producing_crop + total_import_tonnes)) %>%
+  mutate(local_crop_prod_per = ifelse(is.na(local_crop_prod_per), 0, local_crop_prod_per)) %>%
+  mutate(external_crop_prod_per = ifelse(is.na(external_crop_prod_per), 1, external_crop_prod_per)) %>%
+  select(iso3c_consuming, SPAM_super, local_crop_prod_per, external_crop_prod_per)
+
+tmp <- more_local_gf %>% mutate(total=local_crop_prod_per + external_crop_prod_per) 
+summary(tmp)
+
+local_prod_gf <- rbind(local_prod_gf, more_local_gf)
+
+
+```
+
+
+Calculate the proportion of crop coming from each country
+
+```{r}
+
+imports_prop <- imports %>%
+  group_by(iso3c_consuming, SPAM_super) %>%
+  mutate(imports_all_tonnes = sum(imports_tonnes)) %>%
+  ungroup() %>%
+  mutate(imports_per = ifelse((imports_tonnes + imports_all_tonnes) == 0, 0, imports_tonnes/imports_all_tonnes)) %>%
+  dplyr::select(-imports_tonnes, -imports_all_tonnes)
+
+filter(imports_prop, iso3c_consuming=="SDN")
+filter(imports_prop, iso3c_consuming=="IRQ")
+filter(imports_prop, iso3c_consuming == "AFG" & SPAM_super == "sorg")
+filter(imports_prop, iso3c_consuming == "ETH" & SPAM_super == "barl")
+filter(imports_prop, iso3c_consuming == "FJI" & SPAM_super == "xpul")
+
+```
+
+
+Determine which trade regions/crops should be gapfilled because there is no trade data but there is fbs data.
+In these cases, we use every  country's proportion of global production as the trade data.
+```{r}
+
+imports_rgn_crop_list <- imports_prop %>%
+  mutate(major_group_imports = paste(iso3c_consuming, SPAM_super)) %>%
+  select(major_group_imports) %>% unique()
+
+local_prod_rgn_crop_list <- local_prod_gf %>%
+  mutate(major_group_prod = paste(iso3c_consuming, SPAM_super))
+
+missing_trade <- setdiff(local_prod_rgn_crop_list$major_group_prod, imports_rgn_crop_list$major_group_imports)
+
+imports_new_data <- filter(local_prod_rgn_crop_list, major_group_prod %in% missing_trade) %>%
+  select(iso3c_consuming, SPAM_super)
+
+imports_new_data_expand <- left_join(imports_new_data, crop_production_gf) %>%
+  dplyr::filter(iso3c_consuming != iso3c_producing)
+
+imports_prop_gf <- rbind(imports_prop, imports_new_data_expand)
+
+
+```
+
+Figure out which countries crops have neither trade or fbs data.  We will just use the global proportions in this case.  
+
+```{r}
+
+mstr_imports <- imports_prop_gf %>%
+  mutate(rgn_crop_imports = paste(iso3c_consuming, SPAM_super)) %>%
+  select(rgn_crop_imports) %>%
+  unique()
+
+# full region list
+mast_rgns_crops <- crop_production_gf %>%
+  mutate(rgn_crops = paste(iso3c_producing, SPAM_super)) %>%
+  select(rgn_crops) %>%
+  unique()
+  
+missing_rgn_crops <- data.frame(rgn_crops_missing = setdiff(mast_rgns_crops$rgn_crops, mstr_imports$rgn_crop_imports)) %>%
+  separate(rgn_crops_missing, c("iso3c_consuming", "SPAM_super"))
+
+imports_new_data_expand <- left_join(missing_rgn_crops, crop_production_gf) 
+
+imports_prop_gf <- rbind(imports_prop_gf, imports_new_data_expand)
+
+```
+
+
+
+Join local and import proportions.
+
+For now this is just temporary in order to identify and then 
+fix cases where there is no import data, but external_crop_production >0, in these cases we will use global proportions. 
+
+```{r}
+
+import_export_test <- imports_prop_gf %>% 
+  full_join(local_prod_gf, by = c("iso3c_consuming", "SPAM_super")) 
+  
+mismatch <- import_export_test %>%
+  group_by(iso3c_consuming, SPAM_super) %>%
+  mutate(total_imports = sum(imports_per, na.rm=TRUE)) %>%
+  filter(total_imports == 0 & external_crop_prod_per >0)
+
+# fix this one which has a different pattern:
+filter(mismatch, local_crop_prod_per > 0)
+
+local_prod_gf$external_crop_prod_per[local_prod_gf$iso3c_consuming == "ZWE" & local_prod_gf$SPAM_super=="cass"] <- 0
+local_prod_gf$local_crop_prod_per[local_prod_gf$iso3c_consuming == "ZWE" & local_prod_gf$SPAM_super=="cass"] <- 1
+
+## repeat after removing the strange one
+import_export_test <- imports_prop_gf %>% 
+  full_join(local_prod_gf, by = c("iso3c_consuming", "SPAM_super"))
+  
+mismatch <- import_export_test %>%
+  group_by(iso3c_consuming, SPAM_super) %>%
+  mutate(total_imports = sum(imports_per, na.rm=TRUE)) %>%
+  filter(total_imports == 0 & external_crop_prod_per >0) %>%
+  ungroup()
+
+filter(mismatch, local_crop_prod_per > 0)
+summary(mismatch)
+
+## now get the gapfilled data
+mismatch <- mismatch %>%
+  mutate(rgn_crops = paste(iso3c_consuming, SPAM_super)) %>%
+  select(rgn_crops) %>%
+  unique()
+  
+mismatch_rgn_crops <- mismatch %>%
+  separate(rgn_crops, c("iso3c_consuming", "SPAM_super"))
+
+imports_new_data_expand <- left_join(mismatch_rgn_crops, crop_production_gf) %>%
+  filter(iso3c_consuming != iso3c_producing)
+
+## remove old values from data
+imports_prop_gf <- imports_prop_gf %>%
+  mutate(rgn_crop = paste(iso3c_consuming, SPAM_super)) %>%
+  filter(!(rgn_crop %in% mismatch$rgn_crops)) %>%
+  select(-rgn_crop)
+
+imports_prop_gf <- rbind(imports_prop_gf, imports_new_data_expand)
+
+```
+
+Combine for real now the trade data and fbs proportion of imports data.
+
+```{r}
+
+import_export <- imports_prop_gf %>% 
+  full_join(local_prod_gf, by = c("iso3c_consuming", "SPAM_super")) 
+
+  summary(import_export)
+
+import_export_gf <- import_export %>%
+  mutate(local_crop_prod_per = ifelse(is.na(local_crop_prod_per), 0, local_crop_prod_per)) %>%
+  mutate(external_crop_prod_per = ifelse(is.na(external_crop_prod_per), 1, external_crop_prod_per))
+
+summary(import_export_gf)
+```
+
+
+Multiply country imports by proportion of imports (these all sum to one regardless of what proportion of supply are from imports) to reflect the total proportion of imports into the country.
+```{r}
+
+import_export_gf <- import_export_gf %>%
+  mutate(prop_of_supply = imports_per * external_crop_prod_per) %>%
+  dplyr::select(iso3c_consuming, iso3c_producing, SPAM_super, prop_of_supply)
+
+data.frame(filter(import_export_gf, iso3c_consuming== "USA")) %>%
+  arrange(SPAM_super)
+
+tmp <- filter(import_export_gf, iso3c_consuming== "USA") %>%
+  filter(SPAM_super=="maiz")
+sum(tmp$prop_of_supply)  # should be 0.0055
+
+```
+
+
+Add in the within country proportion
+```{r}
+
+# the producing and consuming country are the same in this case:
+local_prod <- local_prod_gf %>%
+  mutate(iso3c_producing = iso3c_consuming, 
+         prop_of_supply = local_crop_prod_per) %>%
+         dplyr::select(iso3c_consuming, iso3c_producing, SPAM_super, prop_of_supply)
+
+filter(local_prod, iso3c_consuming=="BLZ") %>%data.frame
+
+trade_data <- rbind(import_export_gf, local_prod)
+
+tmp <- filter(trade_data, iso3c_consuming == "USA", SPAM_super == "maiz") %>% arrange(-prop_of_supply)
+sum(tmp$prop_of_supply)
+arrange(tmp, -prop_of_supply)
+filter(trade_data, iso3c_consuming == "FJI" & iso3c_producing == "FJI") %>% data.frame()
+filter(trade_data, iso3c_consuming == "ARM" & iso3c_producing == "ARM") %>% data.frame()
+filter(trade_data, iso3c_consuming == "CHN" & iso3c_producing == "CHN") %>% data.frame()
+
+```
+
+## Final data checks and save
+
+
+```{r}
+# These were gapfilled earlier and should be empty.
+regions <- read_csv(here("_spatial/_output/food_rgns.csv"))
+setdiff(regions$iso3c, trade_data$iso3c_consuming)
+setdiff(trade_data$iso3c_consuming, regions$iso3c)
+
+## make sure we got all the values for each countries within country production
+within_country <- trade_data %>%
+  filter(iso3c_consuming==iso3c_producing) %>%
+  select(iso3c_consuming) %>%
+  unique()
+
+missing_country <- setdiff(regions$iso3c, within_country$iso3c_consuming)
+missing_country
+
+# make sure each consuming/providing/crop is unique
+check <- trade_data %>%
+  mutate(unique=paste(iso3c_consuming, iso3c_producing, SPAM_super))
+
+sum(table(check$unique)>1) # should be zero...if not, figure out why
+#table(check$unique)[table(check$unique)>1]
+
+# Check that sums within a country crop sum to 1
+check <- trade_data %>%
+  group_by(iso3c_consuming, SPAM_super) %>%
+  summarize(total = round(sum(prop_of_supply), 2))
+
+
+data.frame(dplyr::filter(check, total!=1))
+
+write_csv(trade_data, here("feed/data/FAO_MAPSPAMcrop_trade_data.csv"))
+
+```
+

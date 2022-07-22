@@ -1,0 +1,34 @@
+region_name,synonym,gapfill_value,included_region,iso3c,explanation
+Wake Island,Wake Island,NA,no,UMI,uninhabited
+Wake Island,Wake Island,NA,no,UMI,uninhabited
+British Indian Ocean Territories,British Indian Territory,NA,yes,IOT,only British and US military presence
+British Indian Ocean Territories,British Indian Ocean Territories,NA,yes,IOT,no permanent inhabitants; synonym for British Indian Territories
+Macquarie Island,Macquarie Island,NA,no,AUS,"uninhabited, Australia"
+South Georgia and the South Sandwich Islands,South Georgia and the South Sandwich Islands,NA,yes,SGS,uninhabited
+Prince Edward Islands,Prince Edward Islands,NA,no,CAN,uninhabited
+Crozet Islands,Crozet Islands,NA,no,ATF,uninhabited
+Amsterdam Island and Saint Paul Island,Amsterdam Island and Saint Paul Island,NA,no,ATF,uninhabited
+Kerguelen Islands,Kerguelen Islands,NA,no,ATF,uninhabited
+Heard and McDonald Islands,Heard and McDonald Islands,NA,yes,HMD,uninhabited
+Bouvet Island,Bouvet Island,NA,no,BVT,uninhabited
+Clipperton Island,Clipperton Island,NA,no,XCL,uninhabited
+Jan Mayen,Jan Mayen,NA,no,,uninhabited
+Jarvis Island,Jarvis Island,NA,no,UMI,uninhabited
+Palmyra Atoll,Palmyra Atoll,NA,no,UMI,uninhabited
+Howland Island and Baker Island,Howland Island and Baker Island,NA,no,UMI,uninhabited
+Johnston Atoll,Johnston Atoll,NA,no,UMI,uninhabited
+Wake Island,Wake-Island,NA,no,UMI,uninhabited
+Pitcairn Island,Pitcairn Island,NA,yes,PCN,~50 people
+Cocos Island,Cocos Island,NA,yes,CCK,uninhabited
+Aland,Aland,NA,yes,ALA,Not included in FAO regions
+Christmas Island,Christmas Island,NA,yes,CXR,Not included in FAO regions
+Kosovo,Kosovo,NA,yes,XKO,Not included in FAO regions
+Madeira Island,Madeira Island,NA,yes,XMI,Not included in FAO regions
+Paracel Islands,Paracel Islands,NA,no,XPI,Not included in FAO regions
+Saint-Barthelemy,Saint-Barthelemy,NA,yes,BLM,"Not included in FAO regions, probably grouped with Guadaloupe"
+Saint Martin,Saint Martin,NA,yes,MAF,Not included in FAO regions
+Spratly Islands,Spratly Islands,NA,no,XSP,Not included in FAO regions
+Vatican City,Vatican City,NA,no,VAT,Not inclued in FAO regions
+Yugoslavia,Yugoslavia,NA,no,SFR,No longer recognized
+United States Minor Outlying Islands,United States Minor Outlying Islands,NA,no,UMI,"No inhabitants (Baker, Howland, Jarvis, Johnston, Kingman Reef, Midway, Navassa, Palmyra, Wake)"
+French Southern Territories,French Southern Territories,NA,no,ATF,"No inhabitants (Crozet, Amsterdam Island and Saint Paul Island, Kerguelen)"

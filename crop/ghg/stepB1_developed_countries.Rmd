@@ -1,0 +1,66 @@
+---
+title: "Identifying Developed vs Non-Developed Countries"
+author: "Juliette"
+date: "3/16/2020"
+output: html_document
+---
+
+In this markdown we determine which countries are classified as developed versus non developed according to the [World Bank Organization](https://www.aans.org/Membership/International-Activities/International-Visiting-Surgeon-Fellowship/World-Bank-Country-List) low income and lower-middle income classifications will be our threshold for non-developed countries
+
+Low income (L)
+Lower middle income (LM)
+Upper middle income (UM)
+High income (H)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Read in libraries and paths
+```{r}
+#Load libraries
+library(readr)
+library(dplyr)
+library(tidyverse)
+
+source(here("_spatial/template_raster.R"))
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+#Files we will need:
+param_raw <- read_csv("crop/ghg/data/ghg_factors_crop_residue_burning.csv")
+```
+
+
+```{r}
+devel <- read_csv(file.path(raw, "World_Bank/world_bank_developed_countries.csv")) %>% 
+  mutate(developed = case_when(Classification == "L" | Classification == "LM"  ~ "no", 
+                               Classification == "UM" | Classification == "H"  ~ "yes")) %>% 
+  rename(iso3c = ISO3) %>% 
+  dplyr::select(-Country) 
+
+devel <- left_join(food_rgns, devel)
+
+na <- filter(devel, is.na(Classification))
+missing_countries <- unique(na$Country)
+```
+
+There are 28 regions that do not have a developed versus not developed classification. The majority of them are territories of developed countries or uninhabited islands. So for these purposes we will assign them with a "developed" designation for calculations of crop residue burning. Regions that do not fall into these two categories are: Kosovo, Niue, and Western Sahara. For now will also assign developed to be on the safer side.
+
+```{r}
+devel_all<- devel %>% 
+  mutate(developed = ifelse(is.na(developed), "yes", developed)) %>% 
+  dplyr::select(-Classification)%>% 
+  mutate(fraction_burned = case_when(developed == "yes" ~  0.1,
+                                     developed == "no" ~ 0.25)) %>% 
+  rename(ISO3 = iso3c)
+
+write_csv(devel_all, here("crop/ghg/data/developed_regions.csv"))
+```
+
+
+
+
+
+
+

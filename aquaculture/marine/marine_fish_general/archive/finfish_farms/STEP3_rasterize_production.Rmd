@@ -1,0 +1,214 @@
+---
+title: "Rasterizing prodution per each region"
+author: "Gage Clawson (NCEAS, UCSB, OHI)"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+```{r}
+
+library(here)
+library(dplyr)
+library(sf)
+library(raster)
+library(mapview)
+
+source(here::here("_spatial/template_raster.R"))
+
+
+```
+
+
+# Global regions
+
+```{r}
+
+# this file includes ocean regions:
+gadm <- raster("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/gadm36mol_pyfill_10km.tif")
+
+gadm_latlon <- raster::projectRaster(gadm, food_raster, method="ngb", over=TRUE)
+plot(gadm_latlon)
+
+gadm_codes <- read.csv("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/gadm_reg_codes.csv") %>% 
+  mutate(reg_id = as.numeric(reg_id))
+
+```
+
+# read in points and converted to spatial dataframe
+```{r}
+
+farms <- read.csv(here::here("aquaculture/marine/marine_fish_general/finfish_farms/data/global_finfish_farm_lat_lon.csv"))
+
+farms_sf <-  st_as_sf(farms, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_sf)
+```
+
+
+# determine subregions where points are located
+
+```{r}
+
+farms_sf$reg_id <- raster::extract(gadm_latlon, farms_sf) 
+
+farms_sf <- farms_sf %>%
+  left_join(gadm_codes, by="reg_id") %>%
+  dplyr::mutate(NAME_1 = as.character(NAME_1))
+
+farms_sf$check <-  paste(farms_sf$iso3c, farms_sf$GID_0, sep=":")
+table(farms_sf$check)
+
+# CYP:XAD
+# ESP:PRT
+# GRC:ALB
+# GRC:TUR
+# KOR:PRK
+# HKG:CHN
+
+
+mapview(filter(farms_sf, check=="CYP:XAD"))
+mapview(filter(farms_sf, check=="ESP:PRT"))
+mapview(filter(farms_sf, check =="GRC:ALB"))
+mapview(filter(farms_sf, check == "GRC:TUR"))
+mapview(filter(farms_sf, check == "KOR:PRK"))
+
+# some annoying mismatches due to raster resolution. Fix these
+
+unique(farms_sf$NAME_1)
+
+farms_sf_correct <- farms_sf %>%
+  mutate(GID_0 = as.character(GID_0)) %>%
+  mutate(NAME_0 = as.character(NAME_0)) %>%
+  mutate(NAME_1 = as.character(NAME_1)) %>%
+  mutate(GID_0 = ifelse(check %in% "CYP:XAD", "CYP", GID_0)) %>%
+  mutate(NAME_0 = ifelse(check %in% "CYP:XAD", "Cyprus", NAME_0)) %>%
+  mutate(GID_0 = ifelse(check %in% "ESP:PRT", "ESP", GID_0)) %>%
+  mutate(NAME_0 = ifelse(check %in% "ESP:PRT", "Spain", NAME_0)) %>%
+  mutate(GID_0 = ifelse(check %in% "GRC:ALB", "GRC", GID_0)) %>%
+  mutate(NAME_0 = ifelse(check %in% "GRC:ALB", "Greece", NAME_0)) %>%
+  mutate(GID_0 = ifelse(check %in% "GRC:TUR", "GRC", GID_0)) %>%
+  mutate(NAME_0 = ifelse(check %in% "GRC:TUR", "Greece", NAME_0)) %>%
+  mutate(GID_0 = ifelse(check %in% "KOR:PRK", "KOR", GID_0)) %>%
+  mutate(NAME_0 = ifelse(check %in% "KOR:PRK", "South Korea", NAME_0)) %>%
+  mutate(GID_0 = ifelse(check %in% "HKG:CHN", "HKG", GID_0)) %>%
+  mutate(NAME_0 = ifelse(check %in% "HKG:CHN", "Hong Kong", NAME_0))
+
+farms_sf_correct$check <-  paste(farms_sf_correct$iso3c, farms_sf_correct$GID_0, sep=":")
+table(farms_sf_correct$check)
+
+```
+
+
+# FAO shrimp production data per country
+```{r}
+
+fao <- read.csv(here::here("aquaculture/marine/marine_fish_general/finfish_farms/data/fao_mariculture_finfish.csv")) %>%
+  dplyr::filter(year == 2017) %>%
+  dplyr::select(iso3c, fao_tonnes_production)
+
+setdiff(fao$iso3c, farms_sf$iso3c)
+setdiff(farms_sf$iso3c, fao$iso3c)
+
+```
+
+
+# join country production to farms by iso3c
+
+```{r}
+
+farms_sf_correct <- farms_sf_correct %>%
+  left_join(fao, by="iso3c")
+
+summary(farms_sf_correct) # make sure no production NA values
+
+```
+
+# get areas with regional production data and calculate production per farm
+```{r}
+
+
+## Egypt is the only one with regional production
+farms_rgn_prod <- farms_sf_correct %>%
+  dplyr::filter(!is.na(rgn_production))
+
+## calculate farm production
+farms_rgn_prod <- farms_rgn_prod %>%
+  mutate(prop_production = rgn_production/sum(rgn_production)) %>%
+  mutate(regional_prod = fao_tonnes_production*prop_production) %>%
+  group_by(NAME_1) %>%
+  add_tally() %>%
+  ungroup() %>%
+  mutate(tonnes_per_farm = regional_prod/n) %>%
+  dplyr::select(iso3c, tonnes_per_farm, geometry)
+
+
+
+```
+
+
+# get areas with no regional production data and calculate production per farm
+
+```{r}
+
+## calculate farm production
+farms_prod <- farms_sf_correct %>%
+  group_by(NAME_0) %>%
+  add_tally() %>%
+  ungroup() %>%
+  mutate(tonnes_per_farm = fao_tonnes_production/n) %>%
+  dplyr::select(iso3c, tonnes_per_farm, geometry) %>%
+  dplyr::filter(iso3c != "EGY") ## filter out EGY since we have regional production estimates
+
+```
+
+# combine and check it all matches ok
+
+```{r}
+
+farm_production <- rbind(farms_prod, farms_rgn_prod)
+
+test <- farm_production %>%
+  dplyr::group_by(iso3c) %>%
+  dplyr::summarize(total_tonnes = sum(tonnes_per_farm, na.rm=TRUE)) %>%
+  left_join(fao, by = "iso3c") %>%
+  mutate(difference = fao_tonnes_production - total_tonnes)
+
+
+farms_sf_prod <- st_as_sf(farm_production)
+
+## write the production data so that we can use it for the nutrient layer. 
+st_write(farms_sf_prod, "aquaculture/marine/marine_fish_general/finfish_nutrient/prod_data_by_cell_iso3c.shp")
+```
+
+## convert to raster, with the value of each cell equalling the sum tonnes per farm for all farms landing in cell.
+
+```{r}
+
+farms_sf <- st_as_sf(farm_production)
+mapview(farms_sf)
+
+sum(farms_sf$tonnes_per_farm) # 3901214
+
+finfish_raster_check <- rasterize(farms_sf, food_raster, field = "tonnes_per_farm", fun=sum)
+plot(log(finfish_raster_check+1))
+cellStats(finfish_raster_check, stat = "sum", na.rm = TRUE) # 3901214
+
+
+finfish_raster <- rasterize(farms_sf, food_raster, field = "tonnes_per_farm", fun=sum, background=0)
+plot(log(finfish_raster+1))
+
+finfish_raster_df <- as.data.frame(finfish_raster, xy=TRUE) %>%
+  dplyr::select(x,y, tonnes_production=layer)
+
+cellStats(finfish_raster, stat = "sum") # 3901214
+sum(finfish_raster_df$tonnes_production) # 3901214
+sum(farms_sf$tonnes_per_farm, na.rm = TRUE) # 3901214
+sum(fao$fao_tonnes_production) # 3901214
+
+write_csv(finfish_raster_df, "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/marine_fish_general/marine_fish_general_farm.csv")
+
+```

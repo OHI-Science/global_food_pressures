@@ -1,0 +1,373 @@
+---
+title: "Animal Water"
+output: html_document
+---
+
+## Script Author
+Paul-Eric Rayner
+
+## Water consumption section of Supp.Mat
+
+Water consumption per individual was estimated by summing service water and drinking water consumption. Service water values were extracted from Chapagain & Hoekstra (2003) for all livestock. For cows and goats, drinking water was estimated as a function of age and temperature based on values from Winchester (1956) and Dahlanuddin (1993) respectively. Water consumption data for different temperatures for sheep and pigs was not available. Model outputs are available in Table X. The model was applied to the WorldClim2 gridded average air temperature map (Fick and Hijmans, 2017) at a 10 km2 resolution. Total water consumption per raster cell was calculated by multiplying the number of individuals in each cell by the respective summed water consumption value (drinking + service water) per individual in each cell. We checked our final values against estimates from Chapagain & Hoekstra (2003) that we calculated by multiplying their drinking water.
+
+## Objectives
+Model water consumption of livestock, preferably based on temperature averages. 
+
+## Inputs
+Chapagain & Hoekstra (2003) drinking water and service water values.
+
+## Outputs
+Water consumption maps for each gleam file.
+
+# Set-up
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source("./_workflow/common.R")
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+
+## load libraries, read in data
+library(doParallel)
+```
+
+# Data import
+```{r}
+# Water data
+model_results       <- vroom::vroom(here("animal_farm/water/data/model_results.csv"))
+livestock_water_use <- vroom::vroom(here("animal_farm/water/data/livestock_water_use.csv"))
+
+# Monthly temperature stack
+avg_monthly_temp <- 
+  list.files(file.path(raw,
+                       "World_Clim_climate_data/avg_temp",
+                       fsep = ""),
+             pattern = ".tif", 
+             full.names = TRUE) %>% 
+  stack()
+```
+
+--------------------------------------------------------------------------------
+
+# Setting-up functions
+
+## Create function that applies monthly temperature data to the `poly` model
+```{r}
+water_temperature_model <- function(avg_monthly_temp_boundaries) {
+  
+  if (individual_model_results$polynomial[1] == 1) {
+    
+    individual_model_results$estimate[1] +
+      individual_model_results$estimate[2] * avg_monthly_temp_boundaries
+  
+  } else if (individual_model_results$polynomial[1] == 2) {
+    
+    individual_model_results$estimate[1] +
+      individual_model_results$estimate[2] * avg_monthly_temp_boundaries +
+      individual_model_results$estimate[3] * (avg_monthly_temp_boundaries ^ 2)
+    
+  } else if (individual_model_results$polynomial[1] == 3) {
+    
+    individual_model_results$estimate[1] +
+      individual_model_results$estimate[2] * avg_monthly_temp_boundaries +
+      individual_model_results$estimate[3] * (avg_monthly_temp_boundaries ^ 2) +
+      individual_model_results$estimate[4] * (avg_monthly_temp_boundaries ^ 3)
+  
+  } else {
+    
+    print(paste("Check", livestock_name))
+    
+  }
+}
+```
+
+## Loop set-up
+```{r}
+# Set up a table with final values
+total_water <- 
+  tibble(gleam_prod_system = as.character(),
+         gleam_product = as.character(),
+         gleam_livestock = as.character(),
+         total_water_consumption = as.double(),
+         MekHoek_2012_comparison = as.double())
+
+gleam_files <- 
+  list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm",
+             pattern = "location_df", 
+             full.names = TRUE)
+```
+
+# Run loop (`calc` won't let me use functions?)
+```{r}
+for (gleam_file in gleam_files) {
+
+  head_count <- 
+    map_df(gleam_file, 
+           ~ vroom::vroom(.x, col_select = c(x, y, contains("current")))) %>%
+    rasterFromXYZ(., crs = food_crs)
+  
+  names(head_count) <- "current_count"
+  
+  # Extract drinking and service water use
+  gleam_livestock_name <- 
+    str_extract(gleam_file, "buffaloes|cows|sheep|goats|pigs|chickens")
+  
+  gleam_prod_system_name <- 
+    str_extract(gleam_file, "grassland|feedlot|industrial|mixed|backyard|intermediate")
+  
+  gleam_product_name <- 
+    str_extract(gleam_file, "meat|milk|eggs&meat|eggs")
+  
+  gleam_full_name <- paste(gleam_livestock_name, 
+                           gleam_prod_system_name, 
+                           gleam_product_name, 
+                           sep = "_")
+  
+  livestock_water_use_filtered <- 
+    livestock_water_use %>% 
+      filter(gleam_livestock %in% gleam_livestock_name &
+             gleam_prod_system %in% gleam_prod_system_name & 
+             gleam_product %in% gleam_product_name)
+  
+  # Extract gleam livestock name
+  livestock_name <- unique(livestock_water_use_filtered$animal)
+  
+  # Extract service water use
+  service_water <- 
+    livestock_water_use_filtered %>% 
+    filter(water_type %in% "service") %>% 
+    .$tonnes_consumed
+
+  # Run water temperature model
+  
+  if (livestock_name %in% c("sheep", "pigs")) {
+
+    drinking_water_raw <-
+      livestock_water_use_filtered %>%
+      filter(water_type %in% "drinking") %>%
+      .$tonnes_consumed
+
+    # Rasterize
+    water_consumption_raster <-
+      (drinking_water_raw + service_water) * head_count * 365
+
+  } else {
+
+    # Filter by livestock name
+    individual_model_results <-
+      model_results %>%
+        filter(livestock %in% livestock_name)
+
+    avg_monthly_temp_boundaries <- avg_monthly_temp
+
+    avg_monthly_temp_boundaries[avg_monthly_temp_boundaries < individual_model_results$min_temp[1]] <-
+      individual_model_results$min_temp[1]
+
+    avg_monthly_temp_boundaries[avg_monthly_temp_boundaries > individual_model_results$max_temp[1]] <-
+      individual_model_results$max_temp[1]
+
+    model_output <-
+      calc(avg_monthly_temp_boundaries,
+           water_temperature_model) %>%
+      mean()
+
+    # Save output for further inspection
+    writeRaster(model_output,
+                file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/water/",
+                          gleam_livestock_name,
+                          "_",
+                          gleam_prod_system_name,
+                          "_",
+                          gleam_product_name,
+                          "_model_output.tif",
+                          fsep = ""),
+                overwrite = TRUE)
+
+    # Rasterize
+    water_consumption_raster <-
+      overlay(model_output,
+              head_count,
+              fun = function(drinking_water, head_count) {
+
+                (drinking_water + service_water) * head_count * 365
+
+              })
+
+  }
+
+  # Save
+  writeRaster(water_consumption_raster,
+              file.path(layers,
+                        "land_",
+                        gleam_full_name,
+                        "_water",
+                        ".tif",
+                        fsep = ""),
+              overwrite = TRUE,
+              format = "GTiff")
+
+  zonal_water <-
+    zonal(water_consumption_raster,
+          food_rgns_tif,
+          fun = "sum",
+          na.rm = TRUE) %>%
+    as_tibble() %>%
+    rename(ID_0 = zone) %>%
+    left_join(food_rgns) %>%
+    dplyr::select(-c(ID_0, Country)) %>%
+    rename(water_consumption = sum)
+
+  zonal_water <-
+    raster_df(head_count) %>%
+    left_join(food_rgns_xy) %>%
+    dplyr::select(x, y, iso3c, current_count) %>%
+    group_by(iso3c) %>%
+    summarize(head_count = sum(current_count, na.rm = TRUE), .groups = 'drop') %>%
+    left_join(zonal_water) %>%
+    mutate(full_name = gleam_full_name) %>%
+    mutate(gleam_prod_system = gleam_prod_system_name) %>%
+    mutate(gleam_product = gleam_product_name) %>%
+    mutate(gleam_livestock = gleam_livestock_name) %>%
+    arrange(water_consumption)
+
+  # Save tbl
+  write_csv(zonal_water,
+            here(file.path("animal_farm/water/error_check/",
+                           gleam_full_name,
+                           "_tbl.csv",
+                           fsep = "")))
+
+  ## Error checking plot
+  png(file = here(file.path("animal_farm/water/error_check/",
+                            gleam_full_name,
+                            "_plot.png",
+                            fsep = "")),
+      width  = 1920,
+      height = 1080)
+
+  ggplot(zonal_water,
+         aes(x = head_count,
+             y = water_consumption)) +
+    geom_point() +
+    labs(title = Hmisc::capitalize(gsub(pattern = "_",
+                                        replacement = " ",
+                                        gleam_full_name))) +
+    theme_classic()
+
+  dev.off()
+
+# Plots
+  png(file = here(paste("animal_farm/water/plots/",
+                        gleam_full_name,
+                        ".png",
+                        sep = "")),
+      width = 1920,
+      height = 1080)
+
+  plot(water_consumption_raster,
+       legend = TRUE,
+       legend.args = list(
+       text = "m³", # unit of measurement for the stressor
+       cex  = 1,
+       side = 3,
+       line = 1),
+       main = Hmisc::capitalize(gsub(pattern = "_",
+                                     replacement = " ",
+                                     gleam_full_name)))
+
+  dev.off()
+
+  ## Create a table with M&H sums using our population numbers for each animal group.
+
+    drinking_water_raw <- 
+      livestock_water_use_filtered %>% 
+      filter(water_type %in% "drinking") %>% 
+      .$tonnes_consumed
+  
+    # Rasterize
+    water_consumption_raster_check <- (drinking_water_raw + service_water) * head_count * 365
+  
+    ## Error checking tbl
+    total_water <- 
+      total_water %>% 
+        add_row(tibble_row(
+          gleam_prod_system = gleam_prod_system_name,
+          gleam_product = gleam_product_name,
+          gleam_livestock = gleam_livestock_name,
+          total_water_consumption = cellStats(water_consumption_raster, 
+                                              stat = "sum", 
+                                              na.rm = TRUE),
+          MekHoek_2012_comparison = cellStats(water_consumption_raster_check, 
+                                              stat = "sum",
+                                              na.rm = TRUE)))
+}
+
+total_water <- 
+  total_water %>% 
+  mutate(difference = total_water_consumption / MekHoek_2012_comparison)
+
+write_csv(total_water, here("animal_farm/water/error_check/total_water.csv"))
+```
+
+# Data checks
+```{r}
+# Compare different systems totals
+p <- 
+  vroom::vroom(here("animal_farm/water/error_check/total_water.csv")) %>% 
+  ggplot(aes(x = gleam_livestock, y = total_water_consumption)) +
+  geom_point() + 
+  theme_classic() + 
+  theme(axis.text.x = element_text(angle = 90)) 
+plotly::ggplotly(p)
+
+
+p2 <- 
+  list.files(here(file.path("animal_farm/water/error_check/",
+                           fsep = "")),
+             pattern = "tbl",
+             full.names = TRUE) %>% 
+  vroom::vroom() %>% 
+  ggplot(aes(x   = head_count,
+             y   = water_consumption,
+             col = gleam_livestock,
+             label = iso3c)) +
+  geom_point() +
+  theme_classic()
+
+plotly::ggplotly(p2)
+
+map(list.files(layers,
+               pattern = "land_.*(meat|milk|eggs)_water.tif",
+               full.names = TRUE),
+    ~ paste(str_extract(.x, pattern = "(?<=land_).*(?=_water)"), 
+            ": ",
+            cellStats(raster(.x), stat = "sum"), 
+            " tonnes of water",
+            sep = ""))
+
+vroom::vroom(here("animal_farm/water/error_check/total_water.csv")) %>%
+  summarise(sum(total_water_consumption))
+
+vroom::vroom(here("animal_farm/water/error_check/total_water.csv")) %>%
+  filter(!gleam_livestock %in% "buffaloes") %>% 
+  group_by(gleam_livestock) %>% 
+  summarise(total_water_consumption = sum(total_water_consumption)) %>% 
+  ungroup() %>% 
+  mutate(percentage_proportion = (total_water_consumption / sum(total_water_consumption)) * 100) %>% 
+  arrange(desc(.$percentage_proportion)) 
+```
+
+Compare animal totals
+```{r}
+vroom::vroom(here("animal_farm/water/error_check/total_water.csv")) %>% 
+  mutate(gleam_livestock = if_else(gleam_livestock %in% "cows" & gleam_product %in% "milk", 
+                                   "dairy cows",
+                                   gleam_livestock),
+         gleam_livestock = Hmisc::capitalize(gleam_livestock)) %>%
+  group_by(gleam_livestock) %>% 
+  summarise(Total_water_consumption = sum(total_water_consumption),
+            MekHoek_2012_comparison = sum(MekHoek_2012_comparison)) %>% 
+  rename(Animal = gleam_livestock) %>% 
+  janitor::adorn_totals("row") %>% 
+  mutate(Difference = Total_water_consumption / MekHoek_2012_comparison)
+```
+

@@ -1,0 +1,43 @@
+---
+title: "Creating a feedlot map"
+author: "Juliette"
+date: "11/9/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Currently, we are using the raw number of feedlot cows in 2010 as our estimate for 2017.  Another option would be to use the proportion of feedlot cows to mixed meat cows (or, some other proportion of cows).  The total feedlot cows are extracted here (used in Step 9) and the proportion relative to mixed/meat is calculated (but not currently used; NOTE: it might be better to use feelots/(mixed+grassland beef cattle) due to our different approach of classifying grassland and mixed production systems).
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+ruminants_raw <- read_csv(here("animal_farm/farm/data/ruminants_GLEAMi_v2.csv"))
+
+```
+
+
+## Calculate the feedlot proportion out of feedlot + mixed
+
+```{r}
+
+feedlot_factor <- ruminants_raw %>% 
+  filter(Species == "Cattle",
+         Production_system == "Mixed systems" | Production_system == "Feedlot operations",
+         Variable == "HERD: total number of animals") %>% 
+  filter(Herd_type %in% "Non-dairy" | Production_system =="Feedlot operations") %>%
+  select(iso3c, Species, Production_system, Value) %>%
+  pivot_wider(names_from = Production_system, values_from = Value) %>% 
+  rename(feedlot_count = 'Feedlot operations', mixed_count = 'Mixed systems') %>% 
+  rowwise() %>% 
+  mutate(factor = feedlot_count/mixed_count,
+         factor = ifelse(feedlot_count == 0, 0, factor)) %>% 
+  filter(factor > 0)
+  
+write_csv(feedlot_factor, here("animal_farm/farm/data/mixed_to_feedlot_factor.csv"))  
+
+```

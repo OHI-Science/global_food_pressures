@@ -1,0 +1,102 @@
+---
+title: "copy_scaled_maps"
+output: html_document
+---
+
+Saves adjusted production data to predatalayers (rasters that will be useful to other people).
+```{r}
+# getting packages we want
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+library(janitor)
+library(furrr)
+library(vroom)
+
+predatalayers_path <- "/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/"
+```
+
+
+```{r}
+crops <- vroom(here("crop/farm/data/crop_codes_updated.csv")) 
+
+scaled_maps <-
+  list.files(file.path(prep, "crop/farm/scaled_maps_2017"),
+               pattern = "_A_",
+               full.names = TRUE)
+
+scaled_maps <- scaled_maps[!grepl(pattern = "(rest)", scaled_maps)]
+```
+
+# Change names and save rasters in predatalayers
+```{r}
+list_of_crop_tibbles <- 
+  vroom::vroom(here("crop/farm/data/crop_codes_updated.csv"), 
+               col_select = c("split_rest_names", "SPAM_super")) %>% 
+    group_split(SPAM_super)
+
+name_change <- function(group) {
+  
+     string_subset <- 
+       str_subset(scaled_maps, 
+                  pattern = paste("('", 
+                                  paste(group$split_rest_names, collapse = '|'), 
+                                  "')",
+                                  sep = "|"))
+     
+     filepath_template <- 
+       str_extract(string_subset[[1]], 
+                   pattern = "(?<=scaled_maps_2017/).*") %>% 
+       str_replace(., pattern = "_A_scaled", replacement = "_production")
+     
+     substr(filepath_template, 6, 9) <- group$SPAM_super[[1]]
+     
+     if(length(string_subset) > 1) { 
+       
+        lapply(string_subset, raster) %>% 
+        stack() %>% 
+        calc(., sum, na.rm = TRUE) %>% 
+        writeRaster(.,
+                    file.path(predatalayers_path,
+                              filepath_template,
+                              fsep = ""), 
+                    format = "GTiff", 
+                    overwrite = TRUE)
+       
+       
+       
+     } else { 
+       
+       raster(string_subset) %>% 
+       writeRaster(.,
+                   file.path(predatalayers_path,
+                             filepath_template,
+                             fsep = ""), 
+                   format = "GTiff", 
+                   overwrite = TRUE)
+      
+     }
+}
+
+lapply(list_of_crop_tibbles, name_change)
+
+list.files(predatalayers_path,
+           pattern = "crop_.*{4}_production")
+```
+
+# Fodder
+```{r}
+list.files(file.path(prep, 
+                     "crop/farm/scaled_maps_2017"),
+           pattern = "fodd_(H_|I_)",
+           full.names = TRUE) %>% 
+  stack() %>%
+  stackApply(., 1, fun = "sum") %>% 
+  writeRaster(.,
+              file.path(predatalayers_path,
+                        "crop_fodd_production", 
+                        fsep = ""),
+              format = "GTiff", 
+              overwrite = TRUE)
+```
+

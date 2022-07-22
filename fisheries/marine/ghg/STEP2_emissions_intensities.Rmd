@@ -1,0 +1,94 @@
+---
+title: "Backcalculating emissions intensities from FUI"
+author: "Gage Clawson (UCSB, NCEAS, OHI)"
+date: "September 17, 2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+The purpose of this script is to prep the emissions intensity estimate from the [Seafood Carbon Emissions Tool](http://seafoodco2.dal.ca/(overlay:menu/5bcb48abaaea53205a2de526). We will back calculate to exlcude the up- and downstream emissions, only accounting for direct fuel use emissions in our estimate. 
+
+We use the data from:
+
+ - [Seafood Carbon Emissions Tool](http://seafoodco2.dal.ca/(overlay:menu/5bcb48abaaea53205a2de526)
+
+ - Parker, R.W.R., Blanchard, J.L., Gardner, C., Green, B.S., Hartmann, K., Tyedmers, P.H., and Watson, R.A. (2018). Fuel use and greenhouse gas emissions of world fisheries. Nature Climate Change 8, 333.
+
+
+Explain numbers in paper and provide an example of how to back calculate one emissions intensity estimate:
+
+We use the data for the species Common name "Blue grenadier" sector (Table 1).
+
+
+The value provided in the data is 3.4 to 4.6 CO2eq/kg.  But this includes direct and indirect (shipbuilding, fuel extraction, etc) costs, and is a range, when we need a mean.  Due to the difficulty of estimating the location of indirect costs, we excluded them. This required a bit of backcalculating.
+
+Direct fuel costs are: 
+2.8 kg CO2eq/ lfuel (from IPCC 2013 characterization factors)
+
+Calculated as:
+Fuel density = 0.9kg/l (in Parker methods section)
+Carbon content of fuel = 860g/kg (in Parker methods section)
+C02/C ratio = 50/14 
+So:
+0.9 * 0.860 * 50/14 = 2.8 kg CO2eq/lfuel
+
+
+We estimated 25% of fuel costs are for refrigeration.  This paper uses 25% for all additional costs, but suggests that refrigeration is the main one.  Similarly, another paper estimates 30% for refrigeration: https://onlinelibrary.wiley.com/doi/epdf/10.1111/j.1530-9290.2011.00344.x
+> Refrigeration during transportation was modeled by the addition of 30% extra fuel use for the transport on the basis of the literature data (Garnett 2007)
+
+
+2.8/0.75 = 3.7 kg CO2eq/l fuelß
+check: 3.7*0.25=0.925  and 2.8+0.925=3.7
+
+Blue grenadier FUI: 666 l fuel/tonne
+
+3.7 kgCO2eq/l fuel * 0.666 l fuel/kg catch = 2.4642 kgCO2eq/kgcatch 
+
+# Setup
+```{r, eval = FALSE}
+#load relevant packages, etc.
+
+library(here)
+library(raster)
+library(tidyverse)
+library(janitor)
+
+raw_folder <- file.path("/home/shares/food-systems/Food_footprint/_raw_data/")
+```
+
+# Methods
+
+
+**Back calculate all emissions intensities from original Parker values**
+```{r, eval = FALSE}
+## Read in parker emissions intensity estimates
+parker_ei <- read_csv(here("fisheries/marine/ghg/data/parker_estimates.csv"))
+
+## read in emissions intensity data 
+emissions_intensity_df <- read_csv(file.path(raw_folder, "seafood_carbon_emmisions_tool/d2020/Specie_List_-_9_22_2020,_12_56_43_PM_Wild.csv")) %>%
+  dplyr::select(1:17) %>%
+  clean_names() %>%
+  dplyr::select(common_name, scientific_name, gear, ghg_low, ghg_high, fui_l_t)
+
+
+## Convert fuel use intensity to L/kgcatch and add in average cost of fuel as a column
+food_ei <- emissions_intensity_df %>%
+  mutate(FUI_l_kg = fui_l_t/1000) %>% ## 1000 kg in 1 MT
+  mutate(fuel_cost = 3.7) ## fuel cost is 3.7 kgCO2eq/l
+
+## calculate direct emissions intensity 
+food_ei <- food_ei %>%
+  mutate(ei_direct = fuel_cost*FUI_l_kg)
+
+## save intermediate file for later use
+food_ei <- food_ei %>%
+  dplyr::select(common_name, scientific_name, gear, ghg_low,  ghg_high, FUI_l_kg, fuel_cost, fui_l_t, ei_direct_kgco2_kgcatch = ei_direct)
+
+DT::datatable(food_ei)
+
+write.csv(food_ei, "fisheries/marine/ghg/int/direct_ei.csv", row.names = FALSE)
+
+```
+
+
+

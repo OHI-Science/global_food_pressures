@@ -1,0 +1,378 @@
+"country","iso3c","year","fao_tonnes_production"
+"Albania","ALB",2010,1410
+"Albania","ALB",2011,1300
+"Albania","ALB",2012,950
+"Albania","ALB",2013,1000
+"Albania","ALB",2014,1200
+"Albania","ALB",2016,1450
+"Albania","ALB",2018,1108
+"Australia","AUS",2010,18330.32
+"Australia","AUS",2011,17013.83
+"Australia","AUS",2012,16817.71
+"Australia","AUS",2013,16735.3
+"Australia","AUS",2014,15576.63
+"Australia","AUS",2015,15497.89
+"Australia","AUS",2016,15727.79
+"Australia","AUS",2017,16616.71
+"Australia","AUS",2018,13543
+"Brazil","BRA",2010,15631
+"Brazil","BRA",2011,18253
+"Brazil","BRA",2012,23502
+"Brazil","BRA",2013,19360
+"Brazil","BRA",2014,22100
+"Brazil","BRA",2015,21100
+"Brazil","BRA",2016,20900
+"Brazil","BRA",2017,20900
+"Brazil","BRA",2018,14500
+"Bulgaria","BGR",2010,698.26
+"Bulgaria","BGR",2011,642.06
+"Bulgaria","BGR",2012,877.78
+"Bulgaria","BGR",2013,1826.93
+"Bulgaria","BGR",2014,2520.1
+"Bulgaria","BGR",2015,3372.64
+"Bulgaria","BGR",2016,3931.9
+"Bulgaria","BGR",2017,3291.58
+"Bulgaria","BGR",2018,2531.12
+"Cambodia","KHM",2010,1700
+"Cambodia","KHM",2011,2000
+"Cambodia","KHM",2012,2300
+"Cambodia","KHM",2013,2700
+"Cambodia","KHM",2014,3600
+"Cambodia","KHM",2015,2500
+"Cambodia","KHM",2016,7988
+"Cambodia","KHM",2017,8300
+"Cambodia","KHM",2018,10150
+"Canada","CAN",2010,38605
+"Canada","CAN",2011,36560
+"Canada","CAN",2012,43633
+"Canada","CAN",2013,39437
+"Canada","CAN",2014,38250
+"Canada","CAN",2015,36280
+"Canada","CAN",2016,40370
+"Canada","CAN",2017,39611
+"Canada","CAN",2018,43117
+"Chile","CHL",2010,233649
+"Chile","CHL",2011,304899
+"Chile","CHL",2012,252758
+"Chile","CHL",2013,252278
+"Chile","CHL",2014,246097
+"Chile","CHL",2015,215281
+"Chile","CHL",2016,307165
+"Chile","CHL",2017,347147.98
+"Chile","CHL",2018,377473.14
+"China","CHN",2010,11017473
+"China","CHN",2011,11200346
+"China","CHN",2012,11816961
+"China","CHN",2013,12447541
+"China","CHN",2014,12836333
+"China","CHN",2015,13262282
+"China","CHN",2016,14153589.07
+"China","CHN",2017,14646278.16
+"China","CHN",2018,14697669
+"China, Hong Kong SAR","HKG",2010,636
+"China, Hong Kong SAR","HKG",2013,572
+"China, Hong Kong SAR","HKG",2014,641
+"China, Hong Kong SAR","HKG",2015,583
+"China, Hong Kong SAR","HKG",2016,684
+"China, Hong Kong SAR","HKG",2017,625
+"China, Hong Kong SAR","HKG",2018,747
+"Croatia","HRV",2010,2000
+"Croatia","HRV",2013,1950
+"Croatia","HRV",2014,713.84
+"Croatia","HRV",2015,746.38
+"Croatia","HRV",2016,698.7
+"Croatia","HRV",2017,919.76
+"Croatia","HRV",2018,881.63
+"Cuba","CUB",2010,1650
+"Cuba","CUB",2011,1796
+"Cuba","CUB",2012,1583
+"Cuba","CUB",2013,1518.7
+"Cuba","CUB",2014,1109.6
+"Cuba","CUB",2015,980
+"Cuba","CUB",2016,1113
+"Cuba","CUB",2017,1089
+"Cuba","CUB",2018,1186
+"Denmark","DNK",2010,669
+"Denmark","DNK",2011,537
+"Denmark","DNK",2012,537
+"Denmark","DNK",2013,810
+"Denmark","DNK",2014,1810
+"Denmark","DNK",2015,1229
+"Denmark","DNK",2016,2221
+"Denmark","DNK",2017,2414
+"Denmark","DNK",2018,4516
+"France","FRA",2010,152639
+"France","FRA",2011,145948
+"France","FRA",2012,159292
+"France","FRA",2013,154201.6
+"France","FRA",2014,134797.1
+"France","FRA",2015,123680.4
+"France","FRA",2016,124049
+"France","FRA",2017,137048
+"France","FRA",2018,144048
+"French Polynesia","PYF",2010,2129.12
+"French Polynesia","PYF",2011,2842.7
+"French Polynesia","PYF",2012,2559.2
+"French Polynesia","PYF",2013,2596.2
+"French Polynesia","PYF",2014,1970.18
+"French Polynesia","PYF",2015,1785.8
+"French Polynesia","PYF",2016,1206.88
+"French Polynesia","PYF",2017,1200
+"French Polynesia","PYF",2018,1200
+"Germany","DEU",2010,4905
+"Germany","DEU",2011,20830
+"Germany","DEU",2012,6933
+"Germany","DEU",2013,5036
+"Germany","DEU",2014,5280
+"Germany","DEU",2015,10875
+"Germany","DEU",2016,22264
+"Germany","DEU",2017,16856
+"Germany","DEU",2018,15864
+"Greece","GRC",2010,17064
+"Greece","GRC",2011,17193.1
+"Greece","GRC",2012,16611.6
+"Greece","GRC",2013,18638.4
+"Greece","GRC",2014,16678.4
+"Greece","GRC",2015,18628.4
+"Greece","GRC",2016,23288.6
+"Greece","GRC",2017,19155.8
+"Greece","GRC",2018,21915.9
+"Guernsey","GGY",2014,637.25
+"Guernsey","GGY",2015,851.7
+"Guernsey","GGY",2016,747
+"Guernsey","GGY",2017,656.1
+"Guernsey","GGY",2018,691.5
+"India","IND",2010,18017
+"India","IND",2011,14014
+"India","IND",2012,12905
+"India","IND",2013,14100
+"India","IND",2014,14200
+"India","IND",2015,12600
+"India","IND",2016,12600
+"India","IND",2017,13000
+"India","IND",2018,13000
+"Indonesia","IDN",2010,58079
+"Indonesia","IDN",2011,48449.4
+"Indonesia","IDN",2012,17251
+"Indonesia","IDN",2013,29090.7
+"Indonesia","IDN",2014,44393.78
+"Indonesia","IDN",2015,39532.1
+"Indonesia","IDN",2016,51406.28
+"Indonesia","IDN",2017,62231
+"Indonesia","IDN",2018,74313
+"Ireland","IRL",2010,29176
+"Ireland","IRL",2011,30336
+"Ireland","IRL",2012,22501
+"Ireland","IRL",2013,23541.4
+"Ireland","IRL",2014,20816.7
+"Ireland","IRL",2015,25088
+"Ireland","IRL",2016,22757.43
+"Ireland","IRL",2017,26161.9
+"Ireland","IRL",2018,24011
+"Italy","ITA",2010,100977.2
+"Italy","ITA",2011,111795.7
+"Italy","ITA",2012,84023
+"Italy","ITA",2013,88844
+"Italy","ITA",2014,100226.47
+"Italy","ITA",2015,100200
+"Italy","ITA",2016,100200
+"Italy","ITA",2017,100200
+"Italy","ITA",2018,93026.24
+"Japan","JPN",2010,420731
+"Japan","JPN",2011,284929
+"Japan","JPN",2012,345914
+"Japan","JPN",2013,331983
+"Japan","JPN",2014,368273
+"Japan","JPN",2015,412589
+"Japan","JPN",2016,373496
+"Japan","JPN",2017,308990
+"Japan","JPN",2018,350000
+"Jersey","JEY",2014,637.25
+"Jersey","JEY",2015,851.7
+"Jersey","JEY",2016,747
+"Jersey","JEY",2017,656.1
+"Jersey","JEY",2018,691.5
+"Korea, Dem. People's Rep","PRK",2010,60000
+"Korea, Dem. People's Rep","PRK",2011,60000
+"Korea, Dem. People's Rep","PRK",2012,60000
+"Korea, Dem. People's Rep","PRK",2013,60000
+"Korea, Dem. People's Rep","PRK",2014,60000
+"Korea, Dem. People's Rep","PRK",2015,60000
+"Korea, Dem. People's Rep","PRK",2016,60000
+"Korea, Dem. People's Rep","PRK",2017,62000
+"Korea, Dem. People's Rep","PRK",2018,62000
+"Korea, Republic of","KOR",2010,370125
+"Korea, Republic of","KOR",2011,409272
+"Korea, Republic of","KOR",2012,387399
+"Korea, Republic of","KOR",2013,306029
+"Korea, Republic of","KOR",2014,371506
+"Korea, Republic of","KOR",2015,364165
+"Korea, Republic of","KOR",2016,395859
+"Korea, Republic of","KOR",2017,453634
+"Korea, Republic of","KOR",2018,454200
+"Malaysia","MYS",2010,89236
+"Malaysia","MYS",2011,60744
+"Malaysia","MYS",2012,45008
+"Malaysia","MYS",2013,41830.21
+"Malaysia","MYS",2014,42598
+"Malaysia","MYS",2015,19315.72
+"Malaysia","MYS",2016,12213.87
+"Malaysia","MYS",2017,16110.88
+"Malaysia","MYS",2018,17856.62
+"Mexico","MEX",2010,3894
+"Mexico","MEX",2011,2571
+"Mexico","MEX",2012,5069
+"Mexico","MEX",2013,4396.12
+"Mexico","MEX",2014,13935.54
+"Mexico","MEX",2015,7512.78
+"Mexico","MEX",2016,8871.78
+"Mexico","MEX",2017,15400.28
+"Mexico","MEX",2018,9329.38
+"Myanmar","MMR",2010,27349
+"Myanmar","MMR",2011,1438
+"Myanmar","MMR",2012,1731
+"Myanmar","MMR",2013,3005
+"Myanmar","MMR",2014,15605
+"Netherlands","NLD",2010,60087
+"Netherlands","NLD",2011,39269.8
+"Netherlands","NLD",2012,42327.4
+"Netherlands","NLD",2013,39862
+"Netherlands","NLD",2014,56985
+"Netherlands","NLD",2015,56900
+"Netherlands","NLD",2016,56300
+"Netherlands","NLD",2017,46250
+"Netherlands","NLD",2018,45500
+"New Zealand","NZL",2010,97607
+"New Zealand","NZL",2011,103115
+"New Zealand","NZL",2012,87663
+"New Zealand","NZL",2013,85058
+"New Zealand","NZL",2014,98947
+"New Zealand","NZL",2015,78720
+"New Zealand","NZL",2016,95983
+"New Zealand","NZL",2017,101550
+"New Zealand","NZL",2018,88168
+"Norway","NOR",2010,1930
+"Norway","NOR",2011,1742.46
+"Norway","NOR",2012,1966.9
+"Norway","NOR",2013,2328.44
+"Norway","NOR",2014,1983.3
+"Norway","NOR",2015,2731.03
+"Norway","NOR",2016,2176.4
+"Norway","NOR",2017,2382.87
+"Norway","NOR",2018,1648.57
+"Peru","PER",2010,58101
+"Peru","PER",2011,52213
+"Peru","PER",2012,24781.7
+"Peru","PER",2013,67694.4
+"Peru","PER",2014,55096.2
+"Peru","PER",2015,23028.6
+"Peru","PER",2016,20974.99
+"Peru","PER",2017,11926.98
+"Peru","PER",2018,12477.03
+"Philippines","PHL",2010,43402
+"Philippines","PHL",2011,43905
+"Philippines","PHL",2012,46308
+"Philippines","PHL",2013,44964
+"Philippines","PHL",2014,41117
+"Philippines","PHL",2015,36210
+"Philippines","PHL",2016,38287
+"Philippines","PHL",2017,42153
+"Philippines","PHL",2018,55011
+"Portugal","PRT",2010,2535
+"Portugal","PRT",2011,2315
+"Portugal","PRT",2012,2320
+"Portugal","PRT",2013,3860.92
+"Portugal","PRT",2014,4101.21
+"Portugal","PRT",2015,4185.66
+"Portugal","PRT",2016,4409.89
+"Portugal","PRT",2017,6379.33
+"Portugal","PRT",2018,7187.08
+"Russian Federation","RUS",2010,854
+"Russian Federation","RUS",2011,725
+"Russian Federation","RUS",2012,504
+"Russian Federation","RUS",2013,2111
+"Russian Federation","RUS",2014,3817
+"Russian Federation","RUS",2015,2805
+"Russian Federation","RUS",2016,5363
+"Russian Federation","RUS",2017,8087
+"Russian Federation","RUS",2018,9534
+"Senegal","SEN",2016,741
+"Singapore","SGP",2015,906.07
+"Singapore","SGP",2016,525.29
+"Slovenia","SVN",2015,573.3
+"Slovenia","SVN",2016,607
+"Slovenia","SVN",2017,641.4
+"Slovenia","SVN",2018,579.3
+"South Africa","ZAF",2010,1715
+"South Africa","ZAF",2011,1606.16
+"South Africa","ZAF",2012,1971.17
+"South Africa","ZAF",2013,2586
+"South Africa","ZAF",2014,2989
+"South Africa","ZAF",2015,3237.4
+"South Africa","ZAF",2016,3360
+"South Africa","ZAF",2017,3359.52
+"South Africa","ZAF",2018,3704.35
+"Spain","ESP",2010,190832.2
+"Spain","ESP",2011,211436.43
+"Spain","ESP",2012,205167.3
+"Spain","ESP",2013,163038.3
+"Spain","ESP",2014,220448.55
+"Spain","ESP",2015,225307.61
+"Spain","ESP",2016,217919.05
+"Spain","ESP",2017,242482.57
+"Spain","ESP",2018,284833.85
+"Sweden","SWE",2010,1382
+"Sweden","SWE",2011,1470
+"Sweden","SWE",2012,1308
+"Sweden","SWE",2013,1702
+"Sweden","SWE",2014,1746
+"Sweden","SWE",2015,1525
+"Sweden","SWE",2016,2317
+"Sweden","SWE",2017,2014
+"Sweden","SWE",2018,1986
+"Taiwan Province of China","TWN",2010,96381
+"Taiwan Province of China","TWN",2011,94406.7
+"Taiwan Province of China","TWN",2012,89892
+"Taiwan Province of China","TWN",2013,84534.58
+"Taiwan Province of China","TWN",2014,85321.75
+"Taiwan Province of China","TWN",2015,85689.4
+"Taiwan Province of China","TWN",2016,60643.67
+"Taiwan Province of China","TWN",2017,75240.97
+"Taiwan Province of China","TWN",2018,71135.41
+"Thailand","THA",2010,270628
+"Thailand","THA",2011,186638
+"Thailand","THA",2012,185479
+"Thailand","THA",2013,216839
+"Thailand","THA",2014,183435.42
+"Thailand","THA",2015,194344
+"Thailand","THA",2016,197137
+"Thailand","THA",2017,97728
+"Thailand","THA",2018,92635
+"Turkey","TUR",2018,907
+"United Kingdom","GBR",2010,31361.6
+"United Kingdom","GBR",2011,26912
+"United Kingdom","GBR",2012,27227
+"United Kingdom","GBR",2013,26245
+"United Kingdom","GBR",2014,21563.7
+"United Kingdom","GBR",2015,24120.44
+"United Kingdom","GBR",2016,16850.68
+"United Kingdom","GBR",2017,18472.08
+"United Kingdom","GBR",2018,17100
+"United States of America","USA",2010,173158
+"United States of America","USA",2011,133384
+"United States of America","USA",2012,168023
+"United States of America","USA",2013,160199
+"United States of America","USA",2014,160084
+"United States of America","USA",2015,159135
+"United States of America","USA",2016,173668
+"United States of America","USA",2017,171497
+"United States of America","USA",2018,181048
+"Viet Nam","VNM",2010,98426
+"Viet Nam","VNM",2011,114800
+"Viet Nam","VNM",2012,134031
+"Viet Nam","VNM",2013,181470
+"Viet Nam","VNM",2014,188881
+"Viet Nam","VNM",2015,232579.99
+"Viet Nam","VNM",2016,262952.92
+"Viet Nam","VNM",2017,284965.52
+"Viet Nam","VNM",2018,300500

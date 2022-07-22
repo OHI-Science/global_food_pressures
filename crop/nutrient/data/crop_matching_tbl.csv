@@ -1,0 +1,45 @@
+split_rest_names,SPAM_super,full_name,report_year,FUBC_crop_name
+acof,xcof,Arabica coffee,2002,coffee
+bana,bana,Banana,2017,fruits
+barl,barl,Barley,2017,oth_cereals
+bean,xpul,Other pulses,2002,"beans, bean, dry_bean, dry_beans"
+cass,cass,Cassava,2017,roots_tubers
+chic,xpul,Other pulses,2002,"chickpeas, chickpea"
+cnut,cnut,Coconut,2017,fruits
+coco,coco,Cocoa,2002,cocoa
+cott,xoil,Other oil crops,2017,fiber_crops
+cowp,xpul,Other pulses,2002,cowpea
+grou,xoil,Other oil crops,2017,oth_oilseeds
+lent,xpul,Other pulses,2002,"lentil, lentils"
+maiz,maiz,Maize,2017,maize
+ocer,ocer,Other cereals,2017,oth_cereals
+ofib,ofib,Other fibre crops,2017,fiber_crops
+oilp,oilp,Oilpalm,2017,oil_palm
+ooil,xoil,Other oil crops,2017,oth_oilseeds
+opul,xpul,Other pulses,2002,"pulses, pulses_other, azuhi_bean, pea"
+orts,orts,Other roots,2017,roots_tubers
+othr,othr,Rest of crops,2002,"rubber, hop"
+pige,xpul,Other pulses,2002,gram
+plnt,plnt,Plantain,2017,fruits
+pmil,xmil,Millet,2017,oth_cereals
+pota,pota,Potato,2017,roots_tubers
+rape,xoil,Other oil crops,2017,oth_oilseeds
+rcof,xcof,Robusta coffee,2002,coffee
+rice,rice,Rice,2017,rice
+sesa,xoil,Other oil crops,2017,oth_oilseeds
+smil,xmil,Millet,2017,oth_cereals
+sorg,sorg,Sorghum,2017,oth_cereals
+soyb,soyb,Soybean,2017,soybeans
+spis,spis,Spices,2002,"pepper, pepper_chili"
+sugb,sugb,Sugarbeet,2017,sugar_crops
+sugc,sugc,Sugarcane,2017,sugar_crops
+sunf,xoil,Other oil crops,2017,oth_oilseeds
+swpo,swpo,Sweet potato,2017,roots_tubers
+teas,teas,Tea,2002,tea
+temf,xfru,Fruits,2017,fruits
+tnut,tnut,Treenuts,2002,"peanut, hazelnut, almond, pistachio"
+toba,toba,Tobacco,2002,tobacco
+trof,xfru,Fruits,2017,fruits
+vege,vege,Vegetables,2017,vegetables
+whea,whea,Wheat,2017,wheat
+yams,yams,Yams,2017,roots_tubers

@@ -1,0 +1,226 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+# Preamble
+```{r}
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+library(janitor)
+library(googlesheets4)
+library(googledrive)
+library(readxl)
+options(httr_oob_default=TRUE)
+# drive_auth(new_user = TRUE)
+
+
+```
+
+# Import tables
+```{r}
+
+## Note: I had to manually download the data sources spreadsheet because I couldn't get the google drive stuff to work. 
+# data_sources <- 
+#   read_sheet("https://docs.google.com/spreadsheets/d/1XHrtRqyPAGxHFRN3U5S7y7_lUH5ZP6m1Zt2NNjK3tfg/edit#gid=0",
+#              sheet = 1,
+#              .name_repair = make_clean_names) %>% 
+#   dplyr::select(contains(c("spatial", "temporal", "system", "unique", "average"))) %>% 
+#   mutate_if(is.list, as.character) %>% 
+#   mutate_at(c("spatial_resolution",  "spatial_extent", "temporal_specificity", 
+#               "system_specificity", "average_score"), 
+#             as.double)
+
+data_sources <- 
+  read_xlsx(here("_analysis/figures/extended_data/prep_Rmd/data/data_sources_quality.xlsx"), sheet =1, .name_repair = make_clean_names) %>%
+  dplyr::select(contains(c("spatial", "temporal", "system", "unique", "average"))) %>% 
+  mutate_if(is.list, as.character) %>% 
+  mutate_at(c("spatial_resolution",  "spatial_extent", "temporal_specificity", 
+              "system_specificity", "average_score"), 
+            as.double)
+
+# scoring_layers <- 
+#   read_sheet("https://docs.google.com/spreadsheets/d/1XHrtRqyPAGxHFRN3U5S7y7_lUH5ZP6m1Zt2NNjK3tfg/edit#gid=0",
+#              sheet = 2,
+#              .name_repair = make_clean_names)
+
+scoring_layers <- read_xlsx(here("_analysis/figures/extended_data/prep_Rmd/data/data_sources_quality.xlsx"), sheet =2, .name_repair = make_clean_names)
+```
+
+# Error checking 
+```{r}
+# Check for duplicates
+scoring_layers[duplicated(scoring_layers)]
+
+# Check that all unique_ids have scores
+setdiff(unique(scoring_layers$unique_id), unique(data_sources$unique_id))
+```
+
+
+```{r}
+scoring_df <- 
+  left_join(scoring_layers, data_sources, by = "unique_id") 
+
+
+scoring_df2 <- 
+  scoring_df %>% 
+  mutate(spatial_score = (spatial_resolution + spatial_extent) / 2) %>% 
+  group_by(origin, organism, system, product, pressure, farm_feed) %>% 
+  summarise(spatial_score   = mean(spatial_score, na.rm = TRUE),
+            temporal_specificity    = mean(temporal_specificity, na.rm = TRUE),
+            system_specificity   = mean(system_specificity, na.rm = TRUE),
+            average_score        = mean(average_score, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(fig_layers = Hmisc::capitalize(if_else(system == "fisheries", 
+                                                paste(origin, 
+                                                      organism, 
+                                                      sep = " "),
+                                                organism)),
+         pressure = Hmisc::capitalize(pressure))
+
+scoring_df2$fig_layers[scoring_df2$fig_layers == "Food_crop"] <- "Food crops"
+scoring_df2$fig_layers[scoring_df2$fig_layers == "Fodd"] <- "Fodder crops"
+scoring_df2$pressure[scoring_df2$pressure == "Ghg"] <- "GHG"
+```
+
+# Calculate feed
+
+```{r}
+feed_scores <- 
+  scoring_df2 %>% 
+  filter(pressure == "NA") %>% 
+  select(-pressure) %>% 
+  rename(crop_spatial_score = spatial_score,
+         crop_temporal_specificity = temporal_specificity,
+         crop_system_specificity = system_specificity,
+         crop_average_score = average_score)
+
+crop_scores <- 
+  scoring_df2 %>% 
+  filter(system == "crop") %>% 
+  rename(crop_type = organism) %>% 
+  select(pressure, crop_type, 7:10)
+
+pressure <- c("Nutrient", "GHG", "Water", "Disturbance")
+
+crop_type <- c("fodd", "food_crop")
+
+feed_scores2 <- expand_grid(feed_scores, pressure, crop_type)
+
+feed_scores3 <- 
+  left_join(feed_scores2, crop_scores) %>% 
+  mutate(average_score = (average_score + crop_average_score) / 2,
+         spatial_score = (crop_spatial_score + spatial_score) / 2,
+         temporal_specificity = (crop_temporal_specificity + temporal_specificity) / 2,
+         system_specificity = (crop_system_specificity + system_specificity) / 2) %>% 
+  group_by(origin, organism, system, product, farm_feed, fig_layers, pressure) %>% 
+  summarise(spatial_score = mean(spatial_score),
+            temporal_specificity = mean(temporal_specificity),
+            system_specificity = mean(system_specificity),
+            average_score = mean(average_score)) %>% 
+  ungroup()
+  
+# Join with the rest of the dataframe
+ scoring_df3 <- 
+  scoring_df2 %>% 
+  filter(!farm_feed == "feed") %>% 
+  bind_rows(feed_scores3)
+```
+
+
+```{r}
+
+
+scoring_df_avg <- 
+  scoring_df3 %>% 
+  select(fig_layers, pressure, average_score) %>% 
+  group_by(fig_layers, pressure) %>% 
+  summarise(average_score = mean(average_score, na.rm = TRUE)) %>% 
+  ungroup()
+
+scoring_df_avg$average_score[scoring_df_avg$average_score == "NaN"] <- NA_real_
+
+# Rank by average score
+scoring_df_avg_2 <- 
+  scoring_df_avg %>% 
+  group_by(fig_layers) %>% 
+  mutate(overall = mean(average_score, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  arrange(desc(overall)) %>% 
+  mutate(fig_layers = fct_reorder(fig_layers, overall))
+
+ggplot(scoring_df_avg_2, aes(x = pressure, y = fig_layers)) +
+  geom_tile(aes(fill = average_score)) +
+  scale_fill_gradient2(midpoint = 3,
+                       limits = c(1,5),
+                       low = "yellow", 
+                       mid = "green", 
+                       high = "darkblue", 
+                       na.value = "grey80",
+                       breaks = c(1, 3, 5),
+                       labels = c("Low", "Medium", "Good")) +
+  theme_dark() +
+  theme(# axis.text.x     = element_text(angle = 45, hjust = 1, size = 12),
+    axis.text.x     = element_text(angle = 45, hjust = 1),
+        axis.title      = element_blank(),
+        panel.grid      = element_blank(),
+        legend.title    = element_blank(),
+        legend.position = "bottom") +
+        #axis.text.y = element_text(size = 12)) +
+   coord_cartesian(expand = FALSE) + 
+   coord_fixed(0.5 , expand = FALSE) ## GC: The only change I made to this plot
+ 
+ggsave(here("_analysis/figures/extended_data/output/ed_fig_5_data_quality_assessment.png"),
+       width=6, height=4, dpi=300) ## GC: and i changed the width and height from 10 and 8 
+# ggsave(here("_analysis/figures/extended_data/output/testing.png"), 
+#        width=5, height=5, dpi=300)
+```
+
+# Visualise all scores
+
+```{r}
+  scoring_df4 <-
+    scoring_df3 %>%
+    unite(food_system, c(11,5) , sep = ": ") %>%
+    pivot_longer(cols      = 7:10,
+                 names_to  = "criteria",
+                 values_to = "score") %>%
+    group_by(food_system, criteria) %>% 
+    summarise(score = mean(score, na.rm = TRUE)) %>% 
+    ungroup() %>% 
+    group_by(food_system) %>% 
+    mutate(overall = mean(score, na.rm = TRUE)) %>% 
+    ungroup() %>% 
+    mutate(food_system = fct_reorder(food_system, overall)) %>% 
+    arrange(desc(overall))
+
+  ### Heatmap!
+
+  ggplot(scoring_df4,
+         aes(x = criteria, y = food_system)) +
+    geom_tile(aes(fill = score)) +
+    scale_fill_gradient2(midpoint = 3,
+                       limits = c(1,5),
+                       low = "yellow", 
+                       mid = "green", 
+                       high = "darkblue", 
+                       na.value = "grey80",
+                       breaks = c(1, 3, 5),
+                       labels = c("Bad", "Medium", "Good")) +
+    theme_dark() +
+    theme(axis.text.x     = element_text(angle = 45, hjust = 1),
+          axis.title      = element_blank(),
+          panel.grid      = element_blank(),
+          legend.title    = element_blank(),
+          legend.position = "bottom") +
+   coord_cartesian(expand = FALSE) + 
+         coord_fixed(0.5 , expand = FALSE) ## GC: this is the only change I made to these plots 
+  
+ggsave(here("_analysis/figures/extended_data/output/ed_fig_6_data_quality_assessment_full.png"), 
+       width=10, height=8, dpi=300)
+
+# ggsave(here("_analysis/figures/extended_data/output/testing2.png"), 
+#        width=10, height=8, dpi=300)
+```

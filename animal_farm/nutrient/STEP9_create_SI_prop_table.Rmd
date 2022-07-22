@@ -1,0 +1,135 @@
+---
+title: "STEP9: Create a table with the props of leaching + volatizing at each stage"
+author: "Juliette"
+date: "6/4/2021"
+output: html_document
+---
+
+Table with all the proportions of total N happening at each animal system (leach p, leach n from mms, leach n from applied to crops after mms, leach n from applied to pasture after mms, leach n applied to crops, leach n left of pastures, volatilization for each n leaching)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(gt)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+
+```
+
+All the categories we are intersted in
+```{r}
+category_list <- c("chickens_industrial_meat", "chickens_industrial_eggs", "chickens_backyard_eggs&meat", "goats_grassland_milk", "goats_grassland_meat", "goats_mixed_milk", "goats_mixed_meat", "sheep_grassland_milk", "sheep_grassland_meat", "sheep_mixed_milk", "sheep_mixed_meat", "cows_grassland_milk", "cows_grassland_meat", "cows_mixed_milk", "cows_mixed_meat", "cows_feedlot_meat", "pigs_backyard_meat", "pigs_intermediate_meat", "pigs_industrial_meat", "buffaloes_grassland_milk", "buffaloes_mixed_milk")
+```
+
+
+```{r}
+
+all_df <- data.frame(food_system = NA,
+                     prop_leach_n_mms = NA, prop_leach_n_applied_crops = NA, prop_leach_n_applied_pastures = NA, prop_leach_n_left_pastures = NA,
+                     prop_volat_n_mms = NA, prop_volat_n_applied_crops = NA, prop_volat_n_applied_pastures = NA, prop_volat_n_left_pastures = NA) 
+
+for(category in category_list)  {
+  
+  # category = category_list[6]
+ 
+    N_excretion <- raster(list.files(file.path(prep, "animal_farm/nutrient/N_from_excretion"), pattern = category, full = TRUE)) %>% 
+    raster_df() %>% 
+    select(-cellindex) 
+ colnames(N_excretion) <- c("x", "y", "exc") 
+ N_excretion <- N_excretion %>% 
+   mutate(exc = ifelse(is.na(exc), 0, exc))
+  
+ ## do the leaching sources for N first
+  mms_prop_l <- read_csv(list.files(file.path(prep, "animal_farm/nutrient/STEP3_N_leaching_prop_mms"), pattern = category, full = TRUE), col_types = c("ddcn")) %>% 
+    mutate(frac_leach_mms = ifelse(is.na(frac_leach_mms), 0, frac_leach_mms)) %>% 
+    left_join(N_excretion) %>% 
+    mutate(leached = frac_leach_mms*exc) %>% 
+    dplyr::summarise(total_leach_n_mms = sum(leached, na.rm=TRUE),
+                     total_exc = sum(exc, na.rm=TRUE)) %>% 
+    mutate(prop_leach_n_mms = total_leach_n_mms/total_exc) %>% 
+    select(prop_leach_n_mms)
+  
+  ## this includes applied directly to crops and also applied post mms** will need to make a note in the gt table
+  applied_crop_prop_l <- read_csv(list.files(file.path(prep, "animal_farm/nutrient/STEP5_N_leached_prop_applied_crops"), pattern = category, full = TRUE), col_types = c("ddcn")) %>% 
+    mutate(N_prop_leach_applied = ifelse(is.na(N_prop_leach_applied), 0, N_prop_leach_applied)) %>% 
+    left_join(N_excretion) %>% 
+    mutate(leached = N_prop_leach_applied*exc) %>% 
+    dplyr::summarise(total_leach_n_crop_applied = sum(leached, na.rm=TRUE),
+                     total_exc = sum(exc, na.rm=TRUE)) %>% 
+    mutate(prop_leach_n_applied_crops = total_leach_n_crop_applied/total_exc) %>% 
+    select(prop_leach_n_applied_crops)
+  
+    applied_pasture_prop_l <- read_csv(list.files(file.path(prep, "animal_farm/nutrient/STEP5.5_N_leached_prop_applied_pastures"), pattern = category, full = TRUE), col_types = c("ddcn")) %>% 
+    mutate(N_prop_leach_applied_pastures = ifelse(is.na(N_prop_leach_applied_pastures), 0, N_prop_leach_applied_pastures)) %>% 
+    left_join(N_excretion) %>% 
+    mutate(leached = N_prop_leach_applied_pastures*exc) %>% 
+    dplyr::summarise(total_leach_n_pasture_applied = sum(leached, na.rm=TRUE),
+                     total_exc = sum(exc, na.rm=TRUE)) %>% 
+    mutate(prop_leach_n_applied_pastures = total_leach_n_pasture_applied/total_exc) %>% 
+    select(prop_leach_n_applied_pastures)
+      
+  pasture_prop_l <- read_csv(list.files(file.path(prep, "animal_farm/nutrient/STEP6.5_N_leaching_prop_pasture"), pattern = category, full = TRUE), col_types = c("ddcn")) %>% 
+    mutate(prop_leaching = ifelse(is.na(prop_leaching), 0, prop_leaching)) %>% 
+    left_join(N_excretion) %>% 
+    mutate(leached = prop_leaching*exc) %>% 
+    dplyr::summarise(total_leach_n_pasture = sum(leached, na.rm=TRUE),
+                     total_exc = sum(exc, na.rm=TRUE)) %>% 
+    mutate(prop_leach_n_left_pastures = total_leach_n_pasture/total_exc) %>% 
+    select(prop_leach_n_left_pastures)
+  
+   ## do the volatizing sources for N first
+  mms_prop_v <- read_csv(list.files(file.path(prep, "animal_farm/nutrient/STEP3.5_N_volatizing_prop_mms"), pattern = category, full = TRUE), col_types = c("ddcn")) %>% 
+    mutate(prop_volt = ifelse(is.na(prop_volt), 0, prop_volt)) %>% 
+    left_join(N_excretion) %>% 
+    mutate(vol = prop_volt*exc) %>% 
+    dplyr::summarise(total_vol_n_mms = sum(vol, na.rm=TRUE),
+                     total_exc = sum(exc, na.rm=TRUE)) %>% 
+    mutate(prop_volat_n_mms = total_vol_n_mms/total_exc) %>% 
+    select(prop_volat_n_mms)
+  
+        # this includes applied directly to crops and also applied post mms** will need to make a note in the gt table
+  applied_crop_prop_v <- read_csv(list.files(file.path(prep, "animal_farm/nutrient/STEP5_N_volatizing_prop_applied_crops"), pattern = category, full = TRUE), col_types = c("ddcn")) %>% 
+    mutate(N_prop_volt_applied = ifelse(is.na(N_prop_volt_applied), 0, N_prop_volt_applied)) %>% 
+    left_join(N_excretion) %>% 
+    mutate(vol = N_prop_volt_applied*exc) %>% 
+    dplyr::summarise(total_vol_n_applied_crops = sum(vol, na.rm=TRUE),
+                     total_exc = sum(exc, na.rm=TRUE)) %>% 
+    mutate(prop_volat_n_applied_crops = total_vol_n_applied_crops/total_exc) %>% 
+    select(prop_volat_n_applied_crops)
+  
+    applied_pasture_prop_v <- read_csv(list.files(file.path(prep, "animal_farm/nutrient/STEP5.5_N_volatizing_prop_applied_pasture"), pattern = category, full = TRUE), col_types = c("ddcn")) %>% 
+    mutate(N_prop_volt_applied_pastures = ifelse(is.na(N_prop_volt_applied_pastures), 0, N_prop_volt_applied_pastures)) %>% 
+    left_join(N_excretion) %>% 
+    mutate(vol = N_prop_volt_applied_pastures*exc) %>% 
+    dplyr::summarise(total_vol_n_applied_pastures = sum(vol, na.rm=TRUE),
+                     total_exc = sum(exc, na.rm=TRUE)) %>% 
+    mutate(prop_volat_n_applied_pastures = total_vol_n_applied_pastures/total_exc) %>% 
+    select(prop_volat_n_applied_pastures)
+    
+  pasture_prop_v <- read_csv(list.files(file.path(prep, "animal_farm/nutrient/STEP6.5_N_volatizing_prop_pasture"), pattern = category, full = TRUE), col_types = c("ddcn")) %>% 
+    ungroup() %>% 
+    mutate(prop_volt = ifelse(is.na(prop_volt), 0, prop_volt)) %>% 
+    left_join(N_excretion) %>% 
+    mutate(vol = prop_volt*exc) %>% 
+    dplyr::summarise(total_vol_n_left_pastures = sum(vol, na.rm=TRUE),
+                     total_exc = sum(exc, na.rm=TRUE)) %>% 
+    mutate(prop_volat_n_left_pastures = total_vol_n_left_pastures/total_exc) %>% 
+    select(prop_volat_n_left_pastures)
+  
+## now do p leaching  ? can we do that i thought it was one value
+  
+  combined_sources <- cbind(mms_prop_l, applied_crop_prop_l, applied_pasture_prop_l, pasture_prop_l,
+                            mms_prop_v, applied_crop_prop_v, applied_pasture_prop_v, pasture_prop_v) %>% 
+    mutate(food_system = category)
+
+all_df <- rbind(all_df, combined_sources) %>% 
+  filter(!is.na(food_system))
+  
+}
+
+write_csv(all_df, here::here("animal_farm/nutrient/data/leach_vol_props_at_steps.csv"))
+```
+

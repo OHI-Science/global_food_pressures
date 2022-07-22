@@ -1,0 +1,43 @@
+---
+title: "hyde_grazing_calculations"
+author: "Juliette"
+date: "10/5/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+```
+
+
+Grab the HYDE data 
+```{r}
+graze <- raster(file.path(raw, "HYDE/baseline/2017AD_lu/grazing2017AD.asc"), crs = food_crs)
+plot(graze)
+```
+
+We want to figure out the distribution of the proportion of cells grazed wise
+```{r}
+
+graze_prop <- graze/area(graze)
+
+# plot histogram
+hist(graze_prop,
+     main = "Distribution of proportion of grazed in each cell (with 0)",
+     xlab = "Proportion", ylab = "Frequency",
+     col = "hotpink4")
+
+graze_prop[graze_prop == 0] <- NA
+hist(graze_prop,
+     main = "Distribution of proportion of grazed in each cell (remove 0)",
+     xlab = "Proportion", ylab = "Frequency",
+     col = "darkseagreen")
+
+
+```
+
+

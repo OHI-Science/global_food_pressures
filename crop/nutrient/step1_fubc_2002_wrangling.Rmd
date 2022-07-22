@@ -1,0 +1,340 @@
+---
+title: "crop_nutrient_wrangling"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Script Description
+Extract fertilizer rates for crops too broadly categorized in fubc 2017.
+
+# Data information
+FAO 2002 on FUBC. 
+
+Extracted: 4/12/2021
+
+# Preamble
+```{r setup, include = FALSE}
+# getting packages we want
+library(here)
+library(janitor)
+library(vroom)
+library("readr")
+library(tabulizer)
+
+# Raster templates
+source(here("_spatial/template_raster.R"))
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+# Import food_rgns xy df
+food_rgns_xy <- 
+  food_rgns_xy %>% 
+  select(x, y, iso3c)
+``` 
+
+-------------------------------------------------------------------------------
+
+# FUBC 2002
+
+- Extract tables from pdf
+- Wrangle tables from pdf
+- Filter niche categories
+
+# 11/12/21 update
+
+`extract_tables` improved the way it reads tables. Previously France and Finland data were extracted in the same table. Now the function is able to extract each table separately. 
+
+```{r}
+pdf <- here("crop/nutrient/data/fubc5ed.pdf")
+
+fubc_tbls <- 
+  extract_tables(pdf, 
+                 pages  = 23:67,
+                 method = "stream",
+                 output = "data.frame") 
+
+# Lapply for all countries
+
+tbl_wrangle_rates <- function(element) {
+  
+  country_names <- 
+    str_extract(colnames(element)[1], 
+                        pattern = ".*(?=\\.)")
+
+  element <- element[-c(2), c(1,4:6)]
+  element[1,1] <- "crop"
+  colnames(element) <- element[1,]
+  
+  element <- element[-1,] 
+  
+  element <- element[!grepl("Total", element$crop),]
+  element <- element[!grepl("Overall consumption", element$crop),]
+  
+  crop_names <- tolower(str_extract(element[,1], pattern = ".*(?=\\s)"))
+  
+  element %>%
+    mutate(crop   = crop_names,
+           fubc_2002_country = country_names,
+           N       = as.numeric(N),
+           P205    = as.numeric(P205),
+           K20     = as.numeric(K20)) %>% 
+    rename(fubc_2002_crop = crop,
+           P2O5 = P205,
+           K2O = K20) %>% 
+    pivot_longer(cols      = -c(fubc_2002_country, fubc_2002_crop),
+                 names_to  = "nutrient",
+                 values_to = "rate") %>% 
+    #mutate(rate = rate / 1000) %>% 
+    return()
+  
+}
+
+tbl_wrangle_averages <- function(element) {
+  
+  if (isTRUE(all_equal(element, fubc_tbls[[4]]))) { 
+    
+      country_names <- "Brazil" 
+      element <- element[, c(1, 3:5)]
+      colnames(element) <- c("crop", "N", "P205", "K20")
+    
+      } else if (isTRUE(all_equal(element, fubc_tbls[[41]]))) { 
+      
+        country_names <- "Vietnam" 
+        element <- element[, c(1, 3:5)]
+        colnames(element) <- c("crop", "N", "P205", "K20") 
+      
+      } else if (isTRUE(all_equal(element, fubc_tbls[[50]]))) { 
+      
+        country_names <- "Canada" 
+        element <- 
+          element[, c(1, 3:4)] %>% 
+          separate(2,
+                   c("N", "P205"),
+                   sep = " ",
+                   remove = TRUE)
+        
+        colnames(element) <- c("crop", "N", "P205", "K20") 
+        
+      } else { 
+      
+        country_names <- colnames(element)[1]
+      
+      if (isTRUE(element[2,4] == "P205 K20")) { 
+
+        element <- 
+          element %>% 
+          separate(4,
+                   c("P205", "K20"),
+                   sep = " ",
+                   remove = TRUE)
+        
+      } else if (element[2,3] == "N P205 K20") { 
+
+        element <- 
+          element %>% 
+          separate(3,
+                   c("N", "P205", "K20"),
+                   sep = " ",
+                   remove = TRUE)
+      }
+        
+
+      element <- element[-c(1,3), c(1, 3:5)]
+      element[1,1] <- "crop"
+      colnames(element) <- element[1,]
+      element <- element[-1,] 
+
+      }
+
+  element <- element[!grepl("Total", element$crop),]
+  element <- element[!grepl("Overall consumption", element$crop),]
+  crop_names <- tolower(str_extract(element[,1], pattern = "\\w[\\w ]*[a-zA-Z]"))
+  
+    element %>%
+    select(-contains("NA")) %>% 
+    mutate(crop   = crop_names,
+           fubc_2002_country = country_names,
+           N       = as.numeric(N),
+           P205    = as.numeric(P205),
+           K20     = as.numeric(K20)) %>% 
+    rename(fubc_2002_crop = crop,
+           P2O5 = P205,
+           K2O = K20) %>% 
+    pivot_longer(cols      = -c(fubc_2002_crop, fubc_2002_country),
+                 names_to  = "nutrient",
+                 values_to = "rate") %>% 
+    #mutate(rate = rate / 1000) %>% 
+    return()
+  
+}
+
+fubc_2002 <- 
+  bind_rows(lapply(fubc_tbls[c(1:3, 5:40, 42)], 
+                   tbl_wrangle_rates)) %>% 
+  bind_rows(lapply(fubc_tbls[c(4, 41, 43:88)], 
+                   tbl_wrangle_averages)) %>%   
+  mutate_at("fubc_2002_country", str_replace, "(\\.){1,2}", "_") %>% 
+  mutate_at("fubc_2002_crop", str_replace, "(\\s&\\s)", "_") %>% 
+  mutate_at("fubc_2002_crop", str_remove, "\\*") %>%
+  mutate_at("fubc_2002_crop", str_replace, "\\s", "_") %>% 
+  mutate_at("fubc_2002_crop", str_remove, "\\)") %>% 
+  mutate_at("fubc_2002_crop", str_remove, "\\(|\\,") %>% 
+  mutate_at("fubc_2002_crop", str_replace, "\\s", "_")
+
+```
+
+-------------------------------------------------------------------------------
+
+# COUNTRIES
+
+```{r}
+fubc_2002 <- 
+  fubc_2002 %>% 
+  mutate(fubc_2002_country = gsub("_", " ", fubc_2002_country),
+         Country = case_when(fubc_2002_country == "USA" ~ "United States",
+                                       fubc_2002_country == "China Taiwan" ~ "Taiwan",
+                                       fubc_2002_country == "Czech Rep" ~ "Czech Republic",
+                                       fubc_2002_country == "Korea Republic" ~ "South Korea",
+                                       TRUE ~ fubc_2002_country)) %>% 
+  left_join(., food_rgns) %>% 
+  select(-ID_0, -fubc_2002_country)
+```
+
+-------------------------------------------------------------------------------
+
+# CROPS
+
+```{r}
+fubc_2002_crop_list <- 
+  tibble(
+    fubc_2002_crop = c("cocoa", "coffee", "coffee", "tea", "tobacco", # non-food residuals
+    
+                       "fodder","fodder_beet","fodder_crops", "fodder_roots",  # Grassland
+                       "forage_products_nes", "clover", "meadows", 
+                       "pasture_fodder", "alfalfa", "green_fodder", "maize_silage",
+                       "lucerne",
+                       
+                       "beans", "bean", "dry_bean", "dry_beans", # bean
+                       "pulses", "pulses_other", "azuhi_bean", "pea", # opul
+                       "chickpeas", "chickpea",   # chic
+                       "gram", # Pigeon peas (pige) also called red gram, mainly produced in India.
+                       "lentil", "lentils",  #lent
+                       "peanut", "hazelnut", "almond", "pistachio", # tree nuts
+                       "rubber", "hop", # othr
+                       "cowpea", # cowp, mainly produced in Nigeria.
+                       
+                       "pepper", "pepper_chili"), # spices
+    split_rest_names = c("coco", "rcof", "acof", "teas", "toba",
+                         rep("fodd", 12),
+                         rep("bean", 4),
+                         rep("opul", 4),
+                         rep("chic", 2),
+                         "pige",
+                         rep("lent", 2),
+                         rep("tnut", 4),
+                         rep("othr", 2),
+                         "cowp",
+                         rep("spis", 2)))
+
+write_csv(fubc_2002_crop_list,
+          here("crop/nutrient/data/fubc_2002_crop_list.csv"))
+```
+
+# Join
+
+```{r}
+# Ensure all countries match
+setdiff(unique(fubc_2002$Country),
+        unique(food_rgns$Country)) # should produce nothing
+
+fubc_2002 <- 
+  left_join(fubc_2002_crop_list,
+            fubc_2002,
+            by = "fubc_2002_crop") %>% 
+  na.omit() %>% 
+  group_by(split_rest_names, nutrient, iso3c) %>% 
+  summarise(rate = mean(rate)) %>% 
+  ungroup()
+```
+
+# Gapfill ROW
+
+```{r}
+# Complete df with all possible iso3c/nutrient/crop combinations
+fubc_2002 <- 
+  expand_grid(iso3c = unique(food_rgns$iso3c),
+              nutrient = c("N", "P2O5", "K2O"),
+              split_rest_names = unique(fubc_2002$split_rest_names)) %>% 
+  left_join(., fubc_2002)
+
+fubc_2002 <- 
+  vroom::vroom(here("_spatial/_output/UNSD_Methodology.csv"), 
+               .name_repair = make_clean_names) %>%
+  dplyr::select(iso3c, region_name, intermediate_region_name, sub_region_name, developed_developing) %>% 
+  left_join(fubc_2002, ., by = "iso3c")
+
+fubc_2002_gf <- 
+  fubc_2002 %>%  
+  group_by(intermediate_region_name,
+           split_rest_names,
+           nutrient) %>% 
+  mutate(int_rgn_mean = mean(rate, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  group_by(sub_region_name,
+           split_rest_names,
+           nutrient) %>% 
+  mutate(sub_rgn_mean = mean(rate, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  group_by(region_name,
+           split_rest_names,
+           nutrient) %>% 
+  mutate(rgn_mean = mean(rate, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  group_by(developed_developing,
+           split_rest_names,
+           nutrient) %>% 
+  mutate(dev_mean = mean(rate, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  group_by(split_rest_names,
+           nutrient) %>% 
+  mutate(global_mean = mean(rate, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  group_by(nutrient, intermediate_region_name) %>% 
+  mutate(local_nutrient_mean = mean(rate, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  group_by(nutrient, region_name) %>% 
+  mutate(region_nutrient_mean = mean(rate, na.rm = TRUE)) %>% 
+  ungroup() %>%
+  mutate(rate = case_when(
+    !is.finite(rate) & is.finite(int_rgn_mean) ~ int_rgn_mean,
+    !is.finite(rate) & !is.finite(int_rgn_mean) & is.finite(sub_rgn_mean) ~ sub_rgn_mean,
+    !is.finite(rate) & !is.finite(int_rgn_mean) & !is.finite(sub_rgn_mean) & is.finite(rgn_mean) ~ rgn_mean,
+    !is.finite(rate) & !is.finite(int_rgn_mean) & !is.finite(sub_rgn_mean) & !is.finite(rgn_mean) & is.finite(dev_mean) ~ dev_mean,
+    !is.finite(rate) & !is.finite(int_rgn_mean) & !is.finite(sub_rgn_mean) & !is.finite(rgn_mean) & !is.finite(dev_mean) & is.finite(global_mean) ~ global_mean,
+    !is.finite(rate) & !is.finite(int_rgn_mean) & !is.finite(sub_rgn_mean) & !is.finite(rgn_mean) & !is.finite(dev_mean) & !is.finite(global_mean) & is.finite(local_nutrient_mean) ~ local_nutrient_mean,
+    !is.finite(rate) & !is.finite(int_rgn_mean) & !is.finite(sub_rgn_mean) & !is.finite(rgn_mean) & !is.finite(dev_mean) & !is.finite(global_mean) & !is.finite(local_nutrient_mean) ~ region_nutrient_mean,
+    TRUE ~ rate)) %>% 
+  select(-matches("mean|region|developed"))
+names(fubc_2002_gf)
+
+# Make sure the dataframe has this many rows before saving
+3 * 244 * length(unique(fubc_2002$split_rest_names))
+```
+
+# Save
+
+```{r}
+write_csv(fubc_2002_gf, here("crop/nutrient/data/fubc_2002_gf.csv"))
+```
+
+```{r}
+SI_fubc_2002_crop_list <- 
+  vroom(here("crop/nutrient/data/fubc_2002_crop_list.csv")) %>% 
+  group_by(SPAM_super = split_rest_names) %>% 
+  summarise(fubc_2002_crop = str_c(unique(fubc_2002_crop), collapse = ", ")) %>% 
+  ungroup() 
+
+write_csv(SI_fubc_2002_crop_list, here("crop/nutrient/data/SI_fubc_2002_crop_list.csv"))
+```
+

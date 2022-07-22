@@ -1,0 +1,160 @@
+---
+title: "Comparing All Global Production"
+author: "Juliette"
+date: "9/14/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(here)
+library(stringr)
+library(gt)
+source(here("_workflow/common.R"))
+
+fao_raw <- read_csv(file.path(raw, "FAO_data/v2020/FAO_production_2020_09_25.csv"))
+
+```
+
+```{r}
+
+item_remove <- c("Fat",  "Hides", "Offals", "Skins", "Silk-worm", "Wool", "Honey")
+products_keep <- c("Laying", "Production", "Producing Animals/Slaughtered", "Milk Animals")
+units_keep <- c("1000 Head", "tonnes")
+
+fao <- fao_raw %>% 
+  filter(str_detect(Item, paste(item_remove, collapse = "|")) == FALSE) %>% 
+  filter(str_detect(Element, paste(products_keep, collapse = "|")) == TRUE) %>% 
+  filter(str_detect(Unit, paste(units_keep, collapse = "|")) == TRUE) %>% 
+  select(Country = Area, Element, Item, Unit, Value) %>% 
+  separate(Item, c("product", "animal"), remove = FALSE) %>% 
+  mutate(animal = ifelse(product == "Beeswax", "bee", animal),
+         animal = ifelse(str_detect(Item, "goat"), "goat", animal),
+         animal = ifelse(str_detect(Item, "cow"), "cow", animal),
+         animal = ifelse(str_detect(Item, "sheep"), "sheep", animal),
+         animal = ifelse(str_detect(Item, "buffalo"), "buffalo", animal),
+         animal = ifelse(str_detect(Item, "camel"), "camel", animal),
+         animal = ifelse(str_detect(Item, "bird nes"), "bird nes", animal),
+         animal = ifelse(str_detect(Item, "other bird"), "other bird", animal),
+         animal = ifelse(str_detect(Item, "other rodents"), "other rodents", animal),
+         animal = ifelse(str_detect(Item, "goose and guinea"), "goose and guinea", animal),
+         animal = ifelse(str_detect(Item, "Snails"), "snails", animal),
+         animal = ifelse(str_detect(Item, "other camelids"), "other camelids", animal),
+         product = ifelse(str_detect(Item, "Snails"), "Meat", product)) %>% 
+  mutate(product = tolower(product)) %>% 
+  unite("combo", animal:product, sep = "-", remove = FALSE)
+
+write_csv(fao, here("_analysis/figures/SI/data/fao_all_production_types.csv"))
+
+```
+
+Global Stats
+```{r}
+
+global_prod <- fao %>% 
+  filter(Element == "Production") %>% 
+  group_by(combo) %>% 
+  dplyr::summarise(total_tonnes = sum(Value, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(global_total = sum(total_tonnes),
+         Percent = total_tonnes/global_total) %>% 
+  arrange(desc(Percent)) %>% 
+  select('Animal-Product' = combo, Tonnes = total_tonnes, Percent,  -global_total) %>% 
+  mutate('Percent Sum' = cumsum(Percent)) %>% 
+  as_tibble()
+
+global_table <- gt(global_prod) %>% 
+  tab_header(title = "Global Animal-Product Stats")
+
+
+```
+Country Stats
+```{r}
+
+country_prod <- fao %>% 
+  filter(Element == "Production") %>% 
+  mutate(global_total = sum(Value, na.rm = TRUE),
+         Percent = Value/global_total) %>% 
+  arrange(desc(Percent)) %>% 
+  select(Country, 'Animal-Product' = combo, Tonnes = Value, Percent,  -global_total) %>% 
+  mutate('Percent Sum' = cumsum(Percent)) %>% 
+  as_tibble() %>% 
+  top_n(-25)
+
+country_table <- gt(country_prod) %>% 
+  tab_header(title = "Top 25 Animal-Product Stats by Country")
+
+#gtsave(country_table, here("_analysis/figures/country_table_production.tex"))
+#gt::gtsave(country_table, filename = here("_analysis/figures/country_production_table.png"))
+
+
+```
+
+Pull out just the buffalo countries
+
+```{r}
+buffprod <- fao %>% 
+  filter(Element == "Production") %>% 
+  mutate(global_total = sum(Value, na.rm = TRUE),
+         Percent = Value/global_total) %>% 
+  arrange(desc(Percent)) %>% 
+  mutate('Percent Sum' = cumsum(Percent)) %>% 
+  filter(combo %in% c("buffalo-milk", "buffalo-meat")) %>% 
+  select(Country, 'Animal-Product' = combo, Tonnes = Value, Percent, 'Percent Sum', -global_total) %>% 
+  as_tibble()
+
+buffalo_table <- gt(buffprod) %>% 
+  tab_header(title = "Buffalo Products",
+             subtitle = "Values pulled from top 25 table")
+
+```
+
+
+
+Make plots
+```{r}
+## buffalo milk only has data for 25 countries and yet its still in the top producing category - mostly India and Pakistan are cranking it out
+
+## look at all countries
+plot_df <- fao %>% 
+  filter(Element == "Production") %>% 
+  arrange(desc(Value))
+
+ggplot(plot_df) +
+  geom_bar(aes(x = Value, y = Country), stat= "identity") +
+  facet_wrap(vars(combo))
+##this looks terrible haha
+```
+
+
+```{r}
+library(treemap)
+library(treemapify)
+library(scales)
+
+devtools::install_github("katiejolly/nationalparkcolors")
+library("nationalparkcolors")
+pal <- park_palette("GeneralGrant")
+show_col(pal)
+bi_pal <- c("#1F304A", "#802729")
+
+global_prod_treemap <- global_prod %>% 
+  rename(animal_pro = 'Animal-Product') %>% 
+  mutate(included = ifelse(str_detect(animal_pro, "cow|cattle|chicken|hen|goat|sheep|buffalo|pig"), "included", "not included"),
+         included = ifelse(animal_pro == "buffalo-meat", "not included", included)) 
+
+ggplot(global_prod_treemap, aes(area = Tonnes, 
+                  label = animal_pro))+
+  # add the tree map and add borders between countries
+  geom_treemap(aes(fill = included)) +
+  scale_fill_manual(values = bi_pal)+
+  geom_treemap_text(colour = "white", place = "center", reflow = FALSE, size = 15)
+
+
+ggsave(here("_analysis/figures/SI/output/treemap_included_land.jpg"),width = 15, height = 10, dpi=300) 
+```
+

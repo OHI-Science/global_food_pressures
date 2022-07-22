@@ -1,0 +1,77 @@
+---
+title: "Checking tif files"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+* copy over the datalayers that are not different:
+```{r}
+
+library(rgdal)
+library(sp)
+library(raster)
+library(tidyverse)
+library(here)
+
+```
+
+
+
+```{r}
+
+org_files <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/datalayers')
+scenario_files <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/scenarios/scenarios_datalayers')
+
+to_copy <- setdiff(org_files, scenario_files)
+
+file.copy(from=paste0("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/", to_copy), 
+           to="/home/shares/food-systems/Food_footprint/all_food_systems/scenarios/scenarios_datalayers", 
+          overwrite = TRUE)
+
+
+```
+
+# Check rasters to make sure extents and such are correct
+```{r}
+
+tif_check_list <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/scenarios/scenarios_datalayers', full=TRUE, pattern = ".tif")
+
+# empty data.frame to add to
+raster_check <- data.frame()
+
+
+for(file in tif_check_list){
+  # file <- "/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/marine_demersal_fisheries_meat_disturbance.tif" 
+name <- basename(file)
+raster_file <- raster(file)
+tmp_values <- values(raster_file)
+extent_data <- data.frame(file = name, 
+                          cellN = ncell(raster_file),
+                          xmin = extent(raster_file)@xmin, 
+                          xmax = extent(raster_file)@xmax, 
+                          ymin = extent(raster_file)@ymin, 
+                          ymax = extent(raster_file)@ymax,
+                          variable = names(raster_file),
+                          min = minValue(raster_file),
+                          max = maxValue(raster_file),
+                          sum_cells = cellStats(raster_file, sum, na.rm=TRUE),
+                          quant_50 = quantile(raster_file, c(0.5)),
+                          mean = cellStats(raster_file, mean, na.rm=TRUE),
+                          total_zero = sum(tmp_values==0, na.rm=TRUE),
+                          total_NA = sum(is.na(tmp_values)),
+                          total_greater_zero = sum(tmp_values>0, na.rm=TRUE))
+raster_check <- rbind(raster_check, extent_data)
+}
+
+write_csv(raster_check, here("_analysis/scenarios/fisheries_disturbance_raster_check.csv"))
+
+# some checks
+## make sure these are equal:
+length(tif_check_list)
+dim(raster_check)
+
+filter(raster_check, cellN!=9331200)
+summary(raster_check)
+filter(raster_check, is.na(mean))
+
+```

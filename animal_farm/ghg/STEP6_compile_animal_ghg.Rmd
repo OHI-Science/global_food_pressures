@@ -1,0 +1,63 @@
+---
+title: "Animal Farm Location"
+output: html_document
+---
+## Script Author 
+Juliette Verstaen
+
+## Objectives
+Combine all the ghg intermediate layers info one final ghg map
+
+## Inputs
+GHG emissions from methane from manure, N2O from manure (direct, volatize, and leach), and enteric fermentation.
+
+## Outputs
+Final ghg layers for each category
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+## load libraries, read in data
+library(janitor)
+library(doParallel)
+library(here)
+library(tidyverse)
+library(countrycode)
+
+source(here("_workflow/common.R"))
+## load libraries, read in data
+
+```
+
+
+```{r}
+
+category_list <- c("chickens_industrial_meat", "chickens_industrial_eggs", "chickens_backyard_eggs&meat", "goats_grassland_milk", "goats_grassland_meat", "goats_mixed_milk", "goats_mixed_meat", "sheep_grassland_milk", "sheep_grassland_meat", "sheep_mixed_milk", "sheep_mixed_meat", "cows_grassland_milk", "cows_grassland_meat", "cows_mixed_milk", "cows_mixed_meat", "cows_feedlot_meat", "pigs_backyard_meat", "pigs_intermediate_meat", "pigs_industrial_meat", "buffaloes_grassland_milk", "buffaloes_mixed_milk")
+
+library(doParallel)
+
+registerDoParallel(5)   
+
+foreach(category = category_list)  %dopar%  {
+  
+  # category = category_list[17]
+  files_list <- list.files(file.path(prep, "animal_farm/ghg"), pattern = category, full = TRUE)
+
+  # check <- files_list[5]
+  # raster <- raster(check)
+  # raster
+  # plot(raster)
+
+  stack <- raster::stack((files_list))
+  
+  sum <- sum(stack, na.rm = TRUE) 
+    names(sum) <- "tonnes_CO2eq"
+  
+  raster::writeRaster(sum, file.path(layers, paste0("land_", category, "_ghg.tif", sep = "")), format = "GTiff", overwrite = TRUE)
+  
+}
+
+
+raster::raster(file.path(layers, paste0("land_pigs_backyard_meat_ghg.tif", sep = "")))
+
+```

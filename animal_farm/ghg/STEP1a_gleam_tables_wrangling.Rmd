@@ -1,0 +1,325 @@
+---
+title: "Manure Gleam Tables Wrangling"
+author: "Juliette"
+date: "8/18/2020"
+output: html_document
+---
+
+
+## Setup
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(janitor)
+library(countrycode)
+library(stringr) 
+source(here("_workflow/common.R"))
+```
+
+
+## Methods
+1. First we will wrangle all the tables together as one for easy comparison and math
+2. Then we will grab all the maps and calculate regional sum for each category to get total heads
+3. Last we will carry out the calculations
+
+```{r}
+## gleam tables
+mms_percent_raw <- read_csv(here("animal_farm/ghg/data/mms_specific_percentages.csv"))
+
+ef_dir_raw <- read_csv(here("animal_farm/ghg/data/gleam_table_4.15_ef_dir.csv"))
+frac_gas_raw <- read_csv(here("animal_farm/ghg/data/gleam_table_4.16_frac_gas.csv"))
+frac_leach_raw <- read_csv(here("animal_farm/ghg/data/gleam_table_4.17_frac_leach.csv"))
+
+##
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>% 
+  dplyr::select(iso3c, Global_Name, Region_Name, Sub_region_Name, Intermediate_Region_Name, Region_Name)
+
+gleam_rgns <- read_csv(here("animal_farm/ghg/data/GLEAM_rgn_to_country.csv")) %>% 
+  mutate(region = tolower(region))
+```
+
+
+## EF direct wrangling
+```{r}
+ef_dir <- ef_dir_raw %>% 
+  select(-note) %>% 
+  rename(ef_dir_unit = unit)
+
+large <- filter(ef_dir, animal == "large ruminants") %>% 
+  slice(rep(1:n(), each = 2)) %>% 
+  mutate(animal = c("cows", "buffaloes"))
+
+small <- filter(ef_dir, animal == "small ruminants") %>% 
+  slice(rep(1:n(), each = 2)) %>% 
+  mutate(animal = c("sheep", "goats"))
+
+other <- filter(ef_dir, animal == "other animals") %>% 
+  slice(rep(1:n(), each = 2)) %>% 
+  mutate(animal = c("chickens", "pigs"))
+
+all <- filter(ef_dir, animal == "all") %>% 
+  slice(rep(1:n(), each = 6)) %>% 
+  mutate(animal = rep(c("chickens", "pigs", "cows", "sheep", "goats", "buffaloes"), times = 11))
+
+ef_dir <- ef_dir %>% 
+  filter(animal != "large ruminants",
+         animal != "small ruminants",
+         animal != "other animals",
+         animal != "all") %>% 
+  rbind(large, small,other, all) %>% 
+  rename(mms_specific = mms) %>% 
+  mutate(mms_specific = ifelse(mms_specific == "Composting - intensive windrow", "Composting intensive windrow", mms_specific)) %>% 
+  filter(animal != "chickens" | mms_specific != "Pit storage (> 1 month)") %>% 
+  mutate(mms_specific = ifelse(mms_specific == "Pit storage (> 1 month) for chickens", "Pit storage (> 1 month)", mms_specific))
+  
+```
+
+## Fraction gas (volatilized) wrangling
+The cows are the only ones that have different values based on both the product they provide and the production system they are in. So we will have a cow_frac_gas and a rest_frac_gas to make it easier
+
+This section is missing frac_gas for burned for fuel. What I can tell from reading the IPPC 2006 Ag section, burned manure doesn't count for emissions here. It is accounted for in energy and calculated differently. If we want to account for it, we will need to figure out how to account for it separately. The only countries that burn manure for fuel, only for cows, (according to GLEAM), are Uzbekistan, Turkmenistan, Kazakhstan (10% total manure) and Sri Lanka, Peru, Pakistan, Nepal, Maldives, Iran, India, Bhutan, Bangladesh, Afghanistan (20%). 
+
+Most of these countries don't have a crazy amount of cows, except India. We should discuss if we're comforbale not including burned manure here for now and going back if we have the time. Or if we believe it's important now.
+```{r}
+## cows
+dairy_cow <- frac_gas_raw %>% 
+  filter(animal == "dairy cow") %>% 
+  mutate(product = "milk",
+         animal = "cows") %>% 
+  slice(rep(1:n(), each = 2)) %>% 
+  mutate(production_system = rep(c("grassland", "mixed"), times = 6))
+
+beef_cow <- frac_gas_raw %>% 
+  filter(animal == "beef cow") %>%
+  mutate(product = "meat",
+         animal = "cows")%>% 
+  slice(rep(1:n(), each = 2)) %>% 
+  mutate(production_system = rep(c("grassland", "mixed"), times = 6))
+
+feedlot_cow <- frac_gas_raw %>% 
+  filter(animal == "feedlot cow") %>% 
+  mutate(product = "meat",
+         animal = "cows",
+         production_system = "feedlot")
+
+cows_frac_gas <- rbind(dairy_cow, beef_cow, feedlot_cow)%>% 
+  rename(mms_specific = mms) %>% 
+  mutate(mms_specific = ifelse(mms_specific == "Composting - intensive windrow", "Composting intensive windrow", mms_specific))
+
+#setdiff(gleam_manure_tables_gf$mms_specific, cows_frac_gas$mms_specific)
+# change pit storage for cows to >1 month and also <1 month in cows frac; also add rows for :"Burned for fuel","Anaerobic digester", Poultry manure with litter"
+
+
+## rest
+small_gas <- frac_gas_raw %>% 
+  filter(animal == 	"small_ruminants") %>% 
+  slice(rep(1:n(), each = 2)) %>% 
+  mutate(animal = rep(c("sheep", "goats"), times = 6))
+
+rest_frac_gas <- frac_gas_raw %>% 
+  filter(animal %in% c("chickens", "pigs", "buffaloes") ) %>% 
+  rbind(small_gas)%>% 
+  rename(mms_specific = mms)
+  
+#setdiff(gleam_manure_tables_gf$mms_specific, rest_frac_gas$mms_specific)
+## add "Burned for fuel", "Composting intensive windrow" to rest_frac_gas
+
+```
+
+## Fraction leaching wrangling
+
+*Solid mms =*
+Pasture/Range/Paddock
+Daily spread
+Solid storage
+Dry lot
+Burned for fuel
+Composting intensive windrow
+Poultry manure with litter
+Pit storage (< 1 month)
+Pit storage (> 1 month)
+Pit storage (> 1 month) for chickens
+
+*Liquid mms = *
+Liquid/Slurry
+Liquid/Slurry with crust
+uncovered anaerobic lagoon
+Anaerobic digester
+
+Since there are some values that are chicken specific we will have to include all the animals
+```{r}
+frac_leach <- frac_leach_raw %>% 
+  select(region, solid_mms, liquid_mms) %>% 
+  na.omit() %>% 
+  ## missing east asia and southeast asia, so will use the same)
+   add_row(region = "East Asia and Southeast Asia", solid_mms = 6, liquid_mms = 18) %>% 
+  pivot_longer(cols = -region, names_to = "mms", values_to = "percentage") 
+
+## solid
+leach_solid <- frac_leach %>% 
+  filter(mms == "solid_mms") %>% 
+  slice(rep(1:n(), each = 10)) %>% 
+  mutate(mms_specific = rep(c("Pasture/Range/Paddock",
+                                   "Daily spread",
+                                   "Solid storage",
+                                   "Dry lot",
+                                   "Burned for fuel",
+                                   "Composting intensive windrow",
+                                   "Poultry manure with litter",
+                                   "Pit storage (< 1 month)",
+                                   "Pit storage (> 1 month)",
+                                   "Pit storage (> 1 month) for chickens"), times = 10)) %>% 
+  mutate(animal = ifelse(mms_specific == "Poultry manure with litter"| mms_specific =="Pit storage (> 1 month) for chickens", "chickens", NA))
+
+leach_solid_rest <- leach_solid %>% 
+  filter(is.na(animal)) %>% 
+  slice(rep(1:n(), each = 6)) %>%
+  mutate(animal = rep(c("cows", "sheep", "goats", "chickens", "pigs", "buffaloes"), times = 80 )) %>% 
+  filter(mms_specific != "Pit storage (> 1 month)" | animal != "chickens")
+
+leach_solid <- leach_solid%>% 
+  filter(!is.na(animal)) %>% 
+  rbind(leach_solid_rest)
+
+## liquid
+leach_liquid <- frac_leach %>% 
+  filter(mms == "liquid_mms") %>% 
+  slice(rep(1:n(), each = 4)) %>% 
+  mutate(mms_specific = rep(c("Liquid/Slurry",
+                              "Liquid/Slurry with crust",
+                              "Uncovered anaerobic lagoon",
+                              "Anaerobic digester"), times = 10)) %>% 
+  slice(rep(1:n(), each = 6))  %>%
+  mutate(animal = rep(c("cows", "sheep", "goats", "chickens", "pigs", "buffaloes"), times = 40))
+
+## combine all
+
+frac_leach <- rbind(leach_solid, leach_liquid) %>% 
+  select(-mms) %>% 
+  mutate(region = tolower(region)) %>% 
+  rename(percentage_leach = percentage) %>% 
+  filter(animal != "chickens" | mms_specific != "Pit storage (> 1 month)") %>% 
+  mutate(mms_specific = ifelse(mms_specific == "Pit storage (> 1 month) for chickens", "Pit storage (> 1 month)", mms_specific))
+
+## assign the countries for each region
+frac_leach_countries <- left_join(gleam_rgns, frac_leach, by = "region") %>% 
+  select(iso3c, animal, mms_specific, percentage_leach)
+
+## some countries are missing, we will pull these out and create a row few each animal and mms
+# mms <- unique(frac_leach$mms_specific)
+# missing_countries <- frac_leach_countries %>% 
+#   filter(is.na(mms_specific)) %>% 
+#   slice(rep(1:n(), each = 5))  %>%
+#   mutate(animal = rep(c("cows", "sheep", "goats", "chickens", "pigs"), times = 27)) %>% 
+#   slice(rep(1:n(), each = 14))  %>%
+#   mutate(mms_specific = rep(mms, times = 135))
+
+frac_leach_countries_gf <- frac_leach_countries %>% 
+  # filter(!is.na(mms_specific)) %>% 
+  # rbind(missing_countries) %>% 
+  left_join(un, by = "iso3c") %>% 
+  mutate(gapfill = ifelse(is.na(percentage_leach), "gapfilled with UN political regions", NA)) %>% 
+  group_by(animal, mms_specific, Intermediate_Region_Name) %>%
+  mutate(percentage_leach = ifelse(is.na(percentage_leach), mean(percentage_leach, na.rm = TRUE), percentage_leach)) %>%
+  ungroup() %>% 
+  group_by(animal, mms_specific, Sub_region_Name) %>%
+  mutate(percentage_leach = ifelse(is.na(percentage_leach), mean(percentage_leach, na.rm = TRUE), percentage_leach)) %>%
+  ungroup() %>% 
+  group_by(animal, mms_specific, Region_Name) %>%
+  mutate(percentage_leach = ifelse(is.na(percentage_leach), mean(percentage_leach, na.rm = TRUE), percentage_leach)) %>%
+  ungroup() %>% 
+  group_by(animal, mms_specific, Global_Name) %>%
+  mutate(percentage_leach = ifelse(is.na(percentage_leach), mean(percentage_leach, na.rm = TRUE), percentage_leach)) %>%
+  ungroup() %>% 
+  ## the only NAs left are the ones that aren't applicable (chicken based management systems for non chickens)
+  filter(!is.na(percentage_leach)) %>% 
+  select(iso3c, animal, mms_specific, percentage_leach)
+```
+
+
+## MMS percentages wrangling
+```{r}
+mms_percent <- mms_percent_raw %>% 
+  mutate(animal = tolower(animal),
+         animal = ifelse(animal == "cow", "cows",
+                         ifelse(animal == "goat", "goats",
+                                ifelse(animal == "pig", "pigs",
+                                       ifelse(animal == "buffalo", "buffaloes",
+                                              ifelse(animal == "chicken", "chickens", animal)))))) %>% 
+  mutate(product = tolower(product),
+         product = ifelse(product == "dairy", "milk", product)) %>% 
+  mutate(production_system = tolower(production_system),
+         production_system = ifelse(production_system == "grassland based", "grassland", production_system)) %>% 
+  mutate(mms_specific = ifelse(mms_specific == "Short pit storage (less than 1 month)", "Pit storage (< 1 month)",
+                               ifelse(mms_specific == "Composting", "Composting intensive windrow", 
+                                      mms_specific))) %>% 
+  select(-mms, - gleam_percentage) %>% 
+  rename(to_mms_percentage = percentage ) %>% 
+  mutate(mms_specific = ifelse(mms_specific == "Pit storage", "Pit storage (> 1 month)", mms_specific)) %>% 
+  mutate(to_mms_percentage = ifelse(production_system == "feedlot" & is.na(to_mms_percentage), 0, to_mms_percentage)) %>% 
+  group_by(iso3c, animal, product, production_system) %>% 
+  mutate(add_to_spread = ifelse(mms_specific == "Daily spread" & production_system == "mixed", to_mms_percentage[mms_specific== "Pasture/Range/Paddock"], 0 )) %>% 
+  ungroup() %>% 
+  mutate(to_mms_percentage = ifelse(mms_specific == "Daily spread" & production_system == "mixed", to_mms_percentage + add_to_spread, to_mms_percentage))  %>% 
+  mutate(to_mms_percentage = ifelse(mms_specific == "Pasture/Range/Paddock" & production_system == "mixed", 0, to_mms_percentage)) %>% 
+  select(-add_to_spread)
+
+```
+
+
+## Combine it all as one
+
+```{r}
+
+gleam_manure_tables <- mms_percent %>% 
+  left_join(ef_dir, by = c("mms_specific", "animal")) %>% 
+  left_join(rest_frac_gas, by = c("mms_specific", "animal")) %>% 
+  left_join(cows_frac_gas, by = c("mms_specific", "animal", "product", "production_system")) %>% 
+  mutate(frac_gas.x = as.character(frac_gas.x),
+         frac_gas.y = as.character(frac_gas.y)) %>% 
+  unite("frac_gas", frac_gas.x:frac_gas.y, na.rm = TRUE) %>% 
+  mutate(frac_gas = as.numeric(frac_gas)) %>% 
+  left_join(frac_leach_countries_gf, by= c("iso3c", "animal", "mms_specific"))
+
+## gapfill frac_gas and percentage leach
+gleam_manure_tables_gf <- gleam_manure_tables %>% 
+  left_join(un, by = "iso3c") %>% 
+    ## we will gap fill by all regions, but there are going to some NAs for frac_gas still because some mms are not used for certain animals
+  group_by(Intermediate_Region_Name, mms_specific, animal, product, production_system) %>% 
+  mutate(frac_gas = ifelse(is.na(frac_gas), mean(frac_gas, na.rm = TRUE), frac_gas)) %>% 
+  ungroup() %>% 
+  group_by(Sub_region_Name, mms_specific, animal, product, production_system) %>% 
+  mutate(frac_gas = ifelse(is.na(frac_gas), mean(frac_gas, na.rm = TRUE), frac_gas)) %>% 
+  ungroup() %>% 
+ group_by(Region_Name, mms_specific, animal, product, production_system) %>% 
+  mutate(frac_gas = ifelse(is.na(frac_gas), mean(frac_gas, na.rm = TRUE), frac_gas)) %>% 
+  ungroup() %>% 
+  group_by(Global_Name, mms_specific, animal, product, production_system) %>% 
+  mutate(frac_gas = ifelse(is.na(frac_gas), mean(frac_gas, na.rm = TRUE), frac_gas)) %>%
+  ungroup() %>%
+  group_by(Intermediate_Region_Name, mms_specific, animal, product, production_system) %>% 
+  mutate(percentage_leach = ifelse(is.na(percentage_leach), mean(percentage_leach, na.rm = TRUE), percentage_leach)) %>% 
+  ungroup()%>%
+  group_by(Sub_region_Name, mms_specific, animal, product, production_system) %>% 
+  mutate(percentage_leach = ifelse(is.na(percentage_leach), mean(percentage_leach, na.rm = TRUE), percentage_leach)) %>% 
+  ungroup() %>% 
+  group_by(Region_Name, mms_specific, animal, product, production_system) %>% 
+  mutate(percentage_leach = ifelse(is.na(percentage_leach), mean(percentage_leach, na.rm = TRUE), percentage_leach)) %>% 
+  ungroup() %>% 
+  group_by(Global_Name, mms_specific, animal, product, production_system) %>% 
+  mutate(percentage_leach = ifelse(is.na(percentage_leach), mean(percentage_leach, na.rm = TRUE), percentage_leach)) %>% 
+  ungroup() %>% 
+  select(-Global_Name, -Region_Name, -Sub_region_Name, -Intermediate_Region_Name )
+
+##check that the frac_gas NA values are only for systems where 0 % of the manure goes to that
+check <- gleam_manure_tables_gf %>% 
+  filter(is.na(frac_gas))
+## burned for fuel for mixed dairy and meat cattle have percentages of their manure going to that, but an NA for frac gas. I wrote a blurb in the section above wrangling this data explaining why that is
+
+write_csv(gleam_manure_tables_gf, here("animal_farm/ghg/data/compiled_gleam_tables.csv"))
+
+```
+
+
+There are NAs because there are some types pf management systems that certain animals dont use at all. So nothing to gapfill these

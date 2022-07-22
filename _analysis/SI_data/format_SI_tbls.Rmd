@@ -1,0 +1,208 @@
+---
+title: "format_SI_tbls"
+output: html_document
+---
+
+# Format and save data associated with the statistics cited in the paper.
+
+```{r}
+library(here)
+library(tidyverse)
+library(kableExtra)
+library(writexl)
+library(googlesheets4)
+library(googledrive)
+library(vroom)
+library(readxl)
+library(janitor)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+```
+
+### Placeholder guide.
+
+```{r}
+data_guide <- 
+  tibble("Sheet name" = c("Supplementary Data 1",	
+                          "Supplementary Data 2",	
+                          "Supplementary Data 3",	
+                          "Supplementary Data 4",	
+                          "Supplementary Data 5",	
+                          "Supplementary Data 6",	
+                          "Supplementary Data 7",	
+                          "Supplementary Data 8"),	
+         "Description" = c("Total raw global pressures from all food production; rescaled pressures calculated with these values",
+                           "Cumulative raw pressure data by food type, country, and production environment (freshwater, marine, terrestrial). NOTE: For crop data, portion estimated to be consumed as animal feed accounted for with animal. (e.g., represents human consumption and other uses)",
+                           "Percentage of cumulative pressure allocated to each production environment (freshwater, marine, terrestrial) at the country-level",
+                           "Country-level comparison of the tonnes of CO2-eq produced using different Global Warming Potential (GWP) calculations GWP100 versus GWP100*.",
+                           "Land vs. ocean cumulative pressure footprint for fed animals",
+                           "Cumulative pressure from imported and exported domestic supply, and the proportion of domestic supply that is produced, important, and exported at the country-level.",
+                           "Environmental efficiency for each food type measured by the cumulative environmental pressure per tonne of food, produced, per tonne of protein produced, and per million kilocalories",
+                           "Data quality scores for each dataset used in the study using the methods detailed in Supplementary Methods, Section 10."))
+```
+
+# Supplementary Data 1 - Rescaling
+
+"To calculate the cumulative pressure, we adopted similar methods for other cumulative measures31, rescaling each individual pressure (GHG, FW, NP, D) by dividing the values in each pixel (i) by the total global pressure across all food systems and pixels (T; Supplementary Data 1), such that each pixel describes its proportional contribution to the global total for that pressure. We then summed these rescaled pressure layers to obtain a total cumulative pressure score (CP) for each pixel i, such that CPi = GHGi/GHGT + FWi/FWT + NPi/NPT + Di/DT."
+
+```{r}
+data_1 <- 
+  vroom(here("_analysis/SI_data/output/pressure_rescale_values.csv"))%>% 
+  janitor::clean_names(case = "sentence") %>% 
+  mutate_at(c("Pressure"), 
+            Hmisc::capitalize)
+
+data_1$Pressure[data_1$Pressure == "Ghg"] <- "GHG"
+```
+
+# Supplementary Data 2 - Raw dataframe summary
+
+We then summed these rescaled pressure layers to obtain a total cumulative pressure score (CP) for each pixel i, such that CPi = GHGi/GHGT + FWi/FWT + NPi/NPT + Di/DT. We then aggregated the cumulative pressure data by food type, nation, and production environment (freshwater, marine, terrestrial; Supplementary Data 2).
+
+```{r}
+data_2 <- 
+  vroom(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw_df_summary/rgn_raw_summary.csv")) %>% 
+  janitor::clean_names(case = "sentence") %>% 
+  rename(ISO3c = Iso3c,
+         Value = Sum) %>% 
+  relocate(Country, ISO3c, Category, Origin, Destination = Consumed) 
+  
+names(data_2)
+```
+
+# Supplementary Data 3 - 
+
+"Country-level cumulative pressure derives almost entirely from land-based food production, with the exception of island nations and some countries with extensive coastlines, such as Norway (87% from oceans), Chile (46%), Japan (39%), the U.K. (36%), Indonesia (27%), and Vietnam (25%) (Fig. 4; Supplementary Data 3). Marine fisheries and aquaculture contribute >25% of total pressures in 87 countries, primarily in island nations (60 countries)."
+
+```{r}
+data_3 <- 
+  vroom(here("_analysis/SI_data/output/percent_cum_pressure_country_origin_fw.csv")) %>% 
+  janitor::clean_names(case = "sentence") %>% 
+  rename(ISO3c = Iso3c,
+         `Cumulative pressure percentage`= `Cum pressure percent final`) %>% 
+  select(-`Cum pressure prop final`) %>% 
+    mutate(Origin = Hmisc::capitalize(Origin))
+```
+
+# Supplementary Data 4
+
+"However, our analyses reveal that the large global footprint of these products arises from different classes of pressures. For example, the ruminant digestive system of cows makes their GHG emissions noteworthy (52% of their cumulative pressures; however it is worth noting that the GWP100 approach used to convert CH4 emissions to CO2-eq may overestimate the global warming potential of cow enteric fermentation by nearly 3x, Supplementary Data 4), along with nutrient emissions from their wastes and feed production (31%)."
+
+```{r}
+data_4 <-
+  vroom(here("_analysis/SI_data/output/SI_gwp_table.csv")) %>% 
+  rename(`Tonnes of CO2eq using GWP100` = tonnes_co2eq_GWP_100,
+         `Tonnes of CO2eq using GWP100*` = tonnes_co2eq_GWP_100_star)
+```
+
+# Supplementary Data 5
+
+"Feed creates widespread footprints for fed animals. For example, because on average forage fish comprise ~0.15% of chicken and ~0.02% of pig feed, these livestock have similar cumulative ocean footprints to that of some mariculture species. Feed for mariculture species increasingly includes crops, and all fed species have ~99% of their footprint on land (Supplementary Data 5)."
+
+```{r}
+crop_codes <- 
+  vroom(here("crop/farm/data/crop_codes_updated.csv")) %>% 
+  select(SPAM_super) %>% 
+  unique()
+
+data_5 <-
+  vroom(here("_analysis/SI_data/output/percent_cum_pressure_product_origin.csv"))[,-1] %>% 
+  filter(!organism %in% c(as_vector(crop_codes), "benthic", "demersal", "large-pelagic", "medium-pelagic", "marine-fish-general", "small-pelagic", "fofm", "reef", "fish"))
+
+names(data_5) <- 
+  Hmisc::capitalize(names(data_5)) %>% 
+  gsub("_", " ", .) 
+
+data_5 <- 
+  rename(data_5,
+         `Cumulative pressure` = `Cum pressure`,
+         `Proportion` = `Proportion final`) %>% 
+    mutate_at(c("Organism", "Origin"), 
+            Hmisc::capitalize)
+```
+
+# Supplementary Data 6 - Trade
+
+"This displacement of cumulative pressures is not limited to feed for fed species. For example, of the 172 countries with FAO trade data, 152 reported crop imports, which means they displace at least some portion of their cumulative pressures (ranging from <1% to 100%; median of 20%) to obtain their domestic crop supply (Supplementary Data 6)."
+
+```{r}
+data_6 <- 
+  vroom(here("_analysis/export_import_stressors/data/cumulative_stress_imports_exports.csv")) %>% 
+  rename(cumulative_pressure_exports = exported_cumstress,
+         cumulative_pressure_of_imported_domestic_supply = imported_ds_cumstress,
+         cumulative_pressure_of_produced_domestic_supply = produced_ds_cumstress) %>% 
+  janitor::clean_names(case = "sentence") %>% 
+  rename(ISO3c = Iso3c)
+
+names(data_6) <- gsub("Prop", "Proportion", names(data_6))
+names(data_6) <- gsub("ds", "domestic supply", names(data_6))
+
+data_6 <- 
+  data_6 %>% 
+  rename("Proportion of domestic supply produced" = "Proportion domestic supply produced",
+        "Proportion of domestic supply imported" =  "Proportion domestic supply imported")
+
+```
+
+# Supplementary Data 7 (assuming we can merge kcal/protein with fig 6)
+
+"The environmental efficiency of food production, measured here as the ratio of cumulative environmental pressures to production per area (e.g., pixel, country, global), such that larger values represent lower efficiency, varies not only among food types but also geographically within each food type (Supplementary Data 7)."
+
+```{r}
+food_rgns <- 
+  food_rgns %>% 
+  select(-ID_0) 
+
+data_7 <-
+  vroom(here("_analysis/SI_data/output/efficiency_df.csv")) %>%
+  dplyr::select(-plot_names) %>%
+  janitor::clean_names(case = "sentence") %>% 
+  rename(ISO3c = Iso3c,
+        `Tonnes of protein` = `Tonnes protein`,
+        `Pressure per tonne of protein` = `Pressure per tonne protein`,
+        `Pressure per million kcal` = `Pressure per mill kcal`) %>% 
+  mutate(Product = Hmisc::capitalize(Product)) 
+
+unique(data_7$Category)
+
+```
+
+# Supplementary Data 8
+
+"We use data of various quality and resolution in our analyses. We performed a qualitative assessment of  the limitations and strengths of the data used to estimate each pressure and food type. We score each dataset on a scale of 1-5 based on the spatial (extent and resolution), temporal, and system components that describe the quality of the data (Supplementary Data 8)"
+
+```{r}
+data_8 <- 
+  # read_sheet("https://docs.google.com/spreadsheets/d/1XHrtRqyPAGxHFRN3U5S7y7_lUH5ZP6m1Zt2NNjK3tfg/edit#gid=0",
+  #            sheet = 1,
+  #            .name_repair = make_clean_names) %>%
+    read_xlsx(here("_analysis/figures/extended_data/prep_Rmd/data/data_sources_quality.xlsx"),
+             sheet = 1,
+             .name_repair = make_clean_names) %>%
+  #dplyr::select(contains(c("spatial", "temporal", "system", "unique", "average"))) %>% 
+  mutate_if(is.list, as.character) %>% 
+  mutate_at(c("spatial_resolution",  "spatial_extent", "temporal_specificity", 
+              "system_specificity", "average_score"), 
+            as.double) %>% 
+  # select(-c("check_06_04", "notes", "times_matched", unique_id, combination_id, times_matched)) %>% 
+   select(-c( "notes", "times_matched", unique_id, combination_id, times_matched)) %>% 
+  janitor::clean_names(case = "sentence") %>% 
+  mutate_at(c("Description", "Dataset", "Units", "Resolution native", "Analysis use"), 
+            Hmisc::capitalize)
+```
+
+
+# Save all in one .xlsx
+```{r}
+write_xlsx(list("Guide" = data_guide,
+                "Supplementary Data 1" = data_1, 
+                "Supplementary Data 2" = data_2, 
+                "Supplementary Data 3" = data_3, 
+                "Supplementary Data 4" = data_4, 
+                "Supplementary Data 5" = data_5, 
+                "Supplementary Data 6" = data_6, 
+                "Supplementary Data 7" = data_7, 
+                "Supplementary Data 8" = data_8),
+           here("_analysis/SI_data/formatted_output/supplementary_data.xlsx"))
+```

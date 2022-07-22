@@ -1,0 +1,301 @@
+---
+title: "STEP 7: Update ruminant maps with 2017 FAO data"
+author: "Juliette"
+date: "9/22/2020"
+output: html_document
+---
+
+# Objective
+This markdown allocates the 2017 FAOSTAT headcount data to the 2010 gridded global distribution of livestock maps. We assume that the proportion of animals in each cell remains the same, but we want to update the total regional counts. We will also gapfill here. The two scenarios that are gapfilled are (1) when FAO doesn't report values for a country but the gridded maps do and (2) when fao reports values but the gridded maps don't. For scenario 1 we gapfill with the gridded cell count and multiple by the proportional change from 2010-2017, and for scenario 2 we evenly distribute the heads across all cells in the country.
+
+# Input:
+For the FAO headcount we use fao_livestock_headcount.csv (calculated in STEP 1)
+
+For the maps:
+**Reference**
+Livestock Systems Global Distribution http://www.fao.org/livestock-systems/global-distributions/en/
+**Description**
+total head counts in each cell 
+**Resolution** 5 minute arc
+**Time Range**  2010
+**Format** raster
+
+## Output:
+updated_gridded_map_tifs/animal_all_counts.tif -> one for each ruminant, located in the prep folder on the server
+
+## Set up
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+
+## FAO total livestock data
+fao_livestock<- read_csv(here("animal_farm/farm/data/fao_livestock_headcount.csv")) %>% 
+  filter(year == 2017)
+prop_change_raw <- read_csv(here("animal_farm/farm/data/prop_change_2010_2017.csv"))
+```
+
+## Methods
+
+First a little prop change wrangling. we will average the dairy and meat cow prop change. While this is loosing a little bit of resolution, the prop change will only be used to gapfill a few countries that don't have much production anyways
+```{r}
+prop_change <- prop_change_raw %>% 
+  filter(animal != "broiler chicken",
+         animal !=  "layer chicken") %>% 
+  mutate(product = ifelse(animal == "dairy cow", "milk",
+                          ifelse(animal == "meat cow", "meat", NA)),
+         animal = ifelse(animal == "dairy cow", "cows",
+                           ifelse(animal == "meat cow", "cows", animal))) 
+```
+
+
+```{r}
+
+ruminant_list <- c("sheep", "goats", "buffaloes")
+
+# registerDoParallel(4)
+
+for(animal_OI in ruminant_list) {
+  
+  # animal_OI <- ruminant_list[3]
+  
+  if(animal_OI == "sheep") {
+    path <- file.path(raw, "FAO_livestock_maps/d2019/sheep/5_Sh_2010_Da.tif")
+  }else{
+    if(animal_OI == "goats"){
+      path <- file.path(raw, "FAO_livestock_maps/d2019/goats/5_Gt_2010_Da.tif")
+    }else{
+      if(animal_OI == "cows"){
+        path <- file.path(raw, "FAO_livestock_maps/d2019/cattle/5_Ct_2010_Da.tif")
+      }else{
+        path <- file.path(raw, "FAO_livestock_maps/d2019/buffalo/5_Bf_2010_Da.tif")
+      }}}
+
+
+      raster <- raster(path)
+      names(raster) <- "gridded_count"
+
+      animal_df <- raster %>% 
+        raster_df() %>% 
+        left_join(food_rgns_xy, by = c("x", "y", "cellindex")) %>% 
+        group_by(iso3c) %>% 
+        mutate(rgn_count = sum(gridded_count, na.rm = TRUE)) %>% 
+        ungroup() %>% 
+        mutate(cell_prop = gridded_count/rgn_count,
+               animal = animal_OI) 
+      
+      fao_data <- fao_livestock %>% 
+        filter(animal == animal_OI) %>% 
+        group_by(iso3c, animal) %>% 
+        summarise(fao_headcount = sum(fao_headcount)) %>% 
+        ungroup()
+
+      animal_df_fao <- animal_df %>% 
+        left_join(fao_data, by = c("iso3c", "animal")) %>% 
+        mutate(cell_count = cell_prop*fao_headcount)
+
+## check if there are any countries that faostat does not have data for but that gridded does. we can use the older cell counts and adjust to 2017 using prop change
+## I checked, there are no countries where the rgn_count > 0 & fao_headcount ==0
+
+## grab the countries that need gapfilling with the FAO gridded
+      iso3c_df_miss <- animal_df_fao %>% 
+        filter(rgn_count >0 & is.na(fao_headcount),
+               !is.na(iso3c))
+      to_gf <- unique(iso3c_df_miss$iso3c)
+
+## combine xy df with the prop change
+      proportion <- prop_change %>%
+        select(-product)
+      
+      animal_df_gf <- left_join(animal_df_fao, proportion, by = c("iso3c", "animal")) %>% 
+        mutate(cell_count = ifelse(iso3c %in% to_gf, gridded_count*prop_change, cell_count))
+      
+## now we want to check that we didnt loose any fao data (ie: the gridded map says there is none)  
+      missing_df <- animal_df_gf %>% 
+        filter(is.na(rgn_count) | rgn_count == 0 & fao_headcount > 0)
+      missing <- unique(missing_df$iso3c)
+      
+      animal_df_gf <- animal_df_gf %>% 
+        group_by(iso3c) %>% 
+        mutate(cell_total = n()) %>% 
+        ungroup() %>%
+        mutate(cell_count = ifelse(iso3c %in% missing, fao_headcount/cell_total, cell_count)) %>% 
+        select(-cell_total) 
+      
+## write raster
+      
+        raster_end <- animal_df_gf %>% 
+        select(x,y, cell_count) %>% 
+        rasterFromXYZ(crs = food_crs)
+        
+      
+      writeRaster(raster_end, file.path(prep, paste0("animal_farm/farm/updated_gridded_map_tifs/", animal_OI, "_all_counts.tif", sep = "")), format = "GTiff", overwrite = TRUE )               
+}
+      
+
+```
+For Cows
+
+Cows FAO data is already in dairy vs non, so we need to create total count maps for these. 
+```{r}
+
+prod_list <- c("milk", "meat")
+
+# registerDoParallel(4)
+
+for(prod_OI in prod_list) {
+  
+  # prod_OI <- prod_list[1]
+  
+      raster <- raster(file.path(raw, "FAO_livestock_maps/d2019/cattle/5_Ct_2010_Da.tif"))
+      names(raster) <- "gridded_count"
+
+      animal_df <- raster %>% 
+        raster_df() %>% 
+        left_join(food_rgns_xy, by = c("x", "y", "cellindex")) %>% 
+        group_by(iso3c) %>% 
+        mutate(rgn_count = sum(gridded_count, na.rm = TRUE)) %>% 
+        ungroup() %>% 
+        mutate(cell_prop = gridded_count/rgn_count,
+               product = prod_OI,
+               animal = "cows")
+      
+      fao_data <- fao_livestock %>% 
+        filter(animal == "cows",
+               product == prod_OI) %>% 
+        group_by(iso3c, animal, product) %>% 
+        summarise(fao_headcount = sum(fao_headcount)) %>% 
+        ungroup()
+
+      animal_df_fao <- animal_df %>% 
+        left_join(fao_data, by = c("iso3c", "animal", "product")) %>% 
+        mutate(cell_count = cell_prop*fao_headcount)
+
+## check if there are any countries that faostat does not have data for but that gridded does. we can use the older cell counts and adjust to 2017 using prop change, and the dairy/non dairy tiff for allocating to milk or meat
+      if(prod_OI == "milk"){
+        prod_read <- "dairy"
+      }else{"nondairy"}
+      
+      product <- raster(file.path(prep, paste0("animal_farm/farm/production_system1_tifs/cows_", prod_read, ".tif", sep = ""))) %>% 
+        raster_df() %>% 
+        select(x,y, prop_product = cows_dairy)
+
+## grab the countries that need gapfilling with the FAO gridded
+      iso3c_df_miss <- animal_df_fao %>% 
+        filter(rgn_count >0 & is.na(fao_headcount),
+               !is.na(iso3c))
+      to_gf <- unique(iso3c_df_miss$iso3c)
+
+## combine xy df with the prop change
+      
+      animal_df_gf <- left_join(animal_df_fao, prop_change, by = c("iso3c", "animal", "product")) %>% 
+        left_join(product, by = c("x", "y")) %>% 
+        rowwise() %>% 
+        mutate(cell_count = ifelse(iso3c %in% to_gf, gridded_count*prop_change*prop_product, cell_count))
+      
+## now we want to check that we didnt loose any fao data (ie: the gridded map says there is none)  
+      missing_df <- animal_df_gf %>% 
+        filter(is.na(rgn_count) | rgn_count == 0 & fao_headcount > 0)
+      missing <- unique(missing_df$iso3c)
+      
+      animal_df_gf <- animal_df_gf %>% 
+        group_by(iso3c) %>% 
+        mutate(cell_total = n()) %>% 
+        ungroup() %>%
+        mutate(cell_count = ifelse(iso3c %in% missing, fao_headcount/cell_total, cell_count)) %>% 
+        select(-cell_total) 
+      
+## write raster
+      
+        raster_end <- animal_df_gf %>% 
+        select(x,y, cell_count) %>% 
+        rasterFromXYZ(crs = food_crs)
+        
+      
+      writeRaster(raster_end, file.path(prep, paste0("animal_farm/farm/updated_gridded_map_tifs/cows_", prod_OI, "_all_counts.tif", sep = "")), format = "GTiff", overwrite = TRUE )               
+}
+      
+
+```
+
+
+
+Check the orginal fao livestock data global sums to the raster sums 
+
+Cows
+```{r}
+cows <- raster(file.path(prep, "animal_farm/farm/updated_gridded_map_tifs/cows_meat_all_counts.tif"))
+plot(cows)
+cellStats(cows, 'sum')
+## 1,197,933,944 from our df
+
+check_fao <- fao_livestock %>% 
+  filter(animal == "cows",
+         product == "meat",
+         year == 2017) %>% 
+  dplyr::summarise(fao_headcount = sum(fao_headcount))
+## 1,197,881,390	
+
+cows <- raster(file.path(prep, "animal_farm/farm/updated_gridded_map_tifs/cows_milk_all_counts.tif"))
+plot(cows)
+cellStats(cows, 'sum')
+## 275,451,528 from our df
+
+check_fao <- fao_livestock %>% 
+  filter(animal == "cows",
+         product == "milk",
+         year == 2017) %>% 
+  dplyr::summarise(fao_headcount = sum(fao_headcount))
+## 275,405,738		
+
+```
+
+Buffaloes
+```{r}
+buff <- raster(file.path(prep, "animal_farm/farm/updated_gridded_map_tifs/buffaloes_all_counts.tif"))
+plot(buff)
+plot(log(1+buff))
+cellStats(buff, 'sum')
+## 207,159,071
+
+check_fao <- fao_livestock %>% 
+  filter(animal == "buffaloes",
+         year == 2017) %>% 
+  dplyr::summarise(fao_headcount = sum(fao_headcount))
+## 1,473,287,128	
+```
+
+Sheep
+```{r}
+sheep <- raster(file.path(prep, "animal_farm/farm/updated_gridded_map_tifs/sheep_all_counts.tif"))
+plot(sheep)
+cellStats(sheep, 'sum')
+##1,201,846,388
+
+check_fao <- fao_livestock %>% 
+  filter(animal == "sheep",
+         year == 2017) %>% 
+  dplyr::summarise(fao_headcount = sum(fao_headcount))
+## 1,201,076,128
+```
+
+Goats
+```{r}
+goat <- raster(file.path(prep, "animal_farm/farm/updated_gridded_map_tifs/goats_all_counts.tif"))
+plot(goat)
+cellStats(goat, 'sum')
+## 1,030,090,558
+
+check_fao <- fao_livestock %>% 
+  filter(animal == "goats",
+         year == 2017) %>% 
+  dplyr::summarise(fao_headcount = sum(fao_headcount))
+## 1,029,333,363
+```
+
+
+
+

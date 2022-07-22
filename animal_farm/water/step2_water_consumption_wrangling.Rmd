@@ -1,0 +1,154 @@
+---
+title: "water_consumption_wrangling"
+output: html_document
+---
+
+# Set-up
+```{r setup, include = FALSE}
+# Open packages we want
+library(tidyverse)
+library(here)
+library(raster)
+library(sf)
+library(janitor)
+
+# Raster templates
+source(here("_spatial/template_raster.R"))
+source("./_workflow/common.R")
+
+```
+
+-------------------------------------------------------------------------------
+
+# Model results
+```{r}
+model_results <- 
+  list.files(path = here("animal_farm/water/data"),
+             pattern = "model.csv$",
+             full.names = TRUE) %>% 
+  vroom::vroom() %>% 
+  left_join(
+    ., 
+    tibble(livestock  = c("backyard_chickens", 
+                          "broiler_chickens",
+                          "layer_chickens", 
+                          "finishing_cattle", 
+                          "goats", 
+                          "growing_cattle", 
+                          "lactating_cows"),
+           polynomial = c(2,            2,           2,        2,     2,        2,          3),
+           min_temp   = c(10,           10,          10,       4,     25,       4,          4),
+           max_temp   = c(37.8,         37.8,        37.8,     32,    45,       32,         32),
+           min_water  = c(0.0001191250, 0.000118250, 0.000120, 0.028, 0.002674, 0.01933333, 0.043),
+           max_water  = c(0.0004158125, 0.000521625, 0.000310, 0.066, 0.006892, 0.047,      0.061))) %>% 
+  
+  mutate(animal = if_else(livestock %in% c("growing_cattle", "finishing_cattle"),
+                          "cows", 
+                          livestock))
+model_results
+```
+
+-------------------------------------------------------------------------------
+
+# Create look-up dataframe for production system and livestock names.
+```{r}
+lookup_names <- 
+  tibble(gleam_livestock = as.character(),
+         gleam_product = as.character(),
+         gleam_prod_system = as.character())
+
+for(val in list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm",
+                     pattern = "location_df", 
+                     full.names = TRUE)) {
+  
+  lookup_names <- 
+    lookup_names %>% 
+    add_row(tibble_row(
+        gleam_livestock   = str_extract(val, "(cows|sheep|goats|pigs|chickens|buffaloes)"),
+        gleam_prod_system = str_extract(val, "(grassland|industrial|mixed|backyard|intermediate|feedlot)"),
+        gleam_product     = str_extract(val, "(meat|milk|eggs&meat|eggs)")))
+
+}
+lookup_names
+
+# Harmonize each gleam name combination with the respective generalized
+# water consumption name.
+lookup_names <- 
+  lookup_names %>% 
+  mutate(prod_system = case_when(
+    gleam_prod_system == "backyard" ~ "grazing",
+    gleam_prod_system == "grassland" ~ "grazing",
+    gleam_prod_system == "intermediate" ~ "mixed",
+    gleam_prod_system == "feedlot" ~ "industrial",
+    TRUE ~ gleam_prod_system)) %>% 
+  mutate(animal = case_when(
+     gleam_product == "eggs&meat" ~ "backyard_chickens",
+     gleam_product == "eggs" ~ "layer_chickens",
+     gleam_product == "meat" & gleam_livestock == "chickens" ~ "broiler_chickens",
+     gleam_livestock == "cows" & gleam_product == "meat" & gleam_prod_system == "mixed" ~ "growing_cattle",
+     gleam_livestock == "cows" & gleam_product == "meat" & gleam_prod_system == "grassland" ~ "growing_cattle",
+     gleam_livestock == "cows" & gleam_product == "meat" & gleam_prod_system == "feedlot" ~ "finishing_cattle",
+     gleam_livestock == "cows" & gleam_product == "milk" ~ "lactating_cows",
+     gleam_livestock == "buffaloes" & gleam_product == "meat" & gleam_prod_system == "grassland"  ~ "growing_cattle",
+     gleam_livestock == "buffaloes" & gleam_product == "milk" & gleam_prod_system == "grassland" ~ "lactating_cows",
+     gleam_livestock == "buffaloes" & gleam_product == "meat" & gleam_prod_system == "mixed" ~ "growing_cattle",
+     gleam_livestock == "buffaloes" & gleam_product == "milk" & gleam_prod_system == "mixed" ~ "lactating_cows",
+     TRUE ~ gleam_livestock))
+lookup_names
+```
+
+-------------------------------------------------------------------------------
+
+# Wrangle Chapagain and Hoekstra 2003 water use data 
+```{r}
+# Wrangling
+livestock_water_use_raw <- 
+  vroom::vroom(here("animal_farm/water/data/mekonnen_2010_service_water.csv"),
+               .name_repair = make_clean_names) 
+
+livestock_water_use_raw$animal <- 
+  livestock_water_use_raw$animal %>% 
+  tolower() %>% 
+  str_replace_all(" ", "_")
+
+livestock_water_use <- 
+  livestock_water_use_raw %>% 
+  mutate(animal = case_when(animal %in% "beef_cattle" ~ "cows",
+                            animal %in% "dairy_cattle" ~ "lactating_cows",
+                            animal %in% "pig" ~ "pigs",
+                            animal %in% "goat"~ "goats",
+                            animal %in% "layer_chicken" ~ "layer_chickens",
+                            TRUE ~ animal)) %>% 
+  pivot_longer(cols      = - animal,
+               names_to  = "prod_system",
+               values_to = "tonnes_consumed") %>% 
+  mutate(water_type      = str_extract(prod_system, pattern = "^\\w*?(?=_)")) %>% 
+  mutate(prod_system     = str_remove(prod_system, pattern = "^\\w*?(?=_)_")) %>% 
+  mutate(tonnes_consumed = tonnes_consumed * 0.001) %>% 
+  filter(!prod_system == "weighted_average")
+
+livestock_water_use <- 
+  livestock_water_use %>%  
+    mutate(animal = if_else(animal == "cows", "growing_cattle", as.character(animal))) %>%
+    bind_rows(livestock_water_use) %>%
+    mutate(animal = if_else(animal == "cows", "finishing_cattle", as.character(animal))) %>%
+    unique() 
+
+livestock_water_use <- 
+  livestock_water_use %>%  
+    mutate(animal = if_else(animal == "broiler_chicken", "broiler_chickens", as.character(animal))) %>%
+    bind_rows(livestock_water_use) %>%
+    mutate(animal = if_else(animal == "broiler_chicken", "backyard_chickens", as.character(animal))) %>%
+    unique() %>% 
+    left_join(lookup_names) %>%
+    na.omit()
+```
+
+# Save
+```{r}
+write_csv(model_results,
+          here("animal_farm/water/data/model_results.csv"))
+
+write_csv(livestock_water_use,
+          here("animal_farm/water/data/livestock_water_use.csv"))
+```

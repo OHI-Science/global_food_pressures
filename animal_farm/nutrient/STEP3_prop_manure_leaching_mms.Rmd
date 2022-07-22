@@ -1,0 +1,176 @@
+---
+title: "Create rasters of proportion leaching from manure lost during MMS"
+author: "Juliette"
+date: "3/29/2021"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(stringr)
+library(janitor)
+library(countrycode)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>% 
+  dplyr::select(iso3c, Global_Name, Region_Name, Sub_region_Name, Intermediate_Region_Name)
+
+gleam_tables <- read_csv(here("animal_farm/ghg/data/compiled_gleam_tables.csv")) %>%
+  mutate(percentage_leach = ifelse(mms_specific == "Pasture/Range/Paddock", 30, percentage_leach)) %>%
+  mutate(percentage_leach = ifelse(mms_specific == "Daily spread", 30, percentage_leach)) %>%
+  mutate(percentage_leach = ifelse(mms_specific == "Burned for fuel", 50*30/100, percentage_leach)) #50% remains as urine, and 30% of remaining leaches
+
+pre_layers <- "/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/"
+
+exc_df_list <- list.files(file.path(prep, "animal_farm/nutrient/N_from_excretion"),  full = TRUE)
+```
+
+
+## Prop Leaching
+
+```{r}
+
+for(file in exc_df_list){
+
+  ############  
+  ## Get the mapped head counts for each system.
+  ## (only really used in step 1, to check data)
+  
+     # file <- exc_df_list[11]
+  
+    ## grab the names of all the parts from the file
+    animal_name <- str_split(str_split(file, pattern = "/")[[1]][12], pattern = "_")[[1]][1]
+    system_name <- str_split(str_split(file, pattern = "/")[[1]][12], pattern = "_")[[1]][2]
+    product_name <- str_split(str_split(file, pattern = "/")[[1]][12], pattern = "_")[[1]][3]
+     
+    ## This describes the proportion of waste going to each manure fate based on 
+    ## country and animal system and the fraction that leaches
+    gleam_values <- gleam_tables %>% 
+      filter(animal == animal_name) %>% 
+      filter(product == product_name) %>% 
+      filter(production_system == system_name) 
+    
+  ########  
+  ## Manure management: This is the step where manure is stored/managed to be later spread on fields.
+        ef_leach = 0.0075 # the amount that volatilizes while waiting to go into mms
+
+    mms <- gleam_values %>%
+      filter(!(mms_specific %in% c("Burned for fuel", "Pasture/Range/Paddock", "Daily spread"))) %>%  # remove categories that are not manure management
+      rowwise() %>%
+      mutate(frac_leach_mms = ((1 - ef_leach) * to_mms_percentage/100 * percentage_leach/100)) %>% 
+      group_by(iso3c, animal, product, system = production_system) %>% 
+      dplyr::summarise(frac_leach_mms = sum(frac_leach_mms, na.rm = TRUE)) %>% 
+      ungroup()
+
+    leach_mms <- left_join(food_rgns_xy, mms) %>% 
+      left_join(un, by = "iso3c") %>% 
+      group_by(Intermediate_Region_Name, animal, product, system) %>% 
+      mutate(frac_leach_mms = ifelse(is.na(frac_leach_mms), mean(frac_leach_mms, na.rm = TRUE), frac_leach_mms)) %>% 
+      ungroup()%>% 
+      group_by(Sub_region_Name, animal, product, system) %>% 
+      mutate(frac_leach_mms = ifelse(is.na(frac_leach_mms), mean(frac_leach_mms, na.rm = TRUE), frac_leach_mms)) %>% 
+      ungroup() %>% 
+      group_by(Region_Name, animal, product, system) %>% 
+      mutate(frac_leach_mms = ifelse(is.na(frac_leach_mms), mean(frac_leach_mms, na.rm = TRUE), frac_leach_mms)) %>% 
+      ungroup() %>% 
+      group_by(Global_Name, animal, product, system) %>% 
+      mutate(frac_leach_mms = ifelse(is.na(frac_leach_mms), mean(frac_leach_mms, na.rm = TRUE), frac_leach_mms)) %>% 
+      ungroup()  %>% 
+      select(x,y, iso3c, frac_leach_mms)
+      ### for grassland categories, it will always be NA. so we want to change it back to 0 that way the rasters dont get confused when stacking all ghg at the end
+
+    write_csv(leach_mms, file.path(prep, paste0("animal_farm/nutrient/STEP3_N_leaching_prop_mms/",
+                                                               animal_name, "_",
+                                                               system_name,"_",
+                                                               product_name,
+                                                               "_N_leaching_prop_mms.csv", sep = "")))
+  
+}
+```
+
+
+Data check
+Create a df with iso3, animal, system, product, frac leaching and make sure nothing looks wrong
+```{r}
+df_list <- list.files(file.path(prep, "animal_farm/nutrient/STEP3_N_leaching_prop_mms/"), full.names = TRUE)
+
+df_check <- data.frame(iso3c = NA, animal = NA, system = NA, product = NA, prop_leach = NA)
+  
+for(df in df_list){
+  
+#  df <- df_list[23]
+    ## grab the names of all the parts from the file
+    animal_name <- str_split(str_split(df, pattern = "//")[[1]][3], pattern = "_")[[1]][1]
+    system_name <- str_split(str_split(df, pattern = "//")[[1]][3], pattern = "_")[[1]][2]
+    product_name <- str_split(str_split(df, pattern = "//")[[1]][3], pattern = "_")[[1]][3]
+     
+  
+  ## values are the same throughout the country so a median or mean function won't make a difference
+    country_sum <- read_csv(df, col_types = "ddcn") %>% 
+      group_by(iso3c) %>% 
+      dplyr::summarise(prop_leach = median(frac_leach_mms, rm.na = TRUE)) %>% 
+      ungroup() %>% 
+      left_join(food_rgns) %>% 
+      mutate(animal = animal_name,
+             system = system_name,
+             product = product_name) %>% 
+       select(iso3c,prop_leach, animal, system, product)
+  
+    df_check <- rbind(df_check, country_sum) %>% 
+      filter(!is.na(iso3c)) 
+    
+}
+
+## look at it
+
+ggplot(df_check, aes(x = animal, y = prop_leach, color = system) ) +
+  geom_point(position = "jitter") +
+  labs(title = "Proportion leached during manure management")
+
+
+```
+
+Let's look at just the USA cows-mixed-meat
+
+```{r}
+df_list <- list.files(file.path(prep, "animal_farm/nutrient/STEP3_N_leaching_prop_mms/"), full.names = TRUE)
+df_list <- str_subset(pattern = "cows", df_list)
+df_file <- df_list[4]
+
+    ## grab the names of all the parts from the file
+    category_name <- str_split(df_file, pattern = "//")[[1]][3]
+  
+  ## values are the same throughout the country so a median or mean function won't make a difference
+    country_sum_mixed <- read_csv(df_file, col_types = "ddcn") %>% 
+      group_by(iso3c) %>% 
+      dplyr::summarise(prop_leach_mms = mean(frac_leach_mms, na.rm = TRUE)) %>% 
+      mutate(category = category_name,
+             animal_system_product = word(category, 1,3, sep="_")) %>% 
+       select(iso3c,prop_leach_mms, animal_system_product) %>% 
+      filter(iso3c == "USA")
+
+df_file_past <- df_list[2]
+
+    ## grab the names of all the parts from the file
+    category_name <- str_split(df_file_past, pattern = "//")[[1]][3]
+  
+  ## values are the same throughout the country so a median or mean function won't make a difference
+    country_sum_pasture <- read_csv(df_file_past, col_types = "ddcn") %>% 
+      group_by(iso3c) %>% 
+      dplyr::summarise(prop_leach_mms = mean(frac_leach_mms, na.rm = TRUE)) %>% 
+      mutate(category = category_name,
+             animal_system_product = word(category, 1,3, sep="_")) %>% 
+       select(iso3c,prop_leach_mms, animal_system_product) %>% 
+      filter(iso3c == "USA")
+
+country_sum <- rbind(country_sum_mixed, country_sum_pasture)
+    
+      
+write_csv(country_sum, here::here("animal_farm/nutrient/data/check/usa_cows_leached_mms.csv"))
+```

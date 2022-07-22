@@ -1,0 +1,41 @@
+SPAM_short_name,SPAM_super,FAO_item_code,FAONAMES,product_description_FAOSTAT,category
+rest,rest,221,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Almonds,tree_nut
+rest,rest,231,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)","Almonds, Shelled",tree_nut
+rest,rest,711,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)","Anise, badian, fennel",spice
+rest,rest,226,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Areca nuts,tree_nut
+rest,rest,216,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Brazil nuts,tree_nut
+rest,rest,229,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)","Brazil Nuts, Shelled",tree_nut
+rest,rest,217,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Cashew nuts,tree_nut
+rest,rest,230,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)","Cashew Nuts, Shelled",tree_nut
+rest,rest,220,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Chestnuts,tree_nut
+rest,rest,828,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Cigarettes,other
+rest,rest,829,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Cigars and Cheroots,other
+rest,rest,693,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Cinnamon (canella),spice
+rest,rest,698,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Cloves,spice
+rest,rest,753,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Essential oils nes,other
+rest,rest,771,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)","Flax, raw or retted",flax
+rest,rest,720,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Ginger,spice
+rest,rest,225,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Hazelnuts (Filberts),tree_nut
+rest,rest,233,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)","Hazelnuts, Shelled",tree_nut
+rest,rest,677,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Hops,other
+rest,rest,224,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Kolanuts,tree_nut
+rest,rest,839,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Natural gums,other
+rest,rest,836,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Natural rubber,other
+rest,rest,702,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)","Nutmeg, mace, cardamoms",spice
+rest,rest,234,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Nuts nes,tree_nut
+rest,rest,235,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)","Nuts, prepared (exc. Groundnuts)",tree_nut
+rest,rest,737,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Oil of citronella,other
+rest,rest,687,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Pepper,spice
+rest,rest,748,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)","Peppermint, Spearmint",spice
+rest,rest,689,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Pimento,spice
+rest,rest,223,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Pistachios,tree_nut
+rest,rest,755,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Pyrethrum Extract,other
+rest,rest,756,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Pyrethrum Marc,other
+rest,rest,754,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)","Pyrethrum, dried flowers",other
+rest,rest,837,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)","Rubber, Natural (Dry)",other
+rest,rest,723,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Spices nes,spice
+rest,rest,831,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Tobacco Products nes,other
+rest,rest,NA,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Treenuts,tree_nut
+rest,rest,692,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Vanilla,spice
+rest,rest,222,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)",Walnuts,tree_nut
+rest,rest,232,"all individual other crops (eg? spices, tree nuts, other sugar crops, mate, rubber)","Walnuts, Shelled",tree_nut

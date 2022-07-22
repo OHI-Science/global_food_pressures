@@ -1,0 +1,42 @@
+split_rest_names,ratio_res_prod,frac_ox,carb_frac,n_c_ratio,dm,gapfilled
+bana,0,0,0,0,0,"carb_frac, nc_ratio gapfilled"
+barl,1.2,0.9,0.4567,0.015,0.89,nc_ratio gapfilled
+bean,2.1,0.9,0.44284999999999997,0.015,0.91,"carb_frac, nc_ratio gapfilled"
+cass,0.4,0.9,0.4226,0.015,0.33,"carb_frac, nc_ratio gapfilled"
+chic,1.9000000000000001,0.9,0.44284999999999997,0.015,0.91,"carb_frac, nc_ratio gapfilled"
+cnut,0,0,0,0,0,all values gapfilled
+coco,0,0,0,0,0,all values gapfilled
+cott,1.325,0.9,0.47809999999999997,0.015,0.935,"carb_frac, nc_ratio gapfilled"
+cowp,1.9000000000000001,0.9,0.44284999999999997,0.015,0.91,"carb_frac, nc_ratio gapfilled"
+grou,1,0.9,0.44284999999999997,0.015,0.74004,"dm, carb_frac, nc_ratio gapfilled"
+lent,1.9000000000000001,0.9,0.44284999999999997,0.015,0.91,"carb_frac, nc_ratio gapfilled"
+maiz,1,0.9,0.4709,0.02,0.87,NA
+ocer,1.45,0.9,0.47809999999999997,0.015,0.89,"carb_frac, nc_ratio gapfilled"
+ofib,1.325,0.9,0.47809999999999997,0.015,0.89,all values gapfilled
+oilp,0,0,0,0,0,"carb_frac, nc_ratio gapfilled"
+ooil,1.325,0.9,0.47809999999999997,0.015,0.89,all values gapfilled
+opul,1.5,0.9,0.44284999999999997,0.015,0.91,"carb_frac, nc_ratio gapfilled"
+orts,0.4,0.9,0.4226,0.015,0.45,all values gapfilled
+pige,1.9000000000000001,0.9,0.44284999999999997,0.015,0.91,"carb_frac, nc_ratio gapfilled"
+plnt,0,0,0,0,0,all values gapfilled
+pmil,1.4,0.9,0.47809999999999997,0.016,0.9,NA
+pota,0.4,0.9,0.4226,0.015,0.45,nc_ratio gapfilled
+rape,1.325,0.9,0.47809999999999997,0.015,0.923,"carb_frac, nc_ratio gapfilled"
+rest,1.2266666666666666,0.9,0.44284999999999997,0.015,0.74004,all values gapfilled
+rice,1.4,0.9,0.4144,0.014,0.89,NA
+sesa,1.325,0.9,0.47809999999999997,0.015,0.89,all values gapfilled
+smil,1.4,0.9,0.47809999999999997,0.016,0.9,NA
+sorg,1.4,0.9,0.47809999999999997,0.02,0.89,NA
+soyb,2.1,0.9,0.44284999999999997,0.05,0.91,NA
+sugb,0.2,0.9,0.4072,0.015,0.25,nc_ratio gapfilled
+sugc,1.325,0.9,0.47809999999999997,0.015,0.32,"carb_frac, nc_ratio gapfilled"
+sunf,1.325,0.9,0.47809999999999997,0.015,0.923,"carb_frac, nc_ratio gapfilled"
+swpo,0.4,0.9,0.44284999999999997,0.015,0.74004,all values gapfilled
+temf,0,0,0,0,0,all values gapfilled
+trof,0,0,0,0,0,all values gapfilled
+vege,0.55,0.9,0.44284999999999997,0.015,0.15,"carb_frac, nc_ratio gapfilled"
+whea,1.3,0.9,0.4853,0.012,0.89,NA
+yams,0.4,0.9,0.4226,0.015,0.45,all values gapfilled
+tnut,0,0,0,0,0,"carb_frac, nc_ratio gapfilled"
+spis,0,0,0,0,0,"carb_frac, nc_ratio gapfilled"
+othr,0,0,0,0,0,"carb_frac, nc_ratio gapfilled"

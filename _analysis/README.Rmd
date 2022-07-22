@@ -1,0 +1,70 @@
+---
+title: "README.Rmd"
+output: html_document
+date: '2022-06-06'
+---
+
+Data flow is like this
+
+For preparing the data:
+1. datalayers data are created in the dataprep scripts in these folders. animal_farm, aquaculture, crop, feed, fisheries folders.
+2. To summarize and rescale the data, run scripts in _analysis/step0-step??
+
+
+To obtain the figures, si data, and statistics for the paper:
+ 
+Before anything, you will need to run _analysis/figures/paper/data_prep/crop_pressures_rescaled.Rmd
+
+And, if changes to feed and/or production (NOTE: I think this can all be deleted, replaced in other scripts now):
+-   	Total_production_stats.Rmd (used in figure 4??, crops only for humans so not counted twice)
+ 
+ 
+_efficiency
+Run steps 0 – 12 in the _efficiency/ folder (You can skip pretty much all of the steps here except STEP0, STEP9, and STEP11)
+ 
+_analysis/figures
+ 
+Run all of the .Rmds in _analysis/figures/paper/
+-   	Figure2_CI_maps.Rmd
+-   	Figure3_overlap_map.Rmd
+-   	Figure4_just_bar.Rmd
+o   Note: I can’t figure out how to get the x-axis label centered
+-   	Figure5_inset_bars.rmd
+-   	Figure6_cp_country_protein.Rmd
+-   	Note: I think that we will need Juliette to work her canva magic to combine some of the pngs created in the /output folder.
+ 
+Run everything in _analysis/figures/extended_data/prep_Rmd
+Outputs to _analysis/figures/extended_data/output
+-   	Ed_fig_1_circle_plot_ranking_countries.Rmd
+-   	Ed_fig_2_circle_plot_ranking_foods_regionally.Rmd
+	- search for “cutoff” variable and make sure it is right
+-   	Ed_fig_3_kcal_efficiency.Rmd
+-   	Ed_fig_4_tonnes_efficiency.Rmd
+-   	Ed_fig_5_6_data_quality_assessment.Rmd; don’t need to run this 
+o   Note: I could not get the google drive links to work for this.. so I manually downloaded the google drive sheets and added them to the repo here: _analysis/figures/extended_data/prep_Rmd/data/data_sources_quality.xlsx
+o   Another note: I’m not really sure if what I changed looks good…
+ed_fig_XX.Rmd
+This is the bar chart which includes crop feed. Pay attention in this one, because there is a section that I do not believe you will need to run again (and if you did run again, it takes a really long time…) 
+-   	Note: I just added screenshots of the legends for ed figs 1 and 2 in the output folder: “circle_plot_legend_food.png and circle_plot_legend_pressures.png”
+ 
+ 
+_analysis/SI_data/
+ 
+-   	SI_crop_names.Rmd
+o   Runs fine, not sure if anything in here needs to be updated though? 
+-   	SI_tables_prep.Rmd
+o   Runs fine, the numbers in the script (which are used in the paper) need to be updated
+-   	Format_SI_tbls.Rmd
+o   Runs fine
+ 
+_analysis/paper_stats
+ 
+-   	Total_production_stats.Rmd
+o   I don’t think this needs to be run
+-   	Production_accounted_for.Rmd
+O I don’t think this needs to be run.. None of the production has changed
+-   	Efficiency_stats.Rmd
+o   It all runs, I imagine that many of the statistics we report in the paper will change? So basically all of the numbers in this script will change. I’m sorry this script is so messy… 
+-   	 Final_paper_stats_v2.Rmd
+o   It all runs, I imagine that many of the statistics we report in the paper will change? So basically all of the numbers in this script will change.
+o   Note: some of the data we use in this comes from _analysis/export_import_stressors/… Does that mean everything in that folder will need to be run?

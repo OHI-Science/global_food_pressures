@@ -1,0 +1,144 @@
+---
+title: "ghg_pesticides"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Script Description
+Map pesticide emissions
+
+# Data information
+## Pesticide use for agricultural use.
+Accessed: 11/24/2020 from FAOSTAT database.
+Year: 2016
+Unit: tonnes.
+
+## Pesticide emission factors data:
+We used Lal 2004 values for herbicide, insecticide and fungicide emission factors. All other pesticide types in FAOSTAT were assumed to have an emission factor of 25.5 kg CO2-eq based on LEAP (2017) (whom quote Audley et al 2009).
+
+We assume that proportional pesticide application perfectly correlates with synthetic nitrogen fertilizer application.
+
+# Preamble
+```{r setup, include = FALSE}
+# getting packages we want
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+library(janitor)
+library(furrr)
+
+food_rgns_xy <- select(food_rgns_xy, c(x, y, iso3c))
+``` 
+
+# Wrangle
+
+Getting the units right:
+Emission factor is from kg of CO2eq to kg of a.i (ie a one-to-one conversion)
+FAOSTAT reports a.i in tonnes.
+Thus, we don't need to convert units.
+
+```{r}
+FAO_pesticide <- 
+  read_csv("crop/ghg/data/FAOSTAT_pesticide_use.csv") %>% 
+  clean_names() %>% 
+  select(area_code, item, value) %>% 
+  rename(tonnes = value, pesticide_type = item) %>% 
+  left_join(read_csv(here("_spatial/_output/FAO_rgn_codes.csv"))) %>% 
+  filter(!area_code %in% 351) %>% # remove China w/ territories
+  filter(pesticide_type %in% "Pesticides (total)") %>%  
+  left_join(clean_names(food_rgns)) %>%
+  filter(!iso3c %in% c("XMI", "GGY"))%>% 
+  mutate(CO2eq = case_when(
+    pesticide_type %in% "Herbicides" ~   6.3 * 44/12 * tonnes,
+    pesticide_type %in% "Insecticides" ~ 5.1 * 44/12 * tonnes,
+    pesticide_type %in% "Fungicides" ~   3.9 * 44/12 * tonnes,
+    TRUE ~ 25.5 * tonnes)) %>% # from LEAP, 2017/Audley et al 2009; could also do an average of the three values.
+  group_by(iso3c) %>%
+  summarize(CO2eq = sum(CO2eq)) %>%
+  ungroup() %>%
+  mutate(CO2eq = ifelse(is.na(CO2eq),
+                        0,
+                        CO2eq))
+```
+
+# FAO_pesticide check
+```{r}
+FAO_pesticide %>% 
+  filter(iso3c %in% c("USA", "BRA", "SRB", "SDN", 
+                      "TWN", "ALA", "XMI", "XKO", 
+                      "PRT", "GBR", "GGY")) %>%
+  group_by(iso3c) %>% 
+  summarize(total_CO2eq_tonnes = sum(CO2eq)) %>% 
+  ungroup()
+```
+
+```{r}
+
+pesticide_prop <- 
+  read_csv(here("crop/nutrient/data/nutrient_df_full.csv")) %>% 
+  filter(nutrient == "N") %>%
+  group_by(iso3c) %>% 
+  mutate(sum_harvested_area = sum(harvested_area)) %>% 
+  ungroup() %>%
+  mutate(prop_pesticide = prop_nutrient) %>%
+  select(iso3c, nutrient, prod_system, split_rest_names, sum_harvested_area, prop_pesticide)
+
+tmp <- pesticide_prop %>%
+  group_by(iso3c) %>%
+  summarize(total_prop = sum(prop_pesticide))
+summary(tmp) # should all be one or zero
+
+sum(duplicated(pesticide_prop)) # should be zero
+
+pesticide_prop <- 
+  pesticide_prop %>% 
+  left_join(., FAO_pesticide)
+
+## gapfill pesticide application when no FAO data
+## based on 
+rgn_median <- pesticide_prop %>%
+  mutate(CO2eq_per_area = CO2eq/sum_harvested_area) %>%
+  select(iso3c, CO2eq_per_area) %>%
+  unique()
+rgn_gf <- median(rgn_median$CO2eq_per_area, na.rm=TRUE)
+
+pesticide_prop <- 
+  pesticide_prop %>% 
+  mutate(CO2eq_gf = case_when(
+    is.na(CO2eq) & sum_harvested_area > 0 ~ rgn_gf*sum_harvested_area,
+    is.na(CO2eq) & sum_harvested_area == 0 ~ 0,
+    TRUE ~ CO2eq))
+
+# Allocate
+
+pesticide_prop <- 
+  pesticide_prop %>% 
+  mutate(allocated_pesticide = CO2eq_gf * prop_pesticide)
+
+
+#should be about equal
+sum(unique(pesticide_prop$CO2eq_gf))
+sum(pesticide_prop$allocated_pesticide, na.rm = TRUE)
+
+```
+
+# Trim
+```{r}
+pesticide_prop <- 
+  pesticide_prop %>% 
+  select(iso3c, nutrient, prod_system, split_rest_names, allocated_pesticide)
+
+# these should be about the same: pesticide_prop can be a bit higher due to gapfilling
+sum(pesticide_prop$allocated_pesticide)
+sum(FAO_pesticide$CO2eq)
+
+```
+
+# Save
+```{r}
+write_csv(pesticide_prop, here("crop/ghg/data/pesticide_df.csv"))
+```
+
+

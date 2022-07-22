@@ -1,0 +1,116 @@
+---
+title: "STEP 10: Pigs system proportions"
+author: "Juliette"
+date: "9/9/2020"
+output: html_document
+---
+
+# Objective
+This markdown calculates pigs system proportions by region using the global distributions map data and also gapfills missing countries.
+
+# Inputs
+**Reference**
+Livestock Systems Global Distribution http://www.fao.org/livestock-systems/global-distributions/en/
+**Description**
+total head counts in each cell 
+**Resolution** 5 minute arc
+**Time Range**  2010
+**Format** raster
+
+# Outputs
+pigs_system_prop.csv
+
+## Setup
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+source(here("_spatial/template_raster.R"))
+
+## un 
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>% 
+  dplyr::select(iso3c, Region_Name)
+
+backyard_raster <-  raster(file.path(raw, "FAO_livestock_maps/d2019/pigs/backyard_pigs/8_PgExt_2010_Da.tif"))
+    names(backyard_raster) <- "backyard_map_counts"
+    
+intermediate_raster <- raster(file.path(raw, "FAO_livestock_maps/d2019/pigs/semi_intensive_pigs/9_PgInt_2010_Da.tif"))
+    names(intermediate_raster) <- "intermediate_map_counts"
+    
+industrial_raster <- raster(file.path(raw, "FAO_livestock_maps/d2019/pigs/intensive_pigs/10_PgInd_2010_Da.tif"))
+    names(industrial_raster) <- "industrial_map_counts"
+    
+syst_prop <- read_csv(here("animal_farm/farm/data/continent_system_props_pigs.csv")) %>% 
+  pivot_longer(cols=2:4, names_to = "system", values_to = "prop_gf") 
+```
+
+## Methods
+
+```{r}
+stack <- stack(backyard_raster, intermediate_raster, industrial_raster)
+df <- raster_df(stack) %>% select(-x,-y)
+
+## all of our regions are included in all of the rasters
+
+pigs <- df %>% 
+  left_join(food_rgns_xy, by = "cellindex") %>%
+  select(-cellindex) %>% 
+  group_by(iso3c) %>% 
+  dplyr::summarise(backyard = sum(backyard_map_counts, na.rm = TRUE),
+                   intermediate = sum(intermediate_map_counts, na.rm = TRUE),
+                   industrial = sum(industrial_map_counts, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  pivot_longer(cols = 2:4, names_to = "system", values_to = "headcount") %>% 
+  group_by(iso3c) %>% 
+  mutate(rgn_total = sum(headcount)) %>% 
+  ungroup() %>% 
+  rowwise() %>% 
+  mutate(prop = headcount/rgn_total,
+         prop = ifelse(is.na(prop), 0, prop)) %>% 
+  left_join(un, by = c("iso3c")) %>% 
+  rename(region = Region_Name)
+
+```
+
+## Now we want to gapfill
+First we want to check which countries have a total of 0 pigs. for these we will want to gapfil with avg(ish) medians. We will need to explore the distribution across the three systems to have an educated gapfilling values. The proportions will need to add up to 1.
+
+
+```{r}
+explore <- pigs %>% filter(rgn_total > 0)
+
+## scatter to see differences between regions
+## square = mean triangle = median
+
+ggplot(explore) + 
+geom_point(aes(y = prop, x = region, color = region), 
+             position = position_jitterdodge(dodge.width = 0.8)) +
+  facet_wrap(vars(system)) +
+  theme_light() +
+  labs(title = "Pigs") +
+  stat_summary(mapping = aes(y = prop, x = region),
+               fun = "mean", geom = "point", shape = 0, size = 4, color = "black",
+               position = position_dodge(width = 0.8)) +
+  stat_summary(mapping = aes(y = prop, x = region),
+               fun = "median", geom = "point", shape = 2, size = 4, color = "black",
+               position = position_dodge(width = 0.8)) + 
+  theme(legend.position = "none")  
+  
+```
+
+From these graphs I created a gapfilling df for system proportions by region. It is located in the data folder: continent_system_props_pigs.csv
+
+```{r}
+pigs_gf <- pigs %>% 
+  left_join(syst_prop, by = c("region", "system")) %>% 
+  mutate(gapfilled = ifelse(rgn_total == 0, "gf with continental medians", NA),
+         prop = ifelse(rgn_total == 0, prop_gf, prop)) %>% 
+  select(iso3c, system, prop, gapfilled)
+
+write_csv(pigs_gf, here("animal_farm/farm/data/pigs_system_prop.csv"))
+  
+```
+
+

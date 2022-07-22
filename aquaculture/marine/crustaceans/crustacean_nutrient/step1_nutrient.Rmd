@@ -1,0 +1,166 @@
+---
+title: "crustacean_nutrient_pollution"
+author: "Gage Clawson (NCEAS, UCSB, OHI)"
+date: "12/22/2020"
+output: 
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_depth: 3
+    toc_float: yes
+    includes: 
+toc: true
+---
+
+This markdown uses models and species specific parameters from the paper *Aquaculture Production is a Large, Spatially Concentrated Source of Nutrients in Chinese Freshwater and Coastal Seas* (2020 Wang et al). 
+
+## Set up
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(sf)
+library(raster)
+library(readr)
+library(data.table)
+
+source(here("_spatial/template_raster.R"))
+
+path_prep <- "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/crustaceans"
+path_final <-"/home/shares/food-systems/Food_footprint/all_food_systems/datalayers"
+
+production <- read_csv(file.path(path_prep, "updated/crustaceans_farm_updated.csv"))
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+```
+
+crustacean N/P pollution values
+
+N: 57 kg/tonne of growth
+P: 9.2 kg/tonne of growth
+
+Steps: 
+1. Multiply tonnes production by 0.95 (this corrects for the growth that occurs outside the seapen on land), this is the value Lex uses
+2. Then multiply growth by the N value and the P value
+3. We report in total excess nutrients (N + P): Sum the N and P kg.
+4. We report in tonnes, so divide by 1000. We will also so individual N and P rasters for reporting purposes.
+
+```{r}
+
+crustacean_pollution <- production %>%
+  dplyr::mutate(prod_growth = tonnes_production*0.95) %>%
+  dplyr::mutate(prod_growth_N_poll = prod_growth*57,
+                prod_growth_P_poll = prod_growth*9.2) %>% ## in kg pollution now
+  # dplyr::mutate(PO4eq_kg = prod_growth_N_poll*0.42 + prod_growth_P_poll*3.07) %>% Don't do this anymore (01/14/2021)
+  dplyr::mutate(total_N_P_kg = prod_growth_N_poll + prod_growth_P_poll) %>%
+  dplyr::mutate(total_N_P_t = total_N_P_kg/1000,
+                N_poll_t = prod_growth_N_poll/1000, 
+                P_poll_t = prod_growth_P_poll/1000) %>%
+  dplyr::select(x, y, total_N_P_t, N_poll_t, P_poll_t)
+
+sum(crustacean_pollution$total_N_P_t) # 25317.85
+sum(production$tonnes_production) # 402573.6
+
+## save to dataprep folder with the correct naming conventions: 
+write.csv(crustacean_pollution, file.path(path_prep, "crustacean_nutrient.csv"))
+
+
+## Save total N P raster
+total_df <- crustacean_pollution %>% 
+  dplyr::select(x, y, total_N_P_t)
+
+final_rast <- rasterFromXYZ(total_df, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+final_rast
+cellStats(final_rast, "sum") # 25317.85
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 25317.85
+final_rast
+
+## Save to datalayers 
+writeRaster(final_rast, file.path(path_final, "marine_crustaceans_aquaculture_meat_nutrient.tif"), overwrite = T)
+
+
+
+## Save total N raster
+total_df <- crustacean_pollution %>% 
+  dplyr::select(x, y, N_poll_t)
+
+final_rast <- rasterFromXYZ(total_df, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+final_rast
+cellStats(final_rast, "sum") # 25317.85
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 25317.85
+final_rast
+
+## Save to datalayers 
+writeRaster(final_rast, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/marine_crustaceans_aquaculture_meat_nutrientN.tif"), overwrite = T)
+
+
+## Save total P raster
+total_df <- crustacean_pollution %>% 
+  dplyr::select(x, y, P_poll_t)
+
+final_rast <- rasterFromXYZ(total_df, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+final_rast
+cellStats(final_rast, "sum") # 3518.493
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 3518.493
+final_rast
+
+## Save to datalayers 
+writeRaster(final_rast, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/marine_crustaceans_aquaculture_meat_nutrientP.tif"), overwrite = T)
+```
+
+Datacheck:
+
+Values from this paper: https://pubs.acs.org/doi/pdf/10.1021/acs.est.9b03340
+
+
+   - 57 kg N / tonne
+   - 9.2 kg P / tonne 
+
+The estimates from their paper for "crustaceans" lumps shrimp in with that, so we just used the same values for shrimp and crustaceans. There are no issues with the code. 
+
+
+```{r}
+crustaceans_nutrient_N <- raster(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/marine_crustaceans_aquaculture_meat_nutrientN.tif"))
+cellStats(crustaceans_nutrient_N, "sum") # 21753.09 N tonnes
+
+crustaceans_nutrient_P <- raster(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/marine_crustaceans_aquaculture_meat_nutrientP.tif"))
+cellStats(crustaceans_nutrient_P, "sum") # 3511.025 P tonnes
+
+sum(production$tonnes_production) # 401719.1
+
+## Total production is 401719.1 tonnes for 2017
+
+## Used 57 N kg and 9.2 P kg for crustaceans
+
+401719.1*0.95*57/1000 # 21753.09 N tonnes
+401719.1*0.95*9.2/1000 # 3511.025 P tonnes
+
+## both match our final layers 
+
+final_rast <- raster(file.path(path_final, "marine_crustaceans_aquaculture_meat_nutrient.tif"))
+cellStats(final_rast, "sum") # 25264.11
+```

@@ -1,0 +1,116 @@
+---
+title: "crop_irrigation_mapping"
+output: html_document
+---
+
+# Script objective
+
+# Data description
+
+# Set-up
+```{r setup, include = FALSE}
+
+# library and package
+library(here); library(janitor); library(fasterize); library(furrr)
+source(here("_spatial/template_raster.R"))
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+# Import food_rgns xy df
+food_rgns_xy <- 
+  food_rgns_xy %>% 
+  dplyr::select(x, y, iso3c)
+```
+
+# Script-specific requisites
+```{r}
+## Import shp files for FIPS codes
+fips_shp <- read_sf("/home/shares/food-systems/Food_footprint/_raw_data/GADM36/rwdb_ad2_py/RWDB_Ad2-Py.shp", 
+                    stringsAsFactors = FALSE) %>% 
+  janitor::clean_names() %>% 
+  dplyr::select("geometry", "fips_code")
+
+# Import
+wf_df_irrigation <- vroom::vroom(here("crop/water/data/wf_df_irrigation.csv")) %>% 
+  filter(!country %in% "ZW" & ! grepl("*999$", fips_code)) 
+
+# A df through which to cycle functions
+distinct_vars <- unique(wf_df_irrigation$split_rest_names)
+```
+
+# Irrigation
+```{r}
+# Function to rasterize sf df
+irrigation_map <- function(crop) {
+  
+  # Filter SPAM category
+  irrigation_raster <- wf_df_irrigation %>% 
+    filter(split_rest_names %in% crop) %>% 
+    dplyr::select(fips_code,
+                  m3_per_ton, 
+                  split_rest_names) %>% 
+    left_join(fips_shp, 
+              ., 
+              by = "fips_code") %>% 
+    fasterize(., 
+              food_raster, 
+              field = "m3_per_ton") %>% 
+    overlay(.,
+            raster(file.path(prep,
+                             "crop/farm/scaled_maps_2017/crop_",
+                             crop,
+                             "_I_scaled.tif", 
+                             fsep = "")), 
+            fun = function(r1, r2) {
+              
+              r1[is.na(r1)] <- 0
+              r2[is.na(r2)] <- 0
+              return(r1 * r2)
+              
+              }
+            )
+ 
+  plot(irrigation_raster)
+  
+  names(irrigation_raster) <- paste("crop_", 
+                                    crop, 
+                                    "_irrigation_m3", 
+                                    sep = "")
+
+  writeRaster(irrigation_raster, 
+              file.path(prep,
+                        "crop/water/irrigation/crop_",
+                        crop,
+                        "_irrigation.tif", 
+                        fsep = ""), 
+               format    = "GTiff", 
+               overwrite = TRUE)
+}
+
+# Run the function for every SPAM category
+map(distinct_vars, irrigation_map)
+```
+
+```{r}
+length(list.files(file.path(prep, 
+                            "crop/water/irrigation/", 
+                            fsep = ""))) # 38
+```
+
+Fodder crop irrigation
+```{r}
+fodder_irrigated <- 
+  file.path(prep,
+            "crop/farm/scaled_maps_2017/crop_fodd_I_scaled.tif",
+            fsep = "") %>% 
+  raster() * 27
+
+names(fodder_irrigated) <- paste("crop_fodd_irrigation_m3", sep = "")
+
+writeRaster(fodder_irrigated, 
+            file.path(prep,
+                      "crop/water/irrigation/crop_fodd_irrigation.tif", 
+                      fsep = ""), 
+            format    = "GTiff", 
+            overwrite = TRUE)
+```

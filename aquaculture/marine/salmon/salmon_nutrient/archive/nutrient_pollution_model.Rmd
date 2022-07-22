@@ -1,0 +1,330 @@
+---
+title: "salmon_nutrient_pollution"
+author: "*Compiled on `r date()` by `r Sys.info()['user']`*"
+output: 
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_depth: 3
+    toc_float: yes
+    includes: 
+toc: true
+---
+
+This markdown uses models and species specific parameters from the paper *Hindcasts and Future Projections of Global Inland and Coastal Nitrogen and Phosphorus Loads Due to Finfish Aquaculture* (2013 Bouwman et al)
+
+## Set up
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(sf)
+library(raster)
+library(readr)
+library(data.table)
+
+source(here("_spatial/template_raster.R"))
+
+path_prep <- "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/salmon"
+path_final <-"/home/shares/food-systems/Food_footprint/all_food_systems/datalayers"
+
+parameters <- read_csv("data/salmon_parameters.csv") 
+production <- read_csv(file.path(path_prep, "salmon_farm.csv"))
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+```
+
+
+Add in all the parameters we will need
+```{r parameters}
+
+## read in all the parameter values we will need for the calculations
+Frac_WG <- as.numeric(parameters$Value[parameters$Parameter == "Frac_WG"])
+Frac_Comp <- as.numeric(parameters$Value[parameters$Parameter == "Frac_Comp"])
+#FCR_Comp <- as.numeric(parameters$Value[parameters$Parameter == "FCR_Comp"])
+FCR_Comp <- 1.2375
+Frac_Comp_N <- as.numeric(parameters$Value[parameters$Parameter == "Frac_Comp_N"])
+Frac_Comp_P <- as.numeric(parameters$Value[parameters$Parameter == "Frac_Comp_P"])
+Frac_Fish_N <- as.numeric(parameters$Value[parameters$Parameter == "Frac_Fish_N"])
+Frac_Fish_P <- as.numeric(parameters$Value[parameters$Parameter == "Frac_Fish_P"])
+ADC_Comp_P <- as.numeric(parameters$Value[parameters$Parameter == "ADC_Comp_P"])
+ADC_Comp_N <- as.numeric(parameters$Value[parameters$Parameter == "ADC_Comp_N"])
+
+##these won't impact the salmon results because they are feed 100% compound feed
+Frac_NonComp <- as.numeric(parameters$Value[parameters$Parameter == "Frac_NonComp"])
+Frac_NonComp_N <- as.numeric(parameters$Value[parameters$Parameter == "Frac_NonComp_N"])
+Frac_NonComp_P <- as.numeric(parameters$Value[parameters$Parameter == "Frac_NonComp_P"])
+ADC_NonComp_N <- as.numeric(parameters$Value[parameters$Parameter == "ADC_NonComp_N"])
+ADC_NonComp_P <- as.numeric(parameters$Value[parameters$Parameter == "ADC_NonComp_P"])
+FCR_NonComp <- as.numeric(parameters$Value[parameters$Parameter == "FCR_NonComp"])
+
+## add all the parameter values to the production by each region and country
+produc_param <- production %>% 
+  mutate(Frac_WG = Frac_WG, 
+         Frac_Comp = Frac_Comp, 
+         FCR_Comp = FCR_Comp,
+         Frac_Comp_N = Frac_Comp_N,
+         Frac_Comp_P = Frac_Comp_P,
+         Frac_Fish_N = Frac_Fish_N, 
+         Frac_Fish_P = Frac_Fish_P,
+         ADC_Comp_N = ADC_Comp_N,
+         ADC_Comp_P = ADC_Comp_P,
+         Frac_NonComp = Frac_NonComp,
+         Frac_NonComp_N = Frac_NonComp_N, 
+         Frac_NonComp_P = Frac_NonComp_P, 
+         ADC_NonComp_N = ADC_NonComp_N, 
+         ADC_NonComp_P = ADC_NonComp_P,
+         FCR_NonComp = FCR_NonComp)
+
+```
+
+
+**in the end will need to apply the same numbers for each value to all the countries so that they can merge **
+
+## 1. Calculating the amount of nutrients (N and P) entering the system from compound feed
+
+$$In\_Comp\_N = Fish\_Prod * Frac\_WG * Frac\_Comp * FCR\_Comp * Frac\_Comp\_N$$
+The same equation is used for calculating nitrogen and phosphorous, using the nitrogen/phosphorous specific variables when needed
+
+Fish_Prod = production in tonnes
+
+Frac_WG = production that is actual weight gain
+
+Frac_Comp = fraction of fish feed that is compound feed
+
+FCR_Comp = amount of feed used to produce 1 kg of fish
+
+Frac_Comp_N = fraction of nitrogen present in the feed
+
+Frac_Comp_P = fraction of phosphorous present in the feed
+
+In_Comp_N = the amount of N entering the system
+
+In_Comp_P = the amount of P entering the system
+
+N_In = total amount of nitrogen entering the system (this is the same as In_Comp_N here because salmon are only fed compound feeds)
+
+P_In = total amount of phosphorous entering the system (this is the same as In_Comp_P here because salmon are only fed compound feeds)
+
+```{r nutrients entering}
+
+nutrients_entering <-  produc_param %>% 
+  mutate(In_Comp_N = tonnes_production*Frac_WG*Frac_Comp*FCR_Comp*Frac_Comp_N,
+         In_Comp_P = tonnes_production*Frac_WG*Frac_Comp*FCR_Comp*Frac_Comp_P,
+         N_In = In_Comp_N, ## since salmon are only feed compound feeds this value is the same
+         P_In = In_Comp_P) %>% 
+  dplyr::select(x, y, tonnes_production,N_In, P_In )
+
+all_parameters_1 <-  produc_param %>% 
+  mutate(In_Comp_N = tonnes_production*Frac_WG*Frac_Comp*FCR_Comp*Frac_Comp_N,
+         In_Comp_P = tonnes_production*Frac_WG*Frac_Comp*FCR_Comp*Frac_Comp_P,
+         N_In = In_Comp_N, ## since salmon are only feed compound feeds this value is the same
+         P_In = In_Comp_P)
+  
+```
+
+
+## 2. Calculating the amount of nutrients (N and P) entering the system from non-compound feed
+We are not doing this here because we know that salmon are only fed compound feed. However, for future analysis with species that are also fed non-compound feed we will need to do this. The equations are the same as with compound except Frac_Comp is replaced by (1-Frac_Comp) and the parameter values for non-compound feeds replaces the compound feed ones.
+
+## 3. Calculating the amount of nutrients retained in fish biomass
+
+$$N\_Fish = Fish\_Prod * Frac\_WG * Frac\_Fish\_N$$
+
+Frac_Fish_N = nitrogen content of fish biomass
+
+Frac_Fish_P = phosphorous content of fish biomass
+
+N_Fish = amount of N in the weight gained during each year (tonnes)
+
+P_Fish = amount of P in the weight gained during each year (tonnes)
+
+```{r nutrients retained in biomass}
+
+nutrients_retained_biomass <- all_parameters_1 %>% 
+  mutate(N_Fish = tonnes_production*Frac_WG*Frac_Fish_N,
+         P_Fish = tonnes_production*Frac_WG*Frac_Fish_P)  %>% 
+  dplyr::select(x, y, tonnes_production,N_Fish, P_Fish )
+  
+all_parameters_3 <- all_parameters_1 %>% 
+  mutate(N_Fish = tonnes_production*Frac_WG*Frac_Fish_N,
+         P_Fish = tonnes_production*Frac_WG*Frac_Fish_P)
+
+```
+
+## 4. Calculating solid particulate nutrient release
+**there is also a component here for the non-compound feed that would need to be included for species that do have this in their diet 
+
+$$PN = (1- ADC\_Comp\_N)* In\_Comp\_N$$ 
+
+ADC_Comp_N = apparent digestibility of compound feed for nitrogen
+
+ADC_Comp_P = apparent digestibility of compound feed for phosphorous
+
+In_Comp_N = the amount of N entering the system
+
+In_Comp_P = the amount of P entering the system
+
+PN = particulate nitrogen in tonnes
+
+PP = particulate phosphorous in tonnes
+
+```{r particulate nutrients released}
+
+particulate_nutrients_released <- all_parameters_3 %>% 
+  mutate(PN = (1 - ADC_Comp_N)*In_Comp_N,
+         PP = (1 - ADC_Comp_P)*In_Comp_P) %>% 
+  dplyr::select(x, y, tonnes_production, PN, PP)
+
+all_parameters_4 <- all_parameters_3 %>% 
+  mutate(PN = (1 - ADC_Comp_N)*In_Comp_N,
+         PP = (1 - ADC_Comp_P)*In_Comp_P)
+```
+
+
+## 5. Calculating dissolved nutrient release
+
+$$DN = N\_In - N\_Fish - PN$$
+N_In = total amount of nitrogen entering the system (this is the same as In_Comp_N here because salmon are only fed compound feeds)
+
+P_In = total amount of phosphorous entering the system (this is the same as In_Comp_P here because salmon are only fed compound feeds)
+
+N_Fish = amount of N in the weight gained during each year (tonnes)
+
+P_Fish = amount of P in the weight gained during each year (tonnes)
+
+PN = particulate nitrogen in tonnes
+
+PP = particulate phosphorous in tonnes
+
+DN = dissolved nitrogen
+
+DP - dissolved phosphorus
+
+```{r dissolved nutrient released}
+
+dissolved_nutrients_released <- all_parameters_4 %>% 
+  mutate(DN = N_In - N_Fish - PN,
+         DP = P_In - P_Fish - PP) %>% 
+  dplyr::select(x, y, tonnes_production, DN, DP)
+
+all_parameters_5 <- all_parameters_4 %>% 
+  mutate(DN = N_In - N_Fish - PN,
+         DP = P_In - P_Fish - PP)
+```
+
+
+## 6. Calculating the actual nutrient release to the water column
+
+$$DN\_out = DN * (1-Frac\_N\_removal * Frac\_Integer\_Aqua)$$
+The parameters are as follows:
+
+Frac_N_removal = fraction of N released that is retained in the integrated system of removed by waste water treatment
+
+Frac_P_removal = fraction of P released that is retained in the integrated system of removed by waste water treatment
+
+Frac_integer_Aqua = fraction of production in integrated aquaculture systems with effluent treatment
+
+Since salmon aquaculture is not an indoor system but an open in the environment one, this part of the model is zero for salmon. So the DN and DP calculated in the previous step is the total nutrient released into the environment
+
+DN_out = total nitrogen released into system
+
+DP_out = total phosphorous released into system
+
+```{r total released nutrients}
+total_nutrients_released <- all_parameters_5 %>% 
+  mutate(DN_out = DN,
+         DP_out = DP) %>% 
+  dplyr::select(x, y, tonnes_production, DN_out, DP_out)
+
+all_parameters <- all_parameters_5 %>% 
+  mutate(DN_out = DN,
+         DP_out = DP)
+```
+
+Map it!
+
+The nutrient values are in tonne/yr
+```{r}
+food_crs <- "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"
+
+nitrogen <- all_parameters %>% 
+  dplyr::select(x,y, DN_out)
+
+phosphorous <- all_parameters %>% 
+  dplyr::select(x,y, DP_out)
+
+nitrogen_raster <- rasterFromXYZ(nitrogen, crs = food_crs) %>% 
+  projectRaster(crs = food_crs, progress="text") 
+plot(nitrogen_raster)
+
+writeRaster(nitrogen_raster, file.path(path_prep, "salmon_nutrient_pollution/nutrient_maps/nitrogen_raster.tif"), overwrite = TRUE)
+
+phosphorous_raster <- rasterFromXYZ(phosphorous, crs = food_crs) %>% 
+  projectRaster(crs = food_crs, progress="text") 
+plot(phosphorous_raster)
+writeRaster(phosphorous_raster, file.path(path_prep, "salmon_nutrient_pollution/nutrient_maps/phosphorous_raster.tif"), overwrite = TRUE)
+```
+
+
+Save them as csv
+```{r}
+salmon_aquaculture_nitrogen_released_df <- all_parameters %>% 
+  dplyr::select(x,y, DN_out)
+
+write_csv(salmon_aquaculture_nitrogen_released_df, file.path(path_prep, "salmon_nutrient_pollution/salmon_aquaculture_nitrogen_released_df.csv"))
+
+salmon_aquaculture_phosphorous_released_df <- all_parameters %>% 
+  dplyr::select(x,y, DP_out)
+
+write_csv(salmon_aquaculture_phosphorous_released_df, file.path(path_prep, "salmon_nutrient_pollution/salmon_aquaculture_phosphorous_released_df.csv"))
+```
+
+Convert nitrogen and phosphorous to PO4-eq and add together and save as one layer of nutrient impact and save to final data
+
+Method: Multiply P by by 3.07 to get PO4eq and  N by 0.42 to get PO4eq. Sum the N and P PO4eq rasters.
+
+```{r}
+all_nutrient <- left_join(salmon_aquaculture_phosphorous_released_df, salmon_aquaculture_nitrogen_released_df) %>% 
+  mutate(p_p04eq = DP_out*3.07,
+         n_p04eq = DN_out*0.42,
+         salmon_nutrient_tonnes_p04eq = p_p04eq+n_p04eq) %>% 
+  dplyr::select(x, y, salmon_nutrient_tonnes_p04eq)
+
+write_csv(all_nutrient, file.path(path_prep, "salmon_nutrient.csv"))
+
+## save to datalayers folder with the correct naming conventions: 
+final_layer_nutrient <- read_csv(file.path(path_prep, "salmon_nutrient.csv"))
+
+final_rast <- rasterFromXYZ(final_layer_nutrient, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+final_rast
+cellStats(final_rast, "sum") # 87616.25
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 87616.25
+final_rast
+
+writeRaster(final_rast, file.path(path_final, "marine_salmon_aquaculture_meat_nutrient.tif"), overwrite = T)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

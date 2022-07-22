@@ -1,0 +1,263 @@
+---
+title: "STEP 6: Caculate dairy vs non dairy proportions for each country and ruminant"
+author: "Juliette"
+date: "9/22/2020"
+output: html_document
+---
+
+## Objective
+This markdown calculates the percent non-dairy and dairy herd for all our ruminant species, and turns it into a raster. 
+
+## Inputs:
+We use data that we have created in the previous steps:
+1. GLEAM production/head rate: ruminants_production_rates.csv (STEP 4)
+2. FAO production data: fao_production.csv (STEP 2)
+3. FAO head count: fao_livestock_headcount.csv (STEP 1)
+
+## Outputs: 
+production_system1_tifs/ruminant_dairy.tif
+production_system1_tifs/ruminant_nondairy.tif
+These are located in the prep folder on the server. There is a file for each of our ruminants. The rasters have one single value across each iso3c.
+
+**
+
+## Setup
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+## FAO total production data, fao head count, and ruminant production rate
+fao_production<- read_csv(here("animal_farm/farm/data/fao_production.csv")) %>% 
+  filter(animal %in% c("cows", "goats", "sheep", "buffaloes")) 
+fao_livestock<- read_csv(here("animal_farm/farm/data/fao_livestock_headcount.csv")) %>% 
+  filter(year == 2017)
+rum_prod_rate<- read_csv(here("animal_farm/farm/data/ruminants_production_rates.csv")) %>% 
+  select(-gapfilled)
+
+## un 
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>% 
+  dplyr::select(iso3c, Region_Name)
+```
+
+## Methods
+
+```{r}
+
+combo <- left_join(rum_prod_rate, fao_production, by = c("iso3c", "animal", "product")) %>% 
+  mutate(fao_product_tonnes = ifelse(is.na(fao_product_tonnes), 0, fao_product_tonnes))
+
+# # make sure there are no duplicates
+# c1 <- combo[duplicated(combo), ]
+# # check that all countries have 16 rows
+# c2 <- combo %>% 
+#   group_by(iso3c) %>% 
+#   filter(n() != 16)
+```
+
+Calculating proportion dairy vs non dairy:
+
+1. buffalo, sheep, goats -> calculate the number of dairy animals using production/head rate and milk production. Subtract form FAO total counts to get non-diary animals
+2. cows -> fao reports dairy and non dairy, so we can calcualte the proportion dairy/ non directly from their counts
+
+Do the first three in a loop since they are the same
+```{r}
+library(doParallel)
+animal_list <- c("buffaloes", "sheep", "goats")
+
+foreach(animal_OI = animal_list) %dopar% {
+  
+ # animal_OI <- animal_list[2]
+  
+  counts <- fao_livestock %>% 
+  filter(animal == animal_OI) %>% 
+  select(-product, -year)
+
+  math <- combo %>%
+    filter(animal == animal_OI) %>% 
+    left_join(counts, by = c("iso3c", "animal")) %>% 
+   ## calculate number of milk animals
+    mutate(milk_dairy_count = ifelse(product == "milk" & system_1 == "dairy", fao_product_tonnes/tonnes_per_head, 0)) %>% 
+  ## wanna make sure that countries with 0 tonnes and milk have 0 dairy animals
+    mutate(milk_dairy_count = ifelse(product == "milk" & fao_product_tonnes== 0, 0, milk_dairy_count)) %>% 
+    group_by(iso3c, animal) %>% 
+    mutate(milk_dairy_count = sum(milk_dairy_count)) %>% 
+    ungroup() %>% 
+    mutate(count = ifelse(system_1 == "dairy", milk_dairy_count, fao_headcount-milk_dairy_count)) %>% 
+    mutate(count = ifelse(count < 0, 0, count))
+
+  ## lets fix the weirdnesses where there are fao counts, but we ended up with 0 or inf because the tonnes per head were 0. this seems to be occuring in places where gleam only reprots non dairy meat animals so we are getting weird math. for those ones we will just calculate the meat cows (and assume that all meat comes from them, not any dairy herd) 
+  
+  math_2 <- math %>% 
+    group_by(country) %>% 
+    mutate(rgn_count_check =sum(count*is.finite(count), na.rm = TRUE)) %>% 
+    ungroup() %>% 
+    mutate(meat_nondairy_count = ifelse(rgn_count_check ==0 & fao_headcount > 0 & system_1 == "non-dairy" & product == "meat", fao_headcount - tonnes_per_head*fao_product_tonnes, NA)) %>% 
+    group_by(iso3c) %>% 
+    mutate(meat_nondairy_count = sum(meat_nondairy_count, na.rm = TRUE)) %>% 
+    ungroup() %>% 
+    mutate(count = ifelse(rgn_count_check == 0 & fao_headcount >0 & system_1 == "non-dairy", meat_nondairy_count,
+                          ifelse(rgn_count_check == 0 & fao_headcount >0 & system_1 == "dairy", fao_headcount-meat_nondairy_count, count))) %>% 
+    select(-rgn_count_check, -meat_nondairy_count)
+    
+  ## Note: I check that there aren't any countries where fao reports milk but we have 0 milk counts, and vice versa. We're good  
+  
+  tidy <- math_2 %>%
+    select(iso3c, country, animal, system_1, count) %>% 
+    unique() %>% 
+    pivot_wider(names_from = system_1, values_from = count) %>%
+    rename(non_dairy = 'non-dairy') %>% 
+    mutate(rgn_total = (dairy + non_dairy),
+         prop_dairy = dairy/rgn_total,
+         prop_nondairy = non_dairy/rgn_total)  %>% 
+    left_join(un, by = "iso3c")
+
+# There are some countries with NAs (because fao headcount = NA) or INF because fao provides production data but we have no production/head rates. will gf according to the plot below
+## this part is not super conducive to a loop but oh well
+    ggplot(tidy) + 
+    geom_point(aes(y = prop_dairy, x = Region_Name, color = Region_Name), 
+                 position = position_jitterdodge(dodge.width = 0.8)) +
+      theme_light() +
+      labs(title = animal_OI) +
+      stat_summary(mapping = aes(y = prop_dairy, x = Region_Name),
+                   fun = "mean", geom = "point", shape = 0, size = 4, color = "black",
+                   position = position_dodge(width = 0.8)) +
+      stat_summary(mapping = aes(y = prop_dairy, x = Region_Name),
+                   fun = "median", geom = "point", shape = 2, size = 4, color = "black",
+                   position = position_dodge(width = 0.8)) + 
+      theme(legend.position = "none")
+
+## goats: gf prop dairy values: africa = .25, americas = 0, asia = .5, europe = 1, oceania = 0
+## sheep: gf prop dairy values: africa = .5, americas = 0, asia = .5, europe = .75, oceania = 0
+## buffaloes: gf prop dairy values: africa = .0, americas = 0, asia = .375, europe = .25, oceania = 0
+
+        if(animal_OI == "buffaloes"){
+          
+          africa <- 0.25 
+          americas <- 0 
+          asia <- 0.5 
+          europe <- 1 
+          oceania <- 0
+        }else{
+         
+           if(animal_OI == "sheep"){
+          africa <- 0.5 
+          americas <- 0 
+          asia <- 0.5 
+          europe <- 0.75 
+          oceania <- 0
+          
+        }else{
+          africa <- 0. 
+          americas <- 0 
+          asia <- 0.375 
+          europe <- 0.25 
+          oceania <- 0
+        }}
+
+
+tidy_2 <- tidy %>% 
+  mutate(prop_dairy = ifelse(is.na(prop_dairy) & Region_Name == "Africa", africa,
+                             ifelse(is.na(prop_dairy) & Region_Name == "Americas", americas,
+                                    ifelse(is.na(prop_dairy) & Region_Name == "Asia", asia,
+                                    ifelse(is.na(prop_dairy) & Region_Name == "Europe", europe,
+                                           ifelse(is.na(prop_dairy) & Region_Name == "Oceania", oceania, prop_dairy)))))) %>% 
+  mutate(prop_nondairy = ifelse(is.na(prop_nondairy), 1-prop_dairy, prop_nondairy)) %>% 
+  select(-Region_Name)
+
+## make into a raster
+
+raster_dairy <- left_join(food_rgns_xy, tidy_2, by = "iso3c") %>% 
+  select(x,y, prop_dairy) %>% 
+  rasterFromXYZ(crs= food_crs)
+
+plot(raster_dairy)
+
+raster_nondairy <- left_join(food_rgns_xy, tidy_2, by = "iso3c") %>% 
+  select(x,y, prop_nondairy) %>% 
+  rasterFromXYZ(crs= food_crs)
+
+plot(raster_nondairy)
+
+## save rasters
+writeRaster(raster_dairy, file.path(paste0(prep, "animal_farm/farm/production_system1_tifs/", animal_OI, "_dairy.tif")), format = "GTiff", overwrite = TRUE) 
+            
+writeRaster(raster_nondairy, file.path(paste0(prep, "animal_farm/farm/production_system1_tifs/", animal_OI, "_nondairy.tif")), format = "GTiff", overwrite = TRUE)      
+
+}
+```
+
+
+Let's do cows next! MUCH easier :)
+```{r}
+
+  cow_props <- fao_livestock %>% 
+    filter(animal == "cows") %>% 
+    select( -year) %>% 
+    group_by(iso3c) %>% 
+    mutate(rgn_total = sum(fao_headcount)) %>% 
+    ungroup() %>% 
+    rowwise() %>% 
+    mutate(prop = fao_headcount/rgn_total) %>% 
+    select(iso3c,animal, product, prop) %>% 
+    pivot_wider(names_from = product, values_from = prop) %>% 
+    rename(prop_dairy = milk, prop_nondairy = meat) %>% 
+    right_join(food_rgns, by = "iso3c") %>% 
+    left_join(un, by = "iso3c")
+
+## look at how we should gapfill
+
+    ggplot(cow_props) + 
+    geom_point(aes(y = prop_dairy, x = Region_Name, color = Region_Name), 
+                 position = position_jitterdodge(dodge.width = 0.8)) +
+      theme_light() +
+      labs(title = "cows") +
+      stat_summary(mapping = aes(y = prop_dairy, x = Region_Name),
+                   fun = "mean", geom = "point", shape = 0, size = 4, color = "black",
+                   position = position_dodge(width = 0.8)) +
+      stat_summary(mapping = aes(y = prop_dairy, x = Region_Name),
+                   fun = "median", geom = "point", shape = 2, size = 4, color = "black",
+                   position = position_dodge(width = 0.8)) + 
+      theme(legend.position = "none")
+## roughly always 25% dairy regardless of region
+    
+    cow_props_gf <- cow_props %>% 
+      mutate(prop_dairy = ifelse(is.na(prop_dairy), 0.25, prop_dairy),
+             prop_nondairy = ifelse(is.na(prop_nondairy), 1-prop_dairy, prop_nondairy)) %>% 
+      select(iso3c, prop_dairy, prop_nondairy)
+
+
+## save rasters
+    
+raster_dairy <- left_join(food_rgns_xy, cow_props_gf, by = "iso3c") %>% 
+  select(x,y, prop_dairy) %>% 
+  rasterFromXYZ(crs= food_crs)
+
+plot(raster_dairy)
+
+raster_nondairy <- left_join(food_rgns_xy, cow_props_gf, by = "iso3c") %>% 
+  select(x,y, prop_nondairy) %>% 
+  rasterFromXYZ(crs= food_crs)
+
+plot(raster_nondairy)
+
+## save rasters
+writeRaster(raster_dairy, file.path(prep, "animal_farm/farm/production_system1_tifs/cows_dairy.tif"), format = "GTiff", overwrite = TRUE) 
+            
+writeRaster(raster_nondairy, file.path(prep, "animal_farm/farm/production_system1_tifs/cows_nondairy.tif"), format = "GTiff", overwrite = TRUE)      
+
+```
+
+
+Check
+```{r}
+dairy <- raster(file.path(paste0(prep, "animal_farm/farm/production_system1_tifs/sheep_dairy.tif", sep = "")))
+nondairy <- raster(file.path(paste0(prep, "animal_farm/farm/production_system1_tifs/sheep_nondairy.tif", sep = "")))
+
+plot(dairy)
+plot(nondairy)
+check <- dairy +nondairy
+```
+

@@ -1,0 +1,151 @@
+---
+title: "Wrangle NPP maps"
+author: "Juliette"
+date: "10/26/2020"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(data.table)
+library(tidyverse)
+library(rgdal)
+library(gdalUtils)
+library(here)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+```
+
+These tifs are in gC/m2/day
+
+Grab the create a raster stack of the months in each year
+
+```{r}
+stack_2015 <- stack(lapply(list.files(path = file.path(raw, "NEO_modis_npp/check_npp_tiffs/2015/"), pattern = ".tiff", full.names = TRUE), raster))
+
+stack_2014 <- stack(lapply(list.files(path = file.path(raw, "NEO_modis_npp/check_npp_tiffs/2014/"), pattern = ".tiff", full.names = TRUE), raster))
+
+stack_2013 <- stack(lapply(list.files(path = file.path(raw, "NEO_modis_npp/check_npp_tiffs/2013/"), pattern = ".tiff", full.names = TRUE), raster))
+
+stack_all <- stack(stack_2015, stack_2013, stack_2014)
+
+```
+
+
+Create a map for each year of missing areas
+```{r}
+
+## 2015
+missing_2015 <- calc(stack_2015, fun = function(x) {sum(x == 99999)/12})
+
+plot(missing_2015,
+     main = "Percent that values are missing from cell 2015") 
+
+##2014
+missing_2014 <- calc(stack_2014, fun = function(x) {sum(x == 99999)/12})
+
+plot(missing_2014,
+     main = "Percent that values are missing from cell 2014") 
+## why is the max 50%? when the ocean should be 100%
+
+##2013
+missing_2013 <- calc(stack_2013, fun = function(x) {sum(x == 99999)/12})
+
+plot(missing_2013,
+     main = "Percent that values are missing from cell 2013") 
+
+## all
+missing_all <- calc(stack_all, fun = function(x) {sum(x == 99999)/36})
+
+plot(missing_all,
+     main = "Percent that values are missing from cell 2013-2015")  
+```
+
+Make the NA/fill value (99999) a 0 and the negative values 0 and then calculate an annual mean
+convert units from C g/m2 to C tonnes/km2 -> this ends up canceling out
+need to multiply by 363 to make the rate per year
+
+2015
+```{r}
+
+remove_na_2015 <- calc(stack_2015, fun = function(x){ifelse(x == 99999 | x <0, 0, x)})
+remove_na_2015 <- calc(remove_na_2015, fun = function(x){ifelse(x<0, 0, x)})
+mean_npp_2015 <- mean(remove_na_2015) 
+
+mean_npp_2015_resample <- resample(mean_npp_2015, food_rgns_tif, method = "ngb")
+
+final_mean_npp_2015 <- mean_npp_2015_resample*365
+plot(final_mean_npp_2015,
+     main = "Mean NPP 2015 C tonnes/km2/year")
+
+writeRaster(final_mean_npp_2015, file.path(prep, ("animal_farm/disturbance/npp_2013_2015_rasters/mean_npp_2015.tif"), sep = ""), format = "GTiff", overwrite = TRUE ) 
+
+
+```
+
+2014
+```{r}
+
+remove_na_2014 <- calc(stack_2014, fun = function(x){ifelse(x == 99999, 0, x)})
+remove_na_2014 <- calc(remove_na_2014, fun = function(x){ifelse(x < 0, 0, x)})
+mean_npp_2014 <- mean(remove_na_2014) 
+
+mean_npp_2014_resample <- resample(mean_npp_2014, food_rgns_tif, method = "ngb")
+
+final_mean_npp_2014 <- mean_npp_2014_resample*365
+plot(final_mean_npp_2014,
+     main = "Mean NPP 2014 C tonnes/km2/year")
+
+writeRaster(final_mean_npp_2014, file.path(prep, ("animal_farm/disturbance/npp_2013_2015_rasters/mean_npp_2014.tif"), sep = ""), format = "GTiff", overwrite = TRUE ) 
+
+```
+
+2013
+```{r}
+
+remove_na_2013 <- calc(stack_2013, fun = function(x){ifelse(x == 99999, 0, x)})
+remove_na_2013 <- calc(remove_na_2013, fun = function(x){ifelse(x<0, 0, x)})
+mean_npp_2013 <- mean(remove_na_2013) 
+
+mean_npp_2013_resample <- resample(mean_npp_2013, food_rgns_tif, method = "ngb")
+
+final_mean_npp_2013 <- mean_npp_2013_resample*365
+plot(final_mean_npp_2013,
+     main = "Mean NPP 2013 C tonnes/km2/year")
+
+writeRaster(final_mean_npp_2013, file.path(prep, ("animal_farm/disturbance/npp_2013_2015_rasters/mean_npp_2013.tif"), sep = ""), format = "GTiff", overwrite = TRUE ) 
+
+```
+
+Mean 2013-2015
+```{r}
+
+stack_all <- calc(stack_all, fun = function(x){ifelse(x == 99999, 0, x)})
+stack_all <- calc(stack_all, fun = function(x){ifelse(x < 0, 0, x)})
+mean_npp_all <- mean(stack_all) 
+
+mean_npp_all_resample <- resample(mean_npp_all, food_rgns_tif, method = "ngb")
+
+final_mean_npp_all <- mean_npp_all_resample*365
+plot(final_mean_npp_all,
+     main = "Mean NPP 2013-2015 C tonnes/km2/year")
+
+writeRaster(final_mean_npp_all, file.path(prep, ("animal_farm/disturbance/npp_2013_2015_rasters/mean_npp_2013_2015.tif"), sep = ""), format = "GTiff", overwrite = TRUE ) 
+```
+
+
+
+
+
+
+
+
+
+
+
+
+

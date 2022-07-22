@@ -1,0 +1,82 @@
+---
+title: "STEP 1: Wrangling FAO livestock count"
+author: "Juliette Verstaen"
+date: "7/1/2020"
+output: html_document
+---
+
+# Objectives
+This markdown wrangles the FAO headcount data from the Emissions-Manure Management section of FAOSTAT into an easy format for the analysis later down the line.
+
+# Inputs
+**Reference** http://www.fao.org/faostat/en/#data/GM
+**Description** Head counts/stock numbers for dairy cows, nondairy cows, buffaloes, broiler chickens, layer chickens, goats, and sheep
+**Resolution** Country level
+**Time Range** Avaliable 1961-2018; we downloaded 2010 and 2017
+**Format** CSV file
+
+## Outputs: 'fao_livestock_headcount.csv' (iso3c, year[2017, 2010], animal, product, fao_headcount)
+
+**
+
+## Setup
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(countrycode)
+source(here("_workflow/common.R"))
+
+# un gapfilling regions
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>% 
+  dplyr::select(iso3c, Global_Name, Region_Name, Sub_region_Name, Intermediate_Region_Name, Region_Name)
+```
+
+## Methods
+
+Read in and clean up the FAO livestock head count numbers
+```{r}
+livestock_headcount_raw <- read_csv(file.path(raw, "FAO_data/v2020/FAO_livestock_head_count_2020_09_25.csv")) 
+
+fao_livestock_headcount <- livestock_headcount_raw %>% 
+  
+  filter(Area != "China") %>% 
+  mutate(Area = ifelse(Area == "Eswatini", "Swaziland", Area),
+         Area = ifelse(Area == "Netherlands Antilles (former)", "Bonaire, Sint Eustatius and Saba", Area),
+         Area = ifelse(Area == "French Guyana", "French Guiana", Area),
+         Area = ifelse(Area == "China, mainland", "China", Area),
+         iso3c = countrycode(Area, origin="country.name", destination = "iso3c")) %>% 
+  rename(country = Area,
+         fao_headcount = Value,
+         fao_class = Item, 
+         year = Year) %>% 
+  select(country, iso3c, year, fao_class, fao_headcount) %>% 
+  
+  mutate(animal = case_when(fao_class == "Cattle, dairy" ~ "cows",
+                            fao_class == "Cattle, non-dairy" ~ "cows",
+                            fao_class == "Chickens, broilers" ~ "chickens",
+                            fao_class == "Chickens, layers" ~ "chickens",
+                            fao_class == "Goats" ~ "goats",
+                            fao_class == "Sheep" ~ "sheep",
+                            fao_class == "Swine, breeding" ~ "pigs",
+                            fao_class == "Swine, market" ~ "pigs",
+                            fao_class == "Buffaloes" ~ "buffaloes"),
+  
+         product = case_when(fao_class == "Cattle, dairy" ~ "milk",
+                            fao_class == "Cattle, non-dairy" ~ "meat",
+                            fao_class == "Chickens, broilers" ~ "meat",
+                            fao_class == "Chickens, layers" ~ "eggs",
+                            fao_class == "Goats" ~ "meat and milk",
+                            fao_class == "Sheep" ~ "meat and milk",
+                            fao_class == "Swine, breeding" ~ "meat",
+                            fao_class == "Swine, market" ~ "meat",
+                            fao_class == "Buffaloes" ~ "meat and milk")) %>% 
+  
+  group_by(iso3c, year, animal, product) %>% 
+  mutate(fao_headcount = sum(fao_headcount)) %>% 
+  select(iso3c,year, animal, product, fao_headcount) %>% 
+  unique() ## we need to do this because the pigs are currently double counted the way the sum calculation is done above
+
+write_csv(fao_livestock_headcount, here("animal_farm/farm/data/fao_livestock_headcount.csv"))
+
+```

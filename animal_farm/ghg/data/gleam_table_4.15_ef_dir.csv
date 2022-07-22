@@ -1,0 +1,17 @@
+﻿mms,animal,ef_direct,unit,note
+Pasture/Range/Paddock,large ruminants,0.02,kg N2O - N kg/N,
+Pasture/Range/Paddock,small ruminants,0.01,kg N2O - N kg/N,
+Pasture/Range/Paddock,other animals,0.02,kg N2O - N kg/N,GLEAM says this is the same as drylot
+Daily spread,all,0.0125,kg N2O - N kg/N,lastest info on this is in 1996 IPPC table 4.17; https://www.ipcc.ch/site/assets/uploads/2018/03/4_Agriculture-1.pdf 
+Solid storage,all,0.005,kg N2O - N kg/N,
+Dry lot,all,0.02,kg N2O - N kg/N,
+Liquid/Slurry,all,0,kg N2O - N kg/N,
+Liquid/Slurry with crust,all,0.005,kg N2O - N kg/N,
+Uncovered anaerobic lagoon,all,0,kg N2O - N kg/N,
+Pit storage (< 1 month),all,0.002,kg N2O - N kg/N,
+Pit storage (> 1 month),all,0.002,kg N2O - N kg/N,
+Pit storage (> 1 month) for chickens,chickens,0.001,kg N2O - N kg/N,
+Anaerobic digester,all,0,kg N2O - N kg/N,
+Composting - intensive windrow,all,0.1,kg N2O - N kg/N,
+Burned for fuel,all,0.007,kg N2O - N kg/N,lastest info on this is in 1996 IPPC table 4.12; https://www.ipcc.ch/site/assets/uploads/2018/03/4_Agriculture-1.pdf 
+Poultry manure with litter,chickens,0.001,kg N2O - N kg/N,

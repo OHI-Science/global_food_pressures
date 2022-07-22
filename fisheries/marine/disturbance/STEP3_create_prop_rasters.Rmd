@@ -1,0 +1,266 @@
+---
+title: "Create rasters for new disturbance calculations"
+author: "Gage Clawson (UCSB, NCEAS, OHI)"
+date: "May 19, 2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, eval = FALSE}
+#load relevant packages, etc.
+
+library(here)
+library(raster)
+library(tidyverse)
+library(doParallel)
+library(foreach)
+library(parallel)
+
+# raster template
+r <- raster::raster(ncol=720, nrow=360, vals=c(1:259200))
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+hab_raster <- raster("/home/shares/food-systems/Food_footprint/_raw_data/Halpern_chi/habitats/coral_reef.tif")
+
+
+cat_msg <- function(x, ...) {
+  if(is.null(knitr:::.knitEnv$input.dir)) {
+    ### not in knitr environment, so use cat()
+    cat(x, ..., '\n')
+  } else {
+    ### in knitr env, so use message()
+    message(x, ...)
+  }
+  return(invisible(NULL))
+}
+
+```
+
+Here we will make rasters describing: 
+
+1. Proportion of bottom trawling to all trawling: tonnes(bottom_trawls)/tonnes(bottom_trawl + midwater_trawl) for all marine fisheries catch
+2. Proportion of destructive catch per species class to all destructive catch: n=7 species classes: raster_tonnes(raking_device + dredge + hand_dredges + bottom_trawl)_spp_i / raster_tonnes(raking_device + dredge + hand_dredges + bottom_trawl)_spp_all
+3. Proportion of all catch per species class: n=7 species classes: all_catch_spp_i / all_catch_spp_all
+
+We will include IUU, landings, discards. 
+
+The catch file (`catch_spp_class_2017.csv`) we are reading in is made in `STEP2c_prep_watson_catch.Rmd`. 
+
+## Raster 1: All catch trawling rasters 
+ 
+```{r}
+# tonnes(bottom_trawls)/tonnes(bottom_trawl + midwater_trawl) for all marine fisheries catch
+
+## read in the catch data 
+# catch_raw <- read.csv("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/catch_with_gear_cats.csv") 
+
+catch_raw <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/catch_spp_class_2017.csv") 
+
+
+catch_all <- catch_raw %>%
+  mutate(catch = ReportedIND + IUUIND + DiscardsIND + ReportedNIND + IUUNIND + DiscardsNIND)
+
+
+sum(catch_all$catch) # 126256514
+
+check <- catch_all %>%
+  group_by(species_class_fin) %>%
+  summarise(catch_sum = sum(catch))
+
+bottom_trawls_tonnes <- catch_all %>%
+  filter(GearName == "bottom trawls") %>%
+  group_by(Cell) %>%
+  summarise(catch = sum(catch, na.rm = TRUE)) %>%
+  ungroup()
+sum(bottom_trawls_tonnes$catch) # 37332269
+37332269/126256514 # around 30% of total catch is bottom trawl
+
+## make bottom trawl raster 
+bottom_trawls_tonnes_raster <- raster::subs(r, bottom_trawls_tonnes, by = "Cell", which = "catch", subsWithNA=TRUE)
+
+plot(bottom_trawls_tonnes_raster)
+cellStats(bottom_trawls_tonnes_raster, "sum") # 37332269 - perfect 
+
+## make bottom and midwater trawl raster
+
+all_trawls_tonnes <- catch_all %>%
+  filter(str_detect(GearName, "trawl")) %>%
+  group_by(Cell) %>%
+  summarise(catch = sum(catch, na.rm = TRUE)) %>%
+  ungroup()
+sum(all_trawls_tonnes$catch) # 55119183
+55119183/126256514 # any type of trawling account for ~44% of total catch
+
+all_trawls_tonnes_raster <- raster::subs(r, all_trawls_tonnes, by = "Cell", which = "catch", subsWithNA=TRUE)
+cellStats(all_trawls_tonnes_raster, "sum") # 55119183
+
+trawl_prop_raster <- bottom_trawls_tonnes_raster/all_trawls_tonnes_raster
+plot(trawl_prop_raster)
+
+## save all three rasters 
+writeRaster(bottom_trawls_tonnes_raster, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/trawling/bottom_trawl_tonnes_raster.tif"))
+
+writeRaster(all_trawls_tonnes_raster, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/trawling/bottom_midwater_trawl_tonnes_raster.tif"))
+
+writeRaster(trawl_prop_raster, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/trawling/trawl_proportion_raster.tif"))
+
+```
+
+## Raster series 2
+
+n=7 species classes: raster_tonnes(raking_device + dredge + hand_dredges + bottom_trawl)_spp_i / raster_tonnes(raking_device + dredge + hand_dredges + bottom_trawl)_spp_all
+
+```{r}
+
+check <- catch_all %>%
+  group_by(category, GearName) %>%
+  summarise(catch = sum(catch))
+
+all_destructive_gears <- catch_all %>%
+  filter(GearName %in% c("bottom trawls", "dredges", "hand dredges", "raking devices"))
+sum(all_destructive_gears$catch) # 41601963
+
+all_dest_gears_cell <- all_destructive_gears %>%
+  group_by(Cell) %>%
+  summarise(catch = sum(catch, na.rm = TRUE)) %>%
+  ungroup()
+sum(all_dest_gears_cell$catch) # 41601963
+
+## make all destructive gears raster 
+all_destructive_gears_rast <- raster::subs(r, all_dest_gears_cell, by = "Cell", which = "catch", subsWithNA=TRUE)
+cellStats(all_destructive_gears_rast, "sum") # 41601963
+plot(all_destructive_gears_rast)
+
+
+## now write a for loop to make the rasters for each species class, and divide by the total raster
+## get species, description, taxon ids
+catch_cats <- all_destructive_gears %>%
+  dplyr::select(species_class_fin) %>%
+  distinct()
+
+reload <- FALSE ## change this to true if you want to rerun all species
+
+## rasterize catch
+for(i in 1:nrow(catch_cats)){
+  
+  # i = 1
+
+  ## get the ids for this i  
+  spp_class_id <- catch_cats$species_class_fin[i]
+  
+  ## this will be the final file name
+  spp_final_file <- file.path(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/destructive_proportions/ben_hab_dest_prop_%s.tif", spp_class_id))
+    
+if(!file.exists(spp_final_file) | reload) { ## if the file already exists, skip over it (unless otherwise specified)
+  
+## filter for correct observations  
+catch_summary_i <- all_destructive_gears %>%
+  filter(species_class_fin == spp_class_id) %>%
+  group_by(Cell) %>%
+  summarise(catch = sum(catch, na.rm = TRUE)) %>%
+  ungroup()
+
+print(sum(catch_summary_i$catch)) # 29229250
+
+## rasterize
+tonnes_raster <- raster::subs(r, catch_summary_i, by = "Cell", which = "catch", subsWithNA=TRUE)
+# plot(log(tonnes_raster+1))
+
+print(cellStats(tonnes_raster, "sum")) # 29229250
+print(cellStats(all_destructive_gears_rast, "sum")) # 41601963
+
+## divide the species group tonnes by the total tonnes 
+final_rast_i <- tonnes_raster/all_destructive_gears_rast
+# plot(final_rast_i)
+
+writeRaster(final_rast_i, file.path(spp_final_file))
+
+cat_msg('Finished ', i, ' out of ', nrow(catch_cats), 'species')
+
+} else {
+      
+      cat_msg('species file ', spp_final_file, ' already exists; skipping these spp')
+      
+    }
+}
+
+```
+
+## Raster series 3
+
+n=7 species classes: all_catch_spp_i / all_catch_spp_all
+
+```{r}
+
+sum(catch_all$catch) # 126256514
+
+all_catch_cell <- catch_all %>%
+  group_by(Cell) %>%
+  summarise(catch = sum(catch, na.rm = TRUE)) %>%
+  ungroup()
+sum(all_catch_cell$catch) # 126256514
+
+## make all catch raster
+all_catch_rast <- raster::subs(r, all_catch_cell, by = "Cell", which = "catch", subsWithNA=TRUE)
+cellStats(all_catch_rast, "sum") # 126256514
+plot(log(all_catch_rast + 1))
+
+
+writeRaster(all_catch_rast, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/catch_rasters/catch_all_spp.tif"))
+
+
+## now write a for loop to make the rasters for each species class, and divide by the total raster
+## get species, description, taxon ids
+catch_cats <- catch_all %>%
+  dplyr::select(species_class_fin) %>%
+  distinct()
+
+reload <- FALSE ## change this to true if you want to rerun all rasters
+
+## rasterize
+for(i in 1:nrow(catch_cats)){
+  
+  # i = 1
+
+  ## get the ids for this i  
+  spp_class_id <- catch_cats$species_class_fin[i]
+  
+  ## this will be the final file name
+  spp_final_file <- file.path(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/all_catch_proportions/catch_prop_%s.tif", spp_class_id))
+    
+if(!file.exists(spp_final_file) | reload) { ## if the file already exists, skip over it (unless otherwise specified)
+  
+## filter for correct observations  
+catch_summary_i <- catch_all %>%
+  filter(species_class_fin == spp_class_id) %>%
+  group_by(Cell) %>%
+  summarise(catch = sum(catch, na.rm = TRUE)) %>%
+  ungroup()
+
+print(sum(catch_summary_i$catch)) # 8752618
+
+## rasterize
+tonnes_raster <- raster::subs(r, catch_summary_i, by = "Cell", which = "catch", subsWithNA=TRUE)
+# plot(log(tonnes_raster+1))
+
+print(cellStats(tonnes_raster, "sum")) # 8752618
+print(cellStats(all_catch_rast, "sum")) # 126256514
+
+writeRaster(tonnes_raster, file.path(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/catch_rasters/catch_%s_spp.tif", spp_class_id)), overwrite=TRUE)
+
+## divide the species group tonnes by the total tonnes 
+final_rast_i <- tonnes_raster/all_catch_rast
+# plot(final_rast_i)
+
+writeRaster(final_rast_i, file.path(spp_final_file), overwrite = TRUE)
+
+cat_msg('Finished ', i, ' out of ', nrow(catch_cats), 'species')
+
+} else {
+      
+      cat_msg('species file ', spp_final_file, ' already exists; skipping these spp')
+      
+    }
+}
+```
+

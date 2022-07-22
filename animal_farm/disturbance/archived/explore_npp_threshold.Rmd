@@ -1,0 +1,47 @@
+---
+title: "Explore NPP"
+author: "Juliette"
+date: "10/26/2020"
+output: html_document
+---
+
+This is the script but in markdown forma nd adjusted to what we want
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+
+npp <- raster(file.path(prep,"animal_farm/disturbance/npp_2013_2015_rasters/mean_npp_2013_2015.tif")) 
+gi <- raster(file.path(prep, "animal_farm/disturbance/grazing_intensity_unmodified.tif"))
+```
+
+
+```{r}
+npp_df <- raster_df(npp)
+gi_df <- raster_df(gi)
+
+npp_gi <- left_join(npp_df, gi_df)
+
+explore <- npp_gi %>% 
+  filter(mean_npp_2013_2015 != 0 ) 
+
+explore_threshold <- ggplot(explore) +
+  geom_point(aes(x = mean_npp_2013_2015, y = grazing_intensity_unmodified), alpha = 0.5)+ 
+  geom_hline(yintercept=1, color = "deeppink4", size=1) +
+  geom_hline(yintercept=2, color = "darkolivegreen", size=1) +
+  geom_vline(xintercept= 10, color = "deepskyblue3", size=1) +
+  theme_minimal() +
+  ylim(0,10)
+
+
+ggsave(here("animal_farm/disturbance/plots/explore_threshold.png"), width = 15, height = 10, dpi=300) 
+
+```
+
+
+

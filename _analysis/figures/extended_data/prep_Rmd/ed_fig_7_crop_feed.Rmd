@@ -1,0 +1,306 @@
+---
+title: 'Figure 5: Ranking Foods'
+author: "Juliette"
+date: "11/17/2020"
+output: html_document
+---
+
+the total crop pressures (counting everything) are here: /home/shares/food-systems/Food_footprint/all_food_systems/datalayers
+and_maize_crop_produce_nutrient.tif includes all the nutrient pressures associated with maize regardless of where it is going.
+
+The human consumed part would be in here; /home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw_feed_combos
+
+The animal consumed part of each crop is also in here: /home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw_feed_combos
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(hrbrthemes)
+library(RColorBrewer)
+library(colorspace)
+library(scales)
+library(colorspace)
+library(strex)
+library(patchwork)
+source(here("_workflow/common.R"))
+
+'%!in%' <- function(x,y)!('%in%'(x,y))
+
+summary_df_raw <- read_csv(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw_df_summary/rgn_raw_summary.csv")) 
+
+rescaling_values <- read_csv(here("_analysis/rescale_values.csv"))
+
+food_groupings <- read_csv(here("_analysis/figures/paper/data/grouping_naming_structure.csv")) 
+
+# mapspam_names <- read_csv(here("crop/farm/data/MapSPAM_names.csv"))%>% 
+#   select(sub_tier = SPAM_short_name, SPAM_full_name) %>% unique()
+
+mapspam_names <- vroom::vroom(here("crop/farm/data/crop_codes_updated.csv")) %>%
+  select(sub_tier = SPAM_super, SPAM_full_name_raw = SPAM_full_name) %>%
+  mutate(SPAM_full_name = case_when(sub_tier == "xmil" ~ "millet",
+                                    sub_tier == "xpul" ~ "pulses",
+                                    sub_tier == "xcof" ~ "coffee",
+                                    sub_tier == "xfru" ~ "other fruits",
+                                    sub_tier == "xoil" ~ "other oil crops",
+                                    T ~ SPAM_full_name_raw))  %>% 
+  select(sub_tier, SPAM_full_name) %>% 
+  unique() 
+
+
+```
+
+Groupings that we will want (this is by tier 2)
+(1) livestock  and their feed
+(2) crops (human consumption and feed)
+(3) mariculture and their feed
+(3) fisheries marine and fresh
+
+
+## need to change salmon to salmonoide and fish meat to river fish meat
+```{r}
+summary_df_int <-summary_df_raw %>% 
+  mutate(feed_item = case_when(category == "feedcrop"|category =="feedfodd"|category =="feedfofm" ~ "feed",
+                               T ~ " ")) %>% 
+  unite(product, c("product", "feed_item"), sep = " ") %>% 
+  mutate(product = str_trim(product, side = c("right"))) %>% 
+  select(organism, product, pressure, sum) %>% 
+  ## fresh water fisheries is listed as fish and there is still salmon instead of salmonids so we will change that here 
+  mutate(organism = ifelse(organism == "fish", "freshwater fish", 
+                           ifelse(organism == "salmon", "salmonids", organism))) %>% 
+  group_by(organism, product, pressure) %>% 
+  dplyr::summarise(sum = sum(sum)) %>% 
+  unite(tier_5, c("organism", "product"), sep = " ") %>% 
+  ungroup() 
+
+## need to split the back yard chickens eggs&meat
+fix_chickens_1 <- summary_df_int %>% 
+  filter(tier_5 == "chickens eggs&meat") 
+fix_chickens_1 <- rbind(fix_chickens_1, fix_chickens_1) %>% 
+  arrange(pressure) %>% 
+  mutate(tier_5 = rep(c("chickens meat", "chickens eggs"), times = 4, each = 1))
+
+fix_chickens_2 <- summary_df_int %>% 
+  filter(tier_5 == "chickens eggs&meat feed") 
+fix_chickens_2 <- rbind(fix_chickens_2, fix_chickens_2) %>% 
+  arrange(pressure) %>% 
+  mutate(tier_5 = rep(c("chickens meat", "chickens eggs"), times = 4, each = 1))
+
+## add back
+summary_df <- summary_df_int %>% 
+  filter(tier_5 != "chickens eggs&meat",
+         tier_5 != "chickens eggs&meat feed") %>% 
+  rbind(fix_chickens_1, fix_chickens_2) %>% 
+  group_by(tier_5, pressure) %>% 
+  dplyr::summarise(sum = sum(sum)) %>% 
+  left_join(rescaling_values, by = "pressure") %>% 
+  ungroup() %>% 
+  rowwise() %>% 
+  mutate(prop_of_global = sum/global_total,
+         prop_of_global = ifelse(tier_5 == "fofm meat", prop_of_global*0.1, prop_of_global)) %>% 
+  left_join(food_groupings, by = "tier_5")
+
+## quick check
+sum(summary_df$prop_of_global) #  3.968501 looks good!
+```
+
+Now extract the feed from crops and assign to the crop it comes from. This takes A LONG TIME. NOTE: This only needs to be run once, and it was run on May 25th, 2022. Maybe there is a way to speed this up? There are ~2700 files that we loop through. 
+
+
+```{r}
+
+crop_feed_files <- grep(list.files(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw_feed_combos"), full.names = T, pattern = "crop_produce"), pattern= 'human', invert=TRUE, value=TRUE)
+
+
+
+
+empty_df <- data.frame(tier_5 = NA, pressure = NA, sum = NA)
+
+for(file in crop_feed_files){
+  
+  # file <- crop_feed_files[[1]]
+  
+
+  index <- match(file, crop_feed_files)
+  
+  file_name <- str_after_last(file, "\\/")
+  
+  crop_long <- str_after_first(file_name, "_x_")
+  
+  crop_name <- str_after_first(crop_long, "_")
+  
+    
+  tier_5_name <- paste(str_before_first(crop_name, "_"), "produce feed")
+  
+  tier_2_name <- str_before_first(crop_name, "_")
+  
+  pressure_name <- str_after_last(file_name, "_")
+  
+  pressure_name <- str_before_first(pressure_name, "\\.")
+  
+  
+  
+  rast <- raster(file)
+  
+  sum_value <- cellStats(rast, "sum", na.rm = TRUE)
+
+  new_df <- data.frame(tier_5 = tier_5_name, pressure = pressure_name, sum = sum_value)
+  
+  empty_df <- rbind(empty_df, new_df)
+  
+  cat(paste("done", index, "out of 2704"))
+  
+  }
+
+
+crop_feed_df <- empty_df %>%
+  group_by(tier_5, pressure) %>%
+  summarise(sum = sum(sum)) %>%
+  left_join(rescaling_values) %>%
+  filter(!is.na(global_total)) %>%
+  mutate(prop_of_global = sum/global_total) %>%
+  mutate(tier_2 = "crop feed")
+
+sum(crop_feed_df$prop_of_global) # 0.5413687
+
+write.csv(crop_feed_df, here("_analysis/figures/extended_data/prep_Rmd/data/crop_feed_bar_fig.csv"), row.names = FALSE)
+
+
+```
+
+Combine with the derivative dataset of rgn_raw_summary
+
+```{r}
+crop_feed_df <- read.csv(here("_analysis/figures/extended_data/prep_Rmd/data/crop_feed_bar_fig.csv"))
+
+sum(crop_feed_df$prop_of_global) # 0.5413687
+
+check <- summary_df %>%
+  filter(tier_1 %in% c("crop human consumption", "feed"))
+
+sum(check$prop_of_global) # 2.283848; this number should be a higher than the sum above, since this includes FOFM feed. And it is. 
+
+crop_human_df <- summary_df %>%
+  filter(tier_2 == "crop human consumption") %>%
+  dplyr::select(tier_5, pressure, sum, global_total, prop_of_global, tier_2)
+
+
+all_crop_human_feed_df <- rbind(crop_feed_df, crop_human_df)
+
+```
+
+
+Colors **might want to darken the colors a bit 
+```{r}
+dis <- "#D5BD75"
+ghg <- "#DA6098"
+nut <- colorspace::lighten("#795B48", 0.4)
+wat <- "#77C1D7"
+
+dis_f <- "#93875F"
+ghg_f <- "#965372"
+nut_f <- "#5A4D44"
+wat_f <- "#5B7A84"
+
+pal <- c(dis, dis_f, ghg, ghg_f, nut, nut_f, wat, wat_f)
+scales::show_col(pal, n=2)
+
+
+
+```
+
+
+Create DF that'll work for the plots
+```{r}
+bar_df_int <- all_crop_human_feed_df %>% 
+  select(tier_2, tier_5, pressure, prop_of_global) %>% 
+  mutate(sub_tier = str_remove(tier_5, " feed"),
+         pressure_bar = ifelse(str_detect(tier_5, "feed"), paste(pressure, "_feed", sep = ""), pressure)) %>%
+  group_by(tier_2, sub_tier) %>% 
+  mutate(food_cat_sum = sum(prop_of_global)) %>% 
+  ungroup()  %>% 
+  mutate(fill_value = case_when(pressure_bar == "disturbance" ~ dis,
+                                pressure_bar == "ghg" ~ ghg,
+                                pressure_bar == "nutrient" ~ nut,
+                                pressure_bar == "water" ~ wat,
+                                pressure_bar == "disturbance_feed" ~ dis_f,
+                                pressure_bar == "ghg_feed" ~ ghg_f,
+                                pressure_bar == "nutrient_feed" ~ nut_f,
+                                pressure_bar == "water_feed" ~ wat_f)) %>% 
+  mutate(prop_of_global = prop_of_global/4)
+
+## make naming changes to make it look better
+bar_df <- bar_df_int%>% 
+# mutate(sub_tier = ifelse(facet_tier ==  "Crops", str_remove(tier_5, " produce"), sub_tier)) %>% 
+   mutate(sub_tier =  str_remove(sub_tier, " produce")) %>% 
+  left_join(mapspam_names, by = "sub_tier") %>% 
+  mutate(SPAM_full_name = ifelse(sub_tier == "xfru", "other fruits",
+                                 ifelse(sub_tier == "xmil", "millet",
+                                        ifelse(sub_tier == "xoil", "other oil crops",
+                                               ifelse(sub_tier == "xpul", "pulses", 
+                                                      ifelse(sub_tier == "tnut", "tree nuts", 
+                                                             ifelse(sub_tier == "spis", "spices", SPAM_full_name))))))) %>% 
+  mutate(sub_tier = ifelse(tier_2 %in% c("crop human consumption", "crop feed"), SPAM_full_name, sub_tier)) %>% 
+  select(-SPAM_full_name)
+
+
+  
+
+
+plot_order <- bar_df %>% 
+  select(sub_tier, food_cat_sum) %>% 
+  unique() %>% 
+  group_by(sub_tier) %>%
+  summarise(food_cat_sum = sum(food_cat_sum)) %>%
+  arrange(food_cat_sum) %>% 
+  pull(sub_tier) 
+
+bar_df$sub_tier <- factor(bar_df$sub_tier, levels = plot_order)
+
+bar_df$fill_value <- factor(bar_df$fill_value, levels = c(dis, dis_f, ghg, ghg_f, nut, nut_f, wat, wat_f))
+
+
+```
+
+
+make the plots individually so can manage the size of the bars
+```{r}
+
+
+crops_all <- ggplot(bar_df, aes(y=sub_tier, x = prop_of_global, fill = fill_value)) + 
+#  geom_vline(data = filter(bar_df, facet_tier %!in% c("Marine and Freshwater Fisheries", "Mariculture")), aes(xintercept = 0.05), color = "grey33", linetype = "F1") +
+#  geom_vline(data = filter(bar_df, facet_tier !=  "Mariculture"), aes(xintercept = 0.025), color = "grey33", linetype = "twodash")+
+#  geom_vline(xintercept = 0.002, color = "grey33", linetype = "dotted", size = 1) +
+  geom_bar(stat="identity", width = 0.5) +
+  theme_minimal() +
+   scale_fill_identity() +
+  labs(y = "Crops",
+       x = "Proportion of global environmental pressures") +
+  theme(axis.title.y = element_text(size = 12),
+        axis.text.y = element_text(size = 10),
+        axis.text.x = element_text(size = 10),
+        axis.title.x = element_text(size = 12))
+
+
+crops_all
+
+ggsave(here("_analysis/figures/extended_data/output/ed_fig_7_crops_feed.png"), units=c("in"), width=9)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

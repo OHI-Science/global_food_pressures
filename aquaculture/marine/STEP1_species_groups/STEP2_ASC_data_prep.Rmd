@@ -1,0 +1,166 @@
+---
+title: "Prep ASC data"
+output: html_document
+---
+
+Prep the aquaculture stewardship data and save as a shp to use for the different species groups.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(data.table)
+library(countrycode)
+library(here)
+library(stringr)
+
+path <- "/home/shares/food-systems/Food_footprint/_raw_data"
+source(here('aquaculture/marine/salmon/salmon_farm/R/fao_mar_clean.R')) # functions specific to mariculture dealing with compound countries
+source('https://raw.githubusercontent.com/OHI-Science/ohiprep_v2019/gh-pages/workflow/R/fao_fxn.R') # function for cleaning FAO files
+```
+
+
+```{r}
+fao <- read.csv(here("aquaculture/data/fao_mariculture_clean.csv")) %>%
+  filter(environment %in% c("Marine", "Brackishwater"))
+
+species_list <- read.csv(here("aquaculture/marine/STEP1_species_groups/int/marine_groups.csv"))
+
+fao_all <- species_list %>%
+  # filter(species %in% shrimp_list) %>%  
+  filter(!is.na(value)) %>%
+  arrange(-value, country) %>% 
+  filter(value>=500) %>%  # countries with less do not appear to be stable producers at this point
+  # dplyr::filter(aq_group == "bivalves") %>%
+  # dplyr::filter(year == 2017) # countries with less do not appear to be stable producers at this point
+  group_by(country, iso3c, aq_group, year) %>%
+  summarize(fao_tonnes_production = sum(value)) %>%
+  arrange(country, iso3c, year) %>%
+  dplyr::filter(year == 2017)
+```
+
+```{r}
+ASC_data <- read_csv(file.path(here::here("aquaculture/data/ASC_farms.csv")))
+
+unique(fao_all$aq_group)
+# [1] "marine_fish_general" "bivalves"            "salmonids"           "shrimps_prawns"     
+# [5] "tuna"                "crustaceans"  
+
+unique(ASC_data$species__c)
+
+unique(ASC_data$farm_species)
+
+
+unique(ASC_data$cert_country)
+
+ASC_classified <- ASC_data %>%
+  dplyr::filter(!(species__c %in% c("Freshwater Trout", "Pangasius", "Seaweed (Algae)", "Tilapia"))) %>%
+  mutate(aq_group = case_when(
+    species__c %in% c("Shrimp") ~ "shrimps_prawns",
+    species__c %in% c("Abalone", "Bivalve") ~ "bivalves",
+    species__c %in% c("Salmon") ~ "salmonids",
+    species__c %in% c("Seabass, Seabream and Meagre", "Seriola and Cobia", "Tropical Marine Finfish") ~ "marine_fish_general"
+  )) 
+
+## Now we need to make the ASC data into an sf
+ASC_all_sf <- ASC_classified %>%
+  mutate(geometry = str_replace_all(geom, "POINT|[()]", "")) %>%
+  mutate(geometry = trimws(geometry)) %>%
+  mutate(x= as.numeric(gsub(" .*$", "", geometry))) %>%
+  dplyr::filter(!is.na(geom)) %>%
+  mutate(y = as.numeric(sub("^\\S+\\s+", '', geometry))) %>%
+  dplyr::select(-geometry, -geom, -X10, -X11, -X12, -X13, -X14)  %>%
+  st_as_sf(coords = c("x", "y"), crs = 4326)
+
+mapview(ASC_all_sf$geometry)
+
+## now we need to write as a shapefile 
+st_write(ASC_all_sf, "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/ASC_all_sf.shp", overwrite = TRUE)
+```
+
+See how many countries from FAO are represented in ASC for marine_fish_general category
+
+```{r}
+fao_marine_fish <- fao_all %>%
+  dplyr::filter(aq_group == "marine_fish_general")
+
+ASC_marine_fish <- ASC_all_sf %>%
+  dplyr::filter(aq_group == "marine_fish_general")
+
+setdiff(fao_marine_fish$country, ASC_marine_fish$cert_country)
+
+#  [1] "Bangladesh"               "Cambodia"                 "China"                   
+#  [4] "China, Hong Kong SAR"     "Costa Rica"               "Cyprus"                  
+#  [7] "Egypt"                    "France"                   "India"                   
+# [10] "Indonesia"                "Iran (Islamic Rep. of)"   "Israel"                  
+# [13] "Italy"                    "Korea, Republic of"       "Malaysia"                
+# [16] "Malta"                    "Mauritius"                "Norway"                  
+# [19] "Philippines"              "Portugal"                 "Saudi Arabia"            
+# [22] "Singapore"                "Taiwan Province of China" "Tunisia"                 
+# [25] "United Arab Emirates"   
+
+
+setdiff(ASC_marine_fish$cert_country, fao_marine_fish$country)
+# [1] "Netherlands" "Denmark"     "Germany"   
+
+unique(ASC_marine_fish$cert_country)
+```
+
+See how many countries from FAO are represented in ASC for bivalves category
+
+```{r}
+fao_bivalve <- fao_all %>%
+  dplyr::filter(aq_group == "bivalves")
+
+ASC_bivalve <- ASC_all_sf %>%
+  dplyr::filter(aq_group == "bivalves")
+
+setdiff(fao_bivalve$country, ASC_bivalve$cert_country)
+
+#  [1] "Brazil"                   "Bulgaria"                 "Cambodia"                
+#  [4] "Canada"                   "China, Hong Kong SAR"     "Croatia"                 
+#  [7] "Cuba"                     "Denmark"                  "French Polynesia"        
+# [10] "Germany"                  "Greece"                   "Guernsey"                
+# [13] "India"                    "Indonesia"                "Ireland"                 
+# [16] "Italy"                    "Jersey"                   "Korea, Dem. People's Rep"
+# [19] "Malaysia"                 "Netherlands"              "Norway"                  
+# [22] "Philippines"              "Russian Federation"       "Slovenia"                
+# [25] "Spain"                    "Sweden"                   "Taiwan Province of China"
+# [28] "Thailand"                        "United States of America"  
+
+
+setdiff(ASC_bivalve$cert_country, fao_bivalve$country)
+# United kingdom spelled differently.. don't worry about it 
+
+unique(ASC_bivalve$cert_country)
+```
+
+Tuna
+```{r}
+fao_tuna <- fao_all %>%
+  dplyr::filter(aq_group == "tuna")
+
+ASC_tuna <- ASC_all_sf %>%
+  dplyr::filter(aq_group == "tuna")
+
+
+
+unique(fao_tuna$country)
+```
+
+Crustaceans
+```{r}
+fao_crust <- fao_all %>%
+  dplyr::filter(aq_group == "crustaceans")
+
+ASC_crust <- ASC_all_sf %>%
+  dplyr::filter(aq_group == "crustaceans")
+
+
+
+unique(fao_crust$country)
+```
+
+

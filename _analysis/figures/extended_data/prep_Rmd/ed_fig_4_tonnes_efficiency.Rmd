@@ -1,0 +1,495 @@
+---
+title: "Extended data figure 4: Production efficiency plot"
+author: "Gage"
+date: "5/10/2022"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+In this script we will make the protein efficiency plot for extended data figure 4. We draw on data that was created in `_efficiency/STEP9_calculate_all_efficiencies.Rmd`. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+source(here("_workflow/common.R"))
+
+'%!in%' <- function(x,y)!('%in%'(x,y))
+
+all_cp_rates <- read_csv(here::here("_analysis/SI_data/output/efficiency_df.csv"))
+
+```
+
+
+
+Assign colors to 5 important countries 
+```{r}
+
+country_colors <- tibble(iso3c = c("USA", "CHN", "BRA", "IND", "IDN", "RUS"),
+                         color_fill = c("#E8C533", "#7C873E", "#F6955E", "#B23539", "#7DCCD3","#62589F"),
+                         include_col = "yes")
+
+```
+
+Make product lists
+
+```{r}
+total_list <- unique(all_cp_rates$product)
+
+livestock_list <- c("chickens_eggs", "chickens_meat", "cattle_meat", "cows_milk", "goats_milk", "goats_meat", "sheep_meat", "sheep_milk", "pigs_meat", "buffaloes_milk")
+
+fisheries_list <- c("forage fish", "benthic", "demersal", "small-pelagic", "large-pelagic", "freshwater fish", "medium-pelagic", "reef")
+
+mariculture_list <- c("shrimp", "crustaceans", "bivalve", "tuna", "marine-fish-general", "salmon")
+
+feed_list <- str_subset(total_list, "feed")
+
+crops_list <- c(setdiff(total_list, c(livestock_list, fisheries_list, mariculture_list, feed_list)))
+
+length(c(livestock_list, fisheries_list, mariculture_list, feed_list, crops_list)) # 65, perfect
+```
+
+
+Livestock calorie plot
+
+```{r}
+
+cp_rate_livestock <- all_cp_rates %>%
+  filter(product %in% livestock_list) %>%
+  filter(tonnes >= 100) %>%
+  left_join(country_colors, by = "iso3c") %>%
+  mutate(color_fill = ifelse(is.na(color_fill), "black", color_fill),
+         include_col = ifelse(is.na(include_col), "no", include_col))
+
+
+livestock_quant <- quantile(cp_rate_livestock$pressure_per_tonne,
+         c(0.9, 0.95, 0.97, 0.99) )
+
+#livestock_quant_99 <- livestock_quant[3]
+ 
+
+## we use protein for the order bc we want to order to be the same for each plot
+live_order_protein <- cp_rate_livestock %>% 
+  filter(pressure_per_tonne_protein < 0.15) %>% 
+  group_by(plot_names) %>% 
+  dplyr::summarise(median = median(pressure_per_tonne_protein)) %>% 
+  ungroup() %>% 
+  arrange(median)
+
+live_tonne_df <- cp_rate_livestock %>% 
+  filter(pressure_per_tonne < 0.05) %>%
+  left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+  
+live_tonne_df$plot_names <- factor(live_tonne_df$plot_names, levels = live_order_protein$plot_names)
+
+live_tonne <- ggplot(live_tonne_df, aes(x=plot_names, y=pressure_per_tonne)) +
+  geom_boxplot(outlier.fill=NA, outlier.colour = NA) +
+  geom_jitter(data = filter(live_tonne_df, include_col == "no"), aes(x=plot_names, y=pressure_per_tonne, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(live_tonne_df, include_col == "yes"), aes(x=plot_names, y=pressure_per_tonne, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+  labs(
+    x = "Livestock",
+       y = "") +
+  scale_colour_identity()  +
+  scale_fill_identity()  +
+  theme(axis.text.x = element_text(margin = margin(b=20)),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA))  + 
+    scale_y_continuous(limits = c(0, 0.05),
+                     breaks = c(0, 0.025, 0.05),
+                     labels= c(0, 0.025, 0.05)) + 
+      theme(text = element_text(size = 14))
+
+##outlier plot
+tonne_df_out_int <- cp_rate_livestock %>% 
+  filter(pressure_per_tonne>= 0.05) %>% 
+   select(iso3c, plot_names, cumulative_pressure, pressure_per_tonne) 
+  
+missing <- setdiff(live_tonne_df$plot_names, tonne_df_out_int$plot_names) %>% 
+  as_tibble() %>% 
+  rename(plot_names = value) %>%
+  mutate(iso3c = NA,  cumulative_pressure = NA, pressure_per_tonne = NA)  %>% 
+  ungroup() %>% 
+  left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+tonne_df_out <- tonne_df_out_int %>% 
+  left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))%>% 
+  rbind(missing) %>% 
+  ungroup()
+
+tonne_df_out$plot_names <- factor(tonne_df_out$plot_names, levels = live_order_protein$plot_names)
+
+live_tonne_out <- ggplot(tonne_df_out, aes(x=plot_names, y=pressure_per_tonne)) +
+      geom_jitter(alpha = 0 )+ 
+   geom_jitter(data = filter(tonne_df_out, include_col == "no"), aes(x=plot_names, y=pressure_per_tonne, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(tonne_df_out, include_col == "yes"), aes(x=plot_names, y=pressure_per_tonne, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+  scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(y = "", x = "")  +
+  theme(axis.text.y = element_blank(),
+        plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA)) + 
+      theme(text = element_text(size = 14))
+#+ 
+#  scale_y_continuous(limits = c(0.05, 1),
+#                     breaks = c(0.05, 0.5, 1),
+#                     labels= c(0.05, 0.5, 1))
+
+```
+ 
+
+Crops tonnes plot 
+
+```{r}
+
+cp_rate_crops <- all_cp_rates %>%
+  filter(product %in% crops_list)
+
+quantile(cp_rate_crops$pressure_per_tonne, 0.99)
+
+## main plot
+ crop_order_prot <- cp_rate_crops %>% 
+  filter(pressure_per_tonne_protein < 0.15) %>% 
+  group_by(plot_names) %>% 
+  dplyr::summarise(median = median(pressure_per_tonne_protein)) %>% 
+  ungroup() %>% 
+  arrange(median)
+
+crop_tonnes_df <- cp_rate_crops %>%  
+  left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill)) %>%
+      filter(pressure_per_tonne < 0.009)  %>%
+  left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+crop_tonnes_df$plot_names <- factor(crop_tonnes_df$plot_names, levels = crop_order_prot$plot_names)
+
+crop_tonnes <- ggplot(crop_tonnes_df, aes(x=plot_names, y=pressure_per_tonne)) +
+  geom_boxplot(outlier.fill=NA, outlier.colour = NA) +
+     geom_jitter(data = filter(crop_tonnes_df, include_col == "no"), aes(x=plot_names, y=pressure_per_tonne, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(crop_tonnes_df, include_col == "yes"), aes(x=plot_names, y=pressure_per_tonne, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+    scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(x = "Crops",
+       y = "")+
+  theme(plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA)) + 
+      theme(text = element_text(size = 14))
+
+
+
+## now lets do the outlier plot
+crop_tonnes_df_out <- cp_rate_crops %>% 
+  filter(pressure_per_tonne>= 0.009) %>%
+  left_join(country_colors) %>% 
+    mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+  color_fill = ifelse(is.na(color_fill), "#000000", color_fill)) %>% 
+   select(iso3c, plot_names, cumulative_pressure, pressure_per_tonne, include_col, color_fill) 
+
+missing <- setdiff(crop_tonnes_df$plot_names, crop_tonnes_df_out$plot_names) %>% 
+  as_tibble() %>% 
+  rename(plot_names = value) %>% 
+  mutate(iso3c = NA,  cumulative_pressure = NA, pressure_per_tonne = NA, include_col = NA, color_fill = NA)
+
+crop_tonnes_df_out <- rbind(crop_tonnes_df_out, missing) %>%
+  left_join(country_colors) %>%
+    mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+  color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+crop_tonnes_df_out$plot_names <- factor(crop_tonnes_df_out$plot_names, levels = crop_order_prot$plot_names)
+
+crop_tonnes_out <- ggplot(crop_tonnes_df_out, aes(x=plot_names, y=pressure_per_tonne)) +
+      geom_jitter(alpha = 0 )+ 
+   geom_jitter(data = filter(crop_tonnes_df_out, include_col == "no"), aes(x=plot_names, y=pressure_per_tonne, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(crop_tonnes_df_out, include_col == "yes"), aes(x=plot_names, y=pressure_per_tonne, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+    scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(y = "",
+       x = "") +
+  theme(axis.text.y = element_blank(),
+        plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA)) + 
+      theme(text = element_text(size = 14)) +  
+  scale_y_continuous(limits = c(0, 0.075), 
+                     breaks = c(0, .025, .050, 0.075),
+                     labels = c(0, .025, .05, .075))
+```
+
+
+Fisheries tonnes
+
+
+```{r}
+cp_rate_fish <- all_cp_rates %>%
+  filter(product %in% fisheries_list)
+
+
+quantile(cp_rate_fish$pressure_per_tonne, 0.90)
+
+## main plot
+fish_order_pro <- cp_rate_fish %>% 
+  filter(pressure_per_tonne_protein < 0.2) %>% 
+  group_by(plot_names) %>% 
+  dplyr::summarise(median = median(pressure_per_tonne_protein)) %>% 
+  ungroup() %>% 
+  arrange(median)
+
+
+fish_tonnes_df <- cp_rate_fish %>% 
+  filter(pressure_per_tonne < 0.05) %>% 
+  left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+fish_tonnes_df$plot_names <- factor(fish_tonnes_df$plot_names, levels = fish_order_pro$plot_names)
+
+fish_tonnes <- ggplot(fish_tonnes_df, aes(x=plot_names, y=pressure_per_tonne)) +
+  geom_boxplot(outlier.fill=NA, outlier.colour = NA) +
+  geom_jitter(data = filter(fish_tonnes_df, include_col == "no"), aes(x=plot_names, y=pressure_per_tonne, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(fish_tonnes_df, include_col == "yes"), aes(x=plot_names, y=pressure_per_tonne, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+    scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(x = "Marine and freshwater fisheries",
+       y = "")+
+  theme(plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA)) + 
+      theme(text = element_text(size = 14))
+
+
+## now lets do the outlier plots
+fish_tonnes_df_out <- cp_rate_fish %>% 
+  filter(pressure_per_tonne>= 0.05 & pressure_per_tonne <100) %>% 
+   select(iso3c, plot_names, cumulative_pressure, pressure_per_tonne) 
+
+missing <- setdiff(fish_tonnes_df$plot_names, fish_tonnes_df_out$plot_names) %>% 
+  as_tibble() %>% 
+  rename(plot_names = value) %>% 
+  mutate(iso3c = NA,  cumulative_pressure = NA, pressure_per_tonne = NA)
+
+fish_tonnes_df_out <- rbind(fish_tonnes_df_out, missing) %>% 
+  left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+fish_tonnes_df_out$plot_names <- factor(fish_tonnes_df_out$plot_names, levels = fish_order_pro$plot_names)
+
+fish_tonnes_out <- ggplot(fish_tonnes_df_out, aes(x=plot_names, y=pressure_per_tonne)) +
+      geom_jitter(alpha = 0 )+ 
+   geom_jitter(data = filter(fish_tonnes_df_out, include_col == "no"), aes(x=plot_names, y=pressure_per_tonne, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(fish_tonnes_df_out, include_col == "yes"), aes(x=plot_names, y=pressure_per_tonne, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+    scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(y = "",
+       x = "") +
+  theme(axis.text.y = element_blank(),
+        plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA)) + 
+      theme(text = element_text(size = 14))
+```
+
+
+Mariculture tonnes
+
+
+```{r}
+
+cp_rate_mari <- all_cp_rates %>%
+  filter(product %in% mariculture_list)
+
+## main plot
+mari_order_pro <- cp_rate_mari %>% 
+  filter(pressure_per_tonne_protein < 0.2) %>% 
+  group_by(plot_names) %>% 
+  dplyr::summarise(median = median(pressure_per_tonne_protein)) %>% 
+  ungroup() %>% 
+  arrange(median)
+
+mari_tonnes_df <- cp_rate_mari %>% 
+  filter(pressure_per_tonne < 0.009) %>% 
+  left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+
+mari_tonnes_df$plot_names <- factor(mari_tonnes_df$plot_names, levels = mari_order_pro$plot_names)
+
+mari_tonnes <- ggplot(mari_tonnes_df, aes(x=plot_names, y=pressure_per_tonne)) +
+  geom_boxplot(outlier.fill=NA, outlier.colour = NA) +
+    geom_jitter(data = filter(mari_tonnes_df, include_col == "no"), aes(x=plot_names, y=pressure_per_tonne, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(mari_tonnes_df, include_col == "yes"), aes(x=plot_names, y=pressure_per_tonne, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+    scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(x = "Mariculture",
+       y = "")+
+  theme(plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA)) + 
+      theme(text = element_text(size = 14))
+
+
+## now lets do the outlier plots
+mari_tonnes_df_out <- cp_rate_mari %>% 
+  filter(pressure_per_tonne>= 0.009 ) %>% 
+   select(iso3c, plot_names, cumulative_pressure, pressure_per_tonne) 
+
+missing <- setdiff(mari_tonnes_df$plot_names, mari_tonnes_df_out$plot_names) %>% 
+  as_tibble() %>% 
+  rename(plot_names = value) %>% 
+  mutate(iso3c = NA,  cumulative_pressure = NA, pressure_per_tonne = NA)
+
+mari_tonnes_df_out <- rbind(mari_tonnes_df_out, missing)%>% 
+  left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+mari_tonnes_df_out$plot_names <- factor(mari_tonnes_df_out$plot_names, levels = mari_order_pro$plot_names)
+
+mari_tonnes_out <- ggplot(mari_tonnes_df_out, aes(x=plot_names, y=pressure_per_tonne)) +
+      geom_jitter(alpha = 0 )+ 
+    geom_jitter(data = filter(mari_tonnes_df_out, include_col == "no"), aes(x=plot_names, y=pressure_per_tonne, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(mari_tonnes_df_out, include_col == "yes"), aes(x=plot_names, y=pressure_per_tonne, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+    scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(y = "",
+       x = "") +
+  theme(axis.text.y = element_blank(),
+        plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA)) + 
+      theme(text = element_text(size = 14)) 
+
+```
+
+
+Feed tonnes
+
+```{r}
+
+cp_rate_feed <- all_cp_rates %>%
+  filter(product %in% feed_list) %>%
+  filter(tonnes >= 50) # 1000 kg or more of feed to be included
+
+## main plot
+feed_order <- cp_rate_feed %>% 
+  filter(pressure_per_tonne < 0.009) %>% 
+  group_by(plot_names) %>% 
+  dplyr::summarise(median = median(pressure_per_tonne)) %>% 
+  ungroup() %>% 
+  arrange(median)
+
+feed_tonnes_df <- cp_rate_feed %>% 
+  filter(pressure_per_tonne < 0.009) %>% 
+  left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+
+feed_tonnes_df$plot_names <- factor(feed_tonnes_df$plot_names, levels = feed_order$plot_names)
+
+feed_tonnes <- ggplot(feed_tonnes_df, aes(x=plot_names, y=pressure_per_tonne)) +
+  geom_boxplot(outlier.fill=NA, outlier.colour = NA) +
+    geom_jitter(data = filter(feed_tonnes_df, include_col == "no"), aes(x=plot_names, y=pressure_per_tonne, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(feed_tonnes_df, include_col == "yes"), aes(x=plot_names, y=pressure_per_tonne, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+    scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(x = "Livestock and mariculture feed",
+       y = "",
+       caption = "Environmental Inefficiency")+
+  theme(plot.caption=element_text(hjust = 1, size = 14),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA)) +
+  # theme(plot.caption = element_text(hjust=0.5, size=rel(1.2))) + 
+  scale_y_continuous(limits = c(0, 0.009),
+                     breaks = c(0, 0.003, 0.006, 0.009),
+                     labels = c(0, 0.003, 0.006, 0.009)) + 
+      theme(text = element_text(size = 14))
+
+
+## now lets do the outlier plots
+feed_tonnes_df_out <- cp_rate_feed %>% 
+  filter(pressure_per_tonne>= 0.009 ) %>% 
+   select(iso3c, plot_names, cumulative_pressure, pressure_per_tonne) 
+
+missing <- setdiff(feed_tonnes_df$plot_names, feed_tonnes_df_out$plot_names) %>% 
+  as_tibble() %>% 
+  rename(plot_names = value) %>% 
+  mutate(iso3c = NA,  cumulative_pressure = NA, pressure_per_tonne = NA)
+
+feed_tonnes_df_out <- rbind(feed_tonnes_df_out, missing)%>% 
+  left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+feed_tonnes_df_out$plot_names <- factor(feed_tonnes_df_out$plot_names, levels = feed_order$plot_names)
+
+feed_tonnes_out <- ggplot(feed_tonnes_df_out, aes(x=plot_names, y=pressure_per_tonne)) +
+      geom_jitter(alpha = 0 )+ 
+    geom_jitter(data = filter(feed_tonnes_df_out, include_col == "no"), aes(x=plot_names, y=pressure_per_tonne, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(feed_tonnes_df_out, include_col == "yes"), aes(x=plot_names, y=pressure_per_tonne, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+    scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(y = "",
+       x = "") +
+  theme(axis.text.y = element_blank(),
+        plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA))  + 
+      theme(text = element_text(size = 14))
+#+ 
+#  scale_y_continuous(limits = c(0.009, 0.8),
+#                    breaks = c(0.009, 0.4, 0.8),
+#                    labels = c(0.009, 0.4, 0.8))
+
+```
+
+Make final figure! 
+
+```{r}
+library(patchwork)
+
+
+((live_tonne + live_tonne_out + plot_layout(widths = c(3, 1)))  /
+   (fish_tonnes + fish_tonnes_out + plot_layout(widths = c(3, 1))) /
+    (mari_tonnes + mari_tonnes_out + plot_layout(widths = c(3, 1))) /
+    (crop_tonnes + crop_tonnes_out + plot_layout(widths = c(3, 1))) /
+    (feed_tonnes + feed_tonnes_out + plot_layout(widths = c(3, 1))))  +
+
+  plot_layout(heights = c(10, 8, 8, 26, 15)) ## these values are the number of elemetns in the y axis for each plot
+
+
+ggsave(here("_analysis/figures/extended_data/output/ed_fig_4_tonnes_efficiency.png"), height=15, width=9, units=c("in"), bg = "transparent")
+```
+

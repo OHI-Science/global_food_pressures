@@ -1,0 +1,378 @@
+---
+title: "Regional Production"
+author: "Gage Clawson"
+date: "10/29/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+We do not have salmon production by farm, however, for some countries we have salmon production according to region. We will use this information to distribute production among the farms within a region. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+library(tidyverse)
+library(data.table)
+library(countrycode)
+library(here)
+library(stringr)
+
+path <- "/home/shares/food-systems/Food_footprint/_raw_data/"
+
+#Set the year that we want to use
+data_year <- 2017 # corresponds to the year of local production
+
+```
+
+
+
+# Chile
+
+
+```{r}
+
+# make sure the names in our data match the official names:
+chile_reg <- read.csv(here("_spatial/_output/food_subrgns.csv")) %>% 
+  filter(iso3c == "CHL") 
+
+
+# rainbow trout = TRUCHA ARCOIRIS
+chile_salmon <- c("SALMON PLATEADO O COHO", "SALMON DEL ATLANTICO")
+
+chile_prod <- fread(file.path(path, "/Regional_aquaculture_production/Chile/Chile_harvest_by_species_region_2017.csv"), skip = 4, header = TRUE, na.string = "-") %>% 
+  dplyr::select(-"V18", -"Total") %>% 
+  gather(Region, Reg_production, `XV`:`XII`) %>% 
+  filter(ESPECIE %in% chile_salmon) %>%   
+  mutate(Reg_production = as.numeric(gsub(",", "", Reg_production)),
+         iso3c = "CHL",
+         year = data_year) %>% 
+  group_by(Region, iso3c, year) %>% 
+  summarise(Salmon_tonnes = sum(Reg_production, na.rm = TRUE)) %>%
+  ungroup()
+
+total_prod_chl <- sum(chile_prod$Salmon_tonnes)
+
+regions <- data.frame(Region = c("I", "II", "III", "IV", "V", "RM", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIV", "XV"),
+                      Region_name = c("Tarapacá", "Antofagasta", "Atacama", "Coquimbo", "Valparaíso", "Región Metropolitana de Santiago",
+                                      "Libertador General Bernardo O'Higgins", "Maule", "Bío-Bío", "Araucanía", "Los Lagos", 
+                                      "Aisén del General Carlos Ibáñez del Campo", "Magallanes y Antártica Chilena", "Los Ríos", "Arica y Parinacota"))
+
+chile_prod <- chile_prod %>% 
+  mutate(Total_Salmon_t = total_prod_chl) %>% 
+left_join(regions, by="Region") %>%
+  mutate(prop_production = Salmon_tonnes/Total_Salmon_t) %>%
+  dplyr::select(iso3c, region = Region_name, year, prop_production)
+                                                         
+```
+
+
+
+# Norway
+Data from:
+https://www.ssb.no/en/statbank/table/09259/
+09259: Aquaculture. Stock and loss of live fish for food (rough classification) (C) 2010 - 2018 (replaced ":" with NA)
+
+https://www.ssb.no/en/statbank/table/07326
+07326: Aquaculture. Sales of slaughtered fish for food, by region, fish species, contents and year
+(replaced "-" with 0; replaced, ":" with NA)
+
+Downloaded: Jan 22 2020
+
+
+Gapfilling missing data.  loss-percent variable is cut because it cannot be gapfilled.
+```{r}
+
+#gapfill missing data
+
+norway_mar <- read.csv("/home/shares/food-systems/Food_footprint/_raw_data/Regional_aquaculture_production/Norway/norway_mariculture.csv") %>%
+  gather(key = "year", value = "value", -region, -species, -variable, -units) %>%
+  mutate(year = gsub("X", "", year)) %>%
+  filter(variable != "loss_percent")
+
+
+# first round of gapfilling if every year is NA or 0, then 0
+norway_mar_gf <- norway_mar %>%
+  group_by(region, species, variable) %>%
+  mutate(total_sp = sum(value, na.rm=TRUE)) %>%   # if all NA or 0 for a species across years, then 0
+  mutate(gapfilled = ifelse(total_sp==0 & is.na(value), "gapfilled", NA)) %>%
+    mutate(value = ifelse(total_sp == 0 & is.na(value), 0, value)) %>%
+  dplyr::select(-total_sp)
+
+# second round of gapfilling, gapfill based on unaccounted fish and avg proportion of aquaculture in previous years
+
+avg_totals <- filter(norway_mar, species == "Total") %>%
+  group_by(region, variable) %>%
+  summarize(total_mean = mean(value))
+
+totals <- filter(norway_mar, species=="Total") %>%
+  dplyr::select(-species, total_value=value)
+
+
+norway_mar_gf <- norway_mar_gf %>%
+  left_join(avg_totals) %>%               
+  left_join(totals) %>%
+  group_by(region, species, variable) %>%
+  mutate(avg_value = mean(value, na.rm=TRUE)) %>%
+  ungroup() %>%
+  mutate(proportion = avg_value/total_mean) %>%
+  group_by(region, variable, year) %>%
+  mutate(total_obs = sum(value[.$species != "Total"], na.rm=TRUE)) %>%
+  mutate(unaccounted = total_value - total_obs) %>%
+  mutate(unaccounted = ifelse(unaccounted < 0, 0, unaccounted))  %>%     # some negatives due to rounding and possible data entry error
+  mutate(avg_value_missing = proportion * ifelse(is.na(value), 1, 0)) %>%                            # figure out proportion of only missing
+   mutate(prop_value_missing = avg_value_missing/sum(avg_value_missing, na.rm=TRUE)) %>%
+  mutate(gf_value = prop_value_missing * unaccounted) %>%                           # gapfill missing data with unaccounted production multiplied by the average proportion of production for each species in previous years 
+mutate(gapfilled = ifelse(is.na(value) & !is.na(gf_value), "gapfilled", gapfilled)) %>%
+  mutate(value = ifelse(is.na(value), gf_value, value))
+
+## watch these be gapfilled
+summary(norway_mar_gf) # make sure no NA values
+data.frame(filter(norway_mar_gf, is.na(value)))
+filter(norway_mar_gf, year==2017)
+filter(norway_mar_gf, region=="Rogaland", variable == "tonnes_fish")
+
+summary(norway_mar_gf)
+dim(norway_mar_gf)
+summary(norway_mar)
+dim(norway_mar)
+
+## clean and save data
+norway_mar_gf <- norway_mar_gf %>%
+dplyr::select(region, species, variable, units, year, value, gapfilled) %>%
+  filter(species != "Total")
+write.csv(norway_mar_gf, here("aquaculture/marine/salmon/salmon_farm/data/norway_mariculture_gf.csv"), row.names=FALSE ) 
+  
+```
+
+Organize data to match names on map.
+```{r}
+
+norway_reg <- read.csv(file.path(path, "Country_regions/Country_regions_cellindex.csv")) %>% 
+  filter(ISO3 == "NOR")
+unique(norway_reg$Region_name)
+
+
+  # other regions: could also include: Hedmark and Uppland (inland regions), and Akershus, Vestfold, Buskerud (no farm points)
+  # Trondelag regions: combined after 2017, about equal number of production
+region_splits <- data.frame(region = c("Trøndelag", "Trøndelag",                                  
+                                            "Other Counties", "Other Counties", "Other Counties", "Other Counties", "Other Counties"),
+                            Region_name_split = c("Sør-Trøndelag", "Nord-Trøndelag",
+                                                  "Oslo", "Telemark", "Ãstfold", "Aust-Agder", "Vest-Agder")) %>%
+  group_by(region) %>%
+  mutate(region_split_n = n())
+    
+
+# sum salmon production among species
+production <- read.csv(here("aquaculture/marine/salmon/salmon_farm/data/norway_mariculture_gf.csv")) %>%
+  filter(variable=="tonnes_fish") %>%
+  filter(species %in% c("Salmon")) %>%
+  filter(year == 2017) %>%
+  group_by(year, region) %>%
+  summarize(tonnes_salmon = sum(value, na.rm=TRUE)) %>%
+  ungroup() 
+
+# spliting regions
+production <- production %>%
+  left_join(region_splits) %>%
+  mutate(region_split_n = ifelse(is.na(region_split_n), 1, region_split_n)) %>%
+  mutate(tonnes_salmon_corrected = tonnes_salmon/region_split_n) %>%
+  mutate(region_corrected = ifelse(is.na(Region_name_split), as.character(region), as.character(Region_name_split))) %>%
+  group_by(region_corrected, year) %>%
+  summarize(Salmon_tonnes = sum(tonnes_salmon_corrected, na.rm=TRUE)) %>%
+  ungroup()
+
+# no farms showing up in Oslo or Troms.  This is such a low proportion of production, will cut.  This production 
+# will be distributed over other farms
+production <- production %>%
+  mutate(Salmon_tonnes = ifelse(region_corrected %in% c("Troms", "Oslo"), 0, Salmon_tonnes))
+
+# cleaning and adding total
+nor_prod <- production %>%
+  mutate(iso3c = "NOR") %>%
+  group_by(year) %>%
+  mutate(Total_Salmon_t = sum(Salmon_tonnes, na.rm=TRUE)) %>%
+  ungroup() %>%
+  mutate(prop_production = Salmon_tonnes/Total_Salmon_t) %>%
+  filter(year == data_year) %>%
+  dplyr::select(iso3c, region = region_corrected, year, prop_production)
+  
+```
+
+
+# UK: Scotland
+
+https://www.mcsuk.org/media/seafood/Farmed_Fish.pdf
+> In the UK open sea cage farming happens almost exclusively in the west coast of Scotland and the Scottish Islands due to their good water quality and coastline topography, which provides numerous sheltered sea-lochs and voes. 
+
+Scottland point data:
+https://data.gov.uk/data/map-preview?e=-0.53202&n=61.46459&s=54.53297&url=http%3A%2F%2Fmsmap1.atkinsgeospatial.com%2Fgeoserver%2Fnmpwfs%2Fows%3Ftoken%3Dd46ffd2a-e192-4e51-8a6a-b3292c20f1ee%26service%3Dwms%26request%3DgetCapabilities&w=-7.75714
+```{r}
+
+uk_reg <- read.csv(file.path(path, "Country_regions/Country_regions_cellindex.csv")) %>% 
+  filter(ISO3 == "GBR")
+
+scot_prod <- fread(file.path(path, "/Regional_aquaculture_production/Scotland/Scotland_regional_salmon_production.csv")) %>% 
+  dplyr::select(Region, year = Year, Tonnage) %>% 
+  dplyr::filter(year == data_year,
+         !Region == "All Scotland") %>% 
+  dplyr::mutate(Salmon_tonnes = as.numeric(gsub(",","",Tonnage)),
+         iso3c = "GBR") %>% 
+  dplyr::select(-Tonnage)
+
+
+
+total_prod_scot <- sum(scot_prod$Salmon_tonnes, na.rm = TRUE)
+
+uk_prod <- scot_prod %>% 
+  mutate(Total_Salmon_t = total_prod_scot) %>%
+  mutate(prop_production = Salmon_tonnes/Total_Salmon_t) %>%
+  dplyr::select(iso3c, region=Region, year, prop_production)
+
+```
+
+
+
+# Canada
+
+Data can be found here: http://www.dfo-mpo.gc.ca/stats/aqua/aqua-prod-eng.htm
+
+Adding in Newfoundland and Labrador data based on this information:
+
+https://www.fishaq.gov.nl.ca/pdf/aquaculture_2015_year.pdf
+https://www.fishaq.gov.nl.ca/stats/pdf/aqua_production_and_%20value_%202016%20aqua.pdf
+
+```{r}
+
+can_reg <- read.csv(file.path(path, "Country_regions/Country_regions_cellindex.csv")) %>% 
+  filter(ISO3 == "CAN")
+unique(can_reg$Region_name)
+
+can_prod <- read_csv(file.path(path, "Regional_aquaculture_production/Canada/Regional_production_by_species_2017.csv")) %>% 
+    rename(species = X1) %>% 
+    gather(region, Production_t, NL:Canda) %>% 
+  filter(species == "Salmon",
+         !is.na(Production_t),
+         !Production_t == 0,
+         !region == "Canda") %>% 
+  rename(Salmon_tonnes = Production_t) %>% 
+  mutate(region = ifelse(region == "NS", "Nova Scotia",
+                              ifelse(region == "BC", "British Columbia",
+                                     ifelse(region == "NB", "New Brunswick", NA))),
+    iso3c = "CAN")
+
+NL <- data.frame(species = "Salmon", Year = 2017, region="Newfoundland and Labrador", Salmon_tonnes = 19684, iso3c="CAN")
+
+can_prod <- rbind(can_prod, NL) %>%
+  mutate(Salmon_tonnes = as.numeric(Salmon_tonnes)) %>%
+  mutate(Salmon_tonnes = ifelse(is.na(Salmon_tonnes), 11078, Salmon_tonnes))
+  
+
+total_prod_can <- sum(can_prod$Salmon_tonnes, na.rm = TRUE)
+
+can_prod <- can_prod %>% 
+  mutate(Total_Salmon_t = total_prod_can) %>%
+  mutate(prop_production = Salmon_tonnes/Total_Salmon_t) %>%
+  dplyr::select(iso3c, region, year=Year, prop_production)
+
+```
+
+
+# New Zealand
+Data from: https://www.aquaculture.org.nz/industry/farming-areas/
+
+Assuming King Salmon is analogous to Atlantic Salmon.
+
+```{r}
+# 
+# nz_reg <- read.csv("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/gadm_reg_codes.csv") %>% 
+#   filter(GID_0 == "NZL") 
+# 
+# 
+# nz_prod <- data.frame(iso3c = c("NZL"),
+#                       region=c("Southland", "Canterbury", "Marlborough"),
+#                       year = 2017,
+#                       prop_production = c(0.29, 0.16, 0.55))
+                                                      
+```
+
+
+## Denmark
+
+Data from http://maps.helcom.fi/website/mapservice/
+
+```{r}
+farms_denmark <- st_read(file.path(path, "Aquaculture_locations/HELCOM_Baltic/Finfish_mariculture.shp"), options = "ENCODING=WINDOWS-1252") %>%
+  filter(COUNTRY == "DK") %>%
+  dplyr::select(region = NAME, PR_AV_TON) %>%
+  mutate(iso3c = "DNK")
+
+dnk_prod_reg <- st_set_geometry(farms_denmark, NULL)
+
+total_prod_DNK <- sum(dnk_prod_reg$PR_AV_TON)
+
+dnk_prod <- dnk_prod_reg %>%
+  mutate(prop_production = PR_AV_TON/total_prod_DNK) %>%
+  mutate(year = 2017) %>%
+  dplyr::select(iso3c, region, year, prop_production)
+
+```
+
+## Finland
+
+Data from http://maps.helcom.fi/website/mapservice/
+
+```{r}
+farms_finland <- st_read(file.path(path, "Aquaculture_locations/HELCOM_Baltic/Finfish_mariculture.shp"), options = "ENCODING=WINDOWS-1252") %>%
+  filter(COUNTRY == "FI") %>%
+  dplyr::select(region = NAME, P_AV_TON) %>%
+  mutate(iso3c = "FIN")
+
+fin_prod_reg <- st_set_geometry(farms_finland, NULL)
+
+total_prod_FIN <- sum(fin_prod_reg$P_AV_TON)
+
+fin_prod <- fin_prod_reg %>%
+  mutate(prop_production = P_AV_TON/total_prod_FIN) %>%
+  mutate(year = 2017) %>%
+  dplyr::select(iso3c, region, year, prop_production)
+sum(fin_prod$prop_production)
+```
+
+## Sweden
+
+Data from http://maps.helcom.fi/website/mapservice/
+
+```{r}
+farms_sweden <- st_read(file.path(path, "Aquaculture_locations/HELCOM_Baltic/Finfish_mariculture.shp"), options = "ENCODING=WINDOWS-1252") %>%
+  filter(COUNTRY == "SE") %>%
+  dplyr::filter(PRODUCTION %in% c("Rainbow trout (Oncorhynchus mykiss)", "Salmon, Rainbow trout (Oncorhynchus mykiss), Char (salvelinus)", "Salmon, Trout (Salmo trutta)", "Salmon", "Salmon, Trout (Salmo trutta), Rainbow trout (Oncorhynchus mykiss), Char (salvelinus)", "Perch (perca fluviatilis), Pikeperch (Sander lucioperca), Rainbow trout (Oncorhynchus mykiss)", "Trout (Salmo trutta)", "Salmon, Trout (Salmo trutta) - breeding", "Perch (perca fluviatilis), Grayling (thymallus thymallus), Rainbow trout (Oncorhynchus mykiss), Char (salvelinus), tropical fish species")) %>%
+  dplyr::select(region = NAME, P_AV_TON) %>%
+  mutate(iso3c = "SWE")
+
+swe_prod_reg <- st_set_geometry(farms_sweden, NULL)
+
+total_prod_SWE <- sum(swe_prod_reg$P_AV_TON)
+
+swe_prod <- swe_prod_reg %>%
+  mutate(prop_production = P_AV_TON/total_prod_SWE) %>%
+  mutate(year = 2017) %>%
+  dplyr::select(iso3c, region, year, prop_production)
+
+```
+
+
+
+# Join regional data and save
+```{r}
+
+all_prod <- Reduce(function(x, y) merge(x, y, all=TRUE), list(chile_prod, nor_prod, uk_prod, can_prod, dnk_prod, swe_prod, fin_prod))
+
+write_csv(all_prod, here("aquaculture/marine/salmon/salmon_farm/data/proportional_regional_production.csv"))
+
+# all_prod <-  read_csv(here("aquaculture/marine/salmon/salmon_farm/data/proportional_regional_production.csv"))
+```
+

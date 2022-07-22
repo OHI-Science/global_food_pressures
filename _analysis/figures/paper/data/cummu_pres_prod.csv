@@ -1,0 +1,23 @@
+product,tonnes,chi,sub_type,type
+chicken-eggs,101975800,266765.5956213651,Chicken Eggs,Livestock
+cow-meat,71141147,927205.5554433466,Ruminant Meat,Livestock
+chicken-meat,124689487,259823.04604949374,Non-Ruminant Meat,Livestock
+goat-meat,8192772,31807.31702710254,Ruminant Meat,Livestock
+pig-meat,175381364,141090.6759504543,Non-Ruminant Meat,Livestock
+sheep-meat,11935410,71326.8079989243,Ruminant Meat,Livestock
+buffalo-milk,123964863,211502.75038662495,Milk,Livestock
+cow-milk,708443103,264647.2141101901,Milk,Livestock
+goat-milk,19071697,35058.829393596236,Milk,Livestock
+sheep-milk,12047656,34374.80042799372,Milk,Livestock
+mariculture-salmon,2753752.25,7142.465879134381,Mariculture,Fisheries and Mariculure
+fisheries-freshwater,7134914.397528418,0.06598056891035173,Freshwater Fisheries,Fisheries and Mariculure
+fisheries-marine,72172118.29090005,327100.82926369965,Marine Fisheries,Fisheries and Mariculure
+Cereals and Grains,9938701000,283362.41679312475,Cereals and Grains,Human Crop Consumption
+Fruits and Vegetables,15741287000,288189.90641412034,Fruits and Vegetables,Human Crop Consumption
+Oil Crops and Seeds,1040174000,152634.91484760362,Oil Crops and Seeds,Human Crop Consumption
+Pulses and Beans,681518000,33735.07756774803,Pulses and Beans,Human Crop Consumption
+Rest,148038000,72874.3340155847,Rest,Human Crop Consumption
+Rice,3019302000,307294.4641774499,Rice,Human Crop Consumption
+Soy,50620000,119914.19167695298,Soy,Human Crop Consumption
+Starches and Roots,4623602000,78723.33432428581,Starches and Roots,Human Crop Consumption
+Sugar,1748235000,116342.84263688055,Sugar,Human Crop Consumption

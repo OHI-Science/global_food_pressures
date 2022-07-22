@@ -1,0 +1,57 @@
+---
+title: "STEP8_combine_all_nutrients"
+author: "Juliette"
+date: "5/6/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+
+```
+
+    
+Grab all the relevant nutrient files and compile into one nutrient layer
+
+```{r}
+
+category_list <- c("chickens_industrial_meat", "chickens_industrial_eggs", "chickens_backyard_eggs&meat", "goats_grassland_milk", "goats_grassland_meat", "goats_mixed_milk", "goats_mixed_meat", "sheep_grassland_milk", "sheep_grassland_meat", "sheep_mixed_milk", "sheep_mixed_meat", "cows_grassland_milk", "cows_grassland_meat", "cows_mixed_milk", "cows_mixed_meat", "cows_feedlot_meat", "pigs_backyard_meat", "pigs_intermediate_meat", "pigs_industrial_meat", "buffaloes_grassland_milk", "buffaloes_mixed_milk")
+
+
+for(category in category_list){
+  
+ # category <- category_list[1]
+  
+  p_leach_manure <- raster(list.files(file.path(prep,"animal_farm/nutrient/STEP2_P_leach/", sep = ""), pattern = category, full = TRUE))
+  n_leach <- raster(list.files(file.path(prep,"animal_farm/nutrient/STEP7_total_N_leaching/", sep = ""), pattern = category, full = TRUE))
+  n_volt <- raster(list.files(file.path(prep,"animal_farm/nutrient/STEP7_total_N_volatizing/", sep = ""), pattern = category, full = TRUE))
+  
+  if(str_detect(category, "grassland")){
+      p_leach_fertilizer <- raster(list.files(file.path(prep,"animal_farm/nutrient/grassland_nutrient_pollution/", sep = ""), pattern = paste0(category, "_leached_P", sep = ""), full = TRUE))
+ 
+  }else{
+    p_leach_fertilizer <- calc(food_rgns_tif, fun = function(x){ifelse(!is.na(x), 0, x)})
+  }
+  
+     ## note: we dont have to do n_leach_fertilizer because that is already incorpated into the total N leaching 
+  
+nutrients <- sum(p_leach_manure, n_leach, n_volt, p_leach_fertilizer, na.rm = TRUE)
+
+    names(nutrients) <- "tonnes_NP"
+    nutrients[is.na(nutrients)] <- 0
+    
+    plot(log(1+ nutrients), main = category)
+  
+  raster::writeRaster(nutrients, file.path(layers, paste0("land_", category, "_nutrient.tif", sep = "")), format = "GTiff", overwrite = TRUE)
+  
+}
+
+
+```
+

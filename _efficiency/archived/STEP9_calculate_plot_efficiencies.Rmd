@@ -1,0 +1,1223 @@
+---
+title: "STEP9: Calculate and plot calorie and protein efficienies for all foods"
+author: "Juliette"
+date: "3/8/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+source(here("_workflow/common.R"))
+
+'%!in%' <- function(x,y)!('%in%'(x,y))
+
+livestock_cal_pro <- read_csv(here::here("_efficiency", "data", "livestock_protein_calories.csv"))
+crop_cal_pro <- read_csv(here::here("_efficiency", "data", "crops_protein_calories.csv"))
+marine_cal_pro <- read_csv(here::here("_efficiency", "data", "marine_fisheries_protein_calories.csv"))
+fresh_cal_pro <- read_csv(here::here("_efficiency", "data", "freshwater_fisheries_protein_calories.csv")) %>% 
+  mutate(organism = "fish")
+mari_cal_pro <- read_csv(here::here("_efficiency", "data", "mariculture_protein_calories.csv"))
+
+```
+
+
+Assign colors to 5 important countries 
+```{r}
+
+country_colors <- tibble(iso3c = c("USA", "CHN", "BRA", "IND", "IDN", "RUS"),
+                         color_fill = c("#E8C533", "#7C873E", "#F6955E", "#B23539", "#7DCCD3","#62589F"),
+                         include_col = "yes")
+
+```
+
+# Livestock
+
+## Make boxplots of efficiency for protein and kcals
+
+Livestock wrangling
+```{r}
+
+# live_prod_list <- pull(livestock_cal_pro, product) %>%  unique()
+# 
+# ## remove feed for now until we clean that up
+# pressures_raw <- read_csv(here("_efficiency/data/pressures_summary.csv")) 
+# 
+# pressures <- pressures_raw %>% 
+#   unite(product, c(organism, product)) %>% 
+#   filter(product %in% live_prod_list,
+#          !str_detect(category1_production, "feed")) %>% 
+#   group_by(iso3c, product) %>% 
+#   summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+#   ungroup()
+# 
+# ## finish up prepping the data
+# cp_rate_livestock <- left_join(pressures, livestock_cal_pro) %>%
+#   filter(!is.na(tonnes)) %>%
+#   filter(!is.na(cumulative_pressure)) %>%
+#   filter(cumulative_pressure>0) %>%
+#   filter(tonnes >= 10) %>% 
+#   rowwise() %>%
+#   mutate(pressure_per_tonne_product = cumulative_pressure/tonnes * 1000000,
+#          pressure_per_tonne_protein = cumulative_pressure/tonnes_protein * 1000000,
+#          pressure_per_mill_kcal = cumulative_pressure/million_kcal * 1000000) %>% 
+#   mutate(product = ifelse(product == "cows_meat", "cattle_meat", product))
+```
+
+Livestock calories plots
+```{r}
+
+# live_order_protein <- cp_rate_livestock %>% 
+#   filter(pressure_per_tonne_protein < 0.5) %>% 
+#   # mutate(plot_names = as.factor(str_replace(product, "_", " "))) %>% 
+#   group_by(plot_names) %>% 
+#   dplyr::summarise(median = median(pressure_per_tonne_protein)) %>% 
+#   ungroup() %>% 
+#   arrange(median)
+# 
+# quantile(cp_rate_livestock$pressure_per_mill_kcal)
+# 
+# live_cal_df <- cp_rate_livestock %>% 
+#   filter(pressure_per_mill_kcal < 0.02)  %>% 
+#       # mutate(plot_names = as.factor(str_replace(product, "_", " "))) %>% 
+#   left_join(country_colors) %>% 
+#   mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+#          color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+#   
+# 
+# live_cal_df$plot_names <- factor(live_cal_df$plot_names, levels = live_order_protein$plot_names)
+# 
+# ## main plot
+# live_cal <- ggplot(live_cal_df, aes(x=plot_names, y=pressure_per_mill_kcal)) +
+#   geom_boxplot(outlier.fill=NA, outlier.colour = NA) +
+#   geom_jitter(data = filter(live_cal_df, include_col == "no"), aes(x=plot_names, y=pressure_per_mill_kcal, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+#    geom_jitter(data = filter(live_cal_df, include_col == "yes"), aes(x=plot_names, y=pressure_per_mill_kcal, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+#   theme_minimal() +
+#   coord_flip() +
+#   labs(y = "", x = "Livestock",
+#        title = "Environmental Inefficiency (pressure/million kcal)") + 
+#     scale_colour_identity()  +
+#   scale_fill_identity()  +
+#   theme(axis.text.x = element_text(margin = margin(b=20)),
+#         panel.background = element_rect(fill = "transparent",colour = NA),
+#         plot.background = element_rect(fill = "transparent",colour = NA)) 
+# 
+# # ggsave(here("_efficiency/output/exploratory_plots/livestock_kcal.png"), units=c("in"))
+# 
+# ##outlier
+# 
+# ##outlier plot
+# cal_df_out_int <- cp_rate_livestock %>% 
+#   filter(pressure_per_mill_kcal >= 0.02) %>% 
+#    select(iso3c, product, cumulative_pressure, pressure_per_mill_kcal) 
+#   
+# missing <- setdiff(live_cal_df$product, cal_df_out_int$product) %>% 
+#   as_tibble() %>% 
+#   rename(product = value) %>% 
+#   mutate(iso3c = NA,  cumulative_pressure = NA, pressure_per_mill_kcal = NA)  %>% 
+#   ungroup() %>% 
+#   mutate(plot_names = as.factor(str_replace(product, "_", " "))) %>% 
+#   left_join(country_colors) %>% 
+#   mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+#          color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+# 
+# cal_df_out <- cal_df_out_int %>% 
+#   mutate(plot_names = as.factor(str_replace(product, "_", " "))) %>% 
+#   left_join(country_colors) %>% 
+#   mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+#          color_fill = ifelse(is.na(color_fill), "#000000", color_fill))%>% 
+#   rbind(missing) %>% 
+#   ungroup()
+# 
+# cal_df_out$plot_names <- factor(cal_df_out$plot_names, levels = live_order_protein$plot_names)
+# 
+# live_cal_out <- ggplot(cal_df_out, aes(x=plot_names, y=pressure_per_mill_kcal)) +
+#    geom_jitter(data = filter(cal_df_out, include_col == "no"), aes(x=plot_names, y=pressure_per_mill_kcal, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+#    geom_jitter(data = filter(cal_df_out, include_col == "yes"), aes(x=plot_names, y=pressure_per_mill_kcal, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+#   theme_minimal() +
+#   coord_flip() +
+#   scale_colour_identity()  +
+#   scale_fill_identity()  +
+#   labs(y = "", x = "")  +
+#   theme(axis.text.y = element_blank(),
+#         plot.caption=element_text(hjust = 1, size = 7),
+#         panel.background = element_rect(fill = "transparent",colour = NA),
+#         plot.background = element_rect(fill = "transparent",colour = NA)) +
+#    scale_y_continuous(limits = c(0.02, 8.1),
+#                      breaks = c(0.02, 2,4,6, 8),
+#                      labels= c(0.02, 2, 4,6,8))
+
+ # ggsave(here("_efficiency/output/exploratory_plots/livestock_kcal_remove_outliers.png"), units=c("in"))
+
+
+```
+ 
+ 
+Livestock protein plots
+```{r}
+## main plot
+# live_order_protein <- cp_rate_livestock %>% 
+#   filter(pressure_per_tonne_protein < 0.5) %>% 
+#   # mutate(plot_names = as.factor(str_replace(product, "_", " "))) %>% 
+#   group_by(plot_names) %>% 
+#   dplyr::summarise(median = median(pressure_per_tonne_protein)) %>% 
+#   ungroup() %>% 
+#   arrange(median)
+# 
+# live_prot_df <- cp_rate_livestock %>% 
+#   filter(pressure_per_tonne_protein < 0.5) %>%
+#    # mutate(plot_names = as.factor(str_replace(product, "_", " "))) %>% 
+#   left_join(country_colors) %>% 
+#   mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+#          color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+#   
+# live_prot_df$plot_names <- factor(live_prot_df$plot_names, levels = live_order_protein$plot_names)
+# 
+# live_pro <- ggplot(live_prot_df, aes(x=plot_names, y=pressure_per_tonne_protein)) +
+#   geom_boxplot(outlier.fill=NA, outlier.colour = NA) +
+#   geom_jitter(data = filter(live_prot_df, include_col == "no"), aes(x=plot_names, y=pressure_per_tonne_protein, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+#    geom_jitter(data = filter(live_prot_df, include_col == "yes"), aes(x=plot_names, y=pressure_per_tonne_protein, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+#   theme_minimal() +
+#   coord_flip() +
+#   labs(#x = "Livestock Primary and\n Secondary Products",
+#     x = "Livestock",
+#        y = "") +
+#   scale_colour_identity()  +
+#   scale_fill_identity()  +
+#   theme(axis.text.x = element_text(margin = margin(b=20)),
+#         panel.background = element_rect(fill = "transparent",colour = NA),
+#         plot.background = element_rect(fill = "transparent",colour = NA)) +
+#   scale_y_continuous(limits = c(0, 0.5),
+#                       breaks = c(0, 0.16, 0.33, 0.5),
+#                      labels= c(0, 0.16, 0.33, 0.5))
+# 
+# # ggsave(here("_efficiency/output/exploratory_plots/livestock_protein.png"), units=c("in"))
+# 
+# ##outlier plot
+# prot_df_out_int <- cp_rate_livestock %>% 
+#   filter(pressure_per_tonne_protein>= 0.5) %>% 
+#    select(iso3c, product, cumulative_pressure, pressure_per_tonne_protein) 
+#   
+# missing <- setdiff(live_prot_df$product, prot_df_out_int$product) %>% 
+#   as_tibble() %>% 
+#   rename(product = value) %>% 
+#   mutate(iso3c = NA,  cumulative_pressure = NA, pressure_per_tonne_protein = NA)  %>% 
+#   ungroup() %>% 
+#   mutate(plot_names = as.factor(str_replace(product, "_", " "))) %>% 
+#   left_join(country_colors) %>% 
+#   mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+#          color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+# 
+# prot_df_out <- prot_df_out_int %>% 
+#   mutate(plot_names = as.factor(str_replace(product, "_", " "))) %>% 
+#   left_join(country_colors) %>% 
+#   mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+#          color_fill = ifelse(is.na(color_fill), "#000000", color_fill))%>% 
+#   rbind(missing) %>% 
+#   ungroup()
+# 
+# prot_df_out$plot_names <- factor(prot_df_out$plot_names, levels = live_order_protein$plot_names)
+# 
+# live_prot_out <- ggplot(prot_df_out, aes(x=plot_names, y=pressure_per_tonne_protein)) +
+#    geom_jitter(data = filter(prot_df_out, include_col == "no"), aes(x=plot_names, y=pressure_per_tonne_protein, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+#    geom_jitter(data = filter(prot_df_out, include_col == "yes"), aes(x=plot_names, y=pressure_per_tonne_protein, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+#   theme_minimal() +
+#   coord_flip() +
+#   scale_colour_identity()  +
+#   scale_fill_identity()  +
+#   labs(y = "", x = "")  +
+#   theme(axis.text.y = element_blank(),
+#         plot.caption=element_text(hjust = 1, size = 7),
+#         panel.background = element_rect(fill = "transparent",colour = NA),
+#         plot.background = element_rect(fill = "transparent",colour = NA)) + 
+#   scale_y_continuous(limits = c(0.5, 235),
+#                      breaks = c(0.5, 117.5, 235),
+#                      labels= c(0.5, 117.5, 235))
+# 
+# # ggsave(here("_efficiency/output/exploratory_plots/livestock_protein_remove_outliers.png"), units=c("in"))
+# 
+
+
+```
+
+
+Livestock tonnes plots
+```{r}
+## main plot
+live_order_protein <- cp_rate_livestock %>% 
+  filter(pressure_per_tonne_protein < 0.5) %>% 
+  # mutate(plot_names = as.factor(str_replace(product, "_", " "))) %>% 
+  group_by(plot_names) %>% 
+  dplyr::summarise(median = median(pressure_per_tonne_protein)) %>% 
+  ungroup() %>% 
+  arrange(median)
+
+range(cp_rate_livestock$pressure_per_tonne_product) # 7.618816e-06 2.589649e+01
+quantile(cp_rate_livestock$pressure_per_tonne_product) 
+#           0%          25%          50%          75%         100% 
+# 7.618816e-06 5.244502e-04 1.565527e-03 8.610650e-03 2.589649e+01 
+
+
+
+live_tonnes_df <- cp_rate_livestock %>% 
+  filter(pressure_per_tonne_product < 0.009) %>%
+   # mutate(plot_names = as.factor(str_replace(product, "_", " "))) %>% 
+  left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+  
+live_tonnes_df$plot_names <- factor(live_tonnes_df$plot_names, levels = live_order_protein$plot_names)
+
+live_tonnes <- ggplot(live_tonnes_df, aes(x=plot_names, y=pressure_per_tonne_product)) +
+  geom_boxplot(outlier.fill=NA, outlier.colour = NA) +
+  geom_jitter(data = filter(live_tonnes_df, include_col == "no"), aes(x=plot_names, y=pressure_per_tonne_product, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(live_tonnes_df, include_col == "yes"), aes(x=plot_names, y=pressure_per_tonne_product, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+  labs(#x = "Livestock Primary and\n Secondary Products",
+    x = "Livestock",
+       y = "") +
+  scale_colour_identity()  +
+  scale_fill_identity()  +
+  theme(axis.text.x = element_text(margin = margin(b=20)),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA))  +  
+  scale_y_continuous(limits = c(0, 0.009),
+                     breaks = c(0, 0.005, 0.009),
+                     labels= c(0, 0.005, 0.009))
+
+# ggsave(here("_efficiency/output/exploratory_plots/livestock_tonnes.png"), units=c("in"))
+
+##outlier plot
+tonnes_df_out_int <- cp_rate_livestock %>% 
+  filter(pressure_per_tonne_product >= 0.009) %>% 
+   select(iso3c, product, cumulative_pressure, pressure_per_tonne_product) 
+  
+missing <- setdiff(live_tonnes_df$product, tonnes_df_out_int$product) %>% 
+  as_tibble() %>% 
+  rename(product = value) %>% 
+  mutate(iso3c = NA,  cumulative_pressure = NA, pressure_per_tonne_product = NA)  %>% 
+  ungroup() %>% 
+  mutate(plot_names = as.factor(str_replace(product, "_", " "))) %>% 
+  left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+tonnes_df_out <- tonnes_df_out_int %>% 
+  mutate(plot_names = as.factor(str_replace(product, "_", " "))) %>% 
+  left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))%>% 
+  rbind(missing) %>% 
+  ungroup()
+
+tonnes_df_out$plot_names <- factor(tonnes_df_out$plot_names, levels = live_order_protein$plot_names)
+
+live_tonnes_out <- ggplot(tonnes_df_out, aes(x=plot_names, y=pressure_per_tonne_product)) +
+   geom_jitter(data = filter(tonnes_df_out, include_col == "no"), aes(x=plot_names, y=pressure_per_tonne_product, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(tonnes_df_out, include_col == "yes"), aes(x=plot_names, y=pressure_per_tonne_product, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+  scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(y = "", x = "")  +
+  theme(axis.text.y = element_blank(),
+        plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA)) +   
+  scale_y_continuous(limits = c(0.009, 1),
+                     breaks = c(0.009, 0.5, 1),
+                     labels= c(0.009, 0.5, 1))
+
+
+ # ggsave(here("_efficiency/output/exploratory_plots/livestock_tonnes_remove_outliers.png"), units=c("in"))
+
+```
+
+
+# Crops
+
+Some wrangling of the data
+```{r}
+# 
+# spam_names_df <- vroom::vroom(here::here("crop/farm/data/crop_codes_updated.csv")) 
+# spam_names <- unique(spam_names_df$SPAM_super)
+# 
+# pressures_crop <- pressures_raw %>% 
+#   filter(organism %in% spam_names) %>% 
+#   group_by(iso3c, organism) %>% 
+#   summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+#   ungroup() %>% 
+#   rename(product = organism)
+# 
+# cp_rate_crops <- left_join(crop_cal_pro, pressures_crop, by = c("iso3c", "product")) %>%
+#   filter(!is.na(tonnes)) %>%
+#   filter(!is.na(cumulative_pressure)) %>%
+#   filter(cumulative_pressure>0) %>%
+#   filter(tonnes >= 10) %>% 
+#   rowwise() %>%
+#   mutate(pressure_per_tonne_product = cumulative_pressure/tonnes * 1000000,
+#          pressure_per_tonne_protein = cumulative_pressure/tonnes_protein * 1000000,
+#          pressure_per_mill_kcal = cumulative_pressure/million_kcal * 1000000)
+#   
+```
+## Make the plots for protein
+```{r}
+# # library(vroom)
+# # long_name <- vroom::vroom(here::here("crop/farm/data/crop_codes_updated.csv")) %>% 
+# #   select(organism = SPAM_super,
+# #          long = SPAM_full_name) %>% 
+# #   mutate(long = ifelse(organism == "tnut", "tree nuts",
+# #                        ifelse(organism == "spis", "spices",
+# #                               ifelse(organism == "xfru", "other fruits",
+# #                                      ifelse(organism == "xmil", "millet",
+# #                                             ifelse(organism == "xoil", "other oil crops",
+# #                                                    ifelse(organism == "xpul", "pulses", long))))))) %>% 
+# #   unique() %>% 
+# #   rename(product = organism)
+# 
+# quantile(cp_rate_crops$pressure_per_tonne_protein)
+# 
+# ## main plot
+#  crop_order_prot <- cp_rate_crops %>% 
+#   filter(pressure_per_tonne_protein < 0.25) %>% 
+#  # left_join(long_name) %>% 
+#   group_by(long) %>% 
+#   dplyr::summarise(median = median(pressure_per_tonne_protein)) %>% 
+#   ungroup() %>% 
+#   arrange(median)
+# 
+# crop_prot_df <- cp_rate_crops %>%  
+#  # left_join(long_name) %>% 
+#   filter(pressure_per_tonne_protein < 0.25) %>% 
+#   left_join(country_colors) %>% 
+#   mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+#          color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+# 
+# crop_prot_df$long <- factor(crop_prot_df$long, levels = crop_order_prot$long)
+# 
+# crop_pro <- ggplot(crop_prot_df, aes(x=long, y=pressure_per_tonne_protein)) +
+#   geom_boxplot(outlier.fill=NA, outlier.colour = NA) +
+#    geom_jitter(data = filter(crop_prot_df, include_col == "no"), aes(x=long, y=pressure_per_tonne_protein, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+#    geom_jitter(data = filter(crop_prot_df, include_col == "yes"), aes(x=long, y=pressure_per_tonne_protein, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+#   theme_minimal() +
+#   coord_flip() +
+#   scale_colour_identity()  +
+#   scale_fill_identity()  +
+#   labs(x = "Crops",
+#        y = "") +
+#   theme(plot.caption=element_text(hjust = 1, size = 7),
+#         panel.background = element_rect(fill = "transparent",colour = NA),
+#         plot.background = element_rect(fill = "transparent",colour = NA)) +
+#   scale_y_continuous(limits = c(0, 0.25),
+#                      breaks = c(0, 0.08, 0.16, 0.25),
+#                      labels= c(0, 0.08, 0.16, 0.25)) 
+# 
+# # ggsave(here("_efficiency/output/exploratory_plots/crops_protein.png"), units=c("in"))
+# 
+# ## now lets do the outlier plot
+# crop_prot_df_out <- cp_rate_crops %>% 
+#    left_join(long_name) %>% 
+#   filter(pressure_per_tonne_protein>= 0.25) %>% 
+#   left_join(country_colors) %>% 
+#   mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+#   color_fill = ifelse(is.na(color_fill), "#000000", color_fill)) %>% 
+#    select(iso3c, long, cumulative_pressure, pressure_per_tonne_protein, include_col, color_fill) %>% 
+#   ungroup()
+# 
+# missing <- setdiff(crop_prot_df$product, crop_prot_df_out$product) %>% 
+#   as_tibble() %>% 
+#   rename(product = value) %>% 
+#   left_join(long_name) %>% 
+#   select(-product) %>% 
+#   mutate(iso3c = NA,  cumulative_pressure = NA, pressure_per_tonne_protein = NA, include_col = NA, color_fill = NA)
+# 
+# crop_prot_df_out <- rbind(crop_prot_df_out, missing) %>% 
+#   left_join(country_colors) %>% 
+#   mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+#   color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+# 
+# crop_prot_df_out$long <- factor(crop_prot_df_out$long, levels = crop_order_prot$long)
+# 
+# crop_prot_out <- ggplot(crop_prot_df_out, aes(x=long, y=pressure_per_tonne_protein)) +
+#    geom_jitter(data = filter(crop_prot_df_out, include_col == "no"), aes(x=long, y=pressure_per_tonne_protein, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+#    geom_jitter(data = filter(crop_prot_df_out, include_col == "yes"), aes(x=long, y=pressure_per_tonne_protein, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+#   theme_minimal() +
+#   coord_flip() +
+#     scale_colour_identity()  +
+#   scale_fill_identity()  +
+#   theme(axis.text.y = element_blank(),
+#         plot.caption=element_text(hjust = 1, size = 7),
+#         panel.background = element_rect(fill = "transparent",colour = NA),
+#         plot.background = element_rect(fill = "transparent",colour = NA)) +
+#   scale_y_continuous(limits = c(0.25, 26),
+#                      breaks = c(0.25, 13, 26),
+#                      labels= c(0.25, 13, 26)) +
+#   labs(y = "",
+#        x = "")
+# 
+# # ggsave(here("_efficiency/output/exploratory_plots/crops_protein_remove_outliers.png"), units=c("in"))
+
+```
+
+## Make the plots for calories
+```{r}
+
+## main plot
+# crop_order_cal <- cp_rate_crops %>% 
+#   filter(pressure_per_mill_kcal < 0.005) %>% 
+#   group_by(product) %>% 
+#   dplyr::summarise(median = median(pressure_per_mill_kcal)) %>% 
+#   ungroup() %>% 
+#   arrange(median)
+
+crop_cal_df <- cp_rate_crops %>% 
+  left_join(long_name) %>%
+  filter(pressure_per_mill_kcal < 0.005)  %>%
+  left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+crop_cal_df$long <- factor(crop_cal_df$long, levels = crop_order_prot$long)
+
+crop_cal <- ggplot(crop_cal_df, aes(x=long, y=pressure_per_mill_kcal)) +
+  geom_boxplot(outlier.fill=NA, outlier.colour = NA) +
+     geom_jitter(data = filter(crop_cal_df, include_col == "no"), aes(x=long, y=pressure_per_mill_kcal, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(crop_cal_df, include_col == "yes"), aes(x=long, y=pressure_per_mill_kcal, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+    scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(x = "Crops",
+       y = "")+
+  theme(plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA))
+
+
+# ggsave(here("_efficiency/output/exploratory_plots/crops_kcal.png"), units=c("in"))
+
+## now lets do the outlier plot
+crop_cal_df_out <- cp_rate_crops %>% 
+  left_join(long_name) %>% 
+  filter(pressure_per_mill_kcal>= 0.005) %>%
+  left_join(country_colors) %>% 
+    mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+  color_fill = ifelse(is.na(color_fill), "#000000", color_fill)) %>% 
+   select(iso3c, long, cumulative_pressure, pressure_per_mill_kcal, include_col, color_fill) 
+
+missing <- setdiff(crop_cal_df$product, crop_cal_df_out$product) %>% 
+  as_tibble() %>% 
+  rename(product = value) %>% 
+  left_join(long_name) %>%
+  dplyr::select(-product) %>%
+  mutate(iso3c = NA,  cumulative_pressure = NA, pressure_per_mill_kcal = NA, include_col = NA, color_fill = NA)
+
+crop_cal_df_out <- rbind(crop_cal_df_out, missing) %>%
+  left_join(country_colors) %>%
+    mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+  color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+crop_cal_df_out$long <- factor(crop_cal_df_out$long, levels = crop_order_prot$long)
+
+crop_cal_out <- ggplot(crop_cal_df_out, aes(x=long, y=pressure_per_mill_kcal)) +
+   geom_jitter(data = filter(crop_cal_df_out, include_col == "no"), aes(x=long, y=pressure_per_mill_kcal, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(crop_cal_df_out, include_col == "yes"), aes(x=long, y=pressure_per_mill_kcal, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+    scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(y = "",
+       x = "") +
+  theme(axis.text.y = element_blank(),
+        plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA))
+
+ # ggsave(here("_efficiency/output/exploratory_plots/crops_kcal_remove_outliers.png"), units=c("in"))
+```
+
+## Make the plots for tonnes product
+```{r}
+
+## main plot
+# crop_order_cal <- cp_rate_crops %>% 
+#   filter(pressure_per_mill_kcal < 0.005) %>% 
+#   group_by(product) %>% 
+#   dplyr::summarise(median = median(pressure_per_mill_kcal)) %>% 
+#   ungroup() %>% 
+#   arrange(median)
+
+quantile(cp_rate_crops$pressure_per_tonne_product)
+
+crop_tonnes_df <- cp_rate_crops %>% 
+  left_join(long_name) %>%
+  filter(pressure_per_tonne_product < 0.009)  %>%
+  left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+crop_tonnes_df$long <- factor(crop_tonnes_df$long, levels = crop_order_prot$long)
+
+crop_tonnes <- ggplot(crop_tonnes_df, aes(x=long, y=pressure_per_tonne_product)) +
+  geom_boxplot(outlier.fill=NA, outlier.colour = NA) +
+     geom_jitter(data = filter(crop_tonnes_df, include_col == "no"), aes(x=long, y=pressure_per_tonne_product, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(crop_tonnes_df, include_col == "yes"), aes(x=long, y=pressure_per_tonne_product, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+    scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(x = "Crops",
+       y = "")+
+  theme(plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA))
+
+
+# ggsave(here("_efficiency/output/exploratory_plots/crops_tonnes.png"), units=c("in"))
+
+## now lets do the outlier plot
+crop_tonnes_df_out <- cp_rate_crops %>% 
+  left_join(long_name) %>% 
+  filter(pressure_per_tonne_product>= 0.009) %>%
+  left_join(country_colors) %>% 
+    mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+  color_fill = ifelse(is.na(color_fill), "#000000", color_fill)) %>% 
+   select(iso3c, long, cumulative_pressure, pressure_per_tonne_product, include_col, color_fill) 
+
+missing <- setdiff(crop_tonnes_df$product, crop_tonnes_df_out$product) %>% 
+  as_tibble() %>% 
+  rename(product = value) %>% 
+  left_join(long_name) %>%
+  dplyr::select(-product) %>%
+  mutate(iso3c = NA,  cumulative_pressure = NA, pressure_per_tonne_product = NA, include_col = NA, color_fill = NA)
+
+crop_tonnes_df_out <- rbind(crop_tonnes_df_out, missing) %>%
+  left_join(country_colors) %>%
+    mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+  color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+crop_tonnes_df_out$long <- factor(crop_tonnes_df_out$long, levels = crop_order_prot$long)
+
+crop_tonnes_out <- ggplot(crop_tonnes_df_out, aes(x=long, y=pressure_per_tonne_product)) +
+   geom_jitter(data = filter(crop_tonnes_df_out, include_col == "no"), aes(x=long, y=pressure_per_tonne_product, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(crop_tonnes_df_out, include_col == "yes"), aes(x=long, y=pressure_per_tonne_product, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+    scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(y = "",
+       x = "") +
+  theme(axis.text.y = element_blank(),
+        plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA))
+
+ # ggsave(here("_efficiency/output/exploratory_plots/crops_tonnes_remove_outliers.png"), units=c("in"))
+```
+
+## Marine fisheries
+Some wrangling
+```{r}
+# fresh_cal_pro_2 <- fresh_cal_pro %>% 
+#   mutate(organism = "freshwater fish",
+#          species_class_final = "Freshwater fish") %>%
+#   rename(tonnes_product = freshwater_tonnes) 
+# 
+# fisheries_cal_pro <- marine_cal_pro %>% 
+#   mutate(organism = case_when(species_class_final == "Demersal" ~ "demersal",
+#                               species_class_final == "Large pelagic" ~ "large-pelagic",
+#                               species_class_final == "Medium pelagic" ~ "medium-pelagic",
+#                               species_class_final == "Small pelagic" ~ "small-pelagic",
+#                               species_class_final == "Reef-associated" ~ "reef",
+#                               species_class_final == "Benthic" ~ "benthic",
+#                               species_class_final == "forage_fish" ~ "fofm")) %>% 
+#   rbind(fresh_cal_pro_2)
+# 
+# fish_cat <- pull(fisheries_cal_pro,organism) %>% 
+#   unique()
+# 
+# pressures_fisheries <- pressures_raw %>% 
+#   mutate(organism = ifelse(organism == "fish", "freshwater fish", organism)) %>% 
+#   filter(organism %in% fish_cat) %>% 
+#   group_by(iso3c, organism) %>% 
+#   summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+#   ungroup()
+# 
+# cp_rate_fish <- left_join(fisheries_cal_pro, pressures_fisheries, by = c("iso3c", "organism")) %>%
+#   filter(!is.na(million_kcal)) %>%
+#   filter(!is.na(cumulative_pressure)) %>%
+#   filter(cumulative_pressure>0) %>%
+#     mutate(organism = ifelse(organism == "fofm", "forage fish", organism)) %>% 
+#   #filter(tonnes_prod >= 10) %>% 
+#   rowwise() %>%
+#   mutate(pressure_per_tonne_product = cumulative_pressure/tonnes_product * 1000000,
+#          pressure_per_tonne_protein = cumulative_pressure/tonnes_protein * 1000000,
+#          pressure_per_mill_kcal = cumulative_pressure/million_kcal * 1000000) %>%
+#   filter(pressure_per_tonne_product != Inf)
+  
+```
+
+
+## Make plots for protein
+```{r}
+
+## main plot
+fish_order_pro <- cp_rate_fish %>% 
+  filter(pressure_per_tonne_protein < 1) %>% 
+  group_by(organism) %>% 
+  dplyr::summarise(median = median(pressure_per_tonne_protein)) %>% 
+  ungroup() %>% 
+  arrange(median)
+
+quantile(cp_rate_fish$pressure_per_tonne_protein, 0.95)
+
+fish_pro_df <- cp_rate_fish %>% 
+  filter(pressure_per_tonne_protein < 0.2) %>% 
+  left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+fish_pro_df$organism <- factor(fish_pro_df$organism, levels = fish_order_pro$organism)
+
+fish_pro <- ggplot(fish_pro_df, aes(x=organism, y=pressure_per_tonne_protein)) +
+  geom_boxplot(outlier.fill=NA, outlier.colour = NA) +
+  geom_jitter(data = filter(fish_pro_df, include_col == "no"), aes(x=organism, y=pressure_per_tonne_protein, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(fish_pro_df, include_col == "yes"), aes(x=organism, y=pressure_per_tonne_protein, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+    scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(x = "Marine and freshwater fisheries",
+       y = "",
+       title = "Environmental Inefficiency (pressure/tonnes protein)")+
+  theme(plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA)) +
+  scale_y_continuous(limits = c(0, 0.2),
+                     breaks = c(0, 0.07, 0.13, 0.2),
+                     labels= c(0, 0.07, 0.13, 0.2))
+
+# ggsave(here("_efficiency/output/exploratory_plots/marine_protein.png"), units=c("in"))
+
+## now lets do the outlier plots
+fish_pro_df_out <- cp_rate_fish %>% 
+  filter(pressure_per_tonne_protein>= 0.2 & pressure_per_tonne_protein <25) %>% 
+   select(iso3c, organism, cumulative_pressure, pressure_per_tonne_protein) 
+
+missing <- setdiff(fish_pro_df$organism, fish_pro_df_out$organism) %>% 
+  as_tibble() %>% 
+  rename(organism = value) %>% 
+  mutate(iso3c = NA,  cumulative_pressure = NA, pressure_per_tonne_protein = NA)
+
+fish_pro_df_out <- rbind(fish_pro_df_out, missing) %>% 
+  left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+fish_pro_df_out$organism <- factor(fish_pro_df_out$organism, levels = fish_order_pro$organism)
+
+fish_pro_out <- ggplot(fish_pro_df_out, aes(x=organism, y=pressure_per_tonne_protein)) +
+   geom_jitter(data = filter(fish_pro_df_out, include_col == "no"), aes(x=organism, y=pressure_per_tonne_protein, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(fish_pro_df_out, include_col == "yes"), aes(x=organism, y=pressure_per_tonne_protein, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+    scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(y = "",
+       x = "") +
+  theme(axis.text.y = element_blank(),
+        plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA)) +
+  scale_y_continuous(limits = c(0.1, 10),
+                     breaks = c(0.1, 5, 10),
+                     labels= c(0.1, 5, 10))
+
+
+
+ # ggsave(here("_efficiency/output/exploratory_plots/marine_protein_remove_outliers.png"), units=c("in"))
+ 
+ 
+ 
+
+```
+
+## Make plots for calories
+```{r}
+
+## main plot
+# fish_order_cal <- cp_rate_fish %>% 
+#   filter(pressure_per_mill_kcal < 0.1) %>% 
+#   group_by(organism) %>% 
+#   dplyr::summarise(median = median(pressure_per_mill_kcal)) %>% 
+#   ungroup() %>% 
+#   arrange(median)
+
+fish_cal_df <- cp_rate_fish %>% 
+  filter(pressure_per_mill_kcal < 0.1) %>%
+    left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+fish_cal_df$organism <- factor(fish_cal_df$organism, levels = fish_order_pro$organism)
+
+fish_cal <- ggplot(fish_cal_df, aes(x=organism, y=pressure_per_mill_kcal)) +
+  geom_boxplot(outlier.fill=NA, outlier.colour = NA) +
+  geom_jitter(data = filter(fish_cal_df, include_col == "no"), aes(x=organism, y=pressure_per_mill_kcal, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(fish_cal_df, include_col == "yes"), aes(x=organism, y=pressure_per_mill_kcal, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+    scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(x = "Marine and freshwater fisheries",
+       y = "")+
+  theme(plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA))
+
+# ggsave(here("_efficiency/output/exploratory_plots/marine_cals.png"), units = c("in"))
+
+## now lets do the outlier plots
+fish_cal_df_out <- cp_rate_fish %>% 
+  filter(pressure_per_mill_kcal>= 0.1 & pressure_per_mill_kcal <100) %>% 
+   select(iso3c, organism, cumulative_pressure, pressure_per_mill_kcal) 
+
+missing <- setdiff(fish_cal_df$organism, fish_cal_df_out$organism) %>% 
+  as_tibble() %>% 
+  rename(organism = value) %>% 
+  mutate(iso3c = NA,  cumulative_pressure = NA, pressure_per_mill_kcal = NA)
+
+fish_cal_df_out <- rbind(fish_cal_df_out, missing) %>%
+    left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+fish_cal_df_out$organism <- factor(fish_cal_df_out$organism, levels = fish_order_pro$organism)
+
+fish_cal_out <- ggplot(fish_cal_df_out, aes(x=organism, y=pressure_per_mill_kcal)) +
+   geom_jitter(data = filter(fish_cal_df_out, include_col == "no"), aes(x=organism, y=pressure_per_mill_kcal, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(fish_cal_df_out, include_col == "yes"), aes(x=organism, y=pressure_per_mill_kcal, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+    scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(y = "",
+       x = "") +
+  theme(axis.text.y = element_blank(),
+        plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA))
+
+# ggsave(here("_efficiency/output/exploratory_plots/marine_kcal_remove_outliers.png"), units=c("in"))
+```
+
+## Make plots for tonnes product 
+```{r}
+
+quantile(cp_rate_fish$pressure_per_tonne_product, 0.95)
+
+fish_tonnes_df <- cp_rate_fish %>% 
+  filter(pressure_per_tonne_product < 0.01) %>%
+    left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+fish_tonnes_df$organism <- factor(fish_tonnes_df$organism, levels = fish_order_pro$organism)
+
+fish_tonnes <- ggplot(fish_tonnes_df, aes(x=organism, y=pressure_per_tonne_product)) +
+  geom_boxplot(outlier.fill=NA, outlier.colour = NA) +
+  geom_jitter(data = filter(fish_tonnes_df, include_col == "no"), aes(x=organism, y=pressure_per_tonne_product, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(fish_tonnes_df, include_col == "yes"), aes(x=organism, y=pressure_per_tonne_product, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+    scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(x = "Marine and freshwater fisheries",
+       y = "")+
+  theme(plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA))
+
+# ggsave(here("_efficiency/output/exploratory_plots/marine_tonnes.png"), units = c("in"))
+
+## now lets do the outlier plots
+fish_tonnes_df_out <- cp_rate_fish %>% 
+  filter(pressure_per_tonne_product>= 0.01 & pressure_per_tonne_product <100) %>% 
+   select(iso3c, organism, cumulative_pressure, pressure_per_tonne_product) 
+
+missing <- setdiff(fish_tonnes_df$organism, fish_tonnes_df_out$organism) %>% 
+  as_tibble() %>% 
+  rename(organism = value) %>% 
+  mutate(iso3c = NA,  cumulative_pressure = NA, pressure_per_tonne_product = NA)
+
+fish_tonnes_df_out <- rbind(fish_tonnes_df_out, missing) %>%
+    left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+fish_tonnes_df_out$organism <- factor(fish_tonnes_df_out$organism, levels = fish_order_pro$organism)
+
+fish_tonnes_out <- ggplot(fish_tonnes_df_out, aes(x=organism, y=pressure_per_tonne_product)) +
+   geom_jitter(data = filter(fish_tonnes_df_out, include_col == "no"), aes(x=organism, y=pressure_per_tonne_product, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(fish_tonnes_df_out, include_col == "yes"), aes(x=organism, y=pressure_per_tonne_product, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+    scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(y = "",
+       x = "") +
+  theme(axis.text.y = element_blank(),
+        plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA))
+
+ # ggsave(here("_efficiency/output/exploratory_plots/marine_tonnes_remove_outliers.png"), units=c("in"))
+ 
+
+```
+
+
+## Mariculture
+Some wrangling
+```{r}
+# 
+# pressures_mari <- pressures_raw %>% 
+#   filter(category2_production == "mariculture") %>% 
+#   group_by(iso3c, organism) %>% 
+#   summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+#   ungroup()
+# 
+# cp_rate_mari <- left_join(mari_cal_pro, pressures_mari, by = c("iso3c", "organism")) %>%
+#   filter(!is.na(million_kcals)) %>%
+#   filter(!is.na(cumulative_pressure)) %>%
+#   filter(cumulative_pressure>0) %>% 
+#   rowwise() %>%
+#   mutate(pressure_per_tonne_protein = cumulative_pressure/tonnes_protein * 1000000,
+#          pressure_per_mill_kcal = cumulative_pressure/million_kcals * 1000000,
+#           pressure_per_tonnes_product = cumulative_pressure/tonnes_product * 1000000)
+```
+
+
+## Make plots for protein
+```{r}
+
+# ## main plot
+# mari_order_pro <- cp_rate_mari %>% 
+#   filter(pressure_per_tonne_protein < 1) %>% 
+#   group_by(organism) %>% 
+#   dplyr::summarise(median = median(pressure_per_tonne_protein)) %>% 
+#   ungroup() %>% 
+#   arrange(median)
+# 
+# mari_pro_df <- cp_rate_mari %>% 
+#   filter(pressure_per_tonne_protein < 1) %>% 
+#   left_join(country_colors) %>% 
+#   mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+#          color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+# 
+# 
+# mari_pro_df$organism <- factor(mari_pro_df$organism, levels = mari_order_pro$organism)
+# 
+# mari_pro <- ggplot(mari_pro_df, aes(x=organism, y=pressure_per_tonne_protein)) +
+#   geom_boxplot(outlier.fill=NA, outlier.colour = NA) +
+#     geom_jitter(data = filter(mari_pro_df, include_col == "no"), aes(x=organism, y=pressure_per_tonne_protein, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+#    geom_jitter(data = filter(mari_pro_df, include_col == "yes"), aes(x=organism, y=pressure_per_tonne_protein, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+#   theme_minimal() +
+#   coord_flip() +
+#     scale_colour_identity()  +
+#   scale_fill_identity()  +
+#   labs(x = "Mariculture",
+#        y = "")+
+#   theme(plot.caption=element_text(hjust = 1, size = 7),
+#         panel.background = element_rect(fill = "transparent",colour = NA),
+#         plot.background = element_rect(fill = "transparent",colour = NA)) 
+# 
+# 
+# ## now lets do the outlier plots
+# mari_pro_df_out <- cp_rate_mari %>% 
+#   filter(pressure_per_tonne_protein>= 1 & pressure_per_tonne_protein <25) %>% 
+#    select(iso3c, organism, cumulative_pressure, pressure_per_tonne_protein) 
+# 
+# missing <- setdiff(mari_pro_df$organism, mari_pro_df_out$organism) %>% 
+#   as_tibble() %>% 
+#   rename(organism = value) %>% 
+#   mutate(iso3c = NA,  cumulative_pressure = NA, pressure_per_tonne_protein = NA)
+# 
+# mari_pro_df_out <- rbind(mari_pro_df_out, missing)%>% 
+#   left_join(country_colors) %>% 
+#   mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+#          color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+# 
+# mari_pro_df_out$organism <- factor(mari_pro_df_out$organism, levels = mari_order_pro$organism)
+# 
+# mari_pro_out <- ggplot(mari_pro_df_out, aes(x=organism, y=pressure_per_tonne_protein)) +
+#    #  geom_jitter(data = filter(mari_pro_df_out, include_col == "no"), aes(x=organism, y=pressure_per_tonne_protein, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+#    # geom_jitter(data = filter(mari_pro_df_out, include_col == "yes"), aes(x=organism, y=pressure_per_tonne_protein, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+#   theme_minimal() +
+#   coord_flip() +
+#   #   scale_colour_identity()  +
+#   # scale_fill_identity()  +
+#   labs(y = "",
+#        x = "") +
+#   theme(axis.text.y = element_blank(),
+#         plot.caption=element_text(hjust = 1, size = 7),
+#         panel.background = element_rect(fill = "transparent",colour = NA),
+#         plot.background = element_rect(fill = "transparent",colour = NA)) 
+#   # scale_y_continuous(limits = c(0.20, 10),
+#   #                    breaks = c(0.20, 5, 10),
+#   #                    labels= c(0.20, 5, 10))
+
+
+```
+
+## Make plots for calories
+
+```{r}
+## main plot
+
+
+mari_cal_df <- cp_rate_mari %>% 
+  filter(pressure_per_mill_kcal < 0.03) %>%
+    left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+mari_cal_df$organism <- factor(mari_cal_df$organism, levels = mari_order_pro$organism)
+
+mari_cal <- ggplot(mari_cal_df, aes(x=organism, y=pressure_per_mill_kcal)) +
+  geom_boxplot(outlier.fill=NA, outlier.colour = NA) +
+    geom_jitter(data = filter(mari_cal_df, include_col == "no"), aes(x=organism, y=pressure_per_mill_kcal, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(mari_cal_df, include_col == "yes"), aes(x=organism, y=pressure_per_mill_kcal, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+    scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(x = "Mariculture",
+       y = "")+
+  theme(plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA))
+
+## now lets do the outlier plots
+mari_cal_df_out <- cp_rate_mari %>% 
+  filter(pressure_per_mill_kcal>= 0.03 & pressure_per_mill_kcal <100) %>% 
+   select(iso3c, organism, cumulative_pressure, pressure_per_mill_kcal) 
+
+missing <- setdiff(mari_cal_df$organism, mari_cal_df_out$organism) %>% 
+  as_tibble() %>% 
+  rename(organism = value) %>% 
+  mutate(iso3c = NA,  cumulative_pressure = NA, pressure_per_mill_kcal = NA)
+
+mari_cal_df_out <- rbind(mari_cal_df_out, missing) %>%
+    left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+mari_cal_df_out$organism <- factor(mari_cal_df_out$organism, levels = mari_order_pro$organism)
+
+mari_cal_out <- ggplot(mari_cal_df_out, aes(x=organism, y=pressure_per_mill_kcal)) +
+    geom_jitter(data = filter(mari_cal_df_out, include_col == "no"), aes(x=organism, y=pressure_per_mill_kcal, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(mari_cal_df_out, include_col == "yes"), aes(x=organism, y=pressure_per_mill_kcal, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+    scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(y = "",
+       x = "") +
+  theme(axis.text.y = element_blank(),
+        plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA))
+
+```
+
+
+## Make plots for tonnes
+
+```{r}
+## main plot
+quantile(cp_rate_mari$pressure_per_tonnes_product, 0.99)
+
+mari_tonnes_df <- cp_rate_mari %>% 
+  filter(pressure_per_tonnes_product < 0.009) %>%
+    left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+mari_tonnes_df$organism <- factor(mari_tonnes_df$organism, levels = mari_order_pro$organism)
+
+mari_tonnes <- ggplot(mari_tonnes_df, aes(x=organism, y=pressure_per_tonnes_product)) +
+  geom_boxplot(outlier.fill=NA, outlier.colour = NA) +
+    geom_jitter(data = filter(mari_tonnes_df, include_col == "no"), aes(x=organism, y=pressure_per_tonnes_product, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(mari_tonnes_df, include_col == "yes"), aes(x=organism, y=pressure_per_tonnes_product, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+    scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(x = "Mariculture",
+       y = "")+
+  theme(plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA))
+
+## now lets do the outlier plots
+mari_tonnes_df_out <- cp_rate_mari %>% 
+  filter(pressure_per_tonnes_product>= 0.009) %>% 
+   select(iso3c, organism, cumulative_pressure, pressure_per_tonnes_product) 
+
+missing <- setdiff(mari_tonnes_df$organism, mari_tonnes_df_out$organism) %>% 
+  as_tibble() %>% 
+  rename(organism = value) %>% 
+  mutate(iso3c = NA,  cumulative_pressure = NA, pressure_per_tonnes_product = NA)
+
+mari_tonnes_df_out <- rbind(mari_tonnes_df_out, missing) %>%
+    left_join(country_colors) %>% 
+  mutate(include_col = ifelse(is.na(include_col), "no", include_col),
+         color_fill = ifelse(is.na(color_fill), "#000000", color_fill))
+
+mari_tonnes_df_out$organism <- factor(mari_tonnes_df_out$organism, levels = mari_order_pro$organism)
+
+mari_tonnes_out <- ggplot(mari_tonnes_df_out, aes(x=organism, y=pressure_per_tonnes_product)) +
+    geom_jitter(data = filter(mari_tonnes_df_out, include_col == "no"), aes(x=organism, y=pressure_per_tonnes_product, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+   geom_jitter(data = filter(mari_tonnes_df_out, include_col == "yes"), aes(x=organism, y=pressure_per_tonnes_product, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+  theme_minimal() +
+  coord_flip() +
+    scale_colour_identity()  +
+  scale_fill_identity()  +
+  labs(y = "",
+       x = "") +
+  theme(axis.text.y = element_blank(),
+        plot.caption=element_text(hjust = 1, size = 7),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        plot.background = element_rect(fill = "transparent",colour = NA))
+
+```
+
+
+
+combine into one to compare
+```{r}
+library(patchwork)
+
+protein <-(live_pro + live_prot_out+ plot_layout(widths = c(3, 1)))/
+           (crop_pro + crop_prot_out + plot_layout(widths = c(3, 1)))/
+           (fish_pro + fish_pro_out + plot_layout(widths = c(3, 1)))/
+           (mari_pro + mari_pro_out + plot_layout(widths = c(3, 1))) +
+ 
+   plot_layout(heights = c(10, 26, 6, 8)) 
+
+ggsave(here("_efficiency/output/protein_all.png"), height=15, width=9, units=c("in"))
+
+calories <-(live_cal + live_cal_out+ plot_layout(widths = c(3, 1)))/
+           (crop_cal + crop_cal_out + plot_layout(widths = c(3, 1)))/
+           (fish_cal + fish_cal_out + plot_layout(widths = c(3, 1)))/
+           (mari_cal + mari_cal_out + plot_layout(widths = c(3, 1))) +
+   plot_layout(heights = c(10, 26, 6, 8)) 
+
+ggsave(here("_efficiency/output/calorie_all.png"), height=15, width=9, units=c("in"))
+
+
+
+# tonnes <-(live_tonnes + live_tonnes_out+ plot_layout(widths = c(3, 1)))/
+#            (crop_tonnes + crop_tonnes_out + plot_layout(widths = c(3, 1)))/
+#            (fish_tonnes + fish_tonnes_out + plot_layout(widths = c(3, 1)))/
+#            (mari_tonnes + mari_tonnes_out + plot_layout(widths = c(3, 1))) +
+#    plot_layout(heights = c(10, 26, 6, 8))
+# 
+# ggsave(here("_efficiency/output/tonnes_all.png"), height=15, width=9, units=c("in"))
+
+
+```
+STOPPED HERE MAY 9
+
+Combine all the cp rate files
+
+```{r}
+
+crops_df <- cp_rate_crops %>% 
+  select(-tonnes, -pressure_per_tonne_product)
+
+live_df <- cp_rate_livestock %>% 
+  select(-tonnes, -pressure_per_tonne_product, -product_tonnes_to_mill_kcal, -product_tonnes_to_tonnes_protein)
+
+
+colnames(crops_df)
+colnames(live_df)
+
+
+mari_df <- cp_rate_mari %>% 
+  select(-tonnes_product, -pressure_per_tonnes_product) %>% 
+  rename(product = organism,
+         million_kcal = million_kcals)
+
+colnames(mari_df)
+
+fish_df <- cp_rate_fish %>% 
+  select(-species_class_final, -tonnes_product, -pressure_per_tonne_product) %>% 
+  rename(product = organism)
+
+colnames(fish_df)
+
+cp_all <- rbind(crops_df, live_df, mari_df, fish_df) %>% 
+  ungroup() %>% 
+  filter(!is.infinite(pressure_per_tonne_protein))
+
+write_csv(cp_all, here::here("_analysis/SI_data/output/SI_figure_efficiency_df.csv"))
+
+```
+
+We want to have the figure 6 efficiency stuff and the SI eff in one df. This will take a little wrangling cause the names of the SI ones are rougher/less wrangled
+
+```{r}
+cp_all <- read_csv(here::here("_analysis/SI_data/output/SI_figure_efficiency_df.csv")) %>% 
+  select(-cumulative_pressure)
+cp_fig6 <- read_csv(here("_efficiency/data/fig_6_cp_rates.csv"))
+
+crop_codes <- vroom::vroom(here("crop/farm/data/crop_codes_updated.csv")) %>% 
+  select(product = SPAM_super, SPAM_full_name) %>% 
+  unique() %>%
+  mutate(SPAM_full_name = ifelse(product == "xmil", "millet",
+                                 ifelse(product == "xpul", "pulses",
+                                        ifelse(product == "xoil", "oil",
+                                               ifelse(product == "xcof", "coffee",
+                                                      ifelse(product == "xfru", "fruits",
+                                                             ifelse(product == "tnut", "tree nuts",
+                                                                    ifelse(product == "spis", "spices", SPAM_full_name)))))))) %>%
+  unique()
+
+## wrangle the crop names for the SI 
+
+cp_fig_si <- left_join(cp_all, crop_codes) %>% 
+  mutate(product = ifelse(!is.na(SPAM_full_name), SPAM_full_name, product)) %>% 
+  select(-SPAM_full_name) %>% 
+  mutate(product = ifelse(product == "bivalve", "unfed/algae fed shellfish",
+                          ifelse(product == "freshwater fish", "river", product)))
+
+
+name_fig <- unique(cp_fig6$product)
+name_si <- unique(cp_all$product)
+
+setdiff(cp_fig6$product, cp_fig_si$product)
+setdiff(cp_fig_si$product, cp_fig6$product)
+
+combine <- left_join(cp_fig6, cp_fig_si) %>% 
+  left_join(food_rgns) %>% 
+  select(country = Country, iso3c, product, tonnes, cumulative_pressure, pressure_per_tonne, million_kcal, tonnes_protein, pressure_per_tonne_protein, pressure_per_mill_kcal) %>% 
+  mutate(country = ifelse(iso3c == "HSX", "High Seas", country)) 
+
+
+chk <- combine %>% 
+  filter(is.na(million_kcal),
+         !str_detect(product, "feed")) %>% 
+  mutate(remove = "yes")
+
+combine_rm_na <- left_join(combine, chk) %>% 
+  filter(is.na(remove)) %>% 
+  select(-remove)
+
+write_csv(combine_rm_na, here::here("_analysis/SI_data/output/efficiency_df.csv"))
+
+```
+

@@ -1,0 +1,760 @@
+---
+title: "Paper Stats using production data"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+
+library(ggplot2)
+library(tidyverse)
+library(here)
+library(countrycode)
+library(cowplot)
+
+source(here("_workflow/common.R"))
+
+```
+
+Get production data for each group.
+
+### Livestock
+```{r, eval = FALSE}
+## Livestock animal products
+livestock_cats <- read_csv(here("_analysis/paper_stats/data/FAO_livestock_categories.csv")) %>%
+  filter(!is.na(category1_production))
+table(livestock_cats$category1_production)
+table(livestock_cats$category2_production)
+
+livestock <- read_csv(here("_analysis/paper_stats/data/FAOSTAT_data_12-18-2020_livestock_primary.csv")) %>%
+  filter(Area != "China") %>%
+  filter(!(is.na(Value))) %>%
+  filter(Item %in% livestock_cats$Item) %>%
+  left_join(livestock_cats, by="Item") %>%
+  group_by(Area, category1_production, category2_production) %>%
+  summarize(tonnes = sum(Value)) %>%
+  ungroup()
+
+livestock_iso3c <- livestock %>%
+    mutate(Area = iconv(Area, "UTF-8", "UTF-8",sub=''),
+         Area = ifelse(Area == "Eswatini", "Swaziland", Area),
+         Area = ifelse(Area == "Netherlands Antilles (former)", "Bonaire, Sint Eustatius and Saba", Area),
+         Area = ifelse(Area == "French Guyana", "French Guiana", Area),
+         Area = ifelse(Area == "China, mainland", "China", Area))
+
+## add standardized country names
+livestock_iso3c$iso3c<- countrycode(as.character(livestock_iso3c$Area), origin="country.name", destination = "iso3c")
+
+## make sure all countries have an iso3c code
+check <- filter(livestock_iso3c, is.na(iso3c))
+unique(check$Area) # these are all higher level area, safe to delete NAs
+
+livestock_iso3c <- livestock_iso3c %>%
+  select(iso3c, category1_production, category2_production, tonnes)
+
+```
+
+### Marine fisheries
+
+```{r, eval = FALSE}
+
+# marine_fish_old <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/catch_by_rgn_spp_class.csv") %>%
+#   mutate(category1_production = recode(species_class, "Benthic" = "benthic_meat",
+#              "Demersal" = "demersal_meat",
+#              "forage_fish" = "fofm_meat",
+#              "Large pelagic" = "large-pelagic_meat",
+#              "Medium pelagic" = "medium-pelagic_meat",
+#              "Reef-associated" = "reef_meat",
+#              "Small pelagic" = "small-pelagic_meat")) %>%
+# #  group_by(country_corrected, iso3c) %>%
+# #  summarize(tonnes = sum(catch_tonnes, na.rm=TRUE)) %>%
+#   mutate(category2_production = "marine_fisheries") %>%
+#   select(iso3c, category1_production, category2_production, tonnes=catch_tonnes)
+
+
+marine_fish <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/catch_extracted_final.csv") %>%
+  mutate(category1_production = recode(species_class_final, "Benthic" = "benthic_meat",
+             "Demersal" = "demersal_meat",
+             "forage_fish" = "fofm_meat",
+             "Large pelagic" = "large-pelagic_meat",
+             "Medium pelagic" = "medium-pelagic_meat",
+             "Reef-associated" = "reef_meat",
+             "Small pelagic" = "small-pelagic_meat")) %>%
+#  group_by(country_corrected, iso3c) %>%
+#  summarize(tonnes = sum(catch_tonnes, na.rm=TRUE)) %>%
+  mutate(category2_production = "marine_fisheries") %>%
+  select(iso3c, category1_production, category2_production, tonnes=catch) %>%
+  filter(tonnes > 0)
+```
+
+### Crops for humans
+```{r, eval = FALSE}
+fao_prod <- read_csv(here("feed/data/MAPSPAMcrop_production.csv"))
+human_crop_prop <- read_csv("feed/data/human_crop_prop_consume.csv")
+
+crop_tonnes <- left_join(human_crop_prop, fao_prod, by=c("iso3c_producing", "SPAM_super")) %>%
+  rowwise() %>%
+  mutate(tonnes = human_feed_prop*tonnes_producing_crop) %>%
+  #group_by(iso3c_producing) %>%
+  #summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+  mutate(category2_production = "human_crop") %>%
+  mutate(category1_production = paste(SPAM_super, "produce", sep = "_")) %>%
+  select(iso3c = iso3c_producing, category1_production, category2_production, tonnes)
+
+```
+
+
+### Mariculture: 
+```{r, eval = FALSE}
+
+# mariculture_old <- read_csv(here("aquaculture/marine/STEP1_species_groups/int/tonnes_per_country_group.csv")) %>%
+#  # filter(!(aq_group %in% "bivalves")) %>%
+#   mutate(aq_group = ifelse(aq_group=="marine_fish_general", "marine-fish-general", aq_group),
+#          aq_group = ifelse(aq_group=="salmonids", "salmon", aq_group),
+#          aq_group = ifelse(aq_group=="shrimps_prawns", "shrimp", aq_group)) %>%
+#   select(country, species = aq_group, tonnes=total_tonnes) %>%
+#   mutate(iso3c = countrycode(country, origin="country.name", destination = "iso3c")) %>%
+#   mutate(category1_production = paste(species, "_meat", sep = ""),
+#          category2_production = "mariculture") %>%
+#   select(-country, -species)
+
+
+mariculture <- read_csv(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/production_extracted_final.csv")) %>%
+ # filter(!(aq_group %in% "bivalves")) %>%
+  mutate(aq_group = ifelse(aq_group=="marine_fish_general", "marine-fish-general", aq_group)) %>%
+  select(Country, iso3c, species = aq_group, tonnes=total_tonnes) %>% 
+  mutate(category1_production = paste(species, "_meat", sep = ""),
+         category2_production = "mariculture") %>% 
+  select(-Country, -species) %>%
+  filter(tonnes > 0)
+
+```
+
+
+### Feed: Crops
+```{r, eval = FALSE}
+
+livestock_cats <- read_csv(here("_analysis/paper_stats/data/raster_livestock_cats.csv"))
+table(livestock_cats$category2_production, livestock_cats$category1_production)
+
+mapspam_feed <- read_csv(here("feed/data/tonnes_feedproduced_per_country_system.csv")) %>% left_join(livestock_cats, by="animal_system") %>%
+  filter(!(is.na(category2_production))) %>%
+    mutate(feed_source = "crops") %>%
+  group_by(iso3c_producing, feed_source, category1_production, category2_production) %>%
+  summarize(tonnes = sum(consumed_tonnes, na.rm=TRUE)) %>%
+  dplyr::select(iso3c=iso3c_producing, category1_production, category2_production, feed_source, tonnes) %>%
+  ungroup() 
+
+
+```
+
+### Feed: fodder
+
+```{r, eval = FALSE}
+
+# remove old files in folder that are created here
+do.call(file.remove, list(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/fodder_tonnes", full.names = TRUE)))
+
+fodder_prod <- sum(stack(raster(file.path(prep, "crop/farm/scaled_maps_2017/crop_fodd_I_scaled.tif")), raster(file.path(prep, "crop/farm/scaled_maps_2017/crop_fodd_H_scaled.tif"))), na.rm=TRUE)
+
+fodder_props <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers", pattern="_x_land_fodd", full=TRUE)
+
+for(fodder_prop in fodder_props){ #fodder_prop = fodder_props[1]
+  fodder_raster <- raster(fodder_prop)
+  saveName <- basename(fodder_prop)
+  saveName <- gsub("_x_land_fodd_crop_feed", "", saveName)
+  saveName <- gsub("_land_", "", saveName)
+  fodder_tonnes <- fodder_raster * fodder_prod
+  writeRaster(fodder_tonnes, sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/fodder_tonnes/%s", saveName), overwrite=TRUE)
+}
+
+fodd_tonnes_stack <- stack(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/fodder_tonnes", full=TRUE))
+
+rgns_eez_land <- raster(file.path(prep, "spatial/land_eez_rgns.tif"))
+plot(rgns_eez_land)
+
+country_sum <- zonal(fodd_tonnes_stack, rgns_eez_land, fun="sum", progress="text", na.rm=TRUE) %>% 
+    data.frame() %>%
+    rename(ID_0 = zone) %>%
+    left_join(food_rgns, by="ID_0") %>%
+    select(-ID_0)
+
+country_fodder <- country_sum %>%
+   pivot_longer(cols=c(-Country, -iso3c), "animal_system") %>%
+   mutate(animal_system = gsub("^land_", "", animal_system)) %>%
+     mutate(animal_system = gsub("eggs.meat", "eggs&meat", animal_system)) %>%
+   left_join(livestock_cats, by="animal_system") %>%
+  mutate(feed_source = "fodder") %>%
+  select(iso3c, category1_production, category2_production, feed_source, tonnes=value)
+
+```
+
+Feed: FOFM
+
+```{r, eval = FALSE}
+fofm <- read_csv(here("feed/data/FMFO_bySource_2021Apr.csv")) %>%
+  mutate(feed_source = "feedfofm") %>%
+  rename(animal_system = system) %>%
+  left_join(livestock_cats, by="animal_system") %>%
+  filter(!is.na(category2_production)) %>%
+  select(iso3c, category1_production, category2_production, feed_source, tonnes) %>% 
+  group_by(iso3c, category1_production, category2_production, feed_source) %>% 
+  dplyr::summarise(tonnes = sum(tonnes))
+
+```
+
+# Calculate total tonnes of feed per country for each animal group:
+```{r, eval = FALSE}
+
+total_feed <- rbind(country_fodder, fofm, mapspam_feed) %>%
+  group_by(iso3c, category1_production, category2_production) %>%
+  summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+  mutate(category1_production = paste("feed_", category1_production, sep="")) %>%
+  mutate(category2_production = paste("feed_", category2_production, sep="")) %>%
+  filter(category1_production != "feed_NA")
+
+```
+
+
+Freshwater fish: 
+```{r, eval = FALSE}
+fresh_fish <- read_csv(here("fisheries/freshwater/data/fw_catch_per_iso3c.csv")) %>% 
+  select(-ID_0, - Country) %>% 
+  rename(tonnes = fw_catch_tonnes) %>% 
+  mutate(category1_production  = "fish_meat",
+         category2_production = "freshwater_fisheries")
+
+setdiff(food_rgns$iso3c, fresh_fish$iso3c)
+setdiff(fresh_fish$iso3c, food_rgns$iso3c)
+```
+
+## Join products
+```{r, eval = FALSE}
+
+product_tonnes <- rbind(livestock_iso3c, marine_fish, crop_tonnes, fresh_fish, mariculture, total_feed)
+
+## deal with feed backyard chickens
+product_tonnes_feed_chickens <- product_tonnes %>%
+  filter(category1_production == "feed_chickens_backyard_eggs&meat") %>%
+  mutate(tonnes = tonnes/2) 
+
+product_tonnes_feed_chickens_eggs <- product_tonnes_feed_chickens %>%
+  mutate(category1_production = "chickens_eggs")
+product_tonnes_feed_chickens_meat <- product_tonnes_feed_chickens %>%
+  mutate(category1_production = "chickens_meat")
+
+product_tonnes <- product_tonnes %>%
+  filter(category1_production != "feed_chickens_backyard_eggs&meat") %>% 
+  rbind(product_tonnes_feed_chickens_eggs, product_tonnes_feed_chickens_meat) %>% 
+  mutate(category1_production = ifelse(category1_production == "bivalves_meat", "bivalve_meat", category1_production))
+
+write.csv(product_tonnes, "_analysis/paper_stats/output/all_production.csv", row.names = FALSE)
+
+
+check_new <- product_tonnes %>%
+  group_by(category2_production) %>%
+  summarise(sum = sum(tonnes))
+
+
+
+```
+
+
+#### Get global proportions of production
+
+## now lets do everything - what we will use in figure 2
+
+```{r, eval = FALSE}
+product_tonnes_total <- product_tonnes %>%
+  group_by(iso3c) %>%
+  summarise(country_tonnes = sum(tonnes, na.rm = TRUE)) %>%
+  ungroup() %>%
+  mutate(total_prod = sum(country_tonnes, na.rm = TRUE)) %>%
+  mutate(prop_prod = country_tonnes/total_prod)
+
+
+sum(product_tonnes_total$prop_prod) # 1 - perfect
+
+write.csv(product_tonnes_total, "_analysis/paper_stats/output/all_production_props.csv", row.names = FALSE)
+```
+
+
+Everything under here is outdated... 
+
+ARCHIVE: 
+### Get costs
+
+```{r, eval = FALSE}
+
+product_tonnes <- read_csv("_analysis/paper_stats/output/all_production.csv")
+
+pressures <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw_df_summary/rgn_raw_summary.csv")
+filter(pressures, organism=="cows", product=="meat", iso3c=="USA") %>% data.frame()
+
+pressures <- pressures %>%
+  mutate(feed = case_when(category %in% c("feedfofm", "feedfodd", "feedcrop") ~ "feed_",
+                          T ~ "")) %>% 
+  group_by(iso3c, organism, product, feed, pressure) %>%
+  summarize(pressure_value = sum(sum, na.rm=TRUE)) %>%
+  mutate(category1_production = paste(organism, product, sep="_")) %>% 
+  unite(category1_production, c(feed, category1_production), sep = "")
+
+## divide backyard chicken pressures equally between meat/eggs. 
+pressures_chickens <- pressures %>%
+  filter(category1_production == "chickens_eggs&meat") %>%
+  mutate(pressure_value = pressure_value/2) 
+
+pressures_chickens_eggs <- pressures_chickens %>%
+  mutate(product = "eggs",
+         category1_production = "chickens_eggs")
+
+pressures_chickens_meat <- pressures_chickens %>%
+  mutate(product = "meat",
+         category1_production = "chickens_meat")
+
+## for backyard chicken feed
+pressures_chickens <- pressures %>%
+  filter(category1_production == "feed_chickens_eggs&meat") %>%
+  mutate(pressure_value = pressure_value/2) 
+
+pressures_feed_chickens_eggs <- pressures_chickens %>%
+  mutate(product = "eggs",
+         category1_production = "feed_chickens_eggs")
+
+pressures_feed_chickens_meat <- pressures_chickens %>%
+  mutate(product = "meat",
+         category1_production = "feed_chickens_meat")
+
+## update the backyards:
+pressures_chicken_update <- pressures %>%
+  filter(category1_production != "chickens_eggs&meat",
+         category1_production != "feed_chickens_eggs&meat") %>%
+  rbind(pressures_chickens_meat) %>%
+  rbind(pressures_chickens_eggs) %>%
+  rbind(pressures_feed_chickens_meat) %>%
+  rbind(pressures_feed_chickens_eggs)
+
+
+setdiff(pressures_chicken_update$category1_production, product_tonnes$category1_production) # 
+setdiff(product_tonnes$category1_production, pressures_chicken_update$category1_production) # 
+
+```
+
+## combine and rescale pressures
+```{r, eval = FALSE}
+
+category_list <- product_tonnes %>%
+  dplyr::select(category1_production, category2_production) %>%
+  unique()
+
+rescaling_values <- read_csv(here("_analysis/rescale_values.csv")) 
+
+pressures_summary <- pressures_chicken_update %>%
+  left_join(rescaling_values, by="pressure") %>%
+  rowwise() %>%
+  mutate(pressure_rescaled = pressure_value/global_total) %>%
+  left_join(category_list, by="category1_production") 
+
+```
+
+
+
+Need to answer these questions: 
+**However, these global results conceal important spatial variation. Countries can have foods that on average are relatively efficient yet are less efficient than foods that are, on average, relatively inefficient. For example, in Country XX goat meat has ~XXx greater cumulative pressure than cow meat, in Country XX small pelagic fisheries have ~XXx greater pressure than demersal fisheries, and in Country XX pulses are greater than millets.**
+
+```{r, eval = FALSE}
+all_cats_pressures <- pressures_summary %>%
+  group_by(iso3c, category1_production) %>%
+  summarise(cum_pressure_rescaled = sum(pressure_rescaled)*1000000) %>%
+  ungroup()
+
+write.csv(all_cats_pressures, "_analysis/paper_stats/output/summary_cum_pressures_rescaled_categories.csv", row.names = FALSE)
+write.csv(all_cats_pressures, "_analysis/paper_stats/supp_tables/summary_cum_pressures_rescaled_categories.csv", row.names = FALSE)
+
+goats_cows_pressures <- pressures_summary %>%
+  left_join(product_tonnes) %>%
+  filter(category1_production %in% c("goats_meat", "cows_meat")) %>%
+  group_by(iso3c, category1_production) %>%
+  summarise(cum_pressure_rescaled = sum(pressure_rescaled)*1000000,
+            prod_total = sum(tonnes, na.rm = TRUE)) %>%
+  ungroup() %>%
+  pivot_wider(names_from = category1_production, values_from = cum_pressure_rescaled) %>%
+  mutate(ratio = goats_meat/cows_meat) %>%
+  arrange(ratio) ## OLD: UAE goats are ~1.5X greater pressure than cows
+## NEW: UAE goats are 4.8X greater pressure than cows
+
+marine_fish2 <- pressures_summary %>%
+  filter(str_detect(category1_production, "small-pelagic|demersal")) %>%
+  group_by(iso3c, category1_production) %>%
+  summarise(cum_pressure_rescaled = sum(pressure_rescaled)*1000000) %>%
+  ungroup() %>%
+  pivot_wider(names_from = category1_production, values_from = cum_pressure_rescaled) %>%
+  mutate(ratio = `small-pelagic_meat`/demersal_meat) %>%
+  arrange(ratio) ## OLD: south africa ~1.4X higher 
+## south africa demersal 1.6X higher
+
+marine_fish3 <- pressures_summary %>%
+  filter(str_detect(category1_production, "small-pelagic|demersal")) %>%
+  group_by(iso3c, category1_production) %>%
+  summarise(cum_pressure_rescaled = sum(pressure_rescaled)) %>%
+  ungroup() %>%
+  pivot_wider(names_from = category1_production, values_from = cum_pressure_rescaled) %>%
+  mutate(ratio = demersal_meat/`small-pelagic_meat`) %>%
+  arrange(ratio)
+
+xpul_xmil_pressures <- pressures_summary %>%
+  filter(str_detect(category1_production, "xpul|xmil")) %>%
+   group_by(iso3c, category1_production) %>%
+  summarise(cum_pressure_rescaled = sum(pressure_rescaled)) %>%
+  ungroup() %>%
+  pivot_wider(names_from = category1_production, values_from = cum_pressure_rescaled) %>%
+  mutate(ratio = xpul_produce/xmil_produce) %>%
+  arrange(ratio) ## algeria is the highest 
+
+
+
+```
+
+
+### Summarize pressures at lower resolution and compare production vs. pressures
+
+```{r, eval = FALSE}
+
+pressures_summary_lowres <- pressures_summary %>%
+  group_by(iso3c, category2_production) %>%
+  summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+  ungroup()
+
+tmp <- filter(pressures_summary_lowres, iso3c=="USA") %>% data.frame()
+sum(tmp$cumulative_pressure)/4
+
+product_lowres <- product_tonnes %>%
+  group_by(iso3c, category2_production) %>%
+  summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+  ungroup()
+tmp <- filter(product_lowres, iso3c=="USA") %>% data.frame()
+
+cp_rate <- left_join(pressures_summary_lowres, product_lowres, by=c("iso3c", "category2_production")) %>%
+  filter(!is.na(tonnes)) %>%
+    filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>%
+    filter(tonnes>2000) %>%
+  rowwise() %>%
+  mutate(pressure_per_tonne = cumulative_pressure/tonnes * 1000000)
+
+test <- cp_rate %>%
+group_by(category2_production) %>%
+  summarize(mean = mean(pressure_per_tonne),
+            sd = sd(pressure_per_tonne))
+
+
+```
+
+
+### Summarize pressures at higher resolution and compare production vs. pressures
+Used for this statement in the paper: 
+"Perhaps the most striking finding from our global cumulative pressure analysis is the dramatic differences in food production efficiencies across food types and countries. We estimate up to >20-fold variation among countries for some livestock and fisheries, and >5-fold for some crops (Fig. 5)."
+
+```{r, eval = FALSE}
+
+pressures_summary_highres <- pressures_summary %>%
+  group_by(iso3c, category1_production) %>%
+  summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+  ungroup()
+
+tmp <- filter(pressures_summary_highres, iso3c=="USA") %>% data.frame()
+sum(tmp$cumulative_pressure)/4
+
+product_highres <- product_tonnes %>%
+  group_by(iso3c, category1_production) %>%
+  summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+  ungroup()
+tmp <- filter(product_highres, iso3c=="USA") %>% data.frame()
+
+cp_rate <- left_join(pressures_summary_highres, product_highres, by=c("iso3c", "category1_production")) %>%
+  filter(!is.na(tonnes)) %>%
+    filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>%
+    filter(tonnes>2000) %>%
+  rowwise() %>%
+  mutate(pressure_per_tonne = (cumulative_pressure/tonnes) * 1000000)
+
+test <- cp_rate %>%
+group_by(category1_production) %>%
+  summarize(mean = mean(pressure_per_tonne),
+            sd = sd(pressure_per_tonne))
+
+
+all_pressure_per_tonne_fig_5 <- cp_rate %>%
+  group_by(category1_production) %>%
+  summarise(max_ppt = max(pressure_per_tonne), 
+         quant_90_ppt = quantile(pressure_per_tonne, .90),
+         median_ppt = median(pressure_per_tonne),
+         quant_10_ppt = quantile(pressure_per_tonne, 0.10),
+         min_ppt = min(pressure_per_tonne)) %>%
+  ungroup() %>%
+  mutate(quant_90_div_10 = quant_90_ppt/quant_10_ppt,
+         max_div_min = max_ppt/min_ppt)
+
+crops_eff <- cp_rate %>%
+  filter(str_detect(category1_production, "produce")) %>%
+    group_by(category1_production) %>%
+    summarise(max_ppt = max(pressure_per_tonne), 
+         quant_90_ppt = quantile(pressure_per_tonne, .90),
+         median_ppt = median(pressure_per_tonne),
+         quant_10_ppt = quantile(pressure_per_tonne, 0.10),
+         min_ppt = min(pressure_per_tonne),
+         sd_ppt = sd(pressure_per_tonne),
+         mean_ppt = mean(pressure_per_tonne))  %>%
+  ungroup() %>%
+  mutate(quant_90_div_10 = quant_90_ppt/quant_10_ppt,
+         max_div_min = max_ppt/min_ppt)
+
+mean(crops_eff$quant_90_div_10) # 4.088458
+sd(crops_eff$quant_90_div_10) # 0.9831299
+
+fis_eff_1 <- cp_rate %>%
+  filter(str_detect(category1_production, "reef|large|medium|demersal|benthic|fofm"))
+  
+fis_eff_2 <- cp_rate %>%
+  filter(str_detect(category1_production, "small-pelagic")) %>%
+  filter(!(iso3c %in% c("TWN", "CHN", "KOR"))) 
+
+fis_eff_total <- rbind(fis_eff_1, fis_eff_2) %>%
+    group_by(category1_production) %>%
+    summarise(max_ppt = max(pressure_per_tonne), 
+         quant_90_ppt = quantile(pressure_per_tonne, .90),
+         median_ppt = median(pressure_per_tonne),
+         quant_10_ppt = quantile(pressure_per_tonne, 0.10),
+         min_ppt = min(pressure_per_tonne),
+         sd_ppt = sd(pressure_per_tonne),
+         mean_ppt = mean(pressure_per_tonne))  %>%
+  ungroup() %>%
+  mutate(quant_90_div_10 = quant_90_ppt/quant_10_ppt,
+         max_div_min = max_ppt/min_ppt) 
+
+test_fis <- fis_eff_total %>%
+  select(category1_production, quant_10_ppt, median_ppt, quant_90_ppt, quant_90_div_10) %>%
+  arrange(quant_90_div_10)
+
+data.frame(test_fis)
+
+mean(fis_eff_total$quant_90_div_10) # 13.0646
+sd(fis_eff_total$quant_90_div_10) # 6.476854
+
+write.csv(all_pressure_per_tonne_fig_5, "_analysis/paper_stats/output/pressure_per_tonne_ranges.csv", row.names = FALSE)
+
+write.csv(all_pressure_per_tonne_fig_5, "_analysis/paper_stats/supp_tables/pressure_per_tonne_ranges.csv", row.names = FALSE)
+
+all_ppt <- read_csv("_analysis/paper_stats/output/pressure_per_tonne_ranges.csv")
+
+```
+
+## Look at pressure/tonne of all meats and all crops (combined)
+
+**For example, for many of the meats, which tend to have very low efficiencies on average (high cumulative pressure per tonne) and a high range of values, African countries have the lowest efficiencies while XX countries produce these meats within the same efficiency range as many crops. Furthermore, taking advantage of regional efficiencies can create production-environment win-wins.**
+
+```{r, eval = FALSE}
+pressures_summary_lowres <- pressures_summary %>%
+  group_by(iso3c, category2_production) %>%
+  summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+  ungroup()
+
+tmp <- filter(pressures_summary_lowres, iso3c=="USA") %>% data.frame()
+sum(tmp$cumulative_pressure)/4
+
+product_lowres <- product_tonnes %>%
+  group_by(iso3c, category2_production) %>%
+  summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+  ungroup()
+tmp <- filter(product_lowres, iso3c=="USA") %>% data.frame()
+
+cp_rate <- left_join(pressures_summary_lowres, product_lowres, by=c("iso3c", "category2_production")) %>%
+  filter(!is.na(tonnes)) %>%
+    filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>%
+    filter(tonnes>2000) %>%
+  rowwise() %>%
+  mutate(pressure_per_tonne = cumulative_pressure/tonnes * 1000000)
+
+## filter for only land meats and crops: 
+land_meats <- c("chickens_eggs&meat" , "cows_meat", "small_ruminant_meat", "pigs_meat")
+crops <- c("human_crop")
+
+
+meats_rates <- cp_rate %>%
+  filter(category2_production %in% land_meats) %>%
+  group_by(iso3c) %>%
+  summarise(cumulative_pressure = sum(cumulative_pressure),
+            tonnes = sum(tonnes)) %>%
+  ungroup() %>%
+  mutate(pressure_per_tonne = cumulative_pressure/tonnes*1000000) %>%
+  select(iso3c, "ppt_meat" = pressure_per_tonne)
+
+crops_rates <- cp_rate %>%
+  filter(category2_production %in% crops) %>%
+    group_by(iso3c) %>%
+  summarise(cumulative_pressure = sum(cumulative_pressure),
+            tonnes = sum(tonnes)) %>%
+  ungroup() %>%
+  mutate(pressure_per_tonne = cumulative_pressure/tonnes*1000000) %>%
+  select(iso3c, "ppt_crop" = pressure_per_tonne)
+
+all_meat_crop <- meats_rates %>%
+  left_join(crops_rates) %>%
+  mutate(difference = ppt_meat - ppt_crop) %>%
+  mutate(difference_X = ppt_crop/ppt_meat) %>% 
+  arrange(ppt_meat) %>%
+  head(20)## choose Singapore, Belize, Israel. they have pretty efficient meat production, with crop efficiencies in the same range 
+
+
+## High meat efficiencies
+# jordan 
+# japan 
+# poland
+# hungary
+# belgium
+# Belize
+# Israel
+
+## high meat/crop efficiences comparison
+# Belize
+# israel
+# Taiwan - cut taiwan due to china issue
+# french polynesia
+# Jordan
+# Japan
+# Hungary
+# poland 
+
+
+country_filter <- c("JOR", "JPN", "POL", "HUN", "BEL", "BLZ", "ISR")
+
+pressures_summary_filt <- pressures_summary %>%
+  filter(iso3c %in% country_filter) %>%
+  filter(category2_production %in% land_meats) %>%
+  left_join(product_lowres, by=c("iso3c", "category2_production")) %>%
+  group_by(iso3c) %>%
+  mutate(total_country_tonnes = sum(tonnes, na.rm = TRUE)) %>%
+  ungroup()
+  
+  
+no_chicken <- pressures_summary_filt %>%
+  filter(organism != "chickens")
+
+chickens <- pressures_summary_filt %>%
+  filter(organism == "chickens") %>%
+  head(56)
+  
+all_pressures_filt <- data.frame(rbind(no_chicken, chickens)) %>%
+  select(-global_total, -pressure_value) %>%
+  pivot_wider(names_from = pressure, values_from = pressure_rescaled) %>%
+  dplyr::mutate(ghg_higher_dist = ifelse(ghg > disturbance, 1, NA),
+         nutrient_higher_dist = ifelse(nutrient > disturbance, 1, NA),
+         ghg_higher_water = ifelse(ghg > water, 1, NA),
+         nutrient_higher_water = ifelse(nutrient > water, 1, NA))
+
+## no goats for israel, belgium, poland, japan, jordan, 
+## no sheep for japan, jordan 
+
+## ghg and nutrients are higher than disturbance and water use in all of these places
+## all of these countries mostly produce chickens and pigs, which are not grazing animals, meaning they have lower disturbance and water use, and likely higher efficiencies bc of this 
+
+
+#### Now lets cut chickens and pigs 
+
+
+## filter for only land meats and crops: 
+land_meats <- c("cows_meat", "small_ruminant_meat")
+crops <- c("human_crop")
+
+
+meats_rates2 <- cp_rate %>%
+  filter(category2_production %in% land_meats) %>%
+  group_by(iso3c) %>%
+  summarise(cumulative_pressure = sum(cumulative_pressure),
+            tonnes = sum(tonnes)) %>%
+  ungroup() %>%
+  mutate(pressure_per_tonne = cumulative_pressure/tonnes*1000000) %>%
+  select(iso3c, "ppt_meat" = pressure_per_tonne)
+
+crops_rates2 <- cp_rate %>%
+  filter(category2_production %in% crops) %>%
+    group_by(iso3c) %>%
+  summarise(cumulative_pressure = sum(cumulative_pressure),
+            tonnes = sum(tonnes)) %>%
+  ungroup() %>%
+  mutate(pressure_per_tonne = cumulative_pressure/tonnes*1000000) %>%
+  select(iso3c, "ppt_crop" = pressure_per_tonne)
+
+mean(crops_rates2$ppt_crop) # 0.0002978471
+
+all_meat_crop <- meats_rates2 %>%
+  left_join(crops_rates2) %>%
+  mutate(difference = ppt_meat - ppt_crop) %>%
+  mutate(difference_X = ppt_meat/ppt_crop) %>% 
+  mutate(global_crop_eff_mean = 0.0002978471) %>%
+  mutate(difference_X_glboal = ppt_meat/global_crop_eff_mean) %>%
+  arrange(ppt_meat) 
+
+
+## High meat efficiencies
+# lebanon
+# kuwait
+# albania
+# algeria
+# israel
+
+## high meat/crop efficiences comparison
+# lebanon
+# jordan
+# Israel
+# tunisia 
+
+
+
+country_filter <- c("JOR", "LBN", "ISR", "KWT", "ALB", "DZA")
+
+pressures_summary_filt2 <- pressures_summary %>%
+  filter(iso3c %in% country_filter) %>%
+  filter(category2_production %in% land_meats) %>%
+  left_join(product_lowres, by=c("iso3c", "category2_production")) %>%
+  group_by(iso3c) %>%
+  mutate(total_country_tonnes = sum(tonnes, na.rm = TRUE)) %>%
+  ungroup()
+  
+  
+all_pressures_filt <- pressures_summary_filt2 %>%
+  select(-global_total, -pressure_value) %>%
+  pivot_wider(names_from = pressure, values_from = pressure_rescaled) %>%
+  dplyr::mutate(ghg_higher_dist = ifelse(ghg > disturbance, 1, NA),
+         nutrient_higher_dist = ifelse(nutrient > disturbance, 1, NA),
+         ghg_higher_water = ifelse(ghg > water, 1, NA),
+         nutrient_higher_water = ifelse(nutrient > water, 1, NA))
+
+## no goats for israel, jordan
+## no sheep for jordan
+
+## ghg and nutrients are higher than disturbance and water use in all of these places
+## these places do produce more cows than goats/sheep 
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

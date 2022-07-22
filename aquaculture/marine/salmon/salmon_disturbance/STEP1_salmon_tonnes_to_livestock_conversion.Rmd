@@ -1,0 +1,328 @@
+---
+title: "Modeling salmon production (tonnes) to total number"
+author: "Juliette Verstaen"
+date: "1/9/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries and paths}
+library(dplyr)
+library(tidyr)
+library(data.table)
+library(countrycode)
+library(readxl)
+library(stringi)
+library(stringr)
+library(ggplot2)
+library(readr)
+library(here)
+
+raw_path <- "/home/shares/food-systems/Food_footprint/_raw_data/"
+```
+
+## About 
+
+Calculating conversion factor converting production of salmon reported in tonnage to the number of individual salmon.
+
+## Data
+
+1. For this we are going to use the data found [here](https://www.ssb.no/en/statbank/table/09259/), which documents for each county: 
+- The stock number as of Jan 1st
+- Supplies - how many additional fish were added
+- Delivered for sale - how many fish were removed for consumption
+- Loss - number of fish died
+- The stock number as of Dec 31st
+- Percent loss
+
+2. [Aquaculture sales](https://www.ssb.no/en/statbank/table/07326)
+
+
+## Methods
+
+### Norwegian Fisheries Directorate data wrangling
+First we're going to read in the sub regional production data we have, and keep all the years. We are also going to gapfill this information. 
+
+# Norway
+Data from:
+https://www.ssb.no/en/statbank/table/09259/
+09259: Aquaculture. Stock and loss of live fish for food (rough classification) (C) 2010 - 2018 (replaced ":" with NA)
+
+https://www.ssb.no/en/statbank/table/07326
+07326: Aquaculture. Sales of slaughtered fish for food, by region, fish species, contents and year
+(replaced "-" with 0; replaced, ":" with NA)
+
+Downloaded: Jan 22 2020
+
+
+Gapfilling missing data.  loss-percent variable is cut because it cannot be gapfilled.
+```{r}
+
+#gapfill missing data
+
+norway_mar <- read.csv("/home/shares/food-systems/Food_footprint/_raw_data/Regional_aquaculture_production/Norway/norway_mariculture.csv") %>%
+  gather(key = "year", value = "value", -region, -species, -variable, -units) %>%
+  mutate(year = gsub("X", "", year)) %>%
+  filter(variable != "loss_percent")
+
+
+# first round of gapfilling if every year is NA or 0, then 0
+norway_mar_gf <- norway_mar %>%
+  group_by(region, species, variable) %>%
+  mutate(total_sp = sum(value, na.rm=TRUE)) %>%   # if all NA or 0 for a species across years, then 0
+  mutate(gapfilled = ifelse(total_sp==0 & is.na(value), "gapfilled", NA)) %>%
+    mutate(value = ifelse(total_sp == 0 & is.na(value), 0, value)) %>%
+  dplyr::select(-total_sp)
+
+# second round of gapfilling, gapfill based on unaccounted fish and avg proportion of aquaculture in previous years
+
+avg_totals <- filter(norway_mar, species == "Total") %>%
+  group_by(region, variable) %>%
+  summarize(total_mean = mean(value))
+
+totals <- filter(norway_mar, species=="Total") %>%
+  dplyr::select(-species, total_value=value)
+
+
+norway_mar_gf <- norway_mar_gf %>%
+  left_join(avg_totals) %>%               
+  left_join(totals) %>%
+  group_by(region, species, variable) %>%
+  mutate(avg_value = mean(value, na.rm=TRUE)) %>%
+  ungroup() %>%
+  mutate(proportion = avg_value/total_mean) %>%
+  group_by(region, variable, year) %>%
+  mutate(total_obs = sum(value[.$species != "Total"], na.rm=TRUE)) %>%
+  mutate(unaccounted = total_value - total_obs) %>%
+  mutate(unaccounted = ifelse(unaccounted < 0, 0, unaccounted))  %>%     # some negatives due to rounding and possible data entry error
+  mutate(avg_value_missing = proportion * ifelse(is.na(value), 1, 0)) %>%                            # figure out proportion of only missing
+   mutate(prop_value_missing = avg_value_missing/sum(avg_value_missing, na.rm=TRUE)) %>%
+  mutate(gf_value = prop_value_missing * unaccounted) %>%                           # gapfill missing data with unaccounted production multiplied by the average proportion of production for each species in previous years 
+mutate(gapfilled = ifelse(is.na(value) & !is.na(gf_value), "gapfilled", gapfilled)) %>%
+  mutate(value = ifelse(is.na(value), gf_value, value))
+
+## watch these be gapfilled
+summary(norway_mar_gf) # make sure no NA values
+data.frame(filter(norway_mar_gf, is.na(value)))
+filter(norway_mar_gf, year==2017)
+filter(norway_mar_gf, region=="Rogaland", variable == "tonnes_fish")
+
+summary(norway_mar_gf)
+dim(norway_mar_gf)
+summary(norway_mar)
+dim(norway_mar)
+
+## clean and save data
+norway_mar_gf <- norway_mar_gf %>%
+dplyr::select(region, species, variable, units, year, value, gapfilled) %>%
+  filter(species != "Total")
+write.csv(norway_mar_gf, here("aquaculture/marine/salmon/salmon_disturbance/data/norway_mariculture_gf.csv"), row.names=FALSE ) 
+  
+```
+
+```{r wrangling production data}
+nor_prod <- read_csv(here("aquaculture/marine/salmon/salmon_disturbance/data/norway_mariculture_gf.csv")) %>% 
+  filter(species == "Salmon") %>% 
+  dplyr:: select(year, region,variable, value) %>% 
+  spread(variable, value) %>% 
+  rename(salmon_tonnes = tonnes_fish) %>% 
+  mutate(Stock_Jan1_count = Stock_Jan1_count*1000,
+         loss_count = loss_count*1000,
+         stock_dec_31_count = stock_dec_31_count*1000,
+         delivered_for_sale_count = delivered_for_sale_count*1000,
+         supplies_count = supplies_count*1000)
+
+```
+
+Checking the total annual sum of salmon production in Norway
+```{r annual totals}
+## combine them all together for total salmon in all of Norway.
+nor_pro_county<- nor_prod %>% 
+  group_by(year) %>% 
+  summarize(total_salmon_tonnes = sum(salmon_tonnes))
+
+nor_pro_county
+```
+
+Because graphs are fun!!
+```{r graph production by region}
+# graph!
+plot <- ggplot(nor_prod)+
+  geom_line(aes(x=year, y = salmon_tonnes, color=region))+
+  ggtitle("Salmon Production in Norwegian Counties") +
+  ylab("Tonnage of Salmon") +
+  xlab("Year") +
+  theme_classic() 
+plot
+
+```
+
+###SSB Data wrangling
+
+**Pulling out Nord and Sor** 
+Up until 2017 Trøndelag was Nord-Trøndelag and Sør-Trøndelag. Since the production data we have combines both of these counties during that time, we are going to do the same here to avoid unnecessary errors in our modeling. Here I pull out that data to work on it so I can better see what's happening. 
+
+```{r nord_tron and sor_tron wrangling}
+
+trond <- nor_prod %>% 
+  filter(region == "Nord-Trøndelag" | region == "Sør-Trøndelag" | region == "Trøndelag") %>% 
+  group_by(year) %>%
+  
+  mutate(t_stock = sum(Stock_Jan1_count),
+         t_prod = sum(salmon_tonnes),
+         t_loss_count = sum(loss_count),
+         t_stock_dec_31_count = sum(stock_dec_31_count),
+         t_sale = sum(delivered_for_sale_count),
+         t_supplies_count = sum(supplies_count)) %>% 
+  
+  dplyr::select(year, t_stock, t_prod, t_loss_count, t_stock_dec_31_count, t_sale, t_supplies_count) %>% 
+  
+  rename(Stock_Jan1_count = t_stock,
+         salmon_tonnes = t_prod,
+         delivered_for_sale_count = t_sale,
+         stock_dec_31_count = t_stock_dec_31_count,
+         loss_count = t_loss_count,
+         supplies_count = t_supplies_count) %>% 
+  
+  mutate(region = "Trøndelag") %>% 
+    unique() 
+
+```
+
+**Finishing up SSB data wrangling**
+```{r finalizing ssb data wrangling}
+nor_prod <- nor_prod %>% 
+  ### get rid of the Trondelag, Sor, and Nord that we will add back in consolidated
+  filter(region != "Nord-Trøndelag" & region != "Sør-Trøndelag" & region != "Trøndelag") %>%
+  bind_rows(trond)
+
+plot <- ggplot(nor_prod)+
+  geom_line(aes(x=year, y = salmon_tonnes, color=region))+
+  ggtitle("Salmon Production in Norwegian Counties") +
+  ylab("Tonnage of Salmon") +
+  xlab("Year") +
+  theme_classic() 
+plot
+
+```
+
+###Combine both data sets
+
+
+```{r combine data sets}
+all_salmon <- nor_prod %>% 
+  mutate(salmon_kg = salmon_tonnes*1000,
+         avg_harvest_wgt_kg = salmon_kg/delivered_for_sale_count,
+         mortality_rate = loss_count/(Stock_Jan1_count)) 
+#%>%   filter(num_loss != is.na(num_loss))
+
+write.csv(all_salmon, file = "data/all_salmon_norway.csv")
+```
+
+Check to see if the math for adding the number of salmon at the end of the year matches the reported values
+```{r}
+sal_check <- all_salmon %>% 
+  mutate(test = Stock_Jan1_count  + supplies_count - loss_count - delivered_for_sale_count,
+         diff = test - stock_dec_31_count,
+         perdiff = diff/stock_dec_31_count)
+```
+
+Some of these values are off by either 1000 or 2000 fish (weird that they are such even numbers...) but this is mostly a drop in the bucket in the ground scheme of things, so we won't worry about it too much
+
+
+```{r explore data}
+### does larger production mean increased mortality rate?
+plot(all_salmon$salmon_kg, all_salmon$mortality_rate) #no
+
+### which counties have higher mortality rates
+ggplot(all_salmon)+
+  geom_line(aes(x= year, y = mortality_rate, color= region))
+
+salmon_model <- lm(delivered_for_sale_count ~salmon_tonnes, data = all_salmon)
+salmon_model
+summary(salmon_model)
+plot(salmon_model)
+
+ggplot(all_salmon) +
+  geom_point(aes(x= salmon_tonnes, y = delivered_for_sale_count))+
+  xlab("Tonnage of Salmon") +
+  ylab("Number Salmon Sold") +
+  theme_classic() +
+  stat_smooth(aes(x= salmon_tonnes, y = delivered_for_sale_count), method = "lm")
+
+plot(all_salmon$loss_count, all_salmon$delivered_for_sale_count)
+```
+
+Simple model conversion production to numbers
+tanding_stock_beginning_year ~ number_produced/sold - 1
+```{r conversion production to numbers}
+
+salm_conv_model <- lm(Stock_Jan1_count ~ delivered_for_sale_count - 1, data = sal_check)
+salm_conv_model
+summary(salm_conv_model)
+
+ggplot(all_salmon)+
+  geom_point(aes(x= delivered_for_sale_count, y = Stock_Jan1_count)) + 
+  geom_abline(intercept=0, slope = 1.477)
+```
+
+
+
+Making histogram graphs for harvest weights 
+- mean and standard deviations
+
+```{r}
+
+all_salmon_2 <- all_salmon %>% 
+  mutate(sd = sd(avg_harvest_wgt_kg),
+         mean = mean(avg_harvest_wgt_kg))
+
+
+hist_harv_weight <- ggplot(all_salmon) +
+  geom_histogram(aes(x= avg_harvest_wgt_kg), fill = "gray65") +
+  ggtitle("Norwegian Salmon Harvest Weight") +
+  ylab("Count") +
+  xlab("Harvest Weight (kg)") +
+  theme_classic() +
+  geom_vline(aes(xintercept = mean(avg_harvest_wgt_kg)) ,col='dodgerblue2',size=1)+
+  geom_vline(aes(xintercept = mean(avg_harvest_wgt_kg) + sd(avg_harvest_wgt_kg)), col='seagreen3', size = 0.5)+
+  geom_vline(aes(xintercept = mean(avg_harvest_wgt_kg) - sd(avg_harvest_wgt_kg)), col='seagreen3', size = 0.5)+
+  geom_vline(aes(xintercept = mean(avg_harvest_wgt_kg) - 2*sd(avg_harvest_wgt_kg)), col='seagreen3', size = 0.5)+
+  geom_vline(aes(xintercept = mean(avg_harvest_wgt_kg) + 2*sd(avg_harvest_wgt_kg)), col='seagreen3', size = 0.5) +
+  theme(legend.position = "none") 
+  
+hist_harv_weight
+
+mean(all_salmon$avg_harvest_wgt_kg)
+#4.907344
+sd(all_salmon$avg_harvest_wgt_kg)
+#0.3927127
+min(all_salmon$avg_harvest_wgt_kg)
+#3.30712
+max(all_salmon$avg_harvest_wgt_kg)
+#6.53237
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

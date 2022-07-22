@@ -1,0 +1,43 @@
+---
+title: "MapSPAM_v2_extent_reset"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source("./_workflow/common.R")
+
+# getting packages we want
+library(tidyverse)
+library(here)
+library(raster)
+library(sf)
+library(stringr)
+
+# Paths
+spam_path <- "/home/shares/food-systems/Food_footprint/_raw_data/map_spam_crop_data/mapspam_2010v2.0"
+new_path  <- "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/MapSPAM_correct_extent"
+
+map_list <- list.files(spam_path, pattern = ".tif$", recursive = TRUE, full = TRUE)
+
+registerDoParallel(18)
+foreach::foreach(map_list = map_list) %dopar% {
+   
+  # Extract file names to paste into file path.
+  this_file_path <- map_list
+  raster_map <- raster(this_file_path)
+  
+  # Set extent.
+  extent(raster_map) <- extent(-180, 180, -90, 90)
+  
+  # extract file_name
+  this_file_name <- str_extract(this_file_path, "[^//]+$")
+  
+  # Save
+  writeRaster(raster_map, 
+              paste(new_path, this_file_name, sep = ""),
+              format = "GTiff", 
+              overwrite = TRUE)
+}
+```
+

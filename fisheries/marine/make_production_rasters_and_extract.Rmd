@@ -1,0 +1,313 @@
+---
+title: "Create production rasters and extract per food raster"
+author: "Gage Clawson (UCSB, NCEAS, OHI)"
+date: "May 13, 2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Here we need to take the raw watson production data and rasterize it (save those files, for each species class, and for each species). Then we will extract the production values from the rasters using our food systems and zonal() with file.path(prep, "spatial/land_eez_rgns.tif")), so that we avoid any weird mismatches between our pressure rasters and production reporting. (The output of this will really only be used for the efficiency calculations).
+
+```{r, eval = FALSE}
+#load relevant packages, etc.
+
+library(here)
+library(raster)
+library(tidyverse)
+library(doParallel)
+library(foreach)
+library(parallel)
+
+# raster template
+r <- raster::raster(ncol=720, nrow=360, vals=c(1:259200))
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+
+prep <- file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep")
+
+
+source(here("_workflow/common_spatial.R"))
+
+food_rgns <- food_rgns %>% 
+  add_row(iso3c = "HSX", ID_0 = 9999, Country = "High Seas")
+
+
+cat_msg <- function(x, ...) {
+  if(is.null(knitr:::.knitEnv$input.dir)) {
+    ### not in knitr environment, so use cat()
+    cat(x, ..., '\n')
+  } else {
+    ### in knitr env, so use message()
+    message(x, ...)
+  }
+  return(invisible(NULL))
+}
+
+```
+
+Save catch rasters for each species class (IUU + Reported)
+```{r, eval = FALSE}
+
+## filter this for 2017... our assessment year 
+catch_full_final <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/catch_spp_class_2017.csv") 
+
+catch_summary <- catch_full_final %>%
+  mutate(catch = ReportedIND + IUUIND + ReportedNIND + IUUNIND)  %>%
+  group_by(Cell, species_class_fin) %>%
+  summarize(catch = sum(catch, na.rm=TRUE)) %>%
+  ungroup() 
+
+check <- catch_summary %>%
+  group_by(species_class_fin) %>%
+  summarise(check = sum(catch, na.rm = TRUE))
+
+## get species, description, taxon ids
+catch_cats <- catch_summary %>%
+  dplyr::select(species_class_fin) %>%
+  distinct() %>%
+  mutate(species_class_fix = case_when(
+    species_class_fin == "Demersal" ~ "demersal",
+    species_class_fin == "Small pelagic" ~ "small-pelagic", 
+    species_class_fin == "Medium pelagic" ~ "medium-pelagic", 
+    species_class_fin == "Large pelagic" ~ "large-pelagic", 
+    species_class_fin == "Reef-associated" ~ "reef", 
+    species_class_fin == "Benthic" ~ "benthic", 
+    species_class_fin == "forage_fish" ~ "fofm"
+  ))
+
+reload <- FALSE ## change this to true if you want to rerun all species
+
+## rasterize and extract catch using zonal
+for(i in 1:nrow(catch_cats)){
+  
+  # i = 1
+
+  ## get the ids for this i  
+  spp_class_id <- catch_cats$species_class_fin[i]
+  
+  spp_class_id_fix <- catch_cats$species_class_fix[i]
+  
+  ## this will be the final file name
+  spp_final_file <- file.path(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/production_rasters/tonnes_%s.tif", spp_class_id))
+  
+  spp_predatalayers_file <- file.path(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/marine_%s_fisheries_meat_tonnes_production.tif", spp_class_id_fix))
+    
+if(!file.exists(spp_final_file) | reload) { ## if the file already exists, skip over it (unless otherwise specified)
+  
+## filter for correct observations  
+catch_summary_i <- catch_summary %>%
+  filter(species_class_fin == spp_class_id) %>%
+  group_by(Cell) %>%
+  summarise(catch_final = sum(catch, na.rm = TRUE)) %>%
+  ungroup()
+
+print(sum(catch_summary_i$catch_final)) # 45088617
+
+## rasterize
+tonnes_raster <- raster::subs(r, catch_summary_i, by = "Cell", which = "catch_final", subsWithNA=TRUE)
+# plot(log(tonnes_raster+1))
+
+# tonnes_raster
+
+print(cellStats(tonnes_raster, "sum")) # 45088617
+
+
+### DIVIDE BY AREA HERE for reprojection
+tonnes_raster_fix <- tonnes_raster/raster::area(tonnes_raster)
+# plot(tonnes_raster_fix)
+
+## reproject
+tonnes_raster_proj <- projectRaster(tonnes_raster_fix, food_raster, method="ngb")
+# tonnes_raster_proj
+
+### MULTIPLY BY AREA HERE for reprojection
+tonnes_raster_proj_final <- tonnes_raster_proj*raster::area(tonnes_raster_proj)
+# plot(log(tonnes_raster_proj_final + 1))
+print(cellStats(tonnes_raster_proj_final, "sum", na.rm = TRUE)) # 45088512 ### close enough
+
+# save raster
+writeRaster(tonnes_raster_proj_final, spp_final_file,
+    overwrite=TRUE)
+
+writeRaster(tonnes_raster_proj_final, spp_predatalayers_file,
+    overwrite=TRUE)
+
+cat_msg('Finished ', i, ' out of ', nrow(catch_cats), 'species')
+
+} else {
+      
+      cat_msg('species file ', spp_final_file, ' already exists; skipping these spp')
+      
+    }
+}
+```
+
+Save and extract catch rasters for each individual species of fish
+```{r, eval = FALSE}
+
+catch_summary <- catch_full_final %>%
+  mutate(catch = ReportedIND + IUUIND + ReportedNIND + IUUNIND)  %>%
+  group_by(Cell, species_class_fin, Descript, TaxonName) %>%
+  summarize(catch = sum(catch, na.rm=TRUE)) %>%
+  ungroup() %>%
+  mutate(TaxonName = ifelse(TaxonName == "Homaridae/Palinuridae", "Homaridae_Palinuridae", TaxonName))
+
+check <- catch_summary %>%
+  group_by(species_class_fin) %>%
+  summarise(check = sum(catch, na.rm = TRUE))
+
+
+test <- catch_summary %>%
+  filter(str_detect(TaxonName, "/"))
+
+## get species, description, taxon ids
+catch_cats <- catch_summary %>%
+  dplyr::select(species_class_fin, Descript, TaxonName) %>%
+  distinct()
+
+reload <- FALSE ## change this to true if you want to rerun all species
+
+## rasterize and extract catch using zonal
+for(i in 1:nrow(catch_cats)){
+  
+  # i = 364
+
+  ## get the ids for this i  
+  spp_class_id <- catch_cats$species_class_fin[i]
+  descript_id <- catch_cats$Descript[i]
+  taxon_id <- catch_cats$TaxonName[i]
+  
+  ## this will be the final file name
+  spp_final_file <- file.path(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/production_csvs/%s/tonnes_%s_%s_%s.csv", spp_class_id, spp_class_id, descript_id, taxon_id))
+    
+if(!file.exists(spp_final_file) | reload) { ## if the file already exists, skip over it (unless otherwise specified)
+  
+## filter for correct observations  
+catch_summary_i <- catch_summary %>%
+  filter(species_class_fin == spp_class_id,
+         Descript == descript_id,
+         TaxonName == taxon_id) %>%
+  group_by(Cell) %>%
+  summarise(catch_final = sum(catch, na.rm = TRUE)) %>%
+  ungroup()
+
+## rasterize
+tonnes_raster <- raster::subs(r, catch_summary_i, by = "Cell", which = "catch_final", subsWithNA=TRUE)
+# plot(log(tonnes_raster+1))
+
+# tonnes_raster
+
+print(cellStats(tonnes_raster, "sum")) # 8187537
+
+
+### DIVIDE BY AREA HERE for reprojection
+tonnes_raster_fix <- tonnes_raster/raster::area(tonnes_raster)
+# plot(tonnes_raster_fix)
+# cellStats(tonnes_raster_fix, "sum", na.rm = TRUE) # 2832.451
+
+## reproject
+tonnes_raster_proj <- projectRaster(tonnes_raster_fix, food_raster, method="ngb")
+# tonnes_raster_proj
+# print(cellStats(tonnes_raster_proj, "sum")) # 101968.2
+
+### MULTIPLY BY AREA HERE for reprojection
+tonnes_raster_proj_final <- tonnes_raster_proj*raster::area(tonnes_raster_proj)
+# plot(log(tonnes_raster_proj_final + 1))
+print(cellStats(tonnes_raster_proj_final, "sum", na.rm = TRUE)) # 8187512 ### close enough
+
+# save raster
+writeRaster(tonnes_raster_proj_final, sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/production_rasters/%s/tonnes_%s_%s_%s.tif", spp_class_id, spp_class_id, descript_id, taxon_id),
+    overwrite=TRUE)
+
+# read in spatial file
+land_eez_rgns <- raster(file.path(prep, "spatial/land_eez_rgns.tif"))
+
+## tag high seas areas
+land_eez_rgns_hsx <- calc(land_eez_rgns, fun = function(x){ifelse(is.na(x), 9999, x)})
+
+# extract with zonal
+tonnes_df <- as.data.frame(raster::zonal(tonnes_raster_proj_final, land_eez_rgns_hsx, fun = "sum"))
+
+## reattach species id tags
+tonnes_df_species <- tonnes_df %>%
+  mutate(species_class_fin = spp_class_id,
+         Descript = descript_id, 
+         TaxonName = taxon_id) %>%
+  left_join(food_rgns, by = c("zone" = "ID_0")) %>%
+  rename("catch" = "sum", rgn_id = "zone")
+
+print(sum(tonnes_df_species$catch)) # 8187512 a little less 
+
+# save dataset
+write.csv(tonnes_df_species, sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/production_csvs/%s/tonnes_%s_%s_%s.csv", spp_class_id, spp_class_id, descript_id, taxon_id), row.names = FALSE)
+
+cat_msg('Finished ', i, ' out of ', nrow(catch_cats), 'species', "species_name", taxon_id)
+
+} else {
+      
+      cat_msg('species file ', spp_final_file, ' already exists; skipping these spp')
+      
+    }
+}
+
+## compile all the files together
+catch_files <- list.files(file.path(prep, 'fisheries/marine/production_csvs'), 
+                                    pattern = 'tonnes_', 
+                                    full.names = TRUE,
+                          recursive = TRUE)
+
+## read in the csvs and bind them all together
+all_catch <- lapply(catch_files, FUN = function(x) {
+    read.csv(x)}) %>%
+    bind_rows() %>%
+  mutate(TaxonName = ifelse(TaxonName == "Homaridae_Palinuridae", "Homaridae/Palinuridae", TaxonName)) ## re-fix the fix earlier 
+
+sum(all_catch$catch) # 111225909
+
+45088617 +1021491 + 39054068 + 7874482 + 3621795 + 8187512 + 6378153 # 111226118 nearly perfect 
+
+## save final csv
+write.csv(all_catch, file.path(prep, "fisheries/marine/catch_extracted_final.csv"), row.names = FALSE)
+```
+
+## FOFM human consumption
+Calculate the amount of forage fish catch that goes to human consumption, not feed. 
+```{r}
+## read in total FOFM tonnage raster
+fofm_tonnes <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/production_rasters/tonnes_forage_fish.tif")
+cellStats(fofm_tonnes, "sum") # 39053973
+  
+## read in raster for human consumption of fofm
+human <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/land_human_human_human_x_marine_fofm_fisheries_meat.tif")
+
+## Multiply human consumption raster here
+fofm_human_tonnes <- fofm_tonnes*human
+cellStats(fofm_human_tonnes, "sum") # 27381757
+
+# save the raster
+writeRaster(fofm_human_tonnes, "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/production_rasters/tonnes_fofm_human.tif", overwrite=TRUE)
+
+
+land_eez_rgns <- raster(file.path(prep, "spatial/land_eez_rgns.tif"))
+
+land_eez_rgns_hsx <- calc(land_eez_rgns, fun = function(x){ifelse(is.na(x), 9999, x)})
+
+## extract per each region
+tonnes_df <- as.data.frame(raster::zonal(fofm_human_tonnes, land_eez_rgns_hsx, fun = "sum"))
+
+
+tonnes_df_species <- tonnes_df %>%
+  mutate(species_class_fin = "forage_fish") %>%
+  left_join(food_rgns, by = c("zone" = "ID_0")) %>%
+  rename("catch" = "sum", rgn_id = "zone")
+
+print(sum(tonnes_df_species$catch)) # 27381757 perfect
+
+## save the csv
+write.csv(tonnes_df_species, "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/catch_human_x_fofm.csv", row.names = FALSE)
+
+```
+
+
+
+

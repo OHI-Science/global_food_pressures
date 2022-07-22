@@ -1,0 +1,183 @@
+---
+title: "step5b_physical_area"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Preamble
+```{r setup, include = FALSE}
+# getting packages we want
+library(here)
+library(janitor)
+
+# src script
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+# Raster templates
+source(here("_spatial/template_raster.R"))
+
+# Preamble
+spam_crops <- 
+  vroom::vroom(here("crop/farm/data/crop_codes_updated.csv")) %>% 
+  select(split_rest_names) %>% 
+  unique()
+
+distinct_vars <- 
+  expand_grid(prod_system = c("_A","_H","_S","_I", "_L"),
+              split_rest_names = spam_crops$split_rest_names)
+``` 
+
+# Do the same as step5a but for HARVESTED AREA 
+
+```{r}
+harvested_area_list <- c()
+
+for(i in 1:nrow(distinct_vars)) { # i=1
+  
+  harvested_area_list[[i]] <- 
+    sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/MapSPAM_correct_extent/spam2010V2r0_global_A_%s%s.tif",
+            toupper(distinct_vars$split_rest_names[i]),
+            distinct_vars$prod_system[i])
+  
+}
+
+harvested_area_stack <- 
+  lapply(harvested_area_list, raster) %>% 
+  stack()
+
+harvested_area_rgns <- 
+  zonal(harvested_area_stack, 
+        food_rgns_tif, 
+        fun      = "sum", 
+        progress = "text", 
+        na.rm    = TRUE) 
+
+harvested_area_df <- harvested_area_rgns %>% 
+  as_tibble() %>% 
+  rename(ID_0 = zone) %>% 
+  pivot_longer(cols      = starts_with("spam"),
+               names_to  = "split_rest_names", 
+               values_to = "harvested_area") %>% 
+  mutate(prod_system = case_when(str_detect(split_rest_names, "_A$") ~ "A",
+                                 str_detect(split_rest_names, "_H$") ~ "H",
+                                 str_detect(split_rest_names, "_I$") ~ "I",
+                                 str_detect(split_rest_names, "_S$") ~ "S",
+                                 str_detect(split_rest_names, "_L$") ~ "L")) %>% 
+  mutate(split_rest_names = tolower(substr(split_rest_names, start = 23, stop = 26))) %>% 
+  left_join(food_rgns, .)
+
+nrow(harvested_area_df) == 244 * 5 * 44
+```
+
+Calculate the proportion of the fodder 'rainfed' layer that is allocated to
+high input for each country based on the median proportion of all other crops.
+
+```{r}
+# read in and convert from 1,000ha to ha
+fodd_rainfed_raster_ha <- 
+  raster(file.path(raw, "GAEZAct_2015/GAEZAct2015_HarvArea_Foddercrops_Rainfed.tif")) * 1000  
+
+fodd_rainfed_ha <- 
+  zonal(fodd_rainfed_raster_ha, 
+        food_rgns_tif, 
+        fun      = "sum", 
+        progress = "text", 
+        na.rm    = TRUE) %>% 
+  as_tibble() %>% 
+  rename(ID_0 = zone, harvested_area = sum) %>% 
+  mutate(prod_system = "H",
+         split_rest_names = "fodd") %>% 
+  left_join(food_rgns, .)
+
+rainfed_system_proportions <- 
+  harvested_area_df %>% 
+  filter(!prod_system %in% c("A", "I")) %>%
+  mutate(prod_system = case_when(prod_system %in% c("L", "S") ~ "low_input",
+                                 TRUE ~ prod_system)) %>% 
+  group_by(iso3c, prod_system, Country, ID_0) %>% 
+  summarise(harvested_area = sum(harvested_area, na.rm = TRUE)) %>% 
+  ungroup(prod_system) %>% 
+  mutate(proportion = harvested_area / sum(harvested_area, na.rm = TRUE)) %>% 
+  select(-harvested_area) 
+
+# Median or zero for gapfilling countries
+median_H_prop <- 
+  median(rainfed_system_proportions$proportion[rainfed_system_proportions$prod_system == "H"],
+         na.rm = TRUE)
+
+# Create table with proportion of production allocated to H vs L/S systems.
+fodd_H_prop <- 
+  rainfed_system_proportions %>% 
+  mutate(proportion = if_else(is.na(proportion),
+                              median_H_prop,
+                              proportion))
+
+# Cell allocation map production
+fodd_H_raster <- 
+  fodd_H_prop %>% 
+  left_join(food_rgns_xy, .) %>% 
+  select(x, y, proportion) %>%
+  rasterFromXYZ(crs = food_crs) %>% 
+  overlay(.,
+          fodd_rainfed_raster_ha,
+          fun = function(r1, r2) {
+            
+            r1[is.na(r1)] <- median_H_prop
+            r3 <- r1 * r2
+            
+            return(r3)
+          })
+plot(fodd_H_raster)
+fodd_H_raster
+writeRaster(fodd_H_raster,
+            file.path(prep,
+                      "spatial/GAEZAct2015_HarvArea_Foddercrops_H.tif",
+                      fsep = ""),
+            format = "GTiff", 
+            overwrite = TRUE)
+
+```
+
+# Integrate fodd within harvested_area_rgns df
+
+```{r}
+fodd_H_ha <- 
+  left_join(fodd_rainfed_ha, fodd_H_prop) %>% 
+  mutate(harvested_area = harvested_area * proportion) %>% 
+  select(-proportion)
+```
+
+# Merge
+
+```{r}
+fodd_irrigated_raster_ha <- 
+  raster(file.path(raw, "GAEZAct_2015/GAEZAct2015_HarvArea_Foddercrops_Irrigated.tif")) * 1000
+
+fodd_irrigated_ha <- 
+  zonal(fodd_irrigated_raster_ha, 
+        food_rgns_tif, 
+        fun      = "sum", 
+        progress = "text", 
+        na.rm    = TRUE) %>% 
+  as_tibble() %>% 
+  rename(ID_0 = zone, harvested_area = sum) %>% 
+  mutate(prod_system = "I",
+         split_rest_names = "fodd") %>% 
+  left_join(food_rgns, .)
+
+harvested_area_rgns <- 
+  bind_rows(harvested_area_df,
+            fodd_H_ha,
+            fodd_irrigated_ha)
+
+nrow(harvested_area_rgns) == 
+  244 * 5 * 44 + 244 * 2 
+
+write_csv(harvested_area_rgns,
+          here("crop/farm/data/harvested_area_tbl.csv"))
+
+```
+
+-------------------------------------------------------------------------------

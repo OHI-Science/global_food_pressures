@@ -1,0 +1,389 @@
+---
+title: "crop_nutrient_mapping"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Script objective
+Map nutrient leaching
+
+# Preamble
+```{r setup, include = FALSE}
+# getting packages we want
+library(here);library(janitor);library("future");library(furrr);library(vroom)
+# Raster templates
+source(here("_spatial/template_raster.R"))
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+# Import food_rgns xy df
+food_rgns_xy <- 
+  food_rgns_xy %>% 
+  dplyr::select(x, y, iso3c)
+# Import main dataframe
+nutrient_df <- vroom::vroom(here("crop/nutrient/data/nutrient_df.csv"))
+distinct_vars <- expand.grid(unique(nutrient_df$split_rest_names),
+                             unique(nutrient_df$nutrient))
+``` 
+
+# Withdrawal of N
+
+Make a raster that describes proportion withdrawal by plants (Table V, NUE values, Bouwman et al. 2005). NOTE: When NUE > 1, use proportion 1. Multiply this raster by the tonnes N applied. Save this raster in dataprep. Check: The sum of the entire raster should be somewhere around 50% of total global fertilizer application.
+
+```{r}
+N_withdrawal_raster <- 
+  vroom(here("crop/nutrient/data/bouwman_2005_tbl5.csv"))[,c(1,4)] %>% 
+  mutate(NUE = if_else(NUE >= 100, 1, NUE / 100)) %>% 
+  left_join(food_rgns_xy, ., by = "iso3c") %>% 
+  select(x, y, NUE) %>% 
+  rasterFromXYZ(crs = food_crs)
+plot(N_withdrawal_raster)
+```
+
+# Volatilization of N as NH3
+Make a raster that describes proportion of N lost to volatilization as NH3. This is based on Table 4 of Bouwman et al. 2002. Ultimately, I decided the best bet is to add the grassland, flooded rice, and crops to get the average values based on how the fertilizer is regionally applied (so this will be slightly different from what you created already). I have done the calculations in the attached spreadsheet (this column will create the raster: prop_NH3-N total). Multiply this raster by the tonnes N applied. Save this raster in the predata folder (people will want this one). Check: The sum of the entire raster should be somewhere around 14% of total global fertilizer application.
+
+```{r}
+N_volatilized_raster <- 
+  vroom(here("crop/nutrient/data/bouwman_2002_tbl4.csv")) %>%
+  select(prop_nh3_n_total, iso3c) %>% 
+  left_join(food_rgns_xy, ., by = "iso3c") %>% 
+  select(x, y, prop_nh3_n_total) %>% 
+  rasterFromXYZ(crs = food_crs)
+plot(N_volatilized_raster)
+```
+
+# Map excess fertilizer applications  (similar to FAO estimates for manure)
+
+```{r}
+nutrient_application <- function(this_crop, this_nutrient) {
+  # Filter by crop and nutrient for each production system
+  raster_H <- 
+    nutrient_df %>% 
+    filter(split_rest_names %in% this_crop &
+           nutrient %in% this_nutrient &
+           prod_system %in% "H") %>%
+    select(iso3c, allocated_nutrient) %>% 
+    left_join(food_rgns_xy, ., by = "iso3c") %>% # Add to XY dataframe
+    select(-iso3c) %>% 
+    rasterFromXYZ(crs = food_crs)
+  raster_I <- 
+    nutrient_df %>% 
+    filter(split_rest_names %in% this_crop &
+           nutrient %in% this_nutrient &
+           prod_system %in% "I") %>%
+    select(iso3c, allocated_nutrient) %>% 
+    left_join(food_rgns_xy, ., by = "iso3c") %>% 
+    select(-iso3c) %>% 
+    rasterFromXYZ(crs = food_crs)
+  # Overlay to calculate total nutrient application at the cell-level
+  nutrient_application <- overlay(
+    
+    raster_H, # High input layer
+    raster(file.path(prep,
+                     "crop/farm/cell_allocation/crop_",
+                     this_crop,
+                     "_H_harvested_area_allocation.tif", 
+                     fsep = "")),
+    
+    raster_I, # Irrigation layer
+    raster(file.path(prep,
+                     "crop/farm/cell_allocation/crop_",
+                     this_crop,
+                     "_I_harvested_area_allocation.tif", 
+                     fsep = "")),
+    
+    fun = function(r1, r2, r3, r4) {
+      
+      r1[is.na(r1)] <- 0
+      r2[is.na(r2)] <- 0
+      r3[is.na(r3)] <- 0
+      r4[is.na(r4)] <- 0
+      
+      r5 <- r1 * r2
+      r6 <- r3 * r4
+      return(r5 + r6)
+      
+      })
+  
+  if (this_nutrient == "N") {
+  
+  # Withdrawal of N
+  
+  overlay(N_withdrawal_raster,
+          nutrient_application,
+          fun = function(r1, r2){
+            
+            r1[is.na(r1)] <- 0
+            r2[is.na(r2)] <- 0
+            
+            r1 * r2
+            
+          }) %>% 
+    
+    writeRaster(.,
+                file.path(prep,
+                          "crop/nutrient/error_check/crop_",
+                          this_crop,
+                          "_withdrawal_N.tif", 
+                          fsep = ""), 
+                format = "GTiff", 
+                overwrite = TRUE)
+  
+  # Volatilization of N as NH3
+  
+    overlay(N_volatilized_raster,
+            nutrient_application,
+            fun = function(r1, r2){
+              
+              r1[is.na(r1)] <- 0
+              r2[is.na(r2)] <- 0
+              
+              r1 * r2
+            }) %>% 
+      
+      writeRaster(.,
+                  file.path(prep,
+                          "crop/nutrient/error_check/crop_",
+                          this_crop,
+                          "_volatilized_N.tif", 
+                          fsep = ""), 
+                  format = "GTiff", 
+                  overwrite = TRUE) 
+    
+    # Denitrification, N2 and N20 emissions
+    ## We are ignoring NO emissions, which are about 0.7% of N application.
+    ## Multiply the tonnes applied raster by 0.01 and then by 10.2 to get the 
+    ## amount of N lost to denitrification. 
+    
+    N_denitrification_raster <- 
+      nutrient_application *
+      0.01 *
+      10.2
+        
+    writeRaster(N_denitrification_raster,
+                file.path(prep,
+                          "crop/nutrient/error_check/crop_",
+                          this_crop,
+                          "_denitrification_N.tif", 
+                          fsep = ""), 
+                format = "GTiff", 
+                overwrite = TRUE)
+      
+   # Leaching/runoff
+   ## Sum the tonnes N rasters for: withdrawal, volatilization, and denitrification.
+   ## Leaching/runoff: Tonnes applied minus N - (withdrawal + volatilization + denitrification)
+   ## NOTE: when leaching/runoff < 0, make 0
+   ## Save this raster in predata folder. Report on global average of leaching/runoff
+      
+   N_leaching <- 
+      overlay(nutrient_application,
+              N_withdrawal_raster,
+              N_volatilized_raster,
+              N_denitrification_raster,
+              fun = function(applied,
+                             withdrawn,
+                             volatilized,
+                             denitrified) { 
+                
+                leached <- applied - (withdrawn + volatilized + denitrified)
+                leached[leached < 0] <- 0
+                return(leached)
+                
+                })
+   
+    names(N_leaching) <- paste("land_", this_crop, "_nutrient_tonnes_N", sep = "")
+     
+    writeRaster(N_leaching,
+                file.path(prep,
+                          "crop/nutrient/error_check/",
+                          this_crop,
+                          "_leached_N", 
+                          fsep = ""), 
+                format = "GTiff", 
+                overwrite = TRUE)
+                
+    } else if (this_nutrient == "P2O5") {
+    
+    leaching_raster_P <-
+      nutrient_application /
+      2.29 * # Convert to P
+      0.065 # Leaching proportion
+      
+  leaching_raster_P[is.na(leaching_raster_P)] <- 0
+    
+  names(leaching_raster_P) <- 
+    paste("land_", 
+          this_crop, 
+          "_nutrient_tonnes_P", 
+          sep = "")
+  
+  writeRaster(leaching_raster_P,
+              file.path(prep,
+                          "crop/nutrient/error_check/",
+                          this_crop,
+                          "_leached_P", 
+                          fsep = ""),
+              format = "GTiff",
+              overwrite = TRUE)
+  }
+  }
+
+plan(multisession, workers = 12)
+options <- furrr_options(seed = 54232)
+future_map2(distinct_vars$Var1,
+            distinct_vars$Var2,
+            nutrient_application,
+            .options = options)
+```
+
+# Calculate nutrient leaching
+```{r}
+total_leaching <- function(crop) {
+  leaching_raster <- 
+    list.files(file.path(prep,
+                          "crop/nutrient/error_check/",
+                         fsep = ""),
+               pattern = paste(crop, "_(leached|volatilized)_.", sep = ""),
+               full.names = TRUE) %>% 
+    stack() %>% 
+    stackApply(., 1, fun = "sum") 
+  names(leaching_raster) <- paste("land_", crop, "_nutrient_tonnes",   sep = "")
+  # Save as Raster in /dataprep/ folder
+  writeRaster(leaching_raster,
+              file.path(prep,
+                          "crop/nutrient/error_check/",
+                        crop,
+                        "_crop_produce_nutrient.tif",
+                        fsep = ""),
+              format = "GTiff",
+              overwrite = TRUE)
+}
+plan(multisession, workers = 12)
+options <- furrr_options(seed = 54232)
+future_map(unique(nutrient_df$split_rest_names),
+           total_leaching,
+           .options = options)
+```
+
+# Check that withdrawal is 50% of total
+```{r}
+total_N <- 
+  list.files(file.path(prep,
+                     "crop/nutrient",
+                     fsep = ""),
+             pattern = "_application_N",
+             full.names = TRUE) %>% 
+  .[!grepl(c("toba|teas|cof|othr"), .)] %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  cellStats(., "sum")
+
+withdrawn_N <- 
+  list.files(file.path(prep,
+                     "crop/nutrient/error_check/",
+                     fsep = ""),
+             pattern = "withdrawal",
+             full.names = TRUE) %>% 
+  .[!grepl(c("toba|teas|cof|othr"), .)] %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  cellStats(., "sum")
+withdrawn_N
+withdrawn_N / total_N # should be approx 50% of total N
+
+# NH3 volatilization
+volatilized_N <- 
+  list.files(file.path(prep,
+                     "crop/nutrient/error_check/",
+                     fsep = ""),
+             pattern = "volatilized",
+             full.names = TRUE) %>% 
+  .[!grepl(c("toba|teas|cof|othr"), .)] %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  cellStats(., "sum")
+volatilized_N / total_N # should be approx 14% of total N
+# Denitrification, N2 and N20 emissions
+denitrification_N <- 
+  list.files(file.path(prep,
+                     "crop/nutrient/error_check/",
+                     fsep = ""),
+             pattern = "denitrification",
+             full.names = TRUE) %>% 
+  .[!grepl(c("toba|teas|cof|othr"), .)] %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  cellStats(., "sum")
+denitrification_N
+denitrification_N / total_N # should be approx 10% of total N
+
+leaching_N <- 
+  list.files(file.path(prep,
+                     "crop/nutrient/error_check/",
+                       fsep = ""),
+             pattern = "leached_N",
+             full.names = TRUE) %>% 
+  .[!grepl(c("toba|teas|cof|othr"), .)] %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  cellStats(., stat = "sum")
+
+leaching_N / total_N
+
+# Check P
+P_leached <- 
+  list.files(file.path(prep,
+                     "crop/nutrient/error_check/"),
+             pattern = "_leached_P",
+             full.names = TRUE) %>% 
+  .[!grepl(c("toba|teas|cof|othr"), .)] %>% 
+  stack()  %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  cellStats(., stat = "sum")
+           
+total_P <- 
+  list.files(file.path(prep,
+                     "crop/nutrient/",
+                     fsep = ""),
+             pattern = "_application_P2O5",
+             full.names = TRUE) %>% 
+  .[!grepl(c("toba|teas|cof|othr|othr"), .)] %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  cellStats(., "sum")
+(total_P / 2.29) * 0.065
+P_leached
+# Check final values
+total_leached <- 
+  list.files(file.path(prep,
+                     "crop/nutrient/error_check",
+                     fsep = ""),
+             pattern = ".*_crop_produce_.*nutrient",
+             full.names = TRUE) %>% 
+  .[!grepl(c("toba|teas|cof|othr"), .)] %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  cellStats(., "sum")
+
+leaching_N + P_leached + volatilized_N
+total_leached
+```
+
+# Compare previous approach to using FUBC rates
+
+```{r}
+old_nutrient_df <- 
+  vroom(here("crop/nutrient/data/old_nutrient_df.csv"))[1:65880,] %>% 
+  select(iso3c, nutrient, split_rest_names, prod_system, 
+         fert_gf = starts_with("fert_gf"), reported_by_FAO)
+  
+old_nutrient_df$fert_gf <- 
+  str_remove(old_nutrient_df$fert_gf, pattern = "\\\\") %>% 
+  as.double() 
+  
+nutrient_df <- vroom(here("crop/nutrient/data/nutrient_df.csv"))
+comparison_df <- left_join(nutrient_df, old_nutrient_df) %>% 
+  rename(new_method = allocated_nutrient, old_method = fert_gf) %>% 
+  mutate(proportional_difference = new_method / old_method) %>% 
+  filter(reported_by_fao = "Yes") %>% 

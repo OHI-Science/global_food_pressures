@@ -1,0 +1,217 @@
+---
+title: "Checking tif files"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+* final edits to files
+
+* Check that all files have been created.
+* Create a csv file describing all combinations of systems and pressures
+* Create a csv with tif parameters to check that all is good
+
+2-3 hour runtime
+```{r}
+
+library(rgdal)
+library(sp)
+library(raster)
+library(tidyverse)
+library(here)
+
+```
+
+
+
+## last minute change to name of fodder crop related files
+changing: land_fodd_crop_produce to 
+          land_fodd_crop_feed
+
+```{r}
+
+fodder_files <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/datalayers', full=TRUE, pattern = "land_fodd_crop_produce")
+
+
+file.rename(from= fodder_files, to = 
+                gsub("land_fodd_crop_produce", "land_fodd_crop_feed", fodder_files))
+
+
+
+```
+
+## check against master list to make sure everything is there
+Add to this list by hand: _analysis/food_system_categories.csv"
+```{r}
+
+complete_list <- read_csv(here("_analysis/food_system_categories.csv")) %>% data.frame()
+
+# all farm pressures
+farm_pressures <- paste(complete_list$origin,
+                        complete_list$organism,
+                        complete_list$system,
+                        complete_list$product, sep="_")
+
+farm_pressures <- expand.grid(farm_pressures, c("disturbance", "ghg", "water", "nutrient"))
+pressures <- paste(farm_pressures$Var1, farm_pressures$Var2, sep="_")
+
+## feed proportion files
+fed <- filter(complete_list, fed=="fed") %>%
+  mutate(animal_system = paste(origin, organism, system, product, sep="_")) %>%
+  select(animal_system) %>%
+  data.frame()
+
+crops <- filter(complete_list, subcategory=="crops") %>%
+  mutate(feed_system = paste(origin, organism, system, product, sep="_")) %>%
+  select(feed_system)
+
+animal_feed_combos <- merge(data.frame(fed), data.frame(crops)) %>%
+  mutate(pressures = paste(animal_system, feed_system, sep="_x_")) %>%
+  select(pressures) %>%
+  pull(.)
+
+# human crop consumption
+human_crop_consumption <- paste("land_human_human_human", crops$feed_system, sep="_x_") 
+human_crop_consumption <- grep("fodd", human_crop_consumption, value=TRUE, invert=TRUE) # eliminate the fodder category
+
+#add in fofm (only these animals)
+fed_fofm_system <- grep(pattern="pig|salmon|chicken|tuna|crustaceans|shrimp|marine-fish-general", fed$animal_system, value=TRUE)
+fed_fofm_system <- grep("eggs&meat", fed_fofm_system, value=TRUE, invert=TRUE)
+fed_fofm <- paste(fed_fofm_system, "marine_fofm_fisheries_meat", sep="_x_")
+
+# human and extra fofm consumption
+human_fofm_consumption <- paste("land_human_human_human", "marine_fofm_fisheries_meat", sep="_x_") 
+
+
+
+# combine everything:
+all_tiffs <- c(pressures, fed_fofm, animal_feed_combos, human_crop_consumption, human_fofm_consumption)
+all_tiffs <- paste(all_tiffs, "tif", sep=".")
+
+```
+
+
+Check to see if anything is missing...
+
+```{r}
+missing <- setdiff(all_tiffs, 
+        list.files('/home/shares/food-systems/Food_footprint/all_food_systems/datalayers', pattern = ".tif"))
+## we can ignore these things:
+missing <- grep("marine_salmon_aquaculture_meat_x_land_fodd_crop_feed.tif", missing, value=TRUE, invert=TRUE)
+missing <- grep("marine_shrimp_aquaculture_meat_x_land_fodd_crop_feed.tif", missing, value=TRUE, invert=TRUE)
+missing <- grep("marine_crustaceans_aquaculture_meat_x_land_fodd_crop_feed.tif", missing, value=TRUE, invert=TRUE)
+missing <- grep("marine_marine-fish-general_aquaculture_meat_x_land_fodd_crop_feed.tif", missing, value=TRUE, invert=TRUE)
+missing <- grep("marine_tuna_aquaculture_meat_x_land_fodd_crop_feed.tif", missing, value=TRUE, invert=TRUE)
+missing  # nothing should be left!
+
+setdiff(list.files('/home/shares/food-systems/Food_footprint/all_food_systems/datalayers', pattern = ".tif"), all_tiffs)  ## ignoring buffaloes/meat  and ofib categories of crops.
+
+```
+
+
+adjust all_tiffs a bit to remove files that we didn't produce:
+```{r}
+
+final_tiffs <- all_tiffs 
+
+final_tiffs <- grep("marine_salmon_aquaculture_meat_x_land_fodd_crop_feed.tif", final_tiffs, value=TRUE, invert=TRUE)
+final_tiffs <- grep("marine_shrimp_aquaculture_meat_x_land_fodd_crop_feed.tif", final_tiffs, value=TRUE, invert=TRUE)
+final_tiffs <- grep("marine_marine-fish-general_aquaculture_meat_x_land_fodd_crop_feed.tif", final_tiffs, value=TRUE, invert=TRUE)
+final_tiffs <- grep("marine_crustaceans_aquaculture_meat_x_land_fodd_crop_feed.tif", final_tiffs, value=TRUE, invert=TRUE)
+final_tiffs <- grep("marine_tuna_aquaculture_meat_x_land_fodd_crop_feed.tif", final_tiffs, value=TRUE, invert=TRUE)
+
+setdiff(final_tiffs, 
+        list.files('/home/shares/food-systems/Food_footprint/all_food_systems/datalayers', pattern = ".tif"))
+
+final_tiffs
+# should be 982 files!
+write_csv(data.frame(raw_tiffs_list = final_tiffs), here("_analysis/final_list_raw_tiffs.csv"))
+```
+
+
+# Check rasters to make sure extents and such are correct
+```{r}
+
+tif_check_list <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/datalayers', full=TRUE, pattern = ".tif")
+
+# empty data.frame to add to
+raster_check <- data.frame()
+
+
+for(file in tif_check_list){
+  # file <- "/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/marine_demersal_fisheries_meat_disturbance.tif" 
+name <- basename(file)
+raster_file <- raster(file)
+tmp_values <- raster::values(raster_file)
+extent_data <- data.frame(file = name, 
+                          cellN = ncell(raster_file),
+                          xmin = extent(raster_file)@xmin, 
+                          xmax = extent(raster_file)@xmax, 
+                          ymin = extent(raster_file)@ymin, 
+                          ymax = extent(raster_file)@ymax,
+                          variable = names(raster_file),
+                          min = minValue(raster_file),
+                          max = maxValue(raster_file),
+                          sum_cells = cellStats(raster_file, sum, na.rm=TRUE),
+                          quant_50 = quantile(raster_file, c(0.5)),
+                          mean = cellStats(raster_file, mean, na.rm=TRUE),
+                          total_zero = sum(tmp_values==0, na.rm=TRUE),
+                          total_NA = sum(is.na(tmp_values)),
+                          total_greater_zero = sum(tmp_values>0, na.rm=TRUE))
+raster_check <- rbind(raster_check, extent_data)
+}
+
+write_csv(raster_check, here("_analysis/checking_data/data/raster_check.csv"))
+
+# some checks
+## make sure these are equal:
+length(tif_check_list)
+dim(raster_check)
+
+filter(raster_check, cellN!=9331200)
+summary(raster_check)
+filter(raster_check, is.na(mean))
+
+new <- read_csv(here("_analysis/checking_data/data/raster_check.csv")) %>%
+  select(file, sum_cells)
+old <- read_csv(here("_analysis/checking_data/data/raster_check_May28_2022.csv")) %>%
+  select(file, old_sum_cells = sum_cells) %>%
+  left_join(new, by="file") %>%
+  mutate(difference = old_sum_cells - sum_cells) %>%
+  filter(difference != 0) %>% 
+  mutate(prop_diff = difference/old_sum_cells*100) %>%
+  data.frame()
+plot(old$old_sum_cells, old$sum_cells)
+abline(0,1, col="red")
+
+new_crop_nutrients <- old %>%
+  filter(str_detect(file, "crop")) %>%
+  filter(str_detect(file, "nutrient")) %>%
+  filter(!str_detect(file, "_x_")) %>%
+  data.frame()
+sum(new_crop_nutrients$old_sum_cells)
+sum(new_crop_nutrients$sum_cells)  
+plot(new_crop_nutrients$old_sum_cells, new_crop_nutrients$sum_cells)
+abline(0,1, col="red")
+
+new_crop_disturbance <- old %>%
+  filter(str_detect(file, "crop")) %>%
+  filter(str_detect(file, "disturbance")) %>%
+  filter(!str_detect(file, "_x_")) %>%
+  data.frame()
+sum(new_crop_disturbance$old_sum_cells)
+sum(new_crop_disturbance$sum_cells)
+plot(new_crop_disturbance$old_sum_cells, new_crop_disturbance$sum_cells)
+abline(0,1, col="red")
+
+
+new_crop_ghg <- old %>%
+  filter(str_detect(file, "crop")) %>%
+  filter(str_detect(file, "ghg")) %>%
+  filter(!str_detect(file, "_x_")) %>%
+  data.frame()
+sum(new_crop_ghg$old_sum_cells)
+sum(new_crop_ghg$sum_cells)
+plot(new_crop_ghg$old_sum_cells, new_crop_ghg$sum_cells)
+abline(0,1, col="red")
+```
+

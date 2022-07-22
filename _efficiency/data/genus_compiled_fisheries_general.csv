@@ -1,0 +1,845 @@
+GENuS_foodID,GENuS_FoodName,FCT_FoodName,general,Calories,Protein,Region
+212,Freshwater Fish,"Catfish,  gunther's walking, raw",catfish,209,17.8,ASEAN
+212,Freshwater Fish,"Catfish,  striped,  , w/ skin, raw",catfish,215,15,ASEAN
+212,Freshwater Fish,"Catfish,  truncated estuarine, raw",catfish,92,18.7,ASEAN
+212,Freshwater Fish,"Carp, common, raw",carp,105,17,ASEAN
+212,Freshwater Fish,"Gourami, giant, raw",gourami,97,17.3,ASEAN
+212,Freshwater Fish,"Gourami, snake skin, raw",gourami,83,17.6,ASEAN
+212,Freshwater Fish,"Sheat-fish, raw",sheat-fish,106,16.3,ASEAN
+212,Freshwater Fish,"Silver- barb, common, raw",silver-barb,124,21.1,ASEAN
+212,Freshwater Fish,"Tilapia,  all species,  raw",tilapia,94,18.4,ASEAN
+213,Demersal Fish,"Giant seaperch, raw",seaperch,111,20.5,ASEAN
+213,Demersal Fish,"Eel, silver pike (daggertooth pike conger),  sea water , raw",eel,88,18.8,ASEAN
+213,Demersal Fish,"Eel, swamp,  raw",eel,86,19.7,ASEAN
+213,Demersal Fish,"Featherback, grey (knifefish), raw",knifefish,94,19.6,ASEAN
+213,Demersal Fish,"Featherback, spotted(knifefish), raw",knifefish,78,16.7,ASEAN
+213,Demersal Fish,"Flatfish/Turbot, Indian(halibut), raw",turbot,87,21.2,ASEAN
+213,Demersal Fish,"Goby, all species,  raw",goby,80,18.5,ASEAN
+213,Demersal Fish,"Grouper, raw",grouper,82,18.9,ASEAN
+213,Demersal Fish,"Mullet, bluespot gray, raw",mullet,117,24.7,ASEAN
+213,Demersal Fish,"Perch, climbing",snapper,145,17.9,ASEAN
+213,Demersal Fish,"Snapper, red, Malabar, raw",snapper,72,16.9,ASEAN
+213,Demersal Fish,"Snapper, russell,  raw",snapper,82,19.5,ASEAN
+213,Demersal Fish,"ray, blue spotted,  raw",ray,88,21.3,ASEAN
+213,Demersal Fish,"Threadfin, all species,  raw",threadfin,108,20.2,ASEAN
+213,Demersal Fish,"Whiting,  common/silver, raw",whiting,89,20.8,ASEAN
+214,Pelagic Fish,"Anchovy, fresh, whole",anchovy,81,18.5,ASEAN
+214,Pelagic Fish,"Cobia/Black kingfish,  raw",kingfish,92,18.7,ASEAN
+214,Pelagic Fish,"Mackerel, Indian, raw",mackerel,119,21.5,ASEAN
+214,Pelagic Fish,"Mackerel, short-bodied, raw",mackerel,122,21.4,ASEAN
+214,Pelagic Fish,"Mackerel, Spanish, sliced, raw",mackerel,103,19.4,ASEAN
+214,Pelagic Fish,"Pomfret, black, raw",pomfret,102,19.8,ASEAN
+214,Pelagic Fish,"Pomfret, silver/white, raw",pomfret,126,19.4,ASEAN
+214,Pelagic Fish,"Scad, big-eyed/caranx, raw",scad,102,21.2,ASEAN
+214,Pelagic Fish,"Scad, hardtail  (torpedo), raw",scad,93,21.3,ASEAN
+214,Pelagic Fish,"Slipmouth, ponyfish, raw",ponyfish,84,18.8,ASEAN
+214,Pelagic Fish,"Trevally, black-banded, raw",trevally,134,18.6,ASEAN
+214,Pelagic Fish,"Tuna, Skipjackkk or Yellow  Fin, canned  in water, drained",tuna,113,26.1,ASEAN
+215,Marine Fish; Other,"Giant seaperch, raw",seaperch,111,20.5,ASEAN
+215,Marine Fish; Other,"Eel, silver pike (daggertooth pike conger),  sea water , raw",eel,88,18.8,ASEAN
+215,Marine Fish; Other,"Eel, swamp,  raw",eel,86,19.7,ASEAN
+215,Marine Fish; Other,"Featherback, grey (knifefish), raw",knifefish,94,19.6,ASEAN
+215,Marine Fish; Other,"Featherback, spotted(knifefish), raw",knifefish,78,16.7,ASEAN
+215,Marine Fish; Other,"Flatfish/Turbot, Indian(halibut), raw",turbot,87,21.2,ASEAN
+215,Marine Fish; Other,"Goby, all species,  raw",goby,80,18.5,ASEAN
+215,Marine Fish; Other,"Grouper, raw",grouper,82,18.9,ASEAN
+215,Marine Fish; Other,"Mullet, bluespot gray, raw",mullet,117,24.7,ASEAN
+215,Marine Fish; Other,"Perch, climbing",perch,145,17.9,ASEAN
+215,Marine Fish; Other,"Snapper, red, Malabar, raw",snapper,72,16.9,ASEAN
+215,Marine Fish; Other,"Snapper, russell,  raw",snapper,82,19.5,ASEAN
+215,Marine Fish; Other,"ray, blue spotted,  raw",ray,88,21.3,ASEAN
+215,Marine Fish; Other,"Threadfin, all species,  raw",threadfin,108,20.2,ASEAN
+215,Marine Fish; Other,"Whiting,  common/silver, raw",whiting,89,20.8,ASEAN
+215,Marine Fish; Other,"Anchovy, fresh, whole",anchovy,81,18.5,ASEAN
+215,Marine Fish; Other,"Cobia/Black kingfish,  raw",kingfish,92,18.7,ASEAN
+215,Marine Fish; Other,"Mackerel, Indian, raw",mackerel,119,21.5,ASEAN
+215,Marine Fish; Other,"Mackerel, short-bodied, raw",mackerel,122,21.4,ASEAN
+215,Marine Fish; Other,"Mackerel, Spanish, sliced, raw",mackerel,103,19.4,ASEAN
+215,Marine Fish; Other,"Pomfret, black, raw",pomfret,102,19.8,ASEAN
+215,Marine Fish; Other,"Pomfret, silver/white, raw",pomfret,126,19.4,ASEAN
+215,Marine Fish; Other,"Scad, big-eyed/caranx, raw",scad,102,21.2,ASEAN
+215,Marine Fish; Other,"Scad, hardtail  (torpedo), raw",scad,93,21.3,ASEAN
+215,Marine Fish; Other,"Slipmouth, ponyfish, raw",ponyfish,84,18.8,ASEAN
+215,Marine Fish; Other,"Trevally, black-banded, raw",trevally,134,18.6,ASEAN
+215,Marine Fish; Other,"Tuna, Skipjackkk or Yellow  Fin, canned  in water, drained",tuna,113,26.1,ASEAN
+216,Crustaceans,"Crab, shore, raw",crab,104,13.1,ASEAN
+216,Crustaceans,"Crabmeat, mud, fresh",crab,98,17.9,ASEAN
+216,Crustaceans,"Prawn,  fresh water, giant, raw",prawn,108,17.9,ASEAN
+216,Crustaceans,"Prawn,  fresh water, raw",prawn,98,17.5,ASEAN
+216,Crustaceans,"Prawn,  green tiger, raw",prawn,79.6,NA,ASEAN
+216,Crustaceans,Radiated scallop,scallop,106,22.3,ASEAN
+217,Cephalopods,"Cuttlefish, raw",cuttlefish,72,15.9,ASEAN
+217,Cephalopods,"Squid, splendid, raw",squid,68,15.4,ASEAN
+218,Molluscs; Other,"Clam, undulated surf",clam,64,10.3,ASEAN
+218,Molluscs; Other,"Cockle/ark shell, fresh",cockle,71,11.7,ASEAN
+218,Molluscs; Other,"Mussel, green, raw",mussel,53,9.3,ASEAN
+218,Molluscs; Other,"Oyster, raw",oyster,58,7.5,ASEAN
+218,Molluscs; Other,"Snail, fresh water, all species",snail,84,11.5,ASEAN
+218,Molluscs; Other,"Snail, pond,  river",snail,74,12.1,ASEAN
+218,Molluscs; Other,"Wedge  shell, bean clam(Donax), fermented",clam,149,10.6,ASEAN
+219,Aquatic Animals; Others,"Sea cucumber/sea slug, cleaned, raw",sea cucumber,21,4.8,ASEAN
+219,Aquatic Animals; Others,Sea horse,sea horse,194,28.5,ASEAN
+212,Freshwater Fish,AIR,,89,15.9,India
+212,Freshwater Fish,BACHA,,147,18,India
+212,Freshwater Fish,BAM,,100,16,India
+212,Freshwater Fish,BATA - small varieties,,89,14,India
+212,Freshwater Fish,"BHAGON, FRESH",,154,14.8,India
+212,Freshwater Fish,BHANGAN BATA,,144,19.4,India
+212,Freshwater Fish,BOAL,,116,15.4,India
+212,Freshwater Fish,CAT FISH,,86,21,India
+212,Freshwater Fish,CHELA,,103,14.6,India
+212,Freshwater Fish,CHITAL,,108,18.6,India
+212,Freshwater Fish,KHORSULA,,117,16.3,India
+212,Freshwater Fish,KHOYRA fresh,,120,18,India
+212,Freshwater Fish,KOI,,156,15,India
+212,Freshwater Fish,LATA,,97,19.4,India
+212,Freshwater Fish,MAGUR,,86,15,India
+212,Freshwater Fish,MAHASOLE,,126,25.2,India
+212,Freshwater Fish,MRIGAL,,98,19,India
+212,Freshwater Fish,PABDA,,114,19,India
+212,Freshwater Fish,PANGAS,,161,14.2,India
+212,Freshwater Fish,SARPUTI,,161,16,India
+212,Freshwater Fish,SINGHALA,,167,21,India
+212,Freshwater Fish,SINGHI,,124,23,India
+212,Freshwater Fish,TENGRA fresh,,144,19,India
+213,Demersal Fish,BHEKTI fresh,bass,79,15,India
+213,Demersal Fish,GHOL,croaker,82,18.4,India
+213,Demersal Fish,GOGGLER,,93,18.7,India
+213,Demersal Fish,INDIAN WHITING,whiting,89,19.2,India
+213,Demersal Fish,KATLA,carp,111,19,India
+213,Demersal Fish,RAVAS,perch,112,22.2,India
+213,Demersal Fish,RAY,ray,97,20.9,India
+213,Demersal Fish,SHARK,shark,93,22,India
+213,Demersal Fish,SILVER BELLY,silver belly,91,19,India
+213,Demersal Fish,SOLE,sole,94,16.2,India
+213,Demersal Fish,"SOLE, MALAHAR",sole,120,19.5,India
+214,Pelagic Fish,ANCHOVY,anchovy,164,19,India
+214,Pelagic Fish,BHOLA,jewfish,86,15.2,India
+214,Pelagic Fish,BIG JAWED JUMPER,jumper,130,19,India
+214,Pelagic Fish,HILSA,hilsa,273,22,India
+214,Pelagic Fish,"HERRING, INDIAN",herring,119,20.3,India
+214,Pelagic Fish,"HERRING, OX-EYED",herring,106,20.7,India
+214,Pelagic Fish,HORSE MACKEREL,mackerel,99,21.2,India
+214,Pelagic Fish,JEW FISH - kora,jewfish,83,19,India
+214,Pelagic Fish,JEW FISH - pallikora,jewfish,100,20,India
+214,Pelagic Fish,MULLET,mullet,155,19,India
+214,Pelagic Fish,OIL sardines,sardines,97,20,India
+214,Pelagic Fish,POMFRETS - black,pomfret,111,20,India
+214,Pelagic Fish,"POMFRETS, WHITE",pomfret,87,17,India
+214,Pelagic Fish,PUTI,barb,106,18.1,India
+214,Pelagic Fish,RIBBON FISH fresh,ribbonfish,104,18,India
+214,Pelagic Fish,ROHU,rohu,97,17,India
+214,Pelagic Fish,sardines,sardines,101,21,India
+214,Pelagic Fish,SEER,seer,126,22.5,India
+214,Pelagic Fish,SURMAI fresh,mackerel,92,20,India
+214,Pelagic Fish,TARTOOR,,79,18.2,India
+214,Pelagic Fish,TUNNY,tunny,113,23.8,India
+214,Pelagic Fish,WHITE BAIT,whitebait,81,14.5,India
+215,Marine Fish; Other,BHEKTI fresh,bass,79,15,India
+215,Marine Fish; Other,GHOL,croaker,82,18.4,India
+215,Marine Fish; Other,GOGGLER,,93,18.7,India
+215,Marine Fish; Other,INDIAN WHITING,whiting,89,19.2,India
+215,Marine Fish; Other,KATLA,carp,111,19,India
+215,Marine Fish; Other,RAVAS,perch,112,22.2,India
+215,Marine Fish; Other,RAY,ray,97,20.9,India
+215,Marine Fish; Other,SHARK,shark,93,22,India
+215,Marine Fish; Other,SILVER BELLY,silver belly,91,19,India
+215,Marine Fish; Other,SOLE,sole,94,16.2,India
+215,Marine Fish; Other,"SOLE, MALAHAR",sole,120,19.5,India
+215,Marine Fish; Other,ANCHOVY,anchovy,164,19,India
+215,Marine Fish; Other,BHOLA,jewfish,86,15.2,India
+215,Marine Fish; Other,BIG JAWED JUMPER,jumper,130,19,India
+215,Marine Fish; Other,HILSA,hilsa,273,22,India
+215,Marine Fish; Other,"HERRING, INDIAN",herring,119,20.3,India
+215,Marine Fish; Other,"HERRING, OX-EYED",herring,106,20.7,India
+215,Marine Fish; Other,HORSE MACKEREL,mackerel,99,21.2,India
+215,Marine Fish; Other,JEW FISH - kora,jewfish,83,19,India
+215,Marine Fish; Other,JEW FISH - pallikora,jewfish,100,20,India
+215,Marine Fish; Other,MULLET,mullet,155,19,India
+215,Marine Fish; Other,OIL sardines,sardines,97,20,India
+215,Marine Fish; Other,POMFRETS - black,pomfret,111,20,India
+215,Marine Fish; Other,"POMFRETS, WHITE",pomfret,87,17,India
+215,Marine Fish; Other,PUTI,barb,106,18.1,India
+215,Marine Fish; Other,RIBBON FISH fresh,ribbonfish,104,18,India
+215,Marine Fish; Other,ROHU,rohu,97,17,India
+215,Marine Fish; Other,sardines,sardines,101,21,India
+215,Marine Fish; Other,SEER,seer,126,22.5,India
+215,Marine Fish; Other,SURMAI fresh,mackerel,92,20,India
+215,Marine Fish; Other,TARTOOR,,79,18.2,India
+215,Marine Fish; Other,TUNNY,tunny,113,23.8,India
+215,Marine Fish; Other,WHITE BAIT,whitebait,81,14.5,India
+216,Crustaceans,CRAB muscle,crab,59,9,India
+216,Crustaceans,CRAB small,crab,169,11,India
+216,Crustaceans,PRAWN,prawn,89,19,India
+218,Molluscs; Other,BLUE MUSSEL,mussel,72,10,India
+212,Freshwater Fish,"Aracu, inteiro, cru",,159.3,18,LATIN
+212,Freshwater Fish,"Aruanã, filé, cru",,93.4,19.3,LATIN
+212,Freshwater Fish,Bagre,catfish,76.9,15.2,LATIN
+212,Freshwater Fish,"Bagre, carne, crudo",,97.1,17.6,LATIN
+212,Freshwater Fish,"Bagre, con piel, sin hueso",,178.2,18.9,LATIN
+212,Freshwater Fish,"Bagre, rayado, de río, carne, crudo",,NA,17.3,LATIN
+212,Freshwater Fish,"Boga, músculo",,NA,NA,LATIN
+212,Freshwater Fish,"Branquinha, filé, cru",,223.5,21,LATIN
+212,Freshwater Fish,"Branquinha, inteiro, cru",,217.2,17.4,LATIN
+212,Freshwater Fish,"Buco, carne, crudo",,140.5,24.1,LATIN
+212,Freshwater Fish,"Cachama, carne, crudo",,80.5,17.1,LATIN
+212,Freshwater Fish,Carachama,,66.8,14.2,LATIN
+212,Freshwater Fish,"Carpa, carne",,96.3,18,LATIN
+212,Freshwater Fish,"Curimatã, filé, cru",,159.79,17.2,LATIN
+212,Freshwater Fish,"Curimatã, inteiro, cru",,250.7,16.1,LATIN
+212,Freshwater Fish,"Curvinata, carne, crudo",,NA,18.9,LATIN
+212,Freshwater Fish,"Curvinata, carne, crudo",,242.2,31.8,LATIN
+212,Freshwater Fish,"Charal, fresco",,157.9,25.3,LATIN
+212,Freshwater Fish,"Dorado, carne, cruda",,79.67,18.78,LATIN
+212,Freshwater Fish,"Dorado, músculo, crudo",,NA,NA,LATIN
+212,Freshwater Fish,"Dourado, filé, cru",,76.3,18.4,LATIN
+212,Freshwater Fish,"Jaraqui, filé, cru",,123.72,18.42,LATIN
+212,Freshwater Fish,"Jaraqui, inteiro, cru",,177,18.6,LATIN
+212,Freshwater Fish,"Mandi, cru",,211.59,17.92,LATIN
+212,Freshwater Fish,"Mapará, filé, cru",,194.8,12.61,LATIN
+212,Freshwater Fish,"Palometa, carne, crudo",,90.2,17.5,LATIN
+212,Freshwater Fish,"Patí, carne, crudo",,90.24,18.2,LATIN
+212,Freshwater Fish,"Patí, músculo, crudo",,NA,NA,LATIN
+212,Freshwater Fish,"Pejerrey, filete, crudo",,103.3,16.4,LATIN
+212,Freshwater Fish,"Pejerrey, agua dulce, carne, crudo",,76.8,18.3,LATIN
+212,Freshwater Fish,"Pescada, filé, cru",,89.3,19.4,LATIN
+212,Freshwater Fish,"Pescada, inteiro, cru",,96.6,20.1,LATIN
+212,Freshwater Fish,"Pirarucu, filé, cru",,98,19.55,LATIN
+212,Freshwater Fish,Róbalo,,89,20,LATIN
+212,Freshwater Fish,Róbalo,,91.7,21.3,LATIN
+212,Freshwater Fish,"Róbalo, carne, crudo",,NA,21.1,LATIN
+212,Freshwater Fish,"Surimi, músculo, cru",,117.4,14.3,LATIN
+212,Freshwater Fish,"Surubí, carne, crudo",,110,18.2,LATIN
+212,Freshwater Fish,"Surubí, carne, zona dorsal, crudo",,NA,NA,LATIN
+212,Freshwater Fish,"Surubí, carne, zona ventral, crudo",,NA,NA,LATIN
+212,Freshwater Fish,"Tambaqui, filé, cru",,151.4,24.8,LATIN
+212,Freshwater Fish,"Tambaqui, inteiro, cru",,138.1,19,LATIN
+212,Freshwater Fish,"Tararira, carne, cruda",,79.24,18.1,LATIN
+212,Freshwater Fish,"Tilapia, carne, cruda",,87.9,16.5,LATIN
+212,Freshwater Fish,"Tilápia, filé, cru",,71.59,16.15,LATIN
+212,Freshwater Fish,"Tilápia, inteiro, cru",,99.32,16.03,LATIN
+212,Freshwater Fish,"Tucunaré, filé, cru",,102.3,20.4,LATIN
+212,Freshwater Fish,"Tucunaré, inteiro, cru",,142,22,LATIN
+212,Freshwater Fish,"Amarillo, músculo dorsal, crudo",,NA,17.29,LATIN
+212,Freshwater Fish,"Armado, músculo dorsal, crudo",,76.21,15.4,LATIN
+212,Freshwater Fish,"Armado, músculo ventral, crudo",,NA,14.63,LATIN
+212,Freshwater Fish,"Boga, músculo ventral, cruda",,180.18,18.47,LATIN
+212,Freshwater Fish,Ispi fresco,,122.51,17.59,LATIN
+212,Freshwater Fish,Ispi integro salado (crudo),,215.42,30.95,LATIN
+212,Freshwater Fish,"Moncholo, músculo dorsal, crudo",,112.5,17.48,LATIN
+212,Freshwater Fish,"Moncholo, músculo ventral, crudo",,148.43,16.7,LATIN
+212,Freshwater Fish,"Sábalo, músculo dorsal, crudo",,NA,18.03,LATIN
+212,Freshwater Fish,"Sábalo, músculo ventral, crudo",,150.91,17.51,LATIN
+212,Freshwater Fish,"Surubí, músculo dorsal, crudo",,187.25,17.58,LATIN
+212,Freshwater Fish,Trucha cruda,,155.07,18.45,LATIN
+213,Demersal Fish,"Abadejo, carne, cruda",pollock,72.1,15.8,LATIN
+213,Demersal Fish,Ayanque,weakfish,88.5,19.6,LATIN
+213,Demersal Fish,"Bagre, de mar, carne, crudo",catfish,NA,18.2,LATIN
+213,Demersal Fish,"Barbudo, carne, crudo",threadfin,NA,22.6,LATIN
+213,Demersal Fish,"Betaracroa, cru",croaker,80.08,16.96,LATIN
+213,Demersal Fish,"Bombache, carne, crudo",drum,NA,18.6,LATIN
+213,Demersal Fish,"Brótola, carne, cruda",hake,82.23,17.58,LATIN
+213,Demersal Fish,"Brótola, filete",hake,66.9,15.6,LATIN
+213,Demersal Fish,"Cação anjo, filé, cru",hake,89.55,20.21,LATIN
+213,Demersal Fish,"Castañeta, carne, cruda",,95.19,18.43,LATIN
+213,Demersal Fish,"Castañeta, entera, cruda",,170.12,16.98,LATIN
+213,Demersal Fish,"Cojinoba austral, filete, cruda",,187.3,17.2,LATIN
+213,Demersal Fish,"Cojinoba, filete, cruda, fresca",,187.3,17.2,LATIN
+213,Demersal Fish,Cojinova,,97.1,20.2,LATIN
+213,Demersal Fish,"Congrio colorado, filete, crudo",eel,NA,17.4,LATIN
+213,Demersal Fish,"Congrio dorado, filete, crudo",eel,72.7,16.11,LATIN
+213,Demersal Fish,"Congrio dorado, filete, crudo",eel,NA,16.1,LATIN
+213,Demersal Fish,"Congrio negro, filete, crudo",eel,NA,16.2,LATIN
+213,Demersal Fish,"Congrio, carne, crudo",ell,107.21,17.2,LATIN
+213,Demersal Fish,"Cornalito, carne, crudo",ell,85.55,16,LATIN
+213,Demersal Fish,Corvina,corvina,126.5,19.5,LATIN
+213,Demersal Fish,"Corvina, água doce, crua",corvina,97.27,17.42,LATIN
+213,Demersal Fish,"Corvina, blanca, carne, cruda",corvina,96.58,19.5,LATIN
+213,Demersal Fish,"Corvina, cruda",corvina,NA,NA,LATIN
+213,Demersal Fish,"Corvina, filé, cru",corvina,80.46,17.93,LATIN
+213,Demersal Fish,"Corvina, filete, cruda, fresca",corvina,97.3,20.5,LATIN
+213,Demersal Fish,"Corvina, negra, carne, cruda",corvina,84.3,18.78,LATIN
+213,Demersal Fish,"Curvinata, carne, cruda",curvinata,NA,18.6,LATIN
+213,Demersal Fish,"Gallina de mar, carne, cruda",gurnard,90.9,20.3,LATIN
+213,Demersal Fish,"Gatuso, carne, crudo",,71.92,17.44,LATIN
+213,Demersal Fish,"Goete, filé, cru",,86.84,19.01,LATIN
+213,Demersal Fish,Gurrubata,croaker,NA,17.8,LATIN
+213,Demersal Fish,"Lamparosa, carne, cruda",lookdown,NA,20.2,LATIN
+213,Demersal Fish,Lenguado,sole,NA,16.7,LATIN
+213,Demersal Fish,"Lenguado, carne, crudo",sole,77.9,17.5,LATIN
+213,Demersal Fish,"Lenguado, carne, crudo",sole,NA,19,LATIN
+213,Demersal Fish,"Lenguado, filete, crudo, fresco",sole,84.8,18.9,LATIN
+213,Demersal Fish,"Lebranche, carne, crudo",mullet,144.8,19.3,LATIN
+213,Demersal Fish,Lisa,mullet,82,19.6,LATIN
+213,Demersal Fish,"Lisa, carne, cruda",mullet,146.04,17.89,LATIN
+213,Demersal Fish,Lorna,,94.2,19.7,LATIN
+213,Demersal Fish,"Maria Luísa, cru",,82.13,18.35,LATIN
+213,Demersal Fish,Mero,grouper,73.8,18,LATIN
+213,Demersal Fish,"Michole, cru",,83.53,19.33,LATIN
+213,Demersal Fish,"Pacu, filé, cru",,145.2,18.3,LATIN
+213,Demersal Fish,"Pacu, inteiro, cru",,292.1,17,LATIN
+213,Demersal Fish,"Palometa, carne, cruda",pompano,215.28,20.13,LATIN
+213,Demersal Fish,Pargo,snapper,103.3,21.1,LATIN
+213,Demersal Fish,"Pargo, carne, crudo",snapper,112.58,19.1,LATIN
+213,Demersal Fish,"Pejegallo, filé, crudo",elephantfish,89.52,19.74,LATIN
+213,Demersal Fish,Pejesapo,clingfish,NA,22.1,LATIN
+213,Demersal Fish,"Perlita, carne, cruda",,71,15.1,LATIN
+213,Demersal Fish,"Pescadilla, carne, cruda",weakfish,97.3,17.75,LATIN
+213,Demersal Fish,"Pescadilla, lomo",weakfish,69.5,14.7,LATIN
+213,Demersal Fish,"Pez gallo, carne, crudo",roosterfish,84.4,20.2,LATIN
+213,Demersal Fish,"Pez palo, carne, crudo",flathead,NA,20.1,LATIN
+213,Demersal Fish,"Raya, filete, cruda, fresca",ray,75,16.5,LATIN
+213,Demersal Fish,"Reineta, filete, cruda",bream,105.1,19.3,LATIN
+213,Demersal Fish,"Roncador, carne, crudo",croaker,NA,14.9,LATIN
+213,Demersal Fish,"Rubio, carne, crudo",,NA,17.13,LATIN
+213,Demersal Fish,"Testolin, carne, crudo",,98.2,18.9,LATIN
+213,Demersal Fish,"Tiburón, carne, crudo",shark,109.6,25.9,LATIN
+213,Demersal Fish,"Tonquicha, carne, crudo",,85.3,17.3,LATIN
+213,Demersal Fish,"Tortinha, cru",,79.73,17.03,LATIN
+214,Pelagic Fish,"Albacora, filete, cruda, fresca",albacore,103,18.9,LATIN
+214,Pelagic Fish,"Anchoa, carne, cruda",anchovy,91.6,21.5,LATIN
+214,Pelagic Fish,"Anchoita, carne, cruda",anchovy,128.36,19.2,LATIN
+214,Pelagic Fish,"Anchova, carne, cruda",anchovy,NA,21,LATIN
+214,Pelagic Fish,Anchoveta,anchovy,165,21,LATIN
+214,Pelagic Fish,"Anchoveta, filete, cruda, fresca",anchovy,NA,NA,LATIN
+214,Pelagic Fish,"Atún, filete",tuna,NA,21.2,LATIN
+214,Pelagic Fish,"Atún, filete",tuna,NA,11,LATIN
+214,Pelagic Fish,"Atún, filete",tuna,99.9,19.8,LATIN
+214,Pelagic Fish,"Besugo, crudo",seabream,99.03,20.35,LATIN
+214,Pelagic Fish,Bonito,bonito,132.6,23.4,LATIN
+214,Pelagic Fish,"Bonito, carne",bonito,162.5,24,LATIN
+214,Pelagic Fish,"Bonito, carne, crudo",bonito,218.5,22,LATIN
+214,Pelagic Fish,"Bonito, carne, crudo",bonito,136,24.4,LATIN
+214,Pelagic Fish,"Bonito, filete, crudo, fresco",bonito,NA,22.6,LATIN
+214,Pelagic Fish,"Boquerón, carne, crudo",anchovy,NA,17.7,LATIN
+214,Pelagic Fish,"Caballa, carne, cruda",mackerel,231.67,22.02,LATIN
+214,Pelagic Fish,"Caballa, carne, cruda",mackerel,NA,21.1,LATIN
+214,Pelagic Fish,"Caballa, filete, cruda, fresca",mackerel,NA,20.1,LATIN
+214,Pelagic Fish,"Cabaña blanca, carne, cruda",,105.6,23.1,LATIN
+214,Pelagic Fish,Cabrilla,grouper,97.6,19.4,LATIN
+214,Pelagic Fish,"Cabrilla, carne",grouper,NA,20.1,LATIN
+214,Pelagic Fish,"Cação azul, filé, cru",shark,55.81,13.3,LATIN
+214,Pelagic Fish,"Carite, carne, crudo",mackerel,95,20.7,LATIN
+214,Pelagic Fish,Cazón,dogfish,110.2,17.6,LATIN
+214,Pelagic Fish,Cazón,dogfish,96.9,21.8,LATIN
+214,Pelagic Fish,"Cazón, carne, crudo",dogfish,NA,23.8,LATIN
+214,Pelagic Fish,"Cazón, lomo",dogfish,95.5,21.4,LATIN
+214,Pelagic Fish,"Cunaro, carne, crudo",,84.8,17.7,LATIN
+214,Pelagic Fish,"Chicharra, carne, cruda",,NA,20.9,LATIN
+214,Pelagic Fish,"Chicharro, carne, crudo",,105.1,21.3,LATIN
+214,Pelagic Fish,"Lamparosa, carne, cruda",lookdown,NA,22,LATIN
+214,Pelagic Fish,Machete,ladyfish,96.4,18.7,LATIN
+214,Pelagic Fish,"Matrinchã, filé, cru",,187.8,20.4,LATIN
+214,Pelagic Fish,"Matrinchã, inteiro, cru",,245.5,19.3,LATIN
+214,Pelagic Fish,"Merluza común, filete, cruda",hake,NA,16.3,LATIN
+214,Pelagic Fish,"Merluza del Sur, filete, cruda",hake,78.5,16.2,LATIN
+214,Pelagic Fish,"Merluza, carne, cruda",hake,80.57,17.12,LATIN
+214,Pelagic Fish,"Merluza, filete",hake,98.2,15.6,LATIN
+214,Pelagic Fish,"Mero, carne, crudo",grouper,82.63,17.94,LATIN
+214,Pelagic Fish,Pampanito,pompano,104.3,19.2,LATIN
+214,Pelagic Fish,Pampano,pompano,85.4,19.1,LATIN
+214,Pelagic Fish,"Pejerrey, de mar, carne, crudo",silverside,86.43,18.65,LATIN
+214,Pelagic Fish,Pintadilla,morwong,87.7,18.8,LATIN
+214,Pelagic Fish,"Puia, filete",,91.3,18.4,LATIN
+214,Pelagic Fish,"Rayado, carne, crudo",,85.2,19.2,LATIN
+214,Pelagic Fish,"Sardina común, filete, cruda",sardine,197.9,16.5,LATIN
+214,Pelagic Fish,"Sardina española, filete, cruda",sardine,171.4,17.1,LATIN
+214,Pelagic Fish,"Sardina, carne, cruda",sardine,NA,20.2,LATIN
+214,Pelagic Fish,"Sardina, carne, cruda",sardine,NA,21.2,LATIN
+214,Pelagic Fish,"Sardina, filete, cruda, fresca",sardine,NA,16.5,LATIN
+214,Pelagic Fish,"Sardina, fueguina, carne, cruda",sardine,136.46,14,LATIN
+214,Pelagic Fish,"Sardinha verdadeira, crua",sardine,NA,NA,LATIN
+214,Pelagic Fish,"Sardinha verdadeira, filé, cru",sardine,101.5,20.45,LATIN
+214,Pelagic Fish,"Sardinha, filé, cru",sardine,NA,NA,LATIN
+214,Pelagic Fish,"Sardinha, filé, cru",sardine,129.82,19.29,LATIN
+214,Pelagic Fish,"Sardinha, filé, cru",sardine,151.5,18.3,LATIN
+214,Pelagic Fish,"Sardinha, filé, cru",sardine,108.05,20.28,LATIN
+214,Pelagic Fish,"Sardinha, inteira, crua",sardine,260.3,18.5,LATIN
+214,Pelagic Fish,Sierra,sierra,112.7,19.4,LATIN
+214,Pelagic Fish,"Sierra, carne, cruda",sierra,NA,23,LATIN
+214,Pelagic Fish,"Sierra, filete, cruda, fresca",sierra,155.9,22.1,LATIN
+214,Pelagic Fish,"Tainha, cru",mullet,NA,NA,LATIN
+214,Pelagic Fish,"Tainha, filé, cru",mullet,150.14,25.16,LATIN
+214,Pelagic Fish,"Tajalí, carne, crudo",beltfish,NA,18.9,LATIN
+214,Pelagic Fish,"Tollo, filete, crudo, fresco",catfish,NA,17.3,LATIN
+214,Pelagic Fish,"Trucha, de cultivo, filete, cruda",trout,143.3,19.9,LATIN
+214,Pelagic Fish,"Trucha, de cultivo, filete, cruda",trout,118.3,19.4,LATIN
+214,Pelagic Fish,Trucha ahumada,trout,137.18,23.54,LATIN
+215,Marine Fish; Other,"Boquilla, carne",,NA,19.5,LATIN
+215,Marine Fish; Other,"Boquita de huevo, carne, cruda",,82.4,17.4,LATIN
+215,Marine Fish; Other,"Cação machote, filé, cru",,77.41,17.89,LATIN
+215,Marine Fish; Other,"Cagalona, carne, cruda",,NA,18.1,LATIN
+215,Marine Fish; Other,"Catalana, carne, cruda",,NA,18.9,LATIN
+215,Marine Fish; Other,"Corocoro, carne, crudo",grunt,94,19.7,LATIN
+215,Marine Fish; Other,"Corocoro, carne, crudo",grunt,86.9,18.6,LATIN
+215,Marine Fish; Other,Cherna,,84.4,19.3,LATIN
+215,Marine Fish; Other,Huachinango,snapper,91.2,20.1,LATIN
+215,Marine Fish; Other,Isabelita,angel fish,83,20.3,LATIN
+215,Marine Fish; Other,"Jurel, carne, crudo",mackerel,148.96,19,LATIN
+215,Marine Fish; Other,"Jurel, crudo",mackerel,112.3,22,LATIN
+215,Marine Fish; Other,"Jurel, filete, crudo",mackerel,122.2,21.9,LATIN
+215,Marine Fish; Other,"Jurel, músculo claro, crudo",mackerel,NA,NA,LATIN
+215,Marine Fish; Other,"Jurel, músculo oscuro, crudo",mackerel,NA,NA,LATIN
+215,Marine Fish; Other,"Maito, filete",,71.5,14.3,LATIN
+215,Marine Fish; Other,"Marari, filete",,110.4,18.7,LATIN
+215,Marine Fish; Other,"Marau, filete",,89.1,20.3,LATIN
+215,Marine Fish; Other,"Matuku, filete",,84.5,18.7,LATIN
+215,Marine Fish; Other,"Mero, filete, crudo",grouper,238.5,12.2,LATIN
+215,Marine Fish; Other,Mojarra,mojarra,NA,19.2,LATIN
+215,Marine Fish; Other,"Mojarra, carne, crudo",mojarra,99.7,20,LATIN
+215,Marine Fish; Other,"Mori, filete",shark,86.5,18.6,LATIN
+215,Marine Fish; Other,"Nanue, filete",,110.8,20.8,LATIN
+215,Marine Fish; Other,"Picúa, carne, crudo",,84.2,17.9,LATIN
+215,Marine Fish; Other,"Porco, cru",triggerfish,80.82,18.63,LATIN
+215,Marine Fish; Other,"Porco, cru",triggerfish,NA,NA,LATIN
+215,Marine Fish; Other,"Raea, filete",,94.9,18.1,LATIN
+215,Marine Fish; Other,"Roncador, cru",croaker,84.2,17.9,LATIN
+215,Marine Fish; Other,Sargo,seabream,NA,20.6,LATIN
+216,Crustaceans,"Camarão, cru",shrimp,45.72,10.62,LATIN
+216,Crustaceans,"Camarão, de malásia, cru",shrimp,NA,NA,LATIN
+216,Crustaceans,"Camarão, marinho, sete-barbas, cru",shrimp,NA,NA,LATIN
+216,Crustaceans,Camarón,,83.4,17.8,LATIN
+216,Crustaceans,"Camarón, carne, crudo",,91.4,21,LATIN
+216,Crustaceans,"Camarón, carne, crudo",,89.1,20.1,LATIN
+216,Crustaceans,"Camarón, crudo",,NA,NA,LATIN
+216,Crustaceans,"Camarón, crudo",,84.1,18.1,LATIN
+216,Crustaceans,Cangrejo,crab,NA,18.9,LATIN
+216,Crustaceans,"Cangrejo de río, entero, crudo",crab,89.8,12.2,LATIN
+216,Crustaceans,"Cangrejo, entero",crab,81.2,16.1,LATIN
+216,Crustaceans,"Caranguejo, cru",crab,61.93,13.3,LATIN
+216,Crustaceans,"Centolla, carne de pata, cruda",crab,83.25,18.8,LATIN
+216,Crustaceans,"Centolla, carne, cruda",crab,NA,13.93,LATIN
+216,Crustaceans,"Jaiba, carne",Jaiba,NA,17.4,LATIN
+216,Crustaceans,"Lagosta, crua",lobster,91.98,21.38,LATIN
+216,Crustaceans,"Langosta, cruda",lobster,72.9,16.2,LATIN
+216,Crustaceans,"Langosta, entera",lobster,83.9,16.2,LATIN
+216,Crustaceans,Langostino,lobster,71,14.6,LATIN
+216,Crustaceans,"Langostino, cola, crudo",lobster,96.55,22,LATIN
+216,Crustaceans,"Siri, azul, carne, cru",crab,107.44,19.21,LATIN
+217,Cephalopods,"Calamar, aletas, tentáculos, crudo",squid,78.95,18.41,LATIN
+217,Cephalopods,"Calamar, entero, crudo",squid,79.82,18.47,LATIN
+217,Cephalopods,"Calamar, fresco",squid,75.5,16.4,LATIN
+217,Cephalopods,"Calamar, grande",squid,46.6,10.6,LATIN
+217,Cephalopods,Pulpo,octopus,68.2,13.6,LATIN
+217,Cephalopods,"Pulpo, crudo",octopus,59.4,12.6,LATIN
+218,Molluscs; Other,"Almeja, blanca",clam,NA,14.4,LATIN
+218,Molluscs; Other,"Almeja, carne",clam,62.3,14,LATIN
+218,Molluscs; Other,"Almeja, de agua dulce",clam,62.3,6,LATIN
+218,Molluscs; Other,"Aruá, cru",,114.85,13.01,LATIN
+218,Molluscs; Other,Caracol,snail,82.4,16.9,LATIN
+218,Molluscs; Other,Concha de abanico,conch,80.2,13.9,LATIN
+218,Molluscs; Other,"Concha, cruda",conch,NA,NA,LATIN
+218,Molluscs; Other,Chanque,,97.5,21.9,LATIN
+218,Molluscs; Other,"Cholga, carne, cruda, fresca",mussel,82,14.2,LATIN
+218,Molluscs; Other,"Chorito, carne, crudo",mussel,NA,NA,LATIN
+218,Molluscs; Other,"Chorito, carne, crudo, fresco",mussel,72.2,10,LATIN
+218,Molluscs; Other,Choro,mussel,93.8,13.3,LATIN
+218,Molluscs; Other,"Guacuco, carne, crudo",,121.4,18.3,LATIN
+218,Molluscs; Other,Macha,clam,110,15.7,LATIN
+218,Molluscs; Other,"Macha, carne, cruda",clam,80.4,14.2,LATIN
+218,Molluscs; Other,"Macha, carne, cruda, fresca",clam,111.5,17.6,LATIN
+218,Molluscs; Other,"Marisco, cru",,108.27,4.44,LATIN
+218,Molluscs; Other,"Mejillón blanco, carne, crudo",mussel,104.5,17.4,LATIN
+218,Molluscs; Other,"Mejillón rojo, carne, crudo",mussel,121.9,17.3,LATIN
+218,Molluscs; Other,"Mejillón, carne, crudo",mussel,64.4,11.86,LATIN
+218,Molluscs; Other,"Michole, cru",,83.53,19.33,LATIN
+218,Molluscs; Other,"Ostión, carne",oyster,27.8,6.4,LATIN
+218,Molluscs; Other,"Ostra, carne, cruda",oyster,62.2,9,LATIN
+218,Molluscs; Other,"Ostra, crua",oyster,84.67,14.19,LATIN
+218,Molluscs; Other,"Ostra, cruda",oyster,86.7,10.9,LATIN
+218,Molluscs; Other,"Ostra, fresca",oyster,86.2,4.2,LATIN
+218,Molluscs; Other,"Pepitonas, carne, cruda",clam,103.5,17.5,LATIN
+219,Aquatic Animals; Others,Erizo,urchin,141.9,16.3,LATIN
+219,Aquatic Animals; Others,"Erizo, carne, crudo, fresco",urchin,122.7,14.4,LATIN
+219,Aquatic Animals; Others,"Estrella de mar, ovas, crudas",seastar,111.6,18.3,LATIN
+219,Aquatic Animals; Others,"Piure, carne, crudo, fresco",tunicate,NA,8.8,LATIN
+219,Aquatic Animals; Others,"Rana, cabeza, cruda",frog,103,17,LATIN
+219,Aquatic Animals; Others,"Rana, carne, cruda",frog,NA,17.5,LATIN
+219,Aquatic Animals; Others,"Tortuga, carne",turtle,257.1,10.5,LATIN
+219,Aquatic Animals; Others,"Tortuga, carne, fresca",turtle,83.7,19.8,LATIN
+212,Freshwater Fish,Squaliobarbus [gold fish heads],,103,16.6,NEASIA
+212,Freshwater Fish,Sense of fish [Monkey Fish],,113,16.6,NEASIA
+212,Freshwater Fish,Clarias [Cat Fish (fish)],,109,18.1,NEASIA
+212,Freshwater Fish,"Catfish [Ge tooth fish, yellow fin fish]",,114,17.5,NEASIA
+212,Freshwater Fish,Fish (eel) [eel],,146,15.4,NEASIA
+212,Freshwater Fish,White beak,,124,17.8,NEASIA
+212,Freshwater Fish,Carp [carp kidnapper],,89,18,NEASIA
+212,Freshwater Fish,Tilapia,,137,22.7,NEASIA
+212,Freshwater Fish,"Herring [Peel fish, bluefish scales, green mix]",,109,17.6,NEASIA
+212,Freshwater Fish,"Argus [blackfish, grouper, raw fish]",,98,18.4,NEASIA
+212,Freshwater Fish,Fish (whitebait) [noodles fish],,118,20.1,NEASIA
+212,Freshwater Fish,"Catfish [Beard catfish, silver carp Hu, Wang shrimp]",,85,18.5,NEASIA
+212,Freshwater Fish,Oyster flower,,105,17.2,NEASIA
+212,Freshwater Fish,"Chub [silver carp, fat, and even sub-fish]",,103,17.3,NEASIA
+212,Freshwater Fish,"Carp [hi head fish, sea fish attached]",,117,15.6,NEASIA
+212,Freshwater Fish,"Bream [gurnard, Wuchang]",,104,17.8,NEASIA
+212,Freshwater Fish,"EEL [eel, eel]",,108,17.1,NEASIA
+212,Freshwater Fish,"Bighead [Pangtou, put a good fish, flowers silver carp]",,135,18.3,NEASIA
+212,Freshwater Fish,"Mandarin [mandarin fish, Atka]",,181,18.6,NEASIA
+212,Freshwater Fish,Trout [rainbow trout],,100,15.3,NEASIA
+212,Freshwater Fish,Salmon [salmon],,117,19.9,NEASIA
+212,Freshwater Fish,White croaker [rice sub (fish)],,99,18.6,NEASIA
+212,Freshwater Fish,Dogs female fish [stud dog female fish],,139,17.2,NEASIA
+213,Demersal Fish,Sea carp [ninety-nine fish],carp,150,19.1,NEASIA
+213,Demersal Fish,Moray [carp hook],carp,100,16.7,NEASIA
+213,Demersal Fish,Matchmaker fish [wing Lepidotrigla],matchmaker,206,17,NEASIA
+213,Demersal Fish,Nibea [Huangpojing chicken (fish)],,122,18.8,NEASIA
+213,Demersal Fish,Yellow croaker (large yellow croaker),croaker,105,18,NEASIA
+213,Demersal Fish,Yellow croaker (small yellow croaker),croaker,137,18.4,NEASIA
+213,Demersal Fish,"Yellow bream [red rainbow, boss fish]",bream,97,17.7,NEASIA
+213,Demersal Fish,"Cynoglossidae [pattern tongue, tongue fish]",tongue fish,99,17.9,NEASIA
+213,Demersal Fish,"Maximus [Piankou fish, halibut]",halibut,81,18.5,NEASIA
+213,Demersal Fish,Bass [bass flower],bass,83,17.7,NEASIA
+213,Demersal Fish,"Bream [black sea bream, bronze basin fish, bigeye fish]",bream,112,20.8,NEASIA
+213,Demersal Fish,"Flounder [halibut, goggle-eyed fish]",flounder,105,18.6,NEASIA
+213,Demersal Fish,Skate [husband Fish],skate,106,17.9,NEASIA
+213,Demersal Fish,"Cod [cod narrow, Pollack]",cod,107,21.1,NEASIA
+213,Demersal Fish,Codfish,cod,90,20.8,NEASIA
+213,Demersal Fish,Hammerhead shark,shark,88,20.4,NEASIA
+213,Demersal Fish,Mullet [supercilious edge fish],mullet,89,20.2,NEASIA
+213,Demersal Fish,"Green face fin dolphin [bread fish, rubber fish]",rubber fish,117,27.4,NEASIA
+213,Demersal Fish,Participation fish [blue circle Senate side of the fish],participation fish,119,18.9,NEASIA
+214,Pelagic Fish,"Octopus [silver pomfret, saury]",octopus,83,18.1,NEASIA
+214,Pelagic Fish,embankment fish,embankment fish,124,18.5,NEASIA
+214,Pelagic Fish,Gold fish [red three fish],gold fish,127,17.7,NEASIA
+214,Pelagic Fish,sardines [Sand Mullet],sardines,191,17.6,NEASIA
+214,Pelagic Fish,"Sand Diamond Fish [scaly hi, sand shuttle parva]",sand diamond fish,101,18.6,NEASIA
+214,Pelagic Fish,Oil Shu [incense barracuda],barracuda,89,19.8,NEASIA
+214,Pelagic Fish,Jaw needle fish [needle of fish],needle fish,84,18.4,NEASIA
+214,Pelagic Fish,"Bayu [mackerel, Spanish mackerel swallow, Pakistan Fish]",mackerel,145,15.9,NEASIA
+214,Pelagic Fish,"Mackerel [blue mackerel, mackerel fish bar, brick Fish]",mackerel,180,20.2,NEASIA
+214,Pelagic Fish,Anchovy (large) [large anchovies],anchovy,121,21.2,NEASIA
+214,Pelagic Fish,Anchovy (small) [small anchovies],anchovy,155,19.9,NEASIA
+214,Pelagic Fish,"Pomfret [butterfish, silver pomfret, pomfret thorn]",pomfret,106,13.2,NEASIA
+214,Pelagic Fish,Shad fish [Kuaiyu force fish],shad,124,15.5,NEASIA
+214,Pelagic Fish,White croaker [rice sub (fish)],croaker,140,18.5,NEASIA
+214,Pelagic Fish,Dogs female fish [stud dog female fish],dogfish,159,20.7,NEASIA
+215,Marine Fish; Other,Sea carp [ninety-nine fish],carp,150,19.1,NEASIA
+215,Marine Fish; Other,Moray [carp hook],carp,100,16.7,NEASIA
+215,Marine Fish; Other,Matchmaker fish [wing Lepidotrigla],matchmaker,206,17,NEASIA
+215,Marine Fish; Other,Nibea [Huangpojing chicken (fish)],,122,18.8,NEASIA
+215,Marine Fish; Other,Yellow croaker (large yellow croaker),croaker,105,18,NEASIA
+215,Marine Fish; Other,Yellow croaker (small yellow croaker),croaker,137,18.4,NEASIA
+215,Marine Fish; Other,"Yellow bream [red rainbow, boss fish]",bream,97,17.7,NEASIA
+215,Marine Fish; Other,"Cynoglossidae [pattern tongue, tongue fish]",tongue fish,99,17.9,NEASIA
+215,Marine Fish; Other,"Maximus [Piankou fish, halibut]",halibut,81,18.5,NEASIA
+215,Marine Fish; Other,Bass [bass flower],bass,83,17.7,NEASIA
+215,Marine Fish; Other,"Bream [black sea bream, bronze basin fish, bigeye fish]",bream,112,20.8,NEASIA
+215,Marine Fish; Other,"Flounder [halibut, goggle-eyed fish]",flounder,105,18.6,NEASIA
+215,Marine Fish; Other,Skate [husband Fish],skate,106,17.9,NEASIA
+215,Marine Fish; Other,"Cod [cod narrow, Pollack]",cod,107,21.1,NEASIA
+215,Marine Fish; Other,Codfish,cod,90,20.8,NEASIA
+215,Marine Fish; Other,Hammerhead shark,shark,88,20.4,NEASIA
+215,Marine Fish; Other,Mullet [supercilious edge fish],mullet,89,20.2,NEASIA
+215,Marine Fish; Other,"Green face fin dolphin [bread fish, rubber fish]",rubber fish,117,27.4,NEASIA
+215,Marine Fish; Other,Participation fish [blue circle Senate side of the fish],participation fish,119,18.9,NEASIA
+215,Marine Fish; Other,"Octopus [silver pomfret, saury]",octopus,83,18.1,NEASIA
+215,Marine Fish; Other,embankment fish,embankment fish,124,18.5,NEASIA
+215,Marine Fish; Other,Gold fish [red three fish],gold fish,127,17.7,NEASIA
+215,Marine Fish; Other,sardines [Sand Mullet],sardines,191,17.6,NEASIA
+215,Marine Fish; Other,"Sand Diamond Fish [scaly hi, sand shuttle parva]",sand diamond fish,101,18.6,NEASIA
+215,Marine Fish; Other,Oil Shu [incense barracuda],barracuda,89,19.8,NEASIA
+215,Marine Fish; Other,Jaw needle fish [needle of fish],needle fish,84,18.4,NEASIA
+215,Marine Fish; Other,"Bayu [mackerel, Spanish mackerel swallow, Pakistan Fish]",mackerel,145,15.9,NEASIA
+215,Marine Fish; Other,"Mackerel [blue mackerel, mackerel fish bar, brick Fish]",mackerel,180,20.2,NEASIA
+215,Marine Fish; Other,Anchovy (large) [large anchovies],anchovy,121,21.2,NEASIA
+215,Marine Fish; Other,Anchovy (small) [small anchovies],anchovy,155,19.9,NEASIA
+215,Marine Fish; Other,"Pomfret [butterfish, silver pomfret, pomfret thorn]",pomfret,106,13.2,NEASIA
+215,Marine Fish; Other,Shad fish [Kuaiyu force fish],shad,124,15.5,NEASIA
+215,Marine Fish; Other,Shrimp (Oriental shrimp) [Chinese shrimp],shrimp,140,18.5,NEASIA
+215,Marine Fish; Other,Shrimp (shrimp),shrimp,159,20.7,NEASIA
+216,Crustaceans,Prawns (shrimp),shrimp,84,18.3,NEASIA
+216,Crustaceans,Prawns (shrimp),shrimp,79,16.8,NEASIA
+216,Crustaceans,Jiang shrimp [prawn],prawn,87,16.4,NEASIA
+216,Crustaceans,Shrimp (lobster),lobster,101,18.2,NEASIA
+216,Crustaceans,Shrimp ponds [grass shrimp],shrimp,87,10.3,NEASIA
+216,Crustaceans,Goby,goby,90,18.9,NEASIA
+216,Crustaceans,Crayfish,crayfish,96,21.2,NEASIA
+216,Crustaceans,Crab (crab),crab,81,11.6,NEASIA
+216,Crustaceans,Crab (crab),crab,93,14.8,NEASIA
+216,Crustaceans,Crab,crab,95,13.8,NEASIA
+216,Crustaceans,Sea cucumber,sea cucumber,103,17.5,NEASIA
+216,Crustaceans,Jellyfish,jellyfish,62,11.6,NEASIA
+217,Cephalopods,Cuttlefish [Man maindroni],cuttlefish,78,16.5,NEASIA
+217,Cephalopods,"Squid (fresh) [squid, Loligo Taiwan gun",squid,33,3.7,NEASIA
+217,Cephalopods,Octopus [octopus vulgaris],octopus,83,15.2,NEASIA
+217,Cephalopods,Abalone [Haliotis],abalone,84,17.4,NEASIA
+217,Cephalopods,Razor fish,razor fish ,52,10.6,NEASIA
+218,Molluscs; Other,Mussel,mussel,84,12.6,NEASIA
+218,Molluscs; Other,Fluminea [clam],clam,40,7.3,NEASIA
+218,Molluscs; Other,Oyster [Oyster],oyster,54,10.9,NEASIA
+218,Molluscs; Other,Oysters,oyster,47,7,NEASIA
+218,Molluscs; Other,"Granosa [blood cockle, clam beads]",cockle,73,5.3,NEASIA
+218,Molluscs; Other,scallop (fresh),scallop,57,10.9,NEASIA
+218,Molluscs; Other,Silver cockle [clam],cockle,71,10,NEASIA
+218,Molluscs; Other,"mussel (fresh) [mussel, mussel]",mussel,60,11.1,NEASIA
+218,Molluscs; Other,Mejillon [Coelomactra],mejillon,71,12.2,NEASIA
+218,Molluscs; Other,clam (mean),clam,80,11.4,NEASIA
+218,Molluscs; Other,Lo (mean),lobster,42,9.5,NEASIA
+218,Molluscs; Other,Red flower stalk [seaweed sprouts],seaweed sprouts,62,10.1,NEASIA
+218,Molluscs; Other,Kelp [Jiang cabbage] (Fresh),kelp,100,15.7,NEASIA
+212,Freshwater Fish,"Black-bass (Micropterus spp.), boiled",,86,18,OldAfrica
+212,Freshwater Fish,Bottle-nose (Mormyrus spp.):,,91,18.6,OldAfrica
+212,Freshwater Fish,Bull-dog (Gnathonemus spp.):,,107,19.4,OldAfrica
+212,Freshwater Fish,"Carp (Cyprinus carpio), boiled",,128,16.2,OldAfrica
+212,Freshwater Fish,"Carp, African; rhino-fish; mud-sucker (Labeo spp.):",,86,18.8,OldAfrica
+212,Freshwater Fish,"Catfish; mudfish; bayad; blolo (Synodontis spp.; Arius spp.; Clarias spp.; Eutropius spp.), flesh:",,90,17.6,OldAfrica
+212,Freshwater Fish,"Catfish, electric (Malapterurus electricus), raw",,85,18.1,OldAfrica
+212,Freshwater Fish,Cichlids; St. Peter's fish; “breams” (Tilapia spp.):,,101,19.7,OldAfrica
+212,Freshwater Fish,Citharinus; lianga (Citharinus spp.):,,135,23.8,OldAfrica
+212,Freshwater Fish,"Climbing-perch (Ctenopoma spp.; Anabas spp.), raw",,103,20,OldAfrica
+212,Freshwater Fish,"Cornish-jackkk; taraza (Mormyrops spp.), raw",,87,18.1,OldAfrica
+212,Freshwater Fish,Distichodus (Distichodus spp.):,,82,18.1,OldAfrica
+212,Freshwater Fish,Gambusia (Gambusia holbrooki):,,98,13.5,OldAfrica
+212,Freshwater Fish,"Globe-fish (Tetraodon spp.), raw",,89,19.5,OldAfrica
+212,Freshwater Fish,"(Gnathobagrus depressus), raw",,79,18.1,OldAfrica
+212,Freshwater Fish,"Gold-fish (Carassius auratus), boiled",,144,18,OldAfrica
+212,Freshwater Fish,Karmout (Clarias lazerae) raw,,77,15.7,OldAfrica
+212,Freshwater Fish,"Perch, Madagascar (Paratilapia polleni), cooked",,77,16,OldAfrica
+212,Freshwater Fish,"Perch, Nile (Lates niloticus):",,107,21.9,OldAfrica
+212,Freshwater Fish,Pike (Hepsetus odoë):,,86,18.8,OldAfrica
+212,Freshwater Fish,Razor-fish (Papyrocranus after):,,88,18.5,OldAfrica
+212,Freshwater Fish,"Sail-fin (Polypterus spp.), raw",,85,18.3,OldAfrica
+212,Freshwater Fish,"Silver-minnow (Micralestes spp.), dried, whole",,423,57,OldAfrica
+212,Freshwater Fish,"Smelt (Sillago sihama), raw",,93,20.1,OldAfrica
+212,Freshwater Fish,Snake-head (Parophiocephalus spp.; Ophiocephalus spp.):,,88,19.4,OldAfrica
+212,Freshwater Fish,"Spiny-eel (Mastacembelus spp.), raw",,87,18.8,OldAfrica
+212,Freshwater Fish,Spot-tail (Alestes spp.):,,98,21,OldAfrica
+212,Freshwater Fish,"Tiger-fish(Therapon spp.), raw",,97,20.7,OldAfrica
+212,Freshwater Fish,"Trout (Salmo spp.), boiled",,99,18,OldAfrica
+212,Freshwater Fish,"Tylochromis (Tylochromis spp.), raw",,109,24.5,OldAfrica
+212,Freshwater Fish,Whitebait; ndagala (Stolothrissa tanganicae and Limnothrissa miodon):,,97,16.2,OldAfrica
+213,Demersal Fish,"Barbel-eel (Plotosus anguillaris), raw",eel,87,19,OldAfrica
+213,Demersal Fish,"Bream, gilt-head (Chrysophrys aurata), raw",bream,92,18.4,OldAfrica
+213,Demersal Fish,Cod (Gadus spp.):,cod,96,17.8,OldAfrica
+213,Demersal Fish,Conger-eel (Conger conger):,eel,122,21,OldAfrica
+213,Demersal Fish,Croaker; cassava fish (Otolithus spp.):,croaker,88,17.4,OldAfrica
+213,Demersal Fish,Dogfish (Mustelus spp.) raw,dogfish,106,21.4,OldAfrica
+213,Demersal Fish,"Drum; corb (Umbrina spp.), raw",drum,101,18.8,OldAfrica
+213,Demersal Fish,Eel (Anguilla spp.),eel,261,11.9,OldAfrica
+213,Demersal Fish,"Genyomyrus, sp. (Genyomyrus donyi), raw",elephant fish,93,19.8,OldAfrica
+213,Demersal Fish,Gobies (Gobius spp.):,goby,92,16.3,OldAfrica
+213,Demersal Fish,Grunter (Pomadasys spp.; Pristipoma spp.):,grunter,104,19.6,OldAfrica
+213,Demersal Fish,"Gurnard (Trigla spp.), raw",gurnard,102,18,OldAfrica
+213,Demersal Fish,Kabeljaauw; meagre (Sciaena spp.):,drum,101,18.6,OldAfrica
+213,Demersal Fish,"Leiognathus, sp. (Leiognathus equulus), raw",ponyfish,94,19.6,OldAfrica
+213,Demersal Fish,Lung-fish (Protopterus spp.):,lungfish,72,16.4,OldAfrica
+213,Demersal Fish,Meagre (Corvina nigrita):,,99,22,OldAfrica
+213,Demersal Fish,Mullet; harder; bouri (Mugil spp.; Valamugil spp.):,mullet,115,19.3,OldAfrica
+213,Demersal Fish,"Mullet, striped (Mullus barbatus), raw",mullet,114,18.4,OldAfrica
+213,Demersal Fish,"Parapristipoma (Parapristipoma mediterraneum; Diagramma mediterraneum), raw",grunt ,93,17.7,OldAfrica
+213,Demersal Fish,"Ray (Pteroplatea spp.), raw",ray,79,18.1,OldAfrica
+213,Demersal Fish,"Ray; skate (Raja spp.),",ray,102,19.9,OldAfrica
+213,Demersal Fish,"sardinesau (Paracubiceps ledanoisi), raw, whole.",,107,18.9,OldAfrica
+213,Demersal Fish,"Scorpion fish (Scorpaena spp.), raw",scorpion fish,154,27.7,OldAfrica
+213,Demersal Fish,"Sea-bass (Dicentrarchus labrax; Morone labrax), raw",bass,89,18.4,OldAfrica
+213,Demersal Fish,Sea-bream; stumpnose (Pagrus spp.):,bream,97,20,OldAfrica
+213,Demersal Fish,"Sea-bream; steenbras (Pagellus spp.), raw",bream,123,19.9,OldAfrica
+213,Demersal Fish,"Scavenger; sea bream (Lethrinus spp.), raw",bream,92,20.4,OldAfrica
+213,Demersal Fish,"Sea-perch; grouper; rock-cod (Epinephelus spp.; Serranus spp.),",perch,91,19.2,OldAfrica
+213,Demersal Fish,"Sea-perch; grouper; rock-cod (Epinephelus spp.; Serranus spp.),",grouper,91,19.2,OldAfrica
+213,Demersal Fish,"Sea-perch; grouper; rock-cod (Epinephelus spp.; Serranus spp.),",cod,91,19.2,OldAfrica
+213,Demersal Fish,"Shiny-nose (Polydactylus quadrifilis), raw",threadfin,87,19.8,OldAfrica
+213,Demersal Fish,"Slimy; soapy (Secutor insidiator), raw",ponyfish,93,19.4,OldAfrica
+213,Demersal Fish,"Smoked Sole (Solea spp.), unspecified:",sole,99,19,OldAfrica
+213,Demersal Fish,Snapper (Lutjanus spp.):,snapper,90,19.8,OldAfrica
+213,Demersal Fish,"ray (Dasyatis spp.), raw",ray,88,19.3,OldAfrica
+213,Demersal Fish,Stockfish; cape-hake (Merluccius spp.):,hake,142,21.8,OldAfrica
+213,Demersal Fish,"Threadfin (Galeoides decadactylus), raw",threadfin,87,19.2,OldAfrica
+213,Demersal Fish,"Threadfin (Pentanemus quinquarius), raw",threadfin,88,19.2,OldAfrica
+213,Demersal Fish,"Tongue-sole (Cynoglossus spp.), raw",sole,86,19,OldAfrica
+213,Demersal Fish,"Turbot (Scophthalmus maximus; Psetta maxima), raw",turbot,134,18.6,OldAfrica
+213,Demersal Fish,"Weakfish; drum (Larimus peli), raw",weakfish,89,19.5,OldAfrica
+213,Demersal Fish,"Weever (Trachinus spp.), raw",weever,114,19.2,OldAfrica
+213,Demersal Fish,"Wrasses (Labrus spp. and Crenilabrus spp.), raw.",wrass,97,18.5,OldAfrica
+213,Demersal Fish,"Xenomystus; pele pele (Xenomystus spp.), raw",knifefish,88,19.7,OldAfrica
+213,Demersal Fish,Zerba;sargo;breams (Diplodus spp.):,bream,175,20.8,OldAfrica
+214,Pelagic Fish,"Albacore, long-finned (Thunnus alalunga; Germo alalunga), raw",albacore,170,24,OldAfrica
+214,Pelagic Fish,Anchovy (Engraulis encrasicholus; E. hepsetus):,anchovy,99,21,OldAfrica
+214,Pelagic Fish,Barracuda; sea-pike (Sphyraena spp.):,barracuda,94,19.7,OldAfrica
+214,Pelagic Fish,"Barred-half-beak (Hemirhamphus spp.), raw",half beak,98,21.6,OldAfrica
+214,Pelagic Fish,bluefish; elft; mayas (Pomatomus saltatrix; Temnodon saltator):,bluefish,106,18.6,OldAfrica
+214,Pelagic Fish,"Bonito, Atlantic; belted bonito; pelamid (Sarda sarda):",bonito,151,22.6,OldAfrica
+214,Pelagic Fish,"Bonito, striped bellied; skipjackkk (Euthynnus pelamys):",bonito,171,22,OldAfrica
+214,Pelagic Fish,Butter-fish; butter-barbel (Schilbe spp.):,butterfish,85,19.1,OldAfrica
+214,Pelagic Fish,Dog's teeth (Dentex spp.),dentex,92,18.8,OldAfrica
+214,Pelagic Fish,Garrick; palometa; pampano (Trachinotus spp.; Lichia spp.):,pompano,106,19.9,OldAfrica
+214,Pelagic Fish,Garrick; palometa; pampano (Trachinotus spp.; Lichia spp.):,leerfish,106,19.9,OldAfrica
+214,Pelagic Fish,Horse-mackerel (Trachurus spp.):,mackerel,143,25,OldAfrica
+214,Pelagic Fish,jackkk (Caranx spp.):,jackk,99,20,OldAfrica
+214,Pelagic Fish,"John-Dory (Zeus faber), raw",john dory,119,21,OldAfrica
+214,Pelagic Fish,"Mackerel, chub; mackerel, cape (Scomber japonicus), raw",mackerel,171,18.9,OldAfrica
+214,Pelagic Fish,"Mackerel, chub; mackerel, cape (Scomber japonicus), raw",chub,171,18.9,OldAfrica
+214,Pelagic Fish,"Mackerel, chub; mackerel, cape (Scomber japonicus), raw",cape,171,18.9,OldAfrica
+214,Pelagic Fish,"Mackerel, rake-gilled (Rastrelliger spp.), raw",mackerel,88,19.6,OldAfrica
+214,Pelagic Fish,"Mackerel, Spanish (Scomberomorus maculatus; Cybium tritor):",mackerel,111,20,OldAfrica
+214,Pelagic Fish,"Mackerel, scad (Decapterus ronchus), raw",mackerel,97,19,OldAfrica
+214,Pelagic Fish,sardines; pilchard (Sardina pilchardus; Clupea pilchardus):,sardines,143,17.6,OldAfrica
+214,Pelagic Fish,"sardines, gilt (sardineslla aurita):",sardines,111,18.3,OldAfrica
+214,Pelagic Fish,sardineslla (sardineslla spp.):,sardines,105,17.8,OldAfrica
+214,Pelagic Fish,"Shad, West African (Ethmalosa dorsalis; E. fimbriata):",shad,108,19.1,OldAfrica
+214,Pelagic Fish,"Silvery-batfish (Psettus sebe), raw",,106,20.7,OldAfrica
+214,Pelagic Fish,"Spade-fish; sickle fish; (Drepane africana; D. punctata), raw",spade fish,99,18.9,OldAfrica
+214,Pelagic Fish,"Swordfish; broadbill (Xiphias gladius),",swordfish,140,19.7,OldAfrica
+214,Pelagic Fish,"Tuna (Thunnus sp.), unspecified:",tuna,232,27,OldAfrica
+215,Marine Fish; Other,"Angel fish; seabat (Platax pinnatus), raw.",angel fish,84,18.6,OldAfrica
+215,Marine Fish; Other,"Garfish (Tylosurus crocodilus), raw",garfish,96,21.1,OldAfrica
+215,Marine Fish; Other,"Gerres(Gerres app.), raw.",gerres,101,21.2,OldAfrica
+215,Marine Fish; Other,"Goat-fish (Upeneus spp.), raw",goat fish,96,20.4,OldAfrica
+215,Marine Fish; Other,"Queenfish; leatherskin (Chorinemus spp.), raw",queen fish,96,20.8,OldAfrica
+215,Marine Fish; Other,"Rabbit-fish (Siganus oramin), raw",rabbit fish,85,18.9,OldAfrica
+215,Marine Fish; Other,"saurida (saurida gracilis), raw",saurida,94,20.6,OldAfrica
+215,Marine Fish; Other,"Tunny, little (Euthynnus alletteratus), raw",tunny,110,22.3,OldAfrica
+216,Crustaceans,Crab (Ocypode spp.; Cardisoma spp.; Grapsus spp.):,crab,242,31.2,OldAfrica
+216,Crustaceans,"Prawn, marine; shrimp (Aristeus spp.; Palaemon spp.; Parapenaeus spp.; Penaeus spp.)",prawn,102,17.9,OldAfrica
+218,Molluscs; Other,"“Oyster” (Etheria elliptica), raw",oyster,109,12.3,OldAfrica
+218,Molluscs; Other,"Snail, African (Achatina marginata):",snail,107,17.7,OldAfrica
+212,Freshwater Fish,"BASS,FRSH H2O,MXD SP,RAW",bass,114,18.86,US
+212,Freshwater Fish,"BURBOT,RAW",burbot,90,19.31,US
+212,Freshwater Fish,"CARP,RAW",carp,127,17.83,US
+212,Freshwater Fish,"CATFISH,CHANNEL,WILD,RAW",catfish,95,16.38,US
+212,Freshwater Fish,"CISCO,RAW",cisco,98,18.99,US
+212,Freshwater Fish,"DRUM,FRESHWATER,RAW",drum,119,17.54,US
+212,Freshwater Fish,"PIKE,NORTHERN,RAW",pike,88,19.26,US
+212,Freshwater Fish,"PIKE,WALLEYE,RAW",pike,93,19.14,US
+212,Freshwater Fish,"SMELT,RAINBOW,RAW",smelt,97,17.63,US
+212,Freshwater Fish,"SUCKER,WHITE,RAW",sucker,92,16.76,US
+212,Freshwater Fish,"TROUT,MIXED SPECIES,RAW",trout,148,20.77,US
+212,Freshwater Fish,"WHITEFISH,MXD SP,RAW",whitefish,134,19.09,US
+212,Freshwater Fish,"MILKFISH,RAW",milkfish,148,20.53,US
+212,Freshwater Fish,"PERCH,MIXED SPECIES,RAW",perch,91,19.39,US
+212,Freshwater Fish,"SALMON,ATLANTIC,WILD,RAW",salmon,142,19.84,US
+212,Freshwater Fish,"SALMON,CHINOOK,RAW",salmon,179,19.93,US
+212,Freshwater Fish,"SALMON,CHUM,RAW",salmon,120,20.14,US
+212,Freshwater Fish,"SALMON,COHO,WILD,RAW",salmon,146,21.62,US
+212,Freshwater Fish,"SALMON,PINK,RAW",salmon,127,20.5,US
+212,Freshwater Fish,"SALMON,SOCKEYE,RAW",salmon,142,21.31,US
+212,Freshwater Fish,"STURGEON,MXD SP,RAW",sturgeon,105,16.14,US
+212,Freshwater Fish,"FISH,TILAPIA,RAW",tilapia,96,20.08,US
+213,Demersal Fish,"COD,ATLANTIC,RAW",cod,82,17.81,US
+213,Demersal Fish,"COD,PACIFIC,RAW",cod,69,15.27,US
+213,Demersal Fish,"EEL,MIXED SPECIES,RAW",eel,184,18.44,US
+213,Demersal Fish,"FLATFISH (FLOUNDER&SOLE SP),RAW",flatfish,70,12.41,US
+213,Demersal Fish,"HADDOCK,RAW",haddock,74,16.32,US
+213,Demersal Fish,"HALIBUT,ATLANTIC&PACIFIC,RAW",halibut,91,18.56,US
+213,Demersal Fish,"POLLOCK,ATLANTIC,RAW",pollock,92,19.44,US
+213,Demersal Fish,"SEA BASS,MXD SP,RAW",bass,97,18.43,US
+213,Demersal Fish,"SHARK,MIXED SPECIES,RAW",shark,130,20.98,US
+213,Demersal Fish,"TURBOT,EUROPEAN,RAW",turbot,95,16.05,US
+213,Demersal Fish,"MONKFISH,RAW",monkfish,76,14.48,US
+213,Demersal Fish,"FISH,POLLOCK,ALASKA,RAW",pollock,56,12.19,US
+213,Demersal Fish,"ROUGHY,ORANGE,RAW",roughy,76,16.41,US
+213,Demersal Fish,"SNAPPER,MIXED SPECIES,RAW",snapper,100,20.51,US
+213,Demersal Fish,"LINGCOD,RAW",lingcod,85,17.66,US
+213,Demersal Fish,"POUT,OCEAN,RAW",pout,79,16.64,US
+213,Demersal Fish,"TILEFISH,RAW",tilefish,96,17.5,US
+213,Demersal Fish,"SCUP,RAW",scup,105,18.88,US
+213,Demersal Fish,"YELLOWTAIL,MXD SP,RAW",yellowfish,146,23.14,US
+213,Demersal Fish,"CROAKER,ATLANTIC,RAW",croaker,104,17.78,US
+213,Demersal Fish,"CUSK,RAW",cusk,87,18.99,US
+213,Demersal Fish,"LING,RAW",ling,87,18.99,US
+213,Demersal Fish,"MULLET,STRIPED,RAW",mullet,117,19.35,US
+213,Demersal Fish,"WOLFFISH,ATLANTIC,RAW",wolffish,96,17.5,US
+213,Demersal Fish,"GROUPER,MIXED SPECIES,RAW",grouper,92,19.38,US
+213,Demersal Fish,"OCEAN PERCH,ATLANTIC,RAW",perch,79,15.31,US
+213,Demersal Fish,"ROCKFISH,PACIFIC,MXD SP,RAW",rockfish,90,18.36,US
+213,Demersal Fish,"WHITEFISH,MXD SP,RAW",whitefish,134,19.09,US
+213,Demersal Fish,"WHITING,MIXED SPECIES,RAW",whiting,90,18.31,US
+214,Pelagic Fish,"HERRING,ATLANTIC,RAW",herring,158,17.96,US
+214,Pelagic Fish,"HERRING,PACIFIC,RAW",herring,195,16.39,US
+214,Pelagic Fish,"SUNFISH,PUMPKIN SEED,RAW",sunfish,89,19.4,US
+214,Pelagic Fish,"SWORDFISH,RAW",swordfish,144,19.66,US
+214,Pelagic Fish,"TUNA,FRESH,BLUEFIN,RAW",tuna,144,23.33,US
+214,Pelagic Fish,"TUNA,FRESH,SKIPjackkK,RAW",tuna,103,22,US
+214,Pelagic Fish,"TUNA,FRESH,YELLOWFIN,RAW",tuna,109,24.4,US
+214,Pelagic Fish,"ANCHOVY,EUROPEAN,RAW",anchovy,131,20.35,US
+214,Pelagic Fish,"bluefish,RAW",bluefish,124,20.04,US
+214,Pelagic Fish,"butterfish,RAW",butterfish,146,17.28,US
+214,Pelagic Fish,"DOLPHINFISH,RAW",dolphinfish,85,18.5,US
+214,Pelagic Fish,"MACKEREL,ATLANTIC,RAW",mackerel,205,18.6,US
+214,Pelagic Fish,"MACKEREL,KING,RAW",mackerel,105,20.28,US
+214,Pelagic Fish,"MACKEREL,SPANISH,RAW",mackerel,139,19.29,US
+214,Pelagic Fish,"SHAD,AMERICAN,RAW",shad,197,16.93,US
+214,Pelagic Fish,"POMPANO,FLORIDA,RAW",pompano,164,18.48,US
+215,Marine Fish; Other,"COD,ATLANTIC,RAW",cod,82,17.81,US
+215,Marine Fish; Other,"COD,PACIFIC,RAW",cod,69,15.27,US
+215,Marine Fish; Other,"EEL,MIXED SPECIES,RAW",eel,184,18.44,US
+215,Marine Fish; Other,"FLATFISH (FLOUNDER&SOLE SP),RAW",flatfish,70,12.41,US
+215,Marine Fish; Other,"HADDOCK,RAW",haddock,74,16.32,US
+215,Marine Fish; Other,"HALIBUT,ATLANTIC&PACIFIC,RAW",halibut,91,18.56,US
+215,Marine Fish; Other,"POLLOCK,ATLANTIC,RAW",pollock,92,19.44,US
+215,Marine Fish; Other,"SEA BASS,MXD SP,RAW",bass,97,18.43,US
+215,Marine Fish; Other,"SHARK,MIXED SPECIES,RAW",shark,130,20.98,US
+215,Marine Fish; Other,"TURBOT,EUROPEAN,RAW",turbot,95,16.05,US
+215,Marine Fish; Other,"MONKFISH,RAW",monkfish,76,14.48,US
+215,Marine Fish; Other,"FISH,POLLOCK,ALASKA,RAW",pollock,56,12.19,US
+215,Marine Fish; Other,"ROUGHY,ORANGE,RAW",roughy,76,16.41,US
+215,Marine Fish; Other,"SNAPPER,MIXED SPECIES,RAW",snapper,100,20.51,US
+215,Marine Fish; Other,"LINGCOD,RAW",lingcod,85,17.66,US
+215,Marine Fish; Other,"POUT,OCEAN,RAW",pout,79,16.64,US
+215,Marine Fish; Other,"TILEFISH,RAW",tilefish,96,17.5,US
+215,Marine Fish; Other,"SCUP,RAW",scup,105,18.88,US
+215,Marine Fish; Other,"YELLOWTAIL,MXD SP,RAW",yellowfish,146,23.14,US
+215,Marine Fish; Other,"CROAKER,ATLANTIC,RAW",croaker,104,17.78,US
+215,Marine Fish; Other,"CUSK,RAW",cusk,87,18.99,US
+215,Marine Fish; Other,"LING,RAW",ling ,87,18.99,US
+215,Marine Fish; Other,"MULLET,STRIPED,RAW",mullet,117,19.35,US
+215,Marine Fish; Other,"WOLFFISH,ATLANTIC,RAW",wolffish,96,17.5,US
+215,Marine Fish; Other,"GROUPER,MIXED SPECIES,RAW",grouper,92,19.38,US
+215,Marine Fish; Other,"OCEAN PERCH,ATLANTIC,RAW",perch,79,15.31,US
+215,Marine Fish; Other,"ROCKFISH,PACIFIC,MXD SP,RAW",rockfish,90,18.36,US
+215,Marine Fish; Other,"WHITEFISH,MXD SP,RAW",whitefish,134,19.09,US
+215,Marine Fish; Other,"WHITING,MIXED SPECIES,RAW",whiting,90,18.31,US
+215,Marine Fish; Other,"HERRING,ATLANTIC,RAW",herring,158,17.96,US
+215,Marine Fish; Other,"HERRING,PACIFIC,RAW",herring,195,16.39,US
+215,Marine Fish; Other,"SUNFISH,PUMPKIN SEED,RAW",sunfish,89,19.4,US
+215,Marine Fish; Other,"SWORDFISH,RAW",swordfish,144,19.66,US
+215,Marine Fish; Other,"TUNA,FRESH,BLUEFIN,RAW",tuna,144,23.33,US
+215,Marine Fish; Other,"TUNA,FRESH,SKIPjackkK,RAW",tuna,103,22,US
+215,Marine Fish; Other,"TUNA,FRESH,YELLOWFIN,RAW",tuna,109,24.4,US
+215,Marine Fish; Other,"ANCHOVY,EUROPEAN,RAW",anchovy,131,20.35,US
+215,Marine Fish; Other,"bluefish,RAW",bluefish,124,20.04,US
+215,Marine Fish; Other,"butterfish,RAW",butterfish,146,17.28,US
+215,Marine Fish; Other,"DOLPHINFISH,RAW",dolphinfish,85,18.5,US
+215,Marine Fish; Other,"MACKEREL,ATLANTIC,RAW",mackerel,205,18.6,US
+215,Marine Fish; Other,"MACKEREL,KING,RAW",mackerel,105,20.28,US
+215,Marine Fish; Other,"MACKEREL,SPANISH,RAW",mackerel,139,19.29,US
+215,Marine Fish; Other,"SHAD,AMERICAN,RAW",shad,197,16.93,US
+215,Marine Fish; Other,"POMPANO,FLORIDA,RAW",pompano,164,18.48,US
+216,Crustaceans,"CRAB,ALASKA KING,RAW",crab,84,18.29,US
+216,Crustaceans,"CRAB,BLUE,RAW",crab,87,18.06,US
+216,Crustaceans,"CRAB,DUNGENESS,RAW",crab,86,17.41,US
+216,Crustaceans,"CRAB,QUEEN,RAW",crab,90,18.5,US
+216,Crustaceans,"CRAYFISH,MXD SP,WILD,RAW",crayfish,77,15.97,US
+216,Crustaceans,"LOBSTER,NORTHERN,RAW",lobster,77,16.52,US
+216,Crustaceans,"SHRIMP,MIXED SPECIES,RAW",shrimp,71,13.61,US
+216,Crustaceans,"SPINY LOBSTER,MXD SP,RAW",lobster,112,20.6,US
+217,Cephalopods,"CUTTLEFISH,MXD SP,RAW",cuttlefish,79,16.24,US
+217,Cephalopods,"OCTOPUS,COMMON,RAW",octopus,82,14.91,US
+217,Cephalopods,"SQUID,MIXED SPECIES,RAW",squid,92,15.58,US
+218,Molluscs; Other,"ABALONE,MIXED SPECIES,RAW",abalone,105,17.1,US
+218,Molluscs; Other,"CLAM,MIXED SPECIES,RAW",clam,86,14.67,US
+218,Molluscs; Other,"MUSSEL,BLUE,RAW",mussel,86,11.9,US
+218,Molluscs; Other,"OYSTER,EASTERN,WILD,RAW",oyster,51,5.71,US
+218,Molluscs; Other,"OYSTER,PACIFIC,RAW",oyster,81,9.45,US
+218,Molluscs; Other,"SCALLOP,MIXED SPECIES,RAW",scallop,69,12.06,US
+218,Molluscs; Other,"WHELK,UNSPECIFIED,RAW",whelk,137,23.84,US
+219,Aquatic Animals; Others,"FROG LEGS,RAW",,73,16.4,US
+219,Aquatic Animals; Others,"SEA CUCUMBER,YANE (ALASKA NATIVE)",,56,13,US
+219,Aquatic Animals; Others,"OOPAH (TUNICATE),WHL ANIMAL (ALASKA NATIVE)",,67,11.7,US
+219,Aquatic Animals; Others,"TURTLE,GREEN,RAW",,89,19.8,US
+212,Freshwater Fish,"African carp, raw",,68,15.6875,WestAfrica
+212,Freshwater Fish,"Bayad, raw",,79,17.1,WestAfrica
+212,Freshwater Fish,"Catfish, raw",,117,16.33,WestAfrica
+212,Freshwater Fish,"Carp, raw",,119,17.22,WestAfrica
+212,Freshwater Fish,"Mormyrids, raw",,83,17.8,WestAfrica
+212,Freshwater Fish,"Mudfish, raw",,95,17,WestAfrica
+212,Freshwater Fish,"Perch, Nile, raw",,98,19.9,WestAfrica
+212,Freshwater Fish,"Tilapia, raw",,99,18.8,WestAfrica
+213,Demersal Fish,"White grouper, raw",,87,19.35,WestAfrica
+213,Demersal Fish,"Shiny-nose, raw",,85,19.79999924,WestAfrica
+214,Pelagic Fish,"Anchovy, fillet, raw",anchovy,109,19.1,WestAfrica
+214,Pelagic Fish,"Barracuda, raw",barracuda,83,19,WestAfrica
+214,Pelagic Fish,"Mackerel, raw",mackerel,124,19.7,WestAfrica
+214,Pelagic Fish,"sardines, raw",sardines,103,19.397,WestAfrica
+214,Pelagic Fish,"Tuna, raw",tuna,139,23.3,WestAfrica

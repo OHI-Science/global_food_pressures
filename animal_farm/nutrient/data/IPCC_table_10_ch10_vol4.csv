@@ -1,0 +1,82 @@
+﻿animal,product,mms_IPPC,mms_specific,frac_N_lost,notes
+cows,milk,anaerobic lagoon,Uncovered anaerobic lagoon,0.77,
+cows,milk,liquid/slurry,Liquid/Slurry,0.4,
+cows,milk,pit storage,,0.28,
+cows,milk,dry lot,Dry lot,0.3,
+cows,milk,solid storage,Solid storage,0.4,
+cows,milk,daily spread,,0.22,
+cows,milk,gf value,Composting intensive windrow,0.345,gf mean does not include  anaerobic lagoon or daily spread
+cows,milk,gf value,Anaerobic digester,0.345,gf mean does not include  anaerobic lagoon or daily spread
+cows,meat,dry lot,Dry lot,0.4,
+cows,meat,solid storage,Solid storage,0.5,
+cows,meat,deep bedding,,0.4,
+cows,meat,gf value,Uncovered anaerobic lagoon,0.77,gf with cow milk fractions
+cows,meat,gf value,Liquid/Slurry,0.4,gf with cow milk fractions
+cows,meat,gf value,Composting intensive windrow,0.345,gf with cow milk fractions
+cows,meat,gf value,Anaerobic digester,0.345,gf with cow milk fractions
+pigs,meat,anaerobic lagoon,Uncovered anaerobic lagoon,0.78,
+pigs,meat,pit storage,Pit storage (< 1 month),0.25,
+pigs,meat,pit storage,Pit storage (> 1 month),0.25,
+pigs,meat,deep bedding,,0.5,
+pigs,meat,liquid/slurry,Liquid/Slurry,0.48,
+pigs,meat,solid storage,Solid storage,0.5,
+pigs,meat,gf value,Anaerobic digester,0.396,gf with pig meat fractions except anaerobic lagoon
+pigs,meat,gf value,Dry lot,0.396,
+chickens,eggs,poultry without litter,,0.55,
+chickens,eggs,anaerobic lagoon,Uncovered anaerobic lagoon,0.77,
+chickens,eggs,poultry with litter,Poultry manure with litter,0.5,
+chickens,eggs,gf value,Dry lot,0.525,gf with average of chicken eggs except anaerobic lagoon
+chickens,eggs,gf value,Solid storage,0.525,gf with average of chicken eggs except anaerobic lagoon
+chickens,eggs,gf value,Pit storage (> 1 month),0.525,gf with average of chicken eggs except anaerobic lagoon
+chickens,eggs,gf value,Liquid/Slurry,0.525,gf with average of chicken eggs except anaerobic lagoon
+chickens,meat,poultry without litter,,0.55,gf with average of chicken meat except anaerobic lagoon
+chickens,meat,anaerobic lagoon,Uncovered anaerobic lagoon,0.77,gf with average of chicken meat except anaerobic lagoon
+chickens,meat,poultry with litter,,0.5,gf with average of chicken meat except anaerobic lagoon
+chickens,meat,gf value,Liquid/Slurry,0.525,gf with average of chicken meat except anaerobic lagoon
+chickens,meat,gf value,Solid storage,0.525,gf with average of chicken meat except anaerobic lagoon
+chickens,meat,gf value,Poultry manure with litter,0.525,gf with average of chicken meat except anaerobic lagoon
+chickens,meat,gf value,Dry lot,0.525,gf with average of chicken meat except anaerobic lagoon
+chickens,meat,gf value,Pit storage (> 1 month),0.525,gf with average of chicken meat except anaerobic lagoon
+chickens,eggs&meat,gf value,Uncovered anaerobic lagoon,0.77,chicken eggs and meat values
+chickens,eggs&meat,gf value,Solid storage,0.525,chicken eggs and meat values
+chickens,eggs&meat,gf value,Poultry manure with litter,0.525,chicken eggs and meat values
+chickens,eggs&meat,gf value,Pit storage (> 1 month),0.525,
+chickens,eggs&meat,gf value,Liquid/Slurry,0.525,
+chickens,eggs&meat,gf value,Dry lot,0.525,
+sheep,meat,deep bedding,,0.35,
+sheep,meat,solid storage,Solid storage,0.15,
+sheep,meat,gf value,Liquid/Slurry,0.426666667,
+sheep,meat,gf value,Composting intensive windrow,0.345,gf with average of all animals with this system
+sheep,meat,gf value,Dry lot,0.40525,gf with average of all animals with this system
+sheep,meat,gf value,Uncovered anaerobic lagoon,0.7725,gf with average of all animals with this system
+sheep,meat,gf value,Anaerobic digester,0.362,gf with average of all animals with this system
+sheep,milk,deep bedding,,0.35,
+sheep,milk,solid storage,Solid storage,0.15,
+sheep,milk,gf value,Liquid/Slurry,0.426666667,
+sheep,milk,gf value,Composting intensive windrow,0.345,gf with average of all animals with this system
+sheep,milk,gf value,Dry lot,0.40525,gf with average of all animals with this system
+sheep,milk,gf value,Uncovered anaerobic lagoon,0.7725,gf with average of all animals with this system
+sheep,milk,gf value,Anaerobic digester,0.362,gf with average of all animals with this system
+buffaloes,milk,dry lot,Dry lot,0.4,
+buffaloes,milk,solid storage,,0.5,
+buffaloes,milk,deep bedding,,0.4,
+buffaloes,milk,gf value,Composting intensive windrow,0.345,gf values from cows milk
+buffaloes,milk,gf value,Liquid/Slurry,0.4,gf values from cows milk
+buffaloes,milk,gf value,Solid storage,0.4,gf values from cows milk
+buffaloes,milk,gf value,Uncovered anaerobic lagoon,0.77,gf values from cows milk
+buffaloes,milk,gf value,Anaerobic digester,0.345,gf values from cows milk
+buffaloes,milk,gf value,Dry lot,0.3,gf values from cows milk
+goats,meat,deep bedding,,0.35,
+goats,meat,solid storage,Solid storage,0.15,
+goats,meat,gf value,Liquid/Slurry,0.426666667,
+goats,meat,gf value,Composting intensive windrow,0.345,gf with average of all animals with this system
+goats,meat,gf value,Dry lot,0.40525,gf with average of all animals with this system
+goats,meat,gf value,Uncovered anaerobic lagoon,0.7725,gf with average of all animals with this system
+goats,meat,gf value,Anaerobic digester,0.362,gf with average of all animals with this system
+goats,milk,deep bedding,,0.35,
+goats,milk,solid storage,Solid storage,0.15,
+goats,milk,gf value,Liquid/Slurry,0.426666667,
+goats,milk,gf value,Composting intensive windrow,0.345,gf with average of all animals with this system
+goats,milk,gf value,Dry lot,0.40525,gf with average of all animals with this system
+goats,milk,gf value,Uncovered anaerobic lagoon,0.7725,gf with average of all animals with this system
+goats,milk,gf value,Anaerobic digester,0.362,gf with average of all animals with this system

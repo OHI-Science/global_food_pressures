@@ -1,0 +1,117 @@
+Item,Include_consumption,food_group_1,food_group_short_1,count_category_included
+Cereals - Excluding Beer,yes,Cereals and Grains,cereals_grains,9
+Wheat and products,yes,Cereals and Grains,cereals_grains,9
+Rice (Milled Equivalent),yes,Rice,rice,1
+Barley and products,yes,Cereals and Grains,cereals_grains,9
+Maize and products,yes,Cereals and Grains,cereals_grains,9
+Rye and products,yes,Cereals and Grains,cereals_grains,9
+Oats,yes,Cereals and Grains,cereals_grains,9
+Millet and products,yes,Cereals and Grains,cereals_grains,9
+"Cereals, Other",yes,Cereals and Grains,cereals_grains,9
+Starchy Roots,yes,Starches and Roots,starch_roots,7
+Potatoes and products,yes,Starches and Roots,starch_roots,7
+Sugar Crops,yes,Sugar,sugar,5
+Sugar cane,yes,Sugar,sugar,5
+Sugar & Sweeteners,yes,Sugar,sugar,5
+Sugar (Raw Equivalent),yes,Sugar,sugar,5
+"Sweeteners, Other",no,,,
+Honey,no,,,
+Pulses,yes,Pulses and Beans,pulses_beans,5
+"Pulses, Other and products",yes,Pulses and Beans,pulses_beans,5
+Treenuts,yes,Rest,rest,2
+Nuts and products,yes,Rest,rest,2
+Oilcrops,yes,Oil Crops and Seeds,oil_seeds,22
+Soyabeans,yes,Soy,soy,1
+Groundnuts (Shelled Eq),yes,Pulses and Beans,pulses_beans,5
+Coconuts - Incl Copra,yes,Fruits and Vegetables,fruits_veg,20
+Sesame seed,yes,Oil Crops and Seeds,oil_seeds,22
+Olives (including preserved),yes,Oil Crops and Seeds,oil_seeds,22
+Vegetable Oils,yes,Oil Crops and Seeds,oil_seeds,22
+Soyabean Oil,yes,Oil Crops and Seeds,oil_seeds,22
+Groundnut Oil,yes,Oil Crops and Seeds,oil_seeds,22
+Sunflowerseed Oil,yes,Oil Crops and Seeds,oil_seeds,22
+Rape and Mustard Oil,yes,Oil Crops and Seeds,oil_seeds,22
+Cottonseed Oil,yes,Oil Crops and Seeds,oil_seeds,22
+Palmkernel Oil,yes,Oil Crops and Seeds,oil_seeds,22
+Palm Oil,yes,Oil Crops and Seeds,oil_seeds,22
+Coconut Oil,yes,Oil Crops and Seeds,oil_seeds,22
+Sesameseed Oil,yes,Oil Crops and Seeds,oil_seeds,22
+Olive Oil,yes,Oil Crops and Seeds,oil_seeds,22
+Ricebran Oil,yes,Oil Crops and Seeds,oil_seeds,22
+Maize Germ Oil,yes,Oil Crops and Seeds,oil_seeds,22
+"Oilcrops Oil, Other",yes,Oil Crops and Seeds,oil_seeds,22
+Vegetables,yes,Fruits and Vegetables,fruits_veg,20
+Tomatoes and products,yes,Fruits and Vegetables,fruits_veg,20
+Onions,yes,Fruits and Vegetables,fruits_veg,20
+"Vegetables, Other",yes,Fruits and Vegetables,fruits_veg,20
+Fruits - Excluding Wine,yes,Fruits and Vegetables,fruits_veg,20
+"Oranges, Mandarines",yes,Fruits and Vegetables,fruits_veg,20
+"Lemons, Limes and products",yes,Fruits and Vegetables,fruits_veg,20
+Grapefruit and products,yes,Fruits and Vegetables,fruits_veg,20
+"Citrus, Other",yes,Fruits and Vegetables,fruits_veg,20
+Bananas,yes,Fruits and Vegetables,fruits_veg,20
+Apples and products,yes,Fruits and Vegetables,fruits_veg,20
+Pineapples and products,yes,Fruits and Vegetables,fruits_veg,20
+Dates,yes,Fruits and Vegetables,fruits_veg,20
+Grapes and products (excl wine),yes,Fruits and Vegetables,fruits_veg,20
+"Fruits, Other",yes,Fruits and Vegetables,fruits_veg,20
+Stimulants,no,,,
+Coffee and products,no,,,
+Cocoa Beans and products,yes,Fruits and Vegetables,fruits_veg,20
+Tea (including mate),no,,,
+Spices,no,,,
+"Spices, Other",no,,,
+Alcoholic Beverages,no,,,
+Wine,no,,,
+Beer,no,,,
+"Beverages, Fermented",no,,,
+"Beverages, Alcoholic",no,,,
+Meat,no,,,
+Bovine Meat,no,,,
+Mutton & Goat Meat,no,,,
+Pigmeat,no,,,
+Poultry Meat,no,,,
+"Meat, Other",no,,,
+Offals,no,,,
+"Offals, Edible",no,,,
+Animal fats,no,,,
+"Butter, Ghee",no,,,
+Cream,no,,,
+"Fats, Animals, Raw",no,,,
+Eggs,no,,,
+Milk - Excluding Butter,no,,,
+"Fish, Seafood",no,,,
+Freshwater Fish,no,,,
+Miscellaneous,no,,,
+Infant food,no,,,
+Cassava and products,yes,Starches and Roots,starch_roots,7
+Sweet potatoes,yes,Starches and Roots,starch_roots,7
+"Roots, Other",yes,Starches and Roots,starch_roots,7
+Beans,yes,Pulses and Beans,pulses_beans,5
+Peas,yes,Pulses and Beans,pulses_beans,5
+Rape and Mustardseed,yes,Oil Crops and Seeds,oil_seeds,22
+Plantains,yes,Fruits and Vegetables,fruits_veg,20
+Pepper,yes,Fruits and Vegetables,fruits_veg,20
+Pimento,yes,Fruits and Vegetables,fruits_veg,20
+"Fish, Body Oil",no,,,
+"Fish, Liver Oil",no,,,
+Demersal Fish,no,,,
+Pelagic Fish,no,,,
+"Marine Fish, Other",no,,,
+Crustaceans,no,,,
+Cephalopods,no,,,
+"Molluscs, Other",no,,,
+"Aquatic Products, Other",no,,,
+"Aquatic Animals, Others",no,,,
+Aquatic Plants,no,,,
+Sorghum and products,yes,Cereals and Grains,cereals_grains,9
+"Oilcrops, Other",yes,Oil Crops and Seeds,oil_seeds,22
+Cloves,no,,,
+Yams,yes,Starches and Roots,starch_roots,7
+Sunflower seed,yes,Oil Crops and Seeds,oil_seeds,22
+Cottonseed,yes,Oil Crops and Seeds,oil_seeds,22
+Palm kernels,yes,Oil Crops and Seeds,oil_seeds,22
+Sugar non-centrifugal,yes,Sugar,sugar,5
+"Meat, Aquatic Mammals",no,,,
+"Alcohol, Non-Food",no,,,
+Sugar beet,yes,Starches and Roots,starch_roots,7

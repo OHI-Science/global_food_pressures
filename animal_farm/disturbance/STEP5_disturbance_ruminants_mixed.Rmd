@@ -1,0 +1,87 @@
+---
+title: "Calculate disturbance layers for pigs (industrial, intermediate, backyard)"
+author: "Juliette"
+date: "10/12/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+## Setup
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+
+```
+
+
+```{r}
+large_rum_barn_extra_space <- 2.5
+
+small_rum_barn_extra_space <- 1.1
+
+farm_extra_space <- 2.5
+
+area_per_animal <- read_csv(here("animal_farm/disturbance/data/livestock_area_head_table.csv")) %>% 
+  filter(animal != "chickens",
+         animal != "pigs")
+```
+
+
+write a loop to do the disturbance maps for all ruminant mixed
+
+```{r}
+
+ruminant_list <- c("cows", "goats", "buffaloes", "sheep")
+product_list <- c("milk", "meat")
+
+  
+for(ruminant in ruminant_list)  { 
+  for(product_type in product_list){
+    
+    # ruminant = ruminant_list[1]
+    # product_type = product_list[1]
+    
+    raster <- raster(file.path(paste0(prep, "animal_farm/farm/location_tifs/", ruminant, "_mixed_", product_type, ".tif", sep = "")))
+    
+    area_raster <- area_per_animal %>% 
+      filter(animal == ruminant) %>% 
+      right_join(food_rgns_xy, by = "iso3c") %>% 
+      select(x,y, meters_sq_animal) %>% 
+      rasterFromXYZ(crs = food_crs)
+    
+    if(ruminant %in% c("cows", "buffaloes")){
+      barn_space <- large_rum_barn_extra_space
+    }else{
+      barn_space <- small_rum_barn_extra_space
+    }
+    
+    animal_area_raster <- raster*area_raster*0.000001*barn_space*farm_extra_space
+    
+    #plot(animal_area_raster)
+    
+       writeRaster(animal_area_raster, file.path(paste0(prep, "animal_farm/disturbance/total_area_rasters/", ruminant, "_mixed_", product_type, "_disturbance_area.tif", sep = "")), format = "GTiff", overwrite = TRUE )
+
+    # Disturbance calculations
+       
+      if(ruminant == "buffaloes" & product_type == "meat") {
+      print("buffalo meat is not one of our categories")
+      
+    }else{
+    
+      names(animal_area_raster) <- "km2_eq"
+    
+      writeRaster(animal_area_raster, file.path(paste(layers, "land_", ruminant, "_mixed_", product_type, "_disturbance.tif", sep = "")), format = "GTiff", overwrite = TRUE )
+
+
+}}}
+
+
+```
+
+

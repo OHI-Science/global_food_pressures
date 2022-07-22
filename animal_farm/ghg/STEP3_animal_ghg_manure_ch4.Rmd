@@ -1,0 +1,195 @@
+---
+title: "Calculate methane emissions rate from manure"
+author: "Juliette"
+date: "8/17/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Objectives: We want to calculate an CO2-eq emissions factor for each animal/product combination. There are two types of emissions, CH4 and N2O. In this markdown we are calculating an emissions rate for each of our categories for methane. We will use FAO data from their manure management data.
+
+
+## Setup
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(janitor)
+library(countrycode)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+ch4_to_co2 <- 25
+
+```
+
+## Methods
+Wrangle and gapfill CH4 emission rates from FAO:
+
+```{r}
+
+manure_ch4 <- read_csv("/home/shares/food-systems/Food_footprint/_raw_data/FAO_data/v2021/manure_management/FAOSTAT_manure_ch4_2-18-2021.csv") %>%
+  filter(Element == "Implied emission factor for CH4 (Manure management)") %>%
+  mutate(kg_co2eq_head = Value * ch4_to_co2) %>%
+  select(Area, Item, kg_co2eq_head) %>%
+  filter(Area != "China")%>%
+  mutate(Area = ifelse(Area == "Netherlands Antilles (former)", "Bonaire, Sint Eustatius and Saba", Area))
+
+manure_ch4$iso3c <- countrycode(as.character(manure_ch4$Area), origin="country.name", destination = "iso3c")
+manure_ch4 <- manure_ch4 %>%
+  mutate(iso3c = ifelse(Area == "French Guyana", "GUF", iso3c))
+
+summary(manure_ch4)
+table(manure_ch4$iso3c)
+filter(manure_ch4, iso3c=="USA")
+
+```
+
+Gapfill missing values
+```{r}
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>% 
+  dplyr::select(iso3c, Global_Name, Region_Name, Sub_region_Name, Intermediate_Region_Name)
+length(table(un$Intermediate_Region_Name)) #24
+length(table(un$Sub_region_Name)) #18
+table(un$Region_Name) # 6
+
+
+all_cats <- expand.grid(iso3c = un$iso3c, Item = unique(manure_ch4$Item))
+
+manure_ch4_gf <- left_join(all_cats, manure_ch4, by=c("iso3c", "Item")) %>%
+  left_join(un, by="iso3c") %>% #NA=617
+  group_by(Item, Intermediate_Region_Name) %>%
+  mutate(kg_co2eq_head = ifelse(is.na(kg_co2eq_head), median(kg_co2eq_head, na.rm=TRUE), kg_co2eq_head)) %>% #NA=108
+  group_by(Item, Sub_region_Name) %>%
+  mutate(kg_co2eq_head = ifelse(is.na(kg_co2eq_head), median(kg_co2eq_head, na.rm=TRUE), kg_co2eq_head)) %>%    # NA=60
+  group_by(Item, Region_Name) %>%
+  mutate(kg_co2eq_head = ifelse(is.na(kg_co2eq_head), median(kg_co2eq_head, na.rm=TRUE), kg_co2eq_head)) %>%    # NA=9
+  group_by(Item) %>%
+  mutate(kg_co2eq_head = ifelse(is.na(kg_co2eq_head), median(kg_co2eq_head, na.rm=TRUE), kg_co2eq_head)) %>% # NA=0
+  ungroup()
+
+summary(manure_ch4_gf)
+```
+
+
+Wrangle some more and save:
+```{r}
+
+buffaloes_milk <- filter(manure_ch4_gf, Item=="Buffaloes") %>%
+  mutate(species = "buffaloes") %>%
+  mutate(product = "milk") %>%
+  select(iso3c, species, product, kg_co2eq_head)
+buffaloes_meat <- buffaloes_milk %>%
+  mutate(product = "meat") 
+
+chickens_meat <- filter(manure_ch4_gf, Item=="Chickens, broilers") %>%
+  mutate(species = "chickens") %>%
+  mutate(product = "meat") %>%
+  select(iso3c, species, product, kg_co2eq_head)
+chickens_eggs <- filter(manure_ch4_gf, Item=="Chickens, layers") %>%
+  mutate(species = "chickens") %>%
+  mutate(product = "eggs") %>%
+  select(iso3c, species, product, kg_co2eq_head)
+chickens_eggs_meat <- filter(manure_ch4_gf, Item %in% c("Chickens, layers", "Chickens, broilers")) %>% 
+  group_by(iso3c) %>%
+  summarize(kg_co2eq_head = mean(kg_co2eq_head, na.rm=TRUE)) %>%
+  mutate(species = "chickens") %>%
+  mutate(product = "eggs&meat") %>%
+  select(iso3c, species, product, kg_co2eq_head)
+
+pigs_meat <- filter(manure_ch4_gf, Item %in% c("Swine, breeding", "Swine, market")) %>% 
+  pivot_wider(names_from = Item, values_from = kg_co2eq_head) %>%
+  rowwise() %>%
+  mutate(kg_co2eq_head = (`Swine, breeding`*0.1 + `Swine, market`*0.9)) %>%
+  mutate(species = "pigs") %>%
+  mutate(product = "meat") %>%
+  select(iso3c, species, product, kg_co2eq_head)
+
+cows_milk <- filter(manure_ch4_gf, Item=="Cattle, dairy") %>% 
+  mutate(species = "cows") %>%
+  mutate(product = "milk") %>%
+  select(iso3c, species, product, kg_co2eq_head)
+cows_meat <- filter(manure_ch4_gf, Item=="Cattle, non-dairy") %>%
+  mutate(species = "cows") %>%
+  mutate(product = "meat") %>%
+  select(iso3c, species, product, kg_co2eq_head)
+
+sheep_milk <- filter(manure_ch4_gf, Item=="Sheep") %>% 
+  mutate(species = "sheep") %>%
+  mutate(product = "milk") %>%
+  select(iso3c, species, product, kg_co2eq_head)
+sheep_meat <- sheep_milk %>%
+  mutate(product = "meat")
+
+goats_milk <- filter(manure_ch4_gf, Item=="Goats") %>% 
+  mutate(species = "goats") %>%
+  mutate(product = "milk") %>%
+  select(iso3c, species, product, kg_co2eq_head)
+goats_meat <- goats_milk %>%
+  mutate(product = "meat")
+
+manure_ch4_all <- rbind(buffaloes_milk, buffaloes_meat, chickens_meat, chickens_eggs, chickens_eggs_meat,
+                        pigs_meat, cows_meat, cows_milk, sheep_meat, sheep_milk, goats_milk, goats_meat)
+table(manure_ch4_all$product, manure_ch4_all$species)
+
+write_csv(manure_ch4_all, here("animal_farm/ghg/data/methane_em_rates_gf.csv"))
+
+```
+
+
+```{r}
+
+livestock <- read_csv(here("animal_farm/ghg/data/methane_em_rates_gf.csv"))
+
+library(doParallel)
+
+map_df_list <- list.files(file.path(prep, "animal_farm/farm"), pattern = "location_df",  full = TRUE)
+
+registerDoParallel(5)   
+foreach(file = map_df_list)  %dopar%  {
+
+      #file <- map_df_list[11]
+     
+    ## grab the names of all the parts from the file
+    animal_name <- str_split(str_split(file, pattern = "/")[[1]][11], pattern = "_")[[1]][1]
+    system_name <- str_split(str_split(file, pattern = "/")[[1]][11], pattern = "_")[[1]][2]
+    product_name <- str_split(str_split(file, pattern = "/")[[1]][11], pattern = "_")[[1]][3]
+
+    ### each animal group has slightly different map_df, so we need to specify the column types for each
+    
+    if(animal_name == "chickens"){
+      col_type = c("ddnnnccnnccncnnc")
+      
+      }else{
+      if(animal_name %in% c("goats", "sheep", "cows", "buffaloes")) {    
+      col_type = c("ddccccn")
+        
+      }else{
+        ## this is pigs
+        (col_type = c("ddcccnnnnncn")) } } 
+    
+    ## read in the map_df we want
+    map_df <- read_csv(file, col_types = col_type) %>% 
+      select(x, y, iso3c, current = contains("current")) 
+      
+    cat(if(dim(map_df)[1] != 9331200)("merge of data went wrong"))  
+    em <- livestock %>% 
+      filter(species == animal_name,
+               product == product_name)
+    
+    map_em <- left_join(map_df, em, by = "iso3c") %>% 
+      mutate(tonnes_em = kg_co2eq_head * current * 0.001) %>% 
+      select(x,y, tonnes_em) %>% 
+      rasterFromXYZ(crs = food_crs)
+    
+        cat(if(ncell(map_em) != 9331200)("merge of data went wrong"))  
+        
+    writeRaster(map_em, filename = paste(prep, "animal_farm/ghg/", animal_name, "_", system_name, "_", product_name, "_methane_manure.tif", sep = ""), format = "GTiff", overwrite = TRUE)
+    
+}
+
+```
+
+
+

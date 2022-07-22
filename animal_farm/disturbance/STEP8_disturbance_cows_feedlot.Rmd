@@ -1,0 +1,42 @@
+---
+title: "Calculate disturbance for feedlot cattle"
+author: "Juliette"
+date: "10/12/2020"
+output: html_document
+---
+
+## Setup
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(countrycode)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+
+
+```
+
+We are going to use 215 sqft/head for space, and then multiply that by 2 to account for the extra area of the feedlot. This is ~ 20 m2
+
+Read in the feedlot location file
+
+```{r}
+feedlots <- raster(file.path(prep, "animal_farm/farm/location_tifs/cows_feedlot_meat.tif"))
+
+km2_head <- 20/1000000
+extra_farm_area <- 2
+
+feedlot_disturbance <- feedlots*km2_head*extra_farm_area
+
+      names(feedlot_disturbance) <- "km2_eq"
+
+     
+writeRaster(feedlot_disturbance, file.path(paste0(layers, "land_cows_feedlot_meat_disturbance.tif", sep = "")), format = "GTiff", overwrite = TRUE ) 
+
+plot(feedlot_disturbance)
+
+```
+

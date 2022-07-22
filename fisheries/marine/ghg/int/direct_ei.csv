@@ -1,0 +1,100 @@
+"common_name","scientific_name","gear","ghg_low","ghg_high","FUI_l_kg","fuel_cost","fui_l_t","ei_direct_kgco2_kgcatch"
+"European pilchard","Sardina pilchardus","Purse seine",0.4,0.5,0.107,3.7,107,0.3959
+"European pilchard","Sardina pilchardus","Midwater trawl",0.4,1.6,0.323,3.7,323,1.1951
+"European anchovy","Engraulis encrasicolus","Midwater trawl",0.4,1.6,0.07,3.7,70,0.259
+"European sprat","Sprattus sprattus","Midwater trawl",0.4,1.6,0.323,3.7,323,1.1951
+"South American pilchard","Sardinops sagax","Purse seine",0.4,0.5,0.101,3.7,101,0.3737
+"Indian oil sardine","Sardinella longiceps","Purse seine",0.6,0.7,0.128,3.7,128,0.4736
+"Gulf menhaden","Brevoortia patronus","Purse seine",0.2,0.2,0.037,3.7,37,0.1369
+"Pacific herring","Clupea pallasii pallasii","Purse seine",0.6,2.6,0.152,3.7,152,0.5624
+"Atlantic mackerel","Scomber scombrus","Purse seine",0.2,0.3,0.043,3.7,43,0.1591
+"South American pilchard","Sardinops sagax","Midwater trawl",0.4,1.6,0.323,3.7,323,1.1951
+"Antarctic krill","Euphausia superba","Midwater trawl",0.5,0.8,0.143,3.7,143,0.5291
+"Anchoveta","Engraulis ringens","Purse seine",0.1,0.1,0.015,3.7,15,0.0555
+"Bigeye tuna","Thunnus obesus","Longlines",7,12.4,1.936,3.7,1936,7.1632
+"Bigeye tuna","Thunnus obesus","Purse seine",2,2.1,0.461,3.7,461,1.7057
+"Atlantic herring","Clupea harengus","Purse seine",0.2,0.4,0.05,3.7,50,0.185
+"Atlantic menhaden","Brevoortia tyrannus","Purse seine",0.1,0.2,0.03,3.7,30,0.111
+"Albacore","Thunnus alalunga","Longlines",4,5.8,1.181,3.7,1181,4.3697
+"Capelin","Mallotus villosus","Purse seine",0.1,0.1,0.026,3.7,26,0.0962
+"Yellowfin tuna","Thunnus albacares","Longlines",5,8.7,1.533,3.7,1533,5.6721
+"Yellowfin tuna","Thunnus albacares","Purse seine",1.8,2.1,0.417,3.7,417,1.5429
+"Atlantic bluefin tuna","Thunnus thynnus","Troll lines",4.9,6.6,1.267,3.7,1267,4.6879
+"Atlantic bluefin tuna","Thunnus thynnus","Purse seine",1.6,2.8,0.519,3.7,519,1.9203
+"Pacific bluefin tuna","Thunnus orientalis","Longlines",5,10.2,1.568,3.7,1568,5.8016
+"Skipjack tuna","Katsuwonus pelamis","Pole and line",5.5,6.3,1.366,3.7,1366,5.0542
+"Skipjack tuna","Katsuwonus pelamis","Purse seine",1.6,3.1,0.569,3.7,569,2.1053
+"Southern bluefin tuna","Thunnus maccoyii","Longlines",5,10.2,1.568,3.7,1568,5.8016
+"Sockeye salmon","Oncorhynchus nerka","Gillnets",3.5,4.3,0.89,3.7,890,3.293
+"Sockeye salmon","Oncorhynchus nerka","Purse seine",1.6,2,0.455,3.7,455,1.6835
+"Sockeye salmon","Oncorhynchus nerka","Troll lines",3.8,4.8,0.935,3.7,935,3.4595
+"Swordfish","Xiphias gladius","Longlines",6.8,11.9,1.925,3.7,1925,7.1225
+"Chinook salmon","Oncorhynchus tshawytscha","Gillnets",2.9,4.3,0.897,3.7,897,3.3189
+"Chinook salmon","Oncorhynchus tshawytscha","Purse seine",1.4,1.4,0.341,3.7,341,1.2617
+"Chinook salmon","Oncorhynchus tshawytscha","Troll lines",5.9,8.5,0.902,3.7,902,3.3374
+"Chum salmon","Oncorhynchus keta","Gillnets",3.6,4.3,0.918,3.7,918,3.3966
+"Chum salmon","Oncorhynchus keta","Purse seine",1.4,1.8,0.417,3.7,417,1.5429
+"Chum salmon","Oncorhynchus keta","Troll lines",3.6,4.1,0.858,3.7,858,3.1746
+"Coho salmon","Oncorhynchus kisutch","Gillnets",2.9,4.3,0.897,3.7,897,3.3189
+"Coho salmon","Oncorhynchus kisutch","Purse seine",1.4,1.4,0.341,3.7,341,1.2617
+"Coho salmon","Oncorhynchus kisutch","Troll lines",3.5,3.9,0.847,3.7,847,3.1339
+"Pink salmon","Oncorhynchus gorbuscha","Gillnets",0.8,0.9,0.192,3.7,192,0.7104
+"Pink salmon","Oncorhynchus gorbuscha","Purse seine",1.1,1.4,0.248,3.7,248,0.9176
+"Pink salmon","Oncorhynchus gorbuscha","Troll lines",3.4,3.7,0.795,3.7,795,2.9415
+"Blue grenadier","Macruronus novaezelandiae","Bottom trawl",3.4,4.6,0.666,3.7,666,2.4642
+"Alaska pollock","Theragra chalcogramma","Midwater trawl",0.3,2.5,0.091,3.7,91,0.3367
+"Atlantic cod","Gadus morhua","Gillnets",1.5,2.4,0.446,3.7,446,1.6502
+"Atlantic cod","Gadus morhua","Longlines",2,4,0.37,3.7,370,1.369
+"Atlantic cod","Gadus morhua","Bottom trawl",1.6,2.8,0.81,3.7,810,2.997
+"Argentine hake","Merluccius hubbsi","Bottom trawl",1.6,4.3,0.975,3.7,975,3.6075
+"Flathead mullet","Mugil cephalus","Purse seine",1.3,2.2,0.601,3.7,601,2.2237
+"Atlantic horse mackerel","Trachurus trachurus","Midwater trawl",4.3,6.1,0.949,3.7,949,3.5113
+"Chub mackerel","Scomber japonicus","Purse seine",0.1,0.4,0.143,3.7,143,0.5291
+"Ling","Molva molva","Longlines",2.2,4.3,1.472,3.7,1472,5.4464
+"Ling","Molva molva","Bottom trawl",1.9,2.4,0.463,3.7,463,1.7131
+"Common sole","Solea solea","Bottom trawl",11.5,13.7,2.464,3.7,2464,9.1168
+"European hake","Merluccius merluccius","Longlines",5.2,13.3,2.12,3.7,2120,7.844
+"European hake","Merluccius merluccius","Bottom trawl",8.5,9.7,1.74,3.7,1740,6.438
+"European plaice","Pleuronectes platessa","Purse seine",1.3,2.2,0.601,3.7,601,2.2237
+"European plaice","Pleuronectes platessa","Bottom trawl",12.2,14.6,2.714,3.7,2714,10.0418
+"Flounder","Platichthys flesus","Bottom trawl",12.2,14.6,0.976,3.7,976,3.6112
+"Silver pomfrets","Pampus","Gillnets",1.5,2.8,0.536,3.7,536,1.9832
+"Silver pomfrets","Pampus","Bottom trawl",1.6,4.3,0.975,3.7,975,3.6075
+"Greenland halibut","Reinhardtius hippoglossoides","Longlines",2.2,4.3,1.472,3.7,1472,5.4464
+"Groupers","Epinephelus","Longlines",2.2,4.3,1.472,3.7,1472,5.4464
+"Haddock","Melanogrammus aeglefinus","Bottom trawl",3.6,4.2,0.962,3.7,962,3.5594
+"North Pacific hake","Merluccius productus","Bottom trawl",1.6,4.3,0.975,3.7,975,3.6075
+"American lobster","Homarus americanus","Traps",5,18.3,1.017,3.7,1017,3.7629
+"Pacific cod","Gadus macrocephalus","Longlines",1.4,3.7,0.41,3.7,410,1.517
+"Pacific cod","Gadus macrocephalus","Bottom trawl",1.6,4.3,0.72,3.7,720,2.664
+"Pacific halibut","Hippoglossus stenolepis","Longlines",3.6,6.7,1.031,3.7,1031,3.8147
+"Snappers","Lutjanus","Longlines",2.2,4.3,1.472,3.7,1472,5.4464
+"Saithe","Pollachius virens","Bottom trawl",1.9,2,0.446,3.7,446,1.6502
+"Norway lobster","Nephrops norvegicus","Traps",4.8,19.9,2.156,3.7,2156,7.9772
+"Norway lobster","Nephrops norvegicus","Bottom trawl",4.5,26,4.303,3.7,4303,15.9211
+"Southern blue whiting","Micromesistius australis","Midwater trawl",1,1.1,0.241,3.7,241,0.8917
+"Threadfin breams","Nemipterus","Bottom trawl",3.1,3.6,0.798,3.7,798,2.9526
+"Blue crab","Callinectes sapidus","Traps",5.2,19.3,2.113,3.7,2113,7.8181
+"Yellowfin sole","Limanda aspera","Bottom trawl",11.5,13.7,0.975,3.7,975,3.6075
+"Blue swimmer crab","Portunus armatus","Bottom trawl",4.5,24.6,3.726,3.7,3726,13.7862
+"Blue swimmer crab","Portunus armatus","Traps",5,6.4,1.135,3.7,1135,4.1995
+"Brown tiger prawn","Penaeus esculentus","Bottom trawl",20,34.8,6.665,3.7,6665,24.6605
+"Caribbean spiny lobster","Panulirus argus","Traps",5.5,22.5,2.113,3.7,2113,7.8181
+"Southern rock lobster","Jasus edwardsii","Traps",12.4,30.2,3.758,3.7,3758,13.9046
+"Dungeness crab","Cancer magister","Traps",5.2,18.9,2.113,3.7,2113,7.8181
+"Southern pink shrimp","Farfantepenaeus notialis","Bottom trawl",2.9,8.6,2.111,3.7,2111,7.8107
+"Australian spiny lobster","Panulirus cygnus","Traps",3.9,16.8,1.722,3.7,1722,6.3714
+"Argentine red shrimp","Pleoticus muelleri","Bottom trawl",5.7,15.4,2.301,3.7,2301,8.5137
+"Giant tiger prawn","Penaeus monodon","Bottom trawl",20,34.8,6.665,3.7,6665,24.6605
+"Banana prawn","Fenneropenaeus merguiensis","Bottom trawl",7.2,16.3,2.604,3.7,2604,9.6348
+"Northern brown shrimp","Farfantepenaeus aztecus","Bottom trawl",8.5,9,2.301,3.7,2301,8.5137
+"Common octopus","Octopus vulgaris","Midwater trawl",9.6,15.2,1.702,3.7,1702,6.2974
+"Northern prawn","Pandalus borealis","Bottom trawl",4,6.7,1.15,3.7,1150,4.255
+"American cupped oyster","Crassostrea virginica","Dredge",1.2,3.2,0.586,3.7,586,2.1682
+"American sea scallop","Placopecten magellanicus","Dredge",1.5,1.6,0.351,3.7,351,1.2987
+"Northern white shrimp","Litopenaeus setiferus","Bottom trawl",8.5,9,2.301,3.7,2301,8.5137
+"Argentine shortfin squid","Illex argentinus","Midwater trawl",1.1,5.3,0.552,3.7,552,2.0424
+"Ocean quahog","Arctica islandica","Dredge",0.2,0.8,0.071,3.7,71,0.2627
+"Blue mussel","Mytilus edulis","Dredge",0.1,0.1,0.024,3.7,24,0.0888
+"Queen scallop","Aequipecten opercularis","Dredge",1.2,3.2,0.586,3.7,586,2.1682
+"Pacific cupped oyster","Crassostrea gigas","Dredge",1.2,3.2,0.586,3.7,586,2.1682

@@ -1,0 +1,245 @@
+ID_0,sum,iso3c,Country
+1,204.72420573234558,AFG,Afghanistan
+3,188.82524490356445,ALA,Åland
+4,1106629.7816538513,ALB,Albania
+5,0,DZA,Algeria
+6,0,ASM,American Samoa
+7,0,AND,Andorra
+8,0,AGO,Angola
+9,0,AIA,Anguilla
+11,0,ATG,Antigua and Barbuda
+12,73.66939282417297,ARG,Argentina
+13,591835.5489754677,ARM,Armenia
+14,0,ABW,Aruba
+15,8743570.166129002,AUS,Australia
+16,212144.57961444499,AUT,Austria
+17,920945.1780039072,AZE,Azerbaijan
+18,0,BHS,Bahamas
+19,32608.271484375,BHR,Bahrain
+20,0,BGD,Bangladesh
+21,0,BRB,Barbados
+22,254459.1154665947,BLR,Belarus
+23,228287.19632971287,BEL,Belgium
+24,0,BLZ,Belize
+25,0,BEN,Benin
+26,0,BMU,Bermuda
+27,0,BTN,Bhutan
+28,31.85228729248047,BOL,Bolivia
+29,0,BES,"Bonaire, Sint Eustatius and Saba"
+30,1749.328144699335,BIH,Bosnia and Herzegovina
+31,220.20111083984375,BWA,Botswana
+33,0,BRA,Brazil
+34,0,IOT,British Indian Ocean Territory
+35,0,VGB,British Virgin Islands
+36,0,BRN,Brunei
+37,42062.55481413379,BGR,Bulgaria
+38,0,BFA,Burkina Faso
+39,0,BDI,Burundi
+40,0,KHM,Cambodia
+41,0,CMR,Cameroon
+42,1022331.8580498951,CAN,Canada
+43,0,CPV,Cape Verde
+45,0,CYM,Cayman Islands
+46,0,CAF,Central African Republic
+47,0,TCD,Chad
+48,1445024.0821592864,CHL,Chile
+49,1371.1548737287521,CHN,China
+50,0,CXR,Christmas Island
+52,0,CCK,Cocos Islands
+53,4.888715654516318e-9,COL,Colombia
+54,0,COM,Comoros
+55,0,COK,Cook Islands
+56,0,CRI,Costa Rica
+57,0,CIV,Côte d'Ivoire
+58,15820.266900449991,HRV,Croatia
+59,0,CUB,Cuba
+60,0,CUW,Curaçao
+61,133556.68588352203,CYP,Cyprus
+62,61010.83922988176,CZE,Czech Republic
+64,2004115.50832963,DNK,Denmark
+65,0,DJI,Djibouti
+66,0,DMA,Dominica
+67,0,DOM,Dominican Republic
+68,0,ECU,Ecuador
+69,52471491.57588196,EGY,Egypt
+70,0,SLV,El Salvador
+71,0,GNQ,Equatorial Guinea
+72,0,ERI,Eritrea
+73,13223.095362663269,EST,Estonia
+74,0,ETH,Ethiopia
+75,0,FLK,Falkland Islands
+76,0,FRO,Faroe Islands
+77,0,FJI,Fiji
+78,175354.460025616,FIN,Finland
+79,8264590.952208274,FRA,France
+80,0,GUF,French Guiana
+81,0,PYF,French Polynesia
+83,0,GAB,Gabon
+84,0,GMB,Gambia
+85,19353.92505952716,GEO,Georgia
+86,8335377.259508312,DEU,Germany
+87,0,GHA,Ghana
+88,0,GIB,Gibraltar
+89,2099396.791112202,GRC,Greece
+90,0,GRL,Greenland
+91,0,GRD,Grenada
+92,0,GLP,Guadeloupe
+93,0,GUM,Guam
+94,0,GTM,Guatemala
+95,0,GGY,Guernsey
+96,0,GIN,Guinea
+97,0,GNB,Guinea-Bissau
+98,0,GUY,Guyana
+99,0,HTI,Haiti
+101,0,HND,Honduras
+102,0,HKG,Hong Kong
+103,124324.34597998857,HUN,Hungary
+104,0,ISL,Iceland
+105,0,IND,India
+106,0,IDN,Indonesia
+107,131.99464416503906,IRN,Iran
+108,184649.31631116383,IRQ,Iraq
+109,4268.277058967826,IRL,Ireland
+110,0,IMN,Isle of Man
+111,580574.9505195618,ISR,Israel
+112,12173895.625751888,ITA,Italy
+113,0,JAM,Jamaica
+114,8224427.21887507,JPN,Japan
+115,0,JEY,Jersey
+116,32229.527256429195,JOR,Jordan
+117,1837929.8030410912,KAZ,Kazakhstan
+118,0,KEN,Kenya
+119,0,KIR,Kiribati
+120,34245.157707333565,XKO,Kosovo
+121,21863.983430862427,KWT,Kuwait
+122,1090449.4246168453,KGZ,Kyrgyzstan
+123,0,LAO,Laos
+124,15442.327759623528,LVA,Latvia
+125,2315.643743932247,LBN,Lebanon
+126,11.689942359924316,LSO,Lesotho
+127,0,LBR,Liberia
+128,0,LBY,Libya
+129,0,LIE,Liechtenstein
+130,7760.2580634355545,LTU,Lithuania
+131,444.3761854171753,LUX,Luxembourg
+132,0,MAC,Macao
+133,61029.51323771477,MKD,Macedonia
+134,0,MDG,Madagascar
+135,0,MWI,Malawi
+136,0,MYS,Malaysia
+137,0,MDV,Maldives
+138,0,MLI,Mali
+139,2506.7903442382812,MLT,Malta
+140,0,MHL,Marshall Islands
+141,0,MTQ,Martinique
+142,0,MRT,Mauritania
+143,0,MUS,Mauritius
+144,0,MYT,Mayotte
+145,65717.19610595703,MEX,Mexico
+146,0,FSM,Micronesia
+147,56160.43660068512,MDA,Moldova
+148,0,MCO,Monaco
+149,0,MNG,Mongolia
+150,9535.303690254688,MNE,Montenegro
+151,0,MSR,Montserrat
+152,0,MAR,Morocco
+153,0,MOZ,Mozambique
+154,0,MMR,Myanmar
+155,0,NAM,Namibia
+156,0,NRU,Nauru
+157,0,NPL,Nepal
+158,8224389.699712753,NLD,Netherlands
+159,0,NCL,New Caledonia
+160,2486774.656226635,NZL,New Zealand
+161,0,NIC,Nicaragua
+162,0,NER,Niger
+163,0,NGA,Nigeria
+164,0,NIU,Niue
+165,0,NFK,Norfolk Island
+166,0,PRK,North Korea
+168,0,MNP,Northern Mariana Islands
+169,717765.5777908049,NOR,Norway
+170,394956.69465351105,OMN,Oman
+171,0,PAK,Pakistan
+172,0,PLW,Palau
+173,0,PSE,Palestina
+174,0,PAN,Panama
+175,0,PNG,Papua New Guinea
+177,0,PRY,Paraguay
+178,1124523.7602728761,PER,Peru
+179,0,PHL,Philippines
+180,0,PCN,Pitcairn Islands
+181,181150.5079445839,POL,Poland
+182,3503775.5813703835,PRT,Portugal
+183,0,PRI,Puerto Rico
+184,174294.9081838131,QAT,Qatar
+185,0,COG,Republic of Congo
+186,0,REU,Reunion
+187,2937652.0816245675,ROU,Romania
+188,1062385.9317634034,RUS,Russia
+189,0,RWA,Rwanda
+190,0,BLM,Saint-Barthélemy
+191,0,MAF,Saint-Martin
+192,0,SHN,Saint Helena
+193,0,KNA,Saint Kitts and Nevis
+194,0,LCA,Saint Lucia
+195,0,SPM,Saint Pierre and Miquelon
+196,0,VCT,Saint Vincent and the Grenadines
+197,0,WSM,Samoa
+198,0,SMR,San Marino
+199,0,STP,São Tomé and Príncipe
+200,3003763.5704374323,SAU,Saudi Arabia
+201,0,SEN,Senegal
+202,32255.548757448792,SRB,Serbia
+203,0,SYC,Seychelles
+204,0,SLE,Sierra Leone
+205,0,SGP,Singapore
+206,0,SXM,Sint Maarten
+207,121638.6522358656,SVK,Slovakia
+208,33037.12705564499,SVN,Slovenia
+209,0,SLB,Solomon Islands
+210,0,SOM,Somalia
+211,1343463.8489360823,ZAF,South Africa
+213,0,KOR,South Korea
+214,0,SSD,South Sudan
+215,3132287.0359585714,ESP,Spain
+217,0,LKA,Sri Lanka
+218,0,SDN,Sudan
+219,0,SUR,Suriname
+220,0,SJM,Svalbard and Jan Mayen
+221,0,SWZ,Swaziland
+222,987992.3896315098,SWE,Sweden
+223,595855.2699137926,CHE,Switzerland
+224,7.155813694000244,SYR,Syria
+225,0,TWN,Taiwan
+226,364056.1107330285,TJK,Tajikistan
+227,0,TZA,Tanzania
+228,0,THA,Thailand
+229,0,TLS,Timor-Leste
+230,0,TGO,Togo
+231,0,TKL,Tokelau
+232,0,TON,Tonga
+233,0,TTO,Trinidad and Tobago
+234,0,TUN,Tunisia
+235,0.0030196430161595345,TUR,Turkey
+236,1295120.9643266797,TKM,Turkmenistan
+237,0,TCA,Turks and Caicos Islands
+238,0,TUV,Tuvalu
+239,0,UGA,Uganda
+240,776005.7258001082,UKR,Ukraine
+241,1447901.7162747383,ARE,United Arab Emirates
+242,333391.14479804283,GBR,United Kingdom
+243,58229139.20231384,USA,United States
+245,0,URY,Uruguay
+246,4791557.989385873,UZB,Uzbekistan
+247,0,VUT,Vanuatu
+249,0,VEN,Venezuela
+250,0,VNM,Vietnam
+251,0,VIR,"Virgin Islands, U.S."
+252,0,WLF,Wallis and Futuna
+253,0,ESH,Western Sahara
+254,3502102.444445763,YEM,Yemen
+255,0,ZMB,Zambia
+256,0,ZWE,Zimbabwe
+300,63448.130859375,XMI,Madeira Island
+301,0,COD,Democratic Republic of the Congo

@@ -1,0 +1,1211 @@
+---
+title: "Location of Marine fish - general Farms"
+author: "Gage Clawson (NCEAS, UCSB, OHI)"
+date: "12/08/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+This script standardizes location of marine fish - general (finfish) farms to be lat/long point data.
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(raster)
+library(tidyverse)
+library(stringr)
+library(rgdal)
+library(PBSmapping)
+library(maptools)
+library(sf)
+library(lwgeom)
+library(data.table)
+library(here)
+library(mapview)
+library(janitor)
+library(rnaturalearth)
+library(spatialEco)
+
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+
+
+
+path <- "/home/shares/food-systems/Food_footprint/_raw_data/Aquaculture_locations"
+
+fao_finfish_spp <- read_csv("aquaculture/marine/marine_fish_general/finfish_farms/data/fao_mariculture_finfish_taxa_production.csv") %>%
+  dplyr::filter(year == 2017)
+fao_finfish <- read_csv("aquaculture/marine/marine_fish_general/finfish_farms/data/fao_mariculture_finfish.csv") %>%
+  dplyr::filter(year == 2017)
+
+unique(fao_finfish$country)
+
+#  [1] "Albania"                  "Australia"                "Bangladesh"               "Cambodia"                
+#  [5] "China"                    "China, Hong Kong SAR"     "Costa Rica"               "Croatia"                 
+#  [9] "Cyprus"                   "Egypt"                    "France"                   "Greece"                  
+# [13] "India"                    "Indonesia"                "Iran (Islamic Rep. of)"   "Israel"                  
+# [17] "Italy"                    "Japan"                    "Korea, Republic of"       "Malaysia"                
+# [21] "Malta"                    "Mauritius"                "Mexico"                   "Norway"                  
+# [25] "Panama"                   "Philippines"              "Portugal"                 "Saudi Arabia"            
+# [29] "Singapore"                "Spain"                    "Taiwan Province of China" "Thailand"                
+# [33] "Tunisia"                  "Turkey"                   "United Arab Emirates"     "United States of America"
+# [37] "Viet Nam"     
+```
+
+## explore
+https://gis.asc-aqua.org/arcgis_app/
+Maps from ASC
+
+```{r}
+ASC_data <- st_read(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/ASC_all_sf.shp"))
+
+ASC_finfish <- ASC_data %>%
+  dplyr::filter(aq_grop == "marine_fish_general")
+
+unique(ASC_finfish$crt_cnt)
+
+#  [1] "Turkey"                   "Croatia"                  "Greece"                   "Albania"                  "Spain"                   
+#  [6] "Japan"                    "Netherlands"              "Denmark"                  "Australia"                "Mexico"                  
+# [11] "Panama"                   "United States of America" "Germany"                  "Viet Nam"                 "Thailand"
+                                    
+
+## what is in ASC and not in FAO
+setdiff(ASC_finfish$crt_cnt, fao_finfish$country)
+# [1] "Netherlands" "Denmark"     "Germany"   
+
+
+## what is in FAO and not ASC -- this is what we need to find alternative data sources for (28 countries)
+setdiff(fao_finfish$country, ASC_finfish$crt_cnt)
+#  [1] "Bangladesh"               "Cambodia"                 "China"                    "Costa Rica"               "Cyprus"                  
+#  [6] "Egypt"                    "France"                   "India"                    "Indonesia"                "Iran (Islamic Rep. of)"  
+# [11] "Israel"                   "Italy"                    "Korea, Republic of"       "Malaysia"                 "Malta"                   
+# [16] "Mauritius"                "Norway"                   "Philippines"              "Portugal"                 "Saudi Arabia"            
+# [21] "Singapore"                "Taiwan Province of China" "Tunisia"                  "United Arab Emirates"  
+
+```
+
+
+# Raster
+
+Standard raster used for this analysis 
+
+```{r}
+
+source(here::here("_spatial/template_raster.R"))
+
+```
+
+# Global regions
+
+```{r}
+
+gadm <- raster("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/gadm36mol_pyfill_10km.tif")
+
+gadm_latlon <- projectRaster(gadm, food_raster)
+
+gadm_codes <- read.csv("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/gadm_reg_codes.csv") %>% 
+  mutate(reg_id = as.numeric(reg_id))
+
+```
+
+```{r}
+
+gadm_df <- tabularaster::as_tibble(gadm_latlon, value = TRUE, cells = TRUE) %>% 
+  mutate(cellvalue = round(cellvalue, 0))
+
+gadm_reg <- dplyr::left_join(gadm_df, gadm_codes, by = c("cellvalue" = "reg_id"))
+
+```
+
+
+# Map data from ASC 
+
+Data comes from https://gis.asc-aqua.org/arcgis_app/ 
+
+```{r}
+
+# get iso3c codes
+iso <-   data.frame(iso3c = countrycode(ASC_finfish$crt_cnt, origin = 'country.name', destination = 'iso3c'))
+
+
+# read in shp
+farms_all <- ASC_finfish %>%
+  cbind(iso) %>%
+  dplyr::filter(!(crt_cnt %in% c("Denmark", "Germany", "Netherlands")))
+
+mapview(farms_all$geometry)
+
+unique(farms_all$iso3c)
+
+all_pts <- st_centroid(farms_all)
+
+all_pts_latlon <- st_transform(all_pts, crs = "+init=epsg:4326") %>% 
+  dplyr::select(geometry, iso3c)
+
+farms_all_fin <- data.frame(do.call(rbind, st_geometry(all_pts_latlon))) 
+names(farms_all_fin) <- c("lon", "lat")
+farms_all_fin <- farms_all_fin %>%
+  cbind(iso3c = all_pts_latlon$iso3c)
+
+## save farm location
+write.csv(farms_all_fin, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/ASC_finfish_farm_lat_lon.csv"), row.names = FALSE)
+
+```
+
+
+Now we will map the remaining countries with marine finfish farms that are not included in the ASC dataset. Workflow will be as follows: 
+ - Try to obtain exact locations of farms from published source or dataset (such as FAO or a research paper)
+ - If there are no exact locations, but the source lists a city or state, place a point in that particular city or state
+ -  If there is enough information to know there are a specific number of finfish farms, equally allocate the farms across the coastline. If there are estimates of farms per state/province, equally allocate them across the state/province, to be even more precise.
+ - If there are not exact numbers of farms in the country, but you know there are a lot, randomly place points along the coast line (a non-exact number, like we did for Taiwan bivalve/shrimp). 
+ - Lastly, if there is no evidence of marine finfish farm locations, place a point on the coast of the country (preferably with some intuition/knowledge of where they might be, i.e. what we've done for Russia for bivalves).
+
+
+##  Europe - EMODNET: Malta, Greece, Norway, Cyprus, Spain 
+https://www.emodnet-humanactivities.eu/search-results.php?dataname=Finfish+Production
+https://www.emodnet-humanactivities.eu/view-data.php
+
+```{r}
+
+## read in shapefile
+eu <- st_read(file.path(path,"EMODnet_HA_Aquaculture_Marine_Finfish_20190104/EMODnet_HA_Aquaculture_Marine_Finfish_20190104.shp"))
+mapview(eu)
+
+unique(eu$COUNTRY)
+# [1] "Spain"          "United Kingdom" "Greece"         "Finland"        "Norway"         "Ireland"        "Malta"          "Denmark"       
+# [9] "Cyprus"  
+
+unique(eu$FARM_TYPE)
+
+unique(eu$SPECIES_DE)
+
+unique(eu$STATUS)
+
+eu_spp <- eu %>%
+  dplyr::filter(str_detect(SPECIES_DE, "Mediterranean marine fish|alibut|eabass|eabream|urbot|Sole|sole|sea bream|sea bass|Sea bream|Sea bass"))
+
+unique(eu_spp$COUNTRY)
+
+
+## Need to filter for the ones in FAO dataset
+# [1] "Spain" - yes          "United Kingdom" - no "Greece" - yes        "Norway" - yes        "Denmark" - no       "Cyprus" - yes  "Malta" - yes   
+
+eu_na <- eu_spp %>%
+  dplyr::filter(STATUS == "n.a.")
+unique(eu_na$COUNTRY)
+
+
+eu_active <- eu_spp %>%
+  dplyr::filter(STATUS == "Active")
+
+unique(eu_active$COUNTRY)
+
+## we will use both "Active" and "n.a." as the status of the farms. I choose this because all of the denmark points are n.a., and they correspond with the HELCOM data that we used for other spp groups. This indicates to me that the farms denoted as "n.a." are probably actually active. 
+
+eu_active_na <- eu_spp %>%
+  dplyr::filter(STATUS %in% c("Active", "n.a."))
+
+unique(eu_active_na$COUNTRY)
+
+# [1] "Spain"          "United Kingdom" "Greece"         "Malta"          "Norway"         "Denmark"        "Cyprus"     
+
+## Now filter for countries that we want: Spain, Greece, Norway, Cyprus, Malta... the others are not included in FAO 2017
+eu_fao_countries <- eu_active_na %>%
+  dplyr::filter(COUNTRY %in% c("Spain", "Greece", "Norway", "Cyprus", "Malta"))
+
+unique(eu_fao_countries$COUNTRY)
+mapview(eu_fao_countries)
+
+
+eu_pts <- st_centroid(eu_fao_countries)
+
+eu_pts_latlon <- st_transform(eu_pts, crs = "+init=epsg:4326") %>%
+  dplyr::select(COUNTRY, geometry)
+
+eu_countries <- eu_pts_latlon %>%
+  dplyr::select(COUNTRY)
+
+farms_eu <- data.frame(do.call(rbind, st_geometry(eu_pts_latlon)))
+names(farms_eu) <- c("lon", "lat")
+
+farms_eu_final <- cbind(farms_eu, eu_countries) %>%
+  dplyr::select(-geometry) %>%
+  mutate(iso3c = case_when(
+    COUNTRY == "Spain" ~ "ESP",
+    COUNTRY == "Cyprus" ~ "CYP", 
+    COUNTRY == "Norway" ~ "NOR", 
+    COUNTRY == "Greece" ~ "GRC",
+    COUNTRY == "Malta" ~ "MLT"
+  )) %>%
+  dplyr::select(-COUNTRY)
+
+ write_csv(farms_eu_final, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/farms_ESP_CYP_NOR_GRC_MLT.csv"))
+
+```
+
+
+## Italy
+From http://www.fao.org/fishery/naso-maps/selected-aquaculture-sites/italy/en/
+
+
+```{r}
+## read in thailand shp file
+italy_file <- file.path(path, "FAO_NASO/NASO/Point/Italy.kml")
+
+italy_aqua <- read_sf(italy_file)
+
+unique(italy_aqua$description)
+
+mapview(italy_aqua)
+
+## We need to filter for just the appropriate species of finfish aquaculture
+
+italy_finfish <- italy_aqua %>%
+  dplyr::filter(!(description %in% c("Floating Cages","Oysters<br>Mussels", "Freshwater farm<br><br>Strugeons<br>Stripped bass"))) %>%
+  dplyr::filter(!is.na(description))
+
+mapview(italy_finfish)
+
+ita_bivalve_mol <- st_transform(italy_finfish, crs = "+init=epsg:3035") # convert to equal area projection to find centroids. 
+ita_pts <- st_centroid(ita_bivalve_mol)
+
+ita_pts_latlon <- st_transform(ita_pts, crs = "+init=epsg:4326") 
+
+mapview(ita_pts_latlon)
+
+farms_ita <- data.frame(do.call(rbind, st_geometry(ita_pts_latlon))) 
+names(farms_ita) <- c("lon", "lat")
+farms_ita <- farms_ita %>%
+  mutate(iso3c="ITA")
+
+
+write_csv(farms_ita, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/farms_ita.csv"))
+
+
+farms_ita <-  st_as_sf(farms_ita, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_ita)
+```
+
+## France, Israel
+http://www.fao.org/fishery/naso-maps/selected-aquaculture-sites/mediterranean-basin/en/
+
+ - It says both Tuna and Finfish, but we'll assume france and israel are just finfish...
+```{r}
+## read in thailand shp file
+france_file <- file.path(path, "FAO_NASO/NASO/Point/Mediterranean.kml")
+
+france_aqua <- read_sf(france_file)
+
+med_countries <- france_aqua %>%
+  dplyr::mutate(country = sub("_.*", "", Name)) %>%
+  dplyr::mutate(country = sub(" fishpen A", "", country))
+
+unique(med_countries$country)
+
+## We need to filter for just the appropriate species of finfish aquaculture, France, Israel
+
+med_finfish <- med_countries %>%
+  dplyr::filter(country %in% c("France", "Israel"))
+  
+
+
+mapview(med_finfish)
+
+fra_finfish_mol <- st_transform(med_finfish, crs = "+init=epsg:3035") # convert to equal area projection to find centroids. 
+fra_pts <- st_centroid(fra_finfish_mol)
+
+fra_pts_latlon <- st_transform(fra_pts, crs = "+init=epsg:4326") 
+
+mapview(fra_pts_latlon)
+
+
+countries <- fra_pts_latlon %>%
+  dplyr::select(country)
+  
+  
+farms_fra <- data.frame(do.call(rbind, st_geometry(fra_pts_latlon))) 
+names(farms_fra) <- c("lon", "lat")
+farms_fra <- farms_fra %>%
+  cbind(countries) %>%
+  mutate(iso3c = ifelse(country == "France", "FRA", "ISR")) %>%
+  dplyr::select(-country, -geometry)
+
+
+write_csv(farms_fra, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/farms_fra_isr.csv"))
+
+
+farms_fra <-  st_as_sf(farms_fra, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_fra)
+```
+ 
+ 
+## Indonesia
+NASO maps 
+ - Per the FAO aquaculture sector report, Indonesia basically only grows grouper/milkfish, so I will assume this is all grouper/milkfish.
+```{r}
+indo_file <- file.path(path, "FAO_NASO/NASO/Point/Indonesia.kml")
+
+indo_aqua <- read_sf(indo_file)
+
+mapview(indo_aqua)
+
+
+idn_finfish_mol <- st_transform(indo_aqua, crs = "+init=epsg:3035") # convert to equal area projection to find centroids. 
+idn_pts <- st_centroid(idn_finfish_mol)
+
+idn_pts_latlon <- st_transform(idn_pts, crs = "+init=epsg:4326") 
+
+mapview(idn_pts_latlon)
+
+  
+farms_idn <- data.frame(do.call(rbind, st_geometry(idn_pts_latlon))) 
+names(farms_idn) <- c("lon", "lat")
+farms_idn <- farms_idn %>%
+  mutate(iso3c = "IDN")
+
+
+write_csv(farms_idn, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/farms_idn.csv"))
+
+
+farms_idn <-  st_as_sf(farms_idn, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_idn)
+```
+ 
+ 
+## Portugal
+ - https://www.ine.pt/xportal/xmain?xpid=INE&xpgid=ine_publicacoes&PUBLICACOESpub_boui=435690295&PUBLICACOESmodo=2&fbclid=IwAR0-_SHYtw2XGUAXdx71RGer284Vk_u40HYKXyJzeFbpdnsHydKgAfomTvU
+ - National Institute of Statistics for Portugal 
+ - There is a csv table, "q5_1.csv", which has the number of farms listed by type of system. I will assume that tanks are for finfish, since [this website](https://rea.apambiente.pt/content/aquaculture-production?language=en) says that the tanks are for **fish production**, and floating structures are for **bivalve molluscs**. Located here "/home/shares/food-systems/Food_footprint/_raw_data/Aquaculture_locations/Portugal/EPesca_2019.xlsx"
+ - According to the table, by these criteria, there are 112 marine tank farm systems in Portugal. 
+ - I will equally allocate 112 points along the coast of Portugal.
+ 
+ Source: 
+  - Estatísticas da Pesca: 2019, 2020. Instituto Nacional de Estatística.
+  - Estatísticas da Pesca: 2019, 2020
+ 
+```{r}
+world <- rnaturalearth::ne_coastline(scale = 110) # world map with 10m resolution
+plot(world)
+
+portugal <- ne_countries(scale = 10, country = "Portugal", returnclass = "sf")
+
+#info of our spatial vector object
+portugal
+mapview(portugal)
+plot(portugal)
+
+world <- st_as_sf(world)
+
+portugal_world_crs <- st_transform(portugal, crs(world))
+
+portugal_world_crop <- st_crop(world, portugal_world_crs) #%>%
+ # dplyr::filter(scalerank == 5) ## filter for the appropriate island
+plot(portugal_world_crop)
+mapview(portugal_world_crop)
+
+portugal_crop <- as(portugal_world_crop, "Spatial")
+
+
+portugal_points_lines <- sample.line(portugal_crop, n = 380) ## equally place the number of farms along the coastline 
+class(portugal_points_lines)
+plot(portugal_points_lines)
+
+
+portugal_points <- st_as_sf(portugal_points_lines)
+mapview(portugal_points)
+
+portugal_points_final <- portugal_points[253:364, ] ## grab the appropriate number of points
+mapview(portugal_points_final)
+
+## now prep dataframe for lat lon points
+prt_pts <- st_centroid(portugal_points_final)
+
+prt_pts_latlon <- st_transform(prt_pts, crs = "+init=epsg:4326") %>%
+  dplyr::select(geometry)
+
+farms_prt <- data.frame(do.call(rbind, st_geometry(prt_pts_latlon)))
+names(farms_prt) <- c("lon", "lat")
+
+farms_prt_final <- farms_prt %>%
+  mutate(iso3c = "PRT")
+
+## visualize it 
+farms_prt <-  st_as_sf(farms_prt, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_prt)
+
+## write to farms folder 
+write_csv(farms_prt_final, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/farms_prt.csv"))
+```
+
+ 
+## Iran 
+
+The only species the FAO reports for Iran is "Marine fishes nei", and I can't find any information on number of marine farms there might be in Iran. Therefore I will place one farm on the Caspian Sea coast. 
+
+
+```{r}
+
+farms_irn <- data.frame(lat = c(37.392419247868425),
+                        lon = c(50.1602963496454)) %>%
+  mutate(iso3c = "IRN")
+
+write_csv(farms_irn, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/farms_irn.csv"))
+
+## visualize it 
+farms_irn <-  st_as_sf(farms_irn, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_irn)
+```
+
+
+## China 
+Can't find any datasets of marine finfish farm locations in China. Therefore I will place one farm on the coast of China.
+
+```{r}
+
+farms_chn <- data.frame(lat = c(26.649767732301385),
+                        lon = c(119.94149300994019)) %>%
+  mutate(iso3c = "CHN")
+
+write_csv(farms_chn, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/farms_chn.csv"))
+
+## visualize it 
+farms_chn <-  st_as_sf(farms_chn, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_chn)
+```
+
+
+## Saudi Arabia
+ - There is really only one marine fish aquaculture producer in Saudi Arabia, and it happens to be the same company that produces almost all of its shrimp. It is one of the largest facilities in the world. http://www.naqua.com.sa/barramundi.php
+ - I'll place a point there: 20.287253, 40.030864
+ 
+Source: Same as shrimp
+
+
+```{r}
+
+farms_sau <- data.frame(lat = c(20.287253),
+                        lon = c(40.030864)) %>%
+  mutate(iso3c = "SAU")
+
+write_csv(farms_sau, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/farms_sau.csv"))
+
+## visualize it 
+farms_sau <-  st_as_sf(farms_sau, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_sau)
+```
+ 
+
+## Mauritius
+
+Can't find any datasets of marine finfish farm locations. Therefore I will place one farm on the coast. It probably doesn't matter, since Mauritius is so small anyways. 
+
+
+```{r}
+
+farms_mus <- data.frame(lat = c(-20.005039247819017),
+                        lon = c(57.67022708374523)) %>%
+  mutate(iso3c = "MUS")
+
+write_csv(farms_mus, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/farms_mus.csv"))
+
+## visualize it 
+farms_mus <-  st_as_sf(farms_mus, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_mus)
+```
+
+
+## United Arab Emirates
+
+http://www.fishfarm.ae/facilities.html
+ - One here in Dibba Al Fujairah. 
+ - They do sea bream and sea bass, which matches what the FAO reports. 
+ 
+The above is also corroborated by the FAO here: http://www.fao.org/fishery/countrysector/naso_uae/en
+
+I will place a point off of the coast of Dibba Al Fujairah: 25.604715925918068, 56.340214330776234
+ 
+```{r}
+
+farms_are <- data.frame(lat = c(25.604715925918068),
+                        lon = c(56.340214330776234)) %>%
+  mutate(iso3c = "ARE")
+
+write_csv(farms_are, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/farms_are.csv"))
+
+## visualize it 
+farms_are <-  st_as_sf(farms_are, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_are)
+```
+
+
+## Tunisia
+
+https://apps.fas.usda.gov/newgainapi/api/report/downloadreportbyfilename?filename=Aquaculture%20Industry%20Small%20but%20Growing_Tunis_Tunisia_5-31-2017.pdf
+"At present, there are roughly 50 companies involved in aquaculture production:
+ - Shellfish farming: 12 private companies
+ - Bluefin tuna fattening: 5 private companies
+ - Other marine fish farming: 20 private companies
+ - Inland fish farming: 15 private companies"
+ 
+ 
+ "The primary marine aquaculture production area is in the Monastir governorate, along Tunisia’s eastern
+shore. Marine aquaculture is practiced using modern and innovative techniques, whether in concrete
+facilities with a density of 60 kg/m3
+or in floating cages on the high seas. Alevin are exclusively
+imported for sea bass and sea bream production while bluefin tuna are imported for fattening."
+
+
+ - I'll place 20 points along the coast of Monastir
+ 
+ 
+```{r}
+## load municipality shapefile, downloaded from here: https://gadm.org/download_country_v3.html
+tunisia <- st_read(file.path("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/Tunisia/gadm36_TUN_shp/gadm36_TUN_1.shp")) %>%
+  dplyr::filter(NAME_1 == "Monastir")
+
+mapview(tunisia)
+
+## OR if you don't municipality and only country info you could use this: 
+# tunisia <- rnaturalearth::ne_countries(country = "Tunisia")
+
+
+world <- rnaturalearth::ne_coastline(scale = 10) # world map with 10m resolution
+plot(world)
+class(world)
+
+#info of our spatial vector object
+tunisia
+mapview(tunisia)
+
+world <- st_as_sf(world)
+
+tunisia_world_crs <- st_transform(tunisia, crs(world))
+
+tunisia_world_crop <- st_crop(world, tunisia_world_crs) 
+plot(tunisia_world_crop)
+mapview(tunisia_world_crop)
+
+tunisia_crop <- as(tunisia_world_crop, "Spatial")
+class(tunisia_crop)
+mapview(tunisia_crop)
+
+tunisia_points_lines <- sample.line(tunisia_crop, n = 20) ## equally place the number of farms along the coastline 
+class(tunisia_points_lines)
+plot(tunisia_points_lines)
+
+
+tunisia_points <- st_as_sf(tunisia_points_lines)
+mapview(tunisia_points)
+
+## now prep dataframe for lat lon points
+tun_pts <- st_centroid(tunisia_points)
+
+tun_pts_latlon <- st_transform(tun_pts, crs = "+init=epsg:4326") %>%
+  dplyr::select(geometry)
+
+farms_tun <- data.frame(do.call(rbind, st_geometry(tun_pts_latlon)))
+names(farms_tun) <- c("lon", "lat")
+
+farms_tun_final <- farms_tun %>%
+  mutate(iso3c = "TUN")
+
+## visualize it 
+farms_tun <-  st_as_sf(farms_tun, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_tun)
+
+## write to farms folder 
+write_csv(farms_tun_final, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/farms_tun.csv"))
+```
+
+
+## Taiwan
+The two main species farmed in Taiwan are Milkfish and Grouper. I will place farms for these two species
+
+
+Milkfish:
+https://digitalarchive.worldfishcenter.org/bitstream/handle/20.500.12348/3610/Pub%20TR4%206.pdf?sequence=1&isAllowed=y
+ - I will use the respondents from the survey, and place the appropriate number of points in each location (table located on page 6, I will only use "gatherers"). This is a really old paper, but it is the best I can find. 42 total points
+ 
+ - Putai (Budai): 4 points: 
+ 23.396775208505524, 120.1486974182384
+ 23.391435122712778, 120.14508600806049
+ 23.379465182872867, 120.13344924193156
+ 23.37173018517046, 120.12923593005728
+
+ - Peimen (Beimen): 4 points
+ 23.328815202320154, 120.11007291797651
+ 23.30989854415313, 120.10560972235575
+ 23.286248936869796, 120.09462339467383
+ 23.24808538030484, 120.08741361713255
+ 
+ - Chiku (Cigu): 2 points
+ 23.098351835751856, 120.0340739167051
+ 23.08684757757559, 120.0323838672442
+ 
+ - Yungan: 4 points
+ 22.84129712135721, 120.19480335124462
+ 22.83607641104833, 120.19703494905501
+ 22.823893974670515, 120.19737827179506
+ 22.808703955682557, 120.19960986960544
+ 
+ - Lingpien (Linbian) : 6 points
+ 22.427007004796724, 120.48594464702815
+ 22.42449445979184, 120.48934227493775
+ 22.419155150689896, 120.4981761075027
+ 22.413920334638384, 120.50893526254974
+ 22.41119815232611, 120.51527750131434
+ 22.40868532131159, 120.51890163775126
+ 
+ - Taitung City: 6 points
+ 22.729748162448605, 121.13759861706552
+ 22.73478926413642, 121.14388413948092
+ 22.73995620049436, 121.14975973652137
+ 22.74096436042943, 121.15167272160434
+ 22.746257078096264, 121.15631854252005
+ 22.74965943121689, 121.16246742314381
+ 
+ - Chungkung (Chengkung): 6 points
+ 23.094448352409827, 121.3724851599623
+ 23.100673804589537, 121.38612214670725
+ 23.110708254441576, 121.39450636818748
+ 23.118419405368904, 121.4097595903985
+ 23.12715198105829, 121.40864842851558
+ 23.13662711164484, 121.40026420703533
+ 
+ 
+ - Erhchieh (River delta below Yilan City): 6 points
+ 24.718398599156366, 121.83377270959099
+ 24.72276233035146, 121.83292494893261
+ 24.7123233460693, 121.83961283857079
+ 24.734911520797553, 121.82878034126954
+ 24.707959248912765, 121.8381057085115
+ 24.70256809420227, 121.83829409976889
+ 
+ - Suao: 4 points
+ 24.59561929860139, 121.87509035189372
+ 24.591466187548917, 121.87405621071602
+ 24.466470314555245, 121.84309342644401
+ 24.43396678054247, 121.80292466585698
+ 
+ 
+```{r}
+milkfish_points <- data.frame(lat = c(23.396775208505524, 23.391435122712778, 23.379465182872867, 23.37173018517046, 23.328815202320154, 23.30989854415313, 23.286248936869796, 23.24808538030484, 23.098351835751856, 23.08684757757559, 22.84129712135721, 22.83607641104833, 22.823893974670515, 22.808703955682557, 22.427007004796724, 22.42449445979184, 22.419155150689896, 22.413920334638384, 22.41119815232611, 22.40868532131159, 22.729748162448605, 22.73478926413642, 22.73995620049436, 22.74096436042943, 22.746257078096264, 22.74965943121689,  23.094448352409827, 23.100673804589537, 23.110708254441576, 23.118419405368904, 23.12715198105829, 23.13662711164484, 24.718398599156366, 24.72276233035146, 24.7123233460693, 24.734911520797553, 24.707959248912765, 24.70256809420227, 24.59561929860139, 24.591466187548917, 24.466470314555245, 24.43396678054247),
+                              
+                              lon = c(120.1486974182384, 120.14508600806049, 120.13344924193156, 120.12923593005728, 120.11007291797651, 120.10560972235575, 120.09462339467383, 120.08741361713255, 120.0340739167051, 120.0323838672442, 120.19480335124462, 120.19703494905501, 120.19737827179506, 120.19960986960544, 120.48594464702815, 120.48934227493775, 120.4981761075027, 120.50893526254974, 120.51527750131434, 120.51890163775126, 121.13759861706552, 121.14388413948092, 121.14975973652137, 121.15167272160434, 121.15631854252005, 121.16246742314381, 121.3724851599623, 121.38612214670725, 121.39450636818748, 121.4097595903985, 121.40864842851558, 121.40026420703533, 121.83377270959099, 121.83292494893261, 121.83961283857079, 121.82878034126954, 121.8381057085115, 121.83829409976889, 121.87509035189372, 121.87405621071602, 121.84309342644401, 121.80292466585698))
+```
+ 
+
+Grouper:
+https://www.researchgate.net/publication/49753615_Real-Time_Quantitative_PCR_Assay_for_Monitoring_of_Nervous_Necrosis_Virus_Infection_in_Grouper_Aquaculture
+ - Although this is just a sample of grouper farm locations, I will use this and place the points accordingly. Table and map on the second page. 24 total farms.
+ 
+ - Kunshen: 5 points
+ 22.963578173481825, 120.16265849315296
+ 22.958915389973615, 120.16450385288077
+ 22.958796842534618, 120.16420344548321
+ 22.95887587417216, 120.16630629726609
+ 22.962708853156307, 120.16480426027832
+ 
+ - Budai: 2 points
+23.366020730714546, 120.12803212666465
+23.344101510137286, 120.11599409273818
+ 
+ - Linyuan: 4 points
+ 22.5060215233288, 120.361518692894
+ 22.495712950055186, 120.37199003646582
+ 22.489210224135196, 120.38503630058813
+ 22.478900398348003, 120.40220243759113
+ 
+ - Jiading: 5 points
+ 22.910490254668936, 120.17469982002679
+ 22.900053951559105, 120.17658809509712
+ 22.88771910346936, 120.18208125893808
+ 22.87475049020418, 120.18637279318882
+ 22.85735162493687, 120.18688777729894
+ 
+ - Cigu: 3 points
+23.11902593130365, 120.05874863883409
+23.124310527454163, 120.07531112355083
+23.130061175003874, 120.08122629666394
+ 
+ - An-Nan: 2 points
+ 23.033784880994748, 120.07405573439489
+ 23.01988231566828, 120.09946161715932
+ 
+ - Anping: 2 points
+ 22.990894265701648, 120.14268135694375
+ 22.969242998130003, 120.15847420298654
+ 
+ - Linbian: 1 points
+ 22.412837508670247, 120.5141089682018
+ 
+ 
+```{r}
+grouper_points <- data.frame(lat = c(23.366020730714546, 23.344101510137286, 23.11902593130365, 23.124310527454163, 23.130061175003874, 22.412837508670247, 22.5060215233288, 22.495712950055186, 22.489210224135196, 22.478900398348003, 22.963578173481825, 22.958915389973615, 22.958796842534618, 22.95887587417216, 22.962708853156307, 22.910490254668936, 22.900053951559105, 22.88771910346936, 22.87475049020418, 22.85735162493687, 23.033784880994748, 23.01988231566828, 22.990894265701648, 22.969242998130003),
+                             lon = c(120.12803212666465, 120.11599409273818, 120.05874863883409, 120.07531112355083, 120.08122629666394, 120.5141089682018, 120.361518692894, 120.37199003646582, 120.38503630058813, 120.40220243759113, 120.16265849315296, 120.16450385288077, 120.16420344548321,  120.16630629726609, 120.16480426027832, 120.17469982002679, 120.17658809509712, 120.18208125893808, 120.18637279318882, 120.18688777729894, 120.07405573439489, 120.09946161715932, 120.14268135694375, 120.15847420298654))
+
+```
+
+Combine milkfish and grouper points
+
+```{r}
+all_points_twn <- rbind(milkfish_points, grouper_points) %>%
+  dplyr::mutate(iso3c = "TWN")
+
+
+farms_twn <-  st_as_sf(all_points_twn, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_twn)
+
+## write to farms folder 
+write_csv(all_points_twn, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/farms_twn.csv"))
+
+
+
+```
+ 
+ 
+## Costa Rica 
+There is only one species farmed in Costa Rice, Spotted Rose Snapper. 
+
+https://www.researchgate.net/profile/Angel_Herrera-Ulloa/publication/235638071_Spotted_rose_snapper_Lutjanus_guttatus_aquaculture_research_and_development_as_socio-economic_alternative_for_Costa_Rican_fishing_communities/links/5acd4d66aca2723a333f53f8/Spotted-rose-snapper-Lutjanus-guttatus-aquaculture-research-and-development-as-socio-economic-alternative-for-Costa-Rican-fishing-communities.pdf
+ - States that there are 3 pilot farms along the Gulf of Nicoya. 
+
+This says that Martec is the only company in the world which farms spotted rose snapper: https://www.seafoodsource.com/news/aquaculture/industrias-martec-plots-expansion-of-its-spotted-rose-snapper-offshore-aquaculture-operation
+
+https://www.martec.co.cr/#aquaculture
+ - Also states that they are the only company in the world to produce Spotted Rose Snapper commercially, and their farms are 3 miles off shore.... based on this I will place one point 3 miles offshore of where "Martec Industries" is located on google maps. 
+
+9.423478373794573, -84.20910189917947
+ 
+```{r}
+farms_cri <- data.frame(lat = c(9.423478373794573),
+                        lon = c(-84.20910189917947)) %>%
+  mutate(iso3c = "CRI")
+
+write_csv(farms_cri, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/farms_cri.csv"))
+
+## visualize it 
+farms_cri <-  st_as_sf(farms_cri, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_cri)
+```
+
+
+## Egypt
+
+There is a map provided by the FAO (2010) here: http://www.fao.org/fishery/countrysector/naso_egypt/en
+ - It has both production and locations.... I think I will need to hand place them, but we can use this. 
+ - I will only use the ones that have Mullet, Seabass, Seabream, or Meagre, and that are along the coast, using ponds or cages. 
+ 
+ - Mersa Matruh: 31.360400495764903, 27.236078999801336: Production = 5
+ - Alexandria: 31.15023941171644, 29.81109569981684: Production = 1521
+ - Behira: 31.319036258284083, 30.225935332660324 : Production = 20376
+ - Dakahlia: 31.491306679824632, 31.4278324391214 : Production = 5460
+ - Damietta: 31.52619128473819, 31.849352783373792 : Production = 55551
+ - Port Said: 31.275726202441984, 32.30190584291966 : Production = 16233 
+ - Suez: 29.944394112057978, 32.54627145839493 : Production = 750
+ - South Sinai: 27.80632012228518, 34.29387671355847 : Production = 30 
+ 
+```{r}
+farms_egy <- data.frame(lat = c(31.360400495764903, 31.15023941171644, 31.319036258284083, 31.491306679824632, 31.52619128473819, 31.275726202441984, 29.944394112057978, 27.80632012228518),
+                        lon = c(27.236078999801336, 29.81109569981684, 30.225935332660324, 31.4278324391214, 31.849352783373792, 32.30190584291966, 32.54627145839493,  34.29387671355847),
+                        rgn_production = c(5, 1521, 20376, 5460, 55551, 16233, 750, 30),
+                        subrgn_name = c("Mersa Matruh", "Alexandria", "Behira", "Dakahlia", "Damietta", "Port Said", "Suez", "South Sinai")) %>%
+  mutate(iso3c = "EGY")
+
+write_csv(farms_egy, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/farms_egy.csv"))
+
+## visualize it 
+farms_egy <-  st_as_sf(farms_egy, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_egy)
+```
+ 
+ 
+ 
+## India
+
+There is not much information on locations of aquaculture facilities. However, this shows "Mandapam Hatchery" 80000 tonnes of marine finfish in 2015... The total for 2017 is 96000. I think it is reasonable to place a point on Mandapam, at the CMFRI farm, and leave it at that. 
+http://www.cmfri.org.in/division/mariculture
+
+9.28696221512509, 79.13007737814245
+
+ 
+```{r}
+farms_ind <- data.frame(lat = c(9.28696221512509),
+                        lon = c(79.13007737814245)) %>%
+  mutate(iso3c = "IND")
+
+write_csv(farms_ind, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/farms_ind.csv"))
+
+## visualize it 
+farms_ind <-  st_as_sf(farms_ind, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_ind)
+```
+
+
+## Singapore
+Barramundi and milkfish 
+
+https://www.sfa.gov.sg/food-farming/food-farms/farming-in-singapore
+ - This says 109 sea based fish farms.
+ - Seems like a pretty reliable source.
+ 
+I'll place 109 farms equally along the coast of Singapore.
+
+```{r}
+world <- rnaturalearth::ne_coastline(scale = 10) # world map with 10m resolution
+plot(world)
+
+singapore <- ne_countries(scale = 50, country = "Singapore", returnclass = "sf")
+
+#info of our spatial vector object
+singapore
+mapview(singapore)
+plot(singapore)
+
+world <- st_as_sf(world)
+
+singapore_world_crs <- st_transform(singapore, crs(world))
+
+singapore_world_crop <- st_crop(world, singapore_world_crs) %>%
+  dplyr::filter(scalerank == 3) ## filter for the appropriate area
+plot(singapore_world_crop)
+mapview(singapore_world_crop)
+
+singapore_crop <- as(singapore_world_crop, "Spatial")
+
+
+singapore_points_lines <- sample.line(singapore_crop, n = 225) ## equally place the number of farms along the coastline 
+class(singapore_points_lines)
+plot(singapore_points_lines)
+
+
+singapore_points <- st_as_sf(singapore_points_lines)
+mapview(singapore_points)
+
+singapore_points_final <- singapore_points[106:214, ] ## grab the appropriate number of points
+mapview(singapore_points_final)
+
+## now prep dataframe for lat lon points
+sgp_pts <- st_centroid(singapore_points_final)
+
+sgp_pts_latlon <- st_transform(sgp_pts, crs = "+init=epsg:4326") %>%
+  dplyr::select(geometry)
+
+farms_sgp <- data.frame(do.call(rbind, st_geometry(sgp_pts_latlon)))
+names(farms_sgp) <- c("lon", "lat")
+
+farms_sgp_final <- farms_sgp %>%
+  mutate(iso3c = "SGP")
+
+## visualize it 
+farms_sgp <-  st_as_sf(farms_sgp, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_sgp)
+
+## write to farms folder 
+write_csv(farms_sgp_final, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/farms_sgp.csv"))
+```
+
+## Malaysia
+
+FAO Sector overview:
+"The culture of marine fish in floating net-cages in
+lagoons and sheltered coastal waters occupies an area of 102 ha, and is concentrated mainly in the western
+coast of Peninsular Malaysia."
+
+ - I can only find the broad suitable areas: https://www.dof.gov.my/ 
+ - Broad suitable areas https://www.dof.gov.my/index.php/pages/view/78. I'll use these and use the area as a production estimate. Saved onto aurora /home/shares/food-systems/Food_footprint/_raw_data/Aquaculture_locations/Malaysia/malaysia_finfish_farms.csv. 
+ 
+```{r}
+malaysia_finfish_loc <- read_csv("/home/shares/food-systems/Food_footprint/_raw_data/Aquaculture_locations/Malaysia/malaysia_finfish_farms.csv") %>%
+  clean_names()
+
+```
+
+Farms: 
+ - SEMPANG (PT Lot 389, 390), MELAKA : 2.131733588116292, 102.40118069215845
+ - KG. AYAU, ROMPIN, PAHANG : 2.8071936098459522, 103.49758024234029
+ - PERMATANG PAUH ISLAND, PAHANG : 5.384539285193906, 100.35040003558889
+ - KG. SABAK FERI, ROMPIN, PAHANG : 2.8056383383493353, 103.49881667894354
+ - SEMPANG (PT Lot 387), MELAKA : 2.1305137929032876, 102.40627304737939
+
+Now lets map the farms 
+```{r}
+farms_mys <- data.frame(lat=c(2.131733588116292, 2.8071936098459522, 5.384539285193906, 2.8056383383493353, 2.1305137929032876),
+                        lon=c(102.40118069215845, 103.49758024234029, 100.35040003558889, 103.49881667894354, 102.40627304737939)) %>%
+  mutate(iso3c = "MYS")
+
+write_csv(farms_mys, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/farms_mys.csv"))
+
+## visualize it 
+farms_mys <-  st_as_sf(farms_mys, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_mys)
+```
+ 
+## Bangladesh
+
+There isn't much information. I will place a point randomly on the coast of Bangladesh. 
+
+```{r}
+farms_bgd <- data.frame(lat=c(21.802433819366538),
+                        lon=c(90.40418040967)) %>%
+  mutate(iso3c = "BGD")
+
+write_csv(farms_bgd, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/farms_bgd.csv"))
+
+## visualize it 
+farms_bgd <-  st_as_sf(farms_bgd, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_bgd)
+```
+
+## Cambodia
+
+The only species is Barramundi. 
+
+https://www.researchgate.net/publication/340828970_Asian_seabass_Lates_calcarifer_farming_practices_in_Cambodia
+ - Farms are definitely located in Prey Nob, Stoeng Hav, and Thomnob Rolork. 
+ - This is the only information I can find on Cambodian Barramundi fishing, so I will place 3 points in these 3 places. It is really small production anyways. 
+ 
+Prey Nob: 10.53427341558665, 103.57357940185497
+Stoeng Hav: 10.748668380457524, 103.6089106992865
+Thomnob Rolork: 10.647924480438327, 103.5006922685572
+ 
+```{r}
+farms_khm <- data.frame(lat=c(10.53427341558665, 10.748668380457524, 10.647924480438327),
+                        lon=c(103.57357940185497, 103.6089106992865, 103.5006922685572)) %>%
+  mutate(iso3c = "KHM")
+
+write_csv(farms_khm, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/farms_khm.csv"))
+
+## visualize it 
+farms_khm <-  st_as_sf(farms_khm, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_khm)
+```
+ 
+ 
+## Korea, Republic of (South Korea)
+
+http://www.fao.org/fishery/countrysector/naso_korea/en
+ - Lists 612 finfish farms. I will place 612 farms along the coast of South Korea. 
+ 
+```{r}
+world <- rnaturalearth::ne_coastline(scale = 110) # world map with 10m resolution
+plot(world)
+
+south_korea <- ne_countries(scale = 50, country = "South Korea", returnclass = "sf")
+
+#info of our spatial vector object
+south_korea
+mapview(south_korea)
+plot(south_korea)
+
+world <- st_as_sf(world)
+
+south_korea_world_crs <- st_transform(south_korea, crs(world))
+
+south_korea_world_crop <- st_crop(world, south_korea_world_crs) #%>%
+ # dplyr::filter(scalerank == 3) ## filter for the appropriate area
+
+south_korea_world_crop <- south_korea_world_crop[2, ]
+plot(south_korea_world_crop)
+mapview(south_korea_world_crop)
+
+south_korea_crop <- as(south_korea_world_crop, "Spatial")
+
+
+south_korea_points_lines <- sample.line(south_korea_crop, n = 612) ## equally place the number of farms along the coastline 
+class(south_korea_points_lines)
+plot(south_korea_points_lines)
+
+
+south_korea_points <- st_as_sf(south_korea_points_lines)
+mapview(south_korea_points)
+
+## now prep dataframe for lat lon points
+kor_pts <- st_centroid(south_korea_points)
+
+kor_pts_latlon <- st_transform(kor_pts, crs = "+init=epsg:4326") %>%
+  dplyr::select(geometry)
+
+farms_kor <- data.frame(do.call(rbind, st_geometry(kor_pts_latlon)))
+names(farms_kor) <- c("lon", "lat")
+
+farms_kor_final <- farms_kor %>%
+  mutate(iso3c = "KOR")
+
+## visualize it 
+farms_kor <-  st_as_sf(farms_kor, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_kor)
+
+## write to farms folder 
+write_csv(farms_kor_final, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/farms_kor.csv"))
+```
+
+
+## Philippines
+The only  species listed is Milkfish. 
+There is no exact number listed, however I know that there are a lot of milkfish farms in the Philippines, as it is their oldest aquaculture method. There are definitely over 300. I will randomly place over 300 farms along the coast of the philippines. 
+
+
+```{r}
+world <- rnaturalearth::ne_coastline(scale = 110) # world map with 10m resolution
+plot(world)
+
+philippines <- ne_countries(scale = 50, country = "Philippines", returnclass = "sf")
+
+#info of our spatial vector object
+philippines
+mapview(philippines)
+plot(philippines)
+
+world <- st_as_sf(world)
+
+philippines_world_crs <- st_transform(philippines, crs(world))
+
+philippines_world_crop <- st_crop(world, philippines_world_crs) #%>%
+ # dplyr::filter(scalerank == 3) ## filter for the appropriate area
+
+philippines_world_crop <- philippines_world_crop[-1, ]
+plot(philippines_world_crop)
+mapview(philippines_world_crop)
+
+philippines_crop <- as(philippines_world_crop, "Spatial")
+
+
+philippines_points_lines <- sample.line(philippines_crop, n = 43) ## equally place the number of farms along the coastline 
+class(philippines_points_lines)
+plot(philippines_points_lines)
+
+
+philippines_points <- st_as_sf(philippines_points_lines)
+mapview(philippines_points)
+
+## now prep dataframe for lat lon points
+phl_pts <- st_centroid(philippines_points)
+
+phl_pts_latlon <- st_transform(phl_pts, crs = "+init=epsg:4326") %>%
+  dplyr::select(geometry)
+
+farms_phl <- data.frame(do.call(rbind, st_geometry(phl_pts_latlon)))
+names(farms_phl) <- c("lon", "lat")
+
+farms_phl_final <- farms_phl %>%
+  mutate(iso3c = "PHL")
+
+## visualize it 
+farms_phl <-  st_as_sf(farms_phl, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_phl)
+
+## write to farms folder 
+write_csv(farms_phl_final, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/farms_phl.csv"))
+```
+
+
+## Hong Kong 
+
+https://www.afcd.gov.hk/english/fisheries/fish_aqu/fish_aqu_mpo/fish_aqu_mpo.html
+From HK government. 
+
+This shows a map fish culture zones, fish ponds, and oyster production areas. I will place a point in all of the "Fish culture zones" shown on the map. Most of the fish cages are visible on google maps when you search these locations.  
+
+
+Sha Tau Kok: 22.537974350807968, 114.22465750899093
+Ap Chau: 22.549021238266082, 114.27266261841545
+Kat O: 22.549243173819686, 114.29054140885648
+0 Pui Tong: 22.545901930448537, 114.29912254835972
+Sai Lau Kong: 22.524524976629923, 114.28385013462695
+Wong Wan: 22.507936457313377, 114.30641749235996
+Tap Mun: 22.47796934657302, 114.35412559932351
+Kau Lau Wan: 22.459641511472412, 114.360272945696
+Sham Wan: 22.4435502213444, 114.35400029960742
+Lo Fu Wat: 22.46853714662761, 114.2720207303674
+Yung Shue Au: 22.42337637093222, 114.27819733339493
+Leung Shuen Wan: 22.349528341786087, 114.35178911904846
+Tiu Cham Wan: 22.367924650829952, 114.31997002657292
+Tai Tau Chau: 22.368469602475702, 114.3230438982345 
+Kai Lung Wan: 22.3691151827537, 114.30143307907038
+Kau Sai: 22.341819373881275, 114.31744391160476
+Ma Nam Wat: 22.35464650188533, 114.26990023341041
+Po Toi O: 22.274992746117093, 114.29389242171153
+Po Toi: 22.164051938726015, 114.25252757025574
+Sok Kwu Wan: 22.20591578796148, 114.12923505969019
+Lo Tik Wan: 22.221779736133797, 114.12958553008323
+Ma Wan: 22.352165476146805, 114.05569941361628
+Yim Tin Tsai: 22.45358281100093, 114.2079128367368
+Cheung Sha Wan: 22.235400816169882, 114.00599898096631
+Yim Tin Tsai (East): 22.454708931476908, 114.22148845386273
+Tung Lung Chau: 22.25579039550771, 114.28554310187128
+ 
+ 
+```{r}
+farms_hkg <- data.frame(lat_lon = c("22.537974350807968, 114.22465750899093", "22.549021238266082, 114.27266261841545", "22.549243173819686, 114.29054140885648", "22.545901930448537, 114.29912254835972", "22.524524976629923, 114.28385013462695", "22.507936457313377, 114.30641749235996", "22.47796934657302, 114.35412559932351", "22.459641511472412, 114.360272945696", "22.4435502213444, 114.35400029960742", "22.46853714662761, 114.2720207303674", "22.42337637093222, 114.27819733339493", "22.349528341786087, 114.35178911904846", "22.367924650829952, 114.31997002657292", "22.368469602475702, 114.3230438982345", "22.3691151827537, 114.30143307907038", "22.341819373881275, 114.31744391160476", "22.35464650188533, 114.26990023341041", "22.274992746117093, 114.29389242171153", "22.164051938726015, 114.25252757025574", "22.20591578796148, 114.12923505969019", "22.221779736133797, 114.12958553008323", "22.352165476146805, 114.05569941361628", "22.45358281100093, 114.2079128367368", "22.235400816169882, 114.00599898096631", "22.454708931476908, 114.22148845386273", "22.25579039550771, 114.28554310187128")) %>%
+  separate(lat_lon, into = c("lat", "lon"), sep = ",") %>%
+  mutate(iso3c = "HKG")
+
+write_csv(farms_hkg, here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites/farms_hkg.csv"))
+
+## visualize it 
+farms_hkg <-  st_as_sf(farms_hkg, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_hkg)
+``` 
+ 
+# Join cell count dataframes
+
+```{r}
+farm_files <- list.files(here::here("aquaculture/marine/marine_fish_general/finfish_farms/data/finfish_sites"), full=TRUE)
+all_farms = plyr::ldply(farm_files, read_csv)
+
+all_farms_sf <- st_as_sf(all_farms, coords = c("lon", "lat"), 
+                         crs = crs(gadm_latlon), agr = "constant")
+
+mapview(all_farms_sf)
+
+write.csv(all_farms, here::here("aquaculture/marine/marine_fish_general/finfish_farms/data/global_finfish_farm_lat_lon.csv"), row.names = FALSE)
+
+
+```
+

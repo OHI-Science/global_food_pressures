@@ -1,0 +1,174 @@
+---
+title: "Nutrient check"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Make sure global value of nutrient pollution is sensible:
+```{r setup, include=FALSE}
+library(here)
+library(tidyverse)
+
+```
+
+We estimate 10% of synthetic fertilizer application is nutrient pollution (in tonnes). Following coverts N and P205 to P04eq.
+```{r}
+fert <- read_csv(here("_analysis/checking_data/data/FAOSTAT_data_12-14-2020_synthetic_ferts.csv")) %>%
+  filter(Area != "China") %>%
+  select(Area, Item, Value) %>%
+  mutate(Item = ifelse(Item == "Nutrient nitrogen N (total)", "N", "P205")) 
+
+
+fert_spread <- spread(fert, Item, Value) 
+sum(fert_spread$N)
+
+fert_spread <- fert_spread %>%
+  rowwise() %>%
+  mutate(N_cor = N) %>%
+  mutate(P_cor = P205/2.29) %>%
+  mutate(P04eq = (N_cor + P_cor) * 0.1)
+
+sum(fert_spread$P04eq, na.rm=TRUE)
+
+```
+
+Manure left on pasture:
+```{r}
+
+man_past <- read_csv(here("_analysis/checking_data/data/FAOSTAT_data_12-14-2020_manure_pasture.csv")) %>%
+  filter(Area != "China") %>%
+  filter(Unit != "Head") %>%
+  mutate(Element = ifelse(`Element Code` == 72380, "total_N", Element)) %>%
+    mutate(Element = ifelse(`Element Code` == 723802, "leaches_N", Element)) %>%
+    mutate(Element = ifelse(`Element Code` == 723801, "vol_N", Element)) %>%
+  group_by(Area, Element) %>%
+  summarize(Value = sum(Value, na.rm=TRUE)) %>%
+  select(Area, Element, Value) %>%
+  spread(Element, Value)
+sum(man_past$leaches_N, na.rm=TRUE)/1000
+sum(man_past$total_N, na.rm=TRUE)/1000
+#table(man_past$`Element Code`, man_past$Element)
+
+## going to adjust for PO4. Assume P is equivalent to N.
+
+man_past_adj <- man_past %>%
+  mutate(leaches_N_adj = (leaches_N * 0.42 + leaches_N/2.29 * 3.07),
+         total_N_adj = (total_N * 0.42 + total_N * 3.07))
+
+sum(man_past_adj$leaches_N_adj) /1000  # kg --> tonnes
+sum(man_past_adj$total_N_adj) /1000  # kg --> tonnes
+
+```
+
+
+Manure left on soil:
+```{r}
+
+man_soil <- read_csv(here("_analysis/checking_data/data/FAOSTAT_data_12-14-2020_manure_soils.csv")) %>%
+  filter(Area != "China") %>%
+  filter(Unit != "Head") %>%
+  mutate(Element = ifelse(`Element Code` == 72381, "total_N", Element)) %>%
+    mutate(Element = ifelse(`Element Code` == 723812, "leaches_N", Element)) %>%
+    mutate(Element = ifelse(`Element Code` == 723811, "vol_N", Element)) %>%
+  group_by(Area, Element) %>%
+  summarize(Value = sum(Value, na.rm=TRUE)) %>%
+  select(Area, Element, Value) %>%
+  spread(Element, Value)
+sum(man_soil$leaches_N, na.rm=TRUE)/1000
+sum(man_soil$total_N, na.rm=TRUE)/1000
+## going to adjust for PO4. Assume P is equivalent to N.
+
+man_soil_adj <- man_soil %>%
+  mutate(leaches_N_adj = (leaches_N * 0.42 + leaches_Nz),
+         total_N_adj = (total_N * 0.42 + total_N/2.29 * 3.07))
+
+sum(man_soil_adj$leaches_N_adj) /1000  # kg --> tonnes
+sum(man_soil_adj$total_N_adj) /1000  # kg --> tonnes
+
+```
+
+
+```{r}
+
+13665669+43236578+10378512+2478743
+#125,652,644 = fao estimates for manure and crops (I added in our salmon aquaculture estimate)
+# modeled value: 1,263,574,842, it seems we are off by an order of magnitude
+
+```
+
+# check crops
+```{r}
+raster_check <- read_csv(here("_analysis/checking_data/data/raster_check.csv"))
+crop_files <- grep("nutrient", raster_check$file, value=TRUE)
+crop_files <- grep("crop", crop_files, value=TRUE)
+
+crop_nutrient <- filter(raster_check, file %in% crop_files)
+sum(crop_nutrient$sum_cells)
+
+## these look good
+```
+
+
+# check livestock
+```{r}
+raster_check <- read_csv(here("_analysis/checking_data/data/raster_check.csv"))
+ls_files <- grep("nutrient", raster_check$file, value=TRUE)
+ls_files <- grep("meat|milk|egg", ls_files, value=TRUE)
+ls_files <- grep("land", ls_files, value=TRUE)
+
+ls_nutrient <- filter(raster_check, file %in% ls_files)
+sum(ls_nutrient$sum_cells)
+
+# 1, 253,580,672 (our value) vs. 56,902,247 (fao value)
+```
+
+## check meat cows
+```{r}
+
+raster_check <- read_csv(here("_analysis/checking_data/data/raster_check.csv"))
+cow_files <- grep("nutrient", raster_check$file, value=TRUE)
+cow_files <- grep("meat", cow_files, value=TRUE)
+cow_files <- grep("cow", cow_files, value=TRUE)
+
+cows <- filter(raster_check, file %in% cow_files) %>%
+  select(file, sum_cells)
+sum(cows$sum_cells)
+
+## our data PO4eq: mixed and feedlot: 381,443,752
+381443752*.3 # maybe not taking into account leaching? possible?
+## if we took 30%: 114,433,126
+
+## FAO total N: soil 41,684,233
+41684233*0.42 + 41684233*3.07 # convert to PO4eq
+## FAO total PO4eq = 145,477,973
+
+## FAO proportion of total that leaches:
+125052701.5739/416842338.5796  #30%
+
+## cows x excretion / kg per tonne x
+84256100*61.4/1000 * 0.42 + 84256100*61.4/1000/2.29 * 3.07
+########################
+## For left on pasture
+
+## grassfed: 145,954,658
+145954658*0.3
+
+## FAO total N: pasture: 906,743
+## convert to PO4eq: 3,164,534
+906743*0.42 + 906743/2.29*3.07
+
+#FAO proportion of total that leaches:
+906743343.2625/3022477810.875   #30%
+
+316453426+145477973
+
+
+84256100*61.4/1000
+
+125052+906743
+1031795*0.42 + 1031795/2.29 * 3.07
+```
+
+
+

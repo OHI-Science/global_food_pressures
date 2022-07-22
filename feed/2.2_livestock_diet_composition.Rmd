@@ -1,0 +1,140 @@
+---
+title: "Livestock diet compositon"
+author: "Juliette"
+date: "10/21/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Here we use GLEAM feed percentages of all livestock's feed.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+source(here("_workflow/common.R"))
+
+'%notin%' <- Negate('%in%')
+
+feed_raw <- read_csv(here("feed/data/feed_GLEAMi.csv"))
+
+tmp<- feed_raw %>% group_by(feedgroup, orientation, production_system, species, iso3c) %>%
+  summarize(total = sum(str_value, na.rm=TRUE))
+low <- filter(tmp, total<98 & total > 0) 
+
+un_rgns <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>%
+  filter(!is.na(iso3c)) %>%
+  filter(iso3c %in% food_rgns$iso3c)
+
+
+```
+
+
+
+Some wrangling
+
+```{r}
+
+diet_compostion <- feed_raw %>%
+  filter(!is.na(iso3c)) %>%
+  filter(!is.na(str_value)) %>%
+  dplyr::select(iso3c, species, feedgroup,orientation, production_system, raw_name = name, str_value) 
+
+tmp <- diet_compostion %>%
+  group_by(species, feedgroup,orientation, production_system, raw_name) %>%
+  summarize(global_average = mean(str_value)) %>%
+  filter(global_average > 0) %>%
+  arrange(-global_average)
+tmp
+
+```
+
+Remove regions with no GLEAM feed data:
+
+```{r}
+# some regions with no data...but still in there and throwing things off.  These will be removed here and gapfilled down below.
+diet_rgn_remove <- diet_compostion %>%
+  group_by(iso3c, species, feedgroup, orientation, production_system) %>%
+  summarize(total_percent = sum(str_value),
+            N = n()) %>%
+  filter(total_percent < 99) %>%                        
+  dplyr::select(iso3c, species, feedgroup, orientation, production_system) %>%
+  mutate(remove = "yes") %>% 
+  ungroup()
+
+diet <- diet_compostion %>%
+  left_join(diet_rgn_remove, by = c("iso3c", "species", "feedgroup", "orientation", "production_system")) %>% 
+  filter(is.na(remove)) %>% 
+  select(-remove)
+
+```
+
+Gapfill missing diet data with average from UN geopolitical region.
+
+```{r}
+
+## now some gapfilling with missing regions
+missing_diet <- setdiff(un_rgns$iso3c, diet$iso3c) 
+
+missing_diet_subs_rgns <- filter(un_rgns, iso3c %in% missing_diet) %>%
+  dplyr::select(iso3c, Sub_region_Name)
+
+## summarize by georegion...these values will be used for missing data
+diet_gf_data <- left_join(diet, un_rgns, by="iso3c") %>%
+  group_by(raw_name, species, feedgroup, orientation, production_system, `Sub_region_Name`) %>%
+  summarize(str_value = mean(str_value, na.rm=TRUE)) %>%
+  dplyr::select(Sub_region_Name, species, feedgroup, orientation, production_system, raw_name, str_value) %>%
+  arrange(Sub_region_Name) 
+
+diet_gf_rgns <- merge(diet_gf_data, missing_diet_subs_rgns) %>%
+  dplyr::select(iso3c, species, feedgroup, orientation, production_system, raw_name, str_value) %>%
+  mutate(gapfill = "yes") %>%
+  arrange(iso3c)
+
+## add the gapfill regions to data:
+diet_gf <- diet %>%
+  mutate(gapfill = "no") %>%
+  rbind(diet_gf_rgns)
+# 
+# check_perc <- diet_gf %>%
+#   group_by(iso3c, species, feedgroup, orientation, production_system) %>%
+#   summarize(total_percent = sum(str_value),
+#             N = n())
+
+```
+
+
+Do the math for the proportion of feedgroups in ruminants
+
+```{r}
+
+rum_prop <- read_csv(here("feed/data/ruminant_feedgroup_prop.csv"))%>% 
+  rename(species = Species)
+
+diet_gf_rum_fix <- diet_gf %>% 
+  select(-gapfill) %>% 
+  left_join(rum_prop, by = c("species", "feedgroup")) %>% 
+  mutate(mean_prop = ifelse(is.na(mean_prop), 1, mean_prop)) %>%
+  mutate(str_value = ifelse(!is.na(mean_prop), str_value*mean_prop, str_value)) %>% 
+  group_by(iso3c, species, orientation, production_system, raw_name) %>% 
+  dplyr::summarise(percent = sum(str_value)/sum(mean_prop)) %>% 
+  ungroup()
+
+check <- diet_gf_rum_fix %>% 
+  group_by(iso3c, species, orientation, production_system) %>% 
+  dplyr::summarise(percent_check = sum(percent)) %>% 
+  ungroup() 
+
+summary(check)
+```
+
+```{r}
+
+livestock_diet_composition <- diet_gf_rum_fix %>% 
+  select(iso3c, species, orientation, production_system, raw_name, percent) %>%
+  mutate(production_system= ifelse(production_system == "Broiler", "Broilers", production_system))
+write_csv(livestock_diet_composition, here("feed/data/livestock_diet_composition.csv"))
+
+```
+

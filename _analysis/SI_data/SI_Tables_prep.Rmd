@@ -1,0 +1,136 @@
+---
+title: "SI Tables prep"
+output: html_document
+---
+
+This script contains code and data to fill out the relevant supplemental results tables. 
+
+```{r setup, include=FALSE, eval = FALSE, eval = FALSE}
+knitr::opts_chunk$set(eval = TRUE)
+
+library(here)
+library(tidyverse)
+library(kableExtra)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+### save the gall peters projection
+gall_peters <- "+proj=cea +lon_0=0 +x_0=0 +y_0=0 +lat_ts=45 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+
+rgn_raw <- read_csv(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw_df_summary/rgn_raw_summary.csv"))
+
+```
+
+#### Supplementary Table XX: Total global pressures
+Total global pressures measured across all included food types, used to rescale raster pressure data.
+
+```{r total pressures, echo=FALSE, warning=FALSE, error=FALSE, message=FALSE, asis=TRUE}
+
+units_df <- data.frame(pressure = c("ghg", "nutrient", "disturbance", "water"),
+                       units = c("tonnes CO2eq", "tonnes N and P", "km2eq", "m3"))
+
+pressure <- read.csv(here("_analysis/rescale_values.csv")) %>%
+  left_join(units_df) %>%
+  select(pressure, "global total" = global_total, units)
+
+kable(pressure) %>%
+ kableExtra::kable_styling("striped", full_width = FALSE, position = "left")
+#kable_styling(x_html, "striped", position = "left", font_size = 7)
+
+## save this 
+write.csv(pressure, here::here("_analysis/SI_data/output/pressure_rescale_values.csv"), row.names = FALSE)
+```
+ 
+ 
+## Supplemental Table XX
+
+
+
+
+
+```{r, eval = FALSE}
+rescale <- read_csv("../rescale_values.csv")
+
+### do overall, including feed and fodder
+percent_pressure_rescale <- rgn_raw %>%
+  left_join(rescale, by = "pressure") %>%
+  mutate(global_pressure_prop = sum/global_total) %>%
+  group_by(origin) %>%
+  summarise(cum_pressure_prop_rescaled = sum(global_pressure_prop),
+            cum_pressure = sum(sum)) %>%
+  ungroup()
+
+percent_pressure_origin <- percent_pressure_rescale %>%
+  mutate(total_cum_prop = sum(cum_pressure_prop_rescaled)) %>%
+  mutate(cum_pressure_prop_final = cum_pressure_prop_rescaled/total_cum_prop) %>%
+  mutate(percent_final = round(cum_pressure_prop_final*100,2)) %>%
+  dplyr::select(origin, cum_pressure_prop_final, percent_final)
+
+
+write.csv(percent_pressure_origin, "output/percent_cum_pressure_origin.csv", row.names = FALSE)
+
+
+```
+ 
+ 
+## Supplemental table XX: Distribution of cumulative pressures by country: marine vs. land 
+
+
+  
+```{r, eval = FALSE}
+
+rescale <- read_csv("../rescale_values.csv")
+
+
+percent_pressure_ocean <- rgn_raw %>%
+  left_join(rescale, by = "pressure") %>%
+  mutate(global_pressure_prop = sum/global_total) %>%
+  group_by(iso3c, country, origin) %>%
+  summarise(cum_pressure_prop_rescaled = sum(global_pressure_prop),
+            cum_pressure = sum(sum)) %>%
+  ungroup()
+
+percent_pressure_origin_countries <- percent_pressure_ocean %>%
+  select(-cum_pressure) %>%
+  group_by(iso3c, country) %>%
+  mutate(total_cum_prop = sum(cum_pressure_prop_rescaled)) %>%
+  ungroup() %>%
+  mutate(cum_pressure_prop_final = cum_pressure_prop_rescaled/total_cum_prop) %>%
+  mutate(cum_pressure_percent_final = round(cum_pressure_prop_final*100,2)) %>%
+  arrange(iso3c) %>%
+  dplyr::select(iso3c, country, origin, cum_pressure_prop_final, cum_pressure_percent_final)
+
+
+write.csv(percent_pressure_origin_countries, "output/percent_cum_pressure_country_origin_fw.csv", row.names = FALSE)
+
+
+``` 
+
+## Supplemental table XX: Distribution of cumulative pressures by product: marine vs. land 
+
+Data S5
+
+
+```{r}
+rescale <- read_csv("../rescale_values.csv")
+
+### rescale pressures 
+percent_pressure_rescale <- rgn_raw %>%
+  left_join(rescale, by = "pressure") %>%
+  mutate(global_pressure_prop = sum/global_total) %>%
+  group_by(organism, origin) %>%
+  summarise(cum_pressure = sum(sum)) %>%
+  ungroup()
+
+### group by food group
+percent_pressure_organisms_origin <- percent_pressure_rescale %>%
+  group_by(organism) %>%
+  mutate(total_organism_pressure = sum(cum_pressure)) %>%
+  ungroup() %>%
+   mutate(proportion_final = cum_pressure/total_organism_pressure) %>%
+  filter(organism %in% c("chickens", "pigs", "crustaceans", "marine-fish-general", "bivalve", "salmon", "shrimp", "tuna"))
+  
+
+write.csv(percent_pressure_organisms_origin, "output/percent_cum_pressure_product_origin.csv")
+```

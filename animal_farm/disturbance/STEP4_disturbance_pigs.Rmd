@@ -1,0 +1,228 @@
+---
+title: "Calculate disturbance layers for pigs (industrial, intermediate, backyard)"
+author: "Juliette"
+date: "10/12/2020"
+output: html_document
+---
+
+## Setup
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+
+conversion_values <- read_csv(here("animal_farm/disturbance/data/livestock_conversion_values.csv")) 
+extra_barn_space <- as.numeric(conversion_values$value[conversion_values$animal == "extra barn space"])
+extra_farm_space <- as.numeric(conversion_values$value[conversion_values$animal == "extra farm space"])
+
+backyard_raster_space <- read_csv(here("animal_farm/disturbance/data/livestock_area_head_table.csv")) %>% 
+  filter(animal == "pigs" & system == "backyard") %>% 
+  right_join(food_rgns_xy, by = "iso3c") %>% 
+  select(x,y, meters_sq_animal) %>% 
+  rasterFromXYZ(crs = food_crs) 
+#plot(backyard_space)
+
+```
+
+For pigs in the EU their LSU matches the USA for the handful of countries that I checked (france, hungary, slovenia, slovakia, uk, czetch republic, germany,norway) no match - cyprus. So we will use the across country conversions.
+
+```{r}
+country_conversions <- read_csv(here("animal_farm/disturbance/data/across_country_conversions.csv")) %>% 
+  filter(animal == "pigs") %>% 
+  right_join(food_rgns_xy, by = "iso3c") %>% 
+  select(x,y, adjust_multiplier) %>% 
+  rasterFromXYZ(crs = food_crs)
+
+plot(country_conversions)
+```
+
+
+
+
+Industrial pigs
+```{r}
+industrial_df <- read_csv(file.path(prep, "animal_farm/farm/pigs_industrial_meat_location_df.csv"), col_types = "ddcccnnnnncc") 
+
+industrial_raster <- industrial_df %>% 
+  select(x,y, current_count) %>% 
+  rasterFromXYZ(crs = food_crs)
+
+## industrial market pigs
+prop_market <- as.numeric(conversion_values$value[conversion_values$animal == "market pigs" & conversion_values$units == "proportion"]) ## prop market pigs
+space_industrial_market <- as.numeric(conversion_values$value[conversion_values$animal == "market pigs" & conversion_values$system == "industrial"]) ## m2/head
+
+industrial_market <- industrial_raster*country_conversions*prop_market*space_industrial_market*0.000001*extra_barn_space*extra_farm_space* country_conversions
+
+## industrial breeder pigs
+prop_breeder <- as.numeric(conversion_values$value[conversion_values$animal == "breeder pigs" & conversion_values$units == "proportion"]) ## prop market pigs
+space_industrial_breeder <- as.numeric(conversion_values$value[conversion_values$animal == "breeder pigs" & conversion_values$system == "industrial and intermediate"]) ## m2/head
+
+industrial_breeder <- industrial_raster*country_conversions*prop_breeder*space_industrial_breeder*0.000001*extra_barn_space*extra_farm_space
+
+## add up the market and breeder industrial areas and save the total area raster
+
+industrial_area <- industrial_market+industrial_breeder
+plot(industrial_area)
+plot(log(1+industrial_area))
+
+writeRaster(industrial_area, file.path(prep, "animal_farm/disturbance/total_area_rasters/pigs_industrial_meat_disturbance_area.tif"), format = "GTiff", overwrite = TRUE)
+
+##create disturbance layer
+
+names(industrial_area) <- "km2_eq"
+
+writeRaster(industrial_area, file.path(layers, "land_pigs_industrial_meat_disturbance.tif"), format = "GTiff", overwrite = TRUE)
+
+
+```
+
+
+Intermediate pigs
+```{r}
+intermediate_df <- read_csv(file.path(prep, "animal_farm/farm/pigs_intermediate_meat_location_df.csv"), col_types = "ddcccnnnnncc") 
+
+intermediate_raster <- intermediate_df %>% 
+  select(x,y, current_count) %>% 
+  rasterFromXYZ(crs = food_crs)
+
+## intermediate market pigs
+prop_market <- as.numeric(conversion_values$value[conversion_values$animal == "market pigs" & conversion_values$units == "proportion"]) ## prop market pigs
+space_intermediate_market <- as.numeric(conversion_values$value[conversion_values$animal == "market pigs" & conversion_values$system == "intermediate"]) ## m2/head
+
+intermediate_market <- intermediate_raster*country_conversions*prop_market*space_intermediate_market*0.000001*extra_barn_space*extra_farm_space
+
+## intermediate breeder pigs
+prop_breeder <- as.numeric(conversion_values$value[conversion_values$animal == "breeder pigs" & conversion_values$units == "proportion"]) ## prop market pigs
+space_intermediate_breeder <- as.numeric(conversion_values$value[conversion_values$animal == "breeder pigs" & conversion_values$system == "industrial and intermediate"]) ## m2/head
+
+intermediate_breeder <- intermediate_raster*country_conversions*prop_breeder*space_intermediate_breeder*0.000001*extra_barn_space*extra_farm_space
+
+## add up the market and breeder intermediate areas and save the total area raster
+
+intermediate_area <- intermediate_market+intermediate_breeder
+plot(intermediate_area)
+plot(log(1+intermediate_area))
+
+writeRaster(intermediate_area, file.path(prep, "animal_farm/disturbance/total_area_rasters/pigs_intermediate_meat_disturbance_area.tif"), format = "GTiff", overwrite = TRUE)
+
+##create disturbance layer
+
+names(intermediate_area) <- "km2_eq"
+
+writeRaster(intermediate_area, file.path(layers, "land_pigs_intermediate_meat_disturbance.tif"), format = "GTiff", overwrite = TRUE)
+
+```
+
+
+backyard pigs
+```{r}
+backyard_df <- read_csv(file.path(prep, "animal_farm/farm/pigs_backyard_meat_location_df.csv"), col_types = "ddcccnnnnncc") 
+
+backyard_raster <- backyard_df %>% 
+  select(x,y, current_count) %>% 
+  rasterFromXYZ(crs = food_crs)
+
+backyard_area <- backyard_raster*backyard_raster_space*0.000001
+
+plot(backyard_area)
+plot(log(1+backyard_area))
+
+writeRaster(backyard_area, file.path(prep, "animal_farm/disturbance/total_area_rasters/pigs_backyard_meat_disturbance_area.tif"), format = "GTiff", overwrite = TRUE)
+
+##create disturbance layer
+
+names(backyard_area) <- "km2_eq"
+
+writeRaster(backyard_area, file.path(layers, "land_pigs_backyard_meat_disturbance.tif"), format = "GTiff", overwrite = TRUE)
+
+```
+
+## Do a data check
+Do zonal stats for the number of chickens in each system, the space used, and calculate a space/chicken (to compare between the three. layers and broilers should be similar, backyard should be less)
+
+```{r}
+
+## industrial meat
+ind_counts <- zonal(industrial_raster, food_rgns_tif, fun="sum", progress="text", na.rm=TRUE) %>% 
+  data.frame() %>% 
+  rename(ID_0 = zone,
+         indu_counts = sum) %>%
+  left_join(food_rgns, by="ID_0") %>% 
+  select(-ID_0)
+
+ind_area <- zonal(industrial_area, food_rgns_tif, fun="sum", progress="text", na.rm=TRUE) %>% 
+  data.frame() %>% 
+  rename(ID_0 = zone,
+         indu_area = sum) %>%
+  left_join(food_rgns, by="ID_0") %>% 
+  select(-ID_0)
+
+industrial_check <- left_join(ind_counts, ind_area, by = c("iso3c", "Country")) %>% 
+  mutate(km2_per_industrial = indu_area/indu_counts)
+
+## intermediate meat
+inter_counts <- zonal(intermediate_raster, food_rgns_tif, fun="sum", progress="text", na.rm=TRUE) %>% 
+  data.frame() %>% 
+  rename(ID_0 = zone,
+         inter_counts = sum) %>%
+  left_join(food_rgns, by="ID_0") %>% 
+  select(-ID_0)
+
+inter_area <- zonal(intermediate_area, food_rgns_tif, fun="sum", progress="text", na.rm=TRUE) %>% 
+  data.frame() %>% 
+  rename(ID_0 = zone,
+         inter_area = sum) %>%
+  left_join(food_rgns, by="ID_0") %>% 
+  select(-ID_0)
+
+intermediate_check <- left_join(inter_counts, inter_area, by = c("iso3c", "Country")) %>% 
+  mutate(km2_per_intermediate = inter_area/inter_counts)
+
+## backyard
+back_counts <- zonal(backyard_raster, food_rgns_tif, fun="sum", progress="text", na.rm=TRUE) %>% 
+  data.frame() %>% 
+  rename(ID_0 = zone,
+         back_counts = sum) %>%
+  left_join(food_rgns, by="ID_0") %>% 
+  select(-ID_0)
+
+back_area <- zonal(backyard_area, food_rgns_tif, fun="sum", progress="text", na.rm=TRUE) %>% 
+  data.frame() %>% 
+  rename(ID_0 = zone,
+         back_area = sum) %>%
+  left_join(food_rgns, by="ID_0") %>% 
+  select(-ID_0)
+
+backyard_check <- left_join(back_counts, back_area, by = c("iso3c", "Country")) %>% 
+  mutate(km2_per_backyard = back_area/back_counts)
+
+```
+
+```{r}
+library(plotly)
+
+all_check <- left_join(industrial_check, intermediate_check) %>% 
+  left_join(backyard_check)
+
+
+check_graph <- ggplot(all_check) +
+  geom_point(aes(x = km2_per_industrial, y = Country), 
+             color = "brown") + 
+  
+  geom_point(aes(x = km2_per_intermediate, y = Country), 
+             color = "blue") +
+  
+  geom_point(aes(x = km2_per_backyard, y = Country),
+             color = "darkgreen") +
+  labs(x = "km2_per_pig",
+       title = "Area per pig",
+       subtitle = "industrial (brown), intermediate (blue), and backyard (green)")
+          
+
+ggsave("plots/area_per_pig.jpg",width = 15, height = 30, dpi=300) 
+
+```

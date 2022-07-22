@@ -1,0 +1,114 @@
+---
+title: "step7_rest_outputs_check"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+  source(here("_spatial/template_raster.R"))
+  source(here("_workflow/common.R"))
+  source(here("_workflow/common_spatial.R"))
+```
+
+
+Nutrient
+```{r}
+
+cats_sum_nutrient <- 
+  list.files(file.path(layers),
+           pattern = "(tnut|othr|spis).*water",
+           full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, fun = sum) %>% 
+  cellStats(., stat = "sum")
+
+rest_sum_nutrient <- 
+  list.files(file.path(layers),
+             pattern = "land_rest_crop_produce_water",
+             full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, fun = sum) %>% 
+  cellStats(., stat = "sum")
+
+cats_sum_nutrient / rest_sum_nutrient
+```
+
+Water
+
+```{r}
+cats_sum_water <- 
+  list.files(file.path(layers),
+           pattern = "(tnut|othr|spis).*nutrient",
+           full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, fun = sum) %>% 
+  cellStats(., stat = "sum")
+
+rest_sum_water <- 
+  list.files(file.path(layers),
+             pattern = "land_rest_crop_produce_nutrient",
+             full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, fun = sum) %>% 
+  cellStats(., stat = "sum")
+
+cats_sum_water / rest_sum_water
+```
+
+GHG
+
+```{r}
+cats_sum_ghg <- 
+  list.files(file.path(layers),
+           pattern = "(tnut|othr|spis).*ghg",
+           full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, fun = sum) %>% 
+  cellStats(., stat = "sum")
+
+rest_sum_ghg <- 
+  list.files(file.path(layers),
+             pattern = "land_rest_crop_produce_ghg",
+             full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, fun = sum) %>% 
+  cellStats(., stat = "sum")
+
+cats_sum_ghg / rest_sum_ghg
+```
+
+Total
+```{r}
+cats_sum_total <- 
+  list.files(file.path(layers),
+           pattern = "(tnut|othr|spis)",
+           full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, fun = sum) %>% 
+  cellStats(., stat = "sum")
+
+rest_sum_total <- 
+  list.files(file.path(layers),
+             pattern = "land_rest_crop_produce_",
+             full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, fun = sum) %>% 
+  cellStats(., stat = "sum")
+
+cats_sum_total / rest_sum_total 
+```
+
+-------------------------------------------------------------------------------
+
+# Analysis for MAR project
+
+```{r}
+# pick out belize, honduras, guatamala, mexico.
+MAR_rest_prop <- 
+  vroom::vroom(here("crop/farm/data/prod_prop.csv")) %>% 
+  filter(split_rest_names %in% c("tnut", "spis"),
+         Country %in% c("Guatemala", "Belize",
+                        "Honduras", "Mexico"))
+```
+

@@ -1,0 +1,43 @@
+SPAM_super,inclusion,SPAM_full_name,FAO_item_code,SPAM_short_name
+bana,included,banana,486,bana
+barl,included,barley,44,barl
+cass,included,cassava,125,cass
+cnut,included,coconut,249,cnut
+coco,included,cocoa,661,coco
+fodd,included,"NA","636:649, 651, 655, and 'Forage_&_Silage_crops' (no FAO code)","NA"
+maiz,included,maize,56,maiz
+ocer,included,other cereals,"68, 71, 75, 89, 92, 94, 97, 101, 103, 108",ocer
+ofib,omitted from study,other fibre crops,773:821,ofib
+oilp,included,oilpalm,254,oilp
+orts,included,other roots,"135, 136, 149",orts
+plnt,included,plantain,489,plnt
+pota,included,potato,116,pota
+rice,included,rice,27,rice
+sorg,included,sorghum,83,sorg
+soyb,included,soybean,236,soyb
+sugb,included,sugarbeet,157,sugb
+sugc,included,sugarcane,156,sugc
+swpo,included,sweet potato,122,swpo
+teas,omitted from study,tea,667,teas
+toba,omitted from study,tobacco,826,toba
+vege,included,vegetables,358:463,vege
+whea,included,wheat,15,whea
+xcof,omitted from study,arabica coffee,656,acof
+xcof,omitted from study,robusta coffee,656,rcof
+xfru,included,temperate fruit,"515:560, 592, 619",temf
+xfru,included,tropical fruit,"490:512, 567:591, 600:603",trof
+xmil,included,pearl millet,79,pmil
+xmil,included,small millet,79,smil
+xoil,included,cotton,328,cott
+xoil,included,groundnut,242,grou
+xoil,included,other oil crops,"260:310, 312:339",ooil
+xoil,included,rapeseed,"270, 292",rape
+xoil,included,sesameseed,289,sesa
+xoil,included,sunflower,267,sunf
+xpul,included,bean,176,bean
+xpul,included,chickpea,191,chic
+xpul,included,cowpea,195,cowp
+xpul,included,lentil,201,lent
+xpul,included,other pulses,"181, 187, 203, 205, 210, 211",opul
+xpul,included,pigeonpea,197,pige
+yams,included,yams,137,yams

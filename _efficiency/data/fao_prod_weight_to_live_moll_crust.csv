@@ -1,0 +1,70 @@
+﻿type,presentation,indicative_cf,Descript,species_class_final
+shrimps and prawns,tails (shell on),1.63,shrimp,Demersal
+shrimps and prawns,tails (peeled),2.8,shrimp,Demersal
+shrimps and prawns,meat,2.8,shrimp,Demersal
+shrimps and prawns,tails (shell on),1.63,shrimp,Benthic
+shrimps and prawns,tails (peeled),2.8,shrimp,Benthic
+shrimps and prawns,meat,2.8,shrimp,Benthic
+lobsters,tails (shell on),2.63,lobsters crab,Benthic
+lobsters,meat,3.86,lobsters crab,Benthic
+crabs,meat,6,lobsters crab,Benthic
+oysters,meat,10,demersal mollusc,Benthic
+oysters,meat (dried),10,demersal mollusc,Benthic
+clams,meat,6,demersal mollusc,Benthic
+clams,meat (dried),10.6,demersal mollusc,Benthic
+mussles,meat,6,demersal mollusc,Benthic
+scallop,meat,9.1,demersal mollusc,Benthic
+scallop,meat (dried),10.6,demersal mollusc,Benthic
+abalone,meat,2.44,demersal mollusc,Benthic
+squid,whole,1,cephalopods,Reef-associated
+squid,"raw, gutted",1.45,cephalopods,Reef-associated
+squid,"raw, gutted, skin off",2.34,cephalopods,Reef-associated
+squid,"raw, gutted, tentacles off",2.34,cephalopods,Reef-associated
+squid,edible meat,,cephalopods,Reef-associated
+squid,"dried, whole",1.55,cephalopods,Reef-associated
+squid,dried gutted,4,cephalopods,Reef-associated
+squid,whole,1,cephalopods,Medium pelagic
+squid,"raw, gutted",1.45,cephalopods,Medium pelagic
+squid,"raw, gutted, skin off",2.34,cephalopods,Medium pelagic
+squid,"raw, gutted, tentacles off",2.34,cephalopods,Medium pelagic
+squid,edible meat,,cephalopods,Medium pelagic
+squid,"dried, whole",1.55,cephalopods,Medium pelagic
+squid,dried gutted,4,cephalopods,Medium pelagic
+squid,whole,1,cephalopods,Small pelagic
+squid,"raw, gutted",1.45,cephalopods,Small pelagic
+squid,"raw, gutted, skin off",2.34,cephalopods,Small pelagic
+squid,"raw, gutted, tentacles off",2.34,cephalopods,Small pelagic
+squid,edible meat,,cephalopods,Small pelagic
+squid,"dried, whole",1.55,cephalopods,Small pelagic
+squid,dried gutted,4,cephalopods,Small pelagic
+squid,whole,1,cephalopods,Large pelagic
+squid,"raw, gutted",1.45,cephalopods,Large pelagic
+squid,"raw, gutted, skin off",2.34,cephalopods,Large pelagic
+squid,"raw, gutted, tentacles off",2.34,cephalopods,Large pelagic
+squid,edible meat,,cephalopods,Large pelagic
+squid,"dried, whole",1.55,cephalopods,Large pelagic
+squid,dried gutted,4,cephalopods,Large pelagic
+cuttlefish,frozen,1,cephalopods,Reef-associated
+cuttlefish,"frozen, gutted",1.6,cephalopods,Reef-associated
+cuttlefish,dried,1.6,cephalopods,Reef-associated
+cuttlefish,frozen,1,cephalopods,Medium pelagic
+cuttlefish,"frozen, gutted",1.6,cephalopods,Medium pelagic
+cuttlefish,dried,1.6,cephalopods,Medium pelagic
+cuttlefish,frozen,1,cephalopods,Small pelagic
+cuttlefish,"frozen, gutted",1.6,cephalopods,Small pelagic
+cuttlefish,dried,1.6,cephalopods,Small pelagic
+cuttlefish,frozen,1,cephalopods,Large pelagic
+cuttlefish,"frozen, gutted",1.6,cephalopods,Large pelagic
+cuttlefish,dried,1.6,cephalopods,Large pelagic
+octopus,frozen,1.3,cephalopods,Reef-associated
+octopus,"frozen, gutted",,cephalopods,Reef-associated
+octopus,dried,4,cephalopods,Reef-associated
+octopus,frozen,1.3,cephalopods,Medium pelagic
+octopus,"frozen, gutted",,cephalopods,Medium pelagic
+octopus,dried,4,cephalopods,Medium pelagic
+octopus,frozen,1.3,cephalopods,Small pelagic
+octopus,"frozen, gutted",,cephalopods,Small pelagic
+octopus,dried,4,cephalopods,Small pelagic
+octopus,frozen,1.3,cephalopods,Large pelagic
+octopus,"frozen, gutted",,cephalopods,Large pelagic
+octopus,dried,4,cephalopods,Large pelagic

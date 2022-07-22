@@ -1,0 +1,636 @@
+iso3c,Country,system,feed_item,tonnes
+AFG,Afghanistan,pigs_intermediate_meat,forage fish,0.18092126436293357
+AFG,Afghanistan,pigs_backyard_meat,forage fish,0.0017150777583986052
+AFG,Afghanistan,chickens_industrial_meat,forage fish,4.644839447651324
+AFG,Afghanistan,chickens_industrial_eggs,forage fish,102.1633684453589
+CYP,Cyprus,pigs_intermediate_meat,forage fish,8.077043119793794
+CYP,Cyprus,pigs_industrial_meat,forage fish,2508.604728380141
+CYP,Cyprus,pigs_backyard_meat,forage fish,0.08622122191731244
+CYP,Cyprus,chickens_industrial_meat,forage fish,96.02475463260465
+CYP,Cyprus,marine-fish-general_aquaculture_meat,forage fish,3532.7105273853617
+ALA,Åland,pigs_intermediate_meat,forage fish,0.033875108579262535
+ALA,Åland,pigs_backyard_meat,forage fish,5.194357792103231e-5
+ALA,Åland,chickens_industrial_eggs,forage fish,0.005394596031063535
+ALB,Albania,marine-fish-general_aquaculture_meat,forage fish,1667.5296117048777
+DZA,Algeria,pigs_intermediate_meat,forage fish,1.2830270882486317
+DZA,Algeria,pigs_industrial_meat,forage fish,9.981028392877395
+DZA,Algeria,pigs_backyard_meat,forage fish,0.06002087059161947
+ASM,American Samoa,pigs_intermediate_meat,forage fish,7.608537203840426
+ASM,American Samoa,pigs_industrial_meat,forage fish,28.420532414885
+ASM,American Samoa,chickens_industrial_meat,forage fish,3.5156433916198346
+ASM,American Samoa,chickens_industrial_eggs,forage fish,1.0387571351070821
+AGO,Angola,pigs_intermediate_meat,forage fish,1442.1756581666136
+AGO,Angola,pigs_industrial_meat,forage fish,5462.693392878085
+AGO,Angola,pigs_backyard_meat,forage fish,59.36933940068695
+ATG,Antigua and Barbuda,pigs_industrial_meat,forage fish,36.387536369299575
+ATG,Antigua and Barbuda,pigs_backyard_meat,forage fish,0.022780600641021997
+ARG,Argentina,pigs_intermediate_meat,forage fish,0.6139812172826146
+ARG,Argentina,pigs_industrial_meat,forage fish,48935.887765035484
+ARG,Argentina,pigs_backyard_meat,forage fish,45.94528609924657
+ARM,Armenia,pigs_intermediate_meat,forage fish,95.40994905649349
+ARM,Armenia,pigs_industrial_meat,forage fish,530.6904294471758
+ARM,Armenia,pigs_backyard_meat,forage fish,3.94729178104908
+ARM,Armenia,chickens_industrial_meat,forage fish,41.19375290591193
+AUS,Australia,chickens_industrial_meat,forage fish,8832.242509449503
+AUS,Australia,chickens_industrial_eggs,forage fish,1942.2344356999806
+AUS,Australia,marine-fish-general_aquaculture_meat,forage fish,3121.3554946720587
+AUS,Australia,salmon_aquaculture_meat,forage fish,32237.10574654637
+AUS,Australia,salmon_aquaculture_meat,forage fish,21491.403831030915
+AUS,Australia,shrimp_aquaculture_meat,forage fish,1746.4172311729242
+AUS,Australia,tuna_aquaculture_meat,forage fish,27220.63164777399
+AUT,Austria,pigs_intermediate_meat,forage fish,75.38966717582896
+AUT,Austria,pigs_industrial_meat,forage fish,27384.230116338174
+AUT,Austria,pigs_backyard_meat,forage fish,3.733957279792725
+AZE,Azerbaijan,pigs_intermediate_meat,forage fish,1.3941073124003174
+AZE,Azerbaijan,pigs_industrial_meat,forage fish,21.524421711321995
+AZE,Azerbaijan,pigs_backyard_meat,forage fish,0.07366014965385347
+AZE,Azerbaijan,chickens_industrial_meat,forage fish,527.6630503665166
+BHS,Bahamas,pigs_industrial_meat,forage fish,49.54736052869159
+BHS,Bahamas,pigs_backyard_meat,forage fish,0.011673488707880571
+BHR,Bahrain,chickens_industrial_meat,forage fish,11.186871929977258
+BGD,Bangladesh,pigs_intermediate_meat,forage fish,5.79461747137296
+BGD,Bangladesh,pigs_backyard_meat,forage fish,0.4602059589755735
+BGD,Bangladesh,chickens_industrial_meat,forage fish,606.755193669272
+BGD,Bangladesh,chickens_industrial_eggs,forage fish,9035.193810208368
+BGD,Bangladesh,crustaceans_aquaculture_meat,forage fish,8926.702504976798
+BGD,Bangladesh,marine-fish-general_aquaculture_meat,forage fish,56946.13623972156
+BGD,Bangladesh,shrimp_aquaculture_meat,forage fish,33470.30064161575
+BRB,Barbados,pigs_industrial_meat,forage fish,145.7637756523478
+BRB,Barbados,pigs_backyard_meat,forage fish,0.06668537960135482
+BLR,Belarus,chickens_industrial_eggs,forage fish,2681.0396143957264
+BEL,Belgium,pigs_intermediate_meat,forage fish,59.844266666870944
+BEL,Belgium,pigs_industrial_meat,forage fish,41754.768078606525
+BEL,Belgium,pigs_backyard_meat,forage fish,0.03686777674323871
+BLZ,Belize,pigs_intermediate_meat,forage fish,13.08893080218658
+BLZ,Belize,pigs_industrial_meat,forage fish,65.33196300399595
+BLZ,Belize,pigs_backyard_meat,forage fish,0.27506843399287806
+BLZ,Belize,shrimp_aquaculture_meat,forage fish,204.7814581239798
+BEN,Benin,pigs_intermediate_meat,forage fish,180.58691114376455
+BEN,Benin,pigs_industrial_meat,forage fish,95.26365090555252
+BEN,Benin,pigs_backyard_meat,forage fish,16.01488631638707
+BMU,Bermuda,pigs_intermediate_meat,forage fish,0.39929781545901016
+BMU,Bermuda,pigs_industrial_meat,forage fish,4.0314786334633395
+BMU,Bermuda,pigs_backyard_meat,forage fish,0.011666454860097
+BTN,Bhutan,pigs_intermediate_meat,forage fish,3.1034534671639618
+BTN,Bhutan,pigs_industrial_meat,forage fish,59.36061703252836
+BTN,Bhutan,pigs_backyard_meat,forage fish,0.5529748127400114
+BTN,Bhutan,chickens_industrial_meat,forage fish,2.914242179994992
+BTN,Bhutan,chickens_industrial_eggs,forage fish,184.4929152971431
+BES,"Bonaire, Sint Eustatius and Saba",pigs_intermediate_meat,forage fish,0.966530891074334
+BES,"Bonaire, Sint Eustatius and Saba",pigs_industrial_meat,forage fish,10.316741082030918
+BES,"Bonaire, Sint Eustatius and Saba",pigs_backyard_meat,forage fish,0.0367761691686811
+BIH,Bosnia and Herzegovina,pigs_intermediate_meat,forage fish,223.1993253060406
+BIH,Bosnia and Herzegovina,pigs_industrial_meat,forage fish,1898.6901616346483
+BIH,Bosnia and Herzegovina,pigs_backyard_meat,forage fish,5.135027460637825
+BRA,Brazil,pigs_intermediate_meat,forage fish,1.0498124135696585
+BRA,Brazil,pigs_industrial_meat,forage fish,211627.98840937568
+BRA,Brazil,pigs_backyard_meat,forage fish,907.4306263046828
+BRA,Brazil,shrimp_aquaculture_meat,forage fish,24573.774974877575
+VGB,British Virgin Islands,pigs_intermediate_meat,forage fish,0.5228673197276686
+VGB,British Virgin Islands,pigs_industrial_meat,forage fish,6.084824645286928
+VGB,British Virgin Islands,pigs_backyard_meat,forage fish,0.024075264836197607
+BRN,Brunei,pigs_intermediate_meat,forage fish,0.021870755076411286
+BRN,Brunei,pigs_industrial_meat,forage fish,10.206252935737117
+BRN,Brunei,pigs_backyard_meat,forage fish,0.0012409055235479709
+BRN,Brunei,shrimp_aquaculture_meat,forage fish,507.85801614747
+BGR,Bulgaria,pigs_intermediate_meat,forage fish,439.3553006804051
+BGR,Bulgaria,pigs_industrial_meat,forage fish,6750.701548134986
+BGR,Bulgaria,chickens_industrial_eggs,forage fish,858.812531844842
+BFA,Burkina Faso,pigs_intermediate_meat,forage fish,0.16124050282744964
+BFA,Burkina Faso,pigs_industrial_meat,forage fish,1105.3037199578273
+BFA,Burkina Faso,pigs_backyard_meat,forage fish,48.22635667133749
+BDI,Burundi,pigs_intermediate_meat,forage fish,142.00716675521505
+BDI,Burundi,pigs_industrial_meat,forage fish,51.80108514042304
+BDI,Burundi,pigs_backyard_meat,forage fish,11.605635560072693
+KHM,Cambodia,pigs_intermediate_meat,forage fish,934.4679196847679
+KHM,Cambodia,pigs_industrial_meat,forage fish,653.198311618283
+KHM,Cambodia,pigs_backyard_meat,forage fish,43.56476321324708
+KHM,Cambodia,marine-fish-general_aquaculture_meat,forage fish,416.88240292621947
+KHM,Cambodia,shrimp_aquaculture_meat,forage fish,409.56291624795955
+CAN,Canada,pigs_intermediate_meat,forage fish,482.41509303455706
+CAN,Canada,pigs_industrial_meat,forage fish,82224.7964579993
+CAN,Canada,pigs_backyard_meat,forage fish,0.04541894262434403
+CAN,Canada,chickens_industrial_meat,forage fish,17048.152469232573
+CAN,Canada,salmon_aquaculture_meat,forage fish,86393.64332880708
+CAN,Canada,salmon_aquaculture_meat,forage fish,57595.762219204735
+CPV,Cape Verde,pigs_intermediate_meat,forage fish,23.966910943004887
+CPV,Cape Verde,pigs_industrial_meat,forage fish,3.37365593604462
+CPV,Cape Verde,pigs_backyard_meat,forage fish,1.4842468375021955
+CYM,Cayman Islands,pigs_intermediate_meat,forage fish,0.43470355847029074
+CYM,Cayman Islands,pigs_industrial_meat,forage fish,4.845105164068949
+CYM,Cayman Islands,pigs_backyard_meat,forage fish,0.019051559573711036
+CAF,Central African Republic,pigs_intermediate_meat,forage fish,242.67143174505492
+CAF,Central African Republic,pigs_industrial_meat,forage fish,114.44349514097068
+CAF,Central African Republic,pigs_backyard_meat,forage fish,19.235191965054472
+TCD,Chad,pigs_intermediate_meat,forage fish,52.60128870356675
+TCD,Chad,pigs_industrial_meat,forage fish,41.68457757457332
+TCD,Chad,pigs_backyard_meat,forage fish,3.6070023423158912
+CHL,Chile,pigs_industrial_meat,forage fish,4610.422607572255
+CHL,Chile,pigs_backyard_meat,forage fish,1.9603480779927556
+CHL,Chile,salmon_aquaculture_meat,forage fish,522512.03127784067
+CHL,Chile,salmon_aquaculture_meat,forage fish,348341.3541852272
+CHN,China,pigs_intermediate_meat,forage fish,210723.71286877565
+CHN,China,pigs_industrial_meat,forage fish,1395367.8537445196
+CHN,China,pigs_backyard_meat,forage fish,10844.191630423858
+CHN,China,chickens_industrial_meat,forage fish,80182.51190582833
+CHN,China,crustaceans_aquaculture_meat,forage fish,177055.2419527785
+CHN,China,marine-fish-general_aquaculture_meat,forage fish,696124.4594528892
+CHN,China,shrimp_aquaculture_meat,forage fish,550925.1950426078
+CXR,Christmas Island,pigs_backyard_meat,forage fish,0.7376147040978708
+COL,Colombia,pigs_intermediate_meat,forage fish,917.4539395239389
+COL,Colombia,pigs_industrial_meat,forage fish,14757.961976369112
+COL,Colombia,pigs_backyard_meat,forage fish,83.35069710302392
+COL,Colombia,shrimp_aquaculture_meat,forage fish,1515.3827901174504
+COK,Cook Islands,pigs_intermediate_meat,forage fish,12.932236274232086
+COK,Cook Islands,pigs_industrial_meat,forage fish,24.566920255873317
+COK,Cook Islands,pigs_backyard_meat,forage fish,0.7406439191409527
+CRI,Costa Rica,marine-fish-general_aquaculture_meat,forage fish,343.3149200568864
+CRI,Costa Rica,shrimp_aquaculture_meat,forage fish,1228.6887487438785
+CIV,Côte d'Ivoire,pigs_intermediate_meat,forage fish,220.88228947253066
+CIV,Côte d'Ivoire,pigs_industrial_meat,forage fish,418.163288102499
+HRV,Croatia,pigs_intermediate_meat,forage fish,2.818900993050602
+HRV,Croatia,pigs_industrial_meat,forage fish,7695.360299519262
+HRV,Croatia,pigs_backyard_meat,forage fish,6.827410643763669
+HRV,Croatia,marine-fish-general_aquaculture_meat,forage fish,5122.9501415877185
+HRV,Croatia,tuna_aquaculture_meat,forage fish,3632.778124844899
+CUB,Cuba,pigs_intermediate_meat,forage fish,1130.687315213439
+CUB,Cuba,pigs_industrial_meat,forage fish,13378.597950609035
+CUB,Cuba,pigs_backyard_meat,forage fish,43.029919927748914
+CUB,Cuba,shrimp_aquaculture_meat,forage fish,2306.2487813922608
+CZE,Czech Republic,pigs_intermediate_meat,forage fish,101.30379293798141
+CZE,Czech Republic,pigs_industrial_meat,forage fish,8703.312169246781
+CZE,Czech Republic,pigs_backyard_meat,forage fish,0.14146433761293792
+DNK,Denmark,pigs_intermediate_meat,forage fish,38.15152042519088
+DNK,Denmark,pigs_industrial_meat,forage fish,78677.10628870306
+DNK,Denmark,pigs_backyard_meat,forage fish,0.039597801683919145
+DNK,Denmark,salmon_aquaculture_meat,forage fish,7992.417497688834
+DNK,Denmark,salmon_aquaculture_meat,forage fish,5328.278331792558
+DOM,Dominican Republic,pigs_intermediate_meat,forage fish,266.190702398753
+DOM,Dominican Republic,pigs_industrial_meat,forage fish,3162.647955450722
+DOM,Dominican Republic,pigs_backyard_meat,forage fish,12.963585680040703
+DMA,Dominica,pigs_intermediate_meat,forage fish,0.771029006716519
+DMA,Dominica,pigs_industrial_meat,forage fish,31.085817382832204
+DMA,Dominica,pigs_backyard_meat,forage fish,0.06549351519701735
+ECU,Ecuador,pigs_intermediate_meat,forage fish,2232.1684396261626
+ECU,Ecuador,pigs_industrial_meat,forage fish,877.4730658551714
+ECU,Ecuador,pigs_backyard_meat,forage fish,22.922841256979034
+ECU,Ecuador,shrimp_aquaculture_meat,forage fish,180207.6831491022
+EGY,Egypt,pigs_intermediate_meat,forage fish,5.219866830129946
+EGY,Egypt,pigs_industrial_meat,forage fish,21.1696758793222
+EGY,Egypt,pigs_backyard_meat,forage fish,0.09197469934687089
+EGY,Egypt,marine-fish-general_aquaculture_meat,forage fish,134014.45039386302
+SLV,El Salvador,pigs_intermediate_meat,forage fish,94.82281494559948
+SLV,El Salvador,pigs_industrial_meat,forage fish,585.4525980987744
+SLV,El Salvador,pigs_backyard_meat,forage fish,4.362349717362522
+SLV,El Salvador,shrimp_aquaculture_meat,forage fish,470.99735368515354
+ERI,Eritrea,pigs_backyard_meat,forage fish,0.008721126781945678
+EST,Estonia,pigs_intermediate_meat,forage fish,9.957026199392388
+EST,Estonia,pigs_industrial_meat,forage fish,2160.367785808947
+EST,Estonia,pigs_backyard_meat,forage fish,0.17222007430547145
+FLK,Falkland Islands,pigs_industrial_meat,forage fish,0.25489095164933934
+FLK,Falkland Islands,pigs_backyard_meat,forage fish,3.248966087963945e-5
+FRO,Faroe Islands,salmon_aquaculture_meat,forage fish,53217.385609035824
+FRO,Faroe Islands,salmon_aquaculture_meat,forage fish,35478.25707269055
+FJI,Fiji,chickens_industrial_meat,forage fish,397.8716284528743
+FJI,Fiji,chickens_industrial_eggs,forage fish,41.75598780031576
+FIN,Finland,pigs_intermediate_meat,forage fish,26.989270582910326
+FIN,Finland,pigs_industrial_meat,forage fish,8589.923043121044
+FIN,Finland,pigs_backyard_meat,forage fish,0.007557385525154072
+FIN,Finland,chickens_industrial_eggs,forage fish,183.74900135240082
+FIN,Finland,salmon_aquaculture_meat,forage fish,7532.957719170271
+FIN,Finland,salmon_aquaculture_meat,forage fish,5021.971812780182
+FRA,France,marine-fish-general_aquaculture_meat,forage fish,1716.5746002844328
+GUF,French Guiana,pigs_intermediate_meat,forage fish,2.82553716120526
+GUF,French Guiana,pigs_industrial_meat,forage fish,13.606491069372343
+GUF,French Guiana,pigs_backyard_meat,forage fish,0.05985262069232176
+PYF,French Polynesia,pigs_backyard_meat,forage fish,1.0966921876245188
+GAB,Gabon,pigs_intermediate_meat,forage fish,14.593523641486772
+GAB,Gabon,pigs_industrial_meat,forage fish,1902.9706323905934
+GAB,Gabon,pigs_backyard_meat,forage fish,1.6331220385994811
+GMB,Gambia,pigs_intermediate_meat,forage fish,4.050173344885407
+GMB,Gambia,pigs_industrial_meat,forage fish,1.355550487967755
+GMB,Gambia,pigs_backyard_meat,forage fish,0.6112209193706439
+GEO,Georgia,pigs_intermediate_meat,forage fish,91.91341360435656
+GEO,Georgia,pigs_industrial_meat,forage fish,161.5337867833073
+GEO,Georgia,pigs_backyard_meat,forage fish,2.2362842318549196
+GEO,Georgia,chickens_industrial_meat,forage fish,148.30859130621258
+GHA,Ghana,pigs_intermediate_meat,forage fish,332.9444713971504
+GHA,Ghana,pigs_industrial_meat,forage fish,1475.6256012974625
+GHA,Ghana,pigs_backyard_meat,forage fish,20.939506003053705
+GRC,Greece,pigs_intermediate_meat,forage fish,22.6615791521344
+GRC,Greece,pigs_industrial_meat,forage fish,5202.524849729568
+GRC,Greece,pigs_backyard_meat,forage fish,1.7354462568074482
+GRC,Greece,marine-fish-general_aquaculture_meat,forage fish,50462.0454345843
+GRD,Grenada,pigs_intermediate_meat,forage fish,0.7056370065009823
+GRD,Grenada,pigs_industrial_meat,forage fish,14.794726600204791
+GRD,Grenada,pigs_backyard_meat,forage fish,0.04636467925507432
+GLP,Guadeloupe,pigs_intermediate_meat,forage fish,6.876146387683121
+GLP,Guadeloupe,pigs_industrial_meat,forage fish,81.36034480510843
+GLP,Guadeloupe,pigs_backyard_meat,forage fish,0.2763305300607866
+GUM,Guam,pigs_industrial_meat,forage fish,24.74811192346485
+GUM,Guam,pigs_backyard_meat,forage fish,0.0067023967373066795
+GUM,Guam,chickens_industrial_meat,forage fish,23.690629813881554
+GUM,Guam,chickens_industrial_eggs,forage fish,9.140464595364984
+GTM,Guatemala,pigs_intermediate_meat,forage fish,660.6360305974292
+GTM,Guatemala,pigs_industrial_meat,forage fish,8176.944898109191
+GTM,Guatemala,pigs_backyard_meat,forage fish,43.393708768387334
+GTM,Guatemala,shrimp_aquaculture_meat,forage fish,6739.357786860174
+GNB,Guinea-Bissau,pigs_intermediate_meat,forage fish,102.2544359373893
+GNB,Guinea-Bissau,pigs_industrial_meat,forage fish,69.57371802430882
+GNB,Guinea-Bissau,pigs_backyard_meat,forage fish,18.216697769119314
+GIN,Guinea,pigs_intermediate_meat,forage fish,15.321337491666922
+GIN,Guinea,pigs_industrial_meat,forage fish,0.0257994499732265
+GIN,Guinea,pigs_backyard_meat,forage fish,5.19405426340938
+GUY,Guyana,pigs_intermediate_meat,forage fish,7.142200620145714
+GUY,Guyana,pigs_industrial_meat,forage fish,9.0353913491185
+GUY,Guyana,pigs_backyard_meat,forage fish,0.5885127584533468
+HND,Honduras,shrimp_aquaculture_meat,forage fish,12901.231861810727
+HKG,Hong Kong,pigs_intermediate_meat,forage fish,65.52649578011099
+HKG,Hong Kong,pigs_industrial_meat,forage fish,379.2059825124267
+HKG,Hong Kong,pigs_backyard_meat,forage fish,2.0348113578682363
+HKG,Hong Kong,chickens_industrial_meat,forage fish,47.08886468419031
+HKG,Hong Kong,marine-fish-general_aquaculture_meat,forage fish,367.83741434666416
+HUN,Hungary,pigs_intermediate_meat,forage fish,0.07826400947672889
+HUN,Hungary,pigs_industrial_meat,forage fish,21626.989212389006
+HUN,Hungary,pigs_backyard_meat,forage fish,16.161411936343235
+ISL,Iceland,pigs_industrial_meat,forage fish,259.7034302161373
+ISL,Iceland,pigs_backyard_meat,forage fish,1.607177207279099e-4
+ISL,Iceland,salmon_aquaculture_meat,forage fish,9637.374244106382
+ISL,Iceland,salmon_aquaculture_meat,forage fish,6424.916162737589
+IND,India,pigs_intermediate_meat,forage fish,7268.256299319001
+IND,India,pigs_industrial_meat,forage fish,1504.860756925608
+IND,India,pigs_backyard_meat,forage fish,513.6348243405656
+IND,India,chickens_industrial_meat,forage fish,7959.853240170132
+IND,India,chickens_industrial_eggs,forage fish,50091.01813622738
+IND,India,marine-fish-general_aquaculture_meat,forage fish,47083.18903637301
+IND,India,shrimp_aquaculture_meat,forage fish,263414.8947769539
+IDN,Indonesia,pigs_intermediate_meat,forage fish,6766.968048164497
+IDN,Indonesia,pigs_industrial_meat,forage fish,13012.696237016416
+IDN,Indonesia,pigs_backyard_meat,forage fish,366.27389842566816
+IDN,Indonesia,crustaceans_aquaculture_meat,forage fish,8164.085662446363
+IDN,Indonesia,marine-fish-general_aquaculture_meat,forage fish,362615.10396271304
+IDN,Indonesia,shrimp_aquaculture_meat,forage fish,366089.8605028199
+IRN,Iran,chickens_industrial_meat,forage fish,38387.438998302954
+IRN,Iran,chickens_industrial_eggs,forage fish,11052.837552833884
+IRN,Iran,marine-fish-general_aquaculture_meat,forage fish,6890.820895427509
+IRN,Iran,shrimp_aquaculture_meat,forage fish,13241.988208129029
+IRQ,Iraq,chickens_industrial_meat,forage fish,1567.9029989327266
+IRL,Ireland,pigs_intermediate_meat,forage fish,27.454229720639603
+IRL,Ireland,pigs_industrial_meat,forage fish,15425.745687402983
+IRL,Ireland,pigs_backyard_meat,forage fish,0.12550917478706428
+IRL,Ireland,salmon_aquaculture_meat,forage fish,11245.544779273447
+IRL,Ireland,salmon_aquaculture_meat,forage fish,7497.029852848965
+ISR,Israel,pigs_intermediate_meat,forage fish,3.327208917144098e-4
+ISR,Israel,pigs_industrial_meat,forage fish,1278.914640865418
+ISR,Israel,pigs_backyard_meat,forage fish,0.3372751247090293
+ISR,Israel,chickens_industrial_meat,forage fish,1553.4246179840259
+ISR,Israel,marine-fish-general_aquaculture_meat,forage fish,1029.9447601706595
+ITA,Italy,pigs_intermediate_meat,forage fish,203.91882805655118
+ITA,Italy,pigs_industrial_meat,forage fish,16073.778807525101
+ITA,Italy,pigs_backyard_meat,forage fish,1.600443601570522
+ITA,Italy,marine-fish-general_aquaculture_meat,forage fish,7405.793275512838
+JPN,Japan,pigs_industrial_meat,forage fish,80911.90690023373
+JPN,Japan,pigs_backyard_meat,forage fish,16.55005663797673
+JPN,Japan,chickens_industrial_meat,forage fish,7211.693083814025
+JPN,Japan,marine-fish-general_aquaculture_meat,forage fish,105999.4624673353
+JPN,Japan,salmon_aquaculture_meat,forage fish,9593.843894126645
+JPN,Japan,salmon_aquaculture_meat,forage fish,6395.895929417762
+JPN,Japan,shrimp_aquaculture_meat,forage fish,554.5481885997373
+JPN,Japan,tuna_aquaculture_meat,forage fish,53291.94773708641
+JOR,Jordan,chickens_industrial_meat,forage fish,1129.4203991568888
+KAZ,Kazakhstan,chickens_industrial_meat,forage fish,947.8253009486021
+KEN,Kenya,pigs_intermediate_meat,forage fish,633.6925691503591
+KEN,Kenya,pigs_industrial_meat,forage fish,198.38771314834372
+KEN,Kenya,pigs_backyard_meat,forage fish,17.921196450232003
+KIR,Kiribati,pigs_intermediate_meat,forage fish,5.335815588803494
+KIR,Kiribati,pigs_industrial_meat,forage fish,10.547721870865635
+KIR,Kiribati,pigs_backyard_meat,forage fish,0.3268757344712706
+XKO,Kosovo,pigs_intermediate_meat,forage fish,1.6081770176207502
+XKO,Kosovo,pigs_backyard_meat,forage fish,9.630224195406317
+KWT,Kuwait,chickens_industrial_meat,forage fish,1860.3262007001226
+KGZ,Kyrgyzstan,chickens_industrial_meat,forage fish,8.942604387853065
+LAO,Laos,pigs_intermediate_meat,forage fish,2363.7304383064074
+LAO,Laos,pigs_industrial_meat,forage fish,116.76555186032735
+LAO,Laos,pigs_backyard_meat,forage fish,230.96240608485226
+LVA,Latvia,pigs_intermediate_meat,forage fish,2.2964863026687086
+LVA,Latvia,pigs_industrial_meat,forage fish,1808.9218387309793
+LVA,Latvia,pigs_backyard_meat,forage fish,1.2029892927433987
+LBN,Lebanon,pigs_intermediate_meat,forage fish,0.508640661346964
+LBN,Lebanon,pigs_industrial_meat,forage fish,27.964304868144097
+LBN,Lebanon,pigs_backyard_meat,forage fish,0.026739756298637896
+LBN,Lebanon,chickens_industrial_meat,forage fish,2891.251960694985
+LSO,Lesotho,pigs_intermediate_meat,forage fish,2.1851603550119756
+LSO,Lesotho,pigs_industrial_meat,forage fish,50.498694547477434
+LSO,Lesotho,pigs_backyard_meat,forage fish,0.6106178411709686
+LTU,Lithuania,pigs_intermediate_meat,forage fish,0.05062739277728029
+LTU,Lithuania,pigs_industrial_meat,forage fish,4875.539377563897
+LUX,Luxembourg,pigs_intermediate_meat,forage fish,2.1266194559283518
+LUX,Luxembourg,pigs_industrial_meat,forage fish,575.2962928889668
+LUX,Luxembourg,pigs_backyard_meat,forage fish,2.8861848147455037e-4
+MAC,Macao,chickens_industrial_meat,forage fish,27.35030934873913
+MKD,Macedonia,pigs_intermediate_meat,forage fish,39.011584905016875
+MKD,Macedonia,pigs_industrial_meat,forage fish,892.7169587244094
+MKD,Macedonia,pigs_backyard_meat,forage fish,1.3472269792698948
+MDG,Madagascar,pigs_intermediate_meat,forage fish,934.8498799929495
+MDG,Madagascar,pigs_industrial_meat,forage fish,1820.4865717396565
+MDG,Madagascar,pigs_backyard_meat,forage fish,23.199805006080965
+MDG,Madagascar,shrimp_aquaculture_meat,forage fish,2227.612701472652
+MWI,Malawi,pigs_intermediate_meat,forage fish,1577.0739054624603
+MWI,Malawi,pigs_industrial_meat,forage fish,391.77296277495844
+MWI,Malawi,pigs_backyard_meat,forage fish,172.58907870046446
+MYS,Malaysia,pigs_intermediate_meat,forage fish,623.3081978315356
+MYS,Malaysia,pigs_industrial_meat,forage fish,8160.72082930826
+MYS,Malaysia,pigs_backyard_meat,forage fish,4.3299504888853075
+MYS,Malaysia,marine-fish-general_aquaculture_meat,forage fish,28423.738670347466
+MYS,Malaysia,shrimp_aquaculture_meat,forage fish,18750.183486231188
+MLT,Malta,pigs_intermediate_meat,forage fish,1.6315269761512734
+MLT,Malta,pigs_industrial_meat,forage fish,255.51413492795112
+MLT,Malta,marine-fish-general_aquaculture_meat,forage fish,1205.6239092626263
+MLT,Malta,tuna_aquaculture_meat,forage fish,15139.375996694054
+MTQ,Martinique,pigs_intermediate_meat,forage fish,0.48862259002032127
+MTQ,Martinique,pigs_industrial_meat,forage fish,61.858723522832406
+MTQ,Martinique,pigs_backyard_meat,forage fish,0.09764526670119979
+MRT,Mauritania,pigs_intermediate_meat,forage fish,3.380584207017541e-5
+MRT,Mauritania,pigs_backyard_meat,forage fish,0.007421065023017607
+MUS,Mauritius,pigs_industrial_meat,forage fish,79.53418067773018
+MUS,Mauritius,pigs_backyard_meat,forage fish,0.26917166760929095
+MUS,Mauritius,marine-fish-general_aquaculture_meat,forage fish,588.5398629546627
+MEX,Mexico,pigs_intermediate_meat,forage fish,34504.15330512203
+MEX,Mexico,pigs_industrial_meat,forage fish,54581.416080763054
+MEX,Mexico,pigs_backyard_meat,forage fish,417.2984652086029
+MEX,Mexico,marine-fish-general_aquaculture_meat,forage fish,321.7253160841663
+MEX,Mexico,shrimp_aquaculture_meat,forage fish,61446.66289024395
+MEX,Mexico,tuna_aquaculture_meat,forage fish,19227.713235881205
+FSM,Micronesia,pigs_backyard_meat,forage fish,1.3804000982967808
+MDA,Moldova,pigs_intermediate_meat,forage fish,307.3308044604024
+MDA,Moldova,pigs_industrial_meat,forage fish,426.6001586490987
+MDA,Moldova,pigs_backyard_meat,forage fish,25.339703194731534
+MDA,Moldova,chickens_industrial_eggs,forage fish,271.12156339263845
+MNG,Mongolia,pigs_intermediate_meat,forage fish,20.07670682888834
+MNG,Mongolia,pigs_industrial_meat,forage fish,25.486611689488136
+MNG,Mongolia,pigs_backyard_meat,forage fish,0.6115628968146368
+MNG,Mongolia,chickens_industrial_meat,forage fish,7.264466357851741
+MNE,Montenegro,pigs_intermediate_meat,forage fish,34.28589961416227
+MNE,Montenegro,pigs_industrial_meat,forage fish,81.86497513044876
+MNE,Montenegro,pigs_backyard_meat,forage fish,0.6711021067982437
+MSR,Montserrat,pigs_intermediate_meat,forage fish,0.44971859292461414
+MSR,Montserrat,pigs_industrial_meat,forage fish,5.01245925987925
+MSR,Montserrat,pigs_backyard_meat,forage fish,0.019709616812567107
+MAR,Morocco,pigs_intermediate_meat,forage fish,3.4452891680074673
+MAR,Morocco,pigs_industrial_meat,forage fish,10.490244919391477
+MOZ,Mozambique,pigs_intermediate_meat,forage fish,362.71981965545655
+MOZ,Mozambique,pigs_industrial_meat,forage fish,150.66485315193927
+MOZ,Mozambique,pigs_backyard_meat,forage fish,30.740334856818347
+MMR,Myanmar,pigs_intermediate_meat,forage fish,1859.4031822836457
+MMR,Myanmar,pigs_industrial_meat,forage fish,27.97109364299018
+MMR,Myanmar,crustaceans_aquaculture_meat,forage fish,1880.3147722205583
+MMR,Myanmar,shrimp_aquaculture_meat,forage fish,22652.72421184569
+"NAM",Namibia,pigs_intermediate_meat,forage fish,66.12733150267373
+"NAM",Namibia,pigs_industrial_meat,forage fish,105.65181518963928
+"NAM",Namibia,pigs_backyard_meat,forage fish,2.7731006292164726
+NRU,Nauru,pigs_intermediate_meat,forage fish,1.227544522967061
+NRU,Nauru,pigs_industrial_meat,forage fish,2.4268021001769315
+NRU,Nauru,pigs_backyard_meat,forage fish,0.06991969672770974
+NPL,Nepal,chickens_industrial_meat,forage fish,564.9946310333518
+NPL,Nepal,chickens_industrial_eggs,forage fish,777.0195112708315
+NCL,New Caledonia,pigs_intermediate_meat,forage fish,25.30088021569989
+NCL,New Caledonia,pigs_industrial_meat,forage fish,52.905615049615946
+NCL,New Caledonia,pigs_backyard_meat,forage fish,1.6020204865362184
+NCL,New Caledonia,chickens_industrial_meat,forage fish,32.71583459917684
+NCL,New Caledonia,chickens_industrial_eggs,forage fish,17.578400606141276
+NCL,New Caledonia,shrimp_aquaculture_meat,forage fish,593.8662285595412
+NZL,New Zealand,pigs_industrial_meat,forage fish,1412.7187055135726
+NZL,New Zealand,pigs_backyard_meat,forage fish,0.23920498062021636
+NZL,New Zealand,chickens_industrial_meat,forage fish,2231.2449323228266
+NZL,New Zealand,chickens_industrial_eggs,forage fish,454.89146551730954
+NZL,New Zealand,salmon_aquaculture_meat,forage fish,8113.811994815439
+NZL,New Zealand,salmon_aquaculture_meat,forage fish,5409.207996543626
+NIC,Nicaragua,pigs_intermediate_meat,forage fish,304.4315067637093
+NIC,Nicaragua,pigs_industrial_meat,forage fish,384.56012432615955
+NIC,Nicaragua,pigs_backyard_meat,forage fish,11.443575244820403
+NIC,Nicaragua,shrimp_aquaculture_meat,forage fish,10193.201859579216
+NIU,Niue,pigs_backyard_meat,forage fish,0.08245697339037272
+NFK,Norfolk Island,chickens_industrial_meat,forage fish,211.76295417550813
+PRK,North Korea,pigs_intermediate_meat,forage fish,1030.2082383278068
+PRK,North Korea,pigs_industrial_meat,forage fish,597.1109703190424
+PRK,North Korea,pigs_backyard_meat,forage fish,63.253346933430684
+PRK,North Korea,chickens_industrial_meat,forage fish,0.6566878949549615
+NOR,Norway,pigs_intermediate_meat,forage fish,43.77644582806251
+NOR,Norway,pigs_industrial_meat,forage fish,8300.037141550225
+NOR,Norway,pigs_backyard_meat,forage fish,0.06903475282777029
+NOR,Norway,marine-fish-general_aquaculture_meat,forage fish,796.0344961381868
+NOR,Norway,salmon_aquaculture_meat,forage fish,799030.4313783552
+NOR,Norway,salmon_aquaculture_meat,forage fish,532686.9542522369
+OMN,Oman,chickens_industrial_meat,forage fish,141.50290914559645
+PAK,Pakistan,pigs_intermediate_meat,forage fish,3.1483784342334516e-4
+PAK,Pakistan,pigs_backyard_meat,forage fish,4.230027863732879
+PAK,Pakistan,chickens_industrial_meat,forage fish,8675.582452980887
+PAK,Pakistan,chickens_industrial_eggs,forage fish,21696.997090002405
+PLW,Palau,chickens_industrial_meat,forage fish,0.09480587095567129
+PSE,Palestina,chickens_industrial_meat,forage fish,152.6423983702462
+PAN,Panama,pigs_intermediate_meat,forage fish,0.0029852994965726487
+PAN,Panama,pigs_industrial_meat,forage fish,1954.1436986755728
+PAN,Panama,pigs_backyard_meat,forage fish,9.344970763415205
+PAN,Panama,marine-fish-general_aquaculture_meat,forage fish,882.809794431994
+PAN,Panama,shrimp_aquaculture_meat,forage fish,3080.7322560171524
+PNG,Papua New Guinea,pigs_intermediate_meat,forage fish,392.5714365872233
+PNG,Papua New Guinea,pigs_industrial_meat,forage fish,143.12950181497484
+PNG,Papua New Guinea,pigs_backyard_meat,forage fish,129.52184141593315
+PNG,Papua New Guinea,chickens_industrial_meat,forage fish,158.28057745664128
+PRY,Paraguay,pigs_intermediate_meat,forage fish,812.411011211676
+PRY,Paraguay,pigs_industrial_meat,forage fish,1285.7728341867112
+PRY,Paraguay,pigs_backyard_meat,forage fish,54.67830037238138
+PER,Peru,shrimp_aquaculture_meat,forage fish,11259.564442097382
+PHL,Philippines,pigs_intermediate_meat,forage fish,9347.563200969265
+PHL,Philippines,pigs_industrial_meat,forage fish,12910.026738428325
+PHL,Philippines,pigs_backyard_meat,forage fish,1410.2621969917152
+PHL,Philippines,crustaceans_aquaculture_meat,forage fish,11202.482392609225
+PHL,Philippines,marine-fish-general_aquaculture_meat,forage fish,179111.4645277298
+PHL,Philippines,shrimp_aquaculture_meat,forage fish,25565.44966398876
+POL,Poland,pigs_intermediate_meat,forage fish,1411.2562981774647
+POL,Poland,pigs_industrial_meat,forage fish,79462.23153581285
+POL,Poland,pigs_backyard_meat,forage fish,31.361239738738362
+PRT,Portugal,pigs_intermediate_meat,forage fish,55.75905611613724
+PRT,Portugal,pigs_industrial_meat,forage fish,19237.07039472254
+PRT,Portugal,pigs_backyard_meat,forage fish,18.328138139637996
+PRT,Portugal,marine-fish-general_aquaculture_meat,forage fish,2199.0939114266703
+PRI,Puerto Rico,pigs_intermediate_meat,forage fish,0.7016243682993384
+PRI,Puerto Rico,pigs_industrial_meat,forage fish,323.25278985368243
+PRI,Puerto Rico,pigs_backyard_meat,forage fish,0.5918245236271676
+QAT,Qatar,chickens_industrial_meat,forage fish,377.0277033185771
+REU,Reunion,pigs_intermediate_meat,forage fish,29.821815118743114
+REU,Reunion,pigs_industrial_meat,forage fish,144.80700531624453
+REU,Reunion,pigs_backyard_meat,forage fish,1.0248473674924452
+ROU,Romania,pigs_intermediate_meat,forage fish,2742.826816795409
+ROU,Romania,pigs_industrial_meat,forage fish,19681.34441099762
+ROU,Romania,pigs_backyard_meat,forage fish,19.00016610008692
+ROU,Romania,chickens_industrial_eggs,forage fish,4742.6785862652305
+RUS,Russia,pigs_intermediate_meat,forage fish,2.104449514635939
+RUS,Russia,pigs_industrial_meat,forage fish,119968.19434745544
+RUS,Russia,pigs_backyard_meat,forage fish,60.6738716215856
+RUS,Russia,chickens_industrial_eggs,forage fish,6816.151141127286
+RUS,Russia,salmon_aquaculture_meat,forage fish,7980.155427272007
+RUS,Russia,salmon_aquaculture_meat,forage fish,5320.103618181339
+RWA,Rwanda,pigs_intermediate_meat,forage fish,431.3620646958762
+RWA,Rwanda,pigs_industrial_meat,forage fish,245.94486005942875
+RWA,Rwanda,pigs_backyard_meat,forage fish,30.27833500292495
+SHN,Saint Helena,pigs_intermediate_meat,forage fish,0.14937891344086887
+SHN,Saint Helena,pigs_industrial_meat,forage fish,0.3922303490339233
+SHN,Saint Helena,pigs_backyard_meat,forage fish,0.01290460304861225
+KNA,Saint Kitts and Nevis,pigs_intermediate_meat,forage fish,0.06315987461108027
+KNA,Saint Kitts and Nevis,pigs_industrial_meat,forage fish,41.608272270758086
+KNA,Saint Kitts and Nevis,pigs_backyard_meat,forage fish,0.049957748709556285
+LCA,Saint Lucia,pigs_intermediate_meat,forage fish,7.418240765097006
+LCA,Saint Lucia,pigs_industrial_meat,forage fish,197.65539600099402
+LCA,Saint Lucia,pigs_backyard_meat,forage fish,0.6186544720414047
+VCT,Saint Vincent and the Grenadines,pigs_intermediate_meat,forage fish,1.5234173863215204
+VCT,Saint Vincent and the Grenadines,pigs_industrial_meat,forage fish,31.3629045028614
+VCT,Saint Vincent and the Grenadines,pigs_backyard_meat,forage fish,0.09953839212872528
+WSM,Samoa,pigs_backyard_meat,forage fish,6.216681799285624
+WSM,Samoa,chickens_industrial_meat,forage fish,27.813635540731898
+WSM,Samoa,chickens_industrial_eggs,forage fish,5.688387220167593
+STP,São Tomé and Príncipe,pigs_intermediate_meat,forage fish,5.815522278766087
+STP,São Tomé and Príncipe,pigs_industrial_meat,forage fish,0.10817170112546055
+STP,São Tomé and Príncipe,pigs_backyard_meat,forage fish,0.8010322996801814
+SAU,Saudi Arabia,chickens_industrial_meat,forage fish,6947.8018430010725
+SAU,Saudi Arabia,marine-fish-general_aquaculture_meat,forage fish,3791.177617199618
+SAU,Saudi Arabia,shrimp_aquaculture_meat,forage fish,16054.866316920015
+SEN,Senegal,pigs_intermediate_meat,forage fish,231.1900391701724
+SEN,Senegal,pigs_industrial_meat,forage fish,2.323425970038009
+SEN,Senegal,pigs_backyard_meat,forage fish,7.043800049193402
+SRB,Serbia,pigs_intermediate_meat,forage fish,834.8647455030374
+SRB,Serbia,pigs_industrial_meat,forage fish,17577.784528278997
+SRB,Serbia,pigs_backyard_meat,forage fish,62.89745108368227
+SYC,Seychelles,pigs_intermediate_meat,forage fish,1.220464882921842
+SYC,Seychelles,pigs_industrial_meat,forage fish,3.5772292345302033
+SYC,Seychelles,pigs_backyard_meat,forage fish,0.09239610143183793
+SLE,Sierra Leone,pigs_intermediate_meat,forage fish,15.925596893335406
+SLE,Sierra Leone,pigs_industrial_meat,forage fish,7.994045781431871
+SLE,Sierra Leone,pigs_backyard_meat,forage fish,3.682042505472198
+SGP,Singapore,marine-fish-general_aquaculture_meat,forage fish,1425.8359079848292
+SVK,Slovakia,chickens_industrial_eggs,forage fish,898.4916264643844
+SVN,Slovenia,pigs_intermediate_meat,forage fish,0.1787073522538389
+SVN,Slovenia,pigs_industrial_meat,forage fish,1481.0873867937746
+SVN,Slovenia,pigs_backyard_meat,forage fish,0.5349149206983133
+SLB,Solomon Islands,pigs_intermediate_meat,forage fish,28.36368467044063
+SLB,Solomon Islands,pigs_industrial_meat,forage fish,23.750137034829987
+SLB,Solomon Islands,pigs_backyard_meat,forage fish,1.4474788676017456
+SLB,Solomon Islands,chickens_industrial_meat,forage fish,5.229430098169277
+SLB,Solomon Islands,chickens_industrial_eggs,forage fish,10.269513698149911
+SOM,Somalia,pigs_industrial_meat,forage fish,18.499118780310003
+ZAF,South Africa,pigs_intermediate_meat,forage fish,380.548490229641
+ZAF,South Africa,pigs_industrial_meat,forage fish,10432.54694526965
+ZAF,South Africa,pigs_backyard_meat,forage fish,17.453989307914792
+KOR,South Korea,pigs_intermediate_meat,forage fish,1185.8683768359808
+KOR,South Korea,pigs_industrial_meat,forage fish,78270.23106430711
+KOR,South Korea,pigs_backyard_meat,forage fish,0.131442243181615
+KOR,South Korea,chickens_industrial_meat,forage fish,3972.7734688098176
+KOR,South Korea,marine-fish-general_aquaculture_meat,forage fish,41312.555680102545
+KOR,South Korea,shrimp_aquaculture_meat,forage fish,2106.791641179504
+SSD,South Sudan,pigs_intermediate_meat,forage fish,0.07582913866996013
+SSD,South Sudan,pigs_backyard_meat,forage fish,0.0052088950632990716
+ESP,Spain,pigs_intermediate_meat,forage fish,1324.3151715172792
+ESP,Spain,pigs_industrial_meat,forage fish,198025.27409784184
+ESP,Spain,pigs_backyard_meat,forage fish,9.315774407190712
+ESP,Spain,marine-fish-general_aquaculture_meat,forage fish,23371.123946881686
+ESP,Spain,tuna_aquaculture_meat,forage fish,3461.388962618174
+LKA,Sri Lanka,chickens_industrial_meat,forage fish,411.7852499844868
+LKA,Sri Lanka,chickens_industrial_eggs,forage fish,1989.6124025529625
+LKA,Sri Lanka,shrimp_aquaculture_meat,forage fish,1896.2763022280528
+SUR,Suriname,pigs_intermediate_meat,forage fish,18.972280924082508
+SUR,Suriname,pigs_industrial_meat,forage fish,108.17387012985948
+SUR,Suriname,pigs_backyard_meat,forage fish,0.41153515376260763
+SWE,Sweden,pigs_intermediate_meat,forage fish,145.64928996524569
+SWE,Sweden,pigs_industrial_meat,forage fish,14631.228615931832
+SWE,Sweden,pigs_backyard_meat,forage fish,0.11192025708155791
+SWE,Sweden,salmon_aquaculture_meat,forage fish,1751.0236555231145
+SWE,Sweden,salmon_aquaculture_meat,forage fish,1167.3491036820762
+CHE,Switzerland,pigs_intermediate_meat,forage fish,82.2107190106465
+CHE,Switzerland,pigs_industrial_meat,forage fish,14008.052789858071
+CHE,Switzerland,pigs_backyard_meat,forage fish,0.42725525115365726
+SYR,Syria,pigs_intermediate_meat,forage fish,0.00129949422286812
+SYR,Syria,pigs_industrial_meat,forage fish,0.09244976008647321
+SYR,Syria,pigs_backyard_meat,forage fish,2.8667255428027876e-4
+SYR,Syria,chickens_industrial_meat,forage fish,217.992643139402
+TWN,Taiwan,pigs_intermediate_meat,forage fish,5962.850333351765
+TWN,Taiwan,pigs_industrial_meat,forage fish,11038.38527890375
+TWN,Taiwan,pigs_backyard_meat,forage fish,117.48094371703696
+TWN,Taiwan,chickens_industrial_meat,forage fish,2165.114258582618
+TWN,Taiwan,marine-fish-general_aquaculture_meat,forage fish,36243.92286336668
+TWN,Taiwan,shrimp_aquaculture_meat,forage fish,2048.211857268558
+TJK,Tajikistan,chickens_industrial_meat,forage fish,75.74269047912261
+TZA,Tanzania,pigs_industrial_meat,forage fish,239.81924675692287
+THA,Thailand,pigs_intermediate_meat,forage fish,7235.6739943032935
+THA,Thailand,pigs_industrial_meat,forage fish,43696.37193801622
+THA,Thailand,pigs_backyard_meat,forage fish,119.9196846015279
+THA,Thailand,marine-fish-general_aquaculture_meat,forage fish,11013.052185539123
+THA,Thailand,shrimp_aquaculture_meat,forage fish,147144.07848332069
+TKL,Tokelau,pigs_intermediate_meat,forage fish,0.4030240673844454
+TKL,Tokelau,pigs_industrial_meat,forage fish,0.7656108282184404
+TKL,Tokelau,pigs_backyard_meat,forage fish,0.023081647941316143
+TON,Tonga,pigs_intermediate_meat,forage fish,33.12638079665754
+TON,Tonga,pigs_industrial_meat,forage fish,56.22574233360068
+TON,Tonga,pigs_backyard_meat,forage fish,1.9521053702701807
+TON,Tonga,chickens_industrial_meat,forage fish,21.161325996263173
+TON,Tonga,chickens_industrial_eggs,forage fish,6.5509683982254785
+TTO,Trinidad and Tobago,pigs_industrial_meat,forage fish,269.50424777063
+TTO,Trinidad and Tobago,pigs_backyard_meat,forage fish,0.17677625039908304
+TUN,Tunisia,pigs_intermediate_meat,forage fish,1.8377031844136353
+TUN,Tunisia,pigs_industrial_meat,forage fish,31.743453040062068
+TUN,Tunisia,pigs_backyard_meat,forage fish,0.09492240168953046
+TUN,Tunisia,marine-fish-general_aquaculture_meat,forage fish,9950.737732905956
+TUR,Turkey,pigs_intermediate_meat,forage fish,0.02588001236290607
+TUR,Turkey,pigs_industrial_meat,forage fish,7.97908980555092
+TUR,Turkey,pigs_backyard_meat,forage fish,0.008230924022341572
+TUR,Turkey,chickens_industrial_meat,forage fish,9119.86253103759
+TUR,Turkey,marine-fish-general_aquaculture_meat,forage fish,79334.19262651693
+TUR,Turkey,salmon_aquaculture_meat,forage fish,3649.192156048171
+TUR,Turkey,salmon_aquaculture_meat,forage fish,2432.7947706987807
+TUR,Turkey,tuna_aquaculture_meat,forage fish,2611.1642951012827
+TKM,Turkmenistan,chickens_industrial_meat,forage fish,742.4989659041557
+TUV,Tuvalu,pigs_intermediate_meat,forage fish,5.789843752044942
+TUV,Tuvalu,pigs_industrial_meat,forage fish,10.998765158186115
+TUV,Tuvalu,pigs_backyard_meat,forage fish,0.33159095432494784
+UGA,Uganda,pigs_intermediate_meat,forage fish,902.507067118796
+UGA,Uganda,pigs_industrial_meat,forage fish,684.176755266565
+UGA,Uganda,pigs_backyard_meat,forage fish,118.39882154659789
+UKR,Ukraine,pigs_industrial_meat,forage fish,3354.820489899733
+UKR,Ukraine,chickens_industrial_eggs,forage fish,2960.706952405496
+ARE,United Arab Emirates,chickens_industrial_meat,forage fish,800.7210434778195
+ARE,United Arab Emirates,marine-fish-general_aquaculture_meat,forage fish,1213.8634673439917
+GBR,United Kingdom,pigs_intermediate_meat,forage fish,325.1724366573805
+GBR,United Kingdom,pigs_industrial_meat,forage fish,37294.9876974805
+GBR,United Kingdom,pigs_backyard_meat,forage fish,1.2882650148585735
+GBR,United Kingdom,salmon_aquaculture_meat,forage fish,118444.85608783437
+GBR,United Kingdom,salmon_aquaculture_meat,forage fish,78963.23739188958
+USA,United States,pigs_intermediate_meat,forage fish,3.946164491918601
+USA,United States,pigs_industrial_meat,forage fish,717426.0205540127
+USA,United States,pigs_backyard_meat,forage fish,71.04839584850635
+USA,United States,chickens_industrial_meat,forage fish,201658.66197645568
+USA,United States,marine-fish-general_aquaculture_meat,forage fish,805.8091623620921
+USA,United States,salmon_aquaculture_meat,forage fish,9003.42520355635
+USA,United States,salmon_aquaculture_meat,forage fish,6002.283469037566
+USA,United States,shrimp_aquaculture_meat,forage fish,668.816242232918
+UZB,Uzbekistan,pigs_intermediate_meat,forage fish,38.18563389571218
+UZB,Uzbekistan,pigs_industrial_meat,forage fish,54.23525094164523
+UZB,Uzbekistan,pigs_backyard_meat,forage fish,3.165571069491417
+UZB,Uzbekistan,chickens_industrial_meat,forage fish,1211.1162552591754
+VUT,Vanuatu,pigs_intermediate_meat,forage fish,61.54583879295927
+VUT,Vanuatu,pigs_industrial_meat,forage fish,118.95957570473561
+VUT,Vanuatu,pigs_backyard_meat,forage fish,4.016937359073961
+VUT,Vanuatu,chickens_industrial_meat,forage fish,57.72793480418437
+VUT,Vanuatu,chickens_industrial_eggs,forage fish,12.782231356080633
+VEN,Venezuela,shrimp_aquaculture_meat,forage fish,10034.29144807501
+VNM,Vietnam,crustaceans_aquaculture_meat,forage fish,41438.17271496856
+VNM,Vietnam,marine-fish-general_aquaculture_meat,forage fish,6498.13728986644
+VNM,Vietnam,shrimp_aquaculture_meat,forage fish,290135.89753973216
+VIR,"Virgin Islands, U.S.",pigs_intermediate_meat,forage fish,1.1644557864590828
+VIR,"Virgin Islands, U.S.",pigs_industrial_meat,forage fish,13.778142429649032
+VIR,"Virgin Islands, U.S.",pigs_backyard_meat,forage fish,0.04615818999727465
+WLF,Wallis and Futuna,pigs_intermediate_meat,forage fish,10.115904091349579
+WLF,Wallis and Futuna,pigs_industrial_meat,forage fish,19.216831788282857
+WLF,Wallis and Futuna,pigs_backyard_meat,forage fish,0.5793493633270355
+YEM,Yemen,chickens_industrial_meat,forage fish,1667.0099214617517
+ZWE,Zimbabwe,pigs_intermediate_meat,forage fish,309.3073801102588
+ZWE,Zimbabwe,pigs_industrial_meat,forage fish,9.974427407871307
+ZWE,Zimbabwe,pigs_backyard_meat,forage fish,12.40335953403592

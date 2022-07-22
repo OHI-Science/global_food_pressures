@@ -1,0 +1,1465 @@
+iso3c,ID_0,Country,animal,kg_n_yr
+AFG,1,Afghanistan,cows,35.38
+AFG,1,Afghanistan,buffaloes,39.394285714285715
+AFG,1,Afghanistan,goats,3.95
+AFG,1,Afghanistan,sheep,4.24
+AFG,1,Afghanistan,pigs,15.064
+AFG,1,Afghanistan,chickens,0.52
+CYP,61,Cyprus,cows,37.69
+CYP,61,Cyprus,buffaloes,44.6325
+CYP,61,Cyprus,goats,3.66
+CYP,61,Cyprus,sheep,4.02
+CYP,61,Cyprus,pigs,19.04
+CYP,61,Cyprus,chickens,0.56
+ALB,4,Albania,cows,42.47
+ALB,4,Albania,buffaloes,55.74
+ALB,4,Albania,goats,5.09
+ALB,4,Albania,sheep,4.81
+ALB,4,Albania,pigs,18.86
+ALB,4,Albania,chickens,0.7
+DZA,5,Algeria,cows,23
+DZA,5,Algeria,buffaloes,32.82
+DZA,5,Algeria,goats,2.42
+DZA,5,Algeria,sheep,3.23
+DZA,5,Algeria,pigs,12.56
+DZA,5,Algeria,chickens,0.63
+ASM,6,American Samoa,cows,46.58625
+ASM,6,American Samoa,buffaloes,43.435267916415384
+ASM,6,American Samoa,goats,5.071666666666666
+ASM,6,American Samoa,sheep,5.865
+ASM,6,American Samoa,pigs,18.77
+ASM,6,American Samoa,chickens,0.6375
+AGO,8,Angola,cows,32.23
+AGO,8,Angola,buffaloes,32.82
+AGO,8,Angola,goats,2.85
+AGO,8,Angola,sheep,3.41
+AGO,8,Angola,pigs,8.02
+AGO,8,Angola,chickens,0.39
+ATG,11,Antigua and Barbuda,cows,34.01416666666667
+ATG,11,Antigua and Barbuda,buffaloes,50.828863636363636
+ATG,11,Antigua and Barbuda,goats,2.9341666666666666
+ATG,11,Antigua and Barbuda,sheep,3.8433333333333333
+ATG,11,Antigua and Barbuda,pigs,20.42
+ATG,11,Antigua and Barbuda,chickens,0.4928571428571428
+ARG,12,Argentina,cows,46.78
+ARG,12,Argentina,buffaloes,54.07
+ARG,12,Argentina,goats,4.23
+ARG,12,Argentina,sheep,4.87
+ARG,12,Argentina,pigs,25.05
+ARG,12,Argentina,chickens,0.63
+ARM,13,Armenia,cows,44.56
+ARM,13,Armenia,buffaloes,44.6325
+ARM,13,Armenia,goats,4.17
+ARM,13,Armenia,sheep,4.28
+ARM,13,Armenia,pigs,12.93
+ARM,13,Armenia,chickens,0.48
+AUS,15,Australia,cows,48.24
+AUS,15,Australia,buffaloes,43.435267916415384
+AUS,15,Australia,goats,5.34
+AUS,15,Australia,sheep,6.3
+AUS,15,Australia,pigs,12.25
+AUS,15,Australia,chickens,0.69
+AUT,16,Austria,cows,62.26
+AUT,16,Austria,buffaloes,52.741282051282056
+AUT,16,Austria,goats,6.59
+AUT,16,Austria,sheep,5.59
+AUT,16,Austria,pigs,20.84
+AUT,16,Austria,chickens,0.47
+AZE,17,Azerbaijan,cows,46.84
+AZE,17,Azerbaijan,buffaloes,48.59
+AZE,17,Azerbaijan,goats,3.06
+AZE,17,Azerbaijan,sheep,3.72
+AZE,17,Azerbaijan,pigs,15.6
+AZE,17,Azerbaijan,chickens,0.53
+BHS,18,Bahamas,cows,38.64
+BHS,18,Bahamas,buffaloes,50.828863636363636
+BHS,18,Bahamas,goats,3.79
+BHS,18,Bahamas,sheep,4.43
+BHS,18,Bahamas,pigs,21.31
+BHS,18,Bahamas,chickens,0.47
+BHR,19,Bahrain,cows,34.29
+BHR,19,Bahrain,buffaloes,44.6325
+BHR,19,Bahrain,goats,2.8
+BHR,19,Bahrain,sheep,3.66
+BHR,19,Bahrain,pigs,14.82625
+BHR,19,Bahrain,chickens,0.31
+BGD,20,Bangladesh,cows,31.97
+BGD,20,Bangladesh,buffaloes,32.44
+BGD,20,Bangladesh,goats,2.96
+BGD,20,Bangladesh,sheep,2.52
+BGD,20,Bangladesh,pigs,12.11
+BGD,20,Bangladesh,chickens,0.36
+BRB,21,Barbados,cows,34.01416666666667
+BRB,21,Barbados,buffaloes,50.828863636363636
+BRB,21,Barbados,goats,2.9341666666666666
+BRB,21,Barbados,sheep,3.8433333333333333
+BRB,21,Barbados,pigs,7.88
+BRB,21,Barbados,chickens,0.4928571428571428
+BLR,22,Belarus,cows,47.05
+BLR,22,Belarus,buffaloes,47.943333333333335
+BLR,22,Belarus,goats,7.21
+BLR,22,Belarus,sheep,4.07
+BLR,22,Belarus,pigs,19.51
+BLR,22,Belarus,chickens,0.88
+BEL,23,Belgium,cows,60.96
+BEL,23,Belgium,buffaloes,52.741282051282056
+BEL,23,Belgium,goats,4.14
+BEL,23,Belgium,sheep,5.35
+BEL,23,Belgium,pigs,13.31
+BEL,23,Belgium,chickens,0.47
+BLZ,24,Belize,cows,34.95
+BLZ,24,Belize,buffaloes,46.57
+BLZ,24,Belize,goats,3.25
+BLZ,24,Belize,sheep,4.52
+BLZ,24,Belize,pigs,14.370000000000001
+BLZ,24,Belize,chickens,0.54
+BEN,25,Benin,cows,32.01
+BEN,25,Benin,buffaloes,32.82
+BEN,25,Benin,goats,4.34
+BEN,25,Benin,sheep,3.11
+BEN,25,Benin,pigs,12.05
+BEN,25,Benin,chickens,0.54
+BTN,27,Bhutan,cows,33.54
+BTN,27,Bhutan,buffaloes,41.14
+BTN,27,Bhutan,goats,3.02
+BTN,27,Bhutan,sheep,3.81
+BTN,27,Bhutan,pigs,12.61
+BTN,27,Bhutan,chickens,0.45
+BOL,28,Bolivia,cows,46.4
+BOL,28,Bolivia,buffaloes,53.2625
+BOL,28,Bolivia,goats,3.69
+BOL,28,Bolivia,sheep,5.06
+BOL,28,Bolivia,pigs,20.69
+BOL,28,Bolivia,chickens,0.83
+BES,29,"Bonaire, Sint Eustatius and Saba",cows,36.5
+BES,29,"Bonaire, Sint Eustatius and Saba",buffaloes,50.828863636363636
+BES,29,"Bonaire, Sint Eustatius and Saba",goats,3.31
+BES,29,"Bonaire, Sint Eustatius and Saba",sheep,4.5
+BES,29,"Bonaire, Sint Eustatius and Saba",pigs,18.84
+BES,29,"Bonaire, Sint Eustatius and Saba",chickens,0.35
+BIH,30,Bosnia and Herzegovina,cows,42.55
+BIH,30,Bosnia and Herzegovina,buffaloes,52.67
+BIH,30,Bosnia and Herzegovina,goats,4.72
+BIH,30,Bosnia and Herzegovina,sheep,4.81
+BIH,30,Bosnia and Herzegovina,pigs,16.51
+BIH,30,Bosnia and Herzegovina,chickens,0.68
+BWA,31,Botswana,cows,26.66
+BWA,31,Botswana,buffaloes,32.82
+BWA,31,Botswana,goats,3.59
+BWA,31,Botswana,sheep,3.58
+BWA,31,Botswana,pigs,8.91
+BWA,31,Botswana,chickens,0.65
+BRA,33,Brazil,cows,43.5
+BRA,33,Brazil,buffaloes,52.75
+BRA,33,Brazil,goats,3.05
+BRA,33,Brazil,sheep,5
+BRA,33,Brazil,pigs,16.74
+BRA,33,Brazil,chickens,0.69
+VGB,35,British Virgin Islands,cows,34.01416666666667
+VGB,35,British Virgin Islands,buffaloes,50.828863636363636
+VGB,35,British Virgin Islands,goats,2.9341666666666666
+VGB,35,British Virgin Islands,sheep,3.8433333333333333
+VGB,35,British Virgin Islands,pigs,12.76
+VGB,35,British Virgin Islands,chickens,0
+BRN,36,Brunei,cows,27.56
+BRN,36,Brunei,buffaloes,33.03
+BRN,36,Brunei,goats,1.82
+BRN,36,Brunei,sheep,1.47
+BRN,36,Brunei,pigs,21.69
+BRN,36,Brunei,chickens,0.94
+BGR,37,Bulgaria,cows,48.46
+BGR,37,Bulgaria,buffaloes,52.76
+BGR,37,Bulgaria,goats,4.83
+BGR,37,Bulgaria,sheep,4.34
+BGR,37,Bulgaria,pigs,19.35
+BGR,37,Bulgaria,chickens,0.59
+BFA,38,Burkina Faso,cows,35.11
+BFA,38,Burkina Faso,buffaloes,32.82
+BFA,38,Burkina Faso,goats,2.56
+BFA,38,Burkina Faso,sheep,3.26
+BFA,38,Burkina Faso,pigs,7.59
+BFA,38,Burkina Faso,chickens,0.5
+BDI,39,Burundi,cows,26.43
+BDI,39,Burundi,buffaloes,32.82
+BDI,39,Burundi,goats,2.11
+BDI,39,Burundi,sheep,2.54
+BDI,39,Burundi,pigs,6.01
+BDI,39,Burundi,chickens,0.38
+KHM,40,Cambodia,cows,29.81
+KHM,40,Cambodia,buffaloes,31.44
+KHM,40,Cambodia,goats,3.073
+KHM,40,Cambodia,sheep,2.45
+KHM,40,Cambodia,pigs,11.34
+KHM,40,Cambodia,chickens,0.52
+CMR,41,Cameroon,cows,30.59
+CMR,41,Cameroon,buffaloes,32.82
+CMR,41,Cameroon,goats,2.57
+CMR,41,Cameroon,sheep,3.45
+CMR,41,Cameroon,pigs,8.94
+CMR,41,Cameroon,chickens,0.5
+CAN,42,Canada,cows,52.3
+CAN,42,Canada,buffaloes,58.1
+CAN,42,Canada,goats,5.23
+CAN,42,Canada,sheep,6.47
+CAN,42,Canada,pigs,13.04
+CAN,42,Canada,chickens,0.72
+CPV,43,Cape Verde,cows,30.708125
+CPV,43,Cape Verde,buffaloes,32.82
+CPV,43,Cape Verde,goats,2.481875
+CPV,43,Cape Verde,sheep,2.8
+CPV,43,Cape Verde,pigs,14.26
+CPV,43,Cape Verde,chickens,0.5293333333333333
+CYM,45,Cayman Islands,cows,34.01416666666667
+CYM,45,Cayman Islands,buffaloes,50.828863636363636
+CYM,45,Cayman Islands,goats,2.9341666666666666
+CYM,45,Cayman Islands,sheep,3.8433333333333333
+CYM,45,Cayman Islands,pigs,19.55
+CYM,45,Cayman Islands,chickens,0.4928571428571428
+CAF,46,Central African Republic,cows,34.8
+CAF,46,Central African Republic,buffaloes,32.82
+CAF,46,Central African Republic,goats,2.7
+CAF,46,Central African Republic,sheep,3.69
+CAF,46,Central African Republic,pigs,10.49
+CAF,46,Central African Republic,chickens,0.57
+TCD,47,Chad,cows,33.7
+TCD,47,Chad,buffaloes,32.82
+TCD,47,Chad,goats,3.21
+TCD,47,Chad,sheep,3.42
+TCD,47,Chad,pigs,11.75
+TCD,47,Chad,chickens,0.56
+CHL,48,Chile,cows,45.96
+CHL,48,Chile,buffaloes,53.2625
+CHL,48,Chile,goats,3.74
+CHL,48,Chile,sheep,5.7
+CHL,48,Chile,pigs,21.53
+CHL,48,Chile,chickens,0.58
+CHN,49,China,cows,39.95
+CHN,49,China,buffaloes,31.36
+CHN,49,China,goats,2.51
+CHN,49,China,sheep,4.03
+CHN,49,China,pigs,14.47
+CHN,49,China,chickens,0.56
+COL,53,Colombia,cows,44.26
+COL,53,Colombia,buffaloes,52.51
+COL,53,Colombia,goats,3.37
+COL,53,Colombia,sheep,4.84
+COL,53,Colombia,pigs,14.36
+COL,53,Colombia,chickens,0.57
+COM,54,Comoros,cows,25.95
+COM,54,Comoros,buffaloes,32.82
+COM,54,Comoros,goats,1.21
+COM,54,Comoros,sheep,1.47
+COM,54,Comoros,pigs,7.633333333333333
+COM,54,Comoros,chickens,0.72
+COK,55,Cook Islands,cows,46.58625
+COK,55,Cook Islands,buffaloes,43.435267916415384
+COK,55,Cook Islands,goats,5.071666666666666
+COK,55,Cook Islands,sheep,5.865
+COK,55,Cook Islands,pigs,19.18
+COK,55,Cook Islands,chickens,0.6375
+CRI,56,Costa Rica,cows,44.57
+CRI,56,Costa Rica,buffaloes,46.57
+CRI,56,Costa Rica,goats,2.92
+CRI,56,Costa Rica,sheep,4.44
+CRI,56,Costa Rica,pigs,15.46
+CRI,56,Costa Rica,chickens,0.63
+CIV,57,Côte d'Ivoire,cows,33.55
+CIV,57,Côte d'Ivoire,buffaloes,32.82
+CIV,57,Côte d'Ivoire,goats,2.52
+CIV,57,Côte d'Ivoire,sheep,2.77
+CIV,57,Côte d'Ivoire,pigs,12.78
+CIV,57,Côte d'Ivoire,chickens,0.65
+HRV,58,Croatia,cows,44.94
+HRV,58,Croatia,buffaloes,55.74
+HRV,58,Croatia,goats,5.71
+HRV,58,Croatia,sheep,4.8
+HRV,58,Croatia,pigs,18.34
+HRV,58,Croatia,chickens,0.59
+CUB,59,Cuba,cows,27.63
+CUB,59,Cuba,buffaloes,50.828863636363636
+CUB,59,Cuba,goats,2.88
+CUB,59,Cuba,sheep,3.27
+CUB,59,Cuba,pigs,12.55
+CUB,59,Cuba,chickens,0.47
+CZE,62,Czech Republic,cows,55.56
+CZE,62,Czech Republic,buffaloes,47.943333333333335
+CZE,62,Czech Republic,goats,7.35
+CZE,62,Czech Republic,sheep,4.47
+CZE,62,Czech Republic,pigs,18.93
+CZE,62,Czech Republic,chickens,0.5
+COD,301,Democratic Republic of the Congo,cows,26.26
+COD,301,Democratic Republic of the Congo,buffaloes,32.82
+COD,301,Democratic Republic of the Congo,goats,2.71
+COD,301,Democratic Republic of the Congo,sheep,3.16
+COD,301,Democratic Republic of the Congo,pigs,6.05
+COD,301,Democratic Republic of the Congo,chickens,0.33
+DNK,64,Denmark,cows,60.13
+DNK,64,Denmark,buffaloes,52.741282051282056
+DNK,64,Denmark,goats,5.888333333333334
+DNK,64,Denmark,sheep,5.43
+DNK,64,Denmark,pigs,20.19
+DNK,64,Denmark,chickens,0.62
+DJI,65,Djibouti,cows,27.92
+DJI,65,Djibouti,buffaloes,32.82
+DJI,65,Djibouti,goats,2.64
+DJI,65,Djibouti,sheep,2.79
+DJI,65,Djibouti,pigs,7.633333333333333
+DJI,65,Djibouti,chickens,0.47933333333333333
+DOM,67,Dominican Republic,cows,32.83
+DOM,67,Dominican Republic,buffaloes,50.828863636363636
+DOM,67,Dominican Republic,goats,3
+DOM,67,Dominican Republic,sheep,4.1
+DOM,67,Dominican Republic,pigs,16.37
+DOM,67,Dominican Republic,chickens,0.26
+DMA,66,Dominica,cows,39.94
+DMA,66,Dominica,buffaloes,50.828863636363636
+DMA,66,Dominica,goats,3.65
+DMA,66,Dominica,sheep,5.01
+DMA,66,Dominica,pigs,23.39
+DMA,66,Dominica,chickens,0.8
+ECU,68,Ecuador,cows,43.14
+ECU,68,Ecuador,buffaloes,53.2625
+ECU,68,Ecuador,goats,3.26
+ECU,68,Ecuador,sheep,3.82
+ECU,68,Ecuador,pigs,16.9
+ECU,68,Ecuador,chickens,0.81
+EGY,69,Egypt,cows,24.45
+EGY,69,Egypt,buffaloes,32.82
+EGY,69,Egypt,goats,1.69
+EGY,69,Egypt,sheep,2.39
+EGY,69,Egypt,pigs,8.17
+EGY,69,Egypt,chickens,0.44
+SLV,70,El Salvador,cows,35.91
+SLV,70,El Salvador,buffaloes,46.57
+SLV,70,El Salvador,goats,2.7
+SLV,70,El Salvador,sheep,3.93
+SLV,70,El Salvador,pigs,14.34
+SLV,70,El Salvador,chickens,0.52
+GNQ,71,Equatorial Guinea,cows,24.33
+GNQ,71,Equatorial Guinea,buffaloes,32.82
+GNQ,71,Equatorial Guinea,goats,2.6
+GNQ,71,Equatorial Guinea,sheep,3.19
+GNQ,71,Equatorial Guinea,pigs,12.19
+GNQ,71,Equatorial Guinea,chickens,0.77
+ERI,72,Eritrea,cows,28.23
+ERI,72,Eritrea,buffaloes,32.82
+ERI,72,Eritrea,goats,2.66
+ERI,72,Eritrea,sheep,3.23
+ERI,72,Eritrea,pigs,7.633333333333333
+ERI,72,Eritrea,chickens,0.53
+EST,73,Estonia,cows,64.12
+EST,73,Estonia,buffaloes,52.741282051282056
+EST,73,Estonia,goats,6
+EST,73,Estonia,sheep,4.68
+EST,73,Estonia,pigs,19.11
+EST,73,Estonia,chickens,0.59
+ETH,74,Ethiopia,cows,31.15
+ETH,74,Ethiopia,buffaloes,32.82
+ETH,74,Ethiopia,goats,2.65
+ETH,74,Ethiopia,sheep,2.77
+ETH,74,Ethiopia,pigs,7.56
+ETH,74,Ethiopia,chickens,0.47
+FLK,75,Falkland Islands,cows,43.09076923076923
+FLK,75,Falkland Islands,buffaloes,53.2625
+FLK,75,Falkland Islands,goats,3.4715384615384615
+FLK,75,Falkland Islands,sheep,4.88
+FLK,75,Falkland Islands,pigs,20.44
+FLK,75,Falkland Islands,chickens,0.6161538461538462
+FJI,77,Fiji,cows,41.5475
+FJI,77,Fiji,buffaloes,43.435267916415384
+FJI,77,Fiji,goats,4.463333333333333
+FJI,77,Fiji,sheep,5.43
+FJI,77,Fiji,pigs,25.19
+FJI,77,Fiji,chickens,0.5800000000000001
+FIN,78,Finland,cows,67.33
+FIN,78,Finland,buffaloes,52.741282051282056
+FIN,78,Finland,goats,4.11
+FIN,78,Finland,sheep,4.17
+FIN,78,Finland,pigs,19.01
+FIN,78,Finland,chickens,0.55
+FRA,79,France,cows,59.01
+FRA,79,France,buffaloes,52.741282051282056
+FRA,79,France,goats,7.57
+FRA,79,France,sheep,5.57
+FRA,79,France,pigs,14.68
+FRA,79,France,chickens,0.58
+GUF,80,French Guiana,cows,35.54
+GUF,80,French Guiana,buffaloes,53.2625
+GUF,80,French Guiana,goats,3.42
+GUF,80,French Guiana,sheep,4.91
+GUF,80,French Guiana,pigs,12.62
+GUF,80,French Guiana,chickens,0.44
+PYF,81,French Polynesia,cows,46.58625
+PYF,81,French Polynesia,buffaloes,43.435267916415384
+PYF,81,French Polynesia,goats,5.071666666666666
+PYF,81,French Polynesia,sheep,5.865
+PYF,81,French Polynesia,pigs,23.57
+PYF,81,French Polynesia,chickens,0.6375
+GAB,83,Gabon,cows,32.3
+GAB,83,Gabon,buffaloes,32.82
+GAB,83,Gabon,goats,2.64
+GAB,83,Gabon,sheep,3.17
+GAB,83,Gabon,pigs,6.21
+GAB,83,Gabon,chickens,0.35
+GMB,84,Gambia,cows,31.02
+GMB,84,Gambia,buffaloes,32.82
+GMB,84,Gambia,goats,2.34
+GMB,84,Gambia,sheep,3.15
+GMB,84,Gambia,pigs,8.57
+GMB,84,Gambia,chickens,0.42
+GEO,85,Georgia,cows,42.12
+GEO,85,Georgia,buffaloes,45.75
+GEO,85,Georgia,goats,3.19
+GEO,85,Georgia,sheep,4.04
+GEO,85,Georgia,pigs,14.35
+GEO,85,Georgia,chickens,0.53
+DEU,86,Germany,cows,66.81
+DEU,86,Germany,buffaloes,52.741282051282056
+DEU,86,Germany,goats,6.02
+DEU,86,Germany,sheep,5.24
+DEU,86,Germany,pigs,20.73
+DEU,86,Germany,chickens,0.43
+GHA,87,Ghana,cows,32.57
+GHA,87,Ghana,buffaloes,32.82
+GHA,87,Ghana,goats,2.39
+GHA,87,Ghana,sheep,2.71
+GHA,87,Ghana,pigs,10.25
+GHA,87,Ghana,chickens,0.52
+GRC,89,Greece,cows,49.79
+GRC,89,Greece,buffaloes,55.74
+GRC,89,Greece,goats,5
+GRC,89,Greece,sheep,5.15
+GRC,89,Greece,pigs,19.01
+GRC,89,Greece,chickens,0.47
+GRD,91,Grenada,cows,34.01416666666667
+GRD,91,Grenada,buffaloes,50.828863636363636
+GRD,91,Grenada,goats,2.9341666666666666
+GRD,91,Grenada,sheep,3.8433333333333333
+GRD,91,Grenada,pigs,24.66
+GRD,91,Grenada,chickens,0.63
+GLP,92,Guadeloupe,cows,33.43
+GLP,92,Guadeloupe,buffaloes,50.828863636363636
+GLP,92,Guadeloupe,goats,1.31
+GLP,92,Guadeloupe,sheep,1.86
+GLP,92,Guadeloupe,pigs,11.85
+GLP,92,Guadeloupe,chickens,0.63
+GUM,93,Guam,cows,46.58625
+GUM,93,Guam,buffaloes,43.435267916415384
+GUM,93,Guam,goats,5.071666666666666
+GUM,93,Guam,sheep,5.865
+GUM,93,Guam,pigs,18.52
+GUM,93,Guam,chickens,0.6375
+GTM,94,Guatemala,cows,35.33
+GTM,94,Guatemala,buffaloes,46.57
+GTM,94,Guatemala,goats,3.23
+GTM,94,Guatemala,sheep,4.31
+GTM,94,Guatemala,pigs,14.07
+GTM,94,Guatemala,chickens,0.55
+GNB,97,Guinea-Bissau,cows,29.3
+GNB,97,Guinea-Bissau,buffaloes,32.82
+GNB,97,Guinea-Bissau,goats,2.1
+GNB,97,Guinea-Bissau,sheep,1.69
+GNB,97,Guinea-Bissau,pigs,14.53
+GNB,97,Guinea-Bissau,chickens,0.66
+GIN,96,Guinea,cows,32.39
+GIN,96,Guinea,buffaloes,32.82
+GIN,96,Guinea,goats,2.67
+GIN,96,Guinea,sheep,3.19
+GIN,96,Guinea,pigs,15.01
+GIN,96,Guinea,chickens,0.72
+GUY,98,Guyana,cows,42.23
+GUY,98,Guyana,buffaloes,53.2625
+GUY,98,Guyana,goats,3.19
+GUY,98,Guyana,sheep,4.67
+GUY,98,Guyana,pigs,14.88
+GUY,98,Guyana,chickens,0.62
+HTI,99,Haiti,cows,33.02
+HTI,99,Haiti,buffaloes,50.828863636363636
+HTI,99,Haiti,goats,2.5
+HTI,99,Haiti,sheep,3.81
+HTI,99,Haiti,pigs,13.37
+HTI,99,Haiti,chickens,0.51
+HND,101,Honduras,cows,40.53
+HND,101,Honduras,buffaloes,46.57
+HND,101,Honduras,goats,3.18
+HND,101,Honduras,sheep,4.5
+HND,101,Honduras,pigs,16.12
+HND,101,Honduras,chickens,0.64
+HKG,102,Hong Kong,cows,25.62
+HKG,102,Hong Kong,buffaloes,33.97
+HKG,102,Hong Kong,goats,2.952
+HKG,102,Hong Kong,sheep,1.31
+HKG,102,Hong Kong,pigs,15.22
+HKG,102,Hong Kong,chickens,0.5820000000000001
+HUN,103,Hungary,cows,59.86
+HUN,103,Hungary,buffaloes,47.943333333333335
+HUN,103,Hungary,goats,4.52
+HUN,103,Hungary,sheep,4.1
+HUN,103,Hungary,pigs,16.36
+HUN,103,Hungary,chickens,0.49
+ISL,104,Iceland,cows,62.891111111111115
+ISL,104,Iceland,buffaloes,52.741282051282056
+ISL,104,Iceland,goats,5.888333333333334
+ISL,104,Iceland,sheep,4.59375
+ISL,104,Iceland,pigs,19.01
+ISL,104,Iceland,chickens,0.63
+IND,105,India,cows,34.47
+IND,105,India,buffaloes,40.57
+IND,105,India,goats,2.71
+IND,105,India,sheep,2.75
+IND,105,India,pigs,15.41
+IND,105,India,chickens,0.68
+IDN,106,Indonesia,cows,30.64
+IDN,106,Indonesia,buffaloes,31.76
+IDN,106,Indonesia,goats,4.23
+IDN,106,Indonesia,sheep,3.25
+IDN,106,Indonesia,pigs,17.89
+IDN,106,Indonesia,chickens,0.81
+IRN,107,Iran,cows,34.02
+IRN,107,Iran,buffaloes,42.34
+IRN,107,Iran,goats,3.37
+IRN,107,Iran,sheep,3.36
+IRN,107,Iran,pigs,15.064
+IRN,107,Iran,chickens,0.54
+IRQ,108,Iraq,cows,30.88
+IRQ,108,Iraq,buffaloes,44.6325
+IRQ,108,Iraq,goats,3.31
+IRQ,108,Iraq,sheep,3.81
+IRQ,108,Iraq,pigs,14.82625
+IRQ,108,Iraq,chickens,0.47
+IRL,109,Ireland,cows,58.95
+IRL,109,Ireland,buffaloes,52.741282051282056
+IRL,109,Ireland,goats,5.06
+IRL,109,Ireland,sheep,4.61
+IRL,109,Ireland,pigs,18.65
+IRL,109,Ireland,chickens,0.63
+ISR,111,Israel,cows,73.85
+ISR,111,Israel,buffaloes,44.6325
+ISR,111,Israel,goats,3.79
+ISR,111,Israel,sheep,4.34
+ISR,111,Israel,pigs,17.71
+ISR,111,Israel,chickens,0.54
+ITA,112,Italy,cows,52.28
+ITA,112,Italy,buffaloes,58.81
+ITA,112,Italy,goats,4.56
+ITA,112,Italy,sheep,5.25
+ITA,112,Italy,pigs,17.83
+ITA,112,Italy,chickens,0.48
+JAM,113,Jamaica,cows,32.15
+JAM,113,Jamaica,buffaloes,50.828863636363636
+JAM,113,Jamaica,goats,4.44
+JAM,113,Jamaica,sheep,4.33
+JAM,113,Jamaica,pigs,18.13
+JAM,113,Jamaica,chickens,0.71
+JPN,114,Japan,cows,55.56
+JPN,114,Japan,buffaloes,32.665
+JPN,114,Japan,goats,2.78
+JPN,114,Japan,sheep,3.39
+JPN,114,Japan,pigs,11.71
+JPN,114,Japan,chickens,0.49
+JOR,116,Jordan,cows,37.5
+JOR,116,Jordan,buffaloes,44.6325
+JOR,116,Jordan,goats,3.16
+JOR,116,Jordan,sheep,4.04
+JOR,116,Jordan,pigs,14.82625
+JOR,116,Jordan,chickens,0.71
+KAZ,117,Kazakhstan,cows,54.94
+KAZ,117,Kazakhstan,buffaloes,35.09
+KAZ,117,Kazakhstan,goats,3.11
+KAZ,117,Kazakhstan,sheep,4.57
+KAZ,117,Kazakhstan,pigs,14.34
+KAZ,117,Kazakhstan,chickens,0.53
+KEN,118,Kenya,cows,35.48
+KEN,118,Kenya,buffaloes,32.82
+KEN,118,Kenya,goats,3.55
+KEN,118,Kenya,sheep,3.2
+KEN,118,Kenya,pigs,7.77
+KEN,118,Kenya,chickens,0.5
+KIR,119,Kiribati,cows,46.58625
+KIR,119,Kiribati,buffaloes,43.435267916415384
+KIR,119,Kiribati,goats,5.071666666666666
+KIR,119,Kiribati,sheep,5.865
+KIR,119,Kiribati,pigs,17.06
+KIR,119,Kiribati,chickens,0.6375
+KWT,121,Kuwait,cows,34.52
+KWT,121,Kuwait,buffaloes,44.6325
+KWT,121,Kuwait,goats,3.44
+KWT,121,Kuwait,sheep,3.96
+KWT,121,Kuwait,pigs,14.82625
+KWT,121,Kuwait,chickens,0.39
+KGZ,122,Kyrgyzstan,cows,53.53
+KGZ,122,Kyrgyzstan,buffaloes,35.09
+KGZ,122,Kyrgyzstan,goats,3.02
+KGZ,122,Kyrgyzstan,sheep,4.42
+KGZ,122,Kyrgyzstan,pigs,16.29
+KGZ,122,Kyrgyzstan,chickens,0.62
+LAO,123,Laos,cows,34.12
+LAO,123,Laos,buffaloes,31.48
+LAO,123,Laos,goats,3.42
+LAO,123,Laos,sheep,2.38
+LAO,123,Laos,pigs,10.47
+LAO,123,Laos,chickens,0.51
+LVA,124,Latvia,cows,61.34
+LVA,124,Latvia,buffaloes,52.741282051282056
+LVA,124,Latvia,goats,6.61
+LVA,124,Latvia,sheep,4.44
+LVA,124,Latvia,pigs,17.44
+LVA,124,Latvia,chickens,0.62
+LBN,125,Lebanon,cows,36.5
+LBN,125,Lebanon,buffaloes,44.6325
+LBN,125,Lebanon,goats,3.75
+LBN,125,Lebanon,sheep,4.28
+LBN,125,Lebanon,pigs,21.17
+LBN,125,Lebanon,chickens,0.72
+LSO,126,Lesotho,cows,23.95
+LSO,126,Lesotho,buffaloes,32.82
+LSO,126,Lesotho,goats,3.24
+LSO,126,Lesotho,sheep,2.53
+LSO,126,Lesotho,pigs,6.6
+LSO,126,Lesotho,chickens,0.47
+LBR,127,Liberia,cows,30.13
+LBR,127,Liberia,buffaloes,32.82
+LBR,127,Liberia,goats,2.41
+LBR,127,Liberia,sheep,2.59
+LBR,127,Liberia,pigs,9.86
+LBR,127,Liberia,chickens,0.52
+LBY,128,Libya,cows,27.86
+LBY,128,Libya,buffaloes,32.82
+LBY,128,Libya,goats,2.35
+LBY,128,Libya,sheep,2.82
+LBY,128,Libya,pigs,11.8875
+LBY,128,Libya,chickens,0.44
+LIE,129,Liechtenstein,cows,58.67
+LIE,129,Liechtenstein,buffaloes,52.741282051282056
+LIE,129,Liechtenstein,goats,4.19
+LIE,129,Liechtenstein,sheep,5.39
+LIE,129,Liechtenstein,pigs,16.87
+LIE,129,Liechtenstein,chickens,0.5071428571428571
+LTU,130,Lithuania,cows,62.07
+LTU,130,Lithuania,buffaloes,52.741282051282056
+LTU,130,Lithuania,goats,6.65
+LTU,130,Lithuania,sheep,4.53
+LTU,130,Lithuania,pigs,17.93
+LTU,130,Lithuania,chickens,0.64
+LUX,131,Luxembourg,cows,60.92
+LUX,131,Luxembourg,buffaloes,52.741282051282056
+LUX,131,Luxembourg,goats,4.38
+LUX,131,Luxembourg,sheep,6.93
+LUX,131,Luxembourg,pigs,18.95
+LUX,131,Luxembourg,chickens,0.53
+MKD,133,Macedonia,cows,43.12
+MKD,133,Macedonia,buffaloes,55.74
+MKD,133,Macedonia,goats,5.31
+MKD,133,Macedonia,sheep,4.81
+MKD,133,Macedonia,pigs,17.3
+MKD,133,Macedonia,chickens,0.6
+MDG,134,Madagascar,cows,34.12
+MDG,134,Madagascar,buffaloes,32.82
+MDG,134,Madagascar,goats,3.12
+MDG,134,Madagascar,sheep,3.37
+MDG,134,Madagascar,pigs,7.84
+MDG,134,Madagascar,chickens,0.47
+MWI,135,Malawi,cows,30
+MWI,135,Malawi,buffaloes,32.82
+MWI,135,Malawi,goats,2.49
+MWI,135,Malawi,sheep,3.02
+MWI,135,Malawi,pigs,6.4
+MWI,135,Malawi,chickens,0.4
+MYS,136,Malaysia,cows,24.72
+MYS,136,Malaysia,buffaloes,30.15
+MYS,136,Malaysia,goats,4.21
+MYS,136,Malaysia,sheep,2.9
+MYS,136,Malaysia,pigs,24.24
+MYS,136,Malaysia,chickens,0.67
+MLI,138,Mali,cows,33.04
+MLI,138,Mali,buffaloes,32.82
+MLI,138,Mali,goats,2.63
+MLI,138,Mali,sheep,3.35
+MLI,138,Mali,pigs,10.95
+MLI,138,Mali,chickens,0.55
+MLT,139,Malta,cows,49.73
+MLT,139,Malta,buffaloes,55.74
+MLT,139,Malta,goats,6.7
+MLT,139,Malta,sheep,5.22
+MLT,139,Malta,pigs,17.17
+MLT,139,Malta,chickens,0.48
+MTQ,141,Martinique,cows,34.99
+MTQ,141,Martinique,buffaloes,50.828863636363636
+MTQ,141,Martinique,goats,2.93
+MTQ,141,Martinique,sheep,4.13
+MTQ,141,Martinique,pigs,11.92
+MTQ,141,Martinique,chickens,0.53
+MRT,142,Mauritania,cows,31.97
+MRT,142,Mauritania,buffaloes,32.82
+MRT,142,Mauritania,goats,3.08
+MRT,142,Mauritania,sheep,3.1
+MRT,142,Mauritania,pigs,8.04
+MRT,142,Mauritania,chickens,0.4
+MUS,143,Mauritius,cows,30.596249999999998
+MUS,143,Mauritius,buffaloes,32.82
+MUS,143,Mauritius,goats,2.716
+MUS,143,Mauritius,sheep,2.92875
+MUS,143,Mauritius,pigs,5.43
+MUS,143,Mauritius,chickens,0.47933333333333333
+MYT,144,Mayotte,cows,13.61
+MYT,144,Mayotte,buffaloes,32.82
+MYT,144,Mayotte,goats,2.716
+MYT,144,Mayotte,sheep,1.04
+MYT,144,Mayotte,pigs,7.633333333333333
+MYT,144,Mayotte,chickens,0.47933333333333333
+MEX,145,Mexico,cows,41.87
+MEX,145,Mexico,buffaloes,46.57
+MEX,145,Mexico,goats,3.3
+MEX,145,Mexico,sheep,4.24
+MEX,145,Mexico,pigs,12.91
+MEX,145,Mexico,chickens,0.54
+FSM,146,Micronesia,cows,46.58625
+FSM,146,Micronesia,buffaloes,43.435267916415384
+FSM,146,Micronesia,goats,5.071666666666666
+FSM,146,Micronesia,sheep,5.865
+FSM,146,Micronesia,pigs,18.32
+FSM,146,Micronesia,chickens,0.6375
+MDA,147,Moldova,cows,47.4
+MDA,147,Moldova,buffaloes,47.943333333333335
+MDA,147,Moldova,goats,4.49
+MDA,147,Moldova,sheep,4.24
+MDA,147,Moldova,pigs,19.46
+MDA,147,Moldova,chickens,0.79
+MNG,149,Mongolia,cows,30.68
+MNG,149,Mongolia,buffaloes,32.665
+MNG,149,Mongolia,goats,4.03
+MNG,149,Mongolia,sheep,4.33
+MNG,149,Mongolia,pigs,12.75
+MNG,149,Mongolia,chickens,0.67
+MNE,150,Montenegro,cows,42.77
+MNE,150,Montenegro,buffaloes,55.74
+MNE,150,Montenegro,goats,4.72
+MNE,150,Montenegro,sheep,4.78
+MNE,150,Montenegro,pigs,21.65
+MNE,150,Montenegro,chickens,0.56
+MSR,151,Montserrat,cows,34.01416666666667
+MSR,151,Montserrat,buffaloes,50.828863636363636
+MSR,151,Montserrat,goats,2.9341666666666666
+MSR,151,Montserrat,sheep,3.8433333333333333
+MSR,151,Montserrat,pigs,25.36
+MSR,151,Montserrat,chickens,0.4928571428571428
+MAR,152,Morocco,cows,23.78
+MAR,152,Morocco,buffaloes,32.82
+MAR,152,Morocco,goats,1.85
+MAR,152,Morocco,sheep,2.73
+MAR,152,Morocco,pigs,10.18
+MAR,152,Morocco,chickens,0.58
+MOZ,153,Mozambique,cows,36.63
+MOZ,153,Mozambique,buffaloes,32.82
+MOZ,153,Mozambique,goats,3.44
+MOZ,153,Mozambique,sheep,3.44
+MOZ,153,Mozambique,pigs,8.65
+MOZ,153,Mozambique,chickens,0.53
+MMR,154,Myanmar,cows,29.69
+MMR,154,Myanmar,buffaloes,33.91
+MMR,154,Myanmar,goats,3.51
+MMR,154,Myanmar,sheep,3.01
+MMR,154,Myanmar,pigs,10.88
+MMR,154,Myanmar,chickens,0.55
+NAM,155,Namibia,cows,26.47
+NAM,155,Namibia,buffaloes,32.82
+NAM,155,Namibia,goats,3.42
+NAM,155,Namibia,sheep,2.58
+NAM,155,Namibia,pigs,8.48
+NAM,155,Namibia,chickens,0.47
+NPL,157,Nepal,cows,29.99
+NPL,157,Nepal,buffaloes,38.98
+NPL,157,Nepal,goats,2.67
+NPL,157,Nepal,sheep,4.28
+NPL,157,Nepal,pigs,13.06
+NPL,157,Nepal,chickens,0.42
+NLD,158,Netherlands,cows,65.18
+NLD,158,Netherlands,buffaloes,52.741282051282056
+NLD,158,Netherlands,goats,3.66
+NLD,158,Netherlands,sheep,5.14
+NLD,158,Netherlands,pigs,16.49
+NLD,158,Netherlands,chickens,0.47
+NCL,159,New Caledonia,cows,41.57
+NCL,159,New Caledonia,buffaloes,43.435267916415384
+NCL,159,New Caledonia,goats,4.5
+NCL,159,New Caledonia,sheep,5.43
+NCL,159,New Caledonia,pigs,25.13
+NCL,159,New Caledonia,chickens,0.37
+NZL,160,New Zealand,cows,55.01
+NZL,160,New Zealand,buffaloes,43.435267916415384
+NZL,160,New Zealand,goats,6.02
+NZL,160,New Zealand,sheep,6.3
+NZL,160,New Zealand,pigs,12.3
+NZL,160,New Zealand,chickens,0.7
+NIC,161,Nicaragua,cows,45.01
+NIC,161,Nicaragua,buffaloes,46.57
+NIC,161,Nicaragua,goats,3.16
+NIC,161,Nicaragua,sheep,4.12
+NIC,161,Nicaragua,pigs,13.28
+NIC,161,Nicaragua,chickens,0.52
+NER,162,Niger,cows,30.97
+NER,162,Niger,buffaloes,32.82
+NER,162,Niger,goats,2.65
+NER,162,Niger,sheep,3.27
+NER,162,Niger,pigs,9.85
+NER,162,Niger,chickens,0.64
+NGA,163,Nigeria,cows,28.41
+NGA,163,Nigeria,buffaloes,32.82
+NGA,163,Nigeria,goats,2.08
+NGA,163,Nigeria,sheep,2.67
+NGA,163,Nigeria,pigs,10.12
+NGA,163,Nigeria,chickens,0.51
+NIU,164,Niue,cows,46.58625
+NIU,164,Niue,buffaloes,43.435267916415384
+NIU,164,Niue,goats,5.071666666666666
+NIU,164,Niue,sheep,5.865
+NIU,164,Niue,pigs,24.59
+NIU,164,Niue,chickens,0.6375
+PRK,166,North Korea,cows,29.48
+PRK,166,North Korea,buffaloes,32.665
+PRK,166,North Korea,goats,2.73
+PRK,166,North Korea,sheep,3.27
+PRK,166,North Korea,pigs,17.29
+PRK,166,North Korea,chickens,0.63
+NOR,169,Norway,cows,62.31
+NOR,169,Norway,buffaloes,52.741282051282056
+NOR,169,Norway,goats,6.9
+NOR,169,Norway,sheep,4.48
+NOR,169,Norway,pigs,19.01
+NOR,169,Norway,chickens,0.66
+OMN,170,Oman,cows,30.29
+OMN,170,Oman,buffaloes,44.6325
+OMN,170,Oman,goats,3.95
+OMN,170,Oman,sheep,4.3
+OMN,170,Oman,pigs,14.82625
+OMN,170,Oman,chickens,0.38
+PAK,171,Pakistan,cows,34.94
+PAK,171,Pakistan,buffaloes,43.33
+PAK,171,Pakistan,goats,2.71
+PAK,171,Pakistan,sheep,3.31
+PAK,171,Pakistan,pigs,15.064
+PAK,171,Pakistan,chickens,0.54
+PSE,173,Palestina,cows,30.81
+PSE,173,Palestina,buffaloes,44.6325
+PSE,173,Palestina,goats,3.65
+PSE,173,Palestina,sheep,4.19
+PSE,173,Palestina,pigs,14.82625
+PSE,173,Palestina,chickens,0.51
+PAN,174,Panama,cows,35.65
+PAN,174,Panama,buffaloes,46.57
+PAN,174,Panama,goats,3.1
+PAN,174,Panama,sheep,4.78
+PAN,174,Panama,pigs,14.41
+PAN,174,Panama,chickens,0.55
+PNG,175,Papua New Guinea,cows,41.54
+PNG,175,Papua New Guinea,buffaloes,43.435267916415384
+PNG,175,Papua New Guinea,goats,4.39
+PNG,175,Papua New Guinea,sheep,5.43
+PNG,175,Papua New Guinea,pigs,28.1
+PNG,175,Papua New Guinea,chickens,0.78
+PRY,177,Paraguay,cows,42.22
+PRY,177,Paraguay,buffaloes,53.2625
+PRY,177,Paraguay,goats,3.38
+PRY,177,Paraguay,sheep,4.87
+PRY,177,Paraguay,pigs,27.13
+PRY,177,Paraguay,chickens,0.68
+PER,178,Peru,cows,46.05
+PER,178,Peru,buffaloes,53.2625
+PER,178,Peru,goats,3.49
+PER,178,Peru,sheep,4.1
+PER,178,Peru,pigs,14.05
+PER,178,Peru,chickens,0.56
+PHL,179,Philippines,cows,24.78
+PHL,179,Philippines,buffaloes,27.56
+PHL,179,Philippines,goats,2.71
+PHL,179,Philippines,sheep,1.92
+PHL,179,Philippines,pigs,19.24
+PHL,179,Philippines,chickens,0.62
+POL,181,Poland,cows,48.68
+POL,181,Poland,buffaloes,47.943333333333335
+POL,181,Poland,goats,5.36
+POL,181,Poland,sheep,4.24
+POL,181,Poland,pigs,17.45
+POL,181,Poland,chickens,0.46
+PRT,182,Portugal,cows,54.17
+PRT,182,Portugal,buffaloes,55.74
+PRT,182,Portugal,goats,5.31
+PRT,182,Portugal,sheep,4.94
+PRT,182,Portugal,pigs,21.43
+PRT,182,Portugal,chickens,0.46
+PRI,183,Puerto Rico,cows,34.62
+PRI,183,Puerto Rico,buffaloes,50.828863636363636
+PRI,183,Puerto Rico,goats,3.29
+PRI,183,Puerto Rico,sheep,4.46
+PRI,183,Puerto Rico,pigs,13.9
+PRI,183,Puerto Rico,chickens,0.69
+QAT,184,Qatar,cows,31.37
+QAT,184,Qatar,buffaloes,44.6325
+QAT,184,Qatar,goats,3.7
+QAT,184,Qatar,sheep,4.31
+QAT,184,Qatar,pigs,14.82625
+QAT,184,Qatar,chickens,0.11
+COG,185,Republic of Congo,cows,29.01
+COG,185,Republic of Congo,buffaloes,32.82
+COG,185,Republic of Congo,goats,2.71
+COG,185,Republic of Congo,sheep,3.43
+COG,185,Republic of Congo,pigs,7.97
+COG,185,Republic of Congo,chickens,0.45
+REU,186,Reunion,cows,30.596249999999998
+REU,186,Reunion,buffaloes,32.82
+REU,186,Reunion,goats,2.716
+REU,186,Reunion,sheep,2.92875
+REU,186,Reunion,pigs,14.67
+REU,186,Reunion,chickens,0.47933333333333333
+ROU,187,Romania,cows,44.64
+ROU,187,Romania,buffaloes,45.57
+ROU,187,Romania,goats,4.26
+ROU,187,Romania,sheep,4.52
+ROU,187,Romania,pigs,15.51
+ROU,187,Romania,chickens,0.62
+RUS,188,Russia,cows,44.95
+RUS,188,Russia,buffaloes,45.5
+RUS,188,Russia,goats,4.86
+RUS,188,Russia,sheep,4.07
+RUS,188,Russia,pigs,19.26
+RUS,188,Russia,chickens,0.58
+RWA,189,Rwanda,cows,28.43
+RWA,189,Rwanda,buffaloes,32.82
+RWA,189,Rwanda,goats,2.26
+RWA,189,Rwanda,sheep,2.23
+RWA,189,Rwanda,pigs,6.44
+RWA,189,Rwanda,chickens,0.46
+SHN,192,Saint Helena,cows,14.98
+SHN,192,Saint Helena,buffaloes,32.82
+SHN,192,Saint Helena,goats,1.21
+SHN,192,Saint Helena,sheep,1.43
+SHN,192,Saint Helena,pigs,10.515625
+SHN,192,Saint Helena,chickens,0.5293333333333333
+KNA,193,Saint Kitts and Nevis,cows,34.01416666666667
+KNA,193,Saint Kitts and Nevis,buffaloes,50.828863636363636
+KNA,193,Saint Kitts and Nevis,goats,2.9341666666666666
+KNA,193,Saint Kitts and Nevis,sheep,3.8433333333333333
+KNA,193,Saint Kitts and Nevis,pigs,6.98
+KNA,193,Saint Kitts and Nevis,chickens,0.4928571428571428
+LCA,194,Saint Lucia,cows,35.13
+LCA,194,Saint Lucia,buffaloes,50.828863636363636
+LCA,194,Saint Lucia,goats,2.48
+LCA,194,Saint Lucia,sheep,3.37
+LCA,194,Saint Lucia,pigs,19.79
+LCA,194,Saint Lucia,chickens,0.27
+SPM,195,Saint Pierre and Miquelon,cows,56.834999999999994
+SPM,195,Saint Pierre and Miquelon,buffaloes,58.1
+SPM,195,Saint Pierre and Miquelon,goats,5.720000000000001
+SPM,195,Saint Pierre and Miquelon,sheep,6.475
+SPM,195,Saint Pierre and Miquelon,pigs,11.87
+SPM,195,Saint Pierre and Miquelon,chickens,0.85
+VCT,196,Saint Vincent and the Grenadines,cows,29.29
+VCT,196,Saint Vincent and the Grenadines,buffaloes,50.828863636363636
+VCT,196,Saint Vincent and the Grenadines,goats,1.63
+VCT,196,Saint Vincent and the Grenadines,sheep,2.85
+VCT,196,Saint Vincent and the Grenadines,pigs,14.32
+VCT,196,Saint Vincent and the Grenadines,chickens,0.58
+WSM,197,Samoa,cows,46.58625
+WSM,197,Samoa,buffaloes,43.435267916415384
+WSM,197,Samoa,goats,5.071666666666666
+WSM,197,Samoa,sheep,5.865
+WSM,197,Samoa,pigs,26.16
+WSM,197,Samoa,chickens,0.6375
+STP,199,São Tomé and Príncipe,cows,26.76
+STP,199,São Tomé and Príncipe,buffaloes,32.82
+STP,199,São Tomé and Príncipe,goats,0.95
+STP,199,São Tomé and Príncipe,sheep,1.44
+STP,199,São Tomé and Príncipe,pigs,16.71
+STP,199,São Tomé and Príncipe,chickens,0.74
+SAU,200,Saudi Arabia,cows,42.11
+SAU,200,Saudi Arabia,buffaloes,44.6325
+SAU,200,Saudi Arabia,goats,3.34
+SAU,200,Saudi Arabia,sheep,3.97
+SAU,200,Saudi Arabia,pigs,0
+SAU,200,Saudi Arabia,chickens,0.47
+SEN,201,Senegal,cows,32.22
+SEN,201,Senegal,buffaloes,32.82
+SEN,201,Senegal,goats,2.03
+SEN,201,Senegal,sheep,3.22
+SEN,201,Senegal,pigs,8.54
+SEN,201,Senegal,chickens,0.45
+SRB,202,Serbia,cows,42.98
+SRB,202,Serbia,buffaloes,55.74
+SRB,202,Serbia,goats,4.72
+SRB,202,Serbia,sheep,4.78
+SRB,202,Serbia,pigs,18.57
+SRB,202,Serbia,chickens,0.65
+SYC,203,Seychelles,cows,30.596249999999998
+SYC,203,Seychelles,buffaloes,32.82
+SYC,203,Seychelles,goats,2.716
+SYC,203,Seychelles,sheep,2.92875
+SYC,203,Seychelles,pigs,3.27
+SYC,203,Seychelles,chickens,0.27
+SLE,204,Sierra Leone,cows,32.56
+SLE,204,Sierra Leone,buffaloes,32.82
+SLE,204,Sierra Leone,goats,2.48
+SLE,204,Sierra Leone,sheep,2.54
+SLE,204,Sierra Leone,pigs,7.8
+SLE,204,Sierra Leone,chickens,0.45
+SGP,205,Singapore,cows,29.02
+SGP,205,Singapore,buffaloes,30.891
+SGP,205,Singapore,goats,2.37
+SGP,205,Singapore,sheep,3.68
+SGP,205,Singapore,pigs,0
+SGP,205,Singapore,chickens,0
+SVK,207,Slovakia,cows,56.47
+SVK,207,Slovakia,buffaloes,47.943333333333335
+SVK,207,Slovakia,goats,5.03
+SVK,207,Slovakia,sheep,4.21
+SVK,207,Slovakia,pigs,19.14
+SVK,207,Slovakia,chickens,0.51
+SVN,208,Slovenia,cows,48.69
+SVN,208,Slovenia,buffaloes,55.74
+SVN,208,Slovenia,goats,5.08
+SVN,208,Slovenia,sheep,4.7
+SVN,208,Slovenia,pigs,16.46
+SVN,208,Slovenia,chickens,0.41
+SLB,209,Solomon Islands,cows,41.54
+SLB,209,Solomon Islands,buffaloes,43.435267916415384
+SLB,209,Solomon Islands,goats,4.463333333333333
+SLB,209,Solomon Islands,sheep,5.43
+SLB,209,Solomon Islands,pigs,25.17
+SLB,209,Solomon Islands,chickens,0.39
+SOM,210,Somalia,cows,31.24
+SOM,210,Somalia,buffaloes,32.82
+SOM,210,Somalia,goats,2.24
+SOM,210,Somalia,sheep,2.93
+SOM,210,Somalia,pigs,6.89
+SOM,210,Somalia,chickens,0.4
+ZAF,211,South Africa,cows,41.82
+ZAF,211,South Africa,buffaloes,32.82
+ZAF,211,South Africa,goats,3.8
+ZAF,211,South Africa,sheep,3.75
+ZAF,211,South Africa,pigs,8.5
+ZAF,211,South Africa,chickens,0.45
+KOR,213,South Korea,cows,46.36
+KOR,213,South Korea,buffaloes,32.665
+KOR,213,South Korea,goats,2.71
+KOR,213,South Korea,sheep,3.51
+KOR,213,South Korea,pigs,15.29
+KOR,213,South Korea,chickens,0.56
+ESP,215,Spain,cows,47.61
+ESP,215,Spain,buffaloes,55.74
+ESP,215,Spain,goats,6.8
+ESP,215,Spain,sheep,4.87
+ESP,215,Spain,pigs,17.62
+ESP,215,Spain,chickens,0.46
+LKA,217,Sri Lanka,cows,28.46
+LKA,217,Sri Lanka,buffaloes,36.96
+LKA,217,Sri Lanka,goats,3.52
+LKA,217,Sri Lanka,sheep,2.31
+LKA,217,Sri Lanka,pigs,22.13
+LKA,217,Sri Lanka,chickens,0.58
+SDN,218,Sudan,cows,31.17
+SDN,218,Sudan,buffaloes,32.82
+SDN,218,Sudan,goats,3.57
+SDN,218,Sudan,sheep,4.13
+SDN,218,Sudan,pigs,11.8875
+SDN,218,Sudan,chickens,0.46
+SUR,219,Suriname,cows,36.69
+SUR,219,Suriname,buffaloes,53.2625
+SUR,219,Suriname,goats,3.25
+SUR,219,Suriname,sheep,4.76
+SUR,219,Suriname,pigs,14.84
+SUR,219,Suriname,chickens,0.51
+SWZ,221,Swaziland,cows,31.04
+SWZ,221,Swaziland,buffaloes,32.82
+SWZ,221,Swaziland,goats,3.61
+SWZ,221,Swaziland,sheep,3.08
+SWZ,221,Swaziland,pigs,6.15
+SWZ,221,Swaziland,chickens,0.4
+SWE,222,Sweden,cows,68.17
+SWE,222,Sweden,buffaloes,52.741282051282056
+SWE,222,Sweden,goats,5.888333333333334
+SWE,222,Sweden,sheep,4.41
+SWE,222,Sweden,pigs,20.22
+SWE,222,Sweden,chickens,0.58
+CHE,223,Switzerland,cows,63.4
+CHE,223,Switzerland,buffaloes,52.741282051282056
+CHE,223,Switzerland,goats,6.57
+CHE,223,Switzerland,sheep,5.49
+CHE,223,Switzerland,pigs,19
+CHE,223,Switzerland,chickens,0.6
+SYR,224,Syria,cows,31.07
+SYR,224,Syria,buffaloes,45.13
+SYR,224,Syria,goats,2.89
+SYR,224,Syria,sheep,3.74
+SYR,224,Syria,pigs,14.82625
+SYR,224,Syria,chickens,0.52
+TJK,226,Tajikistan,cows,51.44
+TJK,226,Tajikistan,buffaloes,35.09
+TJK,226,Tajikistan,goats,3.28
+TJK,226,Tajikistan,sheep,5
+TJK,226,Tajikistan,pigs,22.68
+TJK,226,Tajikistan,chickens,0.9
+TZA,227,Tanzania,cows,37.47
+TZA,227,Tanzania,buffaloes,32.82
+TZA,227,Tanzania,goats,3.07
+TZA,227,Tanzania,sheep,3.28
+TZA,227,Tanzania,pigs,8.9
+TZA,227,Tanzania,chickens,0.5
+THA,228,Thailand,cows,24.59
+THA,228,Thailand,buffaloes,26.67
+THA,228,Thailand,goats,1.7
+THA,228,Thailand,sheep,2.49
+THA,228,Thailand,pigs,14.68
+THA,228,Thailand,chickens,0.57
+TLS,229,Timor-Leste,cows,32.05
+TLS,229,Timor-Leste,buffaloes,33.46
+TLS,229,Timor-Leste,goats,3.59
+TLS,229,Timor-Leste,sheep,3.17
+TLS,229,Timor-Leste,pigs,17.52
+TLS,229,Timor-Leste,chickens,0.7
+TGO,230,Togo,cows,31.1
+TGO,230,Togo,buffaloes,32.82
+TGO,230,Togo,goats,2.22
+TGO,230,Togo,sheep,2.75
+TGO,230,Togo,pigs,8.05
+TGO,230,Togo,chickens,0.41
+TON,232,Tonga,cows,46.58625
+TON,232,Tonga,buffaloes,43.435267916415384
+TON,232,Tonga,goats,5.071666666666666
+TON,232,Tonga,sheep,5.865
+TON,232,Tonga,pigs,19.82
+TON,232,Tonga,chickens,0.6375
+TTO,233,Trinidad and Tobago,cows,34.01416666666667
+TTO,233,Trinidad and Tobago,buffaloes,50.828863636363636
+TTO,233,Trinidad and Tobago,goats,2.9341666666666666
+TTO,233,Trinidad and Tobago,sheep,3.8433333333333333
+TTO,233,Trinidad and Tobago,pigs,13.43
+TTO,233,Trinidad and Tobago,chickens,0.4928571428571428
+TUN,234,Tunisia,cows,25.82
+TUN,234,Tunisia,buffaloes,32.82
+TUN,234,Tunisia,goats,2.15
+TUN,234,Tunisia,sheep,2.84
+TUN,234,Tunisia,pigs,16.64
+TUN,234,Tunisia,chickens,0.79
+TUR,235,Turkey,cows,34.41
+TUR,235,Turkey,buffaloes,39.06
+TUR,235,Turkey,goats,3.47
+TUR,235,Turkey,sheep,4.01
+TUR,235,Turkey,pigs,17.81
+TUR,235,Turkey,chickens,0.55
+TKM,236,Turkmenistan,cows,51.76
+TKM,236,Turkmenistan,buffaloes,35.09
+TKM,236,Turkmenistan,goats,2.99
+TKM,236,Turkmenistan,sheep,5.26
+TKM,236,Turkmenistan,pigs,22.56
+TKM,236,Turkmenistan,chickens,0.61
+TUV,238,Tuvalu,cows,46.58625
+TUV,238,Tuvalu,buffaloes,43.435267916415384
+TUV,238,Tuvalu,goats,5.071666666666666
+TUV,238,Tuvalu,sheep,5.865
+TUV,238,Tuvalu,pigs,26.36
+TUV,238,Tuvalu,chickens,0.6375
+UGA,239,Uganda,cows,37.25
+UGA,239,Uganda,buffaloes,32.82
+UGA,239,Uganda,goats,2.41
+UGA,239,Uganda,sheep,2.92
+UGA,239,Uganda,pigs,6.31
+UGA,239,Uganda,chickens,0.5
+UKR,240,Ukraine,cows,49.63
+UKR,240,Ukraine,buffaloes,47.943333333333335
+UKR,240,Ukraine,goats,6.14
+UKR,240,Ukraine,sheep,4.54
+UKR,240,Ukraine,pigs,19.8
+UKR,240,Ukraine,chickens,0.65
+ARE,241,United Arab Emirates,cows,30.75
+ARE,241,United Arab Emirates,buffaloes,44.6325
+ARE,241,United Arab Emirates,goats,3.65
+ARE,241,United Arab Emirates,sheep,4.31
+ARE,241,United Arab Emirates,pigs,14.82625
+ARE,241,United Arab Emirates,chickens,0.44
+GBR,242,United Kingdom,cows,61.6
+GBR,242,United Kingdom,buffaloes,52.741282051282056
+GBR,242,United Kingdom,goats,5.888333333333334
+GBR,242,United Kingdom,sheep,4.59375
+GBR,242,United Kingdom,pigs,18.73
+GBR,242,United Kingdom,chickens,0.64
+USA,243,United States,cows,61.37
+USA,243,United States,buffaloes,58.1
+USA,243,United States,goats,6.21
+USA,243,United States,sheep,6.48
+USA,243,United States,pigs,10.7
+USA,243,United States,chickens,0.74
+URY,245,Uruguay,cows,42.54
+URY,245,Uruguay,buffaloes,53.2625
+URY,245,Uruguay,goats,3.52
+URY,245,Uruguay,sheep,5.82
+URY,245,Uruguay,pigs,15.21
+URY,245,Uruguay,chickens,0.54
+UZB,246,Uzbekistan,cows,53.38
+UZB,246,Uzbekistan,buffaloes,35.09
+UZB,246,Uzbekistan,goats,2.88
+UZB,246,Uzbekistan,sheep,4.72
+UZB,246,Uzbekistan,pigs,24.27
+UZB,246,Uzbekistan,chickens,0.68
+VUT,247,Vanuatu,cows,41.54
+VUT,247,Vanuatu,buffaloes,43.435267916415384
+VUT,247,Vanuatu,goats,4.5
+VUT,247,Vanuatu,sheep,5.43
+VUT,247,Vanuatu,pigs,29.81
+VUT,247,Vanuatu,chickens,0.78
+VEN,249,Venezuela,cows,44.87
+VEN,249,Venezuela,buffaloes,53.72
+VEN,249,Venezuela,goats,3.54
+VEN,249,Venezuela,sheep,5.02
+VEN,249,Venezuela,pigs,14.02
+VEN,249,Venezuela,chickens,0.55
+VNM,250,Vietnam,cows,29.1
+VNM,250,Vietnam,buffaloes,29.45
+VNM,250,Vietnam,goats,3.17
+VNM,250,Vietnam,sheep,2.79
+VNM,250,Vietnam,pigs,13.09
+VNM,250,Vietnam,chickens,0.54
+VIR,251,"Virgin Islands, U.S.",cows,34.01416666666667
+VIR,251,"Virgin Islands, U.S.",buffaloes,50.828863636363636
+VIR,251,"Virgin Islands, U.S.",goats,2.9341666666666666
+VIR,251,"Virgin Islands, U.S.",sheep,3.8433333333333333
+VIR,251,"Virgin Islands, U.S.",pigs,12.66
+VIR,251,"Virgin Islands, U.S.",chickens,0.4928571428571428
+ESH,253,Western Sahara,cows,17.04
+ESH,253,Western Sahara,buffaloes,32.82
+ESH,253,Western Sahara,goats,2.3383333333333334
+ESH,253,Western Sahara,sheep,2.03
+ESH,253,Western Sahara,pigs,11.8875
+ESH,253,Western Sahara,chickens,0.5566666666666666
+YEM,254,Yemen,cows,31.54
+YEM,254,Yemen,buffaloes,44.6325
+YEM,254,Yemen,goats,3.06
+YEM,254,Yemen,sheep,3.86
+YEM,254,Yemen,pigs,14.82625
+YEM,254,Yemen,chickens,0.5
+ZMB,255,Zambia,cows,32.58
+ZMB,255,Zambia,buffaloes,32.82
+ZMB,255,Zambia,goats,3.09
+ZMB,255,Zambia,sheep,3.69
+ZMB,255,Zambia,pigs,8.62
+ZMB,255,Zambia,chickens,0.51
+ZWE,256,Zimbabwe,cows,33.05
+ZWE,256,Zimbabwe,buffaloes,32.82
+ZWE,256,Zimbabwe,goats,3.8
+ZWE,256,Zimbabwe,sheep,4.94
+ZWE,256,Zimbabwe,pigs,9.74
+ZWE,256,Zimbabwe,chickens,0.55
+ALA,3,Åland,cows,62.891111111111115
+ALA,3,Åland,goats,5.888333333333334
+ALA,3,Åland,sheep,4.59375
+ALA,3,Åland,chickens,0.616
+ALA,3,Åland,pigs,18.93
+ALA,3,Åland,buffaloes,52.741282051282056
+AND,7,Andorra,cows,46.75833333333333
+AND,7,Andorra,goats,5.31
+AND,7,Andorra,sheep,4.91
+AND,7,Andorra,chickens,0.545
+AND,7,Andorra,pigs,18.395833333333332
+AND,7,Andorra,buffaloes,55.74
+AIA,9,Anguilla,cows,34.01416666666667
+AIA,9,Anguilla,goats,2.9341666666666666
+AIA,9,Anguilla,sheep,3.8433333333333333
+AIA,9,Anguilla,chickens,0.4928571428571428
+AIA,9,Anguilla,pigs,16.163809523809523
+AIA,9,Anguilla,buffaloes,50.828863636363636
+ABW,14,Aruba,cows,34.01416666666667
+ABW,14,Aruba,goats,2.9341666666666666
+ABW,14,Aruba,sheep,3.8433333333333333
+ABW,14,Aruba,chickens,0.4928571428571428
+ABW,14,Aruba,pigs,16.163809523809523
+ABW,14,Aruba,buffaloes,50.828863636363636
+BMU,26,Bermuda,cows,56.834999999999994
+BMU,26,Bermuda,goats,5.720000000000001
+BMU,26,Bermuda,sheep,6.475
+BMU,26,Bermuda,chickens,0.77
+BMU,26,Bermuda,pigs,11.87
+BMU,26,Bermuda,buffaloes,58.1
+IOT,34,British Indian Ocean Territory,cows,30.596249999999998
+IOT,34,British Indian Ocean Territory,goats,2.716
+IOT,34,British Indian Ocean Territory,sheep,2.92875
+IOT,34,British Indian Ocean Territory,chickens,0.47933333333333333
+IOT,34,British Indian Ocean Territory,pigs,7.633333333333333
+IOT,34,British Indian Ocean Territory,buffaloes,32.82
+CXR,50,Christmas Island,cows,51.625
+CXR,50,Christmas Island,goats,5.68
+CXR,50,Christmas Island,sheep,6.3
+CXR,50,Christmas Island,chickens,0.695
+CXR,50,Christmas Island,pigs,12.275
+CXR,50,Christmas Island,buffaloes,43.435267916415384
+CCK,52,Cocos Islands,cows,51.625
+CCK,52,Cocos Islands,goats,5.68
+CCK,52,Cocos Islands,sheep,6.3
+CCK,52,Cocos Islands,chickens,0.695
+CCK,52,Cocos Islands,pigs,12.275
+CCK,52,Cocos Islands,buffaloes,43.435267916415384
+CUW,60,Curaçao,cows,34.01416666666667
+CUW,60,Curaçao,goats,2.9341666666666666
+CUW,60,Curaçao,sheep,3.8433333333333333
+CUW,60,Curaçao,chickens,0.4928571428571428
+CUW,60,Curaçao,pigs,16.163809523809523
+CUW,60,Curaçao,buffaloes,50.828863636363636
+FRO,76,Faroe Islands,cows,62.891111111111115
+FRO,76,Faroe Islands,goats,5.888333333333334
+FRO,76,Faroe Islands,sheep,4.59375
+FRO,76,Faroe Islands,chickens,0.616
+FRO,76,Faroe Islands,pigs,18.93
+FRO,76,Faroe Islands,buffaloes,52.741282051282056
+GIB,88,Gibraltar,cows,46.75833333333333
+GIB,88,Gibraltar,goats,5.31
+GIB,88,Gibraltar,sheep,4.91
+GIB,88,Gibraltar,chickens,0.545
+GIB,88,Gibraltar,pigs,18.395833333333332
+GIB,88,Gibraltar,buffaloes,55.74
+GRL,90,Greenland,cows,56.834999999999994
+GRL,90,Greenland,goats,5.720000000000001
+GRL,90,Greenland,sheep,6.475
+GRL,90,Greenland,chickens,0.77
+GRL,90,Greenland,pigs,11.87
+GRL,90,Greenland,buffaloes,58.1
+GGY,95,Guernsey,cows,62.891111111111115
+GGY,95,Guernsey,goats,5.888333333333334
+GGY,95,Guernsey,sheep,4.59375
+GGY,95,Guernsey,chickens,0.616
+GGY,95,Guernsey,pigs,18.93
+GGY,95,Guernsey,buffaloes,52.741282051282056
+IMN,110,Isle of Man,cows,62.891111111111115
+IMN,110,Isle of Man,goats,5.888333333333334
+IMN,110,Isle of Man,sheep,4.59375
+IMN,110,Isle of Man,chickens,0.616
+IMN,110,Isle of Man,pigs,18.93
+IMN,110,Isle of Man,buffaloes,52.741282051282056
+JEY,115,Jersey,cows,62.891111111111115
+JEY,115,Jersey,goats,5.888333333333334
+JEY,115,Jersey,sheep,4.59375
+JEY,115,Jersey,chickens,0.616
+JEY,115,Jersey,pigs,18.93
+JEY,115,Jersey,buffaloes,52.741282051282056
+XKO,120,Kosovo,cows,46.75833333333333
+XKO,120,Kosovo,goats,5.31
+XKO,120,Kosovo,sheep,4.91
+XKO,120,Kosovo,chickens,0.545
+XKO,120,Kosovo,pigs,18.395833333333332
+XKO,120,Kosovo,buffaloes,55.74
+MAC,132,Macao,cows,37.94166666666667
+MAC,132,Macao,goats,2.952
+MAC,132,Macao,sheep,3.3066666666666666
+MAC,132,Macao,chickens,0.5820000000000001
+MAC,132,Macao,pigs,14.455
+MAC,132,Macao,buffaloes,32.665
+MDV,137,Maldives,cows,32.84625
+MDV,137,Maldives,goats,3.11375
+MDV,137,Maldives,sheep,3.3225000000000002
+MDV,137,Maldives,chickens,0.51125
+MDV,137,Maldives,pigs,15.064
+MDV,137,Maldives,buffaloes,39.394285714285715
+MHL,140,Marshall Islands,cows,46.58625
+MHL,140,Marshall Islands,goats,5.071666666666666
+MHL,140,Marshall Islands,sheep,5.865
+MHL,140,Marshall Islands,chickens,0.6375
+MHL,140,Marshall Islands,pigs,17.966666666666665
+MHL,140,Marshall Islands,buffaloes,43.435267916415384
+MCO,148,Monaco,cows,62.151250000000005
+MCO,148,Monaco,goats,5.39
+MCO,148,Monaco,sheep,5.5875
+MCO,148,Monaco,chickens,0.5071428571428571
+MCO,148,Monaco,pigs,17.60875
+MCO,148,Monaco,buffaloes,52.741282051282056
+NRU,156,Nauru,cows,46.58625
+NRU,156,Nauru,goats,5.071666666666666
+NRU,156,Nauru,sheep,5.865
+NRU,156,Nauru,chickens,0.6375
+NRU,156,Nauru,pigs,17.966666666666665
+NRU,156,Nauru,buffaloes,43.435267916415384
+NFK,165,Norfolk Island,cows,51.625
+NFK,165,Norfolk Island,goats,5.68
+NFK,165,Norfolk Island,sheep,6.3
+NFK,165,Norfolk Island,chickens,0.695
+NFK,165,Norfolk Island,pigs,12.275
+NFK,165,Norfolk Island,buffaloes,43.435267916415384
+MNP,168,Northern Mariana Islands,cows,46.58625
+MNP,168,Northern Mariana Islands,goats,5.071666666666666
+MNP,168,Northern Mariana Islands,sheep,5.865
+MNP,168,Northern Mariana Islands,chickens,0.6375
+MNP,168,Northern Mariana Islands,pigs,17.966666666666665
+MNP,168,Northern Mariana Islands,buffaloes,43.435267916415384
+PLW,172,Palau,cows,46.58625
+PLW,172,Palau,goats,5.071666666666666
+PLW,172,Palau,sheep,5.865
+PLW,172,Palau,chickens,0.6375
+PLW,172,Palau,pigs,17.966666666666665
+PLW,172,Palau,buffaloes,43.435267916415384
+PCN,180,Pitcairn Islands,cows,46.58625
+PCN,180,Pitcairn Islands,goats,5.071666666666666
+PCN,180,Pitcairn Islands,sheep,5.865
+PCN,180,Pitcairn Islands,chickens,0.6375
+PCN,180,Pitcairn Islands,pigs,22.635714285714286
+PCN,180,Pitcairn Islands,buffaloes,43.435267916415384
+XMI,300,Madeira Island,cows,24.731428571428573
+XMI,300,Madeira Island,goats,2.3383333333333334
+XMI,300,Madeira Island,sheep,2.8814285714285712
+XMI,300,Madeira Island,chickens,0.5566666666666666
+XMI,300,Madeira Island,pigs,11.8875
+XMI,300,Madeira Island,buffaloes,32.82
+BLM,190,Saint-Barthélemy,cows,34.01416666666667
+BLM,190,Saint-Barthélemy,goats,2.9341666666666666
+BLM,190,Saint-Barthélemy,sheep,3.8433333333333333
+BLM,190,Saint-Barthélemy,chickens,0.4928571428571428
+BLM,190,Saint-Barthélemy,pigs,16.163809523809523
+BLM,190,Saint-Barthélemy,buffaloes,50.828863636363636
+MAF,191,Saint-Martin,cows,34.01416666666667
+MAF,191,Saint-Martin,goats,2.9341666666666666
+MAF,191,Saint-Martin,sheep,3.8433333333333333
+MAF,191,Saint-Martin,chickens,0.4928571428571428
+MAF,191,Saint-Martin,pigs,16.163809523809523
+MAF,191,Saint-Martin,buffaloes,50.828863636363636
+SMR,198,San Marino,cows,46.75833333333333
+SMR,198,San Marino,goats,5.31
+SMR,198,San Marino,sheep,4.91
+SMR,198,San Marino,chickens,0.545
+SMR,198,San Marino,pigs,18.395833333333332
+SMR,198,San Marino,buffaloes,55.74
+SXM,206,Sint Maarten,cows,34.01416666666667
+SXM,206,Sint Maarten,goats,2.9341666666666666
+SXM,206,Sint Maarten,sheep,3.8433333333333333
+SXM,206,Sint Maarten,chickens,0.4928571428571428
+SXM,206,Sint Maarten,pigs,16.163809523809523
+SXM,206,Sint Maarten,buffaloes,50.828863636363636
+SSD,214,South Sudan,cows,30.596249999999998
+SSD,214,South Sudan,goats,2.716
+SSD,214,South Sudan,sheep,2.92875
+SSD,214,South Sudan,chickens,0.47933333333333333
+SSD,214,South Sudan,pigs,7.633333333333333
+SSD,214,South Sudan,buffaloes,32.82
+SJM,220,Svalbard and Jan Mayen,cows,62.891111111111115
+SJM,220,Svalbard and Jan Mayen,goats,5.888333333333334
+SJM,220,Svalbard and Jan Mayen,sheep,4.59375
+SJM,220,Svalbard and Jan Mayen,chickens,0.616
+SJM,220,Svalbard and Jan Mayen,pigs,18.93
+SJM,220,Svalbard and Jan Mayen,buffaloes,52.741282051282056
+TWN,225,Taiwan,cows,37.94166666666667
+TWN,225,Taiwan,goats,2.952
+TWN,225,Taiwan,sheep,3.3066666666666666
+TWN,225,Taiwan,chickens,0.5820000000000001
+TWN,225,Taiwan,pigs,14.455
+TWN,225,Taiwan,buffaloes,32.665
+TKL,231,Tokelau,cows,46.58625
+TKL,231,Tokelau,goats,5.071666666666666
+TKL,231,Tokelau,sheep,5.865
+TKL,231,Tokelau,chickens,0.6375
+TKL,231,Tokelau,pigs,22.635714285714286
+TKL,231,Tokelau,buffaloes,43.435267916415384
+TCA,237,Turks and Caicos Islands,cows,34.01416666666667
+TCA,237,Turks and Caicos Islands,goats,2.9341666666666666
+TCA,237,Turks and Caicos Islands,sheep,3.8433333333333333
+TCA,237,Turks and Caicos Islands,chickens,0.4928571428571428
+TCA,237,Turks and Caicos Islands,pigs,16.163809523809523
+TCA,237,Turks and Caicos Islands,buffaloes,50.828863636363636
+WLF,252,Wallis and Futuna,cows,46.58625
+WLF,252,Wallis and Futuna,goats,5.071666666666666
+WLF,252,Wallis and Futuna,sheep,5.865
+WLF,252,Wallis and Futuna,chickens,0.6375
+WLF,252,Wallis and Futuna,pigs,22.635714285714286
+WLF,252,Wallis and Futuna,buffaloes,43.435267916415384

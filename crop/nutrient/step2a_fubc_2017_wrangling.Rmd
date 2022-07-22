@@ -1,0 +1,209 @@
+---
+title: "fubc 2017 wrangling"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Script Description
+Wrangle fertilizer rate data.
+
+# Data information
+IFA FUBC 2017 data for 2014/15. Placeholder dataset for 2021 report dataset.
+Extracted: 4/14/2021
+
+# Preamble
+```{r setup, include = FALSE}
+# getting packages we want
+library(here)
+library(janitor)
+library(vroom)
+
+# Raster templates
+source(here("_spatial/template_raster.R"))
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+# Import food_rgns xy df
+food_rgns_xy <- 
+  food_rgns_xy %>% 
+  select(x, y, iso3c)
+``` 
+
+Source: [ifa 2017 fubc](https://www.fertilizer.org/images/Library_Downloads/2017_ifa_AgCom_17_134%20rev_fubc%20assessment%202014.pdf)
+
+# FUBC 2017
+
+## Wrangling
+
+```{r}
+# Read-in ifa 2014/15 data
+fubc_2017 <- 
+  vroom(here("crop/nutrient/data/fubc_2017_rates.csv"),
+        skip = 2,
+        .name_repair = make_clean_names) %>% 
+  remove_empty(., which = c("rows", "cols"), quiet = TRUE)
+
+colnames(fubc_2017)[1:2] <- c("fubc_2017_country", "nutrient")
+
+fubc_2017 <- 
+  fubc_2017 %>%
+  mutate(fubc_2017_country = case_when(
+    !is.na(fubc_2017_country) ~ fubc_2017_country,
+    (is.na(fubc_2017_country) & !is.na(lag(fubc_2017_country, n = 1L))) ~ lag(fubc_2017_country, n = 1L),
+    (is.na(fubc_2017_country) & !is.na(lag(fubc_2017_country, n = 2L))) ~ lag(fubc_2017_country, n = 2L),
+    (is.na(fubc_2017_country) & !is.na(lag(fubc_2017_country, n = 3L))) ~ lag(fubc_2017_country, n = 3L))) %>% 
+  filter(!nutrient %in% "N+P+K") %>% 
+  mutate_all(funs(str_replace_all(., "#DIV/0!", NA_character_))) %>% 
+  mutate_at(3:17, funs(as.numeric)) %>% 
+  filter(!fubc_2017_country == "World")
+
+# Gather crops.
+fubc_2017 <- 
+  fubc_2017 %>% 
+  gather(fubc_2017_crop, 
+         rate, 
+         -c(fubc_2017_country, nutrient)) 
+
+fubc_2017 <- 
+  fubc_2017 %>% 
+  group_by(fubc_2017_crop, nutrient) %>% 
+  group_modify(~ mutate(.x, rate = if_else(is.na(rate),
+                                       .x$rate[.x$fubc_2017_country == "ROW"],
+                                       rate))) %>% 
+  ungroup()
+```
+
+-------------------------------------------------------------------------------
+
+# CROPS
+
+### import crop name datasets
+```{r}
+crop_categories <- 
+  vroom(here("crop/farm/data/crop_codes_updated.csv")) %>% 
+  select(split_rest_names) %>% 
+  unique()
+
+crop_codes <- 
+  vroom(here("crop/farm/data/crop_codes_updated.csv")) %>% 
+  select(split_rest_names, item_code, SPAM_full_name) %>% 
+  unique()
+
+crop_defs <- 
+  vroom(here("crop/farm/data/FAO_crop_definitions.csv"), 
+        .name_repair = make_clean_names)
+```
+
+### Match IFA crop categories with item_codes
+```{r}
+crop_match <- 
+  tibble(fubc_2017_crop = c(rep("oth_cereals", 5),
+                            rep("fiber_crops", 2),
+                            rep("roots_tubers", 5),
+                            rep("fruits", 5),
+                            "vegetables",
+                            rep("sugar_crops", 2),
+                            rep("oth_oilseeds", 5),
+                            "soybeans",
+                            "oil_palm",
+                            "rice",
+                            "maize",
+                            "wheat"),
+       split_rest_names = c("barl", "ocer", "pmil", "smil", "sorg", #oth_ce
+                            "ofib", "cott",# fibre
+                            "pota", "cass","swpo", "yams", "orts", #roots_tubers
+                            "temf", "trof", "bana", "plnt", "cnut", # fruits
+                            "vege", # veg
+                            "sugb", "sugc",# sugar
+                            "sesa", "rape", "grou", "ooil", "sunf", # oth_os
+                            "soyb",  "oilp", "rice", "maiz", "whea")) %>% #grassland
+  left_join(., crop_categories)
+crop_match
+
+write_csv(crop_match,
+          here("crop/nutrient/data/fubc_2017_crop_list.csv"))
+```
+
+# Match crop names
+```{r}
+# Match names
+fubc_2017 <- 
+  left_join(fubc_2017, crop_match) %>%
+  na.omit() %>% 
+  select(-fubc_2017_crop)
+```
+
+-------------------------------------------------------------------------------
+
+# COUNTRIES
+
+## Match iso3c codes with fubc_2017_country names
+
+```{r}
+other_fubc_countries <- 
+  unique(fubc_2017$fubc_2017_country)[unique(fubc_2017$fubc_2017_country) %in% c("EU-27", "USA", "New-Zealand", "ROW", "World", "China") == FALSE]
+
+EU_countries <- 
+  c("Austria", "Belgium", "Bulgaria", "Croatia", "Cyprus", "Czech Republic",
+    "Denmark","Estonia","Finland","France","Germany","Greece","Hungary",
+    "Ireland","Italy","Latvia","Lithuania","Luxembourg","Malta","Netherlands",
+    "Poland","Portugal","Slovakia","Slovenia","Spain","Sweden","Romania",
+    "United Kingdom","Guernsey","Faroe Islands","Gibraltar","Åland",
+    "Svalbard and Jan Mayen")
+
+china_countries <- c("China", "Macao", "Hong Kong")
+
+rest_of_the_world <- 
+  food_rgns$Country[!food_rgns$Country %in% c(other_fubc_countries, 
+                                              china_countries, 
+                                              EU_countries,
+                                              "United States",
+                                              "New Zealand")]
+
+# Renaming 
+country_match <- 
+  tibble(fubc_2017_country = c(rep("EU-27", 33),
+                               rep("China", 3),
+                               "USA",
+                               "New-Zealand",
+                               other_fubc_countries,
+                               rep("ROW", length(rest_of_the_world))),
+         Country = c(EU_countries,
+                     china_countries,
+                     "United States",
+                     "New Zealand",
+                     other_fubc_countries,
+                     rest_of_the_world))
+
+# Merge with country names list and populate iso3c for ROW
+setdiff(fubc_2017$fubc_2017_country, country_match$fubc_2017_country)
+setdiff(country_match$fubc_2017_country, fubc_2017$fubc_2017_country)
+```
+
+# Match country names
+```{r}
+fubc_2017 <- 
+  left_join(fubc_2017, country_match) %>% 
+  left_join(., food_rgns) %>% 
+  select(-Country, -fubc_2017_country, -ID_0)
+unique(fubc_2017$iso3c)
+```
+
+# Check
+
+```{r}
+244 * 3 * 30 == 
+  length(unique(fubc_2017$split_rest_names)) *
+  length(unique(fubc_2017$iso3c)) * 
+  length(unique(fubc_2017$nutrient)) 
+
+244 * 3 * 30 == nrow(fubc_2017)
+```
+
+# Save
+
+```{r}
+write_csv(fubc_2017, here("crop/nutrient/data/fubc_2017_gf.csv"))
+```
+

@@ -1,0 +1,238 @@
+﻿rgn_typ,rgn_id,rgn_nam,iso3c,notes,ID_0,Country
+eez,250,Aruba,ABW,NA,14,Aruba
+eez,200,Angola,AGO,NA,8,Angola
+eez,118,Anguilla,AIA,NA,9,Anguilla
+eez,82,Albania,ALB,NA,4,Albania
+eez,54,United Arab Emirates,ARE,NA,241,United Arab Emirates
+eez,172,Argentina,ARG,NA,12,Argentina
+eez,151,American Samoa,ASM,NA,6,American Samoa
+eez,213,Antarctica,ATA,NA,NA,NA
+eez,120,Antigua and Barbuda,ATG,NA,11,Antigua and Barbuda
+eez,16,Australia,AUS,NA,15,Australia
+eez,59,Belgium,BEL,NA,23,Belgium
+eez,99,Benin,BEN,NA,25,Benin
+eez,204,Bangladesh,BGD,NA,20,Bangladesh
+eez,71,Bulgaria,BGR,NA,37,Bulgaria
+eez,52,Bahrain,BHR,NA,19,Bahrain
+eez,110,Bahamas,BHS,NA,18,Bahamas
+eez,232,Bosnia and Herzegovina,BIH,NA,30,Bosnia and Herzegovina
+eez,164,Belize,BLZ,NA,24,Belize
+eez,108,Bermuda,BMU,NA,26,Bermuda
+eez,171,Brazil,BRA,NA,33,Brazil
+eez,124,Barbados,BRB,NA,21,Barbados
+eez,247,Brunei,BRN,NA,36,Brunei
+eez,105,Bouvet Island,uninhabited_island,"uninhabited island, iso3c BVT; admin country = Norway",NA,NA
+eez,218,Canada,CAN,NA,42,Canada
+eez,1,Cocos Islands,CCK,NA,52,Cocos Islands
+eez,224,Chile,CHL,NA,48,Chile
+eez,209,China,CHN/MAC/HKG,NA,NA,NA
+eez,195,Ivory Coast,CIV,NA,57,Côte d'Ivoire
+eez,197,Cameroon,CMR,NA,41,Cameroon
+eez,199,Democratic Republic of the Congo,COD,NA,301,Democratic Republic of the Congo
+eez,100,Republique du Congo,COG,NA,185,Republic of Congo
+eez,153,Cook Islands,COK,NA,55,Cook Islands
+eez,132,Colombia,COL,NA,53,Colombia
+eez,28,Comoro Islands,COM,NA,54,Comoros
+eez,56,Cape Verde,CPV,NA,43,Cape Verde
+eez,130,Costa Rica,CRI,NA,56,Costa Rica
+eez,112,Cuba,CUB,NA,59,Cuba
+eez,244,Curacao,CUW,NA,60,Curaçao
+eez,2,Christmas Island,CXR,NA,50,Christmas Island
+eez,113,Cayman Islands,CYM,NA,45,Cayman Islands
+eez,81,Cyprus,CYP,NA,61,Cyprus
+eez,176,Germany,DEU,NA,86,Germany
+eez,46,Djibouti,DJI,NA,65,Djibouti
+eez,123,Dominica,DMA,NA,66,Dominica
+eez,175,Denmark,DNK,NA,64,Denmark
+eez,115,Dominican Republic,DOM,NA,67,Dominican Republic
+eez,84,Algeria,DZA,NA,5,Algeria
+eez,137,Ecuador,ECU,NA,68,Ecuador
+eez,214,Egypt,EGY,NA,69,Egypt
+eez,45,Eritrea,ERI,NA,72,Eritrea
+eez,63,Western Sahara,ESH,NA,253,Western Sahara
+eez,182,Spain,ESP,NA,215,Spain
+eez,70,Estonia,EST,NA,73,Estonia
+eez,174,Finland,FIN,NA,78,Finland
+eez,18,Fiji,FJI,NA,77,Fiji
+eez,95,Falkland Islands,FLK,NA,75,Falkland Islands
+eez,179,France,FRA,NA,79,France
+eez,141,Faeroe Islands,FRO,NA,76,Faroe Islands
+eez,198,Gabon,GAB,NA,83,Gabon
+eez,180,United Kingdom,GBR,NA,242,United Kingdom
+eez,74,Georgia,GEO,NA,85,Georgia
+eez,228,Guernsey,GGY,NA,95,Guernsey
+eez,106,Ghana,GHA,NA,87,Ghana
+eez,60,Gibraltar,GIB,NA,88,Gibraltar
+eez,194,Guinea,GIN,NA,96,Guinea
+eez,65,Gambia,GMB,NA,84,Gambia
+eez,193,Guinea Bissau,GNB,NA,97,Guinea-Bissau
+eez,104,Equatorial Guinea,GNQ,NA,71,Equatorial Guinea
+eez,80,Greece,GRC,NA,89,Greece
+eez,125,Grenada,GRD,NA,91,Grenada
+eez,145,Greenland,GRL,NA,90,Greenland
+eez,136,Guatemala,GTM,NA,94,Guatemala
+eez,169,French Guiana,GUF,NA,80,French Guiana
+eez,167,Guyana,GUY,NA,98,Guyana
+eez,94,Heard and McDonald Islands,uninhabited_island,"uninhabited island, iso3c: HMD; admin country: AUS",NA,NA
+eez,133,Honduras,HND,NA,101,Honduras
+eez,187,Croatia,HRV,NA,58,Croatia
+eez,114,Haiti,HTI,NA,99,Haiti
+eez,216,Indonesia,IDN,NA,106,Indonesia
+eez,34,Bassas da India,IND,NA,105,India
+eez,203,India,IND,NA,105,India
+eez,38,British Indian Ocean Territory,IOT,NA,34,British Indian Ocean Territory
+eez,181,Ireland,IRL,NA,109,Ireland
+eez,191,Iran,IRN,NA,107,Iran
+eez,192,Iraq,IRQ,NA,108,Iraq
+eez,143,Iceland,ISL,NA,104,Iceland
+eez,79,Israel,ISR,NA,111,Israel
+eez,184,Italy,ITA,NA,112,Italy
+eez,166,Jamaica,JAM,NA,113,Jamaica
+eez,227,Jersey,JEY,NA,115,Jersey
+eez,215,Jordan,JOR,NA,116,Jordan
+eez,210,Japan,JPN,NA,114,Japan
+eez,43,Kenya,KEN,NA,118,Kenya
+eez,24,Cambodia,KHM,NA,40,Cambodia
+eez,212,Kiribati,KIR,NA,119,Kiribati
+eez,119,Saint Kitts and Nevis,KNA,NA,193,Saint Kitts and Nevis
+eez,20,South Korea,KOR,NA,213,South Korea
+eez,51,Kuwait,KWT,NA,121,Kuwait
+eez,78,Lebanon,LBN,NA,125,Lebanon
+eez,97,Liberia,LBR,NA,127,Liberia
+eez,67,Libya,LBY,NA,128,Libya
+eez,122,Saint Lucia,LCA,NA,194,Saint Lucia
+eez,40,Sri Lanka,LKA,NA,217,Sri Lanka
+eez,189,Lithuania,LTU,NA,130,Lithuania
+eez,69,Latvia,LVA,NA,124,Latvia
+eez,62,Morocco,MAR,NA,152,Morocco
+eez,185,Monaco,MCO,NA,148,Monaco
+eez,42,Madagascar,MDG,NA,134,Madagascar
+eez,39,Maldives,MDV,NA,137,Maldives
+eez,135,Mexico,MEX,NA,145,Mexico
+eez,11,Marshall Islands,MHL,NA,140,Marshall Islands
+eez,68,Malta,MLT,NA,139,Malta
+eez,205,Myanmar,MMR,NA,154,Myanmar
+eez,186,Montenegro,MNE,NA,150,Montenegro
+eez,41,Mozambique,MOZ,NA,153,Mozambique
+eez,64,Mauritania,MRT,NA,142,Mauritania
+eez,121,Montserrat,MSR,NA,151,Montserrat
+eez,37,Mauritius,MUS,NA,143,Mauritius
+eez,206,Malaysia,MYS,NA,136,Malaysia
+eez,29,Mayotte,MYT,NA,144,Mayotte
+eez,92,Amsterdam Island and Saint Paul Island,ATF,uninhabited French Southern Territories,NA,NA
+eez,26,Andaman and Nicobar,uninhabited_island,"uninhabited island, admin country = INDIA",NA,NA
+eez,85,Ascension,uninhabited_island,"uninhabited island, admin = GBR",NA,NA
+eez,55,Azores,PRT,"grouped with Portugal, check on GADM36 map",182,Portugal
+eez,245,Bonaire,BES,"Bonaire, Sint Eustatius, Saba grouped in food systems",29,"Bonaire, Sint Eustatius and Saba"
+eez,58,Canary Islands,ESP,"considered part of Spain, check this on gadm36",215,Spain
+eez,107,Clipperton Island,uninhabited_island,"uninhabited island, iso3c, XCL; adimin = FRA",NA,NA
+eez,91,Crozet Islands,ATF,uninhabited French Southern Territories,NA,NA
+eez,30,Glorioso Islands,uninhabited_island,uninhabited island; admin = FRA,NA,NA
+eez,140,Guadeloupe and Martinique,GLP/MTQ,multiple regions reported together,NA,NA
+eez,158,Howland Island and Baker Island,UMI,United States Outlying uninhabited Islands,NA,NA
+eez,35,Ile Europa,uninhabited_island,uninhabited French Overseas Territory,NA,NA
+eez,36,Ile Tromelin,uninhabited_island,uninhabited French Overseas Territory,NA,NA
+eez,144,Jan Mayen,uninhabited_island,Check on eez that this doesn't include Svalbard (SJM),NA,NA
+eez,149,Jarvis Island,UMI,United States Outlying uninhabited Islands,NA,NA
+eez,159,Johnston Atoll,UMI,United States Outlying uninhabited Islands,NA,NA
+eez,33,Juan de Nova Island,ATF,uninhabited French Southern Territories,NA,NA
+eez,93,Kerguelen Islands,ATF,uninhabited French Southern Territories,NA,NA
+eez,148,Line Group,KIR,grouped with Kiribati,119,Kiribati
+eez,4,Macquarie Island,uninhabited_island,"uninhabited island, admin: Australia",NA,NA
+eez,57,Madeira,XMI,our own made up ISO3c,300,Madeira Island
+eez,9,Micronesia,FSM,not identified by countrycode,146,Micronesia
+eez,13,Northern Mariana Islands and Guam,MNP/GUM,mutiple regions reported together,NA,NA
+eez,221,Northern Saint-Martin,MAF,Not catching the label in countrycode,191,Saint-Martin
+eez,237,Oecussi Ambeno,TLS,grouped with Timor Leste check on gadm36 map,229,Timor-Leste
+eez,150,Palmyra Atoll,UMI,United States Outlying uninhabited Islands,NA,NA
+eez,157,Phoenix Group,KIR,grouped with kiribati,119,Kiribati
+eez,90,Prince Edward Islands,uninhabited_island,"uninhabited island, admin: ZAF",NA,NA
+eez,116,Puerto Rico and Virgin Islands of the United States,PRI/VIR,mutiple regions reported together,NA,NA
+eez,248,Saba,BES,"Bonaire, Sint Eustatius, Saba grouped in food systems",29,"Bonaire, Sint Eustatius and Saba"
+eez,249,Sint Eustatius,BES,"Bonaire, Sint Eustatius, Saba grouped in food systems",29,"Bonaire, Sint Eustatius and Saba"
+eez,88,Tristan da Cunha,uninhabited_island,uninhabited island; british overseas territory,NA,NA
+eez,12,Wake Island,UMI,United States Outlying uninhabited Islands,NA,NA
+eez,101,Namibia,NAM,NA,155,Namibia
+eez,5,New Caledonia,NCL,NA,159,New Caledonia
+eez,3,Norfolk Island,NFK,NA,165,Norfolk Island
+eez,196,Nigeria,NGA,NA,163,Nigeria
+eez,131,Nicaragua,NIC,NA,161,Nicaragua
+eez,154,Niue,NIU,NA,164,Niue
+eez,177,Netherlands,NLD,NA,158,Netherlands
+eez,223,Norway,NOR,NA,169,Norway
+eez,10,Nauru,NRU,NA,156,Nauru
+eez,162,New Zealand,NZL,NA,160,New Zealand
+eez,48,Oman,OMN,NA,170,Oman
+eez,53,Pakistan,PAK,NA,171,Pakistan
+eez,129,Panama,PAN,NA,174,Panama
+eez,146,Pitcairn,PCN,NA,180,Pitcairn Islands
+eez,138,Peru,PER,NA,178,Peru
+eez,15,Philippines,PHL,NA,179,Philippines
+eez,8,Palau,PLW,NA,172,Palau
+eez,17,Papua New Guinea,PNG,NA,175,Papua New Guinea
+eez,178,Poland,POL,NA,181,Poland
+eez,21,North Korea,PRK,NA,166,North Korea
+eez,183,Portugal,PRT,NA,182,Portugal
+eez,147,French Polynesia,PYF,NA,81,French Polynesia
+eez,190,Qatar,QAT,NA,184,Qatar
+eez,32,Reunion,REU,NA,186,Reunion
+eez,72,Romania,ROU,NA,187,Romania
+eez,73,Russia,RUS,NA,188,Russia
+eez,50,Saudi Arabia,SAU,NA,200,Saudi Arabia
+eez,49,Sudan,SDN,NA,218,Sudan
+eez,66,Senegal,SEN,NA,201,Senegal
+eez,208,Singapore,SGP,NA,205,Singapore
+eez,89,South Georgia and the South Sandwich Islands,uninhabited_island,"uninhabited island, iso3c SGS; admin: GBR",NA,NA
+eez,86,Saint Helena,SHN,NA,192,Saint Helena
+eez,7,Solomon Islands,SLB,NA,209,Solomon Islands
+eez,96,Sierra Leone,SLE,NA,204,Sierra Leone
+eez,134,El Salvador,SLV,NA,70,El Salvador
+eez,44,Somalia,SOM,NA,210,Somalia
+eez,219,Saint Pierre and Miquelon,SPM,NA,195,Saint Pierre and Miquelon
+eez,103,Sao Tome and Principe,STP,NA,199,São Tomé and Príncipe
+eez,168,Suriname,SUR,NA,219,Suriname
+eez,188,Slovenia,SVN,NA,208,Slovenia
+eez,222,Sweden,SWE,NA,222,Sweden
+eez,220,Sint Maarten,SXM,NA,206,Sint Maarten
+eez,31,Seychelles,SYC,NA,203,Seychelles
+eez,77,Syria,SYR,NA,224,Syria
+eez,111,Turks and Caicos Islands,TCA,NA,237,Turks and Caicos Islands
+eez,98,Togo,TGO,NA,230,Togo
+eez,25,Thailand,THA,NA,228,Thailand
+eez,156,Tokelau,TKL,NA,231,Tokelau
+eez,231,East Timor,TLS,NA,229,Timor-Leste
+eez,155,Tonga,TON,NA,232,Tonga
+eez,126,Trinidad and Tobago,TTO,NA,233,Trinidad and Tobago
+eez,61,Tunisia,TUN,NA,234,Tunisia
+eez,76,Turkey,TUR,NA,235,Turkey
+eez,19,Tuvalu,TUV,NA,238,Tuvalu
+eez,14,Taiwan,TWN,NA,225,Taiwan
+eez,202,Tanzania,TZA,NA,227,Tanzania
+eez,75,Ukraine,UKR,NA,240,Ukraine
+eez,173,Uruguay,URY,NA,245,Uruguay
+eez,163,United States,USA,NA,243,United States
+eez,127,Saint Vincent and the Grenadines,VCT,NA,196,Saint Vincent and the Grenadines
+eez,139,Venezuela,VEN,NA,249,Venezuela
+eez,117,British Virgin Islands,VGB,NA,35,British Virgin Islands
+eez,207,Vietnam,VNM,NA,250,Vietnam
+eez,6,Vanuatu,VUT,NA,247,Vanuatu
+eez,161,Wallis and Futuna,WLF,NA,252,Wallis and Futuna
+eez,152,Samoa,WSM,NA,197,Samoa
+eez,47,Yemen,YEM,NA,254,Yemen
+eez,102,South Africa,ZAF,NA,211,South Africa
+eez-disputed,255,DISPUTED,disputed,NA,NA,NA
+fao,260,Arctic Sea,FAO,NA,NA,NA
+fao,261,"Atlantic, Northwest",FAO,NA,NA,NA
+fao,262,"Atlantic, Northeast",FAO,NA,NA,NA
+fao,263,"Atlantic, Western-Central",FAO,NA,NA,NA
+fao,264,"Atlantic, Eastern Central",FAO,NA,NA,NA
+fao,266,"Atlantic, Southwest",FAO,NA,NA,NA
+fao,267,"Atlantic, Southeast",FAO,NA,NA,NA
+fao,269,"Indian Ocean, Western",FAO,NA,NA,NA
+fao,270,"Indian Ocean, Eastern",FAO,NA,NA,NA
+fao,272,"Pacific, Northwest",FAO,NA,NA,NA
+fao,273,"Pacific, Northeast",FAO,NA,NA,NA
+fao,274,"Pacific, Western Central",FAO,NA,NA,NA
+fao,275,"Pacific, Eastern Central",FAO,NA,NA,NA
+fao,276,"Pacific, Southwest",FAO,NA,NA,NA
+fao,277,"Pacific, Southeast",FAO,NA,NA,NA

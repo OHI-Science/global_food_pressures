@@ -1,0 +1,75 @@
+---
+title: "New disturbance"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Here we:
+1. correct trawl to include only the demersal destructive portion of trawling (removing midwater trawls based on proportion of catch from Watson data). Using data created in STEP3_create_prop_rasters.Rmd. 
+2. combine the hours effort for the corrected trawl data to hours effort for dredge data to get total effort.
+
+
+
+```{r setup, include=FALSE}
+#load relevant packages, etc.
+
+library(here)
+library(raster)
+library(tidyverse)
+
+# raster template
+r_template <- raster::raster(ncol=720, nrow=360, vals=c(1:259200))
+
+  
+```
+
+## correct trawl data
+
+Global Fishing Watch combines midwater and bottom trawls.  We are only concerned here with the bottom trawls, so we attempt to dissentangle this using watson data to generate a raster with these values:
+
+bottom_trawl_tonnes / all_trawl_tonnes
+
+We multiply that raster by the Global Fishing Watch raster for all trawl data.
+```{r}
+
+trawl_correction <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/trawling/trawl_proportion_raster.tif")
+plot(trawl_correction)
+avg_trawl_correction <- cellStats(trawl_correction, "mean", na.rm=TRUE)
+trawl_correction[is.na(trawl_correction)] <- avg_trawl_correction
+plot(trawl_correction)
+
+GFW_all_trawl <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/global_fishing_watch/FishingWatch_annual_effort_trawlers_2017.tif")
+plot(GFW_all_trawl)
+
+resample(trawl_correction, GFW_all_trawl, method="ngb", filename = "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/trawling/trawl_proportion_raster_resampled.tif", progress="text", overwrite=TRUE)
+
+trawl_correction_raster_resampled <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/trawling/trawl_proportion_raster_resampled.tif")
+plot(trawl_correction_raster_resampled)
+
+trawl_stack <- stack(trawl_correction_raster_resampled, GFW_all_trawl)
+  
+overlay(trawl_stack, fun=function(x,y){return(x*y)},
+ filename = "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/global_fishing_watch/FishingWatch_annual_effort_destructive_trawlers_2017.tif", overwrite=TRUE, progress="text")
+
+
+```
+
+
+Sum the corrected trawl with the dredge effort to get the total demersal destructive fishing effort.
+```{r}
+corrected_trawl <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/global_fishing_watch/FishingWatch_annual_effort_destructive_trawlers_2017.tif")
+
+dredge <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/global_fishing_watch/FishingWatch_annual_effort_dredge_2017.tif")
+
+newextent=c(-180.005, 179.995, -89.995, 90.005)
+
+dredge_extend <- extend(dredge, newextent, value=0)
+corrected_trawl_extend <- extend(corrected_trawl, newextent, value=0)
+
+damage_stack <- stack(dredge_extend, corrected_trawl_extend)
+
+calc(damage_stack, sum, na.rm=TRUE,
+ filename = "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/global_fishing_watch/FishingWatch_annual_effort_destructive_hours_2017.tif", overwrite=TRUE, progress="text")
+
+```

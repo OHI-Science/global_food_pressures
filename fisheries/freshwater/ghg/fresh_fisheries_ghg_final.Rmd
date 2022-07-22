@@ -1,0 +1,114 @@
+---
+title: "Freshwater Fisheries GHG"
+output: html_document
+---
+## Script Author
+Paul-Eric Rayner
+@prayner96
+
+## Objectives
+Measure ghg emissions produced from FW fisheries.
+
+## Inputs
+
+
+## Outputs
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+## load libraries, read in data
+
+```
+
+```{r}
+file.path(prep, "fisheries/freshwater/fnl_catch.tif") %>% 
+  raster() %>%
+  cellStats(., stat = "sum")
+fnl_catch <- 
+  file.path(prep, "fisheries/freshwater/fnl_catch.tif") %>% 
+  raster()
+cellStats(fnl_catch, stat = "sum")
+catch_rate <- fnl_catch / (8.872082 * 8.872082)
+catch_rate <- projectRaster(catch_rate, food_raster, method = "ngb")
+catch <- catch_rate * area(catch_rate)
+catch_corrected <- catch * (cellStats(fnl_catch, stat = "sum") / cellStats(catch, stat = "sum"))
+plot(catch_corrected, main = "riverine fish catch (tons / year)")
+plot(log10(catch_corrected + 1), main = "log10 riverine fish catch")
+cellStats(catch_corrected, stat = "sum")
+```
+
+```{r}
+# Import developed country classifications from UNSD
+emissions_factor <- 
+  vroom::vroom(here("_spatial/_output/UNSD_Methodology.csv"), 
+               col_select = c(iso3c, Developed_Developing)) %>% 
+  mutate(CO2_tonnes = if_else(Developed_Developing == "Developed",
+                              
+                              (
+                                1400 *  # Berkes 1982: Quebec: 
+                                0.264172 * # L of gas -> US gal
+                                8.887 * 10^(-3) + # gallons of gas to t CO2eq
+                                
+                              0.55 + # Add Swedish carps
+                                
+                              ((1 / 2.7 + 1 / 4.6 + 1 / 1.7 + 1 / 10.4 + 1 / 1 + 1 / 2.2 + 1 / 3) / 7) * # Berkes 1990: Lake ontario and erie
+                                (1 / 0.002791) * # metric tonnes of gasoline -> US gal
+                                8.887 * 10^(-3)
+                              
+                              ) / 3, # Calculate the mean
+                              0)) %>% 
+  select(- Developed_Developing) %>% 
+  left_join(food_rgns_xy, .) %>%
+  select(x, y, CO2_tonnes) %>% 
+  rasterFromXYZ(., crs = food_crs)
+
+fw_fisheries_ghg <- 
+  overlay(emissions_factor,
+          catch_corrected,
+          fun = function(r1, r2) { r1 * r2 }) 
+
+names(fw_fisheries_ghg) <- "tonnes_co2eq"
+
+writeRaster(fw_fisheries_ghg, 
+            file.path(layers, "freshwater_fish_fisheries_meat_ghg.tif", 
+                      fsep = ""), 
+            overwrite = TRUE,
+            format = "GTiff")
+cellStats(fw_fisheries_ghg, stat = "sum")
+plot(fw_fisheries_ghg)
+```
+
+## Data Checks
+
+```{r}
+raster(file.path(layers, "marine_fish_fisheries_meat_ghg.tif", fsep = ""))
+
+raster(file.path(layers, "marine_medium_pelagic_fisheries_meat_ghg.tif", fsep = "")) %>% 
+  cellStats(., stat = "sum")
+
+str_extract(.x, pattern = "fisheries_meat_ghg.tif")
+
+fishery_sums <-
+  as_vector(map(list.files(layers,
+           pattern = "fisheries_meat_ghg.tif", 
+           full.names = TRUE), ~ cellStats(raster(.x), stat = "sum")))
+
+fishery_names <-
+  as_vector(map(list.files(layers,
+           pattern = "fisheries_meat_ghg.tif", 
+           full.names = TRUE), ~ str_extract(., pattern = "(?<=/datalayers//).*(?=_fisheries_meat_ghg.tif)")))
+
+fishery_df <- 
+  tibble(layer = fishery_names,
+         sum = fishery_sums)
+
+ggplot(fishery_df, aes(x = layer, y = sort(sum))) + 
+  geom_point(size = 3) +
+  theme_classic() + 
+  theme(axis.text.x = element_text(angle = 45, face = "bold", vjust = 0.5)) +
+  labs(title = "Fishery GHG emissions by layer - FW has the lowest", y = "Sum (tCO2eq)", x = "")
+```
+

@@ -1,0 +1,520 @@
+iso3c,raw_name,prop_diet,production_system,species
+ALB,cassava,0,aquaculture,marine-fish-general
+ALB,corn,0,aquaculture,marine-fish-general
+ALB,corn meal,0.26594469726129644,aquaculture,marine-fish-general
+ALB,other animal byproducts,0,aquaculture,marine-fish-general
+ALB,palm oil,0,aquaculture,marine-fish-general
+ALB,pea protein,0.1025976816317647,aquaculture,marine-fish-general
+ALB,rapeseed meal,0,aquaculture,marine-fish-general
+ALB,rapeseed oil,0.11566368519767645,aquaculture,marine-fish-general
+ALB,soybean meal,0.0791889188355268,aquaculture,marine-fish-general
+ALB,soybean oil,0,aquaculture,marine-fish-general
+ALB,sunflower oil,0,aquaculture,marine-fish-general
+ALB,wheat,0.09268790921245397,aquaculture,marine-fish-general
+ALB,wheat meal,0.22891710786128172,aquaculture,marine-fish-general
+ARE,cassava,0,aquaculture,marine-fish-general
+ARE,corn,0,aquaculture,marine-fish-general
+ARE,corn meal,0.26808458772301463,aquaculture,marine-fish-general
+ARE,other animal byproducts,0,aquaculture,marine-fish-general
+ARE,palm oil,0,aquaculture,marine-fish-general
+ARE,pea protein,0.10629396174442425,aquaculture,marine-fish-general
+ARE,rapeseed meal,0,aquaculture,marine-fish-general
+ARE,rapeseed oil,0.11501856121204299,aquaculture,marine-fish-general
+ARE,soybean meal,0.07234187696449539,aquaculture,marine-fish-general
+ARE,soybean oil,0,aquaculture,marine-fish-general
+ARE,sunflower oil,0,aquaculture,marine-fish-general
+ARE,wheat,0.08900243660611248,aquaculture,marine-fish-general
+ARE,wheat meal,0.2342585757499103,aquaculture,marine-fish-general
+AUS,cassava,0,aquaculture,marine-fish-general
+AUS,corn,0,aquaculture,marine-fish-general
+AUS,corn meal,0.043197658568853936,aquaculture,marine-fish-general
+AUS,groundnut meal,0.058575941262765455,aquaculture,marine-fish-general
+AUS,maize meal,0.09543129025187844,aquaculture,marine-fish-general
+AUS,other animal byproducts,0.24328586177930966,aquaculture,marine-fish-general
+AUS,palm oil,0.006645793625977528,aquaculture,marine-fish-general
+AUS,pea protein,0.006645793625977528,aquaculture,marine-fish-general
+AUS,rapeseed meal,0.013291587251955056,aquaculture,marine-fish-general
+AUS,rapeseed oil,0.01661448406494382,aquaculture,marine-fish-general
+AUS,rice bran,0.12576412902470507,aquaculture,marine-fish-general
+AUS,soybean meal,0.1393086912110941,aquaculture,marine-fish-general
+AUS,soybean oil,0,aquaculture,marine-fish-general
+AUS,sunflower oil,0,aquaculture,marine-fish-general
+AUS,wheat,0.08307242032471909,aquaculture,marine-fish-general
+AUS,wheat meal,0.053166349007820225,aquaculture,marine-fish-general
+BGD,cassava,0,aquaculture,marine-fish-general
+BGD,corn,0,aquaculture,marine-fish-general
+BGD,corn meal,0.11984375000000001,aquaculture,marine-fish-general
+BGD,other animal byproducts,0.0553125,aquaculture,marine-fish-general
+BGD,palm oil,0.018437500000000002,aquaculture,marine-fish-general
+BGD,pea protein,0.018437500000000002,aquaculture,marine-fish-general
+BGD,rapeseed meal,0.036875000000000005,aquaculture,marine-fish-general
+BGD,rapeseed oil,0.04609375,aquaculture,marine-fish-general
+BGD,soybean meal,0.21203125,aquaculture,marine-fish-general
+BGD,soybean oil,0,aquaculture,marine-fish-general
+BGD,sunflower oil,0,aquaculture,marine-fish-general
+BGD,wheat,0.23046875000000003,aquaculture,marine-fish-general
+BGD,wheat meal,0.14750000000000002,aquaculture,marine-fish-general
+CHN,cassava,0,aquaculture,marine-fish-general
+CHN,corn,0,aquaculture,marine-fish-general
+CHN,corn meal,0.1351658533825607,aquaculture,marine-fish-general
+CHN,groundnut meal,0.01002223776892168,aquaculture,marine-fish-general
+CHN,maize meal,0.011226311535568472,aquaculture,marine-fish-general
+CHN,other animal byproducts,0.048437765734527564,aquaculture,marine-fish-general
+CHN,palm oil,0.01257313006258459,aquaculture,marine-fish-general
+CHN,pea protein,0.027899387564755213,aquaculture,marine-fish-general
+CHN,rapeseed meal,0.02514626012516918,aquaculture,marine-fish-general
+CHN,rapeseed oil,0.0575789235047473,aquaculture,marine-fish-general
+CHN,rice bran,0.0029903285916907285,aquaculture,marine-fish-general
+CHN,soybean cake,0.001589467896798363,aquaculture,marine-fish-general
+CHN,soybean meal,0.19825355864276048,aquaculture,marine-fish-general
+CHN,soybean oil,0,aquaculture,marine-fish-general
+CHN,sunflower oil,0,aquaculture,marine-fish-general
+CHN,wheat,0.18526158528785444,aquaculture,marine-fish-general
+CHN,wheat meal,0.16885518990206133,aquaculture,marine-fish-general
+CRI,cassava,0,aquaculture,marine-fish-general
+CRI,corn,0,aquaculture,marine-fish-general
+CRI,corn meal,0.11984375000000001,aquaculture,marine-fish-general
+CRI,other animal byproducts,0.0553125,aquaculture,marine-fish-general
+CRI,palm oil,0.018437500000000002,aquaculture,marine-fish-general
+CRI,pea protein,0.018437500000000002,aquaculture,marine-fish-general
+CRI,rapeseed meal,0.036875000000000005,aquaculture,marine-fish-general
+CRI,rapeseed oil,0.04609375,aquaculture,marine-fish-general
+CRI,soybean meal,0.21203125,aquaculture,marine-fish-general
+CRI,soybean oil,0,aquaculture,marine-fish-general
+CRI,sunflower oil,0,aquaculture,marine-fish-general
+CRI,wheat,0.23046875000000003,aquaculture,marine-fish-general
+CRI,wheat meal,0.14750000000000002,aquaculture,marine-fish-general
+CYP,cassava,0,aquaculture,marine-fish-general
+CYP,corn,0,aquaculture,marine-fish-general
+CYP,corn meal,0.2643621252099303,aquaculture,marine-fish-general
+CYP,other animal byproducts,0,aquaculture,marine-fish-general
+CYP,palm oil,0,aquaculture,marine-fish-general
+CYP,pea protein,0.09986406993295918,aquaculture,marine-fish-general
+CYP,rapeseed meal,0,aquaculture,marine-fish-general
+CYP,rapeseed oil,0.11614079148306528,aquaculture,marine-fish-general
+CYP,soybean meal,0.08425270003997545,aquaculture,marine-fish-general
+CYP,soybean oil,0,aquaculture,marine-fish-general
+CYP,sunflower oil,0,aquaculture,marine-fish-general
+CYP,wheat,0.09541352813884899,aquaculture,marine-fish-general
+CYP,wheat meal,0.2249667851952208,aquaculture,marine-fish-general
+EGY,cassava,0,aquaculture,marine-fish-general
+EGY,corn,0,aquaculture,marine-fish-general
+EGY,corn meal,0.07166131694904465,aquaculture,marine-fish-general
+EGY,other animal byproducts,0.005063281570221923,aquaculture,marine-fish-general
+EGY,palm oil,0.001687760523407308,aquaculture,marine-fish-general
+EGY,pea protein,0.020422597271462353,aquaculture,marine-fish-general
+EGY,rapeseed meal,0.003375521046814616,aquaculture,marine-fish-general
+EGY,rapeseed oil,0.03318314415943384,aquaculture,marine-fish-general
+EGY,rice bran,0.07285743886761395,aquaculture,marine-fish-general
+EGY,soybean meal,0.17279550513746897,aquaculture,marine-fish-general
+EGY,soybean oil,0.01005183194850263,aquaculture,marine-fish-general
+EGY,sunflower oil,0,aquaculture,marine-fish-general
+EGY,sunflower oilcake,0.20096326793393213,aquaculture,marine-fish-general
+EGY,wheat,0.22035258371596717,aquaculture,marine-fish-general
+EGY,wheat meal,0.07258575087613052,aquaculture,marine-fish-general
+ESP,cassava,0,aquaculture,marine-fish-general
+ESP,corn,0,aquaculture,marine-fish-general
+ESP,corn meal,0.20941424992102203,aquaculture,marine-fish-general
+ESP,groundnut meal,0.0036328583450442927,aquaculture,marine-fish-general
+ESP,maize meal,0.0010024201274341756,aquaculture,marine-fish-general
+ESP,other animal byproducts,0.0167280116586391,aquaculture,marine-fish-general
+ESP,palm oil,0.004740653780017888,aquaculture,marine-fish-general
+ESP,pea protein,0.05577617212544083,aquaculture,marine-fish-general
+ESP,rapeseed meal,0.009481307560035776,aquaculture,marine-fish-general
+ESP,rapeseed oil,0.09933453249840306,aquaculture,marine-fish-general
+ESP,soybean cake,0.0035084704460196137,aquaculture,marine-fish-general
+ESP,soybean meal,0.15427574552096793,aquaculture,marine-fish-general
+ESP,soybean oil,0,aquaculture,marine-fish-general
+ESP,sunflower oil,0,aquaculture,marine-fish-general
+ESP,wheat,0.1519649704472779,aquaculture,marine-fish-general
+ESP,wheat meal,0.17514060756969735,aquaculture,marine-fish-general
+FRA,cassava,0,aquaculture,marine-fish-general
+FRA,corn,0,aquaculture,marine-fish-general
+FRA,corn meal,0.22774663668870604,aquaculture,marine-fish-general
+FRA,other animal byproducts,0.009482142857142857,aquaculture,marine-fish-general
+FRA,palm oil,0.0031607142857142862,aquaculture,marine-fish-general
+FRA,pea protein,0.06545216384785714,aquaculture,marine-fish-general
+FRA,rapeseed meal,0.0063214285714285725,aquaculture,marine-fish-general
+FRA,rapeseed oil,0.10770246835986852,aquaculture,marine-fish-general
+FRA,soybean meal,0.14404514390203074,aquaculture,marine-fish-general
+FRA,soybean oil,0,aquaculture,marine-fish-general
+FRA,sunflower oil,0,aquaculture,marine-fish-general
+FRA,wheat,0.13895911495399454,aquaculture,marine-fish-general
+FRA,wheat meal,0.18213018653325738,aquaculture,marine-fish-general
+GRC,cassava,0,aquaculture,marine-fish-general
+GRC,corn,0,aquaculture,marine-fish-general
+GRC,corn meal,0.24968760308846075,aquaculture,marine-fish-general
+GRC,other animal byproducts,0.0015728339219918883,aquaculture,marine-fish-general
+GRC,palm oil,5.242779739972962e-4,aquaculture,marine-fish-general
+GRC,pea protein,0.07929937170315844,aquaculture,marine-fish-general
+GRC,rapeseed meal,0.0010485559479945924,aquaculture,marine-fish-general
+GRC,rapeseed oil,0.11733408537958656,aquaculture,marine-fish-general
+GRC,soybean meal,0.1216913989481739,aquaculture,marine-fish-general
+GRC,soybean oil,0,aquaculture,marine-fish-general
+GRC,sunflower oil,0,aquaculture,marine-fish-general
+GRC,wheat,0.11744982047566158,aquaculture,marine-fish-general
+GRC,wheat meal,0.19639205256097503,aquaculture,marine-fish-general
+HKG,cassava,0,aquaculture,marine-fish-general
+HKG,corn,0,aquaculture,marine-fish-general
+HKG,corn meal,0.11984375000000001,aquaculture,marine-fish-general
+HKG,other animal byproducts,0.0553125,aquaculture,marine-fish-general
+HKG,palm oil,0.018437500000000002,aquaculture,marine-fish-general
+HKG,pea protein,0.018437500000000002,aquaculture,marine-fish-general
+HKG,rapeseed meal,0.036875000000000005,aquaculture,marine-fish-general
+HKG,rapeseed oil,0.04609375,aquaculture,marine-fish-general
+HKG,soybean meal,0.21203125,aquaculture,marine-fish-general
+HKG,soybean oil,0,aquaculture,marine-fish-general
+HKG,sunflower oil,0,aquaculture,marine-fish-general
+HKG,wheat,0.23046875000000003,aquaculture,marine-fish-general
+HKG,wheat meal,0.14750000000000002,aquaculture,marine-fish-general
+HRV,cassava,0,aquaculture,marine-fish-general
+HRV,corn,0,aquaculture,marine-fish-general
+HRV,corn meal,0.2454538254055292,aquaculture,marine-fish-general
+HRV,other animal byproducts,0,aquaculture,marine-fish-general
+HRV,palm oil,0,aquaculture,marine-fish-general
+HRV,pea protein,0.0672033455727532,aquaculture,marine-fish-general
+HRV,rapeseed meal,0,aquaculture,marine-fish-general
+HRV,rapeseed oil,0.12184117566140906,aquaculture,marine-fish-general
+HRV,soybean meal,0.1447538905386687,aquaculture,marine-fish-general
+HRV,soybean oil,0,aquaculture,marine-fish-general
+HRV,sunflower oil,0,aquaculture,marine-fish-general
+HRV,wheat,0.12797875622330832,aquaculture,marine-fish-general
+HRV,wheat meal,0.17776900659833167,aquaculture,marine-fish-general
+IDN,cassava,0,aquaculture,marine-fish-general
+IDN,corn,0,aquaculture,marine-fish-general
+IDN,corn meal,0.004523365984673066,aquaculture,marine-fish-general
+IDN,groundnut meal,0.009606505270791757,aquaculture,marine-fish-general
+IDN,maize meal,0.054957875544877806,aquaculture,marine-fish-general
+IDN,other animal byproducts,0.015781512358336726,aquaculture,marine-fish-general
+IDN,palm oil,6.959024591804716e-4,aquaculture,marine-fish-general
+IDN,pea protein,6.959024591804716e-4,aquaculture,marine-fish-general
+IDN,rapeseed meal,0.0013918049183609432,aquaculture,marine-fish-general
+IDN,rapeseed oil,0.0017397561479511792,aquaculture,marine-fish-general
+IDN,rice bran,0.29790225419115823,aquaculture,marine-fish-general
+IDN,soybean meal,0.336109162540184,aquaculture,marine-fish-general
+IDN,soybean oil,0,aquaculture,marine-fish-general
+IDN,sunflower oil,0,aquaculture,marine-fish-general
+IDN,wheat,0.008698780739755895,aquaculture,marine-fish-general
+IDN,wheat bran,0.026018405257109727,aquaculture,marine-fish-general
+IDN,wheat meal,0.1268787721284397,aquaculture,marine-fish-general
+IND,cassava,0,aquaculture,marine-fish-general
+IND,corn,0,aquaculture,marine-fish-general
+IND,corn meal,0.11984375000000001,aquaculture,marine-fish-general
+IND,other animal byproducts,0.0553125,aquaculture,marine-fish-general
+IND,palm oil,0.018437500000000002,aquaculture,marine-fish-general
+IND,pea protein,0.018437500000000002,aquaculture,marine-fish-general
+IND,rapeseed meal,0.036875000000000005,aquaculture,marine-fish-general
+IND,rapeseed oil,0.04609375,aquaculture,marine-fish-general
+IND,soybean meal,0.21203125,aquaculture,marine-fish-general
+IND,soybean oil,0,aquaculture,marine-fish-general
+IND,sunflower oil,0,aquaculture,marine-fish-general
+IND,wheat,0.23046875000000003,aquaculture,marine-fish-general
+IND,wheat meal,0.14750000000000002,aquaculture,marine-fish-general
+IRN,cassava,0,aquaculture,marine-fish-general
+IRN,corn,0,aquaculture,marine-fish-general
+IRN,corn meal,0.11984375000000001,aquaculture,marine-fish-general
+IRN,other animal byproducts,0.0553125,aquaculture,marine-fish-general
+IRN,palm oil,0.018437500000000002,aquaculture,marine-fish-general
+IRN,pea protein,0.018437500000000002,aquaculture,marine-fish-general
+IRN,rapeseed meal,0.036875000000000005,aquaculture,marine-fish-general
+IRN,rapeseed oil,0.04609375,aquaculture,marine-fish-general
+IRN,soybean meal,0.21203125,aquaculture,marine-fish-general
+IRN,soybean oil,0,aquaculture,marine-fish-general
+IRN,sunflower oil,0,aquaculture,marine-fish-general
+IRN,wheat,0.23046875000000003,aquaculture,marine-fish-general
+IRN,wheat meal,0.14750000000000002,aquaculture,marine-fish-general
+ISR,cassava,0,aquaculture,marine-fish-general
+ISR,corn,0,aquaculture,marine-fish-general
+ISR,corn meal,0.290693430405,aquaculture,marine-fish-general
+ISR,other animal byproducts,0,aquaculture,marine-fish-general
+ISR,palm oil,0,aquaculture,marine-fish-general
+ISR,pea protein,0.14534671564499999,aquaculture,marine-fish-general
+ISR,rapeseed meal,0,aquaculture,marine-fish-general
+ISR,rapeseed oil,0.10820255499,aquaculture,marine-fish-general
+ISR,soybean meal,0,aquaculture,marine-fish-general
+ISR,soybean oil,0,aquaculture,marine-fish-general
+ISR,sunflower oil,0,aquaculture,marine-fish-general
+ISR,wheat,0.050063868555,aquaculture,marine-fish-general
+ISR,wheat meal,0.290693430405,aquaculture,marine-fish-general
+ITA,cassava,0,aquaculture,marine-fish-general
+ITA,corn,0,aquaculture,marine-fish-general
+ITA,corn meal,0.23932415149334924,aquaculture,marine-fish-general
+ITA,other animal byproducts,0,aquaculture,marine-fish-general
+ITA,palm oil,0,aquaculture,marine-fish-general
+ITA,pea protein,0.0731546383378808,aquaculture,marine-fish-general
+ITA,rapeseed meal,0,aquaculture,marine-fish-general
+ITA,rapeseed oil,0.11461047167268076,aquaculture,marine-fish-general
+ITA,rice bran,0.005062669893843866,aquaculture,marine-fish-general
+ITA,soybean meal,0.1298032443054544,aquaculture,marine-fish-general
+ITA,soybean oil,6.98475101164763e-4,aquaculture,marine-fish-general
+ITA,sunflower oil,0,aquaculture,marine-fish-general
+ITA,sunflower oilcake,0.013964403664892596,aquaculture,marine-fish-general
+ITA,wheat,0.12487987322260467,aquaculture,marine-fish-general
+ITA,wheat meal,0.18350207230812896,aquaculture,marine-fish-general
+JPN,cassava,0,aquaculture,marine-fish-general
+JPN,corn,0,aquaculture,marine-fish-general
+JPN,corn meal,0.16827941040316227,aquaculture,marine-fish-general
+JPN,groundnut meal,0.0017809693539377178,aquaculture,marine-fish-general
+JPN,maize meal,4.914255820533079e-4,aquaculture,marine-fish-general
+JPN,other animal byproducts,0.03988028695827494,aquaculture,marine-fish-general
+JPN,palm oil,0.012883907667713891,aquaculture,marine-fish-general
+JPN,pea protein,0.055150913077904436,aquaculture,marine-fish-general
+JPN,rapeseed meal,0.025767815335427782,aquaculture,marine-fish-general
+JPN,rapeseed oil,0.0636752065330639,aquaculture,marine-fish-general
+JPN,soybean cake,0.0017199895371865774,aquaculture,marine-fish-general
+JPN,soybean meal,0.14816493817870974,aquaculture,marine-fish-general
+JPN,soybean oil,0,aquaculture,marine-fish-general
+JPN,sunflower oil,0,aquaculture,marine-fish-general
+JPN,wheat,0.17702077792406357,aquaculture,marine-fish-general
+JPN,wheat meal,0.19018435944850193,aquaculture,marine-fish-general
+KHM,groundnut meal,0.09158928171850526,aquaculture,marine-fish-general
+KHM,maize meal,0.1492162676213918,aquaculture,marine-fish-general
+KHM,other animal byproducts,0.3492274558066682,aquaculture,marine-fish-general
+KHM,rice bran,0.19664466323562318,aquaculture,marine-fish-general
+KHM,soybean meal,0.09832233161781159,aquaculture,marine-fish-general
+KOR,cassava,0,aquaculture,marine-fish-general
+KOR,corn,0,aquaculture,marine-fish-general
+KOR,corn meal,0.03547345209360621,aquaculture,marine-fish-general
+KOR,groundnut meal,0.08889595456318233,aquaculture,marine-fish-general
+KOR,maize meal,0.02452919592176431,aquaculture,marine-fish-general
+KOR,other animal byproducts,0.06179183997180162,aquaculture,marine-fish-general
+KOR,palm oil,1.5628338913027995e-4,aquaculture,marine-fish-general
+KOR,pea protein,0.01487661996542364,aquaculture,marine-fish-general
+KOR,rapeseed meal,3.125667782605599e-4,aquaculture,marine-fish-general
+KOR,rapeseed oil,0.014593536669348605,aquaculture,marine-fish-general
+KOR,rice bran,0.008852472899151774,aquaculture,marine-fish-general
+KOR,soybean cake,0.08585218572617509,aquaculture,marine-fish-general
+KOR,soybean meal,0.10880469710880371,aquaculture,marine-fish-general
+KOR,soybean oil,0.0012213381542636385,aquaculture,marine-fish-general
+KOR,sunflower oil,0,aquaculture,marine-fish-general
+KOR,sunflower oilcake,0.02441784820823435,aquaculture,marine-fish-general
+KOR,wheat,0.16541711473560675,aquaculture,marine-fish-general
+KOR,wheat meal,0.24980489381524715,aquaculture,marine-fish-general
+MEX,cassava,0,aquaculture,marine-fish-general
+MEX,corn,0,aquaculture,marine-fish-general
+MEX,corn meal,0.20654773771640783,aquaculture,marine-fish-general
+MEX,other animal byproducts,0,aquaculture,marine-fish-general
+MEX,palm oil,0,aquaculture,marine-fish-general
+MEX,pea protein,0,aquaculture,marine-fish-general
+MEX,rapeseed meal,0,aquaculture,marine-fish-general
+MEX,rapeseed oil,0.13357039769609988,aquaculture,marine-fish-general
+MEX,soybean meal,0.2692423240407911,aquaculture,marine-fish-general
+MEX,soybean oil,0,aquaculture,marine-fish-general
+MEX,sunflower oil,0,aquaculture,marine-fish-general
+MEX,wheat,0.1949856067903435,aquaculture,marine-fish-general
+MEX,wheat meal,0.08065393375635771,aquaculture,marine-fish-general
+MLT,cassava,0,aquaculture,marine-fish-general
+MLT,corn,0,aquaculture,marine-fish-general
+MLT,corn meal,0.290693430405,aquaculture,marine-fish-general
+MLT,other animal byproducts,0,aquaculture,marine-fish-general
+MLT,palm oil,0,aquaculture,marine-fish-general
+MLT,pea protein,0.14534671564499999,aquaculture,marine-fish-general
+MLT,rapeseed meal,0,aquaculture,marine-fish-general
+MLT,rapeseed oil,0.10820255499,aquaculture,marine-fish-general
+MLT,soybean meal,0,aquaculture,marine-fish-general
+MLT,soybean oil,0,aquaculture,marine-fish-general
+MLT,sunflower oil,0,aquaculture,marine-fish-general
+MLT,wheat,0.050063868555,aquaculture,marine-fish-general
+MLT,wheat meal,0.290693430405,aquaculture,marine-fish-general
+MUS,cassava,0,aquaculture,marine-fish-general
+MUS,corn,0,aquaculture,marine-fish-general
+MUS,corn meal,0.2906934306569343,aquaculture,marine-fish-general
+MUS,other animal byproducts,0,aquaculture,marine-fish-general
+MUS,palm oil,0,aquaculture,marine-fish-general
+MUS,pea protein,0.14534671532846716,aquaculture,marine-fish-general
+MUS,rapeseed meal,0,aquaculture,marine-fish-general
+MUS,rapeseed oil,0.10820255474452554,aquaculture,marine-fish-general
+MUS,soybean meal,0,aquaculture,marine-fish-general
+MUS,soybean oil,0,aquaculture,marine-fish-general
+MUS,sunflower oil,0,aquaculture,marine-fish-general
+MUS,wheat,0.05006386861313869,aquaculture,marine-fish-general
+MUS,wheat meal,0.2906934306569343,aquaculture,marine-fish-general
+MYS,cassava,0,aquaculture,marine-fish-general
+MYS,corn,0,aquaculture,marine-fish-general
+MYS,corn meal,0.044633791116579204,aquaculture,marine-fish-general
+MYS,groundnut meal,0.05735114689513435,aquaculture,marine-fish-general
+MYS,maize meal,0.09015296408455618,aquaculture,marine-fish-general
+MYS,other animal byproducts,0.21374707352355166,aquaculture,marine-fish-general
+MYS,palm oil,0.006866737094858339,aquaculture,marine-fish-general
+MYS,pea protein,0.006866737094858339,aquaculture,marine-fish-general
+MYS,rapeseed meal,0.013733474189716679,aquaculture,marine-fish-general
+MYS,rapeseed oil,0.017166842737145846,aquaculture,marine-fish-general
+MYS,rice bran,0.10601060511290583,aquaculture,marine-fish-general
+MYS,soybean meal,0.157625833861083,aquaculture,marine-fish-general
+MYS,soybean oil,0,aquaculture,marine-fish-general
+MYS,sunflower oil,0,aquaculture,marine-fish-general
+MYS,wheat,0.08583421368572923,aquaculture,marine-fish-general
+MYS,wheat meal,0.08501058060388136,aquaculture,marine-fish-general
+NOR,groundnut meal,0.17107358380377652,aquaculture,marine-fish-general
+NOR,maize meal,0.04720459412108234,aquaculture,marine-fish-general
+NOR,other animal byproducts,0.11801148530270583,aquaculture,marine-fish-general
+NOR,soybean cake,0.1652160794237882,aquaculture,marine-fish-general
+NOR,wheat,0.1357562779832587,aquaculture,marine-fish-general
+NOR,wheat meal,0.24773797936538836,aquaculture,marine-fish-general
+PAN,cassava,0,aquaculture,marine-fish-general
+PAN,corn,0,aquaculture,marine-fish-general
+PAN,corn meal,0.11984375000000001,aquaculture,marine-fish-general
+PAN,other animal byproducts,0.0553125,aquaculture,marine-fish-general
+PAN,palm oil,0.018437500000000002,aquaculture,marine-fish-general
+PAN,pea protein,0.018437500000000002,aquaculture,marine-fish-general
+PAN,rapeseed meal,0.036875000000000005,aquaculture,marine-fish-general
+PAN,rapeseed oil,0.04609375,aquaculture,marine-fish-general
+PAN,soybean meal,0.21203125,aquaculture,marine-fish-general
+PAN,soybean oil,0,aquaculture,marine-fish-general
+PAN,sunflower oil,0,aquaculture,marine-fish-general
+PAN,wheat,0.23046875000000003,aquaculture,marine-fish-general
+PAN,wheat meal,0.14750000000000002,aquaculture,marine-fish-general
+PHL,maize meal,0.0493576889334503,aquaculture,marine-fish-general
+PHL,rice bran,0.34184358942223336,aquaculture,marine-fish-general
+PHL,soybean meal,0.35326795337761624,aquaculture,marine-fish-general
+PHL,wheat bran,0.030391026444416592,aquaculture,marine-fish-general
+PHL,wheat meal,0.11013974182228348,aquaculture,marine-fish-general
+PRT,cassava,0,aquaculture,marine-fish-general
+PRT,corn,0,aquaculture,marine-fish-general
+PRT,corn meal,0.17294252703473992,aquaculture,marine-fish-general
+PRT,other animal byproducts,0.03386538754256963,aquaculture,marine-fish-general
+PRT,palm oil,0.011288462514189879,aquaculture,marine-fish-general
+PRT,pea protein,0.04493633594085111,aquaculture,marine-fish-general
+PRT,rapeseed meal,0.022576925028379758,aquaculture,marine-fish-general
+PRT,rapeseed oil,0.07413965623286936,aquaculture,marine-fish-general
+PRT,soybean meal,0.17188472444668,aquaculture,marine-fish-general
+PRT,soybean oil,0,aquaculture,marine-fish-general
+PRT,sunflower oil,0,aquaculture,marine-fish-general
+PRT,wheat,0.1831608688744637,aquaculture,marine-fish-general
+PRT,wheat meal,0.17020511238525673,aquaculture,marine-fish-general
+SAU,cassava,0,aquaculture,marine-fish-general
+SAU,corn,0,aquaculture,marine-fish-general
+SAU,corn meal,0.08386110605474127,aquaculture,marine-fish-general
+SAU,groundnut meal,0.06516701804033362,aquaculture,marine-fish-general
+SAU,maize meal,0.10616940128300842,aquaculture,marine-fish-general
+SAU,other animal byproducts,0.24848007851703433,aquaculture,marine-fish-general
+SAU,palm oil,0,aquaculture,marine-fish-general
+SAU,pea protein,0.04193055315502587,aquaculture,marine-fish-general
+SAU,rapeseed meal,0,aquaculture,marine-fish-general
+SAU,rapeseed oil,0.03121496735157827,aquaculture,marine-fish-general
+SAU,rice bran,0.13991534900335414,aquaculture,marine-fish-general
+SAU,soybean meal,0.06995767450167707,aquaculture,marine-fish-general
+SAU,soybean oil,0,aquaculture,marine-fish-general
+SAU,sunflower oil,0,aquaculture,marine-fish-general
+SAU,wheat,0.014442746038505823,aquaculture,marine-fish-general
+SAU,wheat meal,0.08386110605474127,aquaculture,marine-fish-general
+SGP,groundnut meal,0.025634728481539124,aquaculture,marine-fish-general
+SGP,maize meal,0.07730689328560741,aquaculture,marine-fish-general
+SGP,other animal byproducts,0.09774452686960919,aquaculture,marine-fish-general
+SGP,rice bran,0.30120417202790795,aquaculture,marine-fish-general
+SGP,soybean meal,0.28191176771108645,aquaculture,marine-fish-general
+SGP,wheat bran,0.021884946949522078,aquaculture,marine-fish-general
+SGP,wheat meal,0.07931296467472781,aquaculture,marine-fish-general
+THA,groundnut meal,0.09148214395327246,aquaculture,marine-fish-general
+THA,maize meal,0.14627759468600388,aquaculture,marine-fish-general
+THA,other animal byproducts,0.32732203461380366,aquaculture,marine-fish-general
+THA,rice bran,0.18199676645062252,aquaculture,marine-fish-general
+THA,soybean meal,0.11259762798348431,aquaculture,marine-fish-general
+THA,wheat meal,0.02532383231281326,aquaculture,marine-fish-general
+TUN,cassava,0,aquaculture,marine-fish-general
+TUN,corn,0,aquaculture,marine-fish-general
+TUN,corn meal,0.2763933491594844,aquaculture,marine-fish-general
+TUN,other animal byproducts,0,aquaculture,marine-fish-general
+TUN,palm oil,0,aquaculture,marine-fish-general
+TUN,pea protein,0.12064586910037187,aquaculture,marine-fish-general
+TUN,rapeseed meal,0,aquaculture,marine-fish-general
+TUN,rapeseed oil,0.11251367538285487,aquaculture,marine-fish-general
+TUN,soybean meal,0.045756199580691395,aquaculture,marine-fish-general
+TUN,soybean oil,0,aquaculture,marine-fish-general
+TUN,sunflower oil,0,aquaculture,marine-fish-general
+TUN,wheat,0.07469249260919017,aquaculture,marine-fish-general
+TUN,wheat meal,0.25499841416740726,aquaculture,marine-fish-general
+TUR,cassava,0,aquaculture,marine-fish-general
+TUR,corn,0,aquaculture,marine-fish-general
+TUR,corn meal,0.23795284712000925,aquaculture,marine-fish-general
+TUR,other animal byproducts,2.383363573980885e-4,aquaculture,marine-fish-general
+TUR,palm oil,7.944545246602951e-5,aquaculture,marine-fish-general
+TUR,pea protein,0.05497151174132376,aquaculture,marine-fish-general
+TUR,rapeseed meal,1.5889090493205902e-4,aquaculture,marine-fish-general
+TUR,rapeseed oil,0.12361297528509195,aquaculture,marine-fish-general
+TUR,soybean meal,0.16731296231365328,aquaculture,marine-fish-general
+TUR,soybean oil,0,aquaculture,marine-fish-general
+TUR,sunflower oil,0,aquaculture,marine-fish-general
+TUR,wheat,0.14040693223959483,aquaculture,marine-fish-general
+TUR,wheat meal,0.16026609858553076,aquaculture,marine-fish-general
+TWN,cassava,0,aquaculture,marine-fish-general
+TWN,corn,0,aquaculture,marine-fish-general
+TWN,corn meal,0.024916288592321315,aquaculture,marine-fish-general
+TWN,groundnut meal,0.030407716575187444,aquaculture,marine-fish-general
+TWN,maize meal,0.06264025731955541,aquaculture,marine-fish-general
+TWN,other animal byproducts,0.056110020963927136,aquaculture,marine-fish-general
+TWN,palm oil,0.0033522793048625338,aquaculture,marine-fish-general
+TWN,pea protein,0.0033522793048625338,aquaculture,marine-fish-general
+TWN,rapeseed meal,0.0067045586097250675,aquaculture,marine-fish-general
+TWN,rapeseed oil,0.010402527508031294,aquaculture,marine-fish-general
+TWN,rice bran,0.17353929894096357,aquaculture,marine-fish-general
+TWN,soybean meal,0.2837841242122692,aquaculture,marine-fish-general
+TWN,soybean oil,2.975953266856473e-4,aquaculture,marine-fish-general
+TWN,sunflower oil,0,aquaculture,marine-fish-general
+TWN,sunflower oilcake,0.005949734305051007,aquaculture,marine-fish-general
+TWN,wheat,0.04991407123817063,aquaculture,marine-fish-general
+TWN,wheat bran,0.013599661647382884,aquaculture,marine-fish-general
+TWN,wheat meal,0.16002958615100438,aquaculture,marine-fish-general
+USA,cassava,0,aquaculture,marine-fish-general
+USA,corn,0,aquaculture,marine-fish-general
+USA,corn meal,0.22830158136042758,aquaculture,marine-fish-general
+USA,other animal byproducts,0.02019933049300061,aquaculture,marine-fish-general
+USA,palm oil,0.006733110164333538,aquaculture,marine-fish-general
+USA,pea protein,0.09900129281046333,aquaculture,marine-fish-general
+USA,rapeseed meal,0.013466220328667075,aquaculture,marine-fish-general
+USA,rapeseed oil,0.08552131138073046,aquaculture,marine-fish-general
+USA,soybean meal,0.07743076688983568,aquaculture,marine-fish-general
+USA,soybean oil,0,aquaculture,marine-fish-general
+USA,sunflower oil,0,aquaculture,marine-fish-general
+USA,wheat,0.11594513996561392,aquaculture,marine-fish-general
+USA,wheat meal,0.23840124660692788,aquaculture,marine-fish-general
+VNM,cassava,0,aquaculture,marine-fish-general
+VNM,corn,0,aquaculture,marine-fish-general
+VNM,corn meal,0.11984375000000001,aquaculture,marine-fish-general
+VNM,other animal byproducts,0.0553125,aquaculture,marine-fish-general
+VNM,palm oil,0.018437500000000002,aquaculture,marine-fish-general
+VNM,pea protein,0.018437500000000002,aquaculture,marine-fish-general
+VNM,rapeseed meal,0.036875000000000005,aquaculture,marine-fish-general
+VNM,rapeseed oil,0.04609375,aquaculture,marine-fish-general
+VNM,soybean meal,0.21203125,aquaculture,marine-fish-general
+VNM,soybean oil,0,aquaculture,marine-fish-general
+VNM,sunflower oil,0,aquaculture,marine-fish-general
+VNM,wheat,0.23046875000000003,aquaculture,marine-fish-general
+VNM,wheat meal,0.14750000000000002,aquaculture,marine-fish-general
+ALB,fofm,0.11499999999999999,aquaculture,marine-fish-general
+ARE,fofm,0.11499999999999999,aquaculture,marine-fish-general
+AUS,fofm,0.11499999999999999,aquaculture,marine-fish-general
+BGD,fofm,0.11499999999999999,aquaculture,marine-fish-general
+CHN,fofm,0.11499999999999999,aquaculture,marine-fish-general
+CRI,fofm,0.11499999999999999,aquaculture,marine-fish-general
+CYP,fofm,0.11499999999999999,aquaculture,marine-fish-general
+EGY,fofm,0.11499999999999999,aquaculture,marine-fish-general
+ESP,fofm,0.11499999999999999,aquaculture,marine-fish-general
+FRA,fofm,0.11499999999999999,aquaculture,marine-fish-general
+GRC,fofm,0.11499999999999999,aquaculture,marine-fish-general
+HKG,fofm,0.11499999999999999,aquaculture,marine-fish-general
+HRV,fofm,0.11499999999999999,aquaculture,marine-fish-general
+IDN,fofm,0.11499999999999999,aquaculture,marine-fish-general
+IND,fofm,0.11499999999999999,aquaculture,marine-fish-general
+IRN,fofm,0.11499999999999999,aquaculture,marine-fish-general
+ISR,fofm,0.11499999999999999,aquaculture,marine-fish-general
+ITA,fofm,0.11499999999999999,aquaculture,marine-fish-general
+JPN,fofm,0.11499999999999999,aquaculture,marine-fish-general
+KHM,fofm,0.11499999999999999,aquaculture,marine-fish-general
+KOR,fofm,0.11499999999999999,aquaculture,marine-fish-general
+MEX,fofm,0.11499999999999999,aquaculture,marine-fish-general
+MLT,fofm,0.11499999999999999,aquaculture,marine-fish-general
+MUS,fofm,0.11499999999999999,aquaculture,marine-fish-general
+MYS,fofm,0.11499999999999999,aquaculture,marine-fish-general
+NOR,fofm,0.11499999999999999,aquaculture,marine-fish-general
+PAN,fofm,0.11499999999999999,aquaculture,marine-fish-general
+PHL,fofm,0.11499999999999999,aquaculture,marine-fish-general
+PRT,fofm,0.11499999999999999,aquaculture,marine-fish-general
+SAU,fofm,0.11499999999999999,aquaculture,marine-fish-general
+SGP,fofm,0.11499999999999999,aquaculture,marine-fish-general
+THA,fofm,0.11499999999999999,aquaculture,marine-fish-general
+TUN,fofm,0.11499999999999999,aquaculture,marine-fish-general
+TUR,fofm,0.11499999999999999,aquaculture,marine-fish-general
+TWN,fofm,0.11499999999999999,aquaculture,marine-fish-general
+USA,fofm,0.11499999999999999,aquaculture,marine-fish-general
+VNM,fofm,0.11499999999999999,aquaculture,marine-fish-general

@@ -1,0 +1,154 @@
+---
+title: "Create data frame for other analysis"
+author: "Juliette"
+date: "5/12/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Current weirdness with this data:
+- there are some countries we have CP for livestock products but no kcals or protein. this is probably because FAO didn't report those products. I need to go back and make sure i gapfilled for those
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(here)
+source(here("_workflow/common.R"))
+livestock_cal_pro <- read_csv(here::here("_efficiency", "data", "livestock_protein_calories.csv")) %>% 
+  select(-product_tonnes_to_mill_kcal, -product_tonnes_to_tonnes_protein)
+crop_cal_pro <- read_csv(here::here("_efficiency", "data", "crops_protein_calories.csv"))
+marine_cal_pro <- read_csv(here::here("_efficiency", "data", "marine_fisheries_protein_calories.csv")) %>% 
+  rename(product = species_class_final)  %>% 
+  mutate(product = ifelse(product == "forage_fish", "Forage fish", product))
+fresh_cal_pro <- read_csv(here::here("_efficiency", "data", "freshwater_fisheries_protein_calories.csv"))  %>% 
+  mutate(product = "freshwater fish") %>% 
+  rename(tonnes = freshwater_tonnes)
+mari_cal_pro <- read_csv(here::here("_efficiency", "data", "mariculture_protein_calories.csv")) %>% 
+  rename(product = organism,
+         tonnes = tonnes_product,
+         million_kcal = million_kcals)
+```
+
+Need to add back in total tonnes product for fisheries
+```{r}
+edible_tonnes <- read_csv(here("_efficiency/data/fisheries_edible_tonnes.csv")) %>% 
+  group_by(iso3c, species_class_final) %>% 
+  dplyr::summarise(tonnes = sum(edible_tonnes, na.rm = TRUE) )%>% 
+  rename(product = species_class_final) %>%
+  mutate(product = ifelse(product == "forage_fish", "Forage fish", product))
+marine_cal_pro_2 <- left_join(marine_cal_pro, edible_tonnes, by = c("iso3c", "product")) %>% 
+  mutate(product = tolower(product)) %>%
+  dplyr::select(-tonnes) %>%
+  rename(tonnes = tonnes_product)
+```
+
+
+Read in and wrangle the the cumulative pressures
+
+```{r}
+pressures_raw <- read_csv(here("_efficiency/data/pressures_summary.csv")) 
+pressures <- pressures_raw %>% 
+  filter(!str_detect(category1_production, "feed")) %>% 
+  mutate(product_2 = ifelse(str_detect(organism, c("chickens|cows|buffaloes|pigs|sheep|goats")), category1_production, organism)) %>% 
+  group_by(iso3c, product_2) %>% 
+  dplyr::summarise(cumulative_pressure = sum(pressure_rescaled, na.rm = TRUE)) %>% 
+  rename(product = product_2) %>% 
+  ## fix fisheries naming
+  mutate(product = ifelse(product =="large-pelagic", "large pelagic",
+                          ifelse(product == "medium-pelagic", "medium pelagic",
+                                 ifelse(product == "small-pelagic", "small pelagic",
+                                        ifelse(product == "reef", "reef-associated",
+                                               ifelse(product == "fofm", "forage fish", product)))))) %>% 
+  ## fix freshwater fisheries name
+  mutate(product = ifelse(product == "fish", "freshwater fish", product))
+```
+
+Combine all foods and presssures together
+```{r}
+all_food <- rbind(livestock_cal_pro, crop_cal_pro, marine_cal_pro_2, fresh_cal_pro, mari_cal_pro) 
+all_food_pressures <- left_join(pressures, all_food)
+## check the weird ones where there is a teeeennny amount of CP but no tonnage
+
+ch <- all_food_pressures %>% 
+  filter(is.na(tonnes))
+
+all_food_pressures_final <- all_food_pressures %>% 
+  filter(!is.na(tonnes)) %>% 
+  ## add in grouping names
+  mutate(grouping = case_when(product %in% c("benthic", "demersal", "forage fish", "large pelagic", "medium pelagic", "reef-associated", "small pelagic") ~ "marine fisheries",
+                              product == "freshwater fish" ~ "freshwater fisheries",
+                              product %in% c("bivalve", "crustaceans", "salmon", "shrimp", "marine-fish-general", "tuna") ~ "mariculture",
+                              str_detect(product, c("pigs|chickens|cows|buffaloes|sheep|goats")) ~ "livestock",
+                              T ~ "produce")) %>% 
+  ungroup() %>% 
+  mutate(global_pressure = sum(cumulative_pressure),
+         global_tonnes = sum(tonnes),
+         global_kcal = sum(million_kcal),
+         global_protein = sum(tonnes_protein),
+         
+         percent_pressure = cumulative_pressure/global_pressure,
+         percent_tonnes = tonnes/global_tonnes,
+         percent_kcal = million_kcal/global_kcal,
+         percent_protein = tonnes_protein/global_protein) 
+
+write_csv(all_food_pressures_final, here::here("_efficiency/data/all_food_pressures.csv"))
+
+all_food_pressures_summary <- all_food_pressures_final %>% 
+  group_by(grouping) %>% 
+  dplyr::summarise(percent_pressure = sum(percent_pressure),
+                   percent_tonnes = sum(percent_tonnes),
+                   percent_kcal = sum(percent_kcal),
+                   percent_protein = sum(percent_protein)) %>% 
+  ungroup()
+
+all_food_pressures_summary_foods <- all_food_pressures_final %>% 
+  group_by(product) %>% 
+  dplyr::summarise(percent_pressure = sum(percent_pressure),
+                   percent_tonnes = sum(percent_tonnes),
+                   percent_kcal = sum(percent_kcal),
+                   percent_protein = sum(percent_protein)) %>% 
+  ungroup()
+```
+
+Combine all foods and presssures together: this time only include the human consumed portion.
+```{r}
+
+crop_cal_pro_humans <- read_csv(here::here("_efficiency/data/crops_protein_calories_humans_only.csv")) 
+
+all_food <- rbind(livestock_cal_pro, crop_cal_pro_humans, marine_cal_pro_2, fresh_cal_pro, mari_cal_pro) 
+
+all_food_pressures_final_humans <- all_food %>% 
+  filter(!is.na(tonnes)) %>% 
+  ## add in grouping names
+  mutate(grouping = case_when(product %in% c("benthic", "demersal", "forage fish", "large pelagic", "medium pelagic", "reef-associated", "small pelagic") ~ "marine fisheries",
+                              product == "freshwater fish" ~ "freshwater fisheries",
+                              product %in% c("bivalve", "crustaceans", "salmon", "shrimp", "marine-fish-general", "tuna") ~ "mariculture",
+                              str_detect(product, c("pigs|chickens|cows|buffaloes|sheep|goats")) ~ "livestock",
+                              T ~ "produce")) %>% 
+  ungroup() %>% 
+  mutate(global_tonnes = sum(tonnes),
+         global_kcal = sum(million_kcal),
+         global_protein = sum(tonnes_protein),
+         
+      
+         percent_tonnes = tonnes/global_tonnes,
+         percent_kcal = million_kcal/global_kcal,
+         percent_protein = tonnes_protein/global_protein) 
+
+write_csv(all_food_pressures_final_humans, here::here("_efficiency/data/all_food_pressures_human_crop_consume.csv"))
+
+
+```
+
+
+Table for the SI
+```{r}
+si_table <-all_food_pressures_final %>% 
+  group_by(iso3c) %>% 
+  dplyr::summarise(global_prop_product = sum(percent_tonnes),
+                   global_prop_kcal = sum(percent_kcal),
+                   global_prop_protein = sum(percent_protein)) %>% 
+  ungroup()
+write_csv(si_table, here::here("_efficiency/data/SI_results_global_props_total.csv"))
+```

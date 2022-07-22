@@ -1,0 +1,130 @@
+---
+title: "Checking pressure totals of rice and wheat"
+author: "Juliette"
+date: "5/13/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+source(here("_workflow/common.R"))
+
+```
+
+Read in rice pressure rasters
+```{r}
+
+dist_rice <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw/farm_land_rice_crop_produce_disturbance.tif")
+rice_km2 <- cellStats(dist_rice, stat = 'sum') #1,052,039 km2 global
+
+water_rice <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw/farm_land_rice_crop_produce_water.tif")
+rice_m3 <- cellStats(water_rice, stat = 'sum') # 1.134143e+12 m3
+
+ghg_rice <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw/farm_land_rice_crop_produce_ghg.tif")
+rice_co2eq <- cellStats(ghg_rice, stat = 'sum') #807,208,684
+
+nutrient_rice <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw/farm_land_rice_crop_produce_nutrient.tif")
+rice_n_p <- cellStats(nutrient_rice, stat = 'sum') # 2,0979,610
+
+```
+
+Read in rice pressure rasters
+```{r}
+
+## pressures
+dist_rice <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw/farm_land_rice_crop_produce_disturbance.tif")
+rice_km2 <- cellStats(dist_rice, stat = 'sum') #1,052,039 km2 global
+
+water_rice <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw/farm_land_rice_crop_produce_water.tif")
+rice_m3 <- cellStats(water_rice, stat = 'sum') # 1.134143e+12 m3
+
+ghg_rice <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw/farm_land_rice_crop_produce_ghg.tif")
+rice_co2eq <- cellStats(ghg_rice, stat = 'sum') #807,208,684
+
+nutrient_rice <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw/farm_land_rice_crop_produce_nutrient.tif")
+rice_n_p <- cellStats(nutrient_rice, stat = 'sum') # 2,0979,610
+
+##total rice
+
+
+```
+
+Read in cows pressure rasters
+```{r}
+
+dist_cows <- sum(stack(raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw/feedcrop_land_cows_feedlot_meat_disturbance.tif"),
+                   raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw/feedcrop_land_cows_mixed_meat_disturbance.tif"),
+                   raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw/feedcrop_land_cows_grassland_meat_disturbance.tif"), na.rm = TRUE))
+cows_km2 <- cellStats(dist_cows, stat = 'sum') #342,216.8 km2 global
+
+water_cows <- sum(stack(raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw/feedcrop_land_cows_feedlot_meat_water.tif"),
+                   raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw/feedcrop_land_cows_mixed_meat_water.tif"),
+                   raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw/feedcrop_land_cows_grassland_meat_water.tif"), na.rm = TRUE))
+cows_m3 <- cellStats(water_cows, stat = 'sum') # 313294872723
+
+ghg_cows <- sum(stack(raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw/feedcrop_land_cows_feedlot_meat_ghg.tif"),
+                   raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw/feedcrop_land_cows_mixed_meat_ghg.tif"),
+                   raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw/feedcrop_land_cows_grassland_meat_ghg.tif"), na.rm = TRUE))
+cows_co2eq <- cellStats(ghg_cows, stat = 'sum') #66,936,649
+
+nutrient_cows <- sum(stack(raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw/feedcrop_land_cows_feedlot_meat_nutrient.tif"),
+                   raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw/feedcrop_land_cows_mixed_meat_nutrient.tif"),
+                   raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw/feedcrop_land_cows_grassland_meat_nutrient.tif"), na.rm = TRUE))
+cows_n_p <- cellStats(nutrient_cows, stat = 'sum') # 2,887,868
+
+```
+
+grab totals of cows and human consumption rice
+```{r}
+cows_meat_count <- sum(stack(raster(file.path(prep, "animal_farm/farm/location_tifs/cows_feedlot_meat.tif")),
+                         raster(file.path(prep, "animal_farm/farm/location_tifs/cows_mixed_meat.tif")),
+                         raster(file.path(prep, "animal_farm/farm/location_tifs/cows_grassland_meat.tif"))), na.rm = TRUE)
+cow_count_total <- cellStats(cows_meat_count, stat = 'sum')
+
+human_crop_prop <- read_csv(here("feed/data/human_crop_prop_consume.csv")) %>% 
+  filter(SPAM_super == "rice") %>% 
+  rename(iso3c = iso3c_producing) %>% 
+  right_join(food_rgns_xy) %>% 
+  select(x,y, human_feed_prop) %>% 
+  mutate(human_feed_prop = ifelse(is.na(human_feed_prop), 0, human_feed_prop)) %>% 
+  rasterFromXYZ(crs = food_crs)
+
+rice_all <- raster(file.path(prep, "crop/farm/scaled_maps_2017/crop_rice_A_scaled.tif"))
+
+rice_human <- rice_all*human_crop_prop
+# plot(rice_human)
+# plot(rice_all)
+
+rice_human_total <-  cellStats(rice_human, stat = 'sum')
+```
+
+
+Calc global average for a tonne of rice and 1 cow for each pressure
+
+
+```{r}
+# water
+cows_m3/cow_count_total ## 263.9491 m3 water per cow
+rice_m3/rice_human_total ## 1580.297 m3 water per tonne of rice
+
+# disturbance
+cows_km2/cow_count_total ## 0.0002883157 km2-eq per cow
+rice_km2/rice_human_total ## 0.001465894 km2-eq per tonne of rice
+
+# N/P
+cows_n_p/cow_count_total ##  0.002433012 tonne of N/P per cow
+rice_n_p/rice_human_total ## 0.02923266 tonne of N/P per tonne of rice
+
+## GHG
+cows_co2eq/cow_count_total ##   0.05639374 tonnes CO2eq per cow
+rice_co2eq/rice_human_total ## 1.124752 tonnes CO2eq per tonne of rice
+
+```
+
+I think its important to note that the cows are in whole cows, not meat produced. so the yeild of actual meat will be smaller, and the amount of pressure per tonne of edible weight is going to be much higher. For crops the tonnage is already reported in edible weight (I am 99.9% sure)
+
+
+
+

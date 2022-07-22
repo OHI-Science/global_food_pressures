@@ -1,0 +1,169 @@
+---
+title: "Calculating the GHG emissions from crop irrigation"
+author: "Juliette"
+date: "6/9/2020"
+output: html_document
+---
+
+In this markdown we will be calculating the ghg emissions from irrigated croplands. 
+
+Method:
+1. Stack and sum all crops from blue water foot print irrigation maps to get one global raster of total water used in for irrigation in each cell
+2. Zonal extract blue water total for each country
+3. Grab the FAO data for ghg power irrigation
+4. Calculate a ghg emissions/m3 of blue water in irrigated crop land for each country/rgn
+5. Gapfill using UN regions
+6. Rasterize it
+7. Apply to the blue water maps for each crop and multiply by the ghg emissions/m3 of blue water in irrigated crop land for each country/rgn raster
+8. In the end do a data check and see it it matches the original FAO data (46,990,511 tonnes)
+
+Read in libraries and paths
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+#Load libraries
+library(dplyr)
+library(tidyverse)
+library(doParallel)
+library(raster)
+library(rgdal)
+library(countrycode)
+library(here)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+
+
+```
+
+
+Sum all the irrigation across all crops to get the total 
+```{r}
+irrigation <- list.files(file.path(prep, "crop/water/irrigation"), pattern = ".tif", full = TRUE)
+irrigation <- irrigation[!grepl("rest", irrigation)]
+stack <- raster::stack(lapply(irrigation, raster))
+total <- sum(stack, na.rm = TRUE)
+plot(total)
+
+zone_ext <- zonal(total, food_rgns_tif, fun="sum", progress="text", na.rm=TRUE) %>% 
+  as.data.frame() %>% 
+  rename(ID_0 = zone) %>% 
+  left_join(food_rgns, by = "ID_0")
+
+```
+
+
+Read in the FAO data, calculate a ghg emissions/m3 rate and then gap fill missing regions using UN regions methods
+
+FAO Data and Cleam
+```{r}
+fao_raw <- read_csv(file.path(raw, "FAO_data/v2020/fao_irrigation_energy.csv"))
+
+## what countries are missing?
+setdiff(food_rgns$Country, fao_raw$Country)
+## there are a lot of regions, and some of them definitively use power irrigation. This makes me belive that the missing countries are actually missing data, not missing because the data is 0
+
+fao <- fao_raw %>% 
+    filter(Country != "China") %>%  ## this is the sum of china mainland and islands, we separate it out
+  mutate(Country = ifelse(Country == "Eswatini", "Swaziland", Country),
+         Country = ifelse(Country == "China, mainland", "China", Country),
+         iso3c = countrycode(Country, origin="country.name", destination = "iso3c"))%>% 
+  mutate(fao_co2eq = Value*1000) %>% 
+  dplyr::select(iso3c,  fao_co2eq)
+```
+
+Calculate emissions factor
+```{r}
+combine <- left_join(fao, zone_ext, by = "iso3c") %>% 
+  mutate(em_factor = fao_co2eq/sum) %>% 
+  dplyr::select(iso3c, Country, em_factor) %>% 
+  mutate(em_factor = ifelse(is.infinite(em_factor), 0, em_factor)) # 7 countries with fao emissions data but we have no data on water usage. will make these 0 here because the water maps are what they are and it would be difficult to gapfil. They countries are all mostly small island countries 
+```
+
+
+Gapfill for regions using the UN geopolitical regions
+
+```{r}
+##un data
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>% 
+  dplyr::select(iso3c, Global_Name, Region_Name, Sub_region_Name, Intermediate_Region_Name, Region_Name)
+```
+
+Lithuania total water usage is 3.155994e+01 and the irrigation co2 eq is 	5322.0, this makes for a very large emissions factor, which then factors into the gapfilling. So we will make this 0 and then gapfill.
+
+```{r}
+gapfill <- left_join(food_rgns, combine, by = c("iso3c","Country")) %>% 
+  left_join(un, by = "iso3c") %>% 
+  mutate(em_factor = ifelse(iso3c == "LTU", NA, em_factor)) %>% ## Lithuania's calculated emissions factor is crazy bigger than the other countries because of hte high fao reported emissions and the low water usage total from our maps. we will remove it for these calculations because it has large effects on other gapfilled countries and downstream
+  mutate(gf = ifelse(is.na(em_factor), "gapfilled with UN regions method", NA)) %>% 
+  group_by(Intermediate_Region_Name) %>% 
+  mutate(em_factor = ifelse(is.na(em_factor), mean(em_factor, na.rm = TRUE), em_factor)) %>% 
+  ungroup() %>% 
+  group_by(Sub_region_Name) %>% 
+  mutate(em_factor = ifelse(is.na(em_factor), mean(em_factor, na.rm = TRUE), em_factor)) %>% 
+  ungroup() %>% 
+  group_by(Region_Name) %>% 
+  mutate(em_factor = ifelse(is.na(em_factor), mean(em_factor, na.rm = TRUE), em_factor)) %>% 
+  ungroup() %>% 
+  dplyr::select(iso3c, Country, em_factor, gf)
+
+##save 
+write_csv(gapfill, here("crop/ghg/data/irrigation_emissions_gf.csv"))
+```
+
+Note on the gapfilling: we are gapfilling a lot of Oceania regions particularly Polynesia and Micronesia
+
+Create a raster with all the country specific emissions factor
+```{r}
+irrigation_ghg_em_factor <- left_join(food_rgns_xy, gapfill, by = "iso3c") %>% 
+  dplyr::select(x,y, em_factor) %>% 
+  rasterFromXYZ(crs = food_crs)
+
+plot(irrigation_ghg_em_factor)
+```
+
+Apply the emissions factors to the blue water foot print maps for each crop
+```{r}
+
+wf <- list.files(file.path(prep, "crop/water/irrigation/"), pattern = ".tif", full = TRUE)
+
+registerDoParallel(6)   
+foreach(file = wf) %dopar% {
+  
+   #  file = wf[37]
+    crop <- tolower(str_sub(file, -19, -16))
+   
+    water_fp <- raster(file)
+    
+    ## multiple crop water foot print map with irrigation ghg emissions raster
+    ghg_irrigation <- water_fp*irrigation_ghg_em_factor
+
+  writeRaster(ghg_irrigation, file.path(prep, paste("crop/ghg/crop_irrigation_ghg/ghg_emissions/", crop, ".tif", sep = "")),  format="GTiff", overwrite=TRUE)
+ 
+}
+```
+
+
+Last but not least! Do a data check.
+
+Sum all the final ghg from irrigation for all crop rasters and compare it to the FAO original total of 45,990,511 tonnes. Ours will be a little larger because we included more countries than FAO had data on. However, these countries were generally not huge and areas (think tropical islands) so it shouldn't make a huge differnece in the grand scheme ofthings.
+
+```{r}
+list <- (list.files(file.path(prep, "crop/ghg/crop_irrigation_ghg/ghg_emissions"), full = TRUE, pattern = ".tif") )
+stack <- raster::stack(lapply(list, raster))
+sum <- sum(stack, na.rm = TRUE)
+
+cellStats(sum, stat = 'sum')
+
+##55,914,215
+```
+
+
+
+
+
+
+
+
+

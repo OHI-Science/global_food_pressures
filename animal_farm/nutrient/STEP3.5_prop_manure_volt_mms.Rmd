@@ -1,0 +1,160 @@
+---
+title: "Create rasters of proportion volatized from manure lost during MMS"
+author: "Juliette"
+date: "3/29/2021"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(stringr)
+library(janitor)
+library(countrycode)
+library(doParallel)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>% 
+  dplyr::select(iso3c, Global_Name, Region_Name, Sub_region_Name, Intermediate_Region_Name)
+
+gleam_tables <- read_csv(here("animal_farm/ghg/data/compiled_gleam_tables.csv")) %>%
+  mutate(percentage_leach = ifelse(mms_specific == "Pasture/Range/Paddock", 30, percentage_leach)) %>%
+  mutate(percentage_leach = ifelse(mms_specific == "Daily spread", 30, percentage_leach)) %>%
+  mutate(percentage_leach = ifelse(mms_specific == "Burned for fuel", 50*30/100, percentage_leach)) #50% remains as urine, and 30% of remaining leaches
+
+frac_n_lost_raw <- read_csv(here::here("animal_farm/nutrient/data/IPCC_table_10_ch10_vol4.csv"))
+
+exc_df_list <- list.files(file.path(prep, "animal_farm/nutrient/N_from_excretion"),  full = TRUE)
+```
+
+
+```{r}
+
+frac_n_lost <- frac_n_lost_raw %>% 
+  select(animal, product, mms_specific, frac_N_lost) %>% 
+  filter(!is.na(mms_specific))
+
+volatize <- left_join(gleam_tables, frac_n_lost, by = c("animal", "product", "mms_specific")) %>% 
+  filter(!mms_specific %in% c("Pasture/Range/Paddock", "Daily spread", "Burned for fuel"),
+         animal != "buffaloes" | product != "meat") %>% 
+  mutate(frac_N_lost = ifelse(is.na(frac_N_lost), 0, frac_N_lost)) %>% 
+  select(iso3c, mms_specific, animal, product,frac_N_lost) %>% 
+  unique()
+
+# chk <- tmp %>% 
+#   select(iso3c, animal, product, mms_specific, to_mms_percentage, frac_N_lost) %>% 
+#   filter(is.na(frac_N_lost)) ## all the frac_N_lost == NA are 0 values of to_mms_percentage
+  
+```
+
+## Prop Volatized
+
+```{r}
+
+registerDoParallel(20)   
+
+foreach(file = exc_df_list) %dopar% {
+
+  ############  
+  ## Get the mapped head counts for each system.
+  ## (only really used in step 1, to check data)
+  
+     # file <- exc_df_list[19]
+  
+    ## grab the names of all the parts from the file
+    animal_name <- str_split(str_split(file, pattern = "/")[[1]][12], pattern = "_")[[1]][1]
+    system_name <- str_split(str_split(file, pattern = "/")[[1]][12], pattern = "_")[[1]][2]
+  product_name <- str_split(str_split(file, pattern = "/")[[1]][12], pattern = "_")[[1]][3]
+
+   prop_volatized <- gleam_tables %>% 
+      select(iso3c, mms_specific, animal, product, production_system, to_mms_percentage, percentage_leach) %>% 
+      left_join(volatize, by = c("iso3c", "mms_specific", "animal", "product")) %>% 
+     unique() %>% 
+      filter(!mms_specific %in% c("Pasture/Range/Paddock", "Daily spread", "Burned for fuel")) %>% 
+     rename(system = production_system) %>% 
+     filter(animal == animal_name,
+            system == system_name,
+            product == product_name) %>% 
+      mutate(percentage_leach = percentage_leach/100,
+             to_mms_percentage = to_mms_percentage/100,
+             percent_not_leached = frac_N_lost - percentage_leach,
+             prop_volt = (to_mms_percentage*percent_not_leached)*0.74) %>% ## the 0.74 is to account for only NH3 and not N2 or N2O 
+      group_by(iso3c, animal, system, product) %>% 
+      dplyr::summarise(prop_volt = sum(prop_volt)) 
+    
+    prop_volatized_gf <- left_join(food_rgns_xy, prop_volatized) %>% 
+      left_join(un, by = "iso3c") %>% 
+      group_by(Intermediate_Region_Name, animal, product, system) %>% 
+      mutate(prop_volt = ifelse(is.na(prop_volt), mean(prop_volt, na.rm = TRUE), prop_volt)) %>% 
+      ungroup()%>% 
+      group_by(Sub_region_Name, animal, product, system) %>% 
+      mutate(prop_volt = ifelse(is.na(prop_volt), mean(prop_volt, na.rm = TRUE), prop_volt)) %>% 
+      ungroup() %>% 
+      group_by(Region_Name, animal, product, system) %>% 
+      mutate(prop_volt = ifelse(is.na(prop_volt), mean(prop_volt, na.rm = TRUE), prop_volt)) %>% 
+      ungroup() %>% 
+      group_by(Global_Name, animal, product, system) %>% 
+      mutate(prop_volt = ifelse(is.na(prop_volt), mean(prop_volt, na.rm = TRUE), prop_volt)) %>% 
+      ungroup()  %>% 
+      mutate(prop_volt = ifelse(is.na(prop_volt), 0, prop_volt)) %>% 
+      select(x,y, iso3c, prop_volt)
+      ### for grassland categories, it will always be NA. so we want to change it back to 0 that way the rasters dont get confused when stacking all ghg at the end
+
+    write_csv(prop_volatized_gf, file.path(prep, paste0("animal_farm/nutrient/STEP3.5_N_volatizing_prop_mms/",
+                                                               animal_name, "_",
+                                                               system_name,"_",
+                                                               product_name,
+                                                               "_N_volatizing_prop_mms.csv", sep = "")))
+  
+}
+```
+
+
+Data check
+Create a df with iso3, animal, system, product, frac leaching and make sure nothing looks wrong
+```{r}
+df_list <- list.files(file.path(prep, "animal_farm/nutrient/STEP3.5_N_volatizing_prop_mms/"), full.names = TRUE)
+
+df_check <- data.frame(iso3c = NA, animal = NA, system = NA, product = NA, prop_volt = NA)
+  
+for(df in df_list){
+  
+#  df <- df_list[23]
+    ## grab the names of all the parts from the file
+    animal_name <- str_split(str_split(df, pattern = "//")[[1]][3], pattern = "_")[[1]][1]
+    system_name <- str_split(str_split(df, pattern = "//")[[1]][3], pattern = "_")[[1]][2]
+    product_name <- str_split(str_split(df, pattern = "//")[[1]][3], pattern = "_")[[1]][3]
+     
+  
+  ## values are the same throughout the country so a median or mean function won't make a difference
+    country_sum <- read_csv(df, col_types = "ddcn") %>% 
+      group_by(iso3c) %>% 
+      dplyr::summarise(prop_volt = median(prop_volt, rm.na = TRUE)) %>% 
+      ungroup() %>% 
+      left_join(food_rgns) %>% 
+      mutate(animal = animal_name,
+             system = system_name,
+             product = product_name) %>% 
+       select(iso3c,prop_volt, animal, system, product)
+  
+    df_check <- rbind(df_check, country_sum) %>% 
+      filter(!is.na(iso3c)) 
+    
+}
+
+## look at it
+
+p <- ggplot(df_check, aes(x = animal, y = prop_volt, color = system) ) +
+  geom_point(position = "jitter") +
+  labs(title = "Proportion volatized during manure management")
+
+library(plotly)
+
+ggplotly(p)
+
+```

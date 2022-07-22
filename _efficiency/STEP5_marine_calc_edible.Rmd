@@ -1,0 +1,95 @@
+---
+title: "Convert catch to edible weight"
+author: "Juliette"
+date: "3/5/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+source(here("_workflow/common.R"))
+
+'%!in%' <- function(x,y)!('%in%'(x,y))
+```
+
+
+```{r}
+prod_to_live_fish_raw <- read_csv(here("_efficiency/data/fao_prod_weight_to_live_fish.csv")) 
+
+prod_to_live_moll_crust_raw <- read_csv(here("_efficiency/data/fao_prod_weight_to_live_moll_crust.csv")) 
+
+marine_fisheries_raw <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/catch_extracted_final.csv")
+```
+check
+```{r}
+unique(marine_fisheries_raw$species_class_final)
+
+
+for_chk <-marine_fisheries_raw %>% 
+  filter(species_class_final == "forage_fish") %>% 
+  select(species_class_final, TaxonName) %>% 
+  unique()
+
+## alright so it seems like pretty much everything goes into forage fish so we will use an average of all fish for conversions to edible weight
+```
+
+
+For fish we will use our grouping and then for shellfish and ceph we will use the general description
+
+## fish
+```{r}
+
+prod_to_live_fish <- prod_to_live_fish_raw %>% 
+  filter(is.na(presentation) | presentation == "whole") %>% 
+  select(-'gutted, head on') %>% 
+  group_by(species_class_final) %>% 
+  rename(gutt_head_off = 'gutted, head off') %>% 
+  dplyr::summarise(product_to_live_cf = mean(gutt_head_off, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(live_to_edible = 1/product_to_live_cf) %>% 
+  filter(!is.na(species_class_final)) %>% 
+  add_row(species_class_final = "forage_fish", product_to_live_cf = NA, live_to_edible = NA) %>% 
+  mutate(live_to_edible = ifelse(is.na(live_to_edible), mean(live_to_edible, na.rm = TRUE), live_to_edible))
+
+```
+
+## shellfish
+```{r}
+prod_to_live_moll_crust <- prod_to_live_moll_crust_raw %>% 
+  filter(presentation %in% c("meat", "edible meat", "frozen, gutted")) %>% 
+  group_by(Descript) %>% 
+  dplyr::summarise(product_to_live_cf = mean(indicative_cf, na.rm = TRUE)) %>% 
+  ungroup()%>% 
+  mutate(live_to_edible = 1/product_to_live_cf) %>% 
+  left_join(prod_to_live_moll_crust_raw, by = "Descript") %>% 
+  select(Descript, species_class_final, live_to_edible) %>% 
+  unique()
+  
+```
+
+Convert catch to live weight
+```{r}
+marine_fisheries <- marine_fisheries_raw %>% 
+  group_by(iso3c, species_class_final, TaxonName, Descript) %>% 
+  dplyr::summarise(rgn_catch = sum(catch, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  left_join(prod_to_live_moll_crust, by = c("Descript", "species_class_final")) %>% 
+  left_join(prod_to_live_fish, by = "species_class_final") %>% 
+  rename(live_to_edible= live_to_edible.x) %>% 
+  mutate(live_to_edible = ifelse(is.na(live_to_edible), live_to_edible.y, live_to_edible),
+         edible_tonnes = rgn_catch*live_to_edible,
+         iso3c = ifelse(is.na(iso3c), "HSX", iso3c)) %>% 
+  select(iso3c, species_class_final, TaxonName, rgn_catch, edible_tonnes)
+
+write_csv(marine_fisheries, here("_efficiency/data/fisheries_edible_tonnes.csv"))
+
+test <- read.csv(here("_efficiency/data/fisheries_edible_tonnes.csv"))
+
+sum(test$edible_tonnes)
+sum(marine_fisheries$edible_tonnes)
+```
+
+
+

@@ -1,0 +1,292 @@
+---
+title: "SPAM_data_check"
+output: html_document
+---
+
+# libraries
+```{r}
+library(here)
+library(tidyverse)
+library(countrycode)
+library(janitor)
+library(vroom)
+
+# Raster templates
+source(here("_spatial/template_raster.R"))
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+FAO_area_codes <- vroom(here("_spatial/_output/FAO_rgn_codes.csv"))
+food_rgns <- food_rgns %>% select(Country, iso3c)
+```
+
+# MapSPAM
+```{r}
+crop_codes <- vroom("crop/farm/data/crop_codes.csv")
+
+spam_prod <- 
+  vroom(here("feed/data/MAPSPAMcrop_production.csv")) %>% 
+  rename(iso3c = iso3c_producing, tonnes_spam = tonnes_producing_crop) %>% 
+  filter(!SPAM_super %in% "xcof")
+```
+
+# Extract FAO data and tidy
+```{r}
+# Spread out Serbia data across serbia and kosovo
+SRB_XKO <- 
+  vroom(here("crop/farm/data/prod_crop_rgns.csv")) %>% 
+  filter(iso3c %in% c("XKO", "SRB") & prod_system %in% "A") %>% 
+  group_by(iso3c) %>% 
+  summarize(production = sum(production)) %>% 
+  ungroup() %>% 
+  mutate(relative_proportion = production / sum(production))
+
+fao_prod <- 
+  vroom(here("_analysis/checking_data/data/FAOSTAT_data_12-21-2020_crops.csv")) %>%
+  select(Area, `Area Code`, item_code=`Item Code`, Item, Unit, Value) %>% 
+  clean_names() %>% 
+  filter(!area_code %in% 351) # Remove China
+
+fao_prod <- 
+  fao_prod %>% 
+  mutate(area_code = if_else(area_code %in% 272, 275, area_code)) %>%  # XKO
+  bind_rows(fao_prod) %>%
+  mutate(area_code = if_else(area_code %in% 272, 286, area_code)) %>%
+  unique()
+
+fao_prod <- 
+  fao_prod %>% 
+  left_join(.,
+            FAO_area_codes,
+            by = "area_code") %>%  # SRB without XKO
+  rename(iso3c = iso3c)
+
+fao_prod$value[fao_prod$iso3c %in% "SRB"] <- 
+  fao_prod$value[fao_prod$iso3c %in% "SRB"] * 
+  SRB_XKO$relative_proportion[SRB_XKO$iso3c %in% "SRB"]
+
+fao_prod$value[fao_prod$iso3c%in% "XKO"] <- 
+  fao_prod$value[fao_prod$iso3c %in% "XKO"] * 
+  SRB_XKO$relative_proportion[SRB_XKO$iso3c %in% "XKO"]
+
+# I gave these autonomous regions the same area_codes as POR and GBR respectively.
+fao_prod$value[fao_prod$iso3c %in% c("XMI", "GGY")] <- 0
+```
+
+# Compare FAO and SPAM production
+```{r}
+## ID crop categories not counted in Mapspam but in FAO:
+fao_prod_item_codes <- 
+  left_join(fao_prod, crop_codes, by="item_code") %>% 
+  filter(!SPAM_short_name %in% "smil") %>% 
+  na.omit() 
+
+fao_prod <-   
+  fao_prod_item_codes %>% 
+  group_by(iso3c, SPAM_super) %>%
+  summarize(tonnes_fao = sum(value, na.rm=TRUE)) %>% 
+  ungroup() 
+
+missing_rgns <- setdiff(spam_prod$iso3c, fao_prod$iso3c)
+
+missing_rgns_rows <- 
+  expand_grid(iso3c = missing_rgns,
+              SPAM_super = unique(crop_codes$SPAM_super),
+              tonnes_fao = NA)
+
+fao_prod_gf <- 
+  bind_rows(fao_prod, missing_rgns_rows) %>% 
+  pivot_wider(names_from = SPAM_super, values_from = tonnes_fao) %>% 
+  pivot_longer(cols = -iso3c, names_to = "SPAM_super", values_to = "tonnes_fao") %>% 
+  filter(!SPAM_super %in% c("ofib", "teas", "xcof", "toba", "coco"))
+
+length(unique(fao_prod_gf$iso3c))
+length(unique(fao_prod_gf$SPAM_super))
+length(unique(spam_prod$iso3c))
+length(unique(spam_prod$SPAM_super))
+setdiff(unique(fao_prod_gf$SPAM_super),
+        unique(spam_prod$SPAM_super))
+```
+
+# Compare
+```{r}
+compare <- 
+  left_join(spam_prod, fao_prod_gf, by = c("iso3c", "SPAM_super")) %>%
+  mutate(spam_percent = tonnes_spam / tonnes_fao) %>% 
+  filter(!SPAM_super %in% "xcof")
+```
+
+# Compare across crops
+```{r}
+spam_prod_crop <- 
+  spam_prod %>% 
+  group_by(SPAM_super) %>%
+  summarize(tonnes_spam = sum(tonnes_spam, na.rm = TRUE)) %>% 
+  ungroup()
+spam_prod_crop
+
+fao_prod_gf_crop <- 
+  fao_prod_gf %>%   
+  group_by(SPAM_super) %>% 
+  summarise(tonnes_fao = sum(tonnes_fao, na.rm = TRUE)) %>% 
+  ungroup()
+fao_prod_gf_crop
+
+crop_comparison <- 
+  left_join(spam_prod_crop, fao_prod_gf_crop) %>%
+  mutate(percentage_difference = tonnes_spam / tonnes_fao)
+crop_comparison
+
+crop_comparison %>% 
+  arrange(desc(tonnes_spam))
+
+ggplot(crop_comparison, aes(x = percentage_difference)) +
+  geom_dotplot() +
+  theme_classic()
+```
+
+# Compare across countries
+```{r}
+spam_prod_country <- 
+  spam_prod %>%   
+  group_by(iso3c) %>% 
+  summarise(tonnes_spam = sum(tonnes_spam, na.rm = TRUE)) %>% 
+  ungroup()
+spam_prod_country
+
+fao_prod_gf_country <- 
+  fao_prod_gf %>%   
+  group_by(iso3c) %>% 
+  summarise(tonnes_fao = sum(tonnes_fao, na.rm = TRUE)) %>% 
+  ungroup()
+fao_prod_gf_country
+
+country_comparison <- 
+  left_join(spam_prod_country, fao_prod_gf_country) %>%
+  mutate(percentage_difference = tonnes_spam / tonnes_fao)
+
+country_comparison %>% 
+  arrange(desc(tonnes_spam)) %>% 
+  right_join(food_rgns, .) 
+
+country_comparison %>% 
+  arrange(desc(percentage_difference)) %>% 
+  head(20) %>% 
+  right_join(food_rgns, .) 
+
+country_comparison %>% 
+  arrange(percentage_difference) %>% 
+  head(20) %>% 
+  right_join(food_rgns, .) 
+
+ggplot(country_comparison, aes(x = percentage_difference)) +
+  geom_histogram() +
+  theme_classic()
+```
+
+# Facet wrap 1:1 relationship between each data source for each super crop category
+```{r}
+ggplot(compare, aes(x = tonnes_fao, y = tonnes_spam)) +
+  geom_point() +
+  geom_abline() +
+  theme_classic()
+
+ggplot(compare, aes(x = tonnes_fao, y = tonnes_spam)) +
+  geom_point() +
+  geom_abline() + 
+  xlim(0, 100000000) +
+  ylim(0, 100000000) +
+  theme_classic() +
+  facet_wrap( ~ SPAM_super)
+```
+
+# Compare sums for each data source
+```{r}
+SPAM_total <- 
+  compare %>% 
+  summarise(sum(.$tonnes_spam)) %>% 
+  as.numeric()
+SPAM_total
+
+FAO_total <- 
+  compare %>% 
+  summarise(sum(.$tonnes_fao, na.rm = TRUE)) %>% 
+  as.numeric()
+FAO_total
+
+SPAM_total / FAO_total
+```
+
+-------------------------------------------------------------------------------
+
+# investigate which crops are added/remove between 2010 and 2017.
+```{r}
+scaling_coef_tidy <- 
+  vroom::vroom(here("crop/farm/data/FAOSTAT_crop_production_2010_2017.csv")) %>% 
+  clean_names() %>% 
+  dplyr::select(area_code, item_code, year, value) %>% 
+  rename(tonnes = value) %>% 
+  na.omit() %>% 
+  mutate(area_code = if_else(area_code == 206, 277, area_code)) %>% # Re-allocate former Sudan's 2010 values.
+  bind_rows(.) %>%
+  mutate(area_code = if_else(area_code == 206, 276, area_code)) %>% 
+  unique() %>% 
+  filter(!area_code %in% 351) %>% # Remove China
+  left_join(read_csv(here("_spatial/_output/FAO_rgn_codes.csv")), 
+            by = "area_code") %>% # Add iso3c
+  left_join(vroom("crop/farm/data/crop_codes.csv")) %>% # Add SPAM_short_name
+  select(year, item_code, tonnes, iso3c, contains("SPAM")) %>% 
+  na.omit() # remove milled rice
+
+items_2010 <-  
+  scaling_coef_tidy %>% 
+  filter(year == 2010) %>% 
+  .$item_code %>% 
+  unique()
+
+items_2017 <-  
+  scaling_coef_tidy %>% 
+  filter(year == 2017) %>% 
+  .$item_code %>% 
+  unique()
+
+setdiff(items_2010, items_2017)
+```
+
+Crops are the same for both years
+
+-------------------------------------------------------------------------------
+
+# Compare crop codes across feed and crop dataframes
+```{r}
+crop_codes_items <- 
+  crop_codes %>% 
+  select(SPAM_super, item_code) %>% 
+  unique()
+
+feed_codes <- 
+  vroom(here("feed/data/MapSPAM_to_FAO.csv")) %>% 
+  select(SPAM_super, item_code = FAO_item_code) 
+
+different_feed <- setdiff(feed_codes, crop_codes_items)
+different_feed
+different_crop <- setdiff(crop_codes_items, feed_codes)
+different_crop
+
+fao_prod_item_codes2 <- 
+  fao_prod_item_codes %>% 
+  select(item_code, item) %>% 
+  unique()
+
+fao_prod_item_codes2 %>% 
+  filter(item_code %in% 161) %>% 
+  summarize(value = sum(value))
+
+feed_codes <- left_join(feed_codes, fao_prod_item_codes2)
+
+feed_codes$item[duplicated(feed_codes$item_code) == TRUE] # NA suggests FAO no longer reports these crops?
+
+left_join(different_crop, fao_prod_item_codes2)
+different_feed_tbl <- left_join(different_feed, fao_prod_item_codes2)
+unique(different_feed_tbl$item)
+```

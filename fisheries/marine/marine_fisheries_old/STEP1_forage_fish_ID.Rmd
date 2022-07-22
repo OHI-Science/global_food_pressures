@@ -1,0 +1,13 @@
+---
+title: "Forage fish for feed"
+author: "Melanie Frazier (UCSB, NCEAS, OHI)"
+date: "May 21, 2019"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+This is done in the data prep for greenhouse gases for marine fisheries (found in "STEP3_catch_dataprep.Rmd")
+
+
+

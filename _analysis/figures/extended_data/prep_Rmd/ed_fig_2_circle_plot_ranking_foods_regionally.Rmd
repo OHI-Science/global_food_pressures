@@ -1,0 +1,343 @@
+---
+title: 'SI Circle Plot: Ranking Foods regionally'
+author: "Juliette"
+date: "11/17/2020"
+output: html_document
+---
+
+Figure 2. Ranking foods
+
+a) radial plot of each country, with stacked bars for foods (by CI, so with 4 stressors summed up to CI) 
+
+b) Stacked bar charts of CI by food group (vertical orientation), with component of each pressure as the stacked pieces. (note: this panel is similar to the results that LCAs give but stacking together into CI is new and important to present)
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(hrbrthemes)
+library(RColorBrewer)
+library(colorspace)
+library(scales)
+library(colorspace)
+source(here("_workflow/common.R"))
+
+summary_df_raw <- read_csv(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw_df_summary/rgn_raw_summary.csv")) %>%
+  unite(name_long, 3:7, sep = "-", remove = FALSE)
+
+rescaling_values <- read_csv(here("_analysis/rescale_values.csv"))
+
+food_categories <- read_csv(here("_analysis/figures/paper/data/food_categories.csv")) %>%
+  unite(name_long, 1:5, sep = "-") %>% 
+   mutate(food_name_legend_2 = ifelse(food_name_legend_2 == "Chickens & Pigs Livestock Meat" & food_name_legend_3 == "Chicken", "Chicken Meat",
+                                     ifelse(food_name_legend_2 == "Chickens & Pigs Livestock Meat" & food_name_legend_3 == "Pig", "Pig Meat",
+                                            ifelse( food_name_legend_2 == "Ruminants Livestock Meat", "Ruminant Meat", food_name_legend_2)))) %>% 
+  
+  mutate(food_name_2 = ifelse(food_name_2 == "non_rum_livestock_meat" & food_name_legend_3 == "Chicken", "chicken_meat",
+                                     ifelse(food_name_2 == "non_rum_livestock_meat" & food_name_legend_3 == "Pig", "pig_meat", food_name_2)))
+
+
+un_geopolitical <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>%
+  dplyr::select(iso3c, georegion=Region_Name)
+
+```
+
+
+Create DF that works for the circle plot
+```{r}
+summary_df <- summary_df_raw %>%
+    mutate(land_ocean = case_when(origin %in% c("land", "freshwater") ~ "land",
+                                origin == "marine" ~ "ocean")) %>% 
+  ##this is some weird artifact, very small value but impossible
+ ## mutate(sum = ifelse(iso3c == "HSX" & category == "feedfodd", 0, sum)) %>% 
+  left_join(food_categories, by = "name_long") %>% 
+  group_by(iso3c, country, food_name_legend_2, food_name_2, pressure) %>%
+    dplyr::summarise(pressure_sum = sum(sum)) %>% 
+  left_join(rescaling_values, by = "pressure") %>% 
+  ungroup() %>% 
+  rowwise() %>% 
+  mutate(prop_of_global = pressure_sum/global_total)  %>% 
+  group_by(iso3c,country, food_name_legend_2, food_name_2) %>%
+  dplyr::summarise(food_category_prop = sum(prop_of_global)) %>% 
+  ungroup() %>% 
+  left_join(un_geopolitical, by = "iso3c") %>% 
+  mutate(georegion = ifelse(country == "High Seas", "High Seas", georegion))
+
+## get georegion ranks
+chi <- summary_df %>%
+  group_by(georegion, country, iso3c) %>%
+  summarize(chi = sum(food_category_prop, na.rm=TRUE)) %>%
+  arrange(-chi)
+
+rank_georgn <- chi %>%
+  group_by(georegion) %>%
+  summarize(sum_chi = sum(chi), ## we can also do it by mean
+            count = length(chi)) %>%
+  ungroup() %>%
+  data.frame() %>%
+  arrange(sum_chi)
+
+rank_georgn$georegion <- factor(rank_georgn$georegion, 
+                                         levels=unique(rank_georgn$georegion))
+chi$georegion <- factor(chi$georegion, 
+                                         levels=unique(rank_georgn$georegion))
+
+### Organize the chi data and add a few extra variables to help plotting
+# Including empty spaces to add a y-axes
+rank_rgn <- chi %>%
+  arrange(georegion, chi) %>%
+  data.frame()
+ 
+```
+
+
+```{r}
+ ## modfiy region names to be shorter
+ rank_rgn <- rank_rgn %>% 
+   mutate(rgn_name_short = country, 
+         rgn_name_short = gsub("Islands", "Isl", rgn_name_short),
+         rgn_name_short = gsub("Island", "Isl", rgn_name_short),
+         rgn_name_short = gsub("Democratic", "Dem", rgn_name_short),
+         rgn_name_short = gsub("Republic", "Rep", rgn_name_short),
+         rgn_name_short = gsub("South", "S", rgn_name_short),
+         rgn_name_short = gsub("American", "Am", rgn_name_short),
+         rgn_name_short = gsub("the United States", "US", rgn_name_short),
+         rgn_name_short = gsub("Territory", "Terr", rgn_name_short),
+         rgn_name_short = gsub("Saint", "St", rgn_name_short),
+         rgn_name_short = gsub(" and ", " & ", rgn_name_short),
+         rgn_name_short = gsub("Republique", "Rep", rgn_name_short),
+         rgn_name_short = gsub("Dem Rep of the", "Dem Rep of", rgn_name_short),
+         rgn_name_short = gsub("Georgia and the", "Georgia and", rgn_name_short),
+         rgn_name_short = gsub("St Vincent and the", "St Vincent and", rgn_name_short),
+         rgn_name_short = gsub("Howland Isl & Baker Isl", "Howland & Baker Isl", rgn_name_short),
+         rgn_name_short = gsub("Northern", "N", rgn_name_short), 
+         rgn_name_short = gsub("Reunion", "Reunion", rgn_name_short))
+```
+
+
+
+## Stuff for both plots
+```{r}
+
+
+## pick the colors
+light_blue <- c("#3CC8C0")
+
+dark_green <- c("#2B5F3D")
+dark_green_grad <- lighten("#2B5F3D", amount = 0.4)
+
+dark_blue <- c("#485178")
+
+red <- c("#CB1C24")
+red <- colorspace::lighten(red, amount = -0.2)
+red_1 <- colorspace::lighten(red, amount = 0.4)
+scales::show_col(red)
+scales::show_col(red_1)
+
+purple <- c("#72224F")
+purple_1 <- colorspace::lighten(purple, amount = 0.9)
+purple_2 <- colorspace::lighten(purple, amount = -0.2)
+scales::show_col(c(purple,purple_1, purple_2))
+purple_grad <- colorRampPalette(c(purple_1, purple_2))(4)
+scales::show_col(purple_grad)
+
+orange <- c("#CE512D")
+yellow <- c("#EAB33B")
+
+food_categories_colors <- food_categories %>% 
+  select(food_name_legend_2, food_name_2) %>% 
+  unique() %>% 
+  mutate(fill_color = case_when(food_name_legend_2 == "Freshwater Fishery" ~ light_blue,
+                                food_name_legend_2 == "Marine Fishery" ~dark_blue,
+                                food_name_legend_2 == "Mariculture" ~ yellow,
+                                food_name_legend_2 == "Mariculture Feed" ~ "#719F7F",
+                                food_name_legend_2 == "Livestock Feed" ~ "#2B5F3D",
+                                food_name_legend_2 == "Eggs" ~ red,
+                                food_name_legend_2 == "Milk" ~ red_1,
+                                food_name_legend_2 == "Chicken Meat" ~ "#98537C",
+                                food_name_legend_2 == "Pig Meat" ~ "#CB9BB5",
+                                food_name_legend_2 == "Ruminant Meat" ~ "#660C43",
+                                food_name_legend_2 == "Human Crop Consumption" ~ orange))
+
+fill_order <- rev(c(dark_blue, light_blue, yellow,  "#719F7F", "#2B5F3D", red, red_1, "#CB9BB5", "#98537C", "#660C43", orange))
+
+jv_palette <- c(dark_blue, light_blue, yellow,  "#719F7F", "#2B5F3D", red, red_1, "#CB9BB5", "#98537C", "#660C43", orange)
+
+```
+
+## circle part
+
+```{r}
+#filter to include only countries in circle
+cutoff_value <- 0.03531988  # ukraine chi value; this is the value that corresponds with the top 23 regions (i.e. the circle plot includes all regions but the top 23)
+
+pressures_adj_circle <- summary_df %>%
+  group_by(country, iso3c) %>%
+  mutate(chi = sum(food_category_prop, na.rm=TRUE)) %>%
+  ungroup() %>%
+  arrange(chi) %>% 
+ filter(chi<cutoff_value)
+
+##grab the highest country to highlight red and id where the circle ends and then side bar chart begins
+highest_country <- pressures_adj_circle[dim(pressures_adj_circle)[1], "iso3c"]
+pressures_highest_country <- filter(pressures_adj_circle, iso3c %in% highest_country$iso3c) #used below
+
+# adjust the rank_rgn-adjust dataframe to match above
+rank_rgn_adj <- rank_rgn %>%
+  filter(iso3c %in% pressures_adj_circle$iso3c) 
+
+# add empty space to create space in the circleplot for axes
+ empty_bar <- 5
+ to_add <- data.frame(matrix(NA, empty_bar, ncol(rank_rgn_adj)) )
+ colnames(to_add) = colnames(rank_rgn_adj)
+ to_add$country <- as.character(1:empty_bar)
+ rank_rgn_adj  <- rbind(to_add, rank_rgn_adj)
+ 
+ # some code to orient the country labels
+sequence_length = length(unique(rank_rgn_adj$country))
+first_sequence = c(1:(sequence_length%/%2)) 
+second_sequence = c((sequence_length%/%2+1):sequence_length) 
+first_angles = c(90 - 180/length(first_sequence) * first_sequence)
+second_angles = c(-90 - 180/length(second_sequence) * second_sequence)
+rank_rgn_adj$angle <- c(first_angles, second_angles)
+rank_rgn_adj$hjust <- c(rep(0, length(first_sequence)), 
+                    rep(1, length(second_sequence)))
+
+# color for region labels
+rank_rgn_adj <- rank_rgn_adj %>%
+  mutate(country = factor(country, unique(country))) %>%
+  mutate(georegion = factor(georegion, unique(georegion))) %>%
+  mutate(color = "black") %>%
+  mutate(color = ifelse(is.na(chi), "white", color)) %>%
+  mutate(color = ifelse(iso3c %in% highest_country$iso3c, "red", color))
+
+# get dataframe for georegion shift locations
+rgn_shift <- rank_rgn_adj %>%
+  mutate(georegion = ifelse(is.na(georegion), "tmp", georegion)) %>%
+  mutate(georegion = as.factor(georegion)) %>%
+  mutate(region_shift = as.numeric(georegion) - lag(as.numeric(georegion)), default=first(as.numeric(georegion)))
+rgn_shift <- which(rgn_shift$region_shift > 0)
+rgn_shift <- c(1, rgn_shift) -0.5
+rgn_shift <- data.frame(rgn_shift_x=rgn_shift,
+                         georegion = rank_georgn$georegion,
+                         name_x= c(4, 15, 60, 115, 150, 200), # 140
+                         name_y=c(55, 55, 55, 55, 55, 55))
+
+rgn_shift <- rgn_shift %>%
+   mutate(georegion = as.character(georegion))
+
+# # add some blanks rows to match the master region list
+empty_bar2 <-10
+to_add <-  data.frame( matrix(NA, empty_bar2*nlevels(as.factor(pressures_adj_circle$food_name_2)), ncol(pressures_adj_circle)) )
+  colnames(to_add) <- colnames(pressures_adj_circle)
+  to_add$food_name_2 <- rep(levels(as.factor(pressures_adj_circle$food_name_2)), each=empty_bar2)
+  to_add$chi<-  0
+  to_add$country <- as.character(rep(1:empty_bar2, nlevels(as.factor(pressures_adj_circle$food_name_2))))
+  pressures_adj_circle <- rbind(to_add, pressures_adj_circle, to_add)
+  
+pressures_adj_circle %>%
+  group_by(food_name_2) %>%
+  summarize(sum = sum(food_category_prop, na.rm=TRUE)) %>%
+  arrange(sum) 
+
+#pressures_adj_circle$food_name_2 <- factor(pressures_adj_circle$food_name_2, levels=rev(food_categories$food_name_2))
+pressures_adj_circle$country <- factor(pressures_adj_circle$country, levels=unique(rank_rgn_adj$country))
+pressures_adj_circle$georegion <- factor(pressures_adj_circle$georegion, 
+                                         levels=unique(rank_georgn$georegion))
+```
+
+
+make the plot
+```{r}
+circle_theme <- theme(axis.line=element_blank(),
+                      axis.text.y=element_blank(),
+                      axis.ticks=element_blank(),
+                      axis.title.x=element_blank(),
+                      axis.title.y=element_blank(),
+                      legend.position="none",
+                      panel.background=element_blank(),
+                      panel.border=element_blank(),
+                      panel.grid.major=element_blank(),
+                      panel.grid.minor=element_blank(),
+                      plot.background=element_blank(),
+                      axis.text.x = element_blank())
+
+
+food_categories_colors_plot <- select(food_categories_colors, food_name_2, fill_color) 
+
+pressures_adj_circle_plot <- left_join(pressures_adj_circle, food_categories_colors_plot, by = "food_name_2") %>% 
+  mutate(fill_color = factor(fill_color, levels = fill_order))
+
+rgn_shift <- rgn_shift %>% 
+  mutate(georegion = ifelse(georegion == "High Seas", " ", georegion))
+
+
+## WE DIVIDE EVERYTHING BY 4 HERE SO THAT WE CAN GET PROPORTION OUT OF 1 INSTEAD OF 4
+
+  ggplot(data=pressures_adj_circle_plot, aes(x=country, y=food_category_prop/4, fill=fill_color)) + 
+  
+  geom_bar(stat="identity") +
+  
+  # ## this adjust the inner circle size (ymin) and outer circle size (ymax), which can be expanded to include names
+   geom_errorbar(aes(
+       x     = 1, 
+        ymin = -0.01/4,   # ymin  = -0.03, this is for when ocean bars stack inwards -0.01 for when not
+       ymax  = 0.035/4), 
+       alpha = 0) +
+      # Country name text placement
+     geom_text(
+       data = rank_rgn_adj,
+       aes(x     = country,
+           y     = max(pressures_adj_circle$chi/4, na.rm=TRUE),
+           label = rgn_name_short,
+           angle = angle,
+           hjust = hjust),
+       inherit.aes = FALSE,
+       fontface = "bold",
+       alpha = 0.9,
+       size = 5,
+       color = rank_rgn_adj$color) +
+    # 
+   # georegion names
+    geom_text(
+      data=rgn_shift,
+      aes(y = 0.00375, x = name_x, label = georegion),
+      # aes(x=name_x,
+      #     y=name_y,
+      #     label=georegion),
+      inherit.aes=FALSE, size=7) +
+  #  
+  # # # Scale bar circles
+  # ## This adds the 0 line
+      geom_segment(
+        x = 0, 
+         y = 0, 
+         xend = dim(rank_rgn_adj)[1]+1, 
+         yend = 0, 
+         fill = NULL,
+        alpha = 1, color = "white", size = 0.1) + #color = "black for internal
+  #    
+  #  # Scale bar annotation, this adds the y-axis numbers
+      # annotate("text",
+      #   x     = c(3, 3, 3),
+      #   y     = c(0, 0.0175, 0.035),
+      #   label = c(0, 0.0175, 0.035),
+      #   color = "darkgray", angle = -4, size = 4) +
+    
+              annotate("text",
+        x     = c(3, 3, 3),
+        y     = c(0, 0.004375, 0.00875),
+        label = c(0, 0.004375, 0.00875),
+        color = "darkgray", angle = -4, size = 5) +
+  #     
+  scale_color_identity() +
+     scale_fill_identity() +
+  # scale_fill_manual(values= rev(jv_palette), c("Animal Feed", "Aquaculture", "Freshwater Fisheries", "Human Crop Consumption", "Livestock Meat", "Livestock Secondary Products", "Marine Fisheries")) +
+  coord_polar() +
+ circle_theme
+  
+  ggsave(here("_analysis/figures/extended_data/output/ed_fig_2_circle_foods.png"), height=18, width=18, units=c("in"))
+# ggsave(here("_analysis/figures/extended_data/output/circle_plots_no_legends/ed_fig_5_circle_foods.png"), height=18, width=18, units=c("in"))
+#bg="transparent"
+```

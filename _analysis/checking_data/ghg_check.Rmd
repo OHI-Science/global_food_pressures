@@ -1,0 +1,119 @@
+---
+title: "GHG: checking"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+GHG emissions seem high (6.8 vs 4 billion tonnes CO2eq). Figure out where the mismatch may be.
+
+```{r setup, include=FALSE}
+library(raster)
+library(sp)
+library(tidyverse)
+```
+
+## marine fisheries total
+```{r}
+
+mfish <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers", pattern = "fisheries", full=TRUE)
+
+mfish <- grep("ghg", mfish, value=TRUE)
+mfish <- grep("marine", mfish, value=TRUE)
+mfish_stack <- stack(mfish)
+
+combined  <- calc(mfish_stack, fun=sum, na.rm=TRUE)
+cellStats(combined, sum, na.rm=TRUE)
+
+#0.4 billion
+```
+
+## freshwater fisheries total
+```{r}
+
+
+ffish <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers", pattern = "fisheries", full=TRUE)
+
+ffish <- grep("ghg", ffish, value=TRUE)
+ffish <- grep("marine", ffish, value=TRUE, invert=TRUE)
+ffish_stack <- raster(ffish)
+
+cellStats(ffish_stack, sum, na.rm=TRUE)
+
+#0.0006 billion
+
+```
+
+## crop
+```{r}
+
+crops <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers", pattern = "crop_produce", full=TRUE)
+
+crops <- grep("_x_", crops, value=TRUE, invert=TRUE)
+crops <- grep("ghg", crops, value=TRUE)
+crops_stack <- stack(crops)
+
+combined  <- calc(crops_stack, fun=sum, na.rm=TRUE)
+cellStats(combined, sum, na.rm=TRUE)
+
+# 
+```
+
+## livestock
+```{r}
+
+livestock <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers", pattern = "land", full=TRUE)
+
+livestock <- grep("_x_", livestock, value=TRUE, invert=TRUE)
+livestock <- grep("crop", livestock, value=TRUE, invert=TRUE)
+livestock <- grep("ghg", livestock, value=TRUE)
+
+livestock_stack <- stack(livestock)
+
+combined  <- calc(livestock_stack, fun=sum, na.rm=TRUE)
+cellStats(combined, sum, na.rm=TRUE)
+
+```
+
+
+```{r}
+
+ungs <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers", pattern = "land", full=TRUE)
+
+ungs <- grep("_x_", ungs, value=TRUE, invert=TRUE)
+ungs <- grep("crop", ungs, value=TRUE, invert=TRUE)
+ungs <- grep("ghg", ungs, value=TRUE)
+ungs <- grep("goats|cows|sheep", ungs, value=TRUE)
+
+ungs_stack <- stack(ungs)
+
+combined  <- calc(ungs_stack, fun=sum, na.rm=TRUE)
+cellStats(combined, sum, na.rm=TRUE)
+
+```
+
+```{r}
+
+fodd <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers", pattern = "fodd", full=TRUE)
+
+fodd <- grep("_x_", fodd, value=TRUE, invert=TRUE)
+fodd <- grep("ghg", fodd, value=TRUE)
+
+fodd_stack <- raster(fodd)
+
+cellStats(fodd_stack, sum, na.rm=TRUE)
+
+```
+
+```{r}
+
+m_aqua <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers", pattern = "aquaculture", full=TRUE)
+m_aqua <- grep("_x_", m_aqua, value=TRUE, invert=TRUE)
+m_aqua <- grep("ghg", m_aqua, value=TRUE)
+
+m_aqua_stack <- stack(m_aqua)
+
+combined  <- calc(m_aqua_stack, fun=sum, na.rm=TRUE)
+cellStats(combined, sum, na.rm=TRUE)
+
+
+```

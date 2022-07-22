@@ -1,0 +1,18 @@
+﻿value,species,system,name,description,source,notes
+0.64,salmon,NA,landed_to_edible,multiplier to convert landed weight to edible weight,http://www.fao.org/3/x5898e/x5898e01.htm,
+20,salmon,aquaculture,stocking_density,maximum stocking density in aquaculture pens,,salmon_stocking_densities.xlsx has a list of stocking stockings for different speices and sources
+4.856027,salmon,aquaculture,mean_harvest_weight,mean harvest weight calculated from the SSB Norway salmon data,,calculated in https://github.com/cdkuempel/food_chicken_salmon/blob/master/salmon_occupancy/salmon_tonnes_to_livestock_conversion
+0.346533,salmon,aquaculture,sd_harvest_weight,standard deviation of harvest weight calculated from the SSB Norway salmon data,,
+3.307102,salmon,aquaculture,min_harvest_weight,minimum harvest weight calculated from the SSB Norway salmon data,,
+5.75448,salmon,aquaculture,max_harvest_weight,maximum harvest weight calculated from the SSB Norway salmon data,,
+0.1,salmon,aquaculture,area_misc,"the percent additional area not accounted for in initially calculation for other aquculture related spaces such as docs, moorings, etc",,we came up with this number
+0.25,salmon,aquaculture,area_fallow,the percent additional area not accounted for in initially calculation for areas where pens are left empty,,we came up with this number
+1.45,salmon,aquaculture,live_harvested,the ratio of the number of live fish living in the ocean to the number of fish harvested,,calculated in https://github.com/cdkuempel/food_chicken_salmon/blob/master/salmon_occupancy/salmon_tonnes_to_livestock_conversion
+0,salmon,aquaculture,water_drinking,freshwater used for drinking water at the farm,,
+0,salmon,aquaculture,water_maintence,"freshwater used for washing nets from pens, FW treatments for parasites such as amoebic gill disease",,"data lacking, but assumed to be negligeable, Mekonnen & Hoeksta 2010b)"
+0.42,salmon,aquaculture,water_transport,water used to transport to marine environment,,units: m3/tonne whole fish 
+,salmon,aquaculture,water_hatchery,water used to rear salmon during first part of development at the hatchery,,
+200000,salmon,aquaculture,fish_per_cage,the average number of fish in a salmon aquaculture pen/cage,in the issue,
+9000,salmon,aquaculture,cage_volume,the average volume of a cage/pen used in salmon aquaculture (m3),in the issue,
+1.3,salmon,aquaculture,eFCR,economic feed conversion ratio for salmon,Aas et al 2016 (https://www.sciencedirect.com/science/article/pii/S235251341930256X),
+1.4,shrimps_prawns,aquaculture,eFCR,economic feed conversion ratio for shrimp and prawns,Seafood Watch,"average of eFCR values for whiteleg pond raised shrimp in Vietnam, Thailand, Indonesia, India, Ecuador, and China"

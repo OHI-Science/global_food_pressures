@@ -1,0 +1,81 @@
+GENuS_foodID,GENuS_FoodName,FCT_FoodName,Calories,Protein,Region
+212,Freshwater Fish,"Catfish,  gunther's walking, raw",209,17.8,_ASEAN
+212,Freshwater Fish,"Catfish,  striped,  , w/ skin, raw",215,15,_ASEAN
+212,Freshwater Fish,"Catfish,  truncated estuarine, raw",92,18.7,_ASEAN
+212,Freshwater Fish,"Carp, common, raw",105,17,_ASEAN
+212,Freshwater Fish,"Gourami, giant, raw",97,17.3,_ASEAN
+212,Freshwater Fish,"Gourami, snake skin, raw",83,17.6,_ASEAN
+212,Freshwater Fish,"Sheat-fish, raw",106,16.3,_ASEAN
+212,Freshwater Fish,"Silver- barb, common, raw",124,21.1,_ASEAN
+212,Freshwater Fish,"Tilapia,  all species,  raw",94,18.4,_ASEAN
+213,Demersal Fish,"Giant seaperch, raw",111,20.5,_ASEAN
+213,Demersal Fish,"Eel, silver pike (daggertooth pike conger),  sea water , raw",88,18.8,_ASEAN
+213,Demersal Fish,"Eel, swamp,  raw",86,19.7,_ASEAN
+213,Demersal Fish,"Featherback, grey (knifefish), raw",94,19.6,_ASEAN
+213,Demersal Fish,"Featherback, spotted(knifefish), raw",78,16.7,_ASEAN
+213,Demersal Fish,"Flatfish/Turbot, Indian(halibut), raw",87,21.2,_ASEAN
+213,Demersal Fish,"Goby, all species,  raw",80,18.5,_ASEAN
+213,Demersal Fish,"Grouper, raw",82,18.9,_ASEAN
+213,Demersal Fish,"Mullet, bluespot gray, raw",117,24.7,_ASEAN
+213,Demersal Fish,"Perch, climbing",145,17.9,_ASEAN
+213,Demersal Fish,"Snapper, red, Malabar, raw",72,16.9,_ASEAN
+213,Demersal Fish,"Snapper, russell,  raw",82,19.5,_ASEAN
+213,Demersal Fish,"Sting ray, blue spotted,  raw",88,21.3,_ASEAN
+213,Demersal Fish,"Threadfin, all species,  raw",108,20.2,_ASEAN
+213,Demersal Fish,"Whiting,  common/silver, raw",89,20.8,_ASEAN
+214,Pelagic Fish,"Anchovy, fresh, whole",81,18.5,_ASEAN
+214,Pelagic Fish,"Cobia/Black kingfish,  raw",92,18.7,_ASEAN
+214,Pelagic Fish,"Mackerel, Indian, raw",119,21.5,_ASEAN
+214,Pelagic Fish,"Mackerel, short-bodied, raw",122,21.4,_ASEAN
+214,Pelagic Fish,"Mackerel, Spanish, sliced, raw",103,19.4,_ASEAN
+214,Pelagic Fish,"Pomfret, black, raw",102,19.8,_ASEAN
+214,Pelagic Fish,"Pomfret, silver/white, raw",126,19.4,_ASEAN
+214,Pelagic Fish,"Scad, big-eyed/caranx, raw",102,21.2,_ASEAN
+214,Pelagic Fish,"Scad, hardtail  (torpedo), raw",93,21.3,_ASEAN
+214,Pelagic Fish,"Slipmouth, ponyfish, raw",84,18.8,_ASEAN
+214,Pelagic Fish,"Trevally, black-banded, raw",134,18.6,_ASEAN
+214,Pelagic Fish,"Tuna, Skipjack or Yellow  Fin, canned  in water, drained",113,26.1,_ASEAN
+215,Marine Fish; Other,"Giant seaperch, raw",111,20.5,_ASEAN
+215,Marine Fish; Other,"Eel, silver pike (daggertooth pike conger),  sea water , raw",88,18.8,_ASEAN
+215,Marine Fish; Other,"Eel, swamp,  raw",86,19.7,_ASEAN
+215,Marine Fish; Other,"Featherback, grey (knifefish), raw",94,19.6,_ASEAN
+215,Marine Fish; Other,"Featherback, spotted(knifefish), raw",78,16.7,_ASEAN
+215,Marine Fish; Other,"Flatfish/Turbot, Indian(halibut), raw",87,21.2,_ASEAN
+215,Marine Fish; Other,"Goby, all species,  raw",80,18.5,_ASEAN
+215,Marine Fish; Other,"Grouper, raw",82,18.9,_ASEAN
+215,Marine Fish; Other,"Mullet, bluespot gray, raw",117,24.7,_ASEAN
+215,Marine Fish; Other,"Perch, climbing",145,17.9,_ASEAN
+215,Marine Fish; Other,"Snapper, red, Malabar, raw",72,16.9,_ASEAN
+215,Marine Fish; Other,"Snapper, russell,  raw",82,19.5,_ASEAN
+215,Marine Fish; Other,"Sting ray, blue spotted,  raw",88,21.3,_ASEAN
+215,Marine Fish; Other,"Threadfin, all species,  raw",108,20.2,_ASEAN
+215,Marine Fish; Other,"Whiting,  common/silver, raw",89,20.8,_ASEAN
+215,Marine Fish; Other,"Anchovy, fresh, whole",81,18.5,_ASEAN
+215,Marine Fish; Other,"Cobia/Black kingfish,  raw",92,18.7,_ASEAN
+215,Marine Fish; Other,"Mackerel, Indian, raw",119,21.5,_ASEAN
+215,Marine Fish; Other,"Mackerel, short-bodied, raw",122,21.4,_ASEAN
+215,Marine Fish; Other,"Mackerel, Spanish, sliced, raw",103,19.4,_ASEAN
+215,Marine Fish; Other,"Pomfret, black, raw",102,19.8,_ASEAN
+215,Marine Fish; Other,"Pomfret, silver/white, raw",126,19.4,_ASEAN
+215,Marine Fish; Other,"Scad, big-eyed/caranx, raw",102,21.2,_ASEAN
+215,Marine Fish; Other,"Scad, hardtail  (torpedo), raw",93,21.3,_ASEAN
+215,Marine Fish; Other,"Slipmouth, ponyfish, raw",84,18.8,_ASEAN
+215,Marine Fish; Other,"Trevally, black-banded, raw",134,18.6,_ASEAN
+215,Marine Fish; Other,"Tuna, Skipjack or Yellow  Fin, canned  in water, drained",113,26.1,_ASEAN
+216,Crustaceans,"Crab, shore, raw",104,13.1,_ASEAN
+216,Crustaceans,"Crabmeat, mud, fresh",98,17.9,_ASEAN
+216,Crustaceans,"Prawn,  fresh water, giant, raw",108,17.9,_ASEAN
+216,Crustaceans,"Prawn,  fresh water, raw",98,17.5,_ASEAN
+216,Crustaceans,"Prawn,  green tiger, raw",79.6,NA,_ASEAN
+216,Crustaceans,Radiated scallop,106,22.3,_ASEAN
+217,Cephalopods,"Cuttlefish, raw",72,15.9,_ASEAN
+217,Cephalopods,"Squid, splendid, raw",68,15.4,_ASEAN
+218,Molluscs; Other,"Clam, undulated surf",64,10.3,_ASEAN
+218,Molluscs; Other,"Cockle/ark shell, fresh",71,11.7,_ASEAN
+218,Molluscs; Other,"Mussel, green, raw",53,9.3,_ASEAN
+218,Molluscs; Other,"Oyster, raw",58,7.5,_ASEAN
+218,Molluscs; Other,"Snail, fresh water, all species",84,11.5,_ASEAN
+218,Molluscs; Other,"Snail, pond,  river",74,12.1,_ASEAN
+218,Molluscs; Other,"Wedge  shell, bean clam(Donax), fermented",149,10.6,_ASEAN
+219,Aquatic Animals; Others,"Sea cucumber/sea slug, cleaned, raw",21,4.8,_ASEAN
+219,Aquatic Animals; Others,Sea horse,194,28.5,_ASEAN

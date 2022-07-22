@@ -1,0 +1,68 @@
+---
+title: "STEP 2: Wrangle the FAO production data"
+author: "Juliette Verstaen"
+date: "9/23/2020"
+output: html_document
+---
+
+# Objectives
+This markdown wrangles the FAO production data from the Production-Livestock Primary section of FAOSTAT into an easy format for the analysis later down the line.
+
+# Inputs
+**Reference** http://www.fao.org/faostat/en/#data/QL
+**Description** Tonnes production for eggs and meat from chickens, and meat and milk from buffaloes, cows, goats, and sheep  
+**Resolution** Country level
+**Time Range** Avaliable 1961-2018; we downloaded 2017
+**Format** CSV file
+
+## Outputs: 'fao_production.csv' (iso3c, animal, product, fao_product_tonnes)
+
+**
+
+## Setup
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(stringr)
+source(here("_workflow/common.R"))
+
+fao_production_raw <- read_csv(file.path(raw, "FAO_data/v2020/FAO_production_2020_09_25.csv"))
+```
+
+## Methods
+```{r}
+
+lsoi <- c("cattle", "buffalo", "cow", "hen", "chicken", "goat", "sheep", "pig")
+poi <- c("Meat", "Milk", "Eggs", "meat", "milk", "eggs")
+
+fao_production <- fao_production_raw %>% 
+  filter(Element == "Production",
+         Unit != "1000 No") %>% ## this only applies to # eggs, and we are interested in the weight not count 
+  select(country = Area, Element, Item, Unit, Value) %>% 
+  filter(str_detect(Item, paste(lsoi, collapse = "|")) == TRUE) %>% 
+  filter(str_detect(Item, paste(poi, collapse = "|")) == TRUE) %>% 
+  separate(Item, c("product", "animal"), remove = FALSE) %>%  ## this is throwing the error "expected 2 pieces" and discarding the ones that are not. This is only for "Beeswax" so no need to worry
+  mutate(animal = ifelse(str_detect(Item, "goat"), "goats", animal),
+         animal = ifelse(str_detect(Item, "cow"), "cows", animal),
+         animal = ifelse(str_detect(Item, "sheep"), "sheep", animal),
+         animal = ifelse(str_detect(animal, "hen"), "chicken", animal),
+         animal = ifelse(str_detect(Item, "buffalo"), "buffaloes", animal)) %>% 
+  filter(country != "China") %>% 
+  mutate(product = tolower(product),
+         country = ifelse(country == "Eswatini", "Swaziland", country),
+         country = ifelse(country == "Netherlands Antilles (former)", "Bonaire, Sint Eustatius and Saba", 
+                          ifelse(country == "French Guyana", "French Guiana", country)),
+         iso3c = countrycode(country, origin="country.name", destination = "iso3c"),
+         animal = ifelse(animal == "cattle", "cows",
+                         ifelse(animal == "chicken", "chickens",
+                                ifelse(animal == "pig", "pigs",
+                                       ifelse(animal == "goat", "goats", 
+                                              ifelse(animal == "buffalo", "buffaloes", animal)))))) %>% 
+  select(iso3c,animal, product, fao_product_tonnes = Value)
+
+write_csv(fao_production, here("animal_farm/farm/data/fao_production.csv"))
+
+```
+
+

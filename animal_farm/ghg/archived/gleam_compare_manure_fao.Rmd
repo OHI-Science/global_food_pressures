@@ -1,0 +1,318 @@
+---
+title: "manure_check"
+author: "Juliette"
+date: "7/24/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(countrycode)
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+
+ruminants <- read_csv(here("animal_farm/farm/data/ruminants_GLEAMi_v2.csv"))
+chickens <- read_csv(here("animal_farm/farm/data/chickens_GLEAMi_v2.csv"))
+pigs <- read_csv(here("animal_farm/farm/data/pigs_GLEAMi_v2.csv"))
+
+fao_headcount <- read_csv(here("animal_farm/farm/data/fao_livestock_headcount.csv"))
+
+```
+
+## Exploring GHG
+```{r}
+
+rum_man <- ruminants %>% 
+  filter(Variable %in% c("EMSS: Manure - CH4 from manure management", "EMSS: Manure - N2O from manure management"),
+         Production_system == "All systems",
+         Herd_type == "Whole herd",
+         Species != "Buffalo") %>% 
+  group_by(Species) %>% 
+  dplyr::summarise(total_kgCO2eq = sum(Value))
+
+chick_man <- chickens %>% 
+    filter(Variable %in% c("EMSS: Manure - CH4 from manure management", "EMSS: Manure - N2O from manure management"),
+         Production_system == "All systems") %>% 
+  group_by(Species) %>% 
+  dplyr::summarise(total_kgCO2eq = sum(Value))
+
+pig_man <- pigs %>% 
+  filter(Variable %in% c("EMSS: Manure - CH4 from manure management", "EMSS: Manure - N2O from manure management"),
+         Production_system == "All systems") %>% 
+  group_by(Species) %>% 
+  dplyr::summarise(total_kgCO2eq = sum(Value))
+
+gleam_ems <- rbind(rum_man, chick_man, pig_man) %>% 
+  mutate(gleam = total_kgCO2eq/1000) %>% 
+  select(-total_kgCO2eq) %>% 
+  ungroup() %>% 
+  rename(species = Species)
+  
+
+```
+
+FAO data
+
+```{r}
+fao_manage_raw <- read_csv(file.path(raw, "FAO_data/v2020/manure_data/FAO_livestock_manure_managed.csv"))
+fao_left_raw <- read_csv(file.path(raw, "FAO_data/v2020/manure_data/FAO_livestock_manure_left_pasture.csv"))
+fao_applied_raw <- read_csv(file.path(raw, "FAO_data/v2020/manure_data/FAO_livestock_manure_applied_soil.csv"))
+
+fao_manage <- fao_manage_raw %>% 
+  filter(Element == "Emissions (CO2eq) (Manure management)",
+         Year == "2010") %>% 
+  separate(Item, c("species", "etc"), sep = ", ") %>% 
+  mutate(tonnes_co2eq = Value*1000) %>% 
+  group_by(species) %>% 
+  dplyr::summarise(fao_manage = sum(tonnes_co2eq, na.rm=TRUE)) %>% 
+  mutate(species = ifelse(species == "Swine", "Pigs", species))
+
+fao_left <- fao_left_raw %>% 
+  filter(Element == "Emissions (CO2eq) (Manure on pasture)",
+         Year == "2010") %>% 
+  separate(Item, c("species", "etc"), sep = ", ") %>% 
+  mutate(tonnes_co2eq = Value*1000) %>% 
+  group_by(species) %>% 
+  dplyr::summarise(fao_left = sum(tonnes_co2eq, na.rm=TRUE)) %>% 
+  mutate(species = ifelse(species == "Swine", "Pigs", species))
+
+fao_applied <- fao_applied_raw %>% 
+  filter(Element == "Emissions (CO2eq) (Manure applied)",
+         Year == "2010") %>% 
+  separate(Item, c("species", "etc"), sep = ", ") %>% 
+  mutate(tonnes_co2eq = Value*1000) %>% 
+  group_by(species) %>% 
+  dplyr::summarise(fao_applied = sum(tonnes_co2eq, na.rm=TRUE)) %>% 
+  mutate(species = ifelse(species == "Swine", "Pigs", species))
+
+
+```
+
+Combine and compare
+```{r}
+compare <- left_join(gleam_ems, fao_manage) %>% 
+  left_join(fao_left) %>% 
+  left_join(fao_applied) %>% 
+  rowwise() %>% 
+  mutate(fao_sum = sum(fao_manage, fao_left, fao_applied))
+
+compare_easy <- compare %>% 
+  mutate(gleam= gleam/1000000,
+         fao_manage = fao_manage/1000000,
+         fao_left = fao_left/1000000,
+         fao_applied = fao_applied/1000000,
+         fao_sum = fao_sum/1000000)
+  
+```
+
+Testing out data/methods:
+
+1. Calculate an emissions rate per head for each category and country
+2. GLEAM proportions to allocate FAO 2016 head counts for each category
+3. use the emissions factor to calculate emissions
+4. aggregate by FAO categories and compare emissions
+5. Check: Is it off by orders of magnitude or does it seem more or less ok?
+
+
+```{r}
+## clean and wrangle ruminants
+rum <- ruminants %>% 
+  filter(Variable %in% c("EMSS: Manure - CH4 from manure management", "EMSS: Manure - N2O from manure management", "HERD: total number of animals"),
+         Production_system != "All systems",
+         Species != "Buffalo") %>% 
+  mutate(Herd_type = ifelse(Production_system == "Feedlot operations", "meat", Herd_type),
+         Value = abs(Value)) %>%  ##there are a few negative values for emissions... since the ab value seems in line with other countries in the region i will change it here but if we use these values for real we will need to check it out further
+  filter(Herd_type != "Whole herd") %>% 
+  group_by(iso3c, Species, Production_system, Herd_type) %>% 
+  dplyr::summarise(emissions_mt =  (sum(Value[Variable == "EMSS: Manure - CH4 from manure management"| Variable =="EMSS: Manure - N2O from manure management"]))/1000,
+                   head_count = sum(Value[Variable == "HERD: total number of animals"])) %>% 
+  ungroup() %>% 
+  mutate(mt_per_head = emissions_mt/head_count,
+         mt_per_head = ifelse(is.na(mt_per_head), 0, mt_per_head),
+         Production_system = ifelse(Production_system == "Feedlot operations", "Feedlot", Production_system),
+         Herd_type = ifelse(Herd_type == "Dairy", "milk",
+                            ifelse(Herd_type == "Non-dairy", "meat", Herd_type)),
+         Species = ifelse(Species == "Cattle", "cows", Species),
+         Species = tolower(Species),
+         Production_system = ifelse(Production_system == "Grassland systems", "grassland",
+                                    ifelse(Production_system == "Mixed systems", "mixed", Production_system)),
+         Production_system = tolower(Production_system)) %>% 
+  rename(animal = Species, system = Production_system, product = Herd_type) %>% 
+  select(-emissions_mt, -head_count)
+
+
+## clean and wrangle chickens
+chick <- chickens %>% 
+    filter(Variable %in% c("EMSS: Manure - CH4 from manure management", "EMSS: Manure - N2O from manure management", "HERD: total number of animals"),
+          Production_system != "All systems") %>% 
+   group_by(iso3c, Species, Production_system) %>% 
+  dplyr::summarise(emissions_mt =  (sum(Value[Variable == "EMSS: Manure - CH4 from manure management"| Variable =="EMSS: Manure - N2O from manure management"]))/1000,
+                   head_count = sum(Value[Variable == "HERD: total number of animals"])) %>% 
+  ungroup() %>% 
+  mutate(mt_per_head = emissions_mt/head_count,
+         mt_per_head = ifelse(is.na(mt_per_head), 0, mt_per_head),
+         product = case_when(Production_system == "Broilers" ~ "meat",
+                               Production_system == "Layers" ~ "eggs",
+                               Production_system == "Backyard" ~ "meat & eggs"),
+         Species = tolower(Species),
+         Production_system = case_when(Production_system == "Broilers" | Production_system == "Layers" ~ "industrial",
+                                       T ~ "backyard")) %>% 
+  rename(system = Production_system, animal = Species )%>% 
+  select(-emissions_mt, -head_count)
+
+pig <- pigs %>% 
+ filter(Variable %in% c("EMSS: Manure - CH4 from manure management", "EMSS: Manure - N2O from manure management", "HERD: total number of animals"),
+          Production_system != "All systems") %>% 
+   group_by(iso3c, Species, Production_system) %>% 
+  dplyr::summarise(emissions_mt =  (sum(Value[Variable == "EMSS: Manure - CH4 from manure management"| Variable =="EMSS: Manure - N2O from manure management"]))/1000,
+                   head_count = sum(Value[Variable == "HERD: total number of animals"])) %>% 
+  ungroup() %>% 
+  mutate(mt_per_head = emissions_mt/head_count,
+         mt_per_head = ifelse(is.na(mt_per_head), 0, mt_per_head),
+         product = "meat",
+         Species = tolower(Species),
+         Production_system = tolower(Production_system)) %>% 
+  rename(animal = Species, system = Production_system)%>% 
+  select(-emissions_mt, -head_count)
+
+gleam_rate <- rbind(rum, chick, pig) 
+```
+
+
+Grab the FAO data that is allocated by proportions for each category
+
+```{r}
+## cows
+cows_fao <- read_csv(here("animal_farm/farm/data/fao_allocations_cows.csv")) %>% 
+  select(iso3c, animal, system, product, fao_allocated_headcount) %>% 
+  rename(fao_headcount = fao_allocated_headcount)
+
+## gaots and sheep
+goats_sheep_fao <- read_csv(here("animal_farm/farm/data/fao_allocations_goat_sheep.csv"))%>% 
+  select(iso3c, animal, system, product, fao_allocated_headcount) %>% 
+  rename(fao_headcount = fao_allocated_headcount)
+
+#chickens is just chickens in FAO
+chickens_fao <- read_csv(here("animal_farm/farm/data/fao_livestock_headcount.csv")) %>% 
+  filter(animal == "chickens") %>% 
+  mutate(system = "industrial")
+
+#backyard chickens, read in but i dont think we can use this in the comparison with FAO because they don't include backayrd
+chicken_backyard <- read_csv(here("aniaml_farm/farm/data/chickens_backyard_adjusted.csv"))
+
+## pigs
+pigs_fao <- read_csv(here("animal_farm/farm/data/pigs_GLEAMi_v2.csv")) %>% 
+  filter(Production_system != "All systems",
+         Variable == "HERD: total number of animals") %>% 
+  select(iso3c, animal = Species, system = Production_system, gleam_count = Value) %>% 
+  mutate(animal = tolower(animal), system = tolower(system)) %>% 
+  mutate(product = "meat") %>% 
+  group_by(iso3c) %>% 
+  mutate(gleam_total = sum(gleam_count, na.rm = TRUE)) %>% 
+  rowwise() %>% 
+  mutate(prop = gleam_count/gleam_total,
+         prop = ifelse(gleam_total == 0, 0, prop)) %>% 
+  left_join(fao_headcount, by = c("iso3c", "animal", "product")) %>% 
+  mutate(fao_allo = prop*fao_headcount,
+         fao_allo = ifelse(is.na(fao_allo), 0, fao_allo)) %>% ## this is just for this ghg comparion, would need to gapfil and look more closely if want to do more with these allocated values 
+  select(iso3c, animal, system, product, fao_headcount = fao_allo)
+  
+
+fao_adjusted <- rbind(cows_fao, goats_sheep_fao, chickens_fao, pigs_fao)
+
+```
+
+
+Calculate ghg emissions using FAO total animals and gleam emissions rate
+
+FAO categories: cows dairy, cows meat, chicken meat, chicken egg, goats, sheeps, pigs
+```{r}
+calc_em <- left_join(fao_adjusted, gleam_rate, by = c("iso3c", "animal", "system", "product")) %>% 
+  mutate(emissions = fao_headcount*mt_per_head)
+
+
+cows_em <- calc_em %>% 
+  filter(animal == "cows") %>% 
+  group_by(animal, product) %>% 
+  dplyr::summarise(global_em_calc = sum(emissions, na.rm = TRUE)) %>% 
+  unite(fao_group, c("animal", "product"), sep = " ")
+
+chick_em <- calc_em %>% 
+  filter(animal == "chickens",
+         system != "backyard") %>% 
+  group_by(animal, product) %>% 
+  dplyr::summarise(global_em_calc = sum(emissions, na.rm = TRUE))%>% 
+  unite(fao_group, c("animal", "product"), sep = " ")
+
+rest_em <- calc_em %>% 
+  filter(animal %in% c("goats", "sheep", "pigs")) %>% 
+  group_by(animal) %>% 
+  dplyr::summarise(global_em_calc = sum(emissions, na.rm = TRUE)) %>% 
+  rename(fao_group = animal)
+
+calc_fao_em <- rbind(cows_em, chick_em, rest_em)
+
+```
+
+```{r}
+fao_manage_raw <- read_csv(file.path(raw, "FAO_data/v2020/manure_data/FAO_livestock_manure_managed.csv"))
+fao_left_raw <- read_csv(file.path(raw, "FAO_data/v2020/manure_data/FAO_livestock_manure_left_pasture.csv"))
+fao_applied_raw <- read_csv(file.path(raw, "FAO_data/v2020/manure_data/FAO_livestock_manure_applied_soil.csv"))
+
+
+fao_emissions <- rbind(fao_manage_raw, fao_left_raw, fao_applied_raw) %>% 
+  filter(Element %in% c( "Emissions (CO2eq) (Manure management)", "Emissions (CO2eq) (Manure on pasture)", "Emissions (CO2eq) (Manure applied)"),
+         Year == "2016") %>% 
+  mutate(tonnes = Value*1000,
+         Item = ifelse(Item == "Cattle, dairy", "cows milk",
+                       ifelse(Item == "Cattle, non-dairy", "cows meat",
+                              ifelse(Item == "Swine, breeding" | Item == "Swine, market", "pigs",
+                                     ifelse(Item == "Chickens, broilers", "chickens meat",
+                                            ifelse(Item == "Chickens, layers", "chickens eggs", Item))))),
+         Item = tolower(Item)) %>% 
+  group_by(Item) %>% 
+  dplyr::summarise(fao_tonnes = sum(tonnes, na.rm = TRUE)) %>% 
+  select(fao_group = Item, fao_tonnes)
+  
+  
+  
+  
+  group_by(species) %>% 
+  dplyr::summarise(fao_manage = sum(tonnes_co2eq, na.rm=TRUE)) %>% 
+  mutate(species = ifelse(species == "Swine", "Pigs", species))
+```
+ 
+```{r}
+compare_emisisons_calc <- left_join(calc_fao_em, fao_emissions, by = "fao_group") %>% 
+  mutate(diff= fao_tonnes - global_em_calc,
+         perc_diff = (fao_tonnes - global_em_calc)/fao_tonnes,
+         calc_div_million = global_em_calc/1000000,
+         fao_div_million = fao_tonnes/1000000)
+```
+
+
+
+## Exploring Leaching
+
+GLEAM
+
+```{r}
+rum_nut <- ruminants
+
+unique(rum_nut$Variable)
+
+```
+
+
+
+
+
+
+
+

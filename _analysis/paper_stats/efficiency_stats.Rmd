@@ -1,0 +1,811 @@
+---
+title: "Efficiency paper statistics"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+In this script we will adapt code from _analysis/figures/paper/figure6_cp_country_product.Rmd to get statistics that will help fill out the efficiency section of the main manuscript. 
+
+Above each code chunk there is an excerpt from the main manuscript to fill out with the correct statistics.
+
+```{r setup, include=FALSE}
+
+library(ggplot2)
+library(tidyverse)
+library(here)
+library(countrycode)
+library(cowplot)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+```
+
+
+```{r}
+## read in cumulative pressures
+pressures_summary <- read_csv(here("_efficiency/data/pressures_summary.csv"))
+
+
+## the crop specific one'
+crops_scaled_raw <- read_csv(here::here("_analysis/figures/paper/data_prep/crops_rescaled.csv"))
+crops_scaled_pressures <- crops_scaled_raw %>%
+  unite(category1_production, c("organism", "product"), sep = "_", remove = FALSE) %>% 
+  mutate(pressure_value = NA,
+         global_total = NA,
+         category2_production = "human_crop") %>% 
+  rename(pressure_rescaled = prop_global) %>% 
+    select(-system)
+
+
+pressures_summary_edit_crop <- pressures_summary %>% 
+  filter(category2_production != "human_crop") %>% 
+  rbind(crops_scaled_pressures)
+
+
+
+## Read in matches production and protein data 
+product_tonnes_protein <- read_csv(here("_efficiency/data/all_food_pressures.csv"))
+
+```
+
+### Look at crop inefficiencies; within countries across food groups
+
+Claims to examine: 
+
+ - "In Morocco, sorghum is 5.8-fold less efficient than millets, likely because sorghum here requires more land use per tonne of product than millets."
+
+```{r}
+
+pressures_summary_crops <- crops_scaled_pressures %>%
+  group_by(iso3c, category1_production) %>%
+  summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+  ungroup() %>%
+  separate(col=category1_production, c("organism", "product"), sep="_") %>%
+  filter(product == "produce")
+
+
+product_crops <- product_tonnes_protein %>%
+  filter(grouping == "produce") %>%
+  mutate(organism = product,
+         product = "produce")
+
+# product_crops <- product_tonnes %>%
+#   group_by(iso3c, category1_production) %>%
+#   summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+#   ungroup() %>%
+#  # filter(., !grepl("feed",category1_production)) %>%
+#   separate(col=category1_production, c("organism", "product"), sep="_") %>%
+#   filter(product == "produce")
+
+
+cp_rate_crops <- product_crops %>%
+  filter(!is.na(tonnes)) %>%
+    filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>%
+    filter(tonnes>0) %>%
+  rowwise() %>%
+  mutate(pressure_per_tonne = cumulative_pressure/tonnes * 1000000, 
+         pressure_per_protein = cumulative_pressure/tonnes_protein * 1000000) %>%
+  dplyr::select(iso3c, organism, product, cumulative_pressure, tonnes, tonnes_protein, pressure_per_tonne, pressure_per_protein)
+
+
+
+library(vroom)
+long_name <- vroom::vroom(here::here("crop/farm/data/crop_codes_updated.csv")) %>% 
+  select(organism = SPAM_super,
+         long = SPAM_full_name) %>% 
+  mutate(long = ifelse(organism == "tnut", "tree nuts",
+                       ifelse(organism == "spis", "spices", long))) %>%
+  mutate(long = ifelse(organism == "xfru", "fruits",
+                          ifelse(organism == "xmil", "millet",
+                                 ifelse(organism == "xoil", "oil",
+                                        ifelse(organism == "xpul", "pulses", long))))) %>%
+
+  distinct(organism, long) 
+
+
+
+cp_rate_crops <- cp_rate_crops %>% 
+filter(pressure_per_tonne <= 0.2) %>% 
+  left_join(long_name)  %>% 
+  select(-organism) %>% 
+  rename(organism = long)
+
+
+millets <- cp_rate_crops %>%
+  filter(organism == "millet") %>%
+  arrange(-tonnes) %>%
+  rowid_to_column()
+
+pulses <- cp_rate_crops %>%
+  filter(organism == "pulses") %>%
+  arrange(-tonnes) %>%
+  rowid_to_column()
+
+sorghum <- cp_rate_crops %>%
+  filter(organism == "sorghum") %>%
+  arrange(-tonnes) %>%
+  rowid_to_column()
+  
+  
+maize <- cp_rate_crops %>%
+  filter(organism == "maize") %>%
+  arrange(-tonnes) %>%
+  rowid_to_column()
+
+
+test_ratios <- cp_rate_crops %>%
+  dplyr::select(-product, -tonnes, -cumulative_pressure, -tonnes_protein, -pressure_per_tonne) %>%
+  pivot_wider(names_from = organism, values_from = pressure_per_protein) %>%
+  mutate(ratio_pul_mil = `pulses`/millet,
+         ratio_maiz_sorg = `maize`/`sorghum`, 
+         ratio_sorg_mil = `sorghum`/`millet`)
+
+# MAR, BDI are good ones 
+```
+
+Explore Morocco crop efficiency more deeply:
+
+"In Morocco, sorghum is 5.8-fold less efficient than millets, likely because sorghum here requires more land use per tonne of product than millets."
+
+```{r}
+
+MAR_explore <- cp_rate_crops %>%
+  filter(iso3c == "MAR") %>%
+  filter(organism %in% c("sorghum", "millet"))
+
+## so it looks like the discrepancy between disturbance might drive this difference in Morocco? 
+
+crop_sorg <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/disturbance/crop_sorg.tif")
+
+plot(crop_sorg)
+
+crop_millet <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/disturbance/crop_pmil.tif")
+plot(crop_millet)
+
+
+land_eez_rgns <- raster(file.path(prep, "spatial/land_eez_rgns.tif"))
+
+land_eez_rgns_hsx <- calc(land_eez_rgns, fun = function(x){ifelse(is.na(x), 9999, x)})
+
+
+crop_millet_df <- as.data.frame(raster::zonal(crop_millet, land_eez_rgns_hsx, fun = "sum")) %>%
+  left_join(food_rgns, by = c("zone" = "ID_0"))
+
+
+MAR_dist_mil_df <- crop_millet_df %>%
+  filter(iso3c == "MAR")
+
+# 1.449262 km2 disturbance for sorghum
+# 0 + 0.3988341 km2 disturbance for millets
+
+mar_sorg <- MAR_explore %>%
+  filter(organism == "sorghum") %>%
+  dplyr::select(pressure_per_tonne)
+
+mar_sorg <- mar_sorg$pressure_per_tonne
+
+mar_millet <- MAR_explore %>%
+  filter(organism == "millet") %>%
+  dplyr::select(pressure_per_tonne)
+
+mar_millet <- mar_millet$pressure_per_tonne
+
+mar_sorg/mar_millet # 5.773233  
+
+
+# In Morocco, sorghum is 5.8 fold less efficient than millets, largely because sorghum here requires more land use per tonne of product than millets. 
+
+
+```
+
+
+
+### Look at fisheries inefficiencies; within countries across food groups
+
+Claims to examine: 
+
+ - "In China, while demersal fisheries are notably inefficient, forage fisheries are 1.7-fold less efficient still because an even larger percentage of the estimated forage fish catch is caught using destructive gear types."
+
+```{r}
+
+product_fisheries <- product_tonnes_protein %>%
+  filter(grouping == "marine fisheries") %>%
+  dplyr::select(1:6) %>%
+  rename(organism = product)
+
+cp_rate_fisheries <- product_fisheries %>%
+  filter(!is.na(tonnes)) %>%
+    filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>%
+    filter(tonnes>0) %>%
+  rowwise() %>%
+  mutate(pressure_per_tonne = cumulative_pressure/tonnes * 1000000,
+         pressure_per_protein = cumulative_pressure/tonnes_protein * 1000000)
+
+cp_rate_fisheries <- cp_rate_fisheries %>% 
+  filter(tonnes >=10.3)
+
+
+sm_pel <- cp_rate_fisheries %>%
+  filter(organism == "small-pelagic")
+
+dem <- cp_rate_fisheries %>%
+  filter(organism == "demersal")
+  
+## see if small pelagics/fofm are less efficient than demersal anywhere
+
+test_ratios <- cp_rate_fisheries %>%
+  dplyr::select(-tonnes, -million_kcal, -tonnes, -cumulative_pressure, -pressure_per_tonne, -tonnes_protein) %>%
+  pivot_wider(names_from = organism, values_from = pressure_per_protein) %>%
+  mutate(ratio_sm_dem = `small pelagic`/demersal,
+         ratio_rf_dem = `reef-associated`/demersal,
+         ratio_fofm_dem = `forage fish`/demersal)
+
+norway_sm_dem <- test_ratios %>%
+  filter(iso3c == "NOR") %>%
+  dplyr::select(ratio_sm_dem)
+
+norway_sm_dem$ratio_sm_dem # ~1.624401
+
+## Small pelagic fisheries have a 1.6 times higher pressure per ton than demersal fisheries in Norway 
+
+china_sm_fofm <- test_ratios %>%
+  filter(iso3c == "CHN") %>%
+  dplyr::select(ratio_fofm_dem)
+
+china_sm_fofm$ratio_fofm_dem  # 1.138114
+
+
+## Forage fish are 1.13 less efficient than demersal in China. This is because a larger percentage of the forage fish catch in China is caught using destructive gear types than that of the demersal catch using destructive gear types. 
+
+
+rus_sm_fofm <- test_ratios %>%
+  filter(iso3c == "RUS") %>%
+  dplyr::select(ratio_fofm_dem)
+ 
+rus_sm_fofm$ratio_fofm_dem # 0.7113385
+
+## Forage fish and demersal fish are nearly equally as efficient in Russia because a similar proportion of the forage fish catch is caught using destructive gear types as the proportion of the demersal catch is caught using destructive gear types.
+
+
+
+kor_sm_fofm <- test_ratios %>%
+  filter(iso3c == "KOR") %>%
+  dplyr::select(ratio_fofm_dem)
+
+kor_sm_fofm$ratio_fofm_dem  # 0.7175442
+
+## Forage fish is 1.4x less efficient than demersal in South Korea 
+
+
+# lets look into China in specific 
+
+fis <- cp_rate_fisheries %>%
+  # filter(iso3c == "NOR")
+   filter(iso3c == "CHN")
+  # filter(iso3c == "RUS") %>%
+  # filter(iso3c == "BRA")
+
+china_sm_fofm$ratio_fofm_dem 
+
+# check to see the different taxons 
+all_prod <- read_csv(file.path(prep, "fisheries/marine/catch_extracted_final.csv")) %>%
+  filter(iso3c == "CHN",
+         species_class_final %in% c("forage_fish", "Demersal")) %>%
+  filter(catch != 0)
+
+
+explore <- all_prod %>%
+  group_by(species_class_final, Descript, TaxonName) %>%
+  summarise(catch_all = sum(catch))
+
+## read in raw catch data 
+catch <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/catch_spp_class_2017.csv")
+
+codes_country <- read_csv("/home/shares/food-systems/Food_footprint/_raw_data/watson_data/v5.0/Codes_country.csv")
+
+
+# Taxon names to see what gear type they primarily use
+
+# group by the species class and destruction to see how much of each catch category uses destructive catch. I know this isn't exactly correct since we are using raw catch data here... but it should be fine. 
+
+catch_explore <- catch %>%
+  mutate(catch_tonnes = ReportedIND + IUUIND + DiscardsIND + ReportedNIND + IUUNIND + DiscardsNIND) %>%
+  filter(TaxonName %in% all_prod$TaxonName) %>%
+  left_join(codes_country, by = c("CNumber" = "Cnumber")) %>%
+  filter(`FAO name` == "China Main") %>%
+  group_by(species_class_fin, destruction, fish_type) %>%
+  summarise(catch_total = sum(catch_tonnes)) %>%
+  ungroup() %>%
+  group_by(species_class_fin) %>%
+  mutate(total_spp_catch = sum(catch_total)) %>%
+  ungroup() %>%
+  mutate(prop_of_catch = catch_total/total_spp_catch)
+
+catch_explore_gears <- catch %>%
+  mutate(catch_tonnes = ReportedIND + IUUIND + DiscardsIND + ReportedNIND + IUUNIND + DiscardsNIND) %>%
+  filter(TaxonName %in% all_prod$TaxonName) %>%
+  left_join(codes_country, by = c("CNumber" = "Cnumber")) %>%
+  filter(`FAO name` == "China Main") %>%
+  distinct(TaxonName, species_class_fin, destruction)
+
+```
+
+
+### Look at livestock inefficiencies; within countries across food groups
+
+Claims to examine: 
+
+ - "For example, measured by tonnes of production, in Indonesia on-farm efficiency for pig meat is 5.2 fold less efficient than cow meat, this seems to be due to very low production rates of meat per animal for pigs in Indonesia, perhaps due to the large amount of backyard pigs (~64%) and rearing conditions."
+
+
+```{r}
+
+product_livestock <- product_tonnes_protein %>%
+  filter(grouping == "livestock")
+
+cp_rate_livestock <- product_livestock %>%
+  filter(!is.na(tonnes)) %>%
+    filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>%
+    filter(tonnes>0) %>%
+  rowwise() %>%
+  mutate(pressure_per_tonne = cumulative_pressure/tonnes * 1000000, 
+         pressure_per_protein = cumulative_pressure/tonnes_protein * 1000000)
+
+
+cp_rate_livestock <- cp_rate_livestock %>% 
+  filter(tonnes >= 10) 
+
+
+cows_meat <- cp_rate_livestock %>%
+  filter(product == "cows_meat")
+pigs_meat <- cp_rate_livestock %>%
+  filter(product == "pigs_meat")
+
+test_ratios <- cp_rate_livestock %>%
+  filter(tonnes > 2000) %>%
+ # dplyr::select(-tonnes, -cumulative_pressure) %>%
+  dplyr::select(product, pressure_per_protein, iso3c) %>%
+  pivot_wider(names_from = product, values_from = pressure_per_protein) %>%
+  mutate(ratio_cg = `cows_meat`/goats_meat,
+         ratio_pigs_cows = pigs_meat/cows_meat)
+
+## Indonesia: Pig meat is ~5.2 times less efficient than cow meat in Indonesia
+
+idn_pig_cow <- cp_rate_livestock %>%
+  filter(product %in% c("cows_meat", "pigs_meat"),
+         iso3c == "IDN") 
+
+
+idn_pig <- idn_pig_cow %>%
+  filter(product == "pigs_meat") %>%
+  dplyr::select(pressure_per_tonne)
+
+idn_cow <- idn_pig_cow %>%
+  filter(product == "cows_meat") %>%
+  dplyr::select(pressure_per_tonne)
+
+idn_pig/idn_cow # 5.167378
+
+## just divide the pigs pressure per tonne and the cows pressure per tonne to get this value
+
+
+# check to see % of backyard pig operations in Indonesia - maybe this has something to do with it? Are backyard pig operations more damaging than industrial? Are mixed production cow farms more damaging than grassland? 
+
+pig_system_props <- read_csv("animal_farm/farm/data/pigs_system_prop.csv")
+
+# 64% of pig production in Indonesia comes from backyard operations
+
+cow_system_props <- read_csv("animal_farm/farm/data/production_system2_dfs/cows_prod_syst2.csv")
+
+## 99% of cows in Indonesia are mixed production 
+```
+
+
+### Look at all inefficiencies together
+
+ - "Our spatially-explicit approach reveals how cumulative pressure and its components are distributed across the planet, and importantly where efficiencies are greatest or lowest for each food. Efficiencies for the same crops can vary 2.9 to 8.5 times (90th vs. 10th quantile; average 5.3) among countries (Fig. 6) due to differences in water consumption, fertilizer/pesticide use, and farming practices"
+
+
+ - "Similarly, efficiencies for marine fisheries vary up to 22 fold among countries (mean of 6) based on the specific species fished and gear types used within a country. For example, China and Brazil are less efficient than Russia in harvest of demersal fish (1.4 and 1.9 fold, respectively), primarily because they rely heavily on destructive gear types such as bottom trawls."
+
+
+ - "In other cases, per-unit inefficiencies exceed effects from the scale of production effects. For example, the low efficiency of Brazilian beef production means that it has a higher total cumulative pressure than United States beef production, despite producing about 10% less meat."
+  
+For each food type we calculated the median, 10th and 90th quantiles of the country values.  Feed for animals is reported separately for each animal group. (Corresponds to Figure 6):
+
+```{r, eval = FALSE}
+
+cp_rate <- product_tonnes_protein %>%
+  filter(!is.na(tonnes)) %>%
+    filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>%
+    filter(tonnes>0) %>%
+  rowwise() %>%
+  mutate(pressure_per_tonne = (cumulative_pressure/tonnes) * 1000000, 
+         pressure_per_protein = (cumulative_pressure/tonnes_protein) * 1000000)
+
+
+
+## get a dataframe of all inefficiencies
+all_pressure_per_tonne_fig_5 <- cp_rate %>%
+  group_by(product) %>%
+  summarise(max_pppt = max(pressure_per_protein), 
+         quant_90_pppt = quantile(pressure_per_protein, .90),
+         median_pppt = median(pressure_per_protein),
+         quant_10_pppt = quantile(pressure_per_protein, 0.10),
+         min_pppt = min(pressure_per_protein)) %>%
+  ungroup() %>%
+  mutate(quant_90_div_10 = quant_90_pppt/quant_10_pppt,
+         max_div_min = max_pppt/min_pppt)
+
+
+### look at crops individually 
+crops_eff <- cp_rate %>%
+  filter(str_detect(grouping, "produce"),
+         pressure_per_tonne <= 0.2) %>%
+    group_by(product) %>%
+    summarise(max_ppt = max(pressure_per_protein), 
+         quant_90_ppt = quantile(pressure_per_protein, .90),
+         median_ppt = median(pressure_per_protein),
+         quant_10_ppt = quantile(pressure_per_protein, 0.10),
+         min_ppt = min(pressure_per_protein),
+         sd_ppt = sd(pressure_per_protein),
+         mean_ppt = mean(pressure_per_protein))  %>%
+  ungroup() %>%
+  mutate(quant_90_div_10 = quant_90_ppt/quant_10_ppt,
+         max_div_min = max_ppt/min_ppt) %>%
+  dplyr::select(-sd_ppt, -median_ppt)
+
+mean(crops_eff$quant_90_div_10) # 7.14917
+sd(crops_eff$quant_90_div_10) # 2.919687
+
+### ANSWER:
+max(crops_eff$quant_90_div_10) # 17.67668
+min(crops_eff$quant_90_div_10) # 4.303955
+## so this means that crops can vary by up to ~17x in inefficiencies
+
+
+## Now lets look at fisheries individually
+fis_eff_1 <- cp_rate %>%
+  filter(str_detect(grouping, "marine fisheries"))
+  
+fis_eff_2 <- cp_rate %>%
+  filter(str_detect(product, "small pelagic"))
+
+fis_eff_total <- rbind(fis_eff_1, fis_eff_2) %>%
+  as.data.frame() %>%
+    # dplyr::filter(tonnes >= 10.3) %>%
+    group_by(product) %>%
+    summarise(max_ppt = max(pressure_per_protein), 
+         quant_90_ppt = quantile(pressure_per_protein, .90),
+         median_ppt = median(pressure_per_protein),
+         quant_10_ppt = quantile(pressure_per_protein, 0.10),
+         min_ppt = min(pressure_per_protein),
+         sd_ppt = sd(pressure_per_protein),
+         mean_ppt = mean(pressure_per_protein))  %>%
+  ungroup() %>%
+  mutate(quant_90_div_10 = quant_90_ppt/quant_10_ppt,
+         max_div_min = max_ppt/min_ppt) 
+
+
+mean(fis_eff_total$quant_90_div_10) # 6.003461
+sd(fis_eff_total$quant_90_div_10) # 7.23302
+
+
+### ANSWER:
+max(fis_eff_total$quant_90_div_10) # 22.11267
+## so this means that fisheries can vary by up to 22x in inefficiencies 
+
+# Efficiencies for marine fisheries vary up to 22 times based on the specific species fished and gear types used within a country.
+
+write.csv(all_pressure_per_tonne_fig_5, "_analysis/paper_stats/output/pressure_per_tonne_ranges.csv", row.names = FALSE)
+
+all_ppt <- read_csv("_analysis/paper_stats/output/pressure_per_tonne_ranges.csv")
+
+
+## QUESTION:
+# In other cases, per-unit inefficiencies exceed scale of production effects, for example comparing X and Y where XXX has lower production but also much lower efficiencies and thus higher overall cumulative pressure than YYY
+
+
+## lets look at cows 
+
+cow_eff_1 <- cp_rate %>%
+  filter(product == "cows_meat")
+
+## pick USA and Brazil 
+  
+cow_eff_2 <- cow_eff_1 %>%
+  filter(iso3c %in% c("USA", "BRA"))
+
+### ANSWER:
+# Brazil has higher pressure per tonne of protein, but lower tonnage, and thus, higher cumulative pressure
+
+# For example, the low efficiency of Brazilian beef production means that it has a higher total cumulative pressure than United States beef production, despite producing about 10% less meat.
+
+```
+
+
+## Look at crop inefficiencies; within food group, across countries
+ 
+ - "For example, the United States (the largest producer of soy) is 2.8 times more efficient than India (the 5th largest) in producing soy, largely because US farmers have been able to use technologies to reduce GHG emissions and increase yields"
+ 
+ 
+```{r}
+
+product_crops <- product_tonnes_protein %>%
+  filter(grouping == "produce") %>%
+  # group_by(iso3c, product) %>%
+  # summarize(tonnes = sum(tonnes, na.rm=TRUE), 
+  #           tonnes_protein = sum(tonnes_protein, na.rm = TRUE)) %>%
+  # ungroup() %>%
+  mutate(organism = product,
+         product = "produce") 
+
+
+cp_rate_crops <- product_crops  %>%
+  filter(!is.na(tonnes)) %>%
+    filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>%
+    filter(tonnes>0) %>%
+  rowwise() %>%
+  mutate(pressure_per_tonne = cumulative_pressure/tonnes * 1000000,
+         pressure_per_protein = cumulative_pressure/tonnes_protein * 1000000)
+
+
+
+library(vroom)
+long_name <- vroom::vroom(here::here("crop/farm/data/crop_codes_updated.csv")) %>% 
+  select(organism = SPAM_super,
+         long = SPAM_full_name) %>% 
+  mutate(long = ifelse(organism == "tnut", "tree nuts",
+                       ifelse(organism == "spis", "spices", long))) %>%
+  mutate(long = ifelse(organism == "xfru", "fruits",
+                          ifelse(organism == "xmil", "millet",
+                                 ifelse(organism == "xoil", "oil",
+                                        ifelse(organism == "xpul", "pulses", long))))) %>%
+
+  distinct(organism, long) 
+
+
+
+cp_rate_crops <- cp_rate_crops %>% 
+ filter(pressure_per_tonne <= 0.2) %>% 
+  left_join(long_name)  %>% 
+  select(-organism) %>% 
+  rename(organism = long)
+
+## filter for rice first
+
+rice_ppt <- cp_rate_crops %>%
+  filter(organism == "rice")
+
+# take a look at BRA vs IDN 
+idn_bra_rice <- rice_ppt %>%
+  filter(iso3c %in% c("BRA", "IDN"))
+
+bra_rice <- idn_bra_rice %>%
+  filter(iso3c == "BRA") %>%
+  dplyr::select(pressure_per_tonne, pressure_per_protein)
+
+idn_rice <- idn_bra_rice %>% 
+  filter(iso3c == "IDN") %>%
+  dplyr::select(pressure_per_tonne, pressure_per_protein)
+
+bra_rice/idn_rice # Brazil has a 1.790574 times higher pressure per protein for rice than indonesia 
+
+## filter for soybeans third 
+
+# I think a really good example here could be comparing the United States soybean efficiencies to Indonesia's or India's. India/Indonesia both have ~3x higher pressure per tonne compared to the US (and are pretty large producers, India in particular). The US is the largest producer of soybeans in the world, and has managed to keep their inefficiencies for this product low. This factsheet has a lot of good tidbits, but in particular a couple to highlight might be : 
+# -  "U.S. soy farmers have increased their yields by 55% on approximately the same amount of land through conservation practices." 
+# - "43% of U.S. soy farmers used precision technology in 2006 to increase on-farm efficiency." 
+# -  "Greenhouse gas emissions produced by the U.S. soy industry have decreased by 47% between 1980 and 2012."
+# : https://thesustainabilityalliance.us/u-s-soy-fact-sheet/#:~:text=In%20addition%2C%20U.S.%20soybean%20producers,voluntary%20sustainability%20and%20conservation%20programs.&text=95%25%20of%20U.S.%20soy%20farmers,and%20use%20sustainable%20production%20practices
+
+
+soy_ppt <- cp_rate_crops %>%
+  filter(organism == "soybean")
+
+# IDN vs USA 
+
+idn_usa_soy <- soy_ppt %>%
+  filter(iso3c %in% c("IDN", "USA"))
+
+idn_soy <- idn_usa_soy %>%
+  filter(iso3c == "IDN") %>%
+  dplyr::select(pressure_per_tonne, pressure_per_protein)
+
+usa_soy <- idn_usa_soy %>%
+  filter(iso3c == "USA") %>%
+  dplyr::select(pressure_per_tonne, pressure_per_protein)
+
+idn_soy/usa_soy  # Indonesia has a 3.244815 times higher pressure per tonne than USA for soybean - and they produce a lot less
+ 
+# IND vs USA 
+
+ind_soy <- soy_ppt %>%
+  filter(iso3c == "IND") %>%
+  dplyr::select(pressure_per_tonne, pressure_per_protein)
+
+ind_soy/usa_soy # India has a 2.784735 times higher pressure per tonne protein than USA for soybean - and they produce a lot less
+
+```
+ 
+
+
+
+## Look at fishery inefficiencies; within food group, across countries
+ 
+ - "For example, China and Brazil are 1.5 and 1.9 times less efficient than Russia in harvest of demersal fish, respectively, primarily because they rely heavily on more destructive gear types such as bottom trawls, affecting both disturbance and GHG emissions pressures. Such geographic variation in environmental efficiencies could be leveraged to benefit both food production and the environment."
+ 
+```{r}
+
+product_fisheries <- product_tonnes_protein %>%
+  filter(grouping == "marine fisheries")
+  
+
+cp_rate_fisheries <- product_fisheries %>%
+  filter(!is.na(tonnes)) %>%
+    filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>%
+    filter(tonnes>0) %>%
+  rowwise() %>%
+  mutate(pressure_per_tonne = cumulative_pressure/tonnes * 1000000, 
+         pressure_per_protein = cumulative_pressure/tonnes_protein * 1000000) %>%
+  rename(organism = product)
+
+cp_rate_fisheries <- cp_rate_fisheries %>% 
+  filter(tonnes >=10.3) 
+
+## Look at demersal first
+
+dem_ppt <- cp_rate_fisheries %>%
+  filter(organism == "demersal")
+
+# RUS vs BRA
+
+dem_rus_bra <- dem_ppt %>%
+  filter(iso3c %in% c("RUS", "BRA"))
+
+
+dem_rus <- dem_ppt %>%
+  filter(iso3c == "RUS") %>%
+  dplyr::select(pressure_per_tonne, pressure_per_protein)
+
+dem_bra <- dem_ppt %>%
+  filter(iso3c == "BRA") %>%
+  dplyr::select(pressure_per_tonne, pressure_per_protein)
+
+dem_bra/dem_rus # Brazil has a 1.941632 times higher pressure per tonne than Russia for demersal fishing, despite having a much lower production quantity. 
+
+# CHN vs RUS 
+
+dem_rus_chn <- dem_ppt %>%
+  filter(iso3c %in% c("RUS", "CHN"))
+
+dem_chn <- dem_ppt %>%
+  filter(iso3c == "CHN") %>%
+  dplyr::select(pressure_per_tonne, pressure_per_protein)
+
+dem_chn/dem_rus # China has a 1.528311 times higher pressure per tonne and Russia for demersal fishing, despite having a lower production quantity. 
+
+
+### Let's take a look at the prevalence of midwater/bottom trawling in each of these countries. 
+bottom_trawl <- raster(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/trawling/bottom_trawl_tonnes_raster.tif"))
+
+bottom_midwater_trawl <- raster(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/trawling/bottom_midwater_trawl_tonnes_raster.tif"))
+
+midwater_trawl <- bottom_midwater_trawl - bottom_trawl
+
+
+## reproject midwater
+print(cellStats(midwater_trawl, "sum")) # 17702482
+
+
+### DIVIDE BY AREA HERE for reprojection
+tonnes_raster_fix_mid <- midwater_trawl/raster::area(midwater_trawl)
+
+cellStats(tonnes_raster_fix_mid, "sum", na.rm = TRUE) # 9077.547
+
+## reproject
+tonnes_raster_proj_mid <- projectRaster(tonnes_raster_fix_mid, food_raster, method="ngb")
+tonnes_raster_proj_mid
+print(cellStats(tonnes_raster_proj_mid, "sum")) # 326791.7
+
+### MULTIPLY BY AREA HERE for reprojection
+tonnes_raster_proj_final_mid <- tonnes_raster_proj_mid*raster::area(tonnes_raster_proj_mid)
+# plot(log(tonnes_raster_proj_final + 1))
+print(cellStats(tonnes_raster_proj_final_mid, "sum", na.rm = TRUE)) # 17702448 ### close enough
+
+
+## reproject bottom trawl 
+cellStats(bottom_trawl, "sum") # 37332269
+
+### DIVIDE BY AREA HERE for reprojection
+tonnes_raster_fix_bottom <- bottom_trawl/raster::area(bottom_trawl)
+
+cellStats(tonnes_raster_fix_bottom, "sum", na.rm = TRUE) # 15764.68
+
+## reproject
+tonnes_raster_proj_bottom <- projectRaster(tonnes_raster_fix_bottom, food_raster, method="ngb")
+tonnes_raster_proj_bottom
+print(cellStats(tonnes_raster_proj_bottom, "sum")) # 567528.5
+
+### MULTIPLY BY AREA HERE for reprojection
+tonnes_raster_proj_final_bottom <- tonnes_raster_proj_bottom*raster::area(tonnes_raster_proj_bottom)
+print(cellStats(tonnes_raster_proj_final_bottom, "sum", na.rm = TRUE)) # 37332175 ### close enough
+
+
+## Now we need to extract each per food rgn
+# read in spatial file
+land_eez_rgns <- raster(file.path(prep, "spatial/land_eez_rgns.tif"))
+
+## tag high seas areas
+land_eez_rgns_hsx <- calc(land_eez_rgns, fun = function(x){ifelse(is.na(x), 9999, x)})
+
+# extract with zonal
+tonnes_df <- as.data.frame(raster::zonal(tonnes_raster_proj_final, land_eez_rgns_hsx, fun = "sum"))
+
+
+midwater_df <-  as.data.frame(raster::zonal(tonnes_raster_proj_final_mid, land_eez_rgns_hsx, fun = "sum")) %>%
+    left_join(food_rgns, by = c("zone" = "ID_0")) %>%
+    rename("catch" = "sum", rgn_id = "zone") %>%
+  mutate(gear = "midwater trawl")
+
+
+bottom_df <-  as.data.frame(raster::zonal(tonnes_raster_proj_final_bottom, land_eez_rgns_hsx, fun = "sum")) %>% 
+    left_join(food_rgns, by = c("zone" = "ID_0")) %>%
+    rename("catch" = "sum", rgn_id = "zone") %>%
+  mutate(gear = "bottom trawl")
+
+
+all_trawl_df <- rbind(midwater_df, bottom_df)
+
+
+trawl_rus_chn <- all_trawl_df %>%
+  filter(iso3c %in% c("RUS", "CHN", "BRA")) %>%
+  group_by(iso3c) %>%
+  mutate(total_catch = sum(catch)) %>%
+  ungroup()
+
+
+# this makes me believe that it is safe to say that the reason Russia is more efficient than China when fishing Demersal species is because bottom trawling techniques are much more prevalent in China, whereas Russia mainly relies on mid-water trawling
+
+## Read in the catch data and attempt to figure out the gear types 
+catch <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/catch_spp_class_2017.csv")
+
+codes_country <- read_csv("/home/shares/food-systems/Food_footprint/_raw_data/watson_data/v5.0/Codes_country.csv")
+
+catch_country <- catch %>%
+  left_join(codes_country, by = c("CNumber" ="Cnumber"))
+
+catch_gears <- catch_country %>%
+  mutate(destruction = ifelse(GearName %in% c("bottom trawls", "dredges", "hand dredges", "raking devices"), "destructive", "non-destructive")) %>%
+  dplyr::select(species_class_fin, TaxonName, Descript, destruction, GearName) %>%
+  distinct()
+
+all_prod <- read_csv(file.path(prep, "fisheries/marine/catch_extracted_final.csv"))
+
+
+all_prod_fis_gears <- all_prod %>%
+  left_join(catch_gears, by = c("species_class_final" = "species_class_fin", "Descript", "TaxonName"))
+
+
+## filter for Demersal, Russian Fed, and China Main
+
+catch_country_dem_rus_chn <- all_prod_fis_gears %>%
+  # dplyr::mutate(tonnes_catch = ReportedIND + IUUIND  + ReportedNIND + IUUNIND) %>%
+  #filter(`FAO name` %in% c("Russian Fed", "China Main")) %>%
+  filter(species_class_final == "Demersal") %>%
+  filter(iso3c %in% c("RUS", "CHN")) %>%
+  group_by(iso3c, destruction, Descript) %>%
+   summarise(tonnes_total = sum(catch, na.rm = TRUE))
+# this shows that overall russia has higher catch, but lower pressure per tonne because russia reports less catch using destructive gear types than china - this isn't quite right though due to joining errors.
+
+
+```
+ 

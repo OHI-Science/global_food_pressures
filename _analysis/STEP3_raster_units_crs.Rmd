@@ -1,0 +1,179 @@
+---
+title: "Make tiff files per km2"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+The goal of this script is to create rasters from the raw values to rasters where the values are divided by the area of the raster cell, km2
+
+The outputs are tif files located on Aurora in the final_data folder: 
+
+_tif_version_per_km2
+
+Time to run: 
+~9 hour (longest part is converting to galls peter, ~1.2 minutes per raster which is about 7 hours) 
+
+```{r}
+library(rgdal)
+library(sp)
+library(raster)
+library(tidyverse)
+library(here)
+
+```
+
+# clear out listed files in tif folders. Want to make sure we have a clean start.
+```{r}
+
+do.call(file.remove, list(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_latlong_per_km2", full.names = TRUE)))
+
+do.call(file.remove, list(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_km2", full.names=TRUE)))
+
+do.call(file.remove, list(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell", full.names=TRUE)))
+
+```
+
+
+Control for differences in raster cells area.  
+
+```{r}
+
+files_to_adjust <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw", full=TRUE, pattern = ".tif")
+
+for(file in files_to_adjust){ # 
+  
+  # file = files_to_adjust[1] 
+  
+  stressor_raster <- raster(file)
+  
+  name <- basename(file)
+  name <- gsub(".tif", "", name)
+  
+  raster_area <- area(stressor_raster)
+  #plot(raster_area)
+  
+if(grepl("disturbance", file)){
+  
+   stressor_area_adjust <-  stressor_raster/raster_area
+   #stressor_area_adjust[stressor_area_adjust >1] <- 1 # given the correction from 2010 to 2017, it is ok for this to go over 1.
+
+   writeRaster(stressor_area_adjust,
+               sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_latlong_per_km2/%s_per_area.tif", name),
+               overwrite=TRUE)
+
+} else {
+  
+   stressor_area_adjust <- stressor_raster/raster_area
+   
+   writeRaster(stressor_area_adjust,
+               sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_latlong_per_km2/%s_per_area.tif", name),
+               overwrite=TRUE)
+
+  }
+}
+
+aux_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_latlong_per_km2", full=TRUE, pattern = ".aux.xml")
+file.remove(aux_files)
+
+
+```
+
+
+Next: project rasters to equal area gall peters so we can more easily scale data and such.
+```{r}
+
+gall_peters <- "+proj=cea +lon_0=0 +x_0=0 +y_0=0 +lat_ts=45 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+#raster template 
+template_eq_area <- raster(res=0.083333333333333333)
+extent(template_eq_area) <- c(-180, 180, -90, 90)
+template_eq_area <- projectRaster(template_eq_area, crs=gall_peters, res=3000) 
+
+
+```
+
+
+```{r}
+
+rasters_to_new_crs <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_latlong_per_km2", pattern=".tif", full=TRUE)
+
+library(foreach)
+library(doParallel)
+
+registerDoParallel(6)
+
+foreach(rast=rasters_to_new_crs) %dopar% {
+#for(rast in rasters_to_new_crs){ # rast <- rasters_to_new_crs[1]
+  
+rast_name <- basename(rast)
+ getraster <- raster(rast)
+ highres_raster <- disaggregate(getraster, fact=2)
+ projectRaster(highres_raster, template_eq_area, method="ngb", over=TRUE, progress="text",
+                       filename=sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_km2/hi_res_gall_peter_%s", rast_name), overwrite=TRUE)
+
+ gp_raster <- raster(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_km2/hi_res_gall_peter_%s", rast_name))
+#plot(gp_raster)
+ 
+ aggregate(gp_raster, fact=2, fun=mean, filename=sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_km2/gall_peter_%s", rast_name), overwrite=TRUE)
+}
+
+stopCluster()
+    
+```
+
+
+Delete the hi_res version which is just a temp file.
+```{r}
+
+aux_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_km2", full=TRUE, pattern = ".aux.xml")
+file.remove(aux_files)
+
+remove <- list.files(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_km2"), full=TRUE, pattern="hi_res")
+file.remove(remove)
+```
+
+Check that all went well. Compare raw rasters to the values here. These should basically match, but there will be some error due to estimates relating to altering the projection.
+```{r}
+
+rasters <- list.files(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw"), full=TRUE)
+rasters <- grep("_consumption", rasters, value=TRUE, invert=TRUE)
+check_data <- data.frame()
+for(rast in rasters){ # rast=rasters[1]
+  file_name <- basename(rast)
+  file_name <- gsub(".tif", "", file_name)
+  org_raster <- raster(rast)
+  org_data <- cellStats(org_raster, "sum", na.rm=TRUE)
+  
+  new_raster_path <- grep(file_name, list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_km2", full=TRUE), value=TRUE)
+  new_raster <- raster(new_raster_path)
+  new_data_pre <- new_raster*36
+  new_data <- cellStats(new_data_pre, "sum", na.rm=TRUE)
+  new_dataframe <- data.frame(name=file_name, org_data=org_data, new_data=new_data)
+  check_data <- rbind(check_data, new_dataframe)
+}
+
+plot(log(check_data$org_data +1), log(check_data$new_data +1))
+abline(0,1, col="red")
+check_data_compare <- check_data %>%
+  mutate(percent = org_data/new_data)
+hist(check_data_compare$percent)
+
+```
+
+## convert to total per cell
+```{r}
+
+per_km_rasts <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_km2", full=TRUE)
+
+for(rast in per_km_rasts){ # rast = per_km_rasts[1]
+ save_name <- basename(rast)
+ save_name <- gsub("_per_area", "_per_cell", save_name)
+    new_raster <- raster(rast)
+  per_cell_rast <- new_raster*6000*6000/1000000
+writeRaster(per_cell_rast, sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell/%s", save_name), overwrite=TRUE)
+#check <- raster(sprintf("/home/shares/food-systems/Food_footprint/final_data/_tif_equal_area_proj_per_cell/%s", save_name))
+#cellStats(check, "sum", na.rm=TRUE)
+}
+
+aux_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell", full=TRUE, pattern = ".aux.xml")
+file.remove(aux_files)

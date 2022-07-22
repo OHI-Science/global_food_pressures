@@ -1,0 +1,234 @@
+---
+title: "STEP 8: Chicken and Pig Farm Location"
+output: html_document
+---
+
+## Objective
+Map the distribution of total current living chickens and pigs globally.
+
+## Inputs
+We use 
+1. [FAO gridded livestock maps](http://www.fao.org/livestock-systems/global-distributions/en/) to establish locations of livestock
+2. [GLEAM](http://www.fao.org/gleam/results/en/) data on total herd numbers, production system type and product for proportion of animals going to each category
+3. [FAO head count data](http://www.fao.org/faostat/en/#data/GM) for total living livestock values
+
+The FAO head count data is wrangled in fao_livestock_count.Rmd
+The other two data sets are used in the animal specific scripts, and wrangled accordingly
+
+## Outputs
+6 maps of each livestock system of interest
+
+## Setup
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(countrycode)
+library(readxl)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+## load libraries, read in data
+food_rgns_area <- area(food_rgns_tif)
+
+```
+
+## Map all livestock distributions
+```{r}
+## chickens (cluckers)
+source(here("animal_farm/farm/scripts/mapping_chickens.R"))
+chicken_system_list <- c("industrial", "backyard")
+chicken_product_list <- c("meat", "eggs", "eggs&meat")
+mapping_chickens("chickens", "backyard")
+mapping_chickens("chickens", "industrial")
+
+## pigs (oinkies)
+source(here("animal_farm/farm/scripts/mapping_pigs.R"))
+pigs_system_list <- c("backyard", "intermediate", "industrial")
+mapping_pigs("pigs")
+
+```
+
+## Error checking and initial maps
+
+I'm thinking maybe we want this in another markdown for cleaner? maybe not, might be nice to have it all in one when we rerun and check
+
+### Checking out Chickens
+Looking at the maps (make this a loop in the end and save all plots as pngs)
+```{r}
+chick_ind_egg <- read_csv(file.path(prep, "animal_farm/farm/chickens_industrial_eggs_location_df.csv")) %>% 
+  select(x,y, current_count) %>% 
+  rasterFromXYZ(crs = food_crs)
+writeRaster(chick_ind_egg, file.path(prep, "animal_farm/farm/check/chickens_industrial_eggs_raster.tif"), overwrite=TRUE)
+
+chick_ind_meat <- read_csv(file.path(prep, "animal_farm/farm/chickens_industrial_meat_location_df.csv")) %>% 
+  select(x,y, current_count) %>% 
+  rasterFromXYZ(crs = food_crs)
+writeRaster(chick_ind_meat, file.path(prep, "animal_farm/farm/check/chickens_industrial_meat_raster.tif"), overwrite=TRUE)
+
+chick_back <- read_csv(file.path(prep, "animal_farm/farm/chickens_backyard_eggs&meat_location_df.csv"), col_type = "nnnnnccnn") %>% 
+  select(x,y, current_count) %>% 
+  rasterFromXYZ(crs = food_crs)
+writeRaster(chick_back, file.path(prep, "animal_farm/farm/check/chickens_backyard_eggs$meat_raster.tif"), overwrite=TRUE)
+
+
+```
+
+
+Plot
+```{r}
+
+plot(log(chick_ind_egg+1),
+     main= "Log Chicken Industrial Egg")
+
+plot(chick_ind_egg,
+     main= "Chicken Industrial Egg")
+
+plot(log(chick_ind_meat+1),
+     main= "Log Chicken Industrial Meat")
+
+##backyard
+plot(chick_back,
+     main= "Chicken Backyard Eggs & Meat")
+
+plot(log(1 + chick_back),
+     main= "Log Chicken BackyardEggs & Meat")
+
+##I think the logged versions look so weird because there jsut aren't many places with chcikens, so when we log+1 all the zero areas show up prominent and bright green
+
+```
+
+
+Data check
+
+```{r}
+## broilers
+fao_broiler <- read_csv(here("animal_farm/farm/data/fao_livestock_headcount.csv")) %>% 
+  filter(animal == "chickens" &
+         product == "meat",
+         year == 2017) %>% 
+  dplyr::summarise(total_fao = sum(fao_headcount))
+# 15,724,676,722		
+
+our_broiler <- read_csv(file.path(prep, "animal_farm/farm/chickens_industrial_meat_location_df.csv")) %>% 
+  dplyr::summarise(total_broilers_us = sum(current_count, na.rm = TRUE))
+# 15,803,802,499		
+
+## layers
+fao_layer <- read_csv(here("animal_farm/farm/data/fao_livestock_headcount.csv")) %>% 
+  filter(animal == "chickens", 
+         product == "eggs",
+         year == 2017) %>% 
+  dplyr::summarise(total_fao = sum(fao_headcount))
+# 7,511,742,112	
+
+our_layer <- read_csv(file.path(prep, "animal_farm/farm/chickens_industrial_eggs_location_df.csv")) %>% 
+  dplyr::summarise(total_broilers_us = sum(current_count, na.rm = TRUE))  
+
+# 7,511,232,930	
+
+##Backyard; we are comparing to 2010 gleam value so it will be off already because it is not adjusted for 2016 numbers
+gleam_raw <- read_csv(here(paste0("animal_farm/farm/data/", animal, "_GLEAMi_v2.csv")))
+        
+gleam_backyard <- gleam_raw %>% 
+      filter(Production_system =="Backyard",
+      Variable == "HERD: total number of animals") %>% 
+      dplyr::summarise(total = sum(Value))
+# 3,725,587,649	
+
+our_backyard <- read_csv(file.path(prep, "animal_farm/farm/chickens_backyard_eggs&meat_location_df.csv"), col_type = "nnnnnccnn") %>% 
+  dplyr::summarise(total_broilers_us = sum(current_count, na.rm = TRUE))  
+# 4,095,779,664		
+
+
+```
+
+### Checking out pigs
+
+Compare to FAO counts
+Pigs 
+```{r}
+fao_data <- read_csv(here("animal_farm/farm/data/fao_livestock_headcount.csv"))
+
+pigs_fao <- fao_data %>% 
+  filter(animal == "pigs",
+         year == 2017) %>% 
+  dplyr::summarise(total_pigs = sum(fao_headcount, na.rm = TRUE))
+# 978,466,146		
+
+## using the fao_count which includes both milk and meat so only need to read in one of them
+pigs1 <- read_csv(file.path(prep,  "animal_farm/farm/pigs_backyard_meat_location_df.csv"), col_type = "ddcccnnnnncc") %>% 
+  select(x,y, current_count) %>% 
+  rasterFromXYZ()
+
+pigs2 <- read_csv(file.path(prep,  "animal_farm/farm/pigs_intermediate_meat_location_df.csv"), col_type = "ddcccnnnnncc") %>% 
+  select(x,y, current_count) %>% 
+  rasterFromXYZ()
+
+pigs3 <- read_csv(file.path(prep,  "animal_farm/farm/pigs_industrial_meat_location_df.csv"), col_type = "ddcccnnnnncc") %>% 
+  select(x,y, current_count) %>% 
+  rasterFromXYZ()
+
+
+pigs_ours <-  stack(pigs1, pigs2, pigs3) %>% 
+  sum() %>% 
+  cellStats(stat= 'sum')
+
+ ## 978,734,721
+
+```
+
+
+```{r}
+pig_back <- read_csv(file.path(prep, "animal_farm/farm/pigs_backyard_meat_location_df.csv"), col_types = "ddcccnnnnncc") %>% 
+  select(x,y, current_count) %>% 
+  rasterFromXYZ(crs = food_crs)
+
+pig_inte <- read_csv(file.path(prep, "animal_farm/farm/pigs_intermediate_meat_location_df.csv"), col_types = "ddcccnnnnncc") %>% 
+  select(x,y, current_count) %>% 
+  rasterFromXYZ(crs = food_crs)
+
+pig_indus <- read_csv(file.path(prep, "animal_farm/farm/pigs_industrial_meat_location_df.csv"), col_types = "ddcccnnnnncc") %>% 
+  select(x,y, current_industrial_headcount) %>% 
+  rasterFromXYZ(crs = food_crs)
+
+
+plot(log(pig_back+1),
+     main= "Log Pigs Backyard Meat")
+
+plot(log(pig_inte+1),
+     main= "Log Pigs Intermediate Meat")
+
+plot(log(pig_indus+1),
+     main= "Log Pigs Industrial Meat")
+
+
+```
+
+## Data Check
+```{r}
+
+fao_map_backyard_total <-  raster(file.path(raw, "FAO_livestock_maps/d2019/pigs/backyard_pigs/8_PgExt_2010_Da.tif")) %>% 
+  cellStats(stat= 'sum')
+#320,154,129
+
+our_total <- cellStats(pig_back, stat= 'sum')
+# 333,271,667
+
+fao_map_intermediate_total <- raster(file.path(raw, "FAO_livestock_maps/d2019/pigs/semi_intensive_pigs/9_PgInt_2010_Da.tif")) %>% 
+  cellStats(stat= 'sum')
+# 106,285,361
+
+our_total <- cellStats(pig_inte, stat= 'sum')
+# 110,640,145
+    
+fao_map_industrial_total <- raster(file.path(raw, "FAO_livestock_maps/d2019/pigs/intensive_pigs/10_PgInd_2010_Da.tif")) %>% 
+  cellStats(stat= 'sum')
+#513,514,332
+
+our_total <- cellStats(pig_indus, stat= 'sum')
+# 534,554,334
+
+```
+

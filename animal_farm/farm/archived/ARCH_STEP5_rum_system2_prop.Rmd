@@ -1,0 +1,111 @@
+---
+title: "STEP 5: Calculating ruminant gridded maps system proportions"
+author: "Juliette"
+date: "9/2/2020"
+output: html_document
+---
+
+# Objective
+This markdown creates a raster for each of our animals and production system2 (mixed/grass) where each cell is a percentage of the total number of animals in that cell that fall into that category. We will also create a df with regional percentages going to each by animal, for when we gapfill the "other" production system cells. We use two scripts to do this: prod2_df.R and prod2_mapping.R
+
+# Inputs
+**Reference** 	
+1. Ruminant Livestock Production Systems https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/WPDSZE
+2. Livestock Systems Global Distribution http://www.fao.org/livestock-systems/global-distributions/en/
+
+**Description** 
+1. Ruminant Livestock Production Systems: identification of what type of production system each cell predominatly is
+2. Livestock Systems Global Distribution: total head counts in each cell 
+**Resolution** 5 minute arc
+**Time Range** 1: 2011; 2: 2010
+**Format** raster
+
+## Outputs:
+1. ruminant_prod_syst2.csv (one for each ruminant)-> this has a prop for mixed and grassland for each country
+2. ruminant_system_OI_prod_system.tif (one for each ruminant and system) -> located in the prep folder on our server
+
+
+**
+
+## Setup
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+```
+
+## Methods
+Livestock production country percentages: 
+Convert to df and clean up. We only want to keep the grassland and mixed cells
+```{r}
+
+lps_raster <- raster(file.path(raw, "FAO_livestock_maps/d2019/ruminant_production_systems/no_landless_production_maps/2_GlobalRuminantLPS_GIS/glps_gleam_61113_10km.tif"))
+      ## the extent is a little bit off, so we will use the raster_df function. It might make things a little off, unsure how much that will influence the allocation of mixed vs grassland critters
+
+source(here("_spatial/template_raster.R"))
+
+lps_df <- lps_raster %>% 
+  raster_df() %>% 
+  select(x,y, cellindex, CLASSNAME) %>% 
+  rename(glps_name = CLASSNAME) %>%
+  mutate(system = case_when(glps_name == "LGA" | glps_name == "LGH" | glps_name =="LGT" | glps_name =="LGY" ~ "grassland",
+                            glps_name == "MRY" | glps_name =="MIY" | glps_name =="MRA" | glps_name =="MIA" | glps_name =="MRT" | glps_name =="MRH" | glps_name =="MIT" | glps_name =="MIH" ~ "mixed")) %>% 
+  select(cellindex, system)
+
+```
+
+First let's create dfs for each of our animals with the proportion of grassland vs mixed for each country for the gapfilling of the maps later
+```{r}
+
+source(here("animal_farm/farm/scripts/prod2_df.R"))
+prod2_df(ruminant = "cows")
+prod2_df("buffalo")
+prod2_df("sheep")
+prod2_df("goats")
+```
+
+Now we want to create a raster for each animal and system where the cell is the proportion of the total animals that go to that cell
+
+```{r}
+system_list <- c("grassland", "mixed")
+source(here("animal_farm/farm/scripts/prod2_mapping.R"))
+prod2_mapping("cows")
+prod2_mapping("buffalo")
+prod2_mapping("goats")
+prod2_mapping("sheep")
+
+```
+
+Look at the plots 
+```{r}
+## buffalo
+buffalo_grass <- raster(file.path(prep, "animal_farm/farm/production_system2_tifs/buffaloes_grassland_prod_system.tif"))
+buffalo_mix <- raster(file.path(prep, "animal_farm/farm/production_system2_tifs/buffaloes_mixed_prod_system.tif"))
+plot(buffalo_grass)
+plot(buffalo_mix)
+
+## cows
+cows_grass <- raster(file.path(prep, "animal_farm/farm/production_system2_tifs/cows_grassland_prod_system.tif"))
+cows_mix <- raster(file.path(prep, "animal_farm/farm/production_system2_tifs/cows_mixed_prod_system.tif"))
+plot(cows_grass)
+plot(cows_mix)
+
+## sheep
+sheep_grass <- raster(file.path(prep, "animal_farm/farm/production_system2_tifs/sheep_grassland_prod_system.tif"))
+sheep_mix <- raster(file.path(prep, "animal_farm/farm/production_system2_tifs/sheep_mixed_prod_system.tif"))
+plot(sheep_grass)
+plot(sheep_mix)
+
+## buffalo
+goats_grass <- raster(file.path(prep, "animal_farm/farm/production_system2_tifs/goats_grassland_prod_system.tif"))
+goats_mix <- raster(file.path(prep, "animal_farm/farm/production_system2_tifs/goats_mixed_prod_system.tif"))
+plot(goats_grass)
+plot(goats_mix)
+```
+
+
+
+

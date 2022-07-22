@@ -1,0 +1,227 @@
+---
+title: "Crop Disturbance"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+## Paul-Eric Rayner
+
+## NOTE: if updtes, rerun: crops/farm/step7...
+
+
+# Script Description
+# Calculate the area of each raster cell that is occupied by cropland.
+
+# Preamble
+```{r setup, include = FALSE}
+# getting packages we want
+library(tidyverse)
+library(here)
+library(raster)
+library(sf)
+library(janitor)
+library("furrr")
+library(vroom)
+
+# Raster templates
+source(here("_spatial/template_raster.R"))
+source(here("_workflow/common.R")) 
+source(here("_workflow/common_spatial.R"))
+
+# Import food_rgns xy df
+food_rgns_xy <- 
+  food_rgns_xy %>% 
+  select(x, y, iso3c)  
+``` 
+
+# Disturbance calculator
+# Unit conversion: crop measured in hectare, cell is measured in km2. 1ha = 0.01 km2
+
+```{r}
+scaling_coef <- vroom::vroom(here("crop/farm/data/scaling_coef.csv"))
+
+disturbance_calculator <- function(crop) { #crop="maiz"
+  
+crop_disturbance <-
+    raster(file.path(prep,
+                     "crop/farm/MapSPAM_correct_extent/spam2010V2r0_global_A_",
+                     toupper(crop),
+                     "_A.tif", 
+                     fsep = "")) / 100
+  
+  # Rename layer
+  names(crop_disturbance) <- paste("land_", crop, "_crop_produce_disturbance_km2eq", sep = "")
+  
+  # Save tif
+  writeRaster(crop_disturbance, 
+              file.path(prep, "crop/farm/stressors/land_", crop, "_crop_produce_disturbance", fsep = ""), 
+              format    = "GTiff", 
+              overwrite = TRUE)
+}
+plan(multisession, workers = 12)
+
+options <- furrr_options(seed = 54232)
+
+future_map(unique(scaling_coef$SPAM_short_name),
+                  disturbance_calculator,
+           .options = options)
+
+delete_aux <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/stressors", pattern="aux", full=TRUE)
+file.remove(delete_aux)
+```
+
+# Rest categories.
+
+```{r}
+rest_category_proportion <- 
+  vroom(here("crop/farm/data/rest_category_proportion.csv")) %>% 
+  select(!tonnes)
+rest_disturbance_map <- 
+  raster(file.path(prep, 
+                   "crop/farm/stressors/land_rest_crop_produce_disturbance.tif", 
+                   fsep = ""))
+rest_disturbance <- function(crop) {
+  crop_map <- 
+    rest_category_proportion %>% 
+    filter(SPAM_super %in% crop) %>% 
+    left_join(food_rgns_xy, .) %>% 
+    select(x, y, prop) %>% 
+    rasterFromXYZ(., crs = food_crs)
+    
+  overlay(rest_disturbance_map,
+          crop_map,
+          fun = function(r1, r2) {
+              
+              return(r1 * r2)
+              
+              }) %>%
+    
+    writeRaster(.,
+                file.path(prep, 
+                          "crop/farm/stressors/land_",
+                          crop,
+                          "_crop_produce_disturbance.tif", 
+                          fsep = ""),
+                format = "GTiff", 
+                overwrite = TRUE
+                )
+}
+future_map(unique(rest_category_proportion$SPAM_super),
+           rest_disturbance,
+           .options = options)
+r1 <- raster(file.path(prep,
+                "crop/farm/stressors/land_tnut_crop_produce_disturbance.tif")) %>% 
+  cellStats(., stat = "sum")
+r2 <- raster(file.path(prep,
+                "crop/farm/stressors/land_othr_crop_produce_disturbance.tif")) %>% 
+  cellStats(., stat = "sum")
+raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/stressors/land_othr_crop_produce_disturbance.tif")
+r3 <- raster(file.path(prep,
+                "crop/farm/stressors/land_spis_crop_produce_disturbance.tif")) %>% 
+  cellStats(., stat = "sum")
+r1 + r2 + r3
+cellStats(rest_disturbance_map, stat = "sum")
+```
+
+Cotton fiber vs. seed correction.
+```{r}
+
+cotton_correction = 0.65
+
+cotton_list <- 
+  list.files(file.path(prep, "crop/farm/stressors"),
+             pattern = "land_.*_crop_produce_disturbance.tif", 
+             full.names = TRUE) %>% 
+  .[grepl("cott_",.)]
+
+
+file.copy(from = cotton_list,
+to = gsub("_cott_", "_cott-seedlint_", cotton_list), overwrite=TRUE)
+
+
+cotton_seedlint_list <- 
+  list.files(file.path(prep, "crop/farm/stressors"),
+             pattern = "disturbance", 
+             full.names = TRUE) %>% 
+  .[grepl("seedlint",.)]
+
+for(crop in cotton_seedlint_list){ # crop = cotton_seedlint_list[2]
+  data <- raster(crop) # raster::cellStats(data, "sum", na.rm=TRUE)
+  data_correct <- data*cotton_correction # raster::cellStats(data_correct, "sum", na.rm=TRUE)
+  writeRaster(data_correct, gsub("cott-seedlint", "cott", crop), overwrite=TRUE)
+}
+
+delete_aux <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/stressors", pattern="aux", full=TRUE)
+file.remove(delete_aux)
+
+cellStats(raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/stressors/land_cott-seedlint_crop_produce_disturbance.tif"),
+          "sum", na.rm=TRUE)
+cellStats(raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/stressors/land_cott_crop_produce_disturbance.tif"),
+          "sum", na.rm=TRUE)
+
+
+```
+
+
+
+# Check number of files produced
+```{r}
+length(list.files(file.path(prep, "crop/disturbance/", fsep = ""))) # 42
+```
+
+# Map fodder crop disturbance
+```{r}
+# read in and convert from 1,000ha to km2
+fodd_raster <- 
+  overlay(raster(file.path(raw, "GAEZAct_2015/GAEZAct2015_HarvArea_Foddercrops_Irrigated.tif")) / 10,
+          raster(file.path(raw, "GAEZAct_2015/GAEZAct2015_HarvArea_Foddercrops_Rainfed.tif"))   / 10,
+          
+          fun = function(r1, r2) {
+             
+               return(r1 + r2)
+             
+               }) 
+
+names(fodd_raster) <- "land_fodd_crop_disturbance_km2eq"
+  
+writeRaster(fodd_raster, 
+            file.path(prep, 
+                      "crop/farm/stressors/land_fodd_crop_produce_disturbance", 
+                      fsep = ""),
+            format    = "GTiff",
+            overwrite = TRUE)
+
+# check output
+file.path(prep,
+          "crop/farm/stressors/land_fodd_crop_produce_disturbance.tif", 
+          fsep = "") %>% 
+  raster() %>% 
+  plot()
+
+
+delete_aux <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/stressors", pattern="aux", full=TRUE)
+file.remove(delete_aux)
+
+```
+
+
+# checking
+```{r}
+
+tmp <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/MapSPAM_correct_extent", pattern = "_A.tif", full=TRUE)
+tmp <- grep("_A_", tmp, value=TRUE)
+
+raster_stack <- stack(tmp) %>%
+  calc(., sum, na.rm = TRUE)
+
+plot(raster_stack)
+cellStats(raster_stack, "sum")
+
+tmp <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/stressors", pattern = "_disturbance.tif", full=TRUE)
+
+raster_stack <- stack(tmp) %>%
+  calc(., sum, na.rm = TRUE)
+
+cellStats(raster_stack, "sum") # https://www.nature.com/articles/s43016-021-00429-z 1,244 Mha
+
+```

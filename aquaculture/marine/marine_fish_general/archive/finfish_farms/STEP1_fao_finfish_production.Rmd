@@ -1,0 +1,101 @@
+---
+title: "FAO marine finfish production"
+author: "Gage Clawson"
+date: "10/09/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+All data is ultimately adjusted to FAO production data.  This script cleans the fao mariculture data and subsets it to to the relevant years of data and species (marine fish - general).
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+library(tidyverse)
+library(data.table)
+library(countrycode)
+library(here)
+library(stringr)
+
+path <- "/home/shares/food-systems/Food_footprint/_raw_data"
+source(here('aquaculture/marine/salmon/salmon_farm/R/fao_mar_clean.R')) # functions specific to mariculture dealing with compound countries
+source('https://raw.githubusercontent.com/OHI-Science/ohiprep_v2019/gh-pages/workflow/R/fao_fxn.R') # function for cleaning FAO files
+
+
+```
+
+
+
+
+Subset the data to include only the species (marine fish general) and countries we are interested in. Then summarize by total tonnes of finfish per country/year.
+
+```{r}
+
+fao <- read.csv(here("aquaculture/data/fao_mariculture_clean.csv")) %>%
+  filter(environment %in% c("Marine", "Brackishwater"))
+
+
+## Read in fao data and get a species list for marine fish
+species_list <- read.csv(here("aquaculture/marine/STEP1_species_groups/int/marine_groups.csv"))  %>%
+  distinct(species, aq_group)
+
+# the list of species we are including
+finfish_list <- species_list$species[species_list$aq_group=="marine_fish_general"]
+finfish_list
+
+## write out marine fish taxa and production for Juliette
+fao_finfish_taxa_prod <- fao %>%
+  filter(species %in% finfish_list) %>%  
+  filter(!is.na(value)) %>%
+  arrange(-value, country) %>%
+  filter(value>=500) %>%  # countries with less do not appear to be stable producers at this point
+  group_by(country, iso3c, species, year) %>%
+  dplyr::filter(year == 2017) %>%
+  summarize(fao_tonnes_production = sum(value)) %>%
+  arrange(country, iso3c, species, year)
+  
+write.csv(fao_finfish_taxa_prod, here("aquaculture/marine/marine_fish_general/finfish_farms/data/fao_mariculture_finfish_taxa_production.csv"), row.names=FALSE)
+
+# include only marine finfish
+fao_finfish <- fao %>%
+  filter(species %in% finfish_list) %>%  
+  filter(!is.na(value)) %>%
+  arrange(-value, country) %>%
+  filter(value>=500) %>%  # countries with less do not appear to be stable producers at this point
+  group_by(country, iso3c, year) %>%
+  summarize(fao_tonnes_production = sum(value)) %>%
+  arrange(country, iso3c, year)
+ 
+write.csv(fao_finfish, here("aquaculture/marine/marine_fish_general/finfish_farms/data/fao_mariculture_finfish.csv"), row.names=FALSE)
+        
+ explore <- read_csv(here("aquaculture/marine/marine_fish_general/finfish_farms/data/fao_mariculture_finfish.csv")) %>%
+   filter(year==2017) %>%
+   arrange(-fao_tonnes_production) %>%
+   mutate(percent = round(fao_tonnes_production/sum(fao_tonnes_production)*100,2))
+
+sum(explore$percent[1:25])
+
+
+emod_countries <- explore %>%
+  dplyr::filter(country %in% c("Cyprus", "Greece", "Malta", "Norway", "Spain"))
+sum(emod_countries$percent)
+sum(emod_countries$fao_tonnes_production)
+
+
+## ASC Countries
+ # "Turkey", "Croatia", "Greece", "Albania", "Spain", "Japan", "Australia", "Mexico", "Panama", "United States of America", "Viet Nam", "Thailand"
+
+asc_countries <- explore %>%
+  dplyr::filter(country %in% c( "Turkey", "Croatia", "Albania", "Japan", "Australia", "Mexico", "Panama", "United States of America", "Viet Nam", "Thailand"))
+sum(asc_countries$percent)
+sum(asc_countries$fao_tonnes_production)
+
+unique(sort(asc_countries$country))
+
+
+```
+

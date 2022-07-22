@@ -1,0 +1,67 @@
+---
+title: "MapSPAM_verification"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Verification for GitHub issue #98.
+
+```{r setup, include=FALSE}
+# getting packages we want
+library(tidyverse)
+library(here)
+library(raster)
+library(sf)
+
+# src script
+source(here("_workflow/common.R"))
+
+source(here("_spatial/template_raster.R"))
+```
+
+```{r}
+# Read in FAOSTAT 2010 production data
+FAOSTAT_2010 <- read_csv(here("crop/farm/data/FAOSTAT_data_4-15-2020.csv")) %>% 
+  dplyr::select("Area Code", "Item Code","Value")
+
+
+# Read in country codes
+country_codes <- read_csv(here("_spatial/output/FAOSTAT_countrycodes.csv")) %>% 
+  dplyr::select(`Country Code`, `ISO3 Code`) %>% 
+  rename(`Area Code` = `Country Code`, iso3c = `ISO3 Code`)
+
+country_codes <- unique(country_codes) %>% na.omit()
+
+#  
+FAOSTAT_iso3c <- left_join(FAOSTAT_2010,country_codes) %>% 
+  dplyr::select(-`Area Code`) %>% 
+  rename(FAO_tonnes = `Value`) %>% 
+  na.omit()
+
+# Wheat
+FAOSTAT_whea  <- FAOSTAT_iso3c %>% 
+  filter(`Item Code` == 15) %>% 
+  dplyr::select(-`Item Code`)
+
+# Spam 
+SPAM_whea <- raster(paste(raw,"map_spam_crop_data/spam2010v1r1_global_prod.geotiff/spam2010V1r1_global_P_","WHEA","_A",".tif", sep = ""))
+raster(here("crop_occupancy/data/spam2010V1r1_global_P_WHEA_A.tif"))
+extent(SPAM_whea) <- extent(-180,180,-90,90)
+SPAM_whea_df <- as.data.frame(SPAM_whea, xy=TRUE)
+rasterFromXYZ(SPAM_whea_df)
+
+SPAM_whea_df2 <- raster_df(SPAM_whea)
+rasterFromXYZ(SPAM_whea_df2)
+
+SPAM_whea_iso3c <- left_join(SPAM_whea_df, food_rgns)
+
+SPAM_whea_tonnes <- SPAM_whea_iso3c %>% 
+  group_by(iso3c) %>%
+  summarize(SPAM_tonnes = sum(spam2010V1r1_global_P_WHEA_A, na.rm=TRUE))
+
+wheat_comparison <- left_join(SPAM_whea_tonnes, FAOSTAT_whea)
+
+view(wheat_comparison)
+raster(paste(prep,"/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/MapSPAM_correct_extent/spam2010V1r1_global_P_","RICE","_S",".tif",sep=""))
+```

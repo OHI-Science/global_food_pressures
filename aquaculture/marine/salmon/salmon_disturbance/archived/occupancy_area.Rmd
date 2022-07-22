@@ -1,0 +1,150 @@
+---
+title: "Calculating occupancy and area"
+author: "Juliette"
+date: "1/16/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Now that we use the raster data directly in occupancy_distribution (also maybe rename that) we can probably delete this but i will keep it for now
+
+
+
+```{r read in libaries and paths}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(readr)
+library(tidyverse)
+library(tabularaster)
+library(data.table)
+
+path <- "/home/shares/food-systems/Food_footprint/_raw_data/"
+#when Caitie is done with her stuff we will want this in the _raw_data folder 
+path_2 <- "/home/shares/food-systems/Food_footprint/Data/"
+```
+
+In this markdown we are calculating:
+
+1. How many live fish are in the water at a given time.
+2. The total volume (and area) used by salmon farming
+
+##Methods
+
+##Conversion Table
+Read in and save the necessary values from the salmon conversion table
+```{r parameters from conversion table}
+salmon_conversion <- read_csv("data/salmon_conversion_factors.csv")
+
+stocking_density <- as.numeric(salmon_conversion[salmon_conversion$name == "stocking_density", "value"])
+live_harvested_conversion <- as.numeric(salmon_conversion[salmon_conversion$name == "live_harvested", "value"])
+harvest_weight <- as.numeric(salmon_conversion[salmon_conversion$name == "mean_harvest_weight", "value"])
+fish_per_cage <- as.numeric(salmon_conversion[salmon_conversion$name == "fish_per_cage", "value"])
+cage_volume <- as.numeric(salmon_conversion[salmon_conversion$name == "cage_volume", "value"])
+```
+
+
+###Calculate the total number of fish in the water (occupancy)
+
+```{r regional production}
+production_raw <- fread(paste0(path_2, "Regional_aquaculture_production/FAO_Adjusted_regional_production.csv"))
+
+#this is for comparing end farm area to the polygons we have. can be removed when that is figured out
+usa_ne <- data.frame(ISO3 = "NE", Region_name = "usa northeast", Salmon_tonnes_adj = 8474)
+can_test <- data.frame(ISO3 = "CAN_t", Region_name = "canada test", Salmon_tonnes_adj = 106352)
+```
+
+```{r calculate salmon occupancy}
+salmon_occupany <- production_raw %>% 
+  select(ISO3, Region_name, Salmon_tonnes_adj) %>% 
+    rbind(usa_ne, can_test) %>% 
+  mutate(salmon_kg_pro = Salmon_tonnes_adj*1000,
+         salmon_num_live = (salmon_kg_pro/harvest_weight)*live_harvested_conversion)
+```
+
+
+### Calculate the total area (from an aerial view) used for salmon aquaculture
+
+we don't think this part, can directly use conversion faction from tonnes to kg, can skip live step
+There are two parts to our calculations:
+1. How much area the fish themselves take up
+
+$$Volume\quad used\quad by\quad fish(m^3) = tonnes\_fish\_production*\frac{1000kg}{1tonne}*\frac{1fish}{kg\_harv\_weight}*live\_harvested\_conversion*\frac{kg\_harv\_weight}{1fish}\frac{1}{stocking\_density}$$
+
+The simplified math with the actual values and cancellations:
+$$Volume\quad used\quad by\quad fish(m^3) =production\_tonnes*\frac{100kg}{1tonne}*1.45*\frac{m^3}{20kg}$$
+
+Converting this into an aerial view area
+$$Area\quad used\quad by\quad fish(m^2) = (\sqrt[3]{Volume\quad used\quad by\quad fish})^2 $$
+
+
+2. How much extra area the cages take up, assuming a 5 m buffer
+
+add infracture?
+
+$$number\_cages = \frac{(tonnes\_fish\_production*\frac{1000kg}{1tonne}*live\_harvested\_conversion)\frac{1 }{harvestweight}}{fish\_per\_cage}$$
+$$number\_cages = \frac{(tonnes\_fish\_production*\frac{1000kg}{1tonne}*1.45)*\frac{1 fish}{5kg}}{200,000fish per cage}$$
+
+
+Now we need to figure out how much extra volume a 5 m buffer around the entire pen would be. To do this we are assuming that one cage is 9000 m3.
+
+First we take the cubed root of the average cage size
+$$\sqrt[3]{cage\_volume} = \sqrt[3]{9000m^3} = 20.8m$$
+Now we add 5 meters to each end of the sides
+$$20.8m + 2*5m = 30.8m$$
+Now we subtract the area of the pen from the larger buffered area
+$$(30.8m)^2 - (20.8m)^2$$
+
+3. Combine areas to get total volume used
+
+Doing the thing!
+```{r}
+salmon_occupancy_area_all <- salmon_occupany %>% 
+  select(ISO3, Region_name, salmon_kg_pro, salmon_num_live) %>% 
+##calculate the total area the fish take up
+  mutate(salmon_kg_live = (salmon_num_live*harvest_weight),
+         salmon_volume = salmon_kg_live/stocking_density,
+         side = (salmon_volume)^(1/3),
+         salmon_area =side^2) %>% 
+##calculate the extra area of the cages
+  mutate(num_cages = salmon_num_live/fish_per_cage,
+         num_cages = ceiling(num_cages),
+## mutliple by 1.3 for fallow
+         num_cages = num_cages*(1.3),
+         area_buffer = (((cage_volume)^(1/3) + 10)^2 - ((cage_volume)^(1/3))^2)*num_cages) %>% 
+##calculate the total area
+  mutate(total_area_m2 = (area_buffer+salmon_area)*1.5) ## multiple by 1.5 for infastructure area
+
+salmon_occupancy_area <- salmon_occupancy_area_all %>% 
+  select(ISO3, Region_name, salmon_num_live, total_area_m2)
+
+write.csv(salmon_occupancy_area, file = "data/salmon_occupancy.csv") 
+```
+
+Check out USA and Canada areas to compare with polygon data
+
+```{r}
+usa_can <- salmon_occupancy_area_all %>% 
+  filter(ISO3 == "NE" | ISO3 == "CAN_t") 
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

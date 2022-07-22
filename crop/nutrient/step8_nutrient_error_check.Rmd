@@ -1,0 +1,266 @@
+---
+title: "step_5b_error_check"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Preamble
+```{r setup, include = FALSE}
+# getting packages we want
+library(here);library(janitor);library("future");library(furrr);library(vroom)
+
+# Raster templates
+source(here("_spatial/template_raster.R"))
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+# Import food_rgns xy df
+food_rgns_xy <- 
+  food_rgns_xy %>% 
+  dplyr::select(x, y, iso3c)
+
+# Import main dataframe
+nutrient_df <- vroom::vroom(here("crop/nutrient/data/nutrient_df.csv"))
+distinct_vars <- expand.grid(unique(nutrient_df$split_rest_names),
+                             unique(nutrient_df$nutrient))
+```
+
+# Check that withdrawal is 50% of total
+```{r}
+total_N <- 
+  list.files(file.path(prep,
+                     "crop/nutrient",
+                     fsep = ""),
+             pattern = "_application_N",
+             full.names = TRUE) %>% 
+  .[!grepl(c("toba|teas|cof|othr"), .)] %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  cellStats(., "sum")
+
+withdrawn_N <- 
+  list.files(file.path(prep,
+                     "crop/nutrient/",
+                     fsep = ""),
+             pattern = "withdrawal",
+             full.names = TRUE) %>% 
+  .[!grepl(c("toba|teas|cof|othr"), .)] %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  cellStats(., "sum")
+
+withdrawn_N / total_N # should be approx 50% of total N
+
+# NH3 volatilization
+volatilized_N <- 
+  list.files(file.path(prep,
+                     "crop/nutrient/",
+                     fsep = ""),
+             pattern = "volatilized",
+             full.names = TRUE) %>% 
+  .[!grepl(c("toba|teas|cof|othr"), .)] %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  cellStats(., "sum")
+
+volatilized_N / total_N # should be approx 14% of total N
+
+# Denitrification, N2 and N20 emissions
+denitrification_N <- 
+  list.files(file.path(prep,
+                     "crop/nutrient/",
+                     fsep = ""),
+             pattern = "denitrification",
+             full.names = TRUE) %>% 
+  .[!grepl(c("toba|teas|cof|othr"), .)] %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  cellStats(., "sum")
+
+denitrification_N / total_N # should be approx 10% of total N
+
+leaching_N <- 
+  list.files(file.path("/home/shares/food-systems/Food_footprint/",
+                       "all_food_systems/predatalayers/",
+                       fsep = ""),
+             pattern = "leached_N",
+             full.names = TRUE) %>% 
+  .[!grepl(c("toba|teas|cof|othr"), .)] %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  cellStats(., stat = "sum")
+  
+leaching_N / total_N
+
+# Check P
+P_leached <- 
+  list.files(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers"),
+             pattern = "_leached_P",
+             full.names = TRUE) %>% 
+  .[!grepl(c("toba|teas|cof|othr"), .)] %>% 
+  stack()  %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  cellStats(., stat = "sum")
+           
+total_P <- 
+  list.files(file.path(prep,
+                     "crop/nutrient/",
+                     fsep = ""),
+             pattern = "_application_P2O5",
+             full.names = TRUE) %>% 
+  .[!grepl(c("toba|teas|cof|othr"), .)] %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  cellStats(., "sum")
+
+(total_P / 2.29) * 0.065
+P_leached
+
+# Check final values
+total_leached <- 
+  list.files(file.path(layers),
+             pattern = "land_.*_crop_produce_.*nutrient",
+             full.names = TRUE) %>% 
+  .[!grepl(c("toba|teas|cof|othr"), .)] %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  cellStats(., "sum")
+
+leaching_N + P_leached + volatilized_N
+total_leached
+
+fodd_applications <- 
+  list.files(file.path(prep,
+                     "crop/nutrient/",
+                     fsep = ""),
+             pattern = "crop_fodd_application",
+             full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  cellStats(., "sum")
+fodd_applications / total_N
+```
+
+# Compare previous approach to using FUBC rates
+
+```{r}
+
+old_nutrient_df <- 
+  vroom(here("crop/nutrient/data/old_nutrient_df.csv"))[1:65880,] %>% 
+  select(iso3c, nutrient, split_rest_names, prod_system, 
+         fert_gf = starts_with("fert_gf"), reported_by_FAO)
+  
+old_nutrient_df$fert_gf <- 
+  str_remove(old_nutrient_df$fert_gf, pattern = "\\\\") %>% 
+  as.double() 
+  
+nutrient_df <- vroom(here("crop/nutrient/data/nutrient_df.csv"))
+
+comparison_df <- 
+  left_join(nutrient_df, old_nutrient_df) %>% 
+  rename(new_method = allocated_nutrient, old_method = fert_gf) %>% 
+  mutate(proportional_difference = new_method / old_method) %>% 
+  filter(reported_by_FAO == "Yes") 
+  
+```
+
+# plot differences
+```{r}
+sum(comparison_df$new_method)
+sum(comparison_df$old_method)
+
+comparison_df2 <- 
+  comparison_df %>%
+  filter(nutrient == "N") %>%
+  group_by(split_rest_names) %>%
+  summarise(new_method_sum = sum(new_method, na.rm = TRUE),
+            old_method_sum = sum(old_method, na.rm = TRUE)) %>%
+  ungroup() %>%
+  mutate(proportion_old_N = old_method_sum / sum(old_method_sum),
+         proportion_new_N = new_method_sum / sum(new_method_sum)) %>%
+  select(split_rest_names, contains("prop"))
+
+comparison_df3 <- comparison_df2 %>%
+  pivot_longer(cols = c("proportion_old_N", "proportion_new_N"),
+               names_to = "props_n")
+
+
+  ggplot(., aes(x = split_rest_names, y = value, colour = props_n)) + 
+  geom_point() + 
+  theme_classic()
+  
+```
+
+## check grassland files
+```{r}
+grassland_n_files <-  
+  list.files(file.path(prep, "animal_farm/nutrient/grassland_fertilizer_application"),
+           full.names = TRUE,
+           pattern = "_N",
+           recursive = TRUE) 
+
+applied_n_files <- 
+  list.files(file.path(prep, "crop/nutrient"),
+           full.names = TRUE,
+           pattern = "_application_N") 
+
+
+check_nutrients_per_layer <- function(val) {
+  
+  tibble(layer = str_extract(val, "(?<=nutrient\\/).*(?=\\_application)"),
+         sum_applied_n = cellStats(raster(val), stat = "sum"))
+  
+}
+
+applied_n_df <- 
+  map(c(applied_n_files, grassland_n_files), check_nutrients_per_layer) %>% 
+  bind_rows()
+
+applied_n_df2 <- 
+  applied_n_df %>% 
+  mutate(prop_N = sum_applied_n / sum(sum_applied_n),
+         layer = if_else(str_detect(layer, "grassland"),
+                         str_extract(layer, "(?<=\\/).*(?=\\_nutrient)"),
+                         layer)) 
+
+applied_n_df2 %>% 
+  filter(grepl("grassland", layer)) %>% 
+  summarize(sum(prop_N)) ## 0.044 is what i am expecting.
+
+ggplot(applied_n_df2, aes(x = layer, y = prop_N)) +
+  geom_point() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+ leaching_N_files <- 
+  list.files(file.path("/home/shares/food-systems/Food_footprint/",
+                       "all_food_systems/predatalayers",
+                       fsep = ""),
+             pattern = "leached_N",
+             full.names = TRUE)
+
+check_leached_per_layer <- function(val) {
+  
+  tibble(layer = str_extract(val, "(?<=predatalayers\\/).*(?=\\_leached)"),
+         sum_leaching_n = cellStats(raster(val), stat = "sum"))
+  
+}
+
+leaching_n_df <- 
+  map(leaching_N_files, check_leached_per_layer) %>% 
+  bind_rows() 
+
+
+leaching_n_df %>% 
+  filter(grepl("grassland", layer)) %>% 
+  summarize(sum(sum_leaching_n))
+# 3.7M tonnes of leached N for grassland animals
+leaching_n_df2 <- 
+  leaching_n_df %>% 
+  mutate(prop_N = sum_leaching_n / sum(sum_leaching_n))
+
+ggplot(leaching_n_df2, aes(x = layer, y = prop_N)) + 
+  geom_point()
+  
+```
+

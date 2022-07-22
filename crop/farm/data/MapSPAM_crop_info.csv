@@ -1,0 +1,43 @@
+crop_number,SPAM_short_name,SPAM_full_name,FAONAMES,FAOCODE,GROUP
+1,whea,wheat,wheat,15,cereals
+2,rice,rice,rice,27,cereals
+3,maiz,maize,maize,56,cereals
+4,barl,barley,barley,44,cereals
+5,pmil,pearl millet,millet,79,cereals
+6,smil,small millet,millet,79,cereals
+7,sorg,sorghum,sorghum,83,cereals
+8,ocer,other cereals,other cereals ++,"68, 71, 75, 89, 92, 94, 97, 101, 103, 108",cereals
+9,pota,potato,potato,116,roots&tubers or starchy roots
+10,swpo,sweet potato,sweet potato,122,roots&tubers or starchy roots
+11,yams,yams,yam,137,roots&tubers or starchy roots
+12,cass,cassava,cassava,125,roots&tubers or starchy roots
+13,orts,other roots,yautia ++,"135, 136, 149",roots&tubers or starchy roots
+14,bean,bean,"beans, dry",176,pulses
+15,chic,chickpea,chickpea,191,pulses
+16,cowp,cowpea,cowpea,195,pulses
+17,pige,pigeonpea,pigeon pea,197,pulses
+18,lent,lentil,lentils,201,pulses
+19,opul,other pulses,broad beans ++,"181, 187, 203, 205, 210, 211",pulses
+20,soyb,soybean,soybean,236,oilcrops
+21,grou,groundnut,"groundnut, with shell",242,oilcrops
+22,cnut,coconut,coconut,249,oilcrops
+23,oilp,oilpalm,palmoil,254,oilcrops
+24,sunf,sunflower,sunflower seed,267,oilcrops
+25,rape,rapeseed,rapeseed,"270, 292",oilcrops
+26,sesa,sesameseed,sesame seed,289,oilcrops
+27,ooil,other oil crops,olives ++,"260 - 339, not 311 and the other oilcrops above",oilcrops
+28,sugc,sugarcane,sugar cane,156,sugar crops
+29,sugb,sugarbeet,sugarbeet,157,sugar crops
+30,cott,cotton,seed cotton,328,fibres
+31,ofib,other fibre crops,other fibres ++,773 - 821,fibres
+32,acof,arabica coffee,coffee,656,stimulant
+33,rcof,robusta coffee,coffee,656,stimulant
+34,coco,cocoa,cocoa,661,stimulant
+35,teas,tea,tea,667,stimulant
+36,toba,tobacco,tobacco leaves,826,stimulant
+37,bana,banana,banana,486,fruits
+38,plnt,plantain,plantain,489,fruits
+39,trof,tropical fruit,oranges ++,"490 - 512, 567 - 591, 600 - 603",fruits
+40,temf,temperate fruit,apples ++,"515 - 560, 592, 619",fruits
+41,vege,vegetables,cabbages and other brassicas ++,358 - 463,vegetables
+42,rest,rest of crops,"all individual other crops (eg  spices, tree nuts, other sugar crops, mate, rubber)","161,216-234, 671,677 - 839",NA

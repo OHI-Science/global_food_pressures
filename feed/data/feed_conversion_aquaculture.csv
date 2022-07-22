@@ -1,0 +1,6 @@
+value,species,system,name,description,source,notes
+1.3,salmon,aquaculture,eFCR,economic feed conversion ratio for salmon,Aas et al 2016 (https://www.sciencedirect.com/science/article/pii/S235251341930256X),
+1.4,shrimp,aquaculture,eFCR,economic feed conversion ratio for shrimp and prawns,Seafood Watch,"average of eFCR values for whiteleg pond raised shrimp in Vietnam, Thailand, Indonesia, India, Ecuador, and China"
+6,tuna,aquaculture,FCR,,Froehlich et al 2018,"4.6 to 7.4, used midpoing"
+1.4,crustaceans,aquaculture,FCR,,Froehlich et al 2018,"1.1-1.6 for: crabs and seaspiders; misc marine crustaceans; king crabs, squat-lobsters "
+1.4,marine-fish-general,aquaculture,FCR,,Froehlich et al 2018,avg of: diadromous (1.1-1.7); mis. marine fish (1.1-1.6); flatfish (1.1-1.7)

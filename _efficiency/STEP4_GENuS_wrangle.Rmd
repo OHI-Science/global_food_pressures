@@ -1,0 +1,243 @@
+---
+title: "GENuS Wrangling"
+author: "Juliette"
+date: "2/25/2021"
+output: html_document
+---
+
+This dataset is in some series need of wrangling. The naming conventions is different depending on data source and its sometimes not in English. Since there was no direct way to wrangle this crazy thing in R accurately (that I could think of), I grabbed the unique FCT_FoodName from `_efficiency/data/genus_compiled_fisheries.csv` and created a file called `_efficiency/data/genus_compiled_fisheries_general.csv` which includes a column 'general' I specified things like catfish, salmon, shrimp, etc where possible.
+
+*NOTE*: units for calories are kcal/100 g edible weight; units for protein are g/100 g edible weight
+
+```{r setup, include=FALSE}
+
+library(here)
+source(here("_workflow/common.R"))
+
+library(rfishbase)
+library(worrms)
+
+'%!in%' <- function(x,y)!('%in%'(x,y))
+
+## nutrition data
+general_raw <- read_csv(here("_efficiency/data/genus_compiled_fisheries_general.csv")) %>% 
+  filter(!str_detect(FCT_FoodName, "canned|dried"))
+
+## fisheries catch data
+# marine_fisheries_raw <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/catch_for_juliette.csv")
+marine_fisheries_raw <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/catch_extracted_final.csv")
+
+```
+
+First we want to combine country level catch data with the nutrional information data
+```{r}
+
+## summarize catch by iso3c and taxon name
+marine_fisheries <- marine_fisheries_raw %>% 
+  mutate(TaxonName = ifelse(TaxonName == "Venus (=Chamelea) gallina", "Chamelea gallina", TaxonName)) %>% 
+  group_by(iso3c, TaxonName) %>% 
+  dplyr::summarise(country_catch = sum(catch, na.rm = TRUE)) 
+
+## calculate mean protein and calories
+general <- general_raw %>% 
+  group_by(general) %>% 
+  dplyr::summarise(calories_mean = mean(Calories, na.rm = TRUE),
+                   protein_mean = mean(Protein, na.rm = TRUE)) %>% 
+  rename(general_name = general)
+
+## now we want to grab all the possible scientific names associated with the general names. We will use rfishbase package for that for fishes here and then use the worrms package for non fish species
+general_species_names <- common_to_sci(unique(general$general_name)) %>% 
+  mutate(ComName = tolower(ComName)) %>% 
+  mutate(general_name = str_extract(ComName, paste(unique(general$general_name), collapse = "|"))) %>% 
+  left_join(general, by = "general_name") %>% 
+  select(TaxonName = Species, calories_mean, protein_mean) %>% 
+  unique() %>%  ## okay so there are some species with different values for calories and protein but its in a similar range. 
+  group_by(TaxonName) %>% 
+  dplyr::summarise(calories_mean = mean(calories_mean, na.rm = TRUE),
+                   protein_mean = mean(protein_mean, na.rm = TRUE)) %>% 
+  ungroup()
+
+## combine with the catch data
+combine_catch_nut <- left_join(marine_fisheries, general_species_names) 
+```
+
+To make things extra fun, some of the TaxonNames from the watson data are genus, family, or order (instead of species). So will create a  columns for all those Taxon names for gapfilling
+
+```{r}
+
+## grab all the taxon info 
+# fishbase_taxon_info <- load_taxa(general$general_name) %>% as_tibble() %>% 
+#   select(Species, Genus, Family, Order)
+
+fishbase_taxon_info <- load_taxa() %>% as_tibble() %>%
+  dplyr::select(Species, Genus, Family, Order)
+
+genus_level_taxon <- select(fishbase_taxon_info, -Species, -Order) %>% unique()
+family_level_taxon <- select(fishbase_taxon_info, -Species, -Genus) %>% unique()
+
+## lets fill out the taxon information. this is about to get real janky for the rest of the code 
+catch_nut_sg <- combine_catch_nut %>% 
+  mutate(Species = TaxonName) %>% 
+  # first lets fill out the taxon info where TaxonName is the species name
+  left_join(fishbase_taxon_info, by = "Species") %>% 
+  # second lets fill out the taxon info where TaxonName is the genus name
+  mutate(Genus = ifelse(is.na(Genus),TaxonName, Genus)) %>% 
+  left_join(genus_level_taxon, by = "Genus") %>% 
+  rename(Family = Family.x) %>% 
+  mutate(Family = ifelse(is.na(Family), Family.y, Family)) %>% 
+  select(-Family.y) %>% 
+  mutate(identify_fam = str_extract(TaxonName, "dae"),
+         identify_fam = ifelse(is.na(identify_fam), "no", "yes"),
+         Family = ifelse(identify_fam == "yes", TaxonName, Family),
+         ) %>% 
+  select(-identify_fam)
+
+chk <- catch_nut_sg %>% 
+  select(Family) %>% 
+  group_by(Family) %>% 
+  count() ## 2315 not family identified species ##
+chk2 <- chk %>% 
+  filter(!is.na(Family)) %>% 
+  ungroup() %>% 
+  dplyr::summarise(n_total = sum(n)) ## 6311 family identified species
+## how much of catch isn't family identified
+
+total_catch <- catch_nut_sg %>% 
+  ungroup() %>% 
+  dplyr::summarise(global_catch = sum(country_catch)) %>% 
+  pull(global_catch)
+
+accounted_catch <- catch_nut_sg %>% 
+  ungroup() %>% 
+ filter(!is.na(Family))%>% 
+  dplyr::summarise(acc_catch = sum(country_catch)) %>% 
+  pull(acc_catch)
+  
+ accounted_catch/total_catch ## 0.6591118
+ 
+ ## most of the missing catch seems to be from non fish species
+
+```
+
+
+Get the nonfish/invert info from WoRMS
+```{r}
+
+ ## look at the non fish ones with worrms
+ invert_list <- catch_nut_sg %>% 
+   filter(is.na(Family),
+          TaxonName != "Marine fishes not identified") %>% 
+   pull(TaxonName)  %>% 
+   unique()
+ 
+invert_taxon_table <- data.frame(scientificname = NA, kingdom = NA, phylum = NA, class = NA, order = NA, family = NA, genus = NA)
+
+for(invert in invert_list) {
+
+#invert <- invert_list[3]
+
+  tryCatch({
+    
+    invert_taxon <- wm_records_names(name = c(invert), marine_only = FALSE) %>% 
+      as.data.frame() %>% 
+      dplyr::select(scientificname, kingdom, phylum, class, order, family, genus)
+    
+  },  error=function(e){cat("ERROR :",conditionMessage(e), "\n")} )
+ 
+invert_taxon_table <- rbind(invert_taxon_table, invert_taxon)
+
+}
+
+write_csv(invert_taxon_table, here("_efficiency/data/invert_taxon_table.csv"))
+```
+
+Now combine it with the nutritional data
+```{r}
+invert_taxon_table <- read_csv(here("_efficiency/data/invert_taxon_table.csv")) %>% 
+  select(Species = scientificname, w_family = family, w_genus = genus, w_order = order) %>% 
+  mutate(worms_source = "worm")
+
+catch_nut_sg_w <- left_join(catch_nut_sg, invert_taxon_table) %>% 
+  mutate(worms_source = ifelse(is.na(worms_source), "nonworms", worms_source),
+         Family = ifelse(worms_source == "worm", w_family, Family),
+         Genus = ifelse(worms_source == "worm", w_genus, Genus)) %>% 
+  select(-w_family, -w_genus, -worms_source)
+
+## gapfil starting at genus level and go to family, need to add in order from the fishies
+
+order_level_taxon <- select(fishbase_taxon_info, -Species, -Genus) %>% unique() 
+
+
+## okay here is the last bit of janky code. add in the taxon info for non fishes; make sure that the the information filled out for species, genus, family is accurate and not just from the TaxonName
+catch_nut_all <- catch_nut_sg_w %>% 
+  ## okay here i need to left join the full taxon info to get the order for what we already have family info for
+  left_join(order_level_taxon, by = "Family") %>% 
+  rename(Order = Order.x) %>% 
+  mutate(Order = ifelse(is.na(Order), Order.y, Order)) %>% 
+  mutate(Order= ifelse(!is.na(w_order), w_order, Order),
+         int = str_extract(TaxonName, "dae"),
+         Order = ifelse(is.na(Order) & is.na(int), TaxonName, Order),
+         int = ifelse(is.na(int), "no", int),
+         Family = ifelse(int == "dae", TaxonName, Family)) %>% 
+  select(-w_order, -Order.y, -int) %>% 
+  mutate(Order = ifelse(str_detect(TaxonName, "Marine fishes not identified"), NA, Order),
+         Order = ifelse(str_detect(TaxonName, "Marine animals"), NA, Order),
+         Species = ifelse(str_detect(Genus, Species), NA, Species),
+         Genus = ifelse(str_detect(Family, Genus), NA, Genus),
+         Family = ifelse(str_detect(Order, Family), NA, Family)) %>% 
+## Nas are only "marine fishies not identified"
+## need to fix some of the ones in Order
+  mutate(Order = ifelse(Order == "Homaridae/Palinuridae", "Decapoda",
+                        ifelse(Order == "Lithodes antarcticus", "Decapoda",
+                               ifelse(Order == "Zidona dufresnei", "Neogastropoda",
+                                      ifelse(Order == "Miscellaneous marine crustaceans", "Decapoda",
+                                             ifelse(Order == "Sea-urchins and other echinoderms", "Echinoida",
+                                                    ifelse(Order == "Miscellaneous marine molluscs", NA, 
+                                                           ifelse(Order == "Starfish and other echinoderms", "Echinoida",
+                                                                  ifelse(Order == "Mytilidae", "Mytilida",
+                                                                         ifelse(Order == "Megabalanus psittacus", NA, 
+                                                                                ifelse(Order == "Chlamys delicatula", "Pectinida",
+                                                                                       ifelse(Order== "Sharks rays chimaeras", "Hexanchiformes",
+                                                                                              ifelse(Order == "Clams cockles arkshells", "Arcida",
+                                                                                                     ifelse(Order == "King crabs squat-lobsters", "Decapoda",
+                                                                                                            ifelse(Order == "Haliotis midae", NA, 
+                                                                                                                   ifelse(Order == "Chamelea gallina", "Venerida",
+                                                                                                                          ifelse(Order == "Shrimps prawns", "Decapoda", 
+                                                                                                                                 ifelse(TaxonName == "Homaridae/Palinuridae", "Decapoda", Order ))))))))))))))))))
+
+
+```
+
+Grab all the info minus the catch and country, I worry that weird duplicates may have occurred somehow, this is just a double check measure. 
+
+Gapfill!
+
+```{r}
+fisheries_nutrional_info <- catch_nut_all %>% 
+  ungroup() %>% 
+  select(-iso3c, -country_catch) %>% 
+  unique() %>% 
+  group_by(Genus) %>% 
+  mutate(calories_mean = ifelse(is.na(calories_mean), mean(calories_mean, na.rm = TRUE), calories_mean),
+         protein_mean = ifelse(is.na(protein_mean), mean(protein_mean, na.rm = TRUE), protein_mean)) %>% 
+  ungroup() %>% 
+  group_by(Family) %>% 
+  mutate(calories_mean = ifelse(is.na(calories_mean), mean(calories_mean, na.rm = TRUE), calories_mean),
+         protein_mean = ifelse(is.na(protein_mean), mean(protein_mean, na.rm = TRUE), protein_mean)) %>% 
+  ungroup() %>% 
+  group_by(Order) %>% 
+  mutate(calories_mean = ifelse(is.na(calories_mean), mean(calories_mean, na.rm = TRUE), calories_mean),
+         protein_mean = ifelse(is.na(protein_mean), mean(protein_mean, na.rm = TRUE), protein_mean)) %>% 
+  ungroup() %>% 
+  mutate(calories_mean = ifelse(is.na(calories_mean), mean(calories_mean, na.rm = TRUE), calories_mean),
+         protein_mean = ifelse(is.na(protein_mean), mean(protein_mean, na.rm = TRUE), protein_mean)) 
+
+write_csv(fisheries_nutrional_info, here("_efficiency/data/fisheries_nutrional_info.csv"))
+
+
+test <- read.csv(here("_efficiency/data/fisheries_nutrional_info.csv"))
+  
+```
+
+
+

@@ -1,0 +1,245 @@
+iso3c,Country,em_factor,gf
+AFG,Afghanistan,2.0021203687948127e-5,NA
+CYP,Cyprus,4.4022495497404116e-4,NA
+ALA,Åland,0.0053494529985043575,gapfilled with UN regions method
+ALB,Albania,4.132971749342201e-9,NA
+DZA,Algeria,9.75201897383181e-6,NA
+ASM,American Samoa,0.00103092732699303,gapfilled with UN regions method
+AND,Andorra,6.828960104878535e-4,gapfilled with UN regions method
+AGO,Angola,3.1088574255830026e-5,gapfilled with UN regions method
+AIA,Anguilla,0.004287087970671545,gapfilled with UN regions method
+ATG,Antigua and Barbuda,0,NA
+ARG,Argentina,1.3804427550311764e-4,NA
+ARM,Armenia,4.8415749282908664e-5,NA
+ABW,Aruba,0.004287087970671545,gapfilled with UN regions method
+AUS,Australia,1.2232295705346226e-4,NA
+AUT,Austria,2.6174188788845763e-5,NA
+AZE,Azerbaijan,2.773651125531043e-4,NA
+BHS,Bahamas,0.004287087970671545,gapfilled with UN regions method
+BHR,Bahrain,0.0013383334492665536,NA
+BGD,Bangladesh,0,NA
+BRB,Barbados,0.004287087970671545,gapfilled with UN regions method
+BLR,Belarus,0.007138634540412628,NA
+BEL,Belgium,6.428547785196272e-4,gapfilled with UN regions method
+BLZ,Belize,7.345673593868945e-5,gapfilled with UN regions method
+BEN,Benin,0.0012903650646616863,NA
+BMU,Bermuda,5.156475913417212e-4,gapfilled with UN regions method
+BTN,Bhutan,0,NA
+BOL,Bolivia,1.140512047211305e-4,NA
+BES,"Bonaire, Sint Eustatius and Saba",0.004287087970671545,gapfilled with UN regions method
+BIH,Bosnia and Herzegovina,6.828960104878535e-4,gapfilled with UN regions method
+BWA,Botswana,0.0013373644847053867,NA
+BRA,Brazil,9.592819329134106e-5,NA
+IOT,British Indian Ocean Territory,5.165375137480311e-4,gapfilled with UN regions method
+VGB,British Virgin Islands,0.004287087970671545,gapfilled with UN regions method
+BRN,Brunei,0,NA
+BGR,Bulgaria,3.407288003374336e-4,NA
+BFA,Burkina Faso,1.1377066849472213e-4,NA
+BDI,Burundi,5.165375137480311e-4,gapfilled with UN regions method
+KHM,Cambodia,0,NA
+CMR,Cameroon,8.084055925810364e-6,NA
+CAN,Canada,7.571596769904786e-4,NA
+CPV,Cape Verde,0,NA
+CYM,Cayman Islands,0.004287087970671545,gapfilled with UN regions method
+CAF,Central African Republic,3.1088574255830026e-5,gapfilled with UN regions method
+TCD,Chad,1.1624132263629726e-4,NA
+CHL,Chile,8.974598124949434e-5,NA
+CHN,China,4.892329925097922e-5,NA
+CXR,Christmas Island,0.00103092732699303,gapfilled with UN regions method
+CCK,Cocos Islands,0.00103092732699303,gapfilled with UN regions method
+COL,Colombia,1.1495493355431065e-5,NA
+COM,Comoros,5.165375137480311e-4,gapfilled with UN regions method
+COK,Cook Islands,0.00103092732699303,gapfilled with UN regions method
+CRI,Costa Rica,4.448106894390549e-5,NA
+CIV,Côte d'Ivoire,0.001119030528660995,NA
+HRV,Croatia,6.458984997545528e-5,NA
+CUB,Cuba,4.97082174387223e-4,NA
+CUW,Curaçao,0.004287087970671545,gapfilled with UN regions method
+CZE,Czech Republic,0.002304973367013121,NA
+COD,Democratic Republic of the Congo,0,NA
+DNK,Denmark,0.0053494529985043575,gapfilled with UN regions method
+DJI,Djibouti,5.165375137480311e-4,gapfilled with UN regions method
+DOM,Dominican Republic,0,NA
+DMA,Dominica,0.004287087970671545,gapfilled with UN regions method
+ECU,Ecuador,7.059596168024918e-5,NA
+EGY,Egypt,8.863399317429332e-6,NA
+SLV,El Salvador,4.0313647312872586e-5,NA
+GNQ,Equatorial Guinea,3.1088574255830026e-5,gapfilled with UN regions method
+ERI,Eritrea,0,NA
+EST,Estonia,0.01867271652468517,NA
+ETH,Ethiopia,1.6605608132414574e-6,NA
+FLK,Falkland Islands,8.770784725556202e-5,gapfilled with UN regions method
+FRO,Faroe Islands,0.0053494529985043575,gapfilled with UN regions method
+FJI,Fiji,0.00103092732699303,gapfilled with UN regions method
+FIN,Finland,0.0016063741035257327,NA
+FRA,France,8.215484052603615e-4,NA
+GUF,French Guiana,8.770784725556202e-5,gapfilled with UN regions method
+PYF,French Polynesia,0.00103092732699303,gapfilled with UN regions method
+GAB,Gabon,3.1088574255830026e-5,gapfilled with UN regions method
+GMB,Gambia,0,NA
+GEO,Georgia,1.8673801918029918e-4,NA
+DEU,Germany,0.0017140404171441471,NA
+GHA,Ghana,1.536853853902182e-4,NA
+GIB,Gibraltar,6.828960104878535e-4,gapfilled with UN regions method
+GRC,Greece,6.828960104878535e-4,gapfilled with UN regions method
+GRL,Greenland,5.156475913417212e-4,gapfilled with UN regions method
+GRD,Grenada,0,NA
+GLP,Guadeloupe,0.004287087970671545,gapfilled with UN regions method
+GUM,Guam,0.00103092732699303,gapfilled with UN regions method
+GTM,Guatemala,1.1335569513693311e-4,NA
+GGY,Guernsey,0.0053494529985043575,gapfilled with UN regions method
+GNB,Guinea-Bissau,2.314695972478757e-4,gapfilled with UN regions method
+GIN,Guinea,1.336411335079201e-5,NA
+GUY,Guyana,0,NA
+HTI,Haiti,0,NA
+HND,Honduras,0,NA
+HKG,Hong Kong,0,NA
+HUN,Hungary,7.769030990958187e-4,NA
+ISL,Iceland,0.0053494529985043575,gapfilled with UN regions method
+IND,India,1.8021415545131744e-5,NA
+IDN,Indonesia,0,NA
+IRN,Iran,1.765188874315681e-5,NA
+IRQ,Iraq,1.9854756264059335e-6,NA
+IRL,Ireland,0.0053494529985043575,gapfilled with UN regions method
+IMN,Isle of Man,0.0053494529985043575,gapfilled with UN regions method
+ISR,Israel,6.810400365402192e-5,NA
+ITA,Italy,3.925841247404597e-4,NA
+JAM,Jamaica,3.5505663555278534e-4,NA
+JPN,Japan,3.5909923854118207e-4,NA
+JEY,Jersey,0.0053494529985043575,gapfilled with UN regions method
+JOR,Jordan,3.1024844359281455e-4,NA
+KAZ,Kazakhstan,5.154908903020118e-6,NA
+KEN,Kenya,5.496561017345355e-4,NA
+KIR,Kiribati,0.00103092732699303,gapfilled with UN regions method
+XKO,Kosovo,6.828960104878535e-4,gapfilled with UN regions method
+KWT,Kuwait,2.3856549689104677e-4,NA
+KGZ,Kyrgyzstan,4.417694063171939e-8,NA
+LAO,Laos,0,NA
+LVA,Latvia,0,NA
+LBN,Lebanon,2.2669979268207828e-4,NA
+LSO,Lesotho,0.0011958322397132883,gapfilled with UN regions method
+LBR,Liberia,2.314695972478757e-4,gapfilled with UN regions method
+LBY,Libya,8.915755606677132e-5,gapfilled with UN regions method
+LIE,Liechtenstein,6.428547785196272e-4,gapfilled with UN regions method
+LTU,Lithuania,0.0053494529985043575,gapfilled with UN regions method
+LUX,Luxembourg,6.428547785196272e-4,gapfilled with UN regions method
+MAC,Macao,5.316293677941377e-4,gapfilled with UN regions method
+MKD,Macedonia,6.828960104878535e-4,gapfilled with UN regions method
+MDG,Madagascar,1.0507639475443906e-6,NA
+MWI,Malawi,2.6309383511562276e-4,NA
+MYS,Malaysia,8.435314460576978e-6,NA
+MDV,Maldives,7.956358282319526e-6,gapfilled with UN regions method
+MLI,Mali,3.3052906968565825e-8,NA
+MLT,Malta,8.229597548886243e-4,NA
+MHL,Marshall Islands,0.00103092732699303,gapfilled with UN regions method
+MTQ,Martinique,0.004287087970671545,gapfilled with UN regions method
+MRT,Mauritania,2.314695972478757e-4,gapfilled with UN regions method
+MUS,Mauritius,0.003795818084669263,NA
+MYT,Mayotte,5.165375137480311e-4,gapfilled with UN regions method
+MEX,Mexico,2.3594984571133008e-5,NA
+FSM,Micronesia,0.00103092732699303,gapfilled with UN regions method
+MDA,Moldova,7.960661904672472e-4,NA
+MCO,Monaco,6.428547785196272e-4,gapfilled with UN regions method
+MNG,Mongolia,0.0033133830367668028,NA
+MNE,Montenegro,0.0018444830220597187,NA
+MSR,Montserrat,0.004287087970671545,gapfilled with UN regions method
+MAR,Morocco,9.523948997492978e-5,NA
+MOZ,Mozambique,5.165375137480311e-4,gapfilled with UN regions method
+MMR,Myanmar,0,NA
+NAM,Namibia,0.0016457953678933046,NA
+NRU,Nauru,0.00103092732699303,gapfilled with UN regions method
+NPL,Nepal,0,NA
+NLD,Netherlands,9.656102885154445e-6,NA
+NCL,New Caledonia,0.00103092732699303,gapfilled with UN regions method
+NZL,New Zealand,0.0019395316969325978,NA
+NIC,Nicaragua,3.661337355969188e-7,NA
+NER,Niger,2.314695972478757e-4,gapfilled with UN regions method
+NGA,Nigeria,6.35183037378466e-8,NA
+NIU,Niue,0.00103092732699303,gapfilled with UN regions method
+NFK,Norfolk Island,0.00103092732699303,gapfilled with UN regions method
+PRK,North Korea,0,NA
+MNP,Northern Mariana Islands,0.00103092732699303,gapfilled with UN regions method
+NOR,Norway,0.0053494529985043575,gapfilled with UN regions method
+OMN,Oman,6.0743249861679555e-5,NA
+PAK,Pakistan,7.956358282319526e-6,gapfilled with UN regions method
+PLW,Palau,0.00103092732699303,gapfilled with UN regions method
+PSE,Palestina,5.043825475390105e-4,gapfilled with UN regions method
+PAN,Panama,2.9208562187038503e-4,NA
+PNG,Papua New Guinea,0.00103092732699303,gapfilled with UN regions method
+PRY,Paraguay,8.770784725556202e-5,gapfilled with UN regions method
+PER,Peru,2.8303938751882534e-5,NA
+PHL,Philippines,6.102740711664123e-6,NA
+PCN,Pitcairn Islands,0.00103092732699303,gapfilled with UN regions method
+POL,Poland,0.001557786334036971,NA
+PRT,Portugal,3.5623985223858775e-5,NA
+XMI,Madeira Island,8.915755606677132e-5,gapfilled with UN regions method
+PRI,Puerto Rico,0,NA
+QAT,Qatar,7.354105590742105e-4,NA
+COG,Republic of Congo,2.891846121246797e-8,NA
+REU,Reunion,5.165375137480311e-4,gapfilled with UN regions method
+ROU,Romania,9.34489287271524e-4,NA
+RUS,Russia,0.002111366930078968,gapfilled with UN regions method
+RWA,Rwanda,5.165375137480311e-4,gapfilled with UN regions method
+BLM,Saint-Barthélemy,0.004287087970671545,gapfilled with UN regions method
+MAF,Saint-Martin,0.004287087970671545,gapfilled with UN regions method
+SHN,Saint Helena,2.314695972478757e-4,gapfilled with UN regions method
+KNA,Saint Kitts and Nevis,0,NA
+LCA,Saint Lucia,0.004287087970671545,gapfilled with UN regions method
+SPM,Saint Pierre and Miquelon,5.156475913417212e-4,gapfilled with UN regions method
+VCT,Saint Vincent and the Grenadines,0.004287087970671545,gapfilled with UN regions method
+WSM,Samoa,0.00103092732699303,gapfilled with UN regions method
+SMR,San Marino,6.828960104878535e-4,gapfilled with UN regions method
+STP,São Tomé and Príncipe,3.1088574255830026e-5,gapfilled with UN regions method
+SAU,Saudi Arabia,7.862800418554392e-4,NA
+SEN,Senegal,9.674496176473421e-7,NA
+SRB,Serbia,6.828960104878535e-4,gapfilled with UN regions method
+SYC,Seychelles,0,NA
+SLE,Sierra Leone,0,NA
+SGP,Singapore,1.8311176221525827e-6,gapfilled with UN regions method
+SXM,Sint Maarten,0.004287087970671545,gapfilled with UN regions method
+SVK,Slovakia,0.002111366930078968,gapfilled with UN regions method
+SVN,Slovenia,0.0021850021932594338,NA
+SLB,Solomon Islands,0.00103092732699303,gapfilled with UN regions method
+SOM,Somalia,5.165375137480311e-4,gapfilled with UN regions method
+ZAF,South Africa,0.0017136537457302838,NA
+KOR,South Korea,0,NA
+SSD,South Sudan,5.165375137480311e-4,gapfilled with UN regions method
+ESP,Spain,1.1792102078352864e-4,NA
+LKA,Sri Lanka,0,NA
+SDN,Sudan,8.915755606677132e-5,gapfilled with UN regions method
+SUR,Suriname,9.094347821980454e-6,NA
+SJM,Svalbard and Jan Mayen,0.0053494529985043575,gapfilled with UN regions method
+SWZ,Swaziland,8.65153605241782e-5,NA
+SWE,Sweden,0.0053494529985043575,gapfilled with UN regions method
+CHE,Switzerland,6.428547785196272e-4,gapfilled with UN regions method
+SYR,Syria,1.8759994376371943e-4,NA
+TWN,Taiwan,0,NA
+TJK,Tajikistan,0,NA
+TZA,Tanzania,5.165375137480311e-4,gapfilled with UN regions method
+THA,Thailand,1.8311176221525827e-6,gapfilled with UN regions method
+TLS,Timor-Leste,1.8311176221525827e-6,gapfilled with UN regions method
+TGO,Togo,8.635538558774104e-5,NA
+TKL,Tokelau,0.00103092732699303,gapfilled with UN regions method
+TON,Tonga,0.00103092732699303,gapfilled with UN regions method
+TTO,Trinidad and Tobago,0.0377316529261039,NA
+TUN,Tunisia,2.4277531600089438e-4,NA
+TUR,Turkey,2.5288196222102605e-4,NA
+TKM,Turkmenistan,0,NA
+TCA,Turks and Caicos Islands,0.004287087970671545,gapfilled with UN regions method
+TUV,Tuvalu,0.00103092732699303,gapfilled with UN regions method
+UGA,Uganda,1.528861978010924e-4,NA
+UKR,Ukraine,0.0030413538219970005,NA
+ARE,United Arab Emirates,0.0034136011517546766,NA
+GBR,United Kingdom,0.0011187213658065268,NA
+USA,United States,2.741355056929637e-4,NA
+URY,Uruguay,2.381377368164396e-5,NA
+UZB,Uzbekistan,3.209493847516448e-7,NA
+VUT,Vanuatu,0.00103092732699303,gapfilled with UN regions method
+VEN,Venezuela,3.837131497549115e-4,NA
+VNM,Vietnam,1.1088580497956201e-7,NA
+VIR,"Virgin Islands, U.S.",0.004287087970671545,gapfilled with UN regions method
+WLF,Wallis and Futuna,0.00103092732699303,gapfilled with UN regions method
+ESH,Western Sahara,8.915755606677132e-5,gapfilled with UN regions method
+YEM,Yemen,1.3059019291531463e-6,NA
+ZMB,Zambia,7.640137525645024e-6,NA
+ZWE,Zimbabwe,3.9356945587336594e-4,NA

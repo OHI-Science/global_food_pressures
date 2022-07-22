@@ -1,0 +1,89 @@
+---
+title: "FAO bivalve production"
+author: "Gage Clawson (USCB, NCEAS, OHI)"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+All data is ultimately adjusted to FAO production data.  This script cleans the fao mariculture data and subsets it to to the relevant years of data and species (bivalve).
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+library(tidyverse)
+library(data.table)
+library(countrycode)
+library(here)
+library(stringr)
+
+path <- "/home/shares/food-systems/Food_footprint/_raw_data"
+source(here('aquaculture/marine/salmon/salmon_farm/R/fao_mar_clean.R')) # functions specific to mariculture dealing with compound countries
+source('https://raw.githubusercontent.com/OHI-Science/ohiprep_v2019/gh-pages/workflow/R/fao_fxn.R') # function for cleaning FAO files
+
+
+```
+
+
+
+
+Subset the data to include only the species (bivalve) and countries we are interested in. Then summarize by total tonnes of bivalve per country/year. (There are multiple bivalve species)
+
+```{r}
+
+fao <- read.csv(here("aquaculture/data/fao_mariculture_clean.csv")) %>%
+  filter(environment %in% c("Marine", "Brackishwater"))
+
+
+## Read in fao data and get a species list for salmon 
+species_list <- read.csv(here("aquaculture/marine/STEP1_species_groups/int/marine_groups.csv"))  %>%
+  distinct(species, aq_group)
+
+# the list of species we are including
+bivalve_list <- species_list$species[species_list$aq_group=="bivalves"]
+bivalve_list
+
+## write out bivalve taxa and production for Juliette
+fao_bivalve_taxa_prod <- fao %>%
+  filter(species %in% bivalve_list) %>%  
+  filter(!is.na(value)) %>%
+  arrange(-value, country) %>%
+  filter(value>=500) %>%  # countries with less do not appear to be stable producers at this point
+  group_by(country, iso3c, species, year) %>%
+  dplyr::filter(year == 2017) %>%
+  summarize(fao_tonnes_production = sum(value)) %>%
+  arrange(country, iso3c, species, year) 
+  
+write.csv(fao_bivalve_taxa_prod, here("aquaculture/marine/bivalve/bivalve_farms/data/fao_mariculture_bivalve_taxa_production.csv"), row.names=FALSE)
+
+# include only bivalves
+fao_bivalve <- fao %>%
+  filter(species %in% bivalve_list) %>%  
+  filter(!is.na(value)) %>%
+  arrange(-value, country) %>%
+  filter(value>=500,
+         year == 2017) %>%  # countries with less do not appear to be stable producers at this point
+  group_by(country, iso3c, year) %>%
+  summarize(fao_tonnes_production = sum(value)) %>%
+  arrange(country, iso3c, year) 
+ 
+write.csv(fao_bivalve, here("aquaculture/marine/bivalve/bivalve_farms/data/fao_mariculture_bivalve.csv"), row.names=FALSE)
+        
+ explore <- read_csv(here("aquaculture/marine/bivalve/bivalve_farms/data/fao_mariculture_bivalve.csv")) %>%
+   filter(year==2017) %>%
+   arrange(-fao_tonnes_production) %>%
+   mutate(percent = fao_tonnes_production/sum(fao_tonnes_production)*100)
+
+sum(explore$percent[1:9])
+
+sum(explore$fao_tonnes_production) # 17435623
+
+explore <- fao_bivalve %>%
+  dplyr::filter(year == 2017)
+```
+
+
+Abalones nei, American cupped oyster, Aquatic invertebrates nei, Australian mussel, Blacklip pearl oyster, Blood cockle, Blue mussel, Butter clam, Chilean mussel, Cholga mussel, Choro mussel, Clams, etc. nei, Common edible cockle, Constricted tagelus, Cortez oyster, Cupped oysters nei, European flat oyster, Flat and cupped oysters nei, Green mussel, Grooved carpet shell, Indian backwater oyster, Inflated ark, Japanese carpet shell, Japanese hard clam, Japanese sea cucumber, Korean mussel, Mangrove cupped oyster, Marine molluscs nei, Mediterranean mussel, New Zealand mussel, Northern quahog, Pacific cupped oyster, Pacific geoduck, Pen shells nei, Penguin wing oyster, Perlemoen abalone, Peruvian calico scallop, Red abalone, Sand gaper, Scallops nei, Sea cucumbers nei, Sea mussels nei, Sea snails, Sea squirts nei, Sea urchins nei, Slipper cupped oyster, South American rock mussel, Yesso scallop

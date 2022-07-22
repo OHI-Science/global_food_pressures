@@ -1,0 +1,2179 @@
+"region","species","variable","units","year","value","gapfilled"
+"Rogaland","Salmon","Stock_Jan1_count","1000x","2010",24934,NA
+"Rogaland","Rainbow trout","Stock_Jan1_count","1000x","2010",25,NA
+"Rogaland","Other fish species","Stock_Jan1_count","1000x","2010",977,NA
+"Hordaland","Salmon","Stock_Jan1_count","1000x","2010",48986,NA
+"Hordaland","Rainbow trout","Stock_Jan1_count","1000x","2010",10477,NA
+"Hordaland","Other fish species","Stock_Jan1_count","1000x","2010",450,NA
+"Sogn og Fjordane","Salmon","Stock_Jan1_count","1000x","2010",26388,NA
+"Sogn og Fjordane","Rainbow trout","Stock_Jan1_count","1000x","2010",3516,NA
+"Sogn og Fjordane","Other fish species","Stock_Jan1_count","1000x","2010",1807,NA
+"Møre og Romsdal","Salmon","Stock_Jan1_count","1000x","2010",35814,NA
+"Møre og Romsdal","Rainbow trout","Stock_Jan1_count","1000x","2010",3372,NA
+"Møre og Romsdal","Other fish species","Stock_Jan1_count","1000x","2010",4412,NA
+"Trøndelag","Salmon","Stock_Jan1_count","1000x","2010",0,NA
+"Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2010",0,NA
+"Trøndelag","Other fish species","Stock_Jan1_count","1000x","2010",0,NA
+"Sør-Trøndelag","Salmon","Stock_Jan1_count","1000x","2010",39625,NA
+"Sør-Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2010",75,NA
+"Sør-Trøndelag","Other fish species","Stock_Jan1_count","1000x","2010",721,NA
+"Nord-Trøndelag","Salmon","Stock_Jan1_count","1000x","2010",23713,NA
+"Nord-Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2010",0,NA
+"Nord-Trøndelag","Other fish species","Stock_Jan1_count","1000x","2010",1591,NA
+"Nordland","Salmon","Stock_Jan1_count","1000x","2010",55652,NA
+"Nordland","Rainbow trout","Stock_Jan1_count","1000x","2010",818,NA
+"Nordland","Other fish species","Stock_Jan1_count","1000x","2010",9456,NA
+"Troms","Salmon","Stock_Jan1_count","1000x","2010",36057,NA
+"Troms","Rainbow trout","Stock_Jan1_count","1000x","2010",815,NA
+"Troms","Other fish species","Stock_Jan1_count","1000x","2010",449,NA
+"Finnmark","Salmon","Stock_Jan1_count","1000x","2010",19732,NA
+"Finnmark","Rainbow trout","Stock_Jan1_count","1000x","2010",2039,NA
+"Finnmark","Other fish species","Stock_Jan1_count","1000x","2010",531,NA
+"Other Counties","Salmon","Stock_Jan1_count","1000x","2010",5140,NA
+"Other Counties","Rainbow trout","Stock_Jan1_count","1000x","2010",23,NA
+"Other Counties","Other fish species","Stock_Jan1_count","1000x","2010",305,NA
+"Rogaland","Salmon","supplies_count","1000x","2010",23209,NA
+"Rogaland","Rainbow trout","supplies_count","1000x","2010",41,NA
+"Rogaland","Other fish species","supplies_count","1000x","2010",422,NA
+"Hordaland","Salmon","supplies_count","1000x","2010",36198,NA
+"Hordaland","Rainbow trout","supplies_count","1000x","2010",10471,NA
+"Hordaland","Other fish species","supplies_count","1000x","2010",97,NA
+"Sogn og Fjordane","Salmon","supplies_count","1000x","2010",21757,NA
+"Sogn og Fjordane","Rainbow trout","supplies_count","1000x","2010",4240,NA
+"Sogn og Fjordane","Other fish species","supplies_count","1000x","2010",582,NA
+"Møre og Romsdal","Salmon","supplies_count","1000x","2010",28120,NA
+"Møre og Romsdal","Rainbow trout","supplies_count","1000x","2010",2656,NA
+"Møre og Romsdal","Other fish species","supplies_count","1000x","2010",1285,NA
+"Trøndelag","Salmon","supplies_count","1000x","2010",0,NA
+"Trøndelag","Rainbow trout","supplies_count","1000x","2010",0,NA
+"Trøndelag","Other fish species","supplies_count","1000x","2010",0,NA
+"Sør-Trøndelag","Salmon","supplies_count","1000x","2010",28692,NA
+"Sør-Trøndelag","Rainbow trout","supplies_count","1000x","2010",10,NA
+"Sør-Trøndelag","Other fish species","supplies_count","1000x","2010",538,NA
+"Nord-Trøndelag","Salmon","supplies_count","1000x","2010",24510,NA
+"Nord-Trøndelag","Rainbow trout","supplies_count","1000x","2010",0,NA
+"Nord-Trøndelag","Other fish species","supplies_count","1000x","2010",0,NA
+"Nordland","Salmon","supplies_count","1000x","2010",48815,NA
+"Nordland","Rainbow trout","supplies_count","1000x","2010",724,NA
+"Nordland","Other fish species","supplies_count","1000x","2010",3484,NA
+"Troms","Salmon","supplies_count","1000x","2010",25635,NA
+"Troms","Rainbow trout","supplies_count","1000x","2010",1377,NA
+"Troms","Other fish species","supplies_count","1000x","2010",826,NA
+"Finnmark","Salmon","supplies_count","1000x","2010",17104,NA
+"Finnmark","Rainbow trout","supplies_count","1000x","2010",582,NA
+"Finnmark","Other fish species","supplies_count","1000x","2010",288,NA
+"Other Counties","Salmon","supplies_count","1000x","2010",3279,NA
+"Other Counties","Rainbow trout","supplies_count","1000x","2010",159,NA
+"Other Counties","Other fish species","supplies_count","1000x","2010",165,NA
+"Rogaland","Salmon","delivered_for_sale_count","1000x","2010",13984,NA
+"Rogaland","Rainbow trout","delivered_for_sale_count","1000x","2010",6,NA
+"Rogaland","Other fish species","delivered_for_sale_count","1000x","2010",224,NA
+"Hordaland","Salmon","delivered_for_sale_count","1000x","2010",30259,NA
+"Hordaland","Rainbow trout","delivered_for_sale_count","1000x","2010",7087,NA
+"Hordaland","Other fish species","delivered_for_sale_count","1000x","2010",329,NA
+"Sogn og Fjordane","Salmon","delivered_for_sale_count","1000x","2010",16686,NA
+"Sogn og Fjordane","Rainbow trout","delivered_for_sale_count","1000x","2010",2437,NA
+"Sogn og Fjordane","Other fish species","delivered_for_sale_count","1000x","2010",656,NA
+"Møre og Romsdal","Salmon","delivered_for_sale_count","1000x","2010",22707,NA
+"Møre og Romsdal","Rainbow trout","delivered_for_sale_count","1000x","2010",2701,NA
+"Møre og Romsdal","Other fish species","delivered_for_sale_count","1000x","2010",1543,NA
+"Trøndelag","Salmon","delivered_for_sale_count","1000x","2010",0,NA
+"Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2010",0,NA
+"Trøndelag","Other fish species","delivered_for_sale_count","1000x","2010",0,NA
+"Sør-Trøndelag","Salmon","delivered_for_sale_count","1000x","2010",20277,NA
+"Sør-Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2010",48,NA
+"Sør-Trøndelag","Other fish species","delivered_for_sale_count","1000x","2010",184,NA
+"Nord-Trøndelag","Salmon","delivered_for_sale_count","1000x","2010",16333,NA
+"Nord-Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2010",0,NA
+"Nord-Trøndelag","Other fish species","delivered_for_sale_count","1000x","2010",534,NA
+"Nordland","Salmon","delivered_for_sale_count","1000x","2010",36005,NA
+"Nordland","Rainbow trout","delivered_for_sale_count","1000x","2010",267,NA
+"Nordland","Other fish species","delivered_for_sale_count","1000x","2010",4935,NA
+"Troms","Salmon","delivered_for_sale_count","1000x","2010",20453,NA
+"Troms","Rainbow trout","delivered_for_sale_count","1000x","2010",793,NA
+"Troms","Other fish species","delivered_for_sale_count","1000x","2010",345,NA
+"Finnmark","Salmon","delivered_for_sale_count","1000x","2010",10176,NA
+"Finnmark","Rainbow trout","delivered_for_sale_count","1000x","2010",1607,NA
+"Finnmark","Other fish species","delivered_for_sale_count","1000x","2010",370,NA
+"Other Counties","Salmon","delivered_for_sale_count","1000x","2010",2474,NA
+"Other Counties","Rainbow trout","delivered_for_sale_count","1000x","2010",143,NA
+"Other Counties","Other fish species","delivered_for_sale_count","1000x","2010",143,NA
+"Rogaland","Salmon","loss_count","1000x","2010",5455,NA
+"Rogaland","Rainbow trout","loss_count","1000x","2010",18,NA
+"Rogaland","Other fish species","loss_count","1000x","2010",102,NA
+"Hordaland","Salmon","loss_count","1000x","2010",6794,NA
+"Hordaland","Rainbow trout","loss_count","1000x","2010",2218,NA
+"Hordaland","Other fish species","loss_count","1000x","2010",106,NA
+"Sogn og Fjordane","Salmon","loss_count","1000x","2010",1734,NA
+"Sogn og Fjordane","Rainbow trout","loss_count","1000x","2010",426,NA
+"Sogn og Fjordane","Other fish species","loss_count","1000x","2010",281,NA
+"Møre og Romsdal","Salmon","loss_count","1000x","2010",4618,NA
+"Møre og Romsdal","Rainbow trout","loss_count","1000x","2010",141,NA
+"Møre og Romsdal","Other fish species","loss_count","1000x","2010",1183,NA
+"Trøndelag","Salmon","loss_count","1000x","2010",0,NA
+"Trøndelag","Rainbow trout","loss_count","1000x","2010",0,NA
+"Trøndelag","Other fish species","loss_count","1000x","2010",0,NA
+"Sør-Trøndelag","Salmon","loss_count","1000x","2010",7307,NA
+"Sør-Trøndelag","Rainbow trout","loss_count","1000x","2010",8,NA
+"Sør-Trøndelag","Other fish species","loss_count","1000x","2010",60,NA
+"Nord-Trøndelag","Salmon","loss_count","1000x","2010",3445,NA
+"Nord-Trøndelag","Rainbow trout","loss_count","1000x","2010",0,NA
+"Nord-Trøndelag","Other fish species","loss_count","1000x","2010",10,NA
+"Nordland","Salmon","loss_count","1000x","2010",6904,NA
+"Nordland","Rainbow trout","loss_count","1000x","2010",50,NA
+"Nordland","Other fish species","loss_count","1000x","2010",2000,NA
+"Troms","Salmon","loss_count","1000x","2010",5861,NA
+"Troms","Rainbow trout","loss_count","1000x","2010",103,NA
+"Troms","Other fish species","loss_count","1000x","2010",182,NA
+"Finnmark","Salmon","loss_count","1000x","2010",4153,NA
+"Finnmark","Rainbow trout","loss_count","1000x","2010",270,NA
+"Finnmark","Other fish species","loss_count","1000x","2010",155,NA
+"Other Counties","Salmon","loss_count","1000x","2010",580,NA
+"Other Counties","Rainbow trout","loss_count","1000x","2010",17,NA
+"Other Counties","Other fish species","loss_count","1000x","2010",17,NA
+"Rogaland","Salmon","stock_dec_31_count","1000x","2010",28705,NA
+"Rogaland","Rainbow trout","stock_dec_31_count","1000x","2010",43,NA
+"Rogaland","Other fish species","stock_dec_31_count","1000x","2010",1073,NA
+"Hordaland","Salmon","stock_dec_31_count","1000x","2010",48131,NA
+"Hordaland","Rainbow trout","stock_dec_31_count","1000x","2010",11643,NA
+"Hordaland","Other fish species","stock_dec_31_count","1000x","2010",112,NA
+"Sogn og Fjordane","Salmon","stock_dec_31_count","1000x","2010",29725,NA
+"Sogn og Fjordane","Rainbow trout","stock_dec_31_count","1000x","2010",4894,NA
+"Sogn og Fjordane","Other fish species","stock_dec_31_count","1000x","2010",1453,NA
+"Møre og Romsdal","Salmon","stock_dec_31_count","1000x","2010",36609,NA
+"Møre og Romsdal","Rainbow trout","stock_dec_31_count","1000x","2010",3185,NA
+"Møre og Romsdal","Other fish species","stock_dec_31_count","1000x","2010",2971,NA
+"Trøndelag","Salmon","stock_dec_31_count","1000x","2010",0,NA
+"Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2010",0,NA
+"Trøndelag","Other fish species","stock_dec_31_count","1000x","2010",0,NA
+"Sør-Trøndelag","Salmon","stock_dec_31_count","1000x","2010",40732,NA
+"Sør-Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2010",29,NA
+"Sør-Trøndelag","Other fish species","stock_dec_31_count","1000x","2010",1015,NA
+"Nord-Trøndelag","Salmon","stock_dec_31_count","1000x","2010",28446,NA
+"Nord-Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2010",0,NA
+"Nord-Trøndelag","Other fish species","stock_dec_31_count","1000x","2010",1046,NA
+"Nordland","Salmon","stock_dec_31_count","1000x","2010",61559,NA
+"Nordland","Rainbow trout","stock_dec_31_count","1000x","2010",1225,NA
+"Nordland","Other fish species","stock_dec_31_count","1000x","2010",6005,NA
+"Troms","Salmon","stock_dec_31_count","1000x","2010",35376,NA
+"Troms","Rainbow trout","stock_dec_31_count","1000x","2010",1296,NA
+"Troms","Other fish species","stock_dec_31_count","1000x","2010",749,NA
+"Finnmark","Salmon","stock_dec_31_count","1000x","2010",22507,NA
+"Finnmark","Rainbow trout","stock_dec_31_count","1000x","2010",743,NA
+"Finnmark","Other fish species","stock_dec_31_count","1000x","2010",294,NA
+"Other Counties","Salmon","stock_dec_31_count","1000x","2010",5365,NA
+"Other Counties","Rainbow trout","stock_dec_31_count","1000x","2010",22,NA
+"Other Counties","Other fish species","stock_dec_31_count","1000x","2010",309,NA
+"Rogaland","Salmon","tonnes_fish","tonnes","2010",64336,NA
+"Rogaland","Rainbow trout","tonnes_fish","tonnes","2010",32,NA
+"Rogaland","Char","tonnes_fish","tonnes","2010",0,NA
+"Rogaland","Cod","tonnes_fish","tonnes","2010",50,NA
+"Rogaland","Halibut","tonnes_fish","tonnes","2010",0,"gapfilled"
+"Rogaland","Shellfish","tonnes_fish","tonnes","2010",52,NA
+"Rogaland","Other fish species","tonnes_fish","tonnes","2010",0,"gapfilled"
+"Hordaland","Salmon","tonnes_fish","tonnes","2010",136972,NA
+"Hordaland","Rainbow trout","tonnes_fish","tonnes","2010",26407,NA
+"Hordaland","Char","tonnes_fish","tonnes","2010",0,NA
+"Hordaland","Cod","tonnes_fish","tonnes","2010",888,NA
+"Hordaland","Halibut","tonnes_fish","tonnes","2010",0,NA
+"Hordaland","Shellfish","tonnes_fish","tonnes","2010",31,NA
+"Hordaland","Other fish species","tonnes_fish","tonnes","2010",0,NA
+"Sogn og Fjordane","Salmon","tonnes_fish","tonnes","2010",78220,NA
+"Sogn og Fjordane","Rainbow trout","tonnes_fish","tonnes","2010",8856,NA
+"Sogn og Fjordane","Char","tonnes_fish","tonnes","2010",0,NA
+"Sogn og Fjordane","Cod","tonnes_fish","tonnes","2010",1435,NA
+"Sogn og Fjordane","Halibut","tonnes_fish","tonnes","2010",0,"gapfilled"
+"Sogn og Fjordane","Shellfish","tonnes_fish","tonnes","2010",66,NA
+"Sogn og Fjordane","Other fish species","tonnes_fish","tonnes","2010",0,"gapfilled"
+"Møre og Romsdal","Salmon","tonnes_fish","tonnes","2010",111683,NA
+"Møre og Romsdal","Rainbow trout","tonnes_fish","tonnes","2010",8719,NA
+"Møre og Romsdal","Char","tonnes_fish","tonnes","2010",0,NA
+"Møre og Romsdal","Cod","tonnes_fish","tonnes","2010",3249,NA
+"Møre og Romsdal","Halibut","tonnes_fish","tonnes","2010",351,NA
+"Møre og Romsdal","Shellfish","tonnes_fish","tonnes","2010",9,NA
+"Møre og Romsdal","Other fish species","tonnes_fish","tonnes","2010",0,NA
+"Trøndelag","Salmon","tonnes_fish","tonnes","2010",0,NA
+"Trøndelag","Rainbow trout","tonnes_fish","tonnes","2010",0,NA
+"Trøndelag","Char","tonnes_fish","tonnes","2010",0,NA
+"Trøndelag","Cod","tonnes_fish","tonnes","2010",0,NA
+"Trøndelag","Halibut","tonnes_fish","tonnes","2010",0,NA
+"Trøndelag","Shellfish","tonnes_fish","tonnes","2010",0,NA
+"Trøndelag","Other fish species","tonnes_fish","tonnes","2010",0,NA
+"Sør-Trøndelag","Salmon","tonnes_fish","tonnes","2010",107325,NA
+"Sør-Trøndelag","Rainbow trout","tonnes_fish","tonnes","2010",175,NA
+"Sør-Trøndelag","Char","tonnes_fish","tonnes","2010",0,"gapfilled"
+"Sør-Trøndelag","Cod","tonnes_fish","tonnes","2010",0,"gapfilled"
+"Sør-Trøndelag","Halibut","tonnes_fish","tonnes","2010",0,NA
+"Sør-Trøndelag","Shellfish","tonnes_fish","tonnes","2010",522,NA
+"Sør-Trøndelag","Other fish species","tonnes_fish","tonnes","2010",0,NA
+"Nord-Trøndelag","Salmon","tonnes_fish","tonnes","2010",80162,NA
+"Nord-Trøndelag","Rainbow trout","tonnes_fish","tonnes","2010",0,NA
+"Nord-Trøndelag","Char","tonnes_fish","tonnes","2010",0,NA
+"Nord-Trøndelag","Cod","tonnes_fish","tonnes","2010",0,"gapfilled"
+"Nord-Trøndelag","Halibut","tonnes_fish","tonnes","2010",0,"gapfilled"
+"Nord-Trøndelag","Shellfish","tonnes_fish","tonnes","2010",608,NA
+"Nord-Trøndelag","Other fish species","tonnes_fish","tonnes","2010",0,NA
+"Nordland","Salmon","tonnes_fish","tonnes","2010",191316,NA
+"Nordland","Rainbow trout","tonnes_fish","tonnes","2010",1622,NA
+"Nordland","Char","tonnes_fish","tonnes","2010",373,NA
+"Nordland","Cod","tonnes_fish","tonnes","2010",11789,NA
+"Nordland","Halibut","tonnes_fish","tonnes","2010",0,"gapfilled"
+"Nordland","Shellfish","tonnes_fish","tonnes","2010",587,NA
+"Nordland","Other fish species","tonnes_fish","tonnes","2010",0,"gapfilled"
+"Troms","Salmon","tonnes_fish","tonnes","2010",106679,NA
+"Troms","Rainbow trout","tonnes_fish","tonnes","2010",2884,NA
+"Troms","Char","tonnes_fish","tonnes","2010",0,"gapfilled"
+"Troms","Cod","tonnes_fish","tonnes","2010",971,NA
+"Troms","Halibut","tonnes_fish","tonnes","2010",0,NA
+"Troms","Shellfish","tonnes_fish","tonnes","2010",0,"gapfilled"
+"Troms","Other fish species","tonnes_fish","tonnes","2010",0,NA
+"Finnmark","Salmon","tonnes_fish","tonnes","2010",51249,NA
+"Finnmark","Rainbow trout","tonnes_fish","tonnes","2010",5900,NA
+"Finnmark","Char","tonnes_fish","tonnes","2010",0,"gapfilled"
+"Finnmark","Cod","tonnes_fish","tonnes","2010",766,NA
+"Finnmark","Halibut","tonnes_fish","tonnes","2010",0,NA
+"Finnmark","Shellfish","tonnes_fish","tonnes","2010",0,"gapfilled"
+"Finnmark","Other fish species","tonnes_fish","tonnes","2010",0,NA
+"Other Counties","Salmon","tonnes_fish","tonnes","2010",11596,NA
+"Other Counties","Rainbow trout","tonnes_fish","tonnes","2010",80,NA
+"Other Counties","Char","tonnes_fish","tonnes","2010",0,NA
+"Other Counties","Cod","tonnes_fish","tonnes","2010",0,NA
+"Other Counties","Halibut","tonnes_fish","tonnes","2010",0,NA
+"Other Counties","Shellfish","tonnes_fish","tonnes","2010",78,NA
+"Other Counties","Other fish species","tonnes_fish","tonnes","2010",256,NA
+"Rogaland","Salmon","Stock_Jan1_count","1000x","2011",28705,NA
+"Rogaland","Rainbow trout","Stock_Jan1_count","1000x","2011",43,NA
+"Rogaland","Other fish species","Stock_Jan1_count","1000x","2011",1074,NA
+"Hordaland","Salmon","Stock_Jan1_count","1000x","2011",48402,NA
+"Hordaland","Rainbow trout","Stock_Jan1_count","1000x","2011",11465,NA
+"Hordaland","Other fish species","Stock_Jan1_count","1000x","2011",508,NA
+"Sogn og Fjordane","Salmon","Stock_Jan1_count","1000x","2011",29355,NA
+"Sogn og Fjordane","Rainbow trout","Stock_Jan1_count","1000x","2011",4710,NA
+"Sogn og Fjordane","Other fish species","Stock_Jan1_count","1000x","2011",1006,NA
+"Møre og Romsdal","Salmon","Stock_Jan1_count","1000x","2011",36347,NA
+"Møre og Romsdal","Rainbow trout","Stock_Jan1_count","1000x","2011",3390,NA
+"Møre og Romsdal","Other fish species","Stock_Jan1_count","1000x","2011",2994,NA
+"Trøndelag","Salmon","Stock_Jan1_count","1000x","2011",0,NA
+"Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2011",0,NA
+"Trøndelag","Other fish species","Stock_Jan1_count","1000x","2011",0,NA
+"Sør-Trøndelag","Salmon","Stock_Jan1_count","1000x","2011",40271,NA
+"Sør-Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2011",27,NA
+"Sør-Trøndelag","Other fish species","Stock_Jan1_count","1000x","2011",1015,"gapfilled"
+"Nord-Trøndelag","Salmon","Stock_Jan1_count","1000x","2011",30530,NA
+"Nord-Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2011",0,NA
+"Nord-Trøndelag","Other fish species","Stock_Jan1_count","1000x","2011",1136,NA
+"Nordland","Salmon","Stock_Jan1_count","1000x","2011",59616,NA
+"Nordland","Rainbow trout","Stock_Jan1_count","1000x","2011",1225,NA
+"Nordland","Other fish species","Stock_Jan1_count","1000x","2011",6087,NA
+"Troms","Salmon","Stock_Jan1_count","1000x","2011",35197,NA
+"Troms","Rainbow trout","Stock_Jan1_count","1000x","2011",1296,NA
+"Troms","Other fish species","Stock_Jan1_count","1000x","2011",632,NA
+"Finnmark","Salmon","Stock_Jan1_count","1000x","2011",22507,NA
+"Finnmark","Rainbow trout","Stock_Jan1_count","1000x","2011",743,NA
+"Finnmark","Other fish species","Stock_Jan1_count","1000x","2011",359,"gapfilled"
+"Other Counties","Salmon","Stock_Jan1_count","1000x","2011",5493,NA
+"Other Counties","Rainbow trout","Stock_Jan1_count","1000x","2011",24,NA
+"Other Counties","Other fish species","Stock_Jan1_count","1000x","2011",939,NA
+"Rogaland","Salmon","supplies_count","1000x","2011",18038,NA
+"Rogaland","Rainbow trout","supplies_count","1000x","2011",14,NA
+"Rogaland","Other fish species","supplies_count","1000x","2011",356,NA
+"Hordaland","Salmon","supplies_count","1000x","2011",47220,NA
+"Hordaland","Rainbow trout","supplies_count","1000x","2011",10605,NA
+"Hordaland","Other fish species","supplies_count","1000x","2011",1949,NA
+"Sogn og Fjordane","Salmon","supplies_count","1000x","2011",21626,NA
+"Sogn og Fjordane","Rainbow trout","supplies_count","1000x","2011",4429,NA
+"Sogn og Fjordane","Other fish species","supplies_count","1000x","2011",1544,NA
+"Møre og Romsdal","Salmon","supplies_count","1000x","2011",25442,NA
+"Møre og Romsdal","Rainbow trout","supplies_count","1000x","2011",3035,NA
+"Møre og Romsdal","Other fish species","supplies_count","1000x","2011",1030,NA
+"Trøndelag","Salmon","supplies_count","1000x","2011",0,NA
+"Trøndelag","Rainbow trout","supplies_count","1000x","2011",0,NA
+"Trøndelag","Other fish species","supplies_count","1000x","2011",0,NA
+"Sør-Trøndelag","Salmon","supplies_count","1000x","2011",44034,NA
+"Sør-Trøndelag","Rainbow trout","supplies_count","1000x","2011",0,NA
+"Sør-Trøndelag","Other fish species","supplies_count","1000x","2011",300,"gapfilled"
+"Nord-Trøndelag","Salmon","supplies_count","1000x","2011",19087,NA
+"Nord-Trøndelag","Rainbow trout","supplies_count","1000x","2011",0,NA
+"Nord-Trøndelag","Other fish species","supplies_count","1000x","2011",4,NA
+"Nordland","Salmon","supplies_count","1000x","2011",48800,NA
+"Nordland","Rainbow trout","supplies_count","1000x","2011",920,NA
+"Nordland","Other fish species","supplies_count","1000x","2011",1710,NA
+"Troms","Salmon","supplies_count","1000x","2011",30812,NA
+"Troms","Rainbow trout","supplies_count","1000x","2011",998,NA
+"Troms","Other fish species","supplies_count","1000x","2011",105,NA
+"Finnmark","Salmon","supplies_count","1000x","2011",22039,NA
+"Finnmark","Rainbow trout","supplies_count","1000x","2011",1096,NA
+"Finnmark","Other fish species","supplies_count","1000x","2011",160,"gapfilled"
+"Other Counties","Salmon","supplies_count","1000x","2011",4122,NA
+"Other Counties","Rainbow trout","supplies_count","1000x","2011",201,NA
+"Other Counties","Other fish species","supplies_count","1000x","2011",766,NA
+"Rogaland","Salmon","delivered_for_sale_count","1000x","2011",14987,NA
+"Rogaland","Rainbow trout","delivered_for_sale_count","1000x","2011",29,NA
+"Rogaland","Other fish species","delivered_for_sale_count","1000x","2011",224,NA
+"Hordaland","Salmon","delivered_for_sale_count","1000x","2011",31970,NA
+"Hordaland","Rainbow trout","delivered_for_sale_count","1000x","2011",8322,NA
+"Hordaland","Other fish species","delivered_for_sale_count","1000x","2011",18,NA
+"Sogn og Fjordane","Salmon","delivered_for_sale_count","1000x","2011",17466,NA
+"Sogn og Fjordane","Rainbow trout","delivered_for_sale_count","1000x","2011",2999,NA
+"Sogn og Fjordane","Other fish species","delivered_for_sale_count","1000x","2011",670,NA
+"Møre og Romsdal","Salmon","delivered_for_sale_count","1000x","2011",23499,NA
+"Møre og Romsdal","Rainbow trout","delivered_for_sale_count","1000x","2011",2871,NA
+"Møre og Romsdal","Other fish species","delivered_for_sale_count","1000x","2011",1212,NA
+"Trøndelag","Salmon","delivered_for_sale_count","1000x","2011",0,NA
+"Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2011",0,NA
+"Trøndelag","Other fish species","delivered_for_sale_count","1000x","2011",0,NA
+"Sør-Trøndelag","Salmon","delivered_for_sale_count","1000x","2011",29494,NA
+"Sør-Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2011",18,NA
+"Sør-Trøndelag","Other fish species","delivered_for_sale_count","1000x","2011",149,"gapfilled"
+"Nord-Trøndelag","Salmon","delivered_for_sale_count","1000x","2011",15700,NA
+"Nord-Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2011",0,NA
+"Nord-Trøndelag","Other fish species","delivered_for_sale_count","1000x","2011",795,NA
+"Nordland","Salmon","delivered_for_sale_count","1000x","2011",33272,NA
+"Nordland","Rainbow trout","delivered_for_sale_count","1000x","2011",545,NA
+"Nordland","Other fish species","delivered_for_sale_count","1000x","2011",3142,NA
+"Troms","Salmon","delivered_for_sale_count","1000x","2011",20399,NA
+"Troms","Rainbow trout","delivered_for_sale_count","1000x","2011",388,NA
+"Troms","Other fish species","delivered_for_sale_count","1000x","2011",289,NA
+"Finnmark","Salmon","delivered_for_sale_count","1000x","2011",10600,NA
+"Finnmark","Rainbow trout","delivered_for_sale_count","1000x","2011",188,NA
+"Finnmark","Other fish species","delivered_for_sale_count","1000x","2011",142,"gapfilled"
+"Other Counties","Salmon","delivered_for_sale_count","1000x","2011",3154,NA
+"Other Counties","Rainbow trout","delivered_for_sale_count","1000x","2011",183,NA
+"Other Counties","Other fish species","delivered_for_sale_count","1000x","2011",266,NA
+"Rogaland","Salmon","loss_count","1000x","2011",5041,NA
+"Rogaland","Rainbow trout","loss_count","1000x","2011",6,NA
+"Rogaland","Other fish species","loss_count","1000x","2011",119,NA
+"Hordaland","Salmon","loss_count","1000x","2011",5423,NA
+"Hordaland","Rainbow trout","loss_count","1000x","2011",1511,NA
+"Hordaland","Other fish species","loss_count","1000x","2011",1357,NA
+"Sogn og Fjordane","Salmon","loss_count","1000x","2011",2693,NA
+"Sogn og Fjordane","Rainbow trout","loss_count","1000x","2011",364,NA
+"Sogn og Fjordane","Other fish species","loss_count","1000x","2011",434,NA
+"Møre og Romsdal","Salmon","loss_count","1000x","2011",6804,NA
+"Møre og Romsdal","Rainbow trout","loss_count","1000x","2011",222,NA
+"Møre og Romsdal","Other fish species","loss_count","1000x","2011",769,NA
+"Trøndelag","Salmon","loss_count","1000x","2011",0,NA
+"Trøndelag","Rainbow trout","loss_count","1000x","2011",0,NA
+"Trøndelag","Other fish species","loss_count","1000x","2011",0,NA
+"Sør-Trøndelag","Salmon","loss_count","1000x","2011",7501,NA
+"Sør-Trøndelag","Rainbow trout","loss_count","1000x","2011",5,NA
+"Sør-Trøndelag","Other fish species","loss_count","1000x","2011",816,"gapfilled"
+"Nord-Trøndelag","Salmon","loss_count","1000x","2011",4622,NA
+"Nord-Trøndelag","Rainbow trout","loss_count","1000x","2011",0,NA
+"Nord-Trøndelag","Other fish species","loss_count","1000x","2011",345,NA
+"Nordland","Salmon","loss_count","1000x","2011",9011,NA
+"Nordland","Rainbow trout","loss_count","1000x","2011",184,NA
+"Nordland","Other fish species","loss_count","1000x","2011",1318,NA
+"Troms","Salmon","loss_count","1000x","2011",4979,NA
+"Troms","Rainbow trout","loss_count","1000x","2011",111,NA
+"Troms","Other fish species","loss_count","1000x","2011",85,NA
+"Finnmark","Salmon","loss_count","1000x","2011",4251,NA
+"Finnmark","Rainbow trout","loss_count","1000x","2011",143,NA
+"Finnmark","Other fish species","loss_count","1000x","2011",1,"gapfilled"
+"Other Counties","Salmon","loss_count","1000x","2011",646,NA
+"Other Counties","Rainbow trout","loss_count","1000x","2011",17,NA
+"Other Counties","Other fish species","loss_count","1000x","2011",340,NA
+"Rogaland","Salmon","stock_dec_31_count","1000x","2011",26715,NA
+"Rogaland","Rainbow trout","stock_dec_31_count","1000x","2011",22,NA
+"Rogaland","Other fish species","stock_dec_31_count","1000x","2011",1087,NA
+"Hordaland","Salmon","stock_dec_31_count","1000x","2011",58229,NA
+"Hordaland","Rainbow trout","stock_dec_31_count","1000x","2011",12237,NA
+"Hordaland","Other fish species","stock_dec_31_count","1000x","2011",1082,NA
+"Sogn og Fjordane","Salmon","stock_dec_31_count","1000x","2011",30822,NA
+"Sogn og Fjordane","Rainbow trout","stock_dec_31_count","1000x","2011",5777,NA
+"Sogn og Fjordane","Other fish species","stock_dec_31_count","1000x","2011",1447,NA
+"Møre og Romsdal","Salmon","stock_dec_31_count","1000x","2011",31485,NA
+"Møre og Romsdal","Rainbow trout","stock_dec_31_count","1000x","2011",3332,NA
+"Møre og Romsdal","Other fish species","stock_dec_31_count","1000x","2011",2043,NA
+"Trøndelag","Salmon","stock_dec_31_count","1000x","2011",0,NA
+"Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2011",0,NA
+"Trøndelag","Other fish species","stock_dec_31_count","1000x","2011",0,NA
+"Sør-Trøndelag","Salmon","stock_dec_31_count","1000x","2011",47310,NA
+"Sør-Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2011",4,NA
+"Sør-Trøndelag","Other fish species","stock_dec_31_count","1000x","2011",350,"gapfilled"
+"Nord-Trøndelag","Salmon","stock_dec_31_count","1000x","2011",29296,NA
+"Nord-Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2011",0,NA
+"Nord-Trøndelag","Other fish species","stock_dec_31_count","1000x","2011",0,NA
+"Nordland","Salmon","stock_dec_31_count","1000x","2011",66133,NA
+"Nordland","Rainbow trout","stock_dec_31_count","1000x","2011",1416,NA
+"Nordland","Other fish species","stock_dec_31_count","1000x","2011",3337,NA
+"Troms","Salmon","stock_dec_31_count","1000x","2011",40631,NA
+"Troms","Rainbow trout","stock_dec_31_count","1000x","2011",1795,NA
+"Troms","Other fish species","stock_dec_31_count","1000x","2011",363,NA
+"Finnmark","Salmon","stock_dec_31_count","1000x","2011",29695,NA
+"Finnmark","Rainbow trout","stock_dec_31_count","1000x","2011",1507,NA
+"Finnmark","Other fish species","stock_dec_31_count","1000x","2011",375,"gapfilled"
+"Other Counties","Salmon","stock_dec_31_count","1000x","2011",5815,NA
+"Other Counties","Rainbow trout","stock_dec_31_count","1000x","2011",25,NA
+"Other Counties","Other fish species","stock_dec_31_count","1000x","2011",1100,NA
+"Rogaland","Salmon","tonnes_fish","tonnes","2011",69054,NA
+"Rogaland","Rainbow trout","tonnes_fish","tonnes","2011",111,NA
+"Rogaland","Char","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Rogaland","Cod","tonnes_fish","tonnes","2011",136,NA
+"Rogaland","Halibut","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Rogaland","Shellfish","tonnes_fish","tonnes","2011",4,NA
+"Rogaland","Other fish species","tonnes_fish","tonnes","2011",0,NA
+"Hordaland","Salmon","tonnes_fish","tonnes","2011",156419,NA
+"Hordaland","Rainbow trout","tonnes_fish","tonnes","2011",32004,NA
+"Hordaland","Char","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Hordaland","Cod","tonnes_fish","tonnes","2011",38,NA
+"Hordaland","Halibut","tonnes_fish","tonnes","2011",0,NA
+"Hordaland","Shellfish","tonnes_fish","tonnes","2011",13,NA
+"Hordaland","Other fish species","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Sogn og Fjordane","Salmon","tonnes_fish","tonnes","2011",94063,NA
+"Sogn og Fjordane","Rainbow trout","tonnes_fish","tonnes","2011",11592,NA
+"Sogn og Fjordane","Char","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Sogn og Fjordane","Cod","tonnes_fish","tonnes","2011",1725,NA
+"Sogn og Fjordane","Halibut","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Sogn og Fjordane","Shellfish","tonnes_fish","tonnes","2011",1,NA
+"Sogn og Fjordane","Other fish species","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Møre og Romsdal","Salmon","tonnes_fish","tonnes","2011",127120,NA
+"Møre og Romsdal","Rainbow trout","tonnes_fish","tonnes","2011",10215,NA
+"Møre og Romsdal","Char","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Møre og Romsdal","Cod","tonnes_fish","tonnes","2011",2591,NA
+"Møre og Romsdal","Halibut","tonnes_fish","tonnes","2011",1401,NA
+"Møre og Romsdal","Shellfish","tonnes_fish","tonnes","2011",9,NA
+"Møre og Romsdal","Other fish species","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Trøndelag","Salmon","tonnes_fish","tonnes","2011",0,NA
+"Trøndelag","Rainbow trout","tonnes_fish","tonnes","2011",0,NA
+"Trøndelag","Char","tonnes_fish","tonnes","2011",0,NA
+"Trøndelag","Cod","tonnes_fish","tonnes","2011",0,NA
+"Trøndelag","Halibut","tonnes_fish","tonnes","2011",0,NA
+"Trøndelag","Shellfish","tonnes_fish","tonnes","2011",0,NA
+"Trøndelag","Other fish species","tonnes_fish","tonnes","2011",0,NA
+"Sør-Trøndelag","Salmon","tonnes_fish","tonnes","2011",146085,NA
+"Sør-Trøndelag","Rainbow trout","tonnes_fish","tonnes","2011",56,NA
+"Sør-Trøndelag","Char","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Sør-Trøndelag","Cod","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Sør-Trøndelag","Halibut","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Sør-Trøndelag","Shellfish","tonnes_fish","tonnes","2011",702,NA
+"Sør-Trøndelag","Other fish species","tonnes_fish","tonnes","2011",0,NA
+"Nord-Trøndelag","Salmon","tonnes_fish","tonnes","2011",80803,NA
+"Nord-Trøndelag","Rainbow trout","tonnes_fish","tonnes","2011",0,NA
+"Nord-Trøndelag","Char","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Nord-Trøndelag","Cod","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Nord-Trøndelag","Halibut","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Nord-Trøndelag","Shellfish","tonnes_fish","tonnes","2011",378,NA
+"Nord-Trøndelag","Other fish species","tonnes_fish","tonnes","2011",0,NA
+"Nordland","Salmon","tonnes_fish","tonnes","2011",217345,NA
+"Nordland","Rainbow trout","tonnes_fish","tonnes","2011",1915,NA
+"Nordland","Char","tonnes_fish","tonnes","2011",178,NA
+"Nordland","Cod","tonnes_fish","tonnes","2011",7624,NA
+"Nordland","Halibut","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Nordland","Shellfish","tonnes_fish","tonnes","2011",658,NA
+"Nordland","Other fish species","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Troms","Salmon","tonnes_fish","tonnes","2011",104770,NA
+"Troms","Rainbow trout","tonnes_fish","tonnes","2011",1887,NA
+"Troms","Char","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Troms","Cod","tonnes_fish","tonnes","2011",759,NA
+"Troms","Halibut","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Troms","Shellfish","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Troms","Other fish species","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Finnmark","Salmon","tonnes_fish","tonnes","2011",56178,NA
+"Finnmark","Rainbow trout","tonnes_fish","tonnes","2011",665,NA
+"Finnmark","Char","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Finnmark","Cod","tonnes_fish","tonnes","2011",221,"gapfilled"
+"Finnmark","Halibut","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Finnmark","Shellfish","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Finnmark","Other fish species","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Other Counties","Salmon","tonnes_fish","tonnes","2011",13032,NA
+"Other Counties","Rainbow trout","tonnes_fish","tonnes","2011",111,NA
+"Other Counties","Char","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Other Counties","Cod","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Other Counties","Halibut","tonnes_fish","tonnes","2011",0,"gapfilled"
+"Other Counties","Shellfish","tonnes_fish","tonnes","2011",0,NA
+"Other Counties","Other fish species","tonnes_fish","tonnes","2011",446,"gapfilled"
+"Rogaland","Salmon","Stock_Jan1_count","1000x","2012",26753,NA
+"Rogaland","Rainbow trout","Stock_Jan1_count","1000x","2012",26,NA
+"Rogaland","Other fish species","Stock_Jan1_count","1000x","2012",1037,NA
+"Hordaland","Salmon","Stock_Jan1_count","1000x","2012",58092,NA
+"Hordaland","Rainbow trout","Stock_Jan1_count","1000x","2012",12277,NA
+"Hordaland","Other fish species","Stock_Jan1_count","1000x","2012",1039,NA
+"Sogn og Fjordane","Salmon","Stock_Jan1_count","1000x","2012",30641,NA
+"Sogn og Fjordane","Rainbow trout","Stock_Jan1_count","1000x","2012",5863,NA
+"Sogn og Fjordane","Other fish species","Stock_Jan1_count","1000x","2012",1447,NA
+"Møre og Romsdal","Salmon","Stock_Jan1_count","1000x","2012",31965,NA
+"Møre og Romsdal","Rainbow trout","Stock_Jan1_count","1000x","2012",4291,NA
+"Møre og Romsdal","Other fish species","Stock_Jan1_count","1000x","2012",2043,NA
+"Trøndelag","Salmon","Stock_Jan1_count","1000x","2012",0,NA
+"Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2012",0,NA
+"Trøndelag","Other fish species","Stock_Jan1_count","1000x","2012",0,NA
+"Sør-Trøndelag","Salmon","Stock_Jan1_count","1000x","2012",46016,NA
+"Sør-Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2012",30.3371356147022,"gapfilled"
+"Sør-Trøndelag","Other fish species","Stock_Jan1_count","1000x","2012",321.662864385298,"gapfilled"
+"Nord-Trøndelag","Salmon","Stock_Jan1_count","1000x","2012",28929,NA
+"Nord-Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2012",0,"gapfilled"
+"Nord-Trøndelag","Other fish species","Stock_Jan1_count","1000x","2012",0,"gapfilled"
+"Nordland","Salmon","Stock_Jan1_count","1000x","2012",64670,NA
+"Nordland","Rainbow trout","Stock_Jan1_count","1000x","2012",1481,NA
+"Nordland","Other fish species","Stock_Jan1_count","1000x","2012",2955,NA
+"Troms","Salmon","Stock_Jan1_count","1000x","2012",41245,NA
+"Troms","Rainbow trout","Stock_Jan1_count","1000x","2012",2050,NA
+"Troms","Other fish species","Stock_Jan1_count","1000x","2012",248,NA
+"Finnmark","Salmon","Stock_Jan1_count","1000x","2012",29796,NA
+"Finnmark","Rainbow trout","Stock_Jan1_count","1000x","2012",1463.10577057426,"gapfilled"
+"Finnmark","Other fish species","Stock_Jan1_count","1000x","2012",418.894229425737,"gapfilled"
+"Other Counties","Salmon","Stock_Jan1_count","1000x","2012",5486,NA
+"Other Counties","Rainbow trout","Stock_Jan1_count","1000x","2012",59,NA
+"Other Counties","Other fish species","Stock_Jan1_count","1000x","2012",500,NA
+"Rogaland","Salmon","supplies_count","1000x","2012",18980,NA
+"Rogaland","Rainbow trout","supplies_count","1000x","2012",14,NA
+"Rogaland","Other fish species","supplies_count","1000x","2012",856,NA
+"Hordaland","Salmon","supplies_count","1000x","2012",40490,NA
+"Hordaland","Rainbow trout","supplies_count","1000x","2012",10576,NA
+"Hordaland","Other fish species","supplies_count","1000x","2012",414,NA
+"Sogn og Fjordane","Salmon","supplies_count","1000x","2012",22529,NA
+"Sogn og Fjordane","Rainbow trout","supplies_count","1000x","2012",4292,NA
+"Sogn og Fjordane","Other fish species","supplies_count","1000x","2012",626,NA
+"Møre og Romsdal","Salmon","supplies_count","1000x","2012",37778,NA
+"Møre og Romsdal","Rainbow trout","supplies_count","1000x","2012",3011,NA
+"Møre og Romsdal","Other fish species","supplies_count","1000x","2012",1158,NA
+"Trøndelag","Salmon","supplies_count","1000x","2012",0,NA
+"Trøndelag","Rainbow trout","supplies_count","1000x","2012",0,NA
+"Trøndelag","Other fish species","supplies_count","1000x","2012",0,NA
+"Sør-Trøndelag","Salmon","supplies_count","1000x","2012",23359,NA
+"Sør-Trøndelag","Rainbow trout","supplies_count","1000x","2012",0.709914320685435,"gapfilled"
+"Sør-Trøndelag","Other fish species","supplies_count","1000x","2012",57.2900856793146,"gapfilled"
+"Nord-Trøndelag","Salmon","supplies_count","1000x","2012",27566,NA
+"Nord-Trøndelag","Rainbow trout","supplies_count","1000x","2012",0,"gapfilled"
+"Nord-Trøndelag","Other fish species","supplies_count","1000x","2012",4,"gapfilled"
+"Nordland","Salmon","supplies_count","1000x","2012",47811,NA
+"Nordland","Rainbow trout","supplies_count","1000x","2012",598,NA
+"Nordland","Other fish species","supplies_count","1000x","2012",1591,NA
+"Troms","Salmon","supplies_count","1000x","2012",34670,NA
+"Troms","Rainbow trout","supplies_count","1000x","2012",935,NA
+"Troms","Other fish species","supplies_count","1000x","2012",50,NA
+"Finnmark","Salmon","supplies_count","1000x","2012",22694,NA
+"Finnmark","Rainbow trout","supplies_count","1000x","2012",4.77156398104265,"gapfilled"
+"Finnmark","Other fish species","supplies_count","1000x","2012",1.22843601895735,"gapfilled"
+"Other Counties","Salmon","supplies_count","1000x","2012",3451,NA
+"Other Counties","Rainbow trout","supplies_count","1000x","2012",186,NA
+"Other Counties","Other fish species","supplies_count","1000x","2012",431,NA
+"Rogaland","Salmon","delivered_for_sale_count","1000x","2012",16430,NA
+"Rogaland","Rainbow trout","delivered_for_sale_count","1000x","2012",4,NA
+"Rogaland","Other fish species","delivered_for_sale_count","1000x","2012",580,NA
+"Hordaland","Salmon","delivered_for_sale_count","1000x","2012",41095,NA
+"Hordaland","Rainbow trout","delivered_for_sale_count","1000x","2012",9107,NA
+"Hordaland","Other fish species","delivered_for_sale_count","1000x","2012",270,NA
+"Sogn og Fjordane","Salmon","delivered_for_sale_count","1000x","2012",19721,NA
+"Sogn og Fjordane","Rainbow trout","delivered_for_sale_count","1000x","2012",4124,NA
+"Sogn og Fjordane","Other fish species","delivered_for_sale_count","1000x","2012",907,NA
+"Møre og Romsdal","Salmon","delivered_for_sale_count","1000x","2012",24348,NA
+"Møre og Romsdal","Rainbow trout","delivered_for_sale_count","1000x","2012",2913,NA
+"Møre og Romsdal","Other fish species","delivered_for_sale_count","1000x","2012",805,NA
+"Trøndelag","Salmon","delivered_for_sale_count","1000x","2012",0,NA
+"Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2012",0,NA
+"Trøndelag","Other fish species","delivered_for_sale_count","1000x","2012",0,NA
+"Sør-Trøndelag","Salmon","delivered_for_sale_count","1000x","2012",29920,NA
+"Sør-Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2012",55,"gapfilled"
+"Sør-Trøndelag","Other fish species","delivered_for_sale_count","1000x","2012",230,"gapfilled"
+"Nord-Trøndelag","Salmon","delivered_for_sale_count","1000x","2012",23098,NA
+"Nord-Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2012",0,"gapfilled"
+"Nord-Trøndelag","Other fish species","delivered_for_sale_count","1000x","2012",0,"gapfilled"
+"Nordland","Salmon","delivered_for_sale_count","1000x","2012",44155,NA
+"Nordland","Rainbow trout","delivered_for_sale_count","1000x","2012",741,NA
+"Nordland","Other fish species","delivered_for_sale_count","1000x","2012",1808,NA
+"Troms","Salmon","delivered_for_sale_count","1000x","2012",26124,NA
+"Troms","Rainbow trout","delivered_for_sale_count","1000x","2012",1343,NA
+"Troms","Other fish species","delivered_for_sale_count","1000x","2012",163,NA
+"Finnmark","Salmon","delivered_for_sale_count","1000x","2012",14974,NA
+"Finnmark","Rainbow trout","delivered_for_sale_count","1000x","2012",179.5,"gapfilled"
+"Finnmark","Other fish species","delivered_for_sale_count","1000x","2012",55.5,"gapfilled"
+"Other Counties","Salmon","delivered_for_sale_count","1000x","2012",2866,NA
+"Other Counties","Rainbow trout","delivered_for_sale_count","1000x","2012",182,NA
+"Other Counties","Other fish species","delivered_for_sale_count","1000x","2012",258,NA
+"Rogaland","Salmon","loss_count","1000x","2012",2576,NA
+"Rogaland","Rainbow trout","loss_count","1000x","2012",14,NA
+"Rogaland","Other fish species","loss_count","1000x","2012",95,NA
+"Hordaland","Salmon","loss_count","1000x","2012",6552,NA
+"Hordaland","Rainbow trout","loss_count","1000x","2012",1216,NA
+"Hordaland","Other fish species","loss_count","1000x","2012",285,NA
+"Sogn og Fjordane","Salmon","loss_count","1000x","2012",2832,NA
+"Sogn og Fjordane","Rainbow trout","loss_count","1000x","2012",797,NA
+"Sogn og Fjordane","Other fish species","loss_count","1000x","2012",332,NA
+"Møre og Romsdal","Salmon","loss_count","1000x","2012",3686,NA
+"Møre og Romsdal","Rainbow trout","loss_count","1000x","2012",1014,NA
+"Møre og Romsdal","Other fish species","loss_count","1000x","2012",604,NA
+"Trøndelag","Salmon","loss_count","1000x","2012",0,NA
+"Trøndelag","Rainbow trout","loss_count","1000x","2012",0,NA
+"Trøndelag","Other fish species","loss_count","1000x","2012",0,NA
+"Sør-Trøndelag","Salmon","loss_count","1000x","2012",4093,NA
+"Sør-Trøndelag","Rainbow trout","loss_count","1000x","2012",5.93203883495146,"gapfilled"
+"Sør-Trøndelag","Other fish species","loss_count","1000x","2012",41.0679611650485,"gapfilled"
+"Nord-Trøndelag","Salmon","loss_count","1000x","2012",2980,NA
+"Nord-Trøndelag","Rainbow trout","loss_count","1000x","2012",0,"gapfilled"
+"Nord-Trøndelag","Other fish species","loss_count","1000x","2012",4,"gapfilled"
+"Nordland","Salmon","loss_count","1000x","2012",5084,NA
+"Nordland","Rainbow trout","loss_count","1000x","2012",125,NA
+"Nordland","Other fish species","loss_count","1000x","2012",600,NA
+"Troms","Salmon","loss_count","1000x","2012",5297,NA
+"Troms","Rainbow trout","loss_count","1000x","2012",111,NA
+"Troms","Other fish species","loss_count","1000x","2012",75,NA
+"Finnmark","Salmon","loss_count","1000x","2012",4679,NA
+"Finnmark","Rainbow trout","loss_count","1000x","2012",29.431448489543,"gapfilled"
+"Finnmark","Other fish species","loss_count","1000x","2012",16.568551510457,"gapfilled"
+"Other Counties","Salmon","loss_count","1000x","2012",200,NA
+"Other Counties","Rainbow trout","loss_count","1000x","2012",7,NA
+"Other Counties","Other fish species","loss_count","1000x","2012",125,NA
+"Rogaland","Salmon","stock_dec_31_count","1000x","2012",26727,NA
+"Rogaland","Rainbow trout","stock_dec_31_count","1000x","2012",22,NA
+"Rogaland","Other fish species","stock_dec_31_count","1000x","2012",1218,NA
+"Hordaland","Salmon","stock_dec_31_count","1000x","2012",50935,NA
+"Hordaland","Rainbow trout","stock_dec_31_count","1000x","2012",12529,NA
+"Hordaland","Other fish species","stock_dec_31_count","1000x","2012",898,NA
+"Sogn og Fjordane","Salmon","stock_dec_31_count","1000x","2012",30617,NA
+"Sogn og Fjordane","Rainbow trout","stock_dec_31_count","1000x","2012",5234,NA
+"Sogn og Fjordane","Other fish species","stock_dec_31_count","1000x","2012",834,NA
+"Møre og Romsdal","Salmon","stock_dec_31_count","1000x","2012",41710,NA
+"Møre og Romsdal","Rainbow trout","stock_dec_31_count","1000x","2012",3375,NA
+"Møre og Romsdal","Other fish species","stock_dec_31_count","1000x","2012",1791,NA
+"Trøndelag","Salmon","stock_dec_31_count","1000x","2012",0,NA
+"Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2012",0,NA
+"Trøndelag","Other fish species","stock_dec_31_count","1000x","2012",0,NA
+"Sør-Trøndelag","Salmon","stock_dec_31_count","1000x","2012",35362,NA
+"Sør-Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2012",1.69720347155256,"gapfilled"
+"Sør-Trøndelag","Other fish species","stock_dec_31_count","1000x","2012",78.3027965284474,"gapfilled"
+"Nord-Trøndelag","Salmon","stock_dec_31_count","1000x","2012",30418,NA
+"Nord-Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2012",0,"gapfilled"
+"Nord-Trøndelag","Other fish species","stock_dec_31_count","1000x","2012",0,"gapfilled"
+"Nordland","Salmon","stock_dec_31_count","1000x","2012",63242,NA
+"Nordland","Rainbow trout","stock_dec_31_count","1000x","2012",1213,NA
+"Nordland","Other fish species","stock_dec_31_count","1000x","2012",2138,NA
+"Troms","Salmon","stock_dec_31_count","1000x","2012",44494,NA
+"Troms","Rainbow trout","stock_dec_31_count","1000x","2012",1530,NA
+"Troms","Other fish species","stock_dec_31_count","1000x","2012",59,NA
+"Finnmark","Salmon","stock_dec_31_count","1000x","2012",32837,NA
+"Finnmark","Rainbow trout","stock_dec_31_count","1000x","2012",1343.64548494983,"gapfilled"
+"Finnmark","Other fish species","stock_dec_31_count","1000x","2012",263.354515050167,"gapfilled"
+"Other Counties","Salmon","stock_dec_31_count","1000x","2012",5871,NA
+"Other Counties","Rainbow trout","stock_dec_31_count","1000x","2012",56,NA
+"Other Counties","Other fish species","stock_dec_31_count","1000x","2012",548,NA
+"Rogaland","Salmon","tonnes_fish","tonnes","2012",82732,NA
+"Rogaland","Rainbow trout","tonnes_fish","tonnes","2012",1010.60254083485,"gapfilled"
+"Rogaland","Char","tonnes_fish","tonnes","2012",0,NA
+"Rogaland","Cod","tonnes_fish","tonnes","2012",321,NA
+"Rogaland","Halibut","tonnes_fish","tonnes","2012",0,"gapfilled"
+"Rogaland","Shellfish","tonnes_fish","tonnes","2012",287.397459165154,"gapfilled"
+"Rogaland","Other fish species","tonnes_fish","tonnes","2012",0,"gapfilled"
+"Hordaland","Salmon","tonnes_fish","tonnes","2012",203525,NA
+"Hordaland","Rainbow trout","tonnes_fish","tonnes","2012",37586,NA
+"Hordaland","Char","tonnes_fish","tonnes","2012",0,NA
+"Hordaland","Cod","tonnes_fish","tonnes","2012",0,NA
+"Hordaland","Halibut","tonnes_fish","tonnes","2012",0,NA
+"Hordaland","Shellfish","tonnes_fish","tonnes","2012",15,NA
+"Hordaland","Other fish species","tonnes_fish","tonnes","2012",0,NA
+"Sogn og Fjordane","Salmon","tonnes_fish","tonnes","2012",98503,"gapfilled"
+"Sogn og Fjordane","Rainbow trout","tonnes_fish","tonnes","2012",16358,NA
+"Sogn og Fjordane","Char","tonnes_fish","tonnes","2012",0,NA
+"Sogn og Fjordane","Cod","tonnes_fish","tonnes","2012",0,NA
+"Sogn og Fjordane","Halibut","tonnes_fish","tonnes","2012",0,"gapfilled"
+"Sogn og Fjordane","Shellfish","tonnes_fish","tonnes","2012",25,NA
+"Sogn og Fjordane","Other fish species","tonnes_fish","tonnes","2012",0,NA
+"Møre og Romsdal","Salmon","tonnes_fish","tonnes","2012",118000,NA
+"Møre og Romsdal","Rainbow trout","tonnes_fish","tonnes","2012",11699.0215836657,"gapfilled"
+"Møre og Romsdal","Char","tonnes_fish","tonnes","2012",0,NA
+"Møre og Romsdal","Cod","tonnes_fish","tonnes","2012",1074.41308241726,"gapfilled"
+"Møre og Romsdal","Halibut","tonnes_fish","tonnes","2012",955.565333916997,"gapfilled"
+"Møre og Romsdal","Shellfish","tonnes_fish","tonnes","2012",9,NA
+"Møre og Romsdal","Other fish species","tonnes_fish","tonnes","2012",0,NA
+"Trøndelag","Salmon","tonnes_fish","tonnes","2012",0,NA
+"Trøndelag","Rainbow trout","tonnes_fish","tonnes","2012",0,NA
+"Trøndelag","Char","tonnes_fish","tonnes","2012",0,NA
+"Trøndelag","Cod","tonnes_fish","tonnes","2012",0,NA
+"Trøndelag","Halibut","tonnes_fish","tonnes","2012",0,NA
+"Trøndelag","Shellfish","tonnes_fish","tonnes","2012",0,NA
+"Trøndelag","Other fish species","tonnes_fish","tonnes","2012",0,NA
+"Sør-Trøndelag","Salmon","tonnes_fish","tonnes","2012",141316,NA
+"Sør-Trøndelag","Rainbow trout","tonnes_fish","tonnes","2012",0,NA
+"Sør-Trøndelag","Char","tonnes_fish","tonnes","2012",0,"gapfilled"
+"Sør-Trøndelag","Cod","tonnes_fish","tonnes","2012",0,NA
+"Sør-Trøndelag","Halibut","tonnes_fish","tonnes","2012",0,NA
+"Sør-Trøndelag","Shellfish","tonnes_fish","tonnes","2012",826,"gapfilled"
+"Sør-Trøndelag","Other fish species","tonnes_fish","tonnes","2012",0,NA
+"Nord-Trøndelag","Salmon","tonnes_fish","tonnes","2012",121526,NA
+"Nord-Trøndelag","Rainbow trout","tonnes_fish","tonnes","2012",0,NA
+"Nord-Trøndelag","Char","tonnes_fish","tonnes","2012",0,NA
+"Nord-Trøndelag","Cod","tonnes_fish","tonnes","2012",0,NA
+"Nord-Trøndelag","Halibut","tonnes_fish","tonnes","2012",0,NA
+"Nord-Trøndelag","Shellfish","tonnes_fish","tonnes","2012",452,NA
+"Nord-Trøndelag","Other fish species","tonnes_fish","tonnes","2012",0,NA
+"Nordland","Salmon","tonnes_fish","tonnes","2012",230144,NA
+"Nordland","Rainbow trout","tonnes_fish","tonnes","2012",2955,NA
+"Nordland","Char","tonnes_fish","tonnes","2012",6161,"gapfilled"
+"Nordland","Cod","tonnes_fish","tonnes","2012",5634,NA
+"Nordland","Halibut","tonnes_fish","tonnes","2012",0,"gapfilled"
+"Nordland","Shellfish","tonnes_fish","tonnes","2012",601,NA
+"Nordland","Other fish species","tonnes_fish","tonnes","2012",0,NA
+"Troms","Salmon","tonnes_fish","tonnes","2012",138674,NA
+"Troms","Rainbow trout","tonnes_fish","tonnes","2012",5125,NA
+"Troms","Char","tonnes_fish","tonnes","2012",0,NA
+"Troms","Cod","tonnes_fish","tonnes","2012",261,"gapfilled"
+"Troms","Halibut","tonnes_fish","tonnes","2012",0,NA
+"Troms","Shellfish","tonnes_fish","tonnes","2012",0,"gapfilled"
+"Troms","Other fish species","tonnes_fish","tonnes","2012",0,NA
+"Finnmark","Salmon","tonnes_fish","tonnes","2012",86168,NA
+"Finnmark","Rainbow trout","tonnes_fish","tonnes","2012",682,"gapfilled"
+"Finnmark","Char","tonnes_fish","tonnes","2012",0,"gapfilled"
+"Finnmark","Cod","tonnes_fish","tonnes","2012",0,NA
+"Finnmark","Halibut","tonnes_fish","tonnes","2012",0,NA
+"Finnmark","Shellfish","tonnes_fish","tonnes","2012",0,NA
+"Finnmark","Other fish species","tonnes_fish","tonnes","2012",0,NA
+"Other Counties","Salmon","tonnes_fish","tonnes","2012",14071.3818411265,"gapfilled"
+"Other Counties","Rainbow trout","tonnes_fish","tonnes","2012",118,NA
+"Other Counties","Char","tonnes_fish","tonnes","2012",0,"gapfilled"
+"Other Counties","Cod","tonnes_fish","tonnes","2012",0,NA
+"Other Counties","Halibut","tonnes_fish","tonnes","2012",0,NA
+"Other Counties","Shellfish","tonnes_fish","tonnes","2012",23.8094447396387,"gapfilled"
+"Other Counties","Other fish species","tonnes_fish","tonnes","2012",243.8087141339,"gapfilled"
+"Rogaland","Salmon","Stock_Jan1_count","1000x","2013",26729,NA
+"Rogaland","Rainbow trout","Stock_Jan1_count","1000x","2013",19,NA
+"Rogaland","Other fish species","Stock_Jan1_count","1000x","2013",1218,NA
+"Hordaland","Salmon","Stock_Jan1_count","1000x","2013",51023,NA
+"Hordaland","Rainbow trout","Stock_Jan1_count","1000x","2013",12529,NA
+"Hordaland","Other fish species","Stock_Jan1_count","1000x","2013",1205,NA
+"Sogn og Fjordane","Salmon","Stock_Jan1_count","1000x","2013",30627,NA
+"Sogn og Fjordane","Rainbow trout","Stock_Jan1_count","1000x","2013",5191,NA
+"Sogn og Fjordane","Other fish species","Stock_Jan1_count","1000x","2013",298,NA
+"Møre og Romsdal","Salmon","Stock_Jan1_count","1000x","2013",43319,NA
+"Møre og Romsdal","Rainbow trout","Stock_Jan1_count","1000x","2013",3093.44757901544,"gapfilled"
+"Møre og Romsdal","Other fish species","Stock_Jan1_count","1000x","2013",2074.55242098456,"gapfilled"
+"Trøndelag","Salmon","Stock_Jan1_count","1000x","2013",0,NA
+"Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2013",0,NA
+"Trøndelag","Other fish species","Stock_Jan1_count","1000x","2013",0,NA
+"Sør-Trøndelag","Salmon","Stock_Jan1_count","1000x","2013",33694,NA
+"Sør-Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2013",6.808618504436,"gapfilled"
+"Sør-Trøndelag","Other fish species","Stock_Jan1_count","1000x","2013",72.191381495564,"gapfilled"
+"Nord-Trøndelag","Salmon","Stock_Jan1_count","1000x","2013",29544.1774891217,"gapfilled"
+"Nord-Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2013",0,NA
+"Nord-Trøndelag","Other fish species","Stock_Jan1_count","1000x","2013",872.822510878296,"gapfilled"
+"Nordland","Salmon","Stock_Jan1_count","1000x","2013",65163,NA
+"Nordland","Rainbow trout","Stock_Jan1_count","1000x","2013",2275,NA
+"Nordland","Other fish species","Stock_Jan1_count","1000x","2013",2143,NA
+"Troms","Salmon","Stock_Jan1_count","1000x","2013",44710,NA
+"Troms","Rainbow trout","Stock_Jan1_count","1000x","2013",514.704667733023,"gapfilled"
+"Troms","Other fish species","Stock_Jan1_count","1000x","2013",123.295332266977,"gapfilled"
+"Finnmark","Salmon","Stock_Jan1_count","1000x","2013",32835,NA
+"Finnmark","Rainbow trout","Stock_Jan1_count","1000x","2013",1250.09249685622,"gapfilled"
+"Finnmark","Other fish species","Stock_Jan1_count","1000x","2013",357.907503143775,"gapfilled"
+"Other Counties","Salmon","Stock_Jan1_count","1000x","2013",6183.95541915995,"gapfilled"
+"Other Counties","Rainbow trout","Stock_Jan1_count","1000x","2013",20,NA
+"Other Counties","Other fish species","Stock_Jan1_count","1000x","2013",461.044580840052,"gapfilled"
+"Rogaland","Salmon","supplies_count","1000x","2013",19163,NA
+"Rogaland","Rainbow trout","supplies_count","1000x","2013",21,NA
+"Rogaland","Other fish species","supplies_count","1000x","2013",1092,NA
+"Hordaland","Salmon","supplies_count","1000x","2013",46647,NA
+"Hordaland","Rainbow trout","supplies_count","1000x","2013",9813,NA
+"Hordaland","Other fish species","supplies_count","1000x","2013",1314,NA
+"Sogn og Fjordane","Salmon","supplies_count","1000x","2013",22931,NA
+"Sogn og Fjordane","Rainbow trout","supplies_count","1000x","2013",4760,NA
+"Sogn og Fjordane","Other fish species","supplies_count","1000x","2013",843,NA
+"Møre og Romsdal","Salmon","supplies_count","1000x","2013",14123,NA
+"Møre og Romsdal","Rainbow trout","supplies_count","1000x","2013",3252.25475331662,"gapfilled"
+"Møre og Romsdal","Other fish species","supplies_count","1000x","2013",970.745246683377,"gapfilled"
+"Trøndelag","Salmon","supplies_count","1000x","2013",0,NA
+"Trøndelag","Rainbow trout","supplies_count","1000x","2013",0,NA
+"Trøndelag","Other fish species","supplies_count","1000x","2013",0,NA
+"Sør-Trøndelag","Salmon","supplies_count","1000x","2013",53881,NA
+"Sør-Trøndelag","Rainbow trout","supplies_count","1000x","2013",7.11138310893513,"gapfilled"
+"Sør-Trøndelag","Other fish species","supplies_count","1000x","2013",573.888616891065,"gapfilled"
+"Nord-Trøndelag","Salmon","supplies_count","1000x","2013",20781.3563081771,"gapfilled"
+"Nord-Trøndelag","Rainbow trout","supplies_count","1000x","2013",0,NA
+"Nord-Trøndelag","Other fish species","supplies_count","1000x","2013",73.6436918228998,"gapfilled"
+"Nordland","Salmon","supplies_count","1000x","2013",54915,NA
+"Nordland","Rainbow trout","supplies_count","1000x","2013",1697,NA
+"Nordland","Other fish species","supplies_count","1000x","2013",1456,NA
+"Troms","Salmon","supplies_count","1000x","2013",35056,NA
+"Troms","Rainbow trout","supplies_count","1000x","2013",484.340357164926,"gapfilled"
+"Troms","Other fish species","supplies_count","1000x","2013",107.659642835074,"gapfilled"
+"Finnmark","Salmon","supplies_count","1000x","2013",21065,NA
+"Finnmark","Rainbow trout","supplies_count","1000x","2013",47.7156398104265,"gapfilled"
+"Finnmark","Other fish species","supplies_count","1000x","2013",12.2843601895735,"gapfilled"
+"Other Counties","Salmon","supplies_count","1000x","2013",5031.06928704633,"gapfilled"
+"Other Counties","Rainbow trout","supplies_count","1000x","2013",229,NA
+"Other Counties","Other fish species","supplies_count","1000x","2013",392.930712953665,"gapfilled"
+"Rogaland","Salmon","delivered_for_sale_count","1000x","2013",16129,NA
+"Rogaland","Rainbow trout","delivered_for_sale_count","1000x","2013",9,NA
+"Rogaland","Other fish species","delivered_for_sale_count","1000x","2013",861,NA
+"Hordaland","Salmon","delivered_for_sale_count","1000x","2013",34900,NA
+"Hordaland","Rainbow trout","delivered_for_sale_count","1000x","2013",8962,NA
+"Hordaland","Other fish species","delivered_for_sale_count","1000x","2013",96,NA
+"Sogn og Fjordane","Salmon","delivered_for_sale_count","1000x","2013",21088,NA
+"Sogn og Fjordane","Rainbow trout","delivered_for_sale_count","1000x","2013",3377,NA
+"Sogn og Fjordane","Other fish species","delivered_for_sale_count","1000x","2013",358,NA
+"Møre og Romsdal","Salmon","delivered_for_sale_count","1000x","2013",25406,NA
+"Møre og Romsdal","Rainbow trout","delivered_for_sale_count","1000x","2013",2519.46674393149,"gapfilled"
+"Møre og Romsdal","Other fish species","delivered_for_sale_count","1000x","2013",802.533256068508,"gapfilled"
+"Trøndelag","Salmon","delivered_for_sale_count","1000x","2013",0,NA
+"Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2013",0,NA
+"Trøndelag","Other fish species","delivered_for_sale_count","1000x","2013",0,NA
+"Sør-Trøndelag","Salmon","delivered_for_sale_count","1000x","2013",25313,NA
+"Sør-Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2013",7.14035087719298,"gapfilled"
+"Sør-Trøndelag","Other fish species","delivered_for_sale_count","1000x","2013",29.859649122807,"gapfilled"
+"Nord-Trøndelag","Salmon","delivered_for_sale_count","1000x","2013",20171.2004374131,"gapfilled"
+"Nord-Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2013",0,NA
+"Nord-Trøndelag","Other fish species","delivered_for_sale_count","1000x","2013",391.799562586918,"gapfilled"
+"Nordland","Salmon","delivered_for_sale_count","1000x","2013",45948,NA
+"Nordland","Rainbow trout","delivered_for_sale_count","1000x","2013",1038,NA
+"Nordland","Other fish species","delivered_for_sale_count","1000x","2013",1753,NA
+"Troms","Salmon","delivered_for_sale_count","1000x","2013",26927,NA
+"Troms","Rainbow trout","delivered_for_sale_count","1000x","2013",454.388724273244,"gapfilled"
+"Troms","Other fish species","delivered_for_sale_count","1000x","2013",107.611275726756,"gapfilled"
+"Finnmark","Salmon","delivered_for_sale_count","1000x","2013",18617,NA
+"Finnmark","Rainbow trout","delivered_for_sale_count","1000x","2013",564.470212765958,"gapfilled"
+"Finnmark","Other fish species","delivered_for_sale_count","1000x","2013",174.529787234043,"gapfilled"
+"Other Counties","Salmon","delivered_for_sale_count","1000x","2013",3343.50595152732,"gapfilled"
+"Other Counties","Rainbow trout","delivered_for_sale_count","1000x","2013",58,NA
+"Other Counties","Other fish species","delivered_for_sale_count","1000x","2013",189.49404847268,"gapfilled"
+"Rogaland","Salmon","loss_count","1000x","2013",3843,NA
+"Rogaland","Rainbow trout","loss_count","1000x","2013",9,NA
+"Rogaland","Other fish species","loss_count","1000x","2013",327,NA
+"Hordaland","Salmon","loss_count","1000x","2013",7406,NA
+"Hordaland","Rainbow trout","loss_count","1000x","2013",1760,NA
+"Hordaland","Other fish species","loss_count","1000x","2013",814,NA
+"Sogn og Fjordane","Salmon","loss_count","1000x","2013",2132,NA
+"Sogn og Fjordane","Rainbow trout","loss_count","1000x","2013",794,NA
+"Sogn og Fjordane","Other fish species","loss_count","1000x","2013",63,NA
+"Møre og Romsdal","Salmon","loss_count","1000x","2013",2697,NA
+"Møre og Romsdal","Rainbow trout","loss_count","1000x","2013",388.323940536943,"gapfilled"
+"Møre og Romsdal","Other fish species","loss_count","1000x","2013",538.676059463058,"gapfilled"
+"Trøndelag","Salmon","loss_count","1000x","2013",0,NA
+"Trøndelag","Rainbow trout","loss_count","1000x","2013",0,NA
+"Trøndelag","Other fish species","loss_count","1000x","2013",0,NA
+"Sør-Trøndelag","Salmon","loss_count","1000x","2013",5029,NA
+"Sør-Trøndelag","Rainbow trout","loss_count","1000x","2013",1.38834951456311,"gapfilled"
+"Sør-Trøndelag","Other fish species","loss_count","1000x","2013",9.61165048543689,"gapfilled"
+"Nord-Trøndelag","Salmon","loss_count","1000x","2013",3050.46464272492,"gapfilled"
+"Nord-Trøndelag","Rainbow trout","loss_count","1000x","2013",0,NA
+"Nord-Trøndelag","Other fish species","loss_count","1000x","2013",109.535357275083,"gapfilled"
+"Nordland","Salmon","loss_count","1000x","2013",7659,NA
+"Nordland","Rainbow trout","loss_count","1000x","2013",219,NA
+"Nordland","Other fish species","loss_count","1000x","2013",1121,NA
+"Troms","Salmon","loss_count","1000x","2013",4802,NA
+"Troms","Rainbow trout","loss_count","1000x","2013",35.2106620808255,"gapfilled"
+"Troms","Other fish species","loss_count","1000x","2013",27.7893379191745,"gapfilled"
+"Finnmark","Salmon","loss_count","1000x","2013",3460,NA
+"Finnmark","Rainbow trout","loss_count","1000x","2013",92.1332300542215,"gapfilled"
+"Finnmark","Other fish species","loss_count","1000x","2013",51.8667699457785,"gapfilled"
+"Other Counties","Salmon","loss_count","1000x","2013",474.340403517848,"gapfilled"
+"Other Counties","Rainbow trout","loss_count","1000x","2013",11,NA
+"Other Counties","Other fish species","loss_count","1000x","2013",55.6595964821521,"gapfilled"
+"Rogaland","Salmon","stock_dec_31_count","1000x","2013",25920,NA
+"Rogaland","Rainbow trout","stock_dec_31_count","1000x","2013",22,NA
+"Rogaland","Other fish species","stock_dec_31_count","1000x","2013",1121,NA
+"Hordaland","Salmon","stock_dec_31_count","1000x","2013",55364,NA
+"Hordaland","Rainbow trout","stock_dec_31_count","1000x","2013",11621,NA
+"Hordaland","Other fish species","stock_dec_31_count","1000x","2013",1609,NA
+"Sogn og Fjordane","Salmon","stock_dec_31_count","1000x","2013",30337,NA
+"Sogn og Fjordane","Rainbow trout","stock_dec_31_count","1000x","2013",5780,NA
+"Sogn og Fjordane","Other fish species","stock_dec_31_count","1000x","2013",720,NA
+"Møre og Romsdal","Salmon","stock_dec_31_count","1000x","2013",29338,NA
+"Møre og Romsdal","Rainbow trout","stock_dec_31_count","1000x","2013",3354.66726815138,"gapfilled"
+"Møre og Romsdal","Other fish species","stock_dec_31_count","1000x","2013",1787.33273184862,"gapfilled"
+"Trøndelag","Salmon","stock_dec_31_count","1000x","2013",0,NA
+"Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2013",0,NA
+"Trøndelag","Other fish species","stock_dec_31_count","1000x","2013",0,NA
+"Sør-Trøndelag","Salmon","stock_dec_31_count","1000x","2013",57233,NA
+"Sør-Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2013",13.0048216007715,"gapfilled"
+"Sør-Trøndelag","Other fish species","stock_dec_31_count","1000x","2013",599.995178399229,"gapfilled"
+"Nord-Trøndelag","Salmon","stock_dec_31_count","1000x","2013",27168.2471965471,"gapfilled"
+"Nord-Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2013",0,NA
+"Nord-Trøndelag","Other fish species","stock_dec_31_count","1000x","2013",379.752803452915,"gapfilled"
+"Nordland","Salmon","stock_dec_31_count","1000x","2013",66471,NA
+"Nordland","Rainbow trout","stock_dec_31_count","1000x","2013",2715,NA
+"Nordland","Other fish species","stock_dec_31_count","1000x","2013",725,NA
+"Troms","Salmon","stock_dec_31_count","1000x","2013",48037,NA
+"Troms","Rainbow trout","stock_dec_31_count","1000x","2013",508.379324453335,"gapfilled"
+"Troms","Other fish species","stock_dec_31_count","1000x","2013",96.6206755466655,"gapfilled"
+"Finnmark","Salmon","stock_dec_31_count","1000x","2013",31823,NA
+"Finnmark","Rainbow trout","stock_dec_31_count","1000x","2013",656.354515050167,"gapfilled"
+"Finnmark","Other fish species","stock_dec_31_count","1000x","2013",128.645484949833,"gapfilled"
+"Other Counties","Salmon","stock_dec_31_count","1000x","2013",7399.25199488106,"gapfilled"
+"Other Counties","Rainbow trout","stock_dec_31_count","1000x","2013",180,NA
+"Other Counties","Other fish species","stock_dec_31_count","1000x","2013",606.74800511894,"gapfilled"
+"Rogaland","Salmon","tonnes_fish","tonnes","2013",76872,NA
+"Rogaland","Rainbow trout","tonnes_fish","tonnes","2013",308.788410217308,"gapfilled"
+"Rogaland","Char","tonnes_fish","tonnes","2013",0,NA
+"Rogaland","Cod","tonnes_fish","tonnes","2013",547.397636294319,"gapfilled"
+"Rogaland","Halibut","tonnes_fish","tonnes","2013",0,"gapfilled"
+"Rogaland","Shellfish","tonnes_fish","tonnes","2013",87.8139534883721,"gapfilled"
+"Rogaland","Other fish species","tonnes_fish","tonnes","2013",0,NA
+"Hordaland","Salmon","tonnes_fish","tonnes","2013",160524,NA
+"Hordaland","Rainbow trout","tonnes_fish","tonnes","2013",36905,NA
+"Hordaland","Char","tonnes_fish","tonnes","2013",0,NA
+"Hordaland","Cod","tonnes_fish","tonnes","2013",42.6627288836385,"gapfilled"
+"Hordaland","Halibut","tonnes_fish","tonnes","2013",0,NA
+"Hordaland","Shellfish","tonnes_fish","tonnes","2013",9.33727111636149,"gapfilled"
+"Hordaland","Other fish species","tonnes_fish","tonnes","2013",0,NA
+"Sogn og Fjordane","Salmon","tonnes_fish","tonnes","2013",102132,NA
+"Sogn og Fjordane","Rainbow trout","tonnes_fish","tonnes","2013",12875,NA
+"Sogn og Fjordane","Char","tonnes_fish","tonnes","2013",0,NA
+"Sogn og Fjordane","Cod","tonnes_fish","tonnes","2013",812,"gapfilled"
+"Sogn og Fjordane","Halibut","tonnes_fish","tonnes","2013",0,"gapfilled"
+"Sogn og Fjordane","Shellfish","tonnes_fish","tonnes","2013",307,NA
+"Sogn og Fjordane","Other fish species","tonnes_fish","tonnes","2013",0,NA
+"Møre og Romsdal","Salmon","tonnes_fish","tonnes","2013",128337,NA
+"Møre og Romsdal","Rainbow trout","tonnes_fish","tonnes","2013",12625.0359123177,"gapfilled"
+"Møre og Romsdal","Char","tonnes_fish","tonnes","2013",0,NA
+"Møre og Romsdal","Cod","tonnes_fish","tonnes","2013",1159.45625479662,"gapfilled"
+"Møre og Romsdal","Halibut","tonnes_fish","tonnes","2013",474,NA
+"Møre og Romsdal","Shellfish","tonnes_fish","tonnes","2013",12.5078328856485,"gapfilled"
+"Møre og Romsdal","Other fish species","tonnes_fish","tonnes","2013",0,NA
+"Trøndelag","Salmon","tonnes_fish","tonnes","2013",0,NA
+"Trøndelag","Rainbow trout","tonnes_fish","tonnes","2013",0,NA
+"Trøndelag","Char","tonnes_fish","tonnes","2013",0,NA
+"Trøndelag","Cod","tonnes_fish","tonnes","2013",0,NA
+"Trøndelag","Halibut","tonnes_fish","tonnes","2013",0,NA
+"Trøndelag","Shellfish","tonnes_fish","tonnes","2013",0,NA
+"Trøndelag","Other fish species","tonnes_fish","tonnes","2013",0,NA
+"Sør-Trøndelag","Salmon","tonnes_fish","tonnes","2013",133716,NA
+"Sør-Trøndelag","Rainbow trout","tonnes_fish","tonnes","2013",0,NA
+"Sør-Trøndelag","Char","tonnes_fish","tonnes","2013",0,"gapfilled"
+"Sør-Trøndelag","Cod","tonnes_fish","tonnes","2013",0,NA
+"Sør-Trøndelag","Halibut","tonnes_fish","tonnes","2013",0,NA
+"Sør-Trøndelag","Shellfish","tonnes_fish","tonnes","2013",897,"gapfilled"
+"Sør-Trøndelag","Other fish species","tonnes_fish","tonnes","2013",0,NA
+"Nord-Trøndelag","Salmon","tonnes_fish","tonnes","2013",92651,NA
+"Nord-Trøndelag","Rainbow trout","tonnes_fish","tonnes","2013",0,NA
+"Nord-Trøndelag","Char","tonnes_fish","tonnes","2013",0,NA
+"Nord-Trøndelag","Cod","tonnes_fish","tonnes","2013",0,NA
+"Nord-Trøndelag","Halibut","tonnes_fish","tonnes","2013",0,NA
+"Nord-Trøndelag","Shellfish","tonnes_fish","tonnes","2013",496,NA
+"Nord-Trøndelag","Other fish species","tonnes_fish","tonnes","2013",0,NA
+"Nordland","Salmon","tonnes_fish","tonnes","2013",234503,NA
+"Nordland","Rainbow trout","tonnes_fish","tonnes","2013",3447,NA
+"Nordland","Char","tonnes_fish","tonnes","2013",234,NA
+"Nordland","Cod","tonnes_fish","tonnes","2013",1991,"gapfilled"
+"Nordland","Halibut","tonnes_fish","tonnes","2013",0,"gapfilled"
+"Nordland","Shellfish","tonnes_fish","tonnes","2013",620,NA
+"Nordland","Other fish species","tonnes_fish","tonnes","2013",0,NA
+"Troms","Salmon","tonnes_fish","tonnes","2013",134483,NA
+"Troms","Rainbow trout","tonnes_fish","tonnes","2013",1941.88698023829,"gapfilled"
+"Troms","Char","tonnes_fish","tonnes","2013",0,NA
+"Troms","Cod","tonnes_fish","tonnes","2013",792.113019761711,"gapfilled"
+"Troms","Halibut","tonnes_fish","tonnes","2013",0,NA
+"Troms","Shellfish","tonnes_fish","tonnes","2013",0,"gapfilled"
+"Troms","Other fish species","tonnes_fish","tonnes","2013",0,NA
+"Finnmark","Salmon","tonnes_fish","tonnes","2013",89734,NA
+"Finnmark","Rainbow trout","tonnes_fish","tonnes","2013",2725,"gapfilled"
+"Finnmark","Char","tonnes_fish","tonnes","2013",0,"gapfilled"
+"Finnmark","Cod","tonnes_fish","tonnes","2013",0,NA
+"Finnmark","Halibut","tonnes_fish","tonnes","2013",0,NA
+"Finnmark","Shellfish","tonnes_fish","tonnes","2013",0,NA
+"Finnmark","Other fish species","tonnes_fish","tonnes","2013",0,NA
+"Other Counties","Salmon","tonnes_fish","tonnes","2013",15372,NA
+"Other Counties","Rainbow trout","tonnes_fish","tonnes","2013",40,NA
+"Other Counties","Char","tonnes_fish","tonnes","2013",0,NA
+"Other Counties","Cod","tonnes_fish","tonnes","2013",0,NA
+"Other Counties","Halibut","tonnes_fish","tonnes","2013",0,NA
+"Other Counties","Shellfish","tonnes_fish","tonnes","2013",16.9928825622776,"gapfilled"
+"Other Counties","Other fish species","tonnes_fish","tonnes","2013",174.007117437722,"gapfilled"
+"Rogaland","Salmon","Stock_Jan1_count","1000x","2014",26292,NA
+"Rogaland","Rainbow trout","Stock_Jan1_count","1000x","2014",19,NA
+"Rogaland","Other fish species","Stock_Jan1_count","1000x","2014",1121,NA
+"Hordaland","Salmon","Stock_Jan1_count","1000x","2014",55393,NA
+"Hordaland","Rainbow trout","Stock_Jan1_count","1000x","2014",11621,NA
+"Hordaland","Other fish species","Stock_Jan1_count","1000x","2014",20,NA
+"Sogn og Fjordane","Salmon","Stock_Jan1_count","1000x","2014",30135,NA
+"Sogn og Fjordane","Rainbow trout","Stock_Jan1_count","1000x","2014",5327.10886427531,"gapfilled"
+"Sogn og Fjordane","Other fish species","Stock_Jan1_count","1000x","2014",1067.89113572469,"gapfilled"
+"Møre og Romsdal","Salmon","Stock_Jan1_count","1000x","2014",29098,NA
+"Møre og Romsdal","Rainbow trout","Stock_Jan1_count","1000x","2014",2466.13854983429,"gapfilled"
+"Møre og Romsdal","Other fish species","Stock_Jan1_count","1000x","2014",1653.86145016571,"gapfilled"
+"Trøndelag","Salmon","Stock_Jan1_count","1000x","2014",0,NA
+"Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2014",0,NA
+"Trøndelag","Other fish species","Stock_Jan1_count","1000x","2014",0,NA
+"Sør-Trøndelag","Salmon","Stock_Jan1_count","1000x","2014",57233,NA
+"Sør-Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2014",55.3307984790875,"gapfilled"
+"Sør-Trøndelag","Other fish species","Stock_Jan1_count","1000x","2014",586.669201520913,"gapfilled"
+"Nord-Trøndelag","Salmon","Stock_Jan1_count","1000x","2014",26757.504075692,"gapfilled"
+"Nord-Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2014",0,NA
+"Nord-Trøndelag","Other fish species","Stock_Jan1_count","1000x","2014",790.495924307963,"gapfilled"
+"Nordland","Salmon","Stock_Jan1_count","1000x","2014",65893,NA
+"Nordland","Rainbow trout","Stock_Jan1_count","1000x","2014",1165.83584090571,"gapfilled"
+"Nordland","Other fish species","Stock_Jan1_count","1000x","2014",2170.16415909429,"gapfilled"
+"Troms","Salmon","Stock_Jan1_count","1000x","2014",46094.4086939875,"gapfilled"
+"Troms","Rainbow trout","Stock_Jan1_count","1000x","2014",1343.59130601253,"gapfilled"
+"Troms","Other fish species","Stock_Jan1_count","1000x","2014",0,NA
+"Finnmark","Salmon","Stock_Jan1_count","1000x","2014",29998,NA
+"Finnmark","Rainbow trout","Stock_Jan1_count","1000x","2014",610.27525499511,"gapfilled"
+"Finnmark","Other fish species","Stock_Jan1_count","1000x","2014",174.72474500489,"gapfilled"
+"Other Counties","Salmon","Stock_Jan1_count","1000x","2014",6932,NA
+"Other Counties","Rainbow trout","Stock_Jan1_count","1000x","2014",60,NA
+"Other Counties","Other fish species","Stock_Jan1_count","1000x","2014",310,NA
+"Rogaland","Salmon","supplies_count","1000x","2014",19122,NA
+"Rogaland","Rainbow trout","supplies_count","1000x","2014",20,NA
+"Rogaland","Other fish species","supplies_count","1000x","2014",276,NA
+"Hordaland","Salmon","supplies_count","1000x","2014",40960,NA
+"Hordaland","Rainbow trout","supplies_count","1000x","2014",11390,NA
+"Hordaland","Other fish species","supplies_count","1000x","2014",13,NA
+"Sogn og Fjordane","Salmon","supplies_count","1000x","2014",23820,NA
+"Sogn og Fjordane","Rainbow trout","supplies_count","1000x","2014",4566.88734726054,"gapfilled"
+"Sogn og Fjordane","Other fish species","supplies_count","1000x","2014",794.112652739456,"gapfilled"
+"Møre og Romsdal","Salmon","supplies_count","1000x","2014",47175,NA
+"Møre og Romsdal","Rainbow trout","supplies_count","1000x","2014",2556.82826924253,"gapfilled"
+"Møre og Romsdal","Other fish species","supplies_count","1000x","2014",763.171730757474,"gapfilled"
+"Trøndelag","Salmon","supplies_count","1000x","2014",0,NA
+"Trøndelag","Rainbow trout","supplies_count","1000x","2014",0,NA
+"Trøndelag","Other fish species","supplies_count","1000x","2014",0,NA
+"Sør-Trøndelag","Salmon","supplies_count","1000x","2014",16094,NA
+"Sør-Trøndelag","Rainbow trout","supplies_count","1000x","2014",4.51652386780906,"gapfilled"
+"Sør-Trøndelag","Other fish species","supplies_count","1000x","2014",364.483476132191,"gapfilled"
+"Nord-Trøndelag","Salmon","supplies_count","1000x","2014",25839.4318114285,"gapfilled"
+"Nord-Trøndelag","Rainbow trout","supplies_count","1000x","2014",0,NA
+"Nord-Trøndelag","Other fish species","supplies_count","1000x","2014",91.568188571547,"gapfilled"
+"Nordland","Salmon","supplies_count","1000x","2014",57834,NA
+"Nordland","Rainbow trout","supplies_count","1000x","2014",790.859511098623,"gapfilled"
+"Nordland","Other fish species","supplies_count","1000x","2014",964.140488901377,"gapfilled"
+"Troms","Salmon","supplies_count","1000x","2014",37766.3609358517,"gapfilled"
+"Troms","Rainbow trout","supplies_count","1000x","2014",1088.63906414829,"gapfilled"
+"Troms","Other fish species","supplies_count","1000x","2014",0,NA
+"Finnmark","Salmon","supplies_count","1000x","2014",21870,NA
+"Finnmark","Rainbow trout","supplies_count","1000x","2014",47.7156398104265,"gapfilled"
+"Finnmark","Other fish species","supplies_count","1000x","2014",12.2843601895735,"gapfilled"
+"Other Counties","Salmon","supplies_count","1000x","2014",4502,NA
+"Other Counties","Rainbow trout","supplies_count","1000x","2014",151,NA
+"Other Counties","Other fish species","supplies_count","1000x","2014",213,NA
+"Rogaland","Salmon","delivered_for_sale_count","1000x","2014",12747,NA
+"Rogaland","Rainbow trout","delivered_for_sale_count","1000x","2014",10,NA
+"Rogaland","Other fish species","delivered_for_sale_count","1000x","2014",163,NA
+"Hordaland","Salmon","delivered_for_sale_count","1000x","2014",37338,NA
+"Hordaland","Rainbow trout","delivered_for_sale_count","1000x","2014",9276,NA
+"Hordaland","Other fish species","delivered_for_sale_count","1000x","2014",0,NA
+"Sogn og Fjordane","Salmon","delivered_for_sale_count","1000x","2014",20810,NA
+"Sogn og Fjordane","Rainbow trout","delivered_for_sale_count","1000x","2014",4024.76969257841,"gapfilled"
+"Sogn og Fjordane","Other fish species","delivered_for_sale_count","1000x","2014",625.230307421592,"gapfilled"
+"Møre og Romsdal","Salmon","delivered_for_sale_count","1000x","2014",23541,NA
+"Møre og Romsdal","Rainbow trout","delivered_for_sale_count","1000x","2014",2193.34672590303,"gapfilled"
+"Møre og Romsdal","Other fish species","delivered_for_sale_count","1000x","2014",698.653274096967,"gapfilled"
+"Trøndelag","Salmon","delivered_for_sale_count","1000x","2014",0,NA
+"Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2014",0,NA
+"Trøndelag","Other fish species","delivered_for_sale_count","1000x","2014",0,NA
+"Sør-Trøndelag","Salmon","delivered_for_sale_count","1000x","2014",37348,NA
+"Sør-Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2014",12.7368421052632,"gapfilled"
+"Sør-Trøndelag","Other fish species","delivered_for_sale_count","1000x","2014",53.2631578947368,"gapfilled"
+"Nord-Trøndelag","Salmon","delivered_for_sale_count","1000x","2014",20836.282083893,"gapfilled"
+"Nord-Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2014",0,NA
+"Nord-Trøndelag","Other fish species","delivered_for_sale_count","1000x","2014",404.717916107024,"gapfilled"
+"Nordland","Salmon","delivered_for_sale_count","1000x","2014",44808,NA
+"Nordland","Rainbow trout","delivered_for_sale_count","1000x","2014",820.853197299943,"gapfilled"
+"Nordland","Other fish species","delivered_for_sale_count","1000x","2014",1637.14680270006,"gapfilled"
+"Troms","Salmon","delivered_for_sale_count","1000x","2014",27604.1716297851,"gapfilled"
+"Troms","Rainbow trout","delivered_for_sale_count","1000x","2014",762.828370214897,"gapfilled"
+"Troms","Other fish species","delivered_for_sale_count","1000x","2014",0,NA
+"Finnmark","Salmon","delivered_for_sale_count","1000x","2014",18015,NA
+"Finnmark","Rainbow trout","delivered_for_sale_count","1000x","2014",444.548936170213,"gapfilled"
+"Finnmark","Other fish species","delivered_for_sale_count","1000x","2014",137.451063829787,"gapfilled"
+"Other Counties","Salmon","delivered_for_sale_count","1000x","2014",4972,NA
+"Other Counties","Rainbow trout","delivered_for_sale_count","1000x","2014",137,NA
+"Other Counties","Other fish species","delivered_for_sale_count","1000x","2014",140,NA
+"Rogaland","Salmon","loss_count","1000x","2014",4955,NA
+"Rogaland","Rainbow trout","loss_count","1000x","2014",6,NA
+"Rogaland","Other fish species","loss_count","1000x","2014",299,NA
+"Hordaland","Salmon","loss_count","1000x","2014",9875,NA
+"Hordaland","Rainbow trout","loss_count","1000x","2014",1722,NA
+"Hordaland","Other fish species","loss_count","1000x","2014",10,NA
+"Sogn og Fjordane","Salmon","loss_count","1000x","2014",3695,NA
+"Sogn og Fjordane","Rainbow trout","loss_count","1000x","2014",669.959697732998,"gapfilled"
+"Sogn og Fjordane","Other fish species","loss_count","1000x","2014",244.040302267002,"gapfilled"
+"Møre og Romsdal","Salmon","loss_count","1000x","2014",4463,NA
+"Møre og Romsdal","Rainbow trout","loss_count","1000x","2014",176.358553361438,"gapfilled"
+"Møre og Romsdal","Other fish species","loss_count","1000x","2014",244.641446638562,"gapfilled"
+"Trøndelag","Salmon","loss_count","1000x","2014",0,NA
+"Trøndelag","Rainbow trout","loss_count","1000x","2014",0,NA
+"Trøndelag","Other fish species","loss_count","1000x","2014",0,NA
+"Sør-Trøndelag","Salmon","loss_count","1000x","2014",3666,NA
+"Sør-Trøndelag","Rainbow trout","loss_count","1000x","2014",1.64077669902913,"gapfilled"
+"Sør-Trøndelag","Other fish species","loss_count","1000x","2014",11.3592233009709,"gapfilled"
+"Nord-Trøndelag","Salmon","loss_count","1000x","2014",2198.072149204,"gapfilled"
+"Nord-Trøndelag","Rainbow trout","loss_count","1000x","2014",0,NA
+"Nord-Trøndelag","Other fish species","loss_count","1000x","2014",78.9278507960015,"gapfilled"
+"Nordland","Salmon","loss_count","1000x","2014",7338,NA
+"Nordland","Rainbow trout","loss_count","1000x","2014",53.0807698136081,"gapfilled"
+"Nordland","Other fish species","loss_count","1000x","2014",198.919230186392,"gapfilled"
+"Troms","Salmon","loss_count","1000x","2014",3648.21779672001,"gapfilled"
+"Troms","Rainbow trout","loss_count","1000x","2014",73.7822032799884,"gapfilled"
+"Troms","Other fish species","loss_count","1000x","2014",0,NA
+"Finnmark","Salmon","loss_count","1000x","2014",3174,NA
+"Finnmark","Rainbow trout","loss_count","1000x","2014",39.6684740511232,"gapfilled"
+"Finnmark","Other fish species","loss_count","1000x","2014",22.3315259488768,"gapfilled"
+"Other Counties","Salmon","loss_count","1000x","2014",422,NA
+"Other Counties","Rainbow trout","loss_count","1000x","2014",13,NA
+"Other Counties","Other fish species","loss_count","1000x","2014",28,NA
+"Rogaland","Salmon","stock_dec_31_count","1000x","2014",27712,NA
+"Rogaland","Rainbow trout","stock_dec_31_count","1000x","2014",23,NA
+"Rogaland","Other fish species","stock_dec_31_count","1000x","2014",936,NA
+"Hordaland","Salmon","stock_dec_31_count","1000x","2014",49139,NA
+"Hordaland","Rainbow trout","stock_dec_31_count","1000x","2014",12014,NA
+"Hordaland","Other fish species","stock_dec_31_count","1000x","2014",22,NA
+"Sogn og Fjordane","Salmon","stock_dec_31_count","1000x","2014",29450,NA
+"Sogn og Fjordane","Rainbow trout","stock_dec_31_count","1000x","2014",5214.46198212054,"gapfilled"
+"Sogn og Fjordane","Other fish species","stock_dec_31_count","1000x","2014",977.538017879458,"gapfilled"
+"Møre og Romsdal","Salmon","stock_dec_31_count","1000x","2014",48270,NA
+"Møre og Romsdal","Rainbow trout","stock_dec_31_count","1000x","2014",2692.47604349684,"gapfilled"
+"Møre og Romsdal","Other fish species","stock_dec_31_count","1000x","2014",1434.52395650316,"gapfilled"
+"Trøndelag","Salmon","stock_dec_31_count","1000x","2014",0,NA
+"Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2014",0,NA
+"Trøndelag","Other fish species","stock_dec_31_count","1000x","2014",0,NA
+"Sør-Trøndelag","Salmon","stock_dec_31_count","1000x","2014",32314,NA
+"Sør-Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2014",19.7512054001929,"gapfilled"
+"Sør-Trøndelag","Other fish species","stock_dec_31_count","1000x","2014",911.248794599807,"gapfilled"
+"Nord-Trøndelag","Salmon","stock_dec_31_count","1000x","2014",29546.9974592911,"gapfilled"
+"Nord-Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2014",0,NA
+"Nord-Trøndelag","Other fish species","stock_dec_31_count","1000x","2014",413.00254070892,"gapfilled"
+"Nordland","Salmon","stock_dec_31_count","1000x","2014",71581,NA
+"Nordland","Rainbow trout","stock_dec_31_count","1000x","2014",1115.84026189161,"gapfilled"
+"Nordland","Other fish species","stock_dec_31_count","1000x","2014",1266.15973810839,"gapfilled"
+"Troms","Salmon","stock_dec_31_count","1000x","2014",52585.873461062,"gapfilled"
+"Troms","Rainbow trout","stock_dec_31_count","1000x","2014",1618.12653893798,"gapfilled"
+"Troms","Other fish species","stock_dec_31_count","1000x","2014",0,NA
+"Finnmark","Salmon","stock_dec_31_count","1000x","2014",30680,NA
+"Finnmark","Rainbow trout","stock_dec_31_count","1000x","2014",167.224080267559,"gapfilled"
+"Finnmark","Other fish species","stock_dec_31_count","1000x","2014",32.7759197324415,"gapfilled"
+"Other Counties","Salmon","stock_dec_31_count","1000x","2014",6040,NA
+"Other Counties","Rainbow trout","stock_dec_31_count","1000x","2014",61,NA
+"Other Counties","Other fish species","stock_dec_31_count","1000x","2014",355,NA
+"Rogaland","Salmon","tonnes_fish","tonnes","2014",61436,NA
+"Rogaland","Rainbow trout","tonnes_fish","tonnes","2014",247.770491803279,"gapfilled"
+"Rogaland","Char","tonnes_fish","tonnes","2014",0,NA
+"Rogaland","Cod","tonnes_fish","tonnes","2014",439.229508196721,"gapfilled"
+"Rogaland","Halibut","tonnes_fish","tonnes","2014",0,"gapfilled"
+"Rogaland","Shellfish","tonnes_fish","tonnes","2014",21,NA
+"Rogaland","Other fish species","tonnes_fish","tonnes","2014",0,NA
+"Hordaland","Salmon","tonnes_fish","tonnes","2014",172004,NA
+"Hordaland","Rainbow trout","tonnes_fish","tonnes","2014",36867,NA
+"Hordaland","Char","tonnes_fish","tonnes","2014",0,NA
+"Hordaland","Cod","tonnes_fish","tonnes","2014",0,NA
+"Hordaland","Halibut","tonnes_fish","tonnes","2014",0,"gapfilled"
+"Hordaland","Shellfish","tonnes_fish","tonnes","2014",36,"gapfilled"
+"Hordaland","Other fish species","tonnes_fish","tonnes","2014",0,NA
+"Sogn og Fjordane","Salmon","tonnes_fish","tonnes","2014",97071,NA
+"Sogn og Fjordane","Rainbow trout","tonnes_fish","tonnes","2014",14643,NA
+"Sogn og Fjordane","Char","tonnes_fish","tonnes","2014",0,NA
+"Sogn og Fjordane","Cod","tonnes_fish","tonnes","2014",1098,NA
+"Sogn og Fjordane","Halibut","tonnes_fish","tonnes","2014",0,"gapfilled"
+"Sogn og Fjordane","Shellfish","tonnes_fish","tonnes","2014",1159,"gapfilled"
+"Sogn og Fjordane","Other fish species","tonnes_fish","tonnes","2014",0,NA
+"Møre og Romsdal","Salmon","tonnes_fish","tonnes","2014",123476,NA
+"Møre og Romsdal","Rainbow trout","tonnes_fish","tonnes","2014",9379.59110011523,"gapfilled"
+"Møre og Romsdal","Char","tonnes_fish","tonnes","2014",0,NA
+"Møre og Romsdal","Cod","tonnes_fish","tonnes","2014",0,NA
+"Møre og Romsdal","Halibut","tonnes_fish","tonnes","2014",766.11638310852,"gapfilled"
+"Møre og Romsdal","Shellfish","tonnes_fish","tonnes","2014",9.2925167762489,"gapfilled"
+"Møre og Romsdal","Other fish species","tonnes_fish","tonnes","2014",0,NA
+"Trøndelag","Salmon","tonnes_fish","tonnes","2014",0,NA
+"Trøndelag","Rainbow trout","tonnes_fish","tonnes","2014",0,NA
+"Trøndelag","Char","tonnes_fish","tonnes","2014",0,NA
+"Trøndelag","Cod","tonnes_fish","tonnes","2014",0,NA
+"Trøndelag","Halibut","tonnes_fish","tonnes","2014",0,NA
+"Trøndelag","Shellfish","tonnes_fish","tonnes","2014",0,NA
+"Trøndelag","Other fish species","tonnes_fish","tonnes","2014",0,NA
+"Sør-Trøndelag","Salmon","tonnes_fish","tonnes","2014",205471,NA
+"Sør-Trøndelag","Rainbow trout","tonnes_fish","tonnes","2014",35,"gapfilled"
+"Sør-Trøndelag","Char","tonnes_fish","tonnes","2014",0,"gapfilled"
+"Sør-Trøndelag","Cod","tonnes_fish","tonnes","2014",0,NA
+"Sør-Trøndelag","Halibut","tonnes_fish","tonnes","2014",0,NA
+"Sør-Trøndelag","Shellfish","tonnes_fish","tonnes","2014",970,NA
+"Sør-Trøndelag","Other fish species","tonnes_fish","tonnes","2014",0,NA
+"Nord-Trøndelag","Salmon","tonnes_fish","tonnes","2014",103572,NA
+"Nord-Trøndelag","Rainbow trout","tonnes_fish","tonnes","2014",0,NA
+"Nord-Trøndelag","Char","tonnes_fish","tonnes","2014",0,NA
+"Nord-Trøndelag","Cod","tonnes_fish","tonnes","2014",0,NA
+"Nord-Trøndelag","Halibut","tonnes_fish","tonnes","2014",0,NA
+"Nord-Trøndelag","Shellfish","tonnes_fish","tonnes","2014",517,NA
+"Nord-Trøndelag","Other fish species","tonnes_fish","tonnes","2014",0,NA
+"Nordland","Salmon","tonnes_fish","tonnes","2014",233568,NA
+"Nordland","Rainbow trout","tonnes_fish","tonnes","2014",6084,"gapfilled"
+"Nordland","Char","tonnes_fish","tonnes","2014",219,NA
+"Nordland","Cod","tonnes_fish","tonnes","2014",253,NA
+"Nordland","Halibut","tonnes_fish","tonnes","2014",0,"gapfilled"
+"Nordland","Shellfish","tonnes_fish","tonnes","2014",384,NA
+"Nordland","Other fish species","tonnes_fish","tonnes","2014",0,NA
+"Troms","Salmon","tonnes_fish","tonnes","2014",149638,NA
+"Troms","Rainbow trout","tonnes_fish","tonnes","2014",0,NA
+"Troms","Char","tonnes_fish","tonnes","2014",0,NA
+"Troms","Cod","tonnes_fish","tonnes","2014",4,"gapfilled"
+"Troms","Halibut","tonnes_fish","tonnes","2014",0,NA
+"Troms","Shellfish","tonnes_fish","tonnes","2014",0,"gapfilled"
+"Troms","Other fish species","tonnes_fish","tonnes","2014",0,NA
+"Finnmark","Salmon","tonnes_fish","tonnes","2014",95676,NA
+"Finnmark","Rainbow trout","tonnes_fish","tonnes","2014",2012,"gapfilled"
+"Finnmark","Char","tonnes_fish","tonnes","2014",0,"gapfilled"
+"Finnmark","Cod","tonnes_fish","tonnes","2014",0,NA
+"Finnmark","Halibut","tonnes_fish","tonnes","2014",0,NA
+"Finnmark","Shellfish","tonnes_fish","tonnes","2014",0,NA
+"Finnmark","Other fish species","tonnes_fish","tonnes","2014",0,NA
+"Other Counties","Salmon","tonnes_fish","tonnes","2014",16443,NA
+"Other Counties","Rainbow trout","tonnes_fish","tonnes","2014",96,NA
+"Other Counties","Char","tonnes_fish","tonnes","2014",0,"gapfilled"
+"Other Counties","Cod","tonnes_fish","tonnes","2014",0,NA
+"Other Counties","Halibut","tonnes_fish","tonnes","2014",0,NA
+"Other Counties","Shellfish","tonnes_fish","tonnes","2014",41,NA
+"Other Counties","Other fish species","tonnes_fish","tonnes","2014",211,"gapfilled"
+"Rogaland","Salmon","Stock_Jan1_count","1000x","2015",28003,NA
+"Rogaland","Rainbow trout","Stock_Jan1_count","1000x","2015",37,NA
+"Rogaland","Other fish species","Stock_Jan1_count","1000x","2015",934,NA
+"Hordaland","Salmon","Stock_Jan1_count","1000x","2015",49892,NA
+"Hordaland","Rainbow trout","Stock_Jan1_count","1000x","2015",12014,NA
+"Hordaland","Other fish species","Stock_Jan1_count","1000x","2015",5,NA
+"Sogn og Fjordane","Salmon","Stock_Jan1_count","1000x","2015",29690,NA
+"Sogn og Fjordane","Rainbow trout","Stock_Jan1_count","1000x","2015",5158.00751956102,"gapfilled"
+"Sogn og Fjordane","Other fish species","Stock_Jan1_count","1000x","2015",1033.99248043898,"gapfilled"
+"Møre og Romsdal","Salmon","Stock_Jan1_count","1000x","2015",48410,NA
+"Møre og Romsdal","Rainbow trout","Stock_Jan1_count","1000x","2015",2470.92716837766,"gapfilled"
+"Møre og Romsdal","Other fish species","Stock_Jan1_count","1000x","2015",1657.07283162234,"gapfilled"
+"Trøndelag","Salmon","Stock_Jan1_count","1000x","2015",0,NA
+"Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2015",0,NA
+"Trøndelag","Other fish species","Stock_Jan1_count","1000x","2015",0,NA
+"Sør-Trøndelag","Salmon","Stock_Jan1_count","1000x","2015",34035,NA
+"Sør-Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2015",73.6020278833967,"gapfilled"
+"Sør-Trøndelag","Other fish species","Stock_Jan1_count","1000x","2015",780.397972116603,"gapfilled"
+"Nord-Trøndelag","Salmon","Stock_Jan1_count","1000x","2015",28853,NA
+"Nord-Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2015",0,"gapfilled"
+"Nord-Trøndelag","Other fish species","Stock_Jan1_count","1000x","2015",0,"gapfilled"
+"Nordland","Salmon","Stock_Jan1_count","1000x","2015",72830,NA
+"Nordland","Rainbow trout","Stock_Jan1_count","1000x","2015",1931,NA
+"Nordland","Other fish species","Stock_Jan1_count","1000x","2015",452,NA
+"Troms","Salmon","Stock_Jan1_count","1000x","2015",53345,NA
+"Troms","Rainbow trout","Stock_Jan1_count","1000x","2015",662.339392176821,"gapfilled"
+"Troms","Other fish species","Stock_Jan1_count","1000x","2015",158.660607823179,"gapfilled"
+"Finnmark","Salmon","Stock_Jan1_count","1000x","2015",30680,NA
+"Finnmark","Rainbow trout","Stock_Jan1_count","1000x","2015",0,NA
+"Finnmark","Other fish species","Stock_Jan1_count","1000x","2015",0,NA
+"Other Counties","Salmon","Stock_Jan1_count","1000x","2015",6380,NA
+"Other Counties","Rainbow trout","Stock_Jan1_count","1000x","2015",61,NA
+"Other Counties","Other fish species","Stock_Jan1_count","1000x","2015",355,NA
+"Rogaland","Salmon","supplies_count","1000x","2015",19392,NA
+"Rogaland","Rainbow trout","supplies_count","1000x","2015",8,NA
+"Rogaland","Other fish species","supplies_count","1000x","2015",458,NA
+"Hordaland","Salmon","supplies_count","1000x","2015",45944,NA
+"Hordaland","Rainbow trout","supplies_count","1000x","2015",10600,NA
+"Hordaland","Other fish species","supplies_count","1000x","2015",116,NA
+"Sogn og Fjordane","Salmon","supplies_count","1000x","2015",24201,NA
+"Sogn og Fjordane","Rainbow trout","supplies_count","1000x","2015",4618.85155695704,"gapfilled"
+"Sogn og Fjordane","Other fish species","supplies_count","1000x","2015",803.148443042964,"gapfilled"
+"Møre og Romsdal","Salmon","supplies_count","1000x","2015",14952,NA
+"Møre og Romsdal","Rainbow trout","supplies_count","1000x","2015",1873.72384911659,"gapfilled"
+"Møre og Romsdal","Other fish species","supplies_count","1000x","2015",559.276150883414,"gapfilled"
+"Trøndelag","Salmon","supplies_count","1000x","2015",0,NA
+"Trøndelag","Rainbow trout","supplies_count","1000x","2015",0,NA
+"Trøndelag","Other fish species","supplies_count","1000x","2015",0,NA
+"Sør-Trøndelag","Salmon","supplies_count","1000x","2015",53243,NA
+"Sør-Trøndelag","Rainbow trout","supplies_count","1000x","2015",2.14198286413709,"gapfilled"
+"Sør-Trøndelag","Other fish species","supplies_count","1000x","2015",172.858017135863,"gapfilled"
+"Nord-Trøndelag","Salmon","supplies_count","1000x","2015",25619,NA
+"Nord-Trøndelag","Rainbow trout","supplies_count","1000x","2015",0,"gapfilled"
+"Nord-Trøndelag","Other fish species","supplies_count","1000x","2015",177,"gapfilled"
+"Nordland","Salmon","supplies_count","1000x","2015",57614,NA
+"Nordland","Rainbow trout","supplies_count","1000x","2015",1539,NA
+"Nordland","Other fish species","supplies_count","1000x","2015",412,NA
+"Troms","Salmon","supplies_count","1000x","2015",41159,NA
+"Troms","Rainbow trout","supplies_count","1000x","2015",0,"gapfilled"
+"Troms","Other fish species","supplies_count","1000x","2015",0,"gapfilled"
+"Finnmark","Salmon","supplies_count","1000x","2015",24880,NA
+"Finnmark","Rainbow trout","supplies_count","1000x","2015",0,NA
+"Finnmark","Other fish species","supplies_count","1000x","2015",0,NA
+"Other Counties","Salmon","supplies_count","1000x","2015",5723,NA
+"Other Counties","Rainbow trout","supplies_count","1000x","2015",146,NA
+"Other Counties","Other fish species","supplies_count","1000x","2015",165,NA
+"Rogaland","Salmon","delivered_for_sale_count","1000x","2015",16446,NA
+"Rogaland","Rainbow trout","delivered_for_sale_count","1000x","2015",8,NA
+"Rogaland","Other fish species","delivered_for_sale_count","1000x","2015",115,NA
+"Hordaland","Salmon","delivered_for_sale_count","1000x","2015",32538,NA
+"Hordaland","Rainbow trout","delivered_for_sale_count","1000x","2015",8783,NA
+"Hordaland","Other fish species","delivered_for_sale_count","1000x","2015",0,NA
+"Sogn og Fjordane","Salmon","delivered_for_sale_count","1000x","2015",20207,NA
+"Sogn og Fjordane","Rainbow trout","delivered_for_sale_count","1000x","2015",3871.56878169962,"gapfilled"
+"Sogn og Fjordane","Other fish species","delivered_for_sale_count","1000x","2015",601.431218300383,"gapfilled"
+"Møre og Romsdal","Salmon","delivered_for_sale_count","1000x","2015",36319,NA
+"Møre og Romsdal","Rainbow trout","delivered_for_sale_count","1000x","2015",2280.56487025948,"gapfilled"
+"Møre og Romsdal","Other fish species","delivered_for_sale_count","1000x","2015",726.435129740519,"gapfilled"
+"Trøndelag","Salmon","delivered_for_sale_count","1000x","2015",0,NA
+"Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2015",0,NA
+"Trøndelag","Other fish species","delivered_for_sale_count","1000x","2015",0,NA
+"Sør-Trøndelag","Salmon","delivered_for_sale_count","1000x","2015",26027,NA
+"Sør-Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2015",34.5438596491228,"gapfilled"
+"Sør-Trøndelag","Other fish species","delivered_for_sale_count","1000x","2015",144.456140350877,"gapfilled"
+"Nord-Trøndelag","Salmon","delivered_for_sale_count","1000x","2015",26348,NA
+"Nord-Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2015",0,"gapfilled"
+"Nord-Trøndelag","Other fish species","delivered_for_sale_count","1000x","2015",0,"gapfilled"
+"Nordland","Salmon","delivered_for_sale_count","1000x","2015",51358,NA
+"Nordland","Rainbow trout","delivered_for_sale_count","1000x","2015",976,NA
+"Nordland","Other fish species","delivered_for_sale_count","1000x","2015",438,NA
+"Troms","Salmon","delivered_for_sale_count","1000x","2015",33074,NA
+"Troms","Rainbow trout","delivered_for_sale_count","1000x","2015",596.688395931769,"gapfilled"
+"Troms","Other fish species","delivered_for_sale_count","1000x","2015",141.311604068231,"gapfilled"
+"Finnmark","Salmon","delivered_for_sale_count","1000x","2015",16902,NA
+"Finnmark","Rainbow trout","delivered_for_sale_count","1000x","2015",0,NA
+"Finnmark","Other fish species","delivered_for_sale_count","1000x","2015",0,NA
+"Other Counties","Salmon","delivered_for_sale_count","1000x","2015",3344,NA
+"Other Counties","Rainbow trout","delivered_for_sale_count","1000x","2015",109,NA
+"Other Counties","Other fish species","delivered_for_sale_count","1000x","2015",140,NA
+"Rogaland","Salmon","loss_count","1000x","2015",4188,NA
+"Rogaland","Rainbow trout","loss_count","1000x","2015",10,NA
+"Rogaland","Other fish species","loss_count","1000x","2015",78,NA
+"Hordaland","Salmon","loss_count","1000x","2015",8970,NA
+"Hordaland","Rainbow trout","loss_count","1000x","2015",1871,NA
+"Hordaland","Other fish species","loss_count","1000x","2015",31,NA
+"Sogn og Fjordane","Salmon","loss_count","1000x","2015",3104,NA
+"Sogn og Fjordane","Rainbow trout","loss_count","1000x","2015",641.372795969773,"gapfilled"
+"Sogn og Fjordane","Other fish species","loss_count","1000x","2015",233.627204030227,"gapfilled"
+"Møre og Romsdal","Salmon","loss_count","1000x","2015",5261,NA
+"Møre og Romsdal","Rainbow trout","loss_count","1000x","2015",170.074994453073,"gapfilled"
+"Møre og Romsdal","Other fish species","loss_count","1000x","2015",235.925005546927,"gapfilled"
+"Trøndelag","Salmon","loss_count","1000x","2015",0,NA
+"Trøndelag","Rainbow trout","loss_count","1000x","2015",0,NA
+"Trøndelag","Other fish species","loss_count","1000x","2015",0,NA
+"Sør-Trøndelag","Salmon","loss_count","1000x","2015",5215,NA
+"Sør-Trøndelag","Rainbow trout","loss_count","1000x","2015",21.5825242718447,"gapfilled"
+"Sør-Trøndelag","Other fish species","loss_count","1000x","2015",149.417475728155,"gapfilled"
+"Nord-Trøndelag","Salmon","loss_count","1000x","2015",2392,NA
+"Nord-Trøndelag","Rainbow trout","loss_count","1000x","2015",0,"gapfilled"
+"Nord-Trøndelag","Other fish species","loss_count","1000x","2015",6,"gapfilled"
+"Nordland","Salmon","loss_count","1000x","2015",9125,NA
+"Nordland","Rainbow trout","loss_count","1000x","2015",377,NA
+"Nordland","Other fish species","loss_count","1000x","2015",78,NA
+"Troms","Salmon","loss_count","1000x","2015",5271,NA
+"Troms","Rainbow trout","loss_count","1000x","2015",46.3886500429923,"gapfilled"
+"Troms","Other fish species","loss_count","1000x","2015",36.6113499570077,"gapfilled"
+"Finnmark","Salmon","loss_count","1000x","2015",7127,NA
+"Finnmark","Rainbow trout","loss_count","1000x","2015",0,NA
+"Finnmark","Other fish species","loss_count","1000x","2015",0,NA
+"Other Counties","Salmon","loss_count","1000x","2015",1098,NA
+"Other Counties","Rainbow trout","loss_count","1000x","2015",6,NA
+"Other Counties","Other fish species","loss_count","1000x","2015",24,NA
+"Rogaland","Salmon","stock_dec_31_count","1000x","2015",26761,NA
+"Rogaland","Rainbow trout","stock_dec_31_count","1000x","2015",27,NA
+"Rogaland","Other fish species","stock_dec_31_count","1000x","2015",1199,NA
+"Hordaland","Salmon","stock_dec_31_count","1000x","2015",54327,NA
+"Hordaland","Rainbow trout","stock_dec_31_count","1000x","2015",11959,NA
+"Hordaland","Other fish species","stock_dec_31_count","1000x","2015",90,NA
+"Sogn og Fjordane","Salmon","stock_dec_31_count","1000x","2015",30581,NA
+"Sogn og Fjordane","Rainbow trout","stock_dec_31_count","1000x","2015",5275.93738985549,"gapfilled"
+"Sogn og Fjordane","Other fish species","stock_dec_31_count","1000x","2015",989.062610144509,"gapfilled"
+"Møre og Romsdal","Salmon","stock_dec_31_count","1000x","2015",21783,NA
+"Møre og Romsdal","Rainbow trout","stock_dec_31_count","1000x","2015",2053.77140415024,"gapfilled"
+"Møre og Romsdal","Other fish species","stock_dec_31_count","1000x","2015",1094.22859584976,"gapfilled"
+"Trøndelag","Salmon","stock_dec_31_count","1000x","2015",0,NA
+"Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2015",0,NA
+"Trøndelag","Other fish species","stock_dec_31_count","1000x","2015",0,NA
+"Sør-Trøndelag","Salmon","stock_dec_31_count","1000x","2015",56037,NA
+"Sør-Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2015",14.4262295081967,"gapfilled"
+"Sør-Trøndelag","Other fish species","stock_dec_31_count","1000x","2015",665.573770491803,"gapfilled"
+"Nord-Trøndelag","Salmon","stock_dec_31_count","1000x","2015",25733,NA
+"Nord-Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2015",0,"gapfilled"
+"Nord-Trøndelag","Other fish species","stock_dec_31_count","1000x","2015",171,"gapfilled"
+"Nordland","Salmon","stock_dec_31_count","1000x","2015",69960,NA
+"Nordland","Rainbow trout","stock_dec_31_count","1000x","2015",2115,NA
+"Nordland","Other fish species","stock_dec_31_count","1000x","2015",348,NA
+"Troms","Salmon","stock_dec_31_count","1000x","2015",56159,NA
+"Troms","Rainbow trout","stock_dec_31_count","1000x","2015",0,"gapfilled"
+"Troms","Other fish species","stock_dec_31_count","1000x","2015",0,"gapfilled"
+"Finnmark","Salmon","stock_dec_31_count","1000x","2015",31531,NA
+"Finnmark","Rainbow trout","stock_dec_31_count","1000x","2015",0,NA
+"Finnmark","Other fish species","stock_dec_31_count","1000x","2015",0,NA
+"Other Counties","Salmon","stock_dec_31_count","1000x","2015",7661,NA
+"Other Counties","Rainbow trout","stock_dec_31_count","1000x","2015",92,NA
+"Other Counties","Other fish species","stock_dec_31_count","1000x","2015",356,NA
+"Rogaland","Salmon","tonnes_fish","tonnes","2015",83055,NA
+"Rogaland","Rainbow trout","tonnes_fish","tonnes","2015",186.819672131148,"gapfilled"
+"Rogaland","Char","tonnes_fish","tonnes","2015",0,NA
+"Rogaland","Cod","tonnes_fish","tonnes","2015",331.180327868852,"gapfilled"
+"Rogaland","Halibut","tonnes_fish","tonnes","2015",0,"gapfilled"
+"Rogaland","Shellfish","tonnes_fish","tonnes","2015",7,NA
+"Rogaland","Other fish species","tonnes_fish","tonnes","2015",0,NA
+"Hordaland","Salmon","tonnes_fish","tonnes","2015",164058,NA
+"Hordaland","Rainbow trout","tonnes_fish","tonnes","2015",35628,NA
+"Hordaland","Char","tonnes_fish","tonnes","2015",0,NA
+"Hordaland","Cod","tonnes_fish","tonnes","2015",0,NA
+"Hordaland","Halibut","tonnes_fish","tonnes","2015",0,NA
+"Hordaland","Shellfish","tonnes_fish","tonnes","2015",29,NA
+"Hordaland","Other fish species","tonnes_fish","tonnes","2015",0,NA
+"Sogn og Fjordane","Salmon","tonnes_fish","tonnes","2015",100484,NA
+"Sogn og Fjordane","Rainbow trout","tonnes_fish","tonnes","2015",19562,NA
+"Sogn og Fjordane","Char","tonnes_fish","tonnes","2015",0,NA
+"Sogn og Fjordane","Cod","tonnes_fish","tonnes","2015",0,NA
+"Sogn og Fjordane","Halibut","tonnes_fish","tonnes","2015",0,"gapfilled"
+"Sogn og Fjordane","Shellfish","tonnes_fish","tonnes","2015",120,NA
+"Sogn og Fjordane","Other fish species","tonnes_fish","tonnes","2015",0,"gapfilled"
+"Møre og Romsdal","Salmon","tonnes_fish","tonnes","2015",171091,NA
+"Møre og Romsdal","Rainbow trout","tonnes_fish","tonnes","2015",7944.25042364265,"gapfilled"
+"Møre og Romsdal","Char","tonnes_fish","tonnes","2015",0,NA
+"Møre og Romsdal","Cod","tonnes_fish","tonnes","2015",0,NA
+"Møre og Romsdal","Halibut","tonnes_fish","tonnes","2015",648.879075442283,"gapfilled"
+"Møre og Romsdal","Shellfish","tonnes_fish","tonnes","2015",7.87050091506812,"gapfilled"
+"Møre og Romsdal","Other fish species","tonnes_fish","tonnes","2015",0,NA
+"Trøndelag","Salmon","tonnes_fish","tonnes","2015",0,NA
+"Trøndelag","Rainbow trout","tonnes_fish","tonnes","2015",0,NA
+"Trøndelag","Char","tonnes_fish","tonnes","2015",0,NA
+"Trøndelag","Cod","tonnes_fish","tonnes","2015",0,NA
+"Trøndelag","Halibut","tonnes_fish","tonnes","2015",0,NA
+"Trøndelag","Shellfish","tonnes_fish","tonnes","2015",0,NA
+"Trøndelag","Other fish species","tonnes_fish","tonnes","2015",0,NA
+"Sør-Trøndelag","Salmon","tonnes_fish","tonnes","2015",142527,NA
+"Sør-Trøndelag","Rainbow trout","tonnes_fish","tonnes","2015",567,"gapfilled"
+"Sør-Trøndelag","Char","tonnes_fish","tonnes","2015",0,"gapfilled"
+"Sør-Trøndelag","Cod","tonnes_fish","tonnes","2015",0,NA
+"Sør-Trøndelag","Halibut","tonnes_fish","tonnes","2015",0,NA
+"Sør-Trøndelag","Shellfish","tonnes_fish","tonnes","2015",1137,NA
+"Sør-Trøndelag","Other fish species","tonnes_fish","tonnes","2015",0,NA
+"Nord-Trøndelag","Salmon","tonnes_fish","tonnes","2015",109298,NA
+"Nord-Trøndelag","Rainbow trout","tonnes_fish","tonnes","2015",0,NA
+"Nord-Trøndelag","Char","tonnes_fish","tonnes","2015",0,NA
+"Nord-Trøndelag","Cod","tonnes_fish","tonnes","2015",0,NA
+"Nord-Trøndelag","Halibut","tonnes_fish","tonnes","2015",0,NA
+"Nord-Trøndelag","Shellfish","tonnes_fish","tonnes","2015",1286,NA
+"Nord-Trøndelag","Other fish species","tonnes_fish","tonnes","2015",0,NA
+"Nordland","Salmon","tonnes_fish","tonnes","2015",262252,NA
+"Nordland","Rainbow trout","tonnes_fish","tonnes","2015",1643.38149044037,"gapfilled"
+"Nordland","Char","tonnes_fish","tonnes","2015",238,NA
+"Nordland","Cod","tonnes_fish","tonnes","2015",3346.61850955963,"gapfilled"
+"Nordland","Halibut","tonnes_fish","tonnes","2015",0,"gapfilled"
+"Nordland","Shellfish","tonnes_fish","tonnes","2015",180,NA
+"Nordland","Other fish species","tonnes_fish","tonnes","2015",0,NA
+"Troms","Salmon","tonnes_fish","tonnes","2015",163767,NA
+"Troms","Rainbow trout","tonnes_fish","tonnes","2015",4279,"gapfilled"
+"Troms","Char","tonnes_fish","tonnes","2015",0,NA
+"Troms","Cod","tonnes_fish","tonnes","2015",0,NA
+"Troms","Halibut","tonnes_fish","tonnes","2015",0,NA
+"Troms","Shellfish","tonnes_fish","tonnes","2015",0,"gapfilled"
+"Troms","Other fish species","tonnes_fish","tonnes","2015",0,NA
+"Finnmark","Salmon","tonnes_fish","tonnes","2015",90482,NA
+"Finnmark","Rainbow trout","tonnes_fish","tonnes","2015",0,NA
+"Finnmark","Char","tonnes_fish","tonnes","2015",0,NA
+"Finnmark","Cod","tonnes_fish","tonnes","2015",0,NA
+"Finnmark","Halibut","tonnes_fish","tonnes","2015",0,NA
+"Finnmark","Shellfish","tonnes_fish","tonnes","2015",0,NA
+"Finnmark","Other fish species","tonnes_fish","tonnes","2015",0,NA
+"Other Counties","Salmon","tonnes_fish","tonnes","2015",16332,NA
+"Other Counties","Rainbow trout","tonnes_fish","tonnes","2015",101,NA
+"Other Counties","Char","tonnes_fish","tonnes","2015",0,"gapfilled"
+"Other Counties","Cod","tonnes_fish","tonnes","2015",0,NA
+"Other Counties","Halibut","tonnes_fish","tonnes","2015",0,NA
+"Other Counties","Shellfish","tonnes_fish","tonnes","2015",2,NA
+"Other Counties","Other fish species","tonnes_fish","tonnes","2015",214,"gapfilled"
+"Rogaland","Salmon","Stock_Jan1_count","1000x","2016",26761,NA
+"Rogaland","Rainbow trout","Stock_Jan1_count","1000x","2016",30,NA
+"Rogaland","Other fish species","Stock_Jan1_count","1000x","2016",1199,NA
+"Hordaland","Salmon","Stock_Jan1_count","1000x","2016",54359,NA
+"Hordaland","Rainbow trout","Stock_Jan1_count","1000x","2016",12112,NA
+"Hordaland","Other fish species","Stock_Jan1_count","1000x","2016",80,NA
+"Sogn og Fjordane","Salmon","Stock_Jan1_count","1000x","2016",30581,NA
+"Sogn og Fjordane","Rainbow trout","Stock_Jan1_count","1000x","2016",5218.81736273414,"gapfilled"
+"Sogn og Fjordane","Other fish species","Stock_Jan1_count","1000x","2016",1046.18263726586,"gapfilled"
+"Møre og Romsdal","Salmon","Stock_Jan1_count","1000x","2016",21886,NA
+"Møre og Romsdal","Rainbow trout","Stock_Jan1_count","1000x","2016",1883.72281949721,"gapfilled"
+"Møre og Romsdal","Other fish species","Stock_Jan1_count","1000x","2016",1263.27718050279,"gapfilled"
+"Trøndelag","Salmon","Stock_Jan1_count","1000x","2016",0,NA
+"Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2016",0,NA
+"Trøndelag","Other fish species","Stock_Jan1_count","1000x","2016",0,NA
+"Sør-Trøndelag","Salmon","Stock_Jan1_count","1000x","2016",56026,NA
+"Sør-Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2016",58.6058301647655,"gapfilled"
+"Sør-Trøndelag","Other fish species","Stock_Jan1_count","1000x","2016",621.394169835234,"gapfilled"
+"Nord-Trøndelag","Salmon","Stock_Jan1_count","1000x","2016",30286,NA
+"Nord-Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2016",0,"gapfilled"
+"Nord-Trøndelag","Other fish species","Stock_Jan1_count","1000x","2016",172,"gapfilled"
+"Nordland","Salmon","Stock_Jan1_count","1000x","2016",72895,NA
+"Nordland","Rainbow trout","Stock_Jan1_count","1000x","2016",2115,NA
+"Nordland","Other fish species","Stock_Jan1_count","1000x","2016",345,NA
+"Troms","Salmon","Stock_Jan1_count","1000x","2016",55717,NA
+"Troms","Rainbow trout","Stock_Jan1_count","1000x","2016",0,"gapfilled"
+"Troms","Other fish species","Stock_Jan1_count","1000x","2016",0,"gapfilled"
+"Finnmark","Salmon","Stock_Jan1_count","1000x","2016",31531,NA
+"Finnmark","Rainbow trout","Stock_Jan1_count","1000x","2016",129.829258069023,"gapfilled"
+"Finnmark","Other fish species","Stock_Jan1_count","1000x","2016",37.1707419309767,"gapfilled"
+"Other Counties","Salmon","Stock_Jan1_count","1000x","2016",6893,NA
+"Other Counties","Rainbow trout","Stock_Jan1_count","1000x","2016",62,NA
+"Other Counties","Other fish species","Stock_Jan1_count","1000x","2016",366,NA
+"Rogaland","Salmon","supplies_count","1000x","2016",20747,NA
+"Rogaland","Rainbow trout","supplies_count","1000x","2016",0,NA
+"Rogaland","Other fish species","supplies_count","1000x","2016",473,NA
+"Hordaland","Salmon","supplies_count","1000x","2016",44908,NA
+"Hordaland","Rainbow trout","supplies_count","1000x","2016",10230,NA
+"Hordaland","Other fish species","supplies_count","1000x","2016",191,NA
+"Sogn og Fjordane","Salmon","supplies_count","1000x","2016",25217,NA
+"Sogn og Fjordane","Rainbow trout","supplies_count","1000x","2016",4033.61529365392,"gapfilled"
+"Sogn og Fjordane","Other fish species","supplies_count","1000x","2016",701.384706346078,"gapfilled"
+"Møre og Romsdal","Salmon","supplies_count","1000x","2016",48116,NA
+"Møre og Romsdal","Rainbow trout","supplies_count","1000x","2016",2568.38020419392,"gapfilled"
+"Møre og Romsdal","Other fish species","supplies_count","1000x","2016",766.619795806077,"gapfilled"
+"Trøndelag","Salmon","supplies_count","1000x","2016",0,NA
+"Trøndelag","Rainbow trout","supplies_count","1000x","2016",0,NA
+"Trøndelag","Other fish species","supplies_count","1000x","2016",0,NA
+"Sør-Trøndelag","Salmon","supplies_count","1000x","2016",19563,NA
+"Sør-Trøndelag","Rainbow trout","supplies_count","1000x","2016",0,"gapfilled"
+"Sør-Trøndelag","Other fish species","supplies_count","1000x","2016",0,"gapfilled"
+"Nord-Trøndelag","Salmon","supplies_count","1000x","2016",21367,NA
+"Nord-Trøndelag","Rainbow trout","supplies_count","1000x","2016",0,"gapfilled"
+"Nord-Trøndelag","Other fish species","supplies_count","1000x","2016",162,"gapfilled"
+"Nordland","Salmon","supplies_count","1000x","2016",66040,NA
+"Nordland","Rainbow trout","supplies_count","1000x","2016",1583,NA
+"Nordland","Other fish species","supplies_count","1000x","2016",510,NA
+"Troms","Salmon","supplies_count","1000x","2016",40593,NA
+"Troms","Rainbow trout","supplies_count","1000x","2016",216.807761230921,"gapfilled"
+"Troms","Other fish species","supplies_count","1000x","2016",48.1922387690787,"gapfilled"
+"Finnmark","Salmon","supplies_count","1000x","2016",25677,NA
+"Finnmark","Rainbow trout","supplies_count","1000x","2016",63.6208530805687,"gapfilled"
+"Finnmark","Other fish species","supplies_count","1000x","2016",16.3791469194313,"gapfilled"
+"Other Counties","Salmon","supplies_count","1000x","2016",2531,NA
+"Other Counties","Rainbow trout","supplies_count","1000x","2016",148,NA
+"Other Counties","Other fish species","supplies_count","1000x","2016",215,NA
+"Rogaland","Salmon","delivered_for_sale_count","1000x","2016",15382,NA
+"Rogaland","Rainbow trout","delivered_for_sale_count","1000x","2016",11,NA
+"Rogaland","Other fish species","delivered_for_sale_count","1000x","2016",140,NA
+"Hordaland","Salmon","delivered_for_sale_count","1000x","2016",38761,NA
+"Hordaland","Rainbow trout","delivered_for_sale_count","1000x","2016",11775,NA
+"Hordaland","Other fish species","delivered_for_sale_count","1000x","2016",0,NA
+"Sogn og Fjordane","Salmon","delivered_for_sale_count","1000x","2016",20910,NA
+"Sogn og Fjordane","Rainbow trout","delivered_for_sale_count","1000x","2016",3848.19915122658,"gapfilled"
+"Sogn og Fjordane","Other fish species","delivered_for_sale_count","1000x","2016",597.800848773419,"gapfilled"
+"Møre og Romsdal","Salmon","delivered_for_sale_count","1000x","2016",18422,NA
+"Møre og Romsdal","Rainbow trout","delivered_for_sale_count","1000x","2016",2316.21054664864,"gapfilled"
+"Møre og Romsdal","Other fish species","delivered_for_sale_count","1000x","2016",737.789453351362,"gapfilled"
+"Trøndelag","Salmon","delivered_for_sale_count","1000x","2016",0,NA
+"Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2016",0,NA
+"Trøndelag","Other fish species","delivered_for_sale_count","1000x","2016",0,NA
+"Sør-Trøndelag","Salmon","delivered_for_sale_count","1000x","2016",34062,NA
+"Sør-Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2016",5.78947368421053,"gapfilled"
+"Sør-Trøndelag","Other fish species","delivered_for_sale_count","1000x","2016",24.2105263157895,"gapfilled"
+"Nord-Trøndelag","Salmon","delivered_for_sale_count","1000x","2016",21057,NA
+"Nord-Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2016",0,"gapfilled"
+"Nord-Trøndelag","Other fish species","delivered_for_sale_count","1000x","2016",118,"gapfilled"
+"Nordland","Salmon","delivered_for_sale_count","1000x","2016",55260,NA
+"Nordland","Rainbow trout","delivered_for_sale_count","1000x","2016",1521,NA
+"Nordland","Other fish species","delivered_for_sale_count","1000x","2016",400,NA
+"Troms","Salmon","delivered_for_sale_count","1000x","2016",35018,NA
+"Troms","Rainbow trout","delivered_for_sale_count","1000x","2016",121.278129254425,"gapfilled"
+"Troms","Other fish species","delivered_for_sale_count","1000x","2016",28.7218707455754,"gapfilled"
+"Finnmark","Salmon","delivered_for_sale_count","1000x","2016",18194,NA
+"Finnmark","Rainbow trout","delivered_for_sale_count","1000x","2016",51.1765957446809,"gapfilled"
+"Finnmark","Other fish species","delivered_for_sale_count","1000x","2016",15.8234042553191,"gapfilled"
+"Other Counties","Salmon","delivered_for_sale_count","1000x","2016",3377,NA
+"Other Counties","Rainbow trout","delivered_for_sale_count","1000x","2016",142,NA
+"Other Counties","Other fish species","delivered_for_sale_count","1000x","2016",186,NA
+"Rogaland","Salmon","loss_count","1000x","2016",4071,NA
+"Rogaland","Rainbow trout","loss_count","1000x","2016",10,NA
+"Rogaland","Other fish species","loss_count","1000x","2016",115,NA
+"Hordaland","Salmon","loss_count","1000x","2016",9123,NA
+"Hordaland","Rainbow trout","loss_count","1000x","2016",1465,NA
+"Hordaland","Other fish species","loss_count","1000x","2016",55,NA
+"Sogn og Fjordane","Salmon","loss_count","1000x","2016",3885,NA
+"Sogn og Fjordane","Rainbow trout","loss_count","1000x","2016",756.453400503778,"gapfilled"
+"Sogn og Fjordane","Other fish species","loss_count","1000x","2016",275.546599496222,"gapfilled"
+"Møre og Romsdal","Salmon","loss_count","1000x","2016",5452,NA
+"Møre og Romsdal","Rainbow trout","loss_count","1000x","2016",124.414466385622,"gapfilled"
+"Møre og Romsdal","Other fish species","loss_count","1000x","2016",172.585533614378,"gapfilled"
+"Trøndelag","Salmon","loss_count","1000x","2016",0,NA
+"Trøndelag","Rainbow trout","loss_count","1000x","2016",0,NA
+"Trøndelag","Other fish species","loss_count","1000x","2016",0,NA
+"Sør-Trøndelag","Salmon","loss_count","1000x","2016",9761,NA
+"Sør-Trøndelag","Rainbow trout","loss_count","1000x","2016",82.0388349514563,"gapfilled"
+"Sør-Trøndelag","Other fish species","loss_count","1000x","2016",567.961165048544,"gapfilled"
+"Nord-Trøndelag","Salmon","loss_count","1000x","2016",3891,NA
+"Nord-Trøndelag","Rainbow trout","loss_count","1000x","2016",0,"gapfilled"
+"Nord-Trøndelag","Other fish species","loss_count","1000x","2016",80,"gapfilled"
+"Nordland","Salmon","loss_count","1000x","2016",8683,NA
+"Nordland","Rainbow trout","loss_count","1000x","2016",293,NA
+"Nordland","Other fish species","loss_count","1000x","2016",59,NA
+"Troms","Salmon","loss_count","1000x","2016",4867,NA
+"Troms","Rainbow trout","loss_count","1000x","2016",1.11779879621668,"gapfilled"
+"Troms","Other fish species","loss_count","1000x","2016",0.882201203783319,"gapfilled"
+"Finnmark","Salmon","loss_count","1000x","2016",4980,NA
+"Finnmark","Rainbow trout","loss_count","1000x","2016",21.7536793183579,"gapfilled"
+"Finnmark","Other fish species","loss_count","1000x","2016",12.2463206816421,"gapfilled"
+"Other Counties","Salmon","loss_count","1000x","2016",1247,NA
+"Other Counties","Rainbow trout","loss_count","1000x","2016",4,NA
+"Other Counties","Other fish species","loss_count","1000x","2016",23,NA
+"Rogaland","Salmon","stock_dec_31_count","1000x","2016",28055,NA
+"Rogaland","Rainbow trout","stock_dec_31_count","1000x","2016",10,NA
+"Rogaland","Other fish species","stock_dec_31_count","1000x","2016",1416,NA
+"Hordaland","Salmon","stock_dec_31_count","1000x","2016",51383,NA
+"Hordaland","Rainbow trout","stock_dec_31_count","1000x","2016",9102,NA
+"Hordaland","Other fish species","stock_dec_31_count","1000x","2016",216,NA
+"Sogn og Fjordane","Salmon","stock_dec_31_count","1000x","2016",31003,NA
+"Sogn og Fjordane","Rainbow trout","stock_dec_31_count","1000x","2016",4651.91989490211,"gapfilled"
+"Sogn og Fjordane","Other fish species","stock_dec_31_count","1000x","2016",872.080105097888,"gapfilled"
+"Møre og Romsdal","Salmon","stock_dec_31_count","1000x","2016",46129,NA
+"Møre og Romsdal","Rainbow trout","stock_dec_31_count","1000x","2016",2042.68051664372,"gapfilled"
+"Møre og Romsdal","Other fish species","stock_dec_31_count","1000x","2016",1088.31948335628,"gapfilled"
+"Trøndelag","Salmon","stock_dec_31_count","1000x","2016",0,NA
+"Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2016",0,NA
+"Trøndelag","Other fish species","stock_dec_31_count","1000x","2016",0,NA
+"Sør-Trøndelag","Salmon","stock_dec_31_count","1000x","2016",31767,NA
+"Sør-Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2016",0,"gapfilled"
+"Sør-Trøndelag","Other fish species","stock_dec_31_count","1000x","2016",0,"gapfilled"
+"Nord-Trøndelag","Salmon","stock_dec_31_count","1000x","2016",26705,NA
+"Nord-Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2016",0,"gapfilled"
+"Nord-Trøndelag","Other fish species","stock_dec_31_count","1000x","2016",136,"gapfilled"
+"Nordland","Salmon","stock_dec_31_count","1000x","2016",74992,NA
+"Nordland","Rainbow trout","stock_dec_31_count","1000x","2016",1885,NA
+"Nordland","Other fish species","stock_dec_31_count","1000x","2016",397,NA
+"Troms","Salmon","stock_dec_31_count","1000x","2016",56425,NA
+"Troms","Rainbow trout","stock_dec_31_count","1000x","2016",94.9534936582261,"gapfilled"
+"Troms","Other fish species","stock_dec_31_count","1000x","2016",18.0465063417739,"gapfilled"
+"Finnmark","Salmon","stock_dec_31_count","1000x","2016",34034,NA
+"Finnmark","Rainbow trout","stock_dec_31_count","1000x","2016",122.073578595318,"gapfilled"
+"Finnmark","Other fish species","stock_dec_31_count","1000x","2016",23.9264214046823,"gapfilled"
+"Other Counties","Salmon","stock_dec_31_count","1000x","2016",4799,NA
+"Other Counties","Rainbow trout","stock_dec_31_count","1000x","2016",64,NA
+"Other Counties","Other fish species","stock_dec_31_count","1000x","2016",372,NA
+"Rogaland","Salmon","tonnes_fish","tonnes","2016",75661,NA
+"Rogaland","Rainbow trout","tonnes_fish","tonnes","2016",216.871521158978,"gapfilled"
+"Rogaland","Char","tonnes_fish","tonnes","2016",0,"gapfilled"
+"Rogaland","Cod","tonnes_fish","tonnes","2016",384.454060236371,"gapfilled"
+"Rogaland","Halibut","tonnes_fish","tonnes","2016",0,"gapfilled"
+"Rogaland","Shellfish","tonnes_fish","tonnes","2016",61.6744186046512,"gapfilled"
+"Rogaland","Other fish species","tonnes_fish","tonnes","2016",0,NA
+"Hordaland","Salmon","tonnes_fish","tonnes","2016",173790,NA
+"Hordaland","Rainbow trout","tonnes_fish","tonnes","2016",50698,NA
+"Hordaland","Char","tonnes_fish","tonnes","2016",0,NA
+"Hordaland","Cod","tonnes_fish","tonnes","2016",0,NA
+"Hordaland","Halibut","tonnes_fish","tonnes","2016",0,NA
+"Hordaland","Shellfish","tonnes_fish","tonnes","2016",19,NA
+"Hordaland","Other fish species","tonnes_fish","tonnes","2016",0,NA
+"Sogn og Fjordane","Salmon","tonnes_fish","tonnes","2016",104647,NA
+"Sogn og Fjordane","Rainbow trout","tonnes_fish","tonnes","2016",16084,NA
+"Sogn og Fjordane","Char","tonnes_fish","tonnes","2016",0,NA
+"Sogn og Fjordane","Cod","tonnes_fish","tonnes","2016",0,NA
+"Sogn og Fjordane","Halibut","tonnes_fish","tonnes","2016",0,"gapfilled"
+"Sogn og Fjordane","Shellfish","tonnes_fish","tonnes","2016",44,"gapfilled"
+"Sogn og Fjordane","Other fish species","tonnes_fish","tonnes","2016",0,NA
+"Møre og Romsdal","Salmon","tonnes_fish","tonnes","2016",89363,NA
+"Møre og Romsdal","Rainbow trout","tonnes_fish","tonnes","2016",14686.8417609978,"gapfilled"
+"Møre og Romsdal","Char","tonnes_fish","tonnes","2016",0,NA
+"Møre og Romsdal","Cod","tonnes_fish","tonnes","2016",0,NA
+"Møre og Romsdal","Halibut","tonnes_fish","tonnes","2016",1199.60774079848,"gapfilled"
+"Møre og Romsdal","Shellfish","tonnes_fish","tonnes","2016",14.5504982037552,"gapfilled"
+"Møre og Romsdal","Other fish species","tonnes_fish","tonnes","2016",0,NA
+"Trøndelag","Salmon","tonnes_fish","tonnes","2016",0,NA
+"Trøndelag","Rainbow trout","tonnes_fish","tonnes","2016",0,NA
+"Trøndelag","Char","tonnes_fish","tonnes","2016",0,NA
+"Trøndelag","Cod","tonnes_fish","tonnes","2016",0,NA
+"Trøndelag","Halibut","tonnes_fish","tonnes","2016",0,NA
+"Trøndelag","Shellfish","tonnes_fish","tonnes","2016",0,NA
+"Trøndelag","Other fish species","tonnes_fish","tonnes","2016",0,NA
+"Sør-Trøndelag","Salmon","tonnes_fish","tonnes","2016",167256,NA
+"Sør-Trøndelag","Rainbow trout","tonnes_fish","tonnes","2016",19,"gapfilled"
+"Sør-Trøndelag","Char","tonnes_fish","tonnes","2016",0,"gapfilled"
+"Sør-Trøndelag","Cod","tonnes_fish","tonnes","2016",0,NA
+"Sør-Trøndelag","Halibut","tonnes_fish","tonnes","2016",0,NA
+"Sør-Trøndelag","Shellfish","tonnes_fish","tonnes","2016",650,NA
+"Sør-Trøndelag","Other fish species","tonnes_fish","tonnes","2016",0,NA
+"Nord-Trøndelag","Salmon","tonnes_fish","tonnes","2016",93968,NA
+"Nord-Trøndelag","Rainbow trout","tonnes_fish","tonnes","2016",0,"gapfilled"
+"Nord-Trøndelag","Char","tonnes_fish","tonnes","2016",0,NA
+"Nord-Trøndelag","Cod","tonnes_fish","tonnes","2016",0,NA
+"Nord-Trøndelag","Halibut","tonnes_fish","tonnes","2016",0,"gapfilled"
+"Nord-Trøndelag","Shellfish","tonnes_fish","tonnes","2016",487,NA
+"Nord-Trøndelag","Other fish species","tonnes_fish","tonnes","2016",0,NA
+"Nordland","Salmon","tonnes_fish","tonnes","2016",249831,NA
+"Nordland","Rainbow trout","tonnes_fish","tonnes","2016",5637,"gapfilled"
+"Nordland","Char","tonnes_fish","tonnes","2016",245,NA
+"Nordland","Cod","tonnes_fish","tonnes","2016",0,NA
+"Nordland","Halibut","tonnes_fish","tonnes","2016",0,"gapfilled"
+"Nordland","Shellfish","tonnes_fish","tonnes","2016",912,NA
+"Nordland","Other fish species","tonnes_fish","tonnes","2016",0,NA
+"Troms","Salmon","tonnes_fish","tonnes","2016",168813,NA
+"Troms","Rainbow trout","tonnes_fish","tonnes","2016",0,NA
+"Troms","Char","tonnes_fish","tonnes","2016",0,NA
+"Troms","Cod","tonnes_fish","tonnes","2016",452,"gapfilled"
+"Troms","Halibut","tonnes_fish","tonnes","2016",0,NA
+"Troms","Shellfish","tonnes_fish","tonnes","2016",0,"gapfilled"
+"Troms","Other fish species","tonnes_fish","tonnes","2016",0,NA
+"Finnmark","Salmon","tonnes_fish","tonnes","2016",92702,NA
+"Finnmark","Rainbow trout","tonnes_fish","tonnes","2016",43,"gapfilled"
+"Finnmark","Char","tonnes_fish","tonnes","2016",0,"gapfilled"
+"Finnmark","Cod","tonnes_fish","tonnes","2016",0,NA
+"Finnmark","Halibut","tonnes_fish","tonnes","2016",0,NA
+"Finnmark","Shellfish","tonnes_fish","tonnes","2016",0,NA
+"Finnmark","Other fish species","tonnes_fish","tonnes","2016",0,NA
+"Other Counties","Salmon","tonnes_fish","tonnes","2016",17588,NA
+"Other Counties","Rainbow trout","tonnes_fish","tonnes","2016",100,NA
+"Other Counties","Char","tonnes_fish","tonnes","2016",0,"gapfilled"
+"Other Counties","Cod","tonnes_fish","tonnes","2016",0,NA
+"Other Counties","Halibut","tonnes_fish","tonnes","2016",0,NA
+"Other Counties","Shellfish","tonnes_fish","tonnes","2016",30.4270462633452,"gapfilled"
+"Other Counties","Other fish species","tonnes_fish","tonnes","2016",311.572953736655,"gapfilled"
+"Rogaland","Salmon","Stock_Jan1_count","1000x","2017",27589,NA
+"Rogaland","Rainbow trout","Stock_Jan1_count","1000x","2017",38.1380332517077,"gapfilled"
+"Rogaland","Other fish species","Stock_Jan1_count","1000x","2017",1448.86196674829,"gapfilled"
+"Hordaland","Salmon","Stock_Jan1_count","1000x","2017",50621,NA
+"Hordaland","Rainbow trout","Stock_Jan1_count","1000x","2017",9042,NA
+"Hordaland","Other fish species","Stock_Jan1_count","1000x","2017",217,NA
+"Sogn og Fjordane","Salmon","Stock_Jan1_count","1000x","2017",31002,NA
+"Sogn og Fjordane","Rainbow trout","Stock_Jan1_count","1000x","2017",5313,NA
+"Sogn og Fjordane","Other fish species","Stock_Jan1_count","1000x","2017",372,NA
+"Møre og Romsdal","Salmon","Stock_Jan1_count","1000x","2017",46026,NA
+"Møre og Romsdal","Rainbow trout","Stock_Jan1_count","1000x","2017",1872.94842777463,"gapfilled"
+"Møre og Romsdal","Other fish species","Stock_Jan1_count","1000x","2017",1256.05157222537,"gapfilled"
+"Trøndelag","Salmon","Stock_Jan1_count","1000x","2017",0,NA
+"Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2017",0,NA
+"Trøndelag","Other fish species","Stock_Jan1_count","1000x","2017",0,NA
+"Sør-Trøndelag","Salmon","Stock_Jan1_count","1000x","2017",32256,NA
+"Sør-Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2017",0,"gapfilled"
+"Sør-Trøndelag","Other fish species","Stock_Jan1_count","1000x","2017",0,"gapfilled"
+"Nord-Trøndelag","Salmon","Stock_Jan1_count","1000x","2017",27281,NA
+"Nord-Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2017",0,NA
+"Nord-Trøndelag","Other fish species","Stock_Jan1_count","1000x","2017",136,NA
+"Nordland","Salmon","Stock_Jan1_count","1000x","2017",75961,NA
+"Nordland","Rainbow trout","Stock_Jan1_count","1000x","2017",1885,NA
+"Nordland","Other fish species","Stock_Jan1_count","1000x","2017",397,NA
+"Troms","Salmon","Stock_Jan1_count","1000x","2017",56772,NA
+"Troms","Rainbow trout","Stock_Jan1_count","1000x","2017",96.8096553729824,"gapfilled"
+"Troms","Other fish species","Stock_Jan1_count","1000x","2017",23.1903446270176,"gapfilled"
+"Finnmark","Salmon","Stock_Jan1_count","1000x","2017",34034,NA
+"Finnmark","Rainbow trout","Stock_Jan1_count","1000x","2017",113.50342322202,"gapfilled"
+"Finnmark","Other fish species","Stock_Jan1_count","1000x","2017",32.4965767779796,"gapfilled"
+"Other Counties","Salmon","Stock_Jan1_count","1000x","2017",4799,NA
+"Other Counties","Rainbow trout","Stock_Jan1_count","1000x","2017",68,NA
+"Other Counties","Other fish species","Stock_Jan1_count","1000x","2017",371,NA
+"Rogaland","Salmon","supplies_count","1000x","2017",19309,NA
+"Rogaland","Rainbow trout","supplies_count","1000x","2017",9.17551221920513,"gapfilled"
+"Rogaland","Other fish species","supplies_count","1000x","2017",305.824487780795,"gapfilled"
+"Hordaland","Salmon","supplies_count","1000x","2017",49982,NA
+"Hordaland","Rainbow trout","supplies_count","1000x","2017",11840,NA
+"Hordaland","Other fish species","supplies_count","1000x","2017",36,NA
+"Sogn og Fjordane","Salmon","supplies_count","1000x","2017",25918,NA
+"Sogn og Fjordane","Rainbow trout","supplies_count","1000x","2017",3891,NA
+"Sogn og Fjordane","Other fish species","supplies_count","1000x","2017",163,NA
+"Møre og Romsdal","Salmon","supplies_count","1000x","2017",13065,NA
+"Møre og Romsdal","Rainbow trout","supplies_count","1000x","2017",2820.98251513114,"gapfilled"
+"Møre og Romsdal","Other fish species","supplies_count","1000x","2017",842.017484868863,"gapfilled"
+"Trøndelag","Salmon","supplies_count","1000x","2017",0,NA
+"Trøndelag","Rainbow trout","supplies_count","1000x","2017",0,NA
+"Trøndelag","Other fish species","supplies_count","1000x","2017",0,NA
+"Sør-Trøndelag","Salmon","supplies_count","1000x","2017",54886,NA
+"Sør-Trøndelag","Rainbow trout","supplies_count","1000x","2017",18.1150550795594,"gapfilled"
+"Sør-Trøndelag","Other fish species","supplies_count","1000x","2017",1461.88494492044,"gapfilled"
+"Nord-Trøndelag","Salmon","supplies_count","1000x","2017",26049,NA
+"Nord-Trøndelag","Rainbow trout","supplies_count","1000x","2017",0,NA
+"Nord-Trøndelag","Other fish species","supplies_count","1000x","2017",288,NA
+"Nordland","Salmon","supplies_count","1000x","2017",64338,NA
+"Nordland","Rainbow trout","supplies_count","1000x","2017",958,NA
+"Nordland","Other fish species","supplies_count","1000x","2017",613,NA
+"Troms","Salmon","supplies_count","1000x","2017",50168,NA
+"Troms","Rainbow trout","supplies_count","1000x","2017",180.809491441636,"gapfilled"
+"Troms","Other fish species","supplies_count","1000x","2017",40.1905085583637,"gapfilled"
+"Finnmark","Salmon","supplies_count","1000x","2017",27870,NA
+"Finnmark","Rainbow trout","supplies_count","1000x","2017",0,"gapfilled"
+"Finnmark","Other fish species","supplies_count","1000x","2017",0,"gapfilled"
+"Other Counties","Salmon","supplies_count","1000x","2017",6294,NA
+"Other Counties","Rainbow trout","supplies_count","1000x","2017",366,NA
+"Other Counties","Other fish species","supplies_count","1000x","2017",309,NA
+"Rogaland","Salmon","delivered_for_sale_count","1000x","2017",16324,NA
+"Rogaland","Rainbow trout","delivered_for_sale_count","1000x","2017",9.39890939597315,"gapfilled"
+"Rogaland","Other fish species","delivered_for_sale_count","1000x","2017",281.601090604027,"gapfilled"
+"Hordaland","Salmon","delivered_for_sale_count","1000x","2017",32435,NA
+"Hordaland","Rainbow trout","delivered_for_sale_count","1000x","2017",8763,NA
+"Hordaland","Other fish species","delivered_for_sale_count","1000x","2017",0,NA
+"Sogn og Fjordane","Salmon","delivered_for_sale_count","1000x","2017",20292,NA
+"Sogn og Fjordane","Rainbow trout","delivered_for_sale_count","1000x","2017",3787,NA
+"Sogn og Fjordane","Other fish species","delivered_for_sale_count","1000x","2017",7,NA
+"Møre og Romsdal","Salmon","delivered_for_sale_count","1000x","2017",32952,NA
+"Møre og Romsdal","Rainbow trout","delivered_for_sale_count","1000x","2017",1732.22818878372,"gapfilled"
+"Møre og Romsdal","Other fish species","delivered_for_sale_count","1000x","2017",551.771811216277,"gapfilled"
+"Trøndelag","Salmon","delivered_for_sale_count","1000x","2017",0,NA
+"Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2017",0,NA
+"Trøndelag","Other fish species","delivered_for_sale_count","1000x","2017",0,NA
+"Sør-Trøndelag","Salmon","delivered_for_sale_count","1000x","2017",20310,NA
+"Sør-Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2017",0,"gapfilled"
+"Sør-Trøndelag","Other fish species","delivered_for_sale_count","1000x","2017",0,"gapfilled"
+"Nord-Trøndelag","Salmon","delivered_for_sale_count","1000x","2017",21256,NA
+"Nord-Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2017",0,NA
+"Nord-Trøndelag","Other fish species","delivered_for_sale_count","1000x","2017",45,NA
+"Nordland","Salmon","delivered_for_sale_count","1000x","2017",54302,NA
+"Nordland","Rainbow trout","delivered_for_sale_count","1000x","2017",1393,NA
+"Nordland","Other fish species","delivered_for_sale_count","1000x","2017",450,NA
+"Troms","Salmon","delivered_for_sale_count","1000x","2017",43835,NA
+"Troms","Rainbow trout","delivered_for_sale_count","1000x","2017",101.065107712021,"gapfilled"
+"Troms","Other fish species","delivered_for_sale_count","1000x","2017",23.9348922879795,"gapfilled"
+"Finnmark","Salmon","delivered_for_sale_count","1000x","2017",18803,NA
+"Finnmark","Rainbow trout","delivered_for_sale_count","1000x","2017",44.3021276595745,"gapfilled"
+"Finnmark","Other fish species","delivered_for_sale_count","1000x","2017",13.6978723404255,"gapfilled"
+"Other Counties","Salmon","delivered_for_sale_count","1000x","2017",3408,NA
+"Other Counties","Rainbow trout","delivered_for_sale_count","1000x","2017",196,NA
+"Other Counties","Other fish species","delivered_for_sale_count","1000x","2017",185,NA
+"Rogaland","Salmon","loss_count","1000x","2017",4220,NA
+"Rogaland","Rainbow trout","loss_count","1000x","2017",8.0976821192053,"gapfilled"
+"Rogaland","Other fish species","loss_count","1000x","2017",125.902317880795,"gapfilled"
+"Hordaland","Salmon","loss_count","1000x","2017",13362,NA
+"Hordaland","Rainbow trout","loss_count","1000x","2017",2168,NA
+"Hordaland","Other fish species","loss_count","1000x","2017",91,NA
+"Sogn og Fjordane","Salmon","loss_count","1000x","2017",5535,NA
+"Sogn og Fjordane","Rainbow trout","loss_count","1000x","2017",820,NA
+"Sogn og Fjordane","Other fish species","loss_count","1000x","2017",56,NA
+"Møre og Romsdal","Salmon","loss_count","1000x","2017",6400,NA
+"Møre og Romsdal","Rainbow trout","loss_count","1000x","2017",151.643221655203,"gapfilled"
+"Møre og Romsdal","Other fish species","loss_count","1000x","2017",210.356778344797,"gapfilled"
+"Trøndelag","Salmon","loss_count","1000x","2017",0,NA
+"Trøndelag","Rainbow trout","loss_count","1000x","2017",0,NA
+"Trøndelag","Other fish species","loss_count","1000x","2017",0,NA
+"Sør-Trøndelag","Salmon","loss_count","1000x","2017",6219,NA
+"Sør-Trøndelag","Rainbow trout","loss_count","1000x","2017",4.29126213592233,"gapfilled"
+"Sør-Trøndelag","Other fish species","loss_count","1000x","2017",29.7087378640777,"gapfilled"
+"Nord-Trøndelag","Salmon","loss_count","1000x","2017",3529,NA
+"Nord-Trøndelag","Rainbow trout","loss_count","1000x","2017",0,NA
+"Nord-Trøndelag","Other fish species","loss_count","1000x","2017",73,NA
+"Nordland","Salmon","loss_count","1000x","2017",6739,NA
+"Nordland","Rainbow trout","loss_count","1000x","2017",142,NA
+"Nordland","Other fish species","loss_count","1000x","2017",33,NA
+"Troms","Salmon","loss_count","1000x","2017",5946,NA
+"Troms","Rainbow trout","loss_count","1000x","2017",6.70679277730009,"gapfilled"
+"Troms","Other fish species","loss_count","1000x","2017",5.29320722269991,"gapfilled"
+"Finnmark","Salmon","loss_count","1000x","2017",5191,NA
+"Finnmark","Rainbow trout","loss_count","1000x","2017",2.55925639039504,"gapfilled"
+"Finnmark","Other fish species","loss_count","1000x","2017",1.44074360960496,"gapfilled"
+"Other Counties","Salmon","loss_count","1000x","2017",431,NA
+"Other Counties","Rainbow trout","loss_count","1000x","2017",30,NA
+"Other Counties","Other fish species","loss_count","1000x","2017",28,NA
+"Rogaland","Salmon","stock_dec_31_count","1000x","2017",26354,NA
+"Rogaland","Rainbow trout","stock_dec_31_count","1000x","2017",28.3140284706169,"gapfilled"
+"Rogaland","Other fish species","stock_dec_31_count","1000x","2017",1348.68597152938,"gapfilled"
+"Hordaland","Salmon","stock_dec_31_count","1000x","2017",54807,NA
+"Hordaland","Rainbow trout","stock_dec_31_count","1000x","2017",9950,NA
+"Hordaland","Other fish species","stock_dec_31_count","1000x","2017",162,NA
+"Sogn og Fjordane","Salmon","stock_dec_31_count","1000x","2017",31093,NA
+"Sogn og Fjordane","Rainbow trout","stock_dec_31_count","1000x","2017",4597,NA
+"Sogn og Fjordane","Other fish species","stock_dec_31_count","1000x","2017",473,NA
+"Møre og Romsdal","Salmon","stock_dec_31_count","1000x","2017",19739,NA
+"Møre og Romsdal","Rainbow trout","stock_dec_31_count","1000x","2017",2704.21933615081,"gapfilled"
+"Møre og Romsdal","Other fish species","stock_dec_31_count","1000x","2017",1440.78066384919,"gapfilled"
+"Trøndelag","Salmon","stock_dec_31_count","1000x","2017",0,NA
+"Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2017",0,NA
+"Trøndelag","Other fish species","stock_dec_31_count","1000x","2017",0,NA
+"Sør-Trøndelag","Salmon","stock_dec_31_count","1000x","2017",60613,NA
+"Sør-Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2017",30.655737704918,"gapfilled"
+"Sør-Trøndelag","Other fish species","stock_dec_31_count","1000x","2017",1414.34426229508,"gapfilled"
+"Nord-Trøndelag","Salmon","stock_dec_31_count","1000x","2017",28545,NA
+"Nord-Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2017",0,NA
+"Nord-Trøndelag","Other fish species","stock_dec_31_count","1000x","2017",305,NA
+"Nordland","Salmon","stock_dec_31_count","1000x","2017",79258,NA
+"Nordland","Rainbow trout","stock_dec_31_count","1000x","2017",1308,NA
+"Nordland","Other fish species","stock_dec_31_count","1000x","2017",527,NA
+"Troms","Salmon","stock_dec_31_count","1000x","2017",57159,NA
+"Troms","Rainbow trout","stock_dec_31_count","1000x","2017",171.42046642724,"gapfilled"
+"Troms","Other fish species","stock_dec_31_count","1000x","2017",32.5795335727599,"gapfilled"
+"Finnmark","Salmon","stock_dec_31_count","1000x","2017",37910,NA
+"Finnmark","Rainbow trout","stock_dec_31_count","1000x","2017",70.2341137123746,"gapfilled"
+"Finnmark","Other fish species","stock_dec_31_count","1000x","2017",13.7658862876254,"gapfilled"
+"Other Counties","Salmon","stock_dec_31_count","1000x","2017",7253,NA
+"Other Counties","Rainbow trout","stock_dec_31_count","1000x","2017",207,NA
+"Other Counties","Other fish species","stock_dec_31_count","1000x","2017",467,NA
+"Rogaland","Salmon","tonnes_fish","tonnes","2017",78723,NA
+"Rogaland","Rainbow trout","tonnes_fish","tonnes","2017",365.344262295082,"gapfilled"
+"Rogaland","Char","tonnes_fish","tonnes","2017",0,NA
+"Rogaland","Cod","tonnes_fish","tonnes","2017",647.655737704918,"gapfilled"
+"Rogaland","Halibut","tonnes_fish","tonnes","2017",0,"gapfilled"
+"Rogaland","Shellfish","tonnes_fish","tonnes","2017",12,NA
+"Rogaland","Other fish species","tonnes_fish","tonnes","2017",0,NA
+"Hordaland","Salmon","tonnes_fish","tonnes","2017",160061,NA
+"Hordaland","Rainbow trout","tonnes_fish","tonnes","2017",39580,NA
+"Hordaland","Char","tonnes_fish","tonnes","2017",0,NA
+"Hordaland","Cod","tonnes_fish","tonnes","2017",0,NA
+"Hordaland","Halibut","tonnes_fish","tonnes","2017",0,NA
+"Hordaland","Shellfish","tonnes_fish","tonnes","2017",45,NA
+"Hordaland","Other fish species","tonnes_fish","tonnes","2017",0,NA
+"Sogn og Fjordane","Salmon","tonnes_fish","tonnes","2017",93529,NA
+"Sogn og Fjordane","Rainbow trout","tonnes_fish","tonnes","2017",14394,NA
+"Sogn og Fjordane","Char","tonnes_fish","tonnes","2017",0,NA
+"Sogn og Fjordane","Cod","tonnes_fish","tonnes","2017",0,NA
+"Sogn og Fjordane","Halibut","tonnes_fish","tonnes","2017",0,"gapfilled"
+"Sogn og Fjordane","Shellfish","tonnes_fish","tonnes","2017",59,"gapfilled"
+"Sogn og Fjordane","Other fish species","tonnes_fish","tonnes","2017",0,NA
+"Møre og Romsdal","Salmon","tonnes_fish","tonnes","2017",162953,NA
+"Møre og Romsdal","Rainbow trout","tonnes_fish","tonnes","2017",8319,NA
+"Møre og Romsdal","Char","tonnes_fish","tonnes","2017",0,NA
+"Møre og Romsdal","Cod","tonnes_fish","tonnes","2017",0,NA
+"Møre og Romsdal","Halibut","tonnes_fish","tonnes","2017",600.713715046605,"gapfilled"
+"Møre og Romsdal","Shellfish","tonnes_fish","tonnes","2017",7.28628495339547,"gapfilled"
+"Møre og Romsdal","Other fish species","tonnes_fish","tonnes","2017",0,NA
+"Trøndelag","Salmon","tonnes_fish","tonnes","2017",0,NA
+"Trøndelag","Rainbow trout","tonnes_fish","tonnes","2017",0,NA
+"Trøndelag","Char","tonnes_fish","tonnes","2017",0,NA
+"Trøndelag","Cod","tonnes_fish","tonnes","2017",0,NA
+"Trøndelag","Halibut","tonnes_fish","tonnes","2017",0,NA
+"Trøndelag","Shellfish","tonnes_fish","tonnes","2017",0,NA
+"Trøndelag","Other fish species","tonnes_fish","tonnes","2017",0,NA
+"Sør-Trøndelag","Salmon","tonnes_fish","tonnes","2017",98825,NA
+"Sør-Trøndelag","Rainbow trout","tonnes_fish","tonnes","2017",0,NA
+"Sør-Trøndelag","Char","tonnes_fish","tonnes","2017",0,NA
+"Sør-Trøndelag","Cod","tonnes_fish","tonnes","2017",0,NA
+"Sør-Trøndelag","Halibut","tonnes_fish","tonnes","2017",0,NA
+"Sør-Trøndelag","Shellfish","tonnes_fish","tonnes","2017",869,NA
+"Sør-Trøndelag","Other fish species","tonnes_fish","tonnes","2017",0,NA
+"Nord-Trøndelag","Salmon","tonnes_fish","tonnes","2017",89800,NA
+"Nord-Trøndelag","Rainbow trout","tonnes_fish","tonnes","2017",0,NA
+"Nord-Trøndelag","Char","tonnes_fish","tonnes","2017",0,"gapfilled"
+"Nord-Trøndelag","Cod","tonnes_fish","tonnes","2017",0,"gapfilled"
+"Nord-Trøndelag","Halibut","tonnes_fish","tonnes","2017",0,NA
+"Nord-Trøndelag","Shellfish","tonnes_fish","tonnes","2017",611,NA
+"Nord-Trøndelag","Other fish species","tonnes_fish","tonnes","2017",0,NA
+"Nordland","Salmon","tonnes_fish","tonnes","2017",255601,NA
+"Nordland","Rainbow trout","tonnes_fish","tonnes","2017",1501.76745419,"gapfilled"
+"Nordland","Char","tonnes_fish","tonnes","2017",289,NA
+"Nordland","Cod","tonnes_fish","tonnes","2017",3058.23254581,"gapfilled"
+"Nordland","Halibut","tonnes_fish","tonnes","2017",0,NA
+"Nordland","Shellfish","tonnes_fish","tonnes","2017",791,NA
+"Nordland","Other fish species","tonnes_fish","tonnes","2017",0,NA
+"Troms","Salmon","tonnes_fish","tonnes","2017",186851,NA
+"Troms","Rainbow trout","tonnes_fish","tonnes","2017",0,NA
+"Troms","Char","tonnes_fish","tonnes","2017",0,NA
+"Troms","Cod","tonnes_fish","tonnes","2017",376,"gapfilled"
+"Troms","Halibut","tonnes_fish","tonnes","2017",0,NA
+"Troms","Shellfish","tonnes_fish","tonnes","2017",0,"gapfilled"
+"Troms","Other fish species","tonnes_fish","tonnes","2017",0,NA
+"Finnmark","Salmon","tonnes_fish","tonnes","2017",95585,NA
+"Finnmark","Rainbow trout","tonnes_fish","tonnes","2017",29,"gapfilled"
+"Finnmark","Char","tonnes_fish","tonnes","2017",0,"gapfilled"
+"Finnmark","Cod","tonnes_fish","tonnes","2017",0,NA
+"Finnmark","Halibut","tonnes_fish","tonnes","2017",0,NA
+"Finnmark","Shellfish","tonnes_fish","tonnes","2017",0,NA
+"Finnmark","Other fish species","tonnes_fish","tonnes","2017",0,NA
+"Other Counties","Salmon","tonnes_fish","tonnes","2017",14426,NA
+"Other Counties","Rainbow trout","tonnes_fish","tonnes","2017",137,NA
+"Other Counties","Char","tonnes_fish","tonnes","2017",0,"gapfilled"
+"Other Counties","Cod","tonnes_fish","tonnes","2017",0,NA
+"Other Counties","Halibut","tonnes_fish","tonnes","2017",0,NA
+"Other Counties","Shellfish","tonnes_fish","tonnes","2017",29.4483985765125,"gapfilled"
+"Other Counties","Other fish species","tonnes_fish","tonnes","2017",301.551601423488,"gapfilled"
+"Rogaland","Salmon","Stock_Jan1_count","1000x","2018",26354,NA
+"Rogaland","Rainbow trout","Stock_Jan1_count","1000x","2018",35.3167934012115,"gapfilled"
+"Rogaland","Other fish species","Stock_Jan1_count","1000x","2018",1341.68320659879,"gapfilled"
+"Hordaland","Salmon","Stock_Jan1_count","1000x","2018",55332,NA
+"Hordaland","Rainbow trout","Stock_Jan1_count","1000x","2018",9453.07464680574,"gapfilled"
+"Hordaland","Other fish species","Stock_Jan1_count","1000x","2018",363.925353194265,"gapfilled"
+"Sogn og Fjordane","Salmon","Stock_Jan1_count","1000x","2018",31092,NA
+"Sogn og Fjordane","Rainbow trout","Stock_Jan1_count","1000x","2018",4615.71700030485,"gapfilled"
+"Sogn og Fjordane","Other fish species","Stock_Jan1_count","1000x","2018",925.282999695153,"gapfilled"
+"Møre og Romsdal","Salmon","Stock_Jan1_count","1000x","2018",19554,NA
+"Møre og Romsdal","Rainbow trout","Stock_Jan1_count","1000x","2018",3757,NA
+"Møre og Romsdal","Other fish species","Stock_Jan1_count","1000x","2018",483,NA
+"Trøndelag","Salmon","Stock_Jan1_count","1000x","2018",89199,NA
+"Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2018",0,"gapfilled"
+"Trøndelag","Other fish species","Stock_Jan1_count","1000x","2018",0,"gapfilled"
+"Sør-Trøndelag","Salmon","Stock_Jan1_count","1000x","2018",0,NA
+"Sør-Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2018",0,NA
+"Sør-Trøndelag","Other fish species","Stock_Jan1_count","1000x","2018",0,NA
+"Nord-Trøndelag","Salmon","Stock_Jan1_count","1000x","2018",0,NA
+"Nord-Trøndelag","Rainbow trout","Stock_Jan1_count","1000x","2018",0,NA
+"Nord-Trøndelag","Other fish species","Stock_Jan1_count","1000x","2018",0,NA
+"Nordland","Salmon","Stock_Jan1_count","1000x","2018",78434,NA
+"Nordland","Rainbow trout","Stock_Jan1_count","1000x","2018",615.768210934009,"gapfilled"
+"Nordland","Other fish species","Stock_Jan1_count","1000x","2018",1146.23178906599,"gapfilled"
+"Troms","Salmon","Stock_Jan1_count","1000x","2018",57626,NA
+"Troms","Rainbow trout","Stock_Jan1_count","1000x","2018",16.9416896902719,"gapfilled"
+"Troms","Other fish species","Stock_Jan1_count","1000x","2018",4.05831030972808,"gapfilled"
+"Finnmark","Salmon","Stock_Jan1_count","1000x","2018",37910,NA
+"Finnmark","Rainbow trout","Stock_Jan1_count","1000x","2018",65.3033393880117,"gapfilled"
+"Finnmark","Other fish species","Stock_Jan1_count","1000x","2018",18.6966606119883,"gapfilled"
+"Other Counties","Salmon","Stock_Jan1_count","1000x","2018",7244,NA
+"Other Counties","Rainbow trout","Stock_Jan1_count","1000x","2018",248,NA
+"Other Counties","Other fish species","Stock_Jan1_count","1000x","2018",460,NA
+"Rogaland","Salmon","supplies_count","1000x","2018",20660,NA
+"Rogaland","Rainbow trout","supplies_count","1000x","2018",20.0696124413725,"gapfilled"
+"Rogaland","Other fish species","supplies_count","1000x","2018",668.930387558628,"gapfilled"
+"Hordaland","Salmon","supplies_count","1000x","2018",48514,NA
+"Hordaland","Rainbow trout","supplies_count","1000x","2018",11958.5232279293,"gapfilled"
+"Hordaland","Other fish species","supplies_count","1000x","2018",577.476772070715,"gapfilled"
+"Sogn og Fjordane","Salmon","supplies_count","1000x","2018",22496,NA
+"Sogn og Fjordane","Rainbow trout","supplies_count","1000x","2018",3945.87244777296,"gapfilled"
+"Sogn og Fjordane","Other fish species","supplies_count","1000x","2018",686.12755222704,"gapfilled"
+"Møre og Romsdal","Salmon","supplies_count","1000x","2018",54031,NA
+"Møre og Romsdal","Rainbow trout","supplies_count","1000x","2018",3895,NA
+"Møre og Romsdal","Other fish species","supplies_count","1000x","2018",287,NA
+"Trøndelag","Salmon","supplies_count","1000x","2018",44072,NA
+"Trøndelag","Rainbow trout","supplies_count","1000x","2018",0,"gapfilled"
+"Trøndelag","Other fish species","supplies_count","1000x","2018",0,"gapfilled"
+"Sør-Trøndelag","Salmon","supplies_count","1000x","2018",0,NA
+"Sør-Trøndelag","Rainbow trout","supplies_count","1000x","2018",0,NA
+"Sør-Trøndelag","Other fish species","supplies_count","1000x","2018",0,NA
+"Nord-Trøndelag","Salmon","supplies_count","1000x","2018",0,NA
+"Nord-Trøndelag","Rainbow trout","supplies_count","1000x","2018",0,NA
+"Nord-Trøndelag","Other fish species","supplies_count","1000x","2018",0,NA
+"Nordland","Salmon","supplies_count","1000x","2018",69640,NA
+"Nordland","Rainbow trout","supplies_count","1000x","2018",693.973588086541,"gapfilled"
+"Nordland","Other fish species","supplies_count","1000x","2018",846.026411913459,"gapfilled"
+"Troms","Salmon","supplies_count","1000x","2018",48116,NA
+"Troms","Rainbow trout","supplies_count","1000x","2018",7.36328245689922,"gapfilled"
+"Troms","Other fish species","supplies_count","1000x","2018",1.63671754310078,"gapfilled"
+"Finnmark","Salmon","supplies_count","1000x","2018",31567,NA
+"Finnmark","Rainbow trout","supplies_count","1000x","2018",63.6208530805687,"gapfilled"
+"Finnmark","Other fish species","supplies_count","1000x","2018",16.3791469194313,"gapfilled"
+"Other Counties","Salmon","supplies_count","1000x","2018",2428,NA
+"Other Counties","Rainbow trout","supplies_count","1000x","2018",949,NA
+"Other Counties","Other fish species","supplies_count","1000x","2018",261,NA
+"Rogaland","Salmon","delivered_for_sale_count","1000x","2018",14230,NA
+"Rogaland","Rainbow trout","delivered_for_sale_count","1000x","2018",8.36535234899329,"gapfilled"
+"Rogaland","Other fish species","delivered_for_sale_count","1000x","2018",250.634647651007,"gapfilled"
+"Hordaland","Salmon","delivered_for_sale_count","1000x","2018",39047,NA
+"Hordaland","Rainbow trout","delivered_for_sale_count","1000x","2018",8702.90672913117,"gapfilled"
+"Hordaland","Other fish species","delivered_for_sale_count","1000x","2018",86.0932708688245,"gapfilled"
+"Sogn og Fjordane","Salmon","delivered_for_sale_count","1000x","2018",18491,NA
+"Sogn og Fjordane","Rainbow trout","delivered_for_sale_count","1000x","2018",3639.603560708,"gapfilled"
+"Sogn og Fjordane","Other fish species","delivered_for_sale_count","1000x","2018",565.396439291999,"gapfilled"
+"Møre og Romsdal","Salmon","delivered_for_sale_count","1000x","2018",16157,NA
+"Møre og Romsdal","Rainbow trout","delivered_for_sale_count","1000x","2018",3294,NA
+"Møre og Romsdal","Other fish species","delivered_for_sale_count","1000x","2018",192,NA
+"Trøndelag","Salmon","delivered_for_sale_count","1000x","2018",67231,NA
+"Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2018",0,"gapfilled"
+"Trøndelag","Other fish species","delivered_for_sale_count","1000x","2018",0,"gapfilled"
+"Sør-Trøndelag","Salmon","delivered_for_sale_count","1000x","2018",0,NA
+"Sør-Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2018",0,NA
+"Sør-Trøndelag","Other fish species","delivered_for_sale_count","1000x","2018",0,NA
+"Nord-Trøndelag","Salmon","delivered_for_sale_count","1000x","2018",0,NA
+"Nord-Trøndelag","Rainbow trout","delivered_for_sale_count","1000x","2018",0,NA
+"Nord-Trøndelag","Other fish species","delivered_for_sale_count","1000x","2018",0,NA
+"Nordland","Salmon","delivered_for_sale_count","1000x","2018",52587,NA
+"Nordland","Rainbow trout","delivered_for_sale_count","1000x","2018",564.378317102077,"gapfilled"
+"Nordland","Other fish species","delivered_for_sale_count","1000x","2018",1125.62168289792,"gapfilled"
+"Troms","Salmon","delivered_for_sale_count","1000x","2018",37730,NA
+"Troms","Rainbow trout","delivered_for_sale_count","1000x","2018",7.27668775526548,"gapfilled"
+"Troms","Other fish species","delivered_for_sale_count","1000x","2018",1.72331224473452,"gapfilled"
+"Finnmark","Salmon","delivered_for_sale_count","1000x","2018",21742,NA
+"Finnmark","Rainbow trout","delivered_for_sale_count","1000x","2018",45.8297872340426,"gapfilled"
+"Finnmark","Other fish species","delivered_for_sale_count","1000x","2018",14.1702127659574,"gapfilled"
+"Other Counties","Salmon","delivered_for_sale_count","1000x","2018",2801,NA
+"Other Counties","Rainbow trout","delivered_for_sale_count","1000x","2018",202,NA
+"Other Counties","Other fish species","delivered_for_sale_count","1000x","2018",178,NA
+"Rogaland","Salmon","loss_count","1000x","2018",4702,NA
+"Rogaland","Rainbow trout","loss_count","1000x","2018",7.7955298013245,"gapfilled"
+"Rogaland","Other fish species","loss_count","1000x","2018",121.204470198675,"gapfilled"
+"Hordaland","Salmon","loss_count","1000x","2018",10698,NA
+"Hordaland","Rainbow trout","loss_count","1000x","2018",2004.46043165468,"gapfilled"
+"Hordaland","Other fish species","loss_count","1000x","2018",395.539568345324,"gapfilled"
+"Sogn og Fjordane","Salmon","loss_count","1000x","2018",5987,NA
+"Sogn og Fjordane","Rainbow trout","loss_count","1000x","2018",640.639798488665,"gapfilled"
+"Sogn og Fjordane","Other fish species","loss_count","1000x","2018",233.360201511335,"gapfilled"
+"Møre og Romsdal","Salmon","loss_count","1000x","2018",5526,NA
+"Møre og Romsdal","Rainbow trout","loss_count","1000x","2018",511,NA
+"Møre og Romsdal","Other fish species","loss_count","1000x","2018",63,NA
+"Trøndelag","Salmon","loss_count","1000x","2018",7839,NA
+"Trøndelag","Rainbow trout","loss_count","1000x","2018",0,"gapfilled"
+"Trøndelag","Other fish species","loss_count","1000x","2018",0,"gapfilled"
+"Sør-Trøndelag","Salmon","loss_count","1000x","2018",0,NA
+"Sør-Trøndelag","Rainbow trout","loss_count","1000x","2018",0,NA
+"Sør-Trøndelag","Other fish species","loss_count","1000x","2018",0,NA
+"Nord-Trøndelag","Salmon","loss_count","1000x","2018",0,NA
+"Nord-Trøndelag","Rainbow trout","loss_count","1000x","2018",0,NA
+"Nord-Trøndelag","Other fish species","loss_count","1000x","2018",0,NA
+"Nordland","Salmon","loss_count","1000x","2018",7501,NA
+"Nordland","Rainbow trout","loss_count","1000x","2018",0,"gapfilled"
+"Nordland","Other fish species","loss_count","1000x","2018",0,"gapfilled"
+"Troms","Salmon","loss_count","1000x","2018",5830,NA
+"Troms","Rainbow trout","loss_count","1000x","2018",6.70679277730009,"gapfilled"
+"Troms","Other fish species","loss_count","1000x","2018",5.29320722269991,"gapfilled"
+"Finnmark","Salmon","loss_count","1000x","2018",4198,NA
+"Finnmark","Rainbow trout","loss_count","1000x","2018",3.83888458559256,"gapfilled"
+"Finnmark","Other fish species","loss_count","1000x","2018",2.16111541440744,"gapfilled"
+"Other Counties","Salmon","loss_count","1000x","2018",566,NA
+"Other Counties","Rainbow trout","loss_count","1000x","2018",20,NA
+"Other Counties","Other fish species","loss_count","1000x","2018",24,NA
+"Rogaland","Salmon","stock_dec_31_count","1000x","2018",28082,NA
+"Rogaland","Rainbow trout","stock_dec_31_count","1000x","2018",34.5237863487042,"gapfilled"
+"Rogaland","Other fish species","stock_dec_31_count","1000x","2018",1644.4762136513,"gapfilled"
+"Hordaland","Salmon","stock_dec_31_count","1000x","2018",54102,NA
+"Hordaland","Rainbow trout","stock_dec_31_count","1000x","2018",10672.7633706402,"gapfilled"
+"Hordaland","Other fish species","stock_dec_31_count","1000x","2018",491.236629359763,"gapfilled"
+"Sogn og Fjordane","Salmon","stock_dec_31_count","1000x","2018",29109,NA
+"Sogn og Fjordane","Rainbow trout","stock_dec_31_count","1000x","2018",4289.80447947707,"gapfilled"
+"Sogn og Fjordane","Other fish species","stock_dec_31_count","1000x","2018",804.195520522926,"gapfilled"
+"Møre og Romsdal","Salmon","stock_dec_31_count","1000x","2018",51903,NA
+"Møre og Romsdal","Rainbow trout","stock_dec_31_count","1000x","2018",3847,NA
+"Møre og Romsdal","Other fish species","stock_dec_31_count","1000x","2018",515,NA
+"Trøndelag","Salmon","stock_dec_31_count","1000x","2018",58201,NA
+"Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2018",0,"gapfilled"
+"Trøndelag","Other fish species","stock_dec_31_count","1000x","2018",0,"gapfilled"
+"Sør-Trøndelag","Salmon","stock_dec_31_count","1000x","2018",0,NA
+"Sør-Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2018",0,NA
+"Sør-Trøndelag","Other fish species","stock_dec_31_count","1000x","2018",0,NA
+"Nord-Trøndelag","Salmon","stock_dec_31_count","1000x","2018",0,NA
+"Nord-Trøndelag","Rainbow trout","stock_dec_31_count","1000x","2018",0,NA
+"Nord-Trøndelag","Other fish species","stock_dec_31_count","1000x","2018",0,NA
+"Nordland","Salmon","stock_dec_31_count","1000x","2018",87985,NA
+"Nordland","Rainbow trout","stock_dec_31_count","1000x","2018",850.69937682417,"gapfilled"
+"Nordland","Other fish species","stock_dec_31_count","1000x","2018",965.30062317583,"gapfilled"
+"Troms","Salmon","stock_dec_31_count","1000x","2018",62181,NA
+"Troms","Rainbow trout","stock_dec_31_count","1000x","2018",7.56266763649589,"gapfilled"
+"Troms","Other fish species","stock_dec_31_count","1000x","2018",1.43733236350411,"gapfilled"
+"Finnmark","Salmon","stock_dec_31_count","1000x","2018",43537,NA
+"Finnmark","Rainbow trout","stock_dec_31_count","1000x","2018",81.9397993311037,"gapfilled"
+"Finnmark","Other fish species","stock_dec_31_count","1000x","2018",16.0602006688963,"gapfilled"
+"Other Counties","Salmon","stock_dec_31_count","1000x","2018",6305,NA
+"Other Counties","Rainbow trout","stock_dec_31_count","1000x","2018",975,NA
+"Other Counties","Other fish species","stock_dec_31_count","1000x","2018",520,NA
+"Rogaland","Salmon","tonnes_fish","tonnes","2018",64019,NA
+"Rogaland","Rainbow trout","tonnes_fish","tonnes","2018",1198,"gapfilled"
+"Rogaland","Char","tonnes_fish","tonnes","2018",0,NA
+"Rogaland","Cod","tonnes_fish","tonnes","2018",0,NA
+"Rogaland","Halibut","tonnes_fish","tonnes","2018",0,"gapfilled"
+"Rogaland","Shellfish","tonnes_fish","tonnes","2018",26,NA
+"Rogaland","Other fish species","tonnes_fish","tonnes","2018",0,NA
+"Hordaland","Salmon","tonnes_fish","tonnes","2018",172670,NA
+"Hordaland","Rainbow trout","tonnes_fish","tonnes","2018",34867,NA
+"Hordaland","Char","tonnes_fish","tonnes","2018",0,NA
+"Hordaland","Cod","tonnes_fish","tonnes","2018",0,NA
+"Hordaland","Halibut","tonnes_fish","tonnes","2018",0,"gapfilled"
+"Hordaland","Shellfish","tonnes_fish","tonnes","2018",47,"gapfilled"
+"Hordaland","Other fish species","tonnes_fish","tonnes","2018",0,NA
+"Sogn og Fjordane","Salmon","tonnes_fish","tonnes","2018",81408,NA
+"Sogn og Fjordane","Rainbow trout","tonnes_fish","tonnes","2018",14668,NA
+"Sogn og Fjordane","Char","tonnes_fish","tonnes","2018",0,NA
+"Sogn og Fjordane","Cod","tonnes_fish","tonnes","2018",194.764675199615,"gapfilled"
+"Sogn og Fjordane","Halibut","tonnes_fish","tonnes","2018",0,"gapfilled"
+"Sogn og Fjordane","Shellfish","tonnes_fish","tonnes","2018",33.2353248003852,"gapfilled"
+"Sogn og Fjordane","Other fish species","tonnes_fish","tonnes","2018",0,NA
+"Møre og Romsdal","Salmon","tonnes_fish","tonnes","2018",78306,NA
+"Møre og Romsdal","Rainbow trout","tonnes_fish","tonnes","2018",11142.824916966,"gapfilled"
+"Møre og Romsdal","Char","tonnes_fish","tonnes","2018",0,NA
+"Møre og Romsdal","Cod","tonnes_fish","tonnes","2018",0,NA
+"Møre og Romsdal","Halibut","tonnes_fish","tonnes","2018",910.135701213312,"gapfilled"
+"Møre og Romsdal","Shellfish","tonnes_fish","tonnes","2018",11.0393818206466,"gapfilled"
+"Møre og Romsdal","Other fish species","tonnes_fish","tonnes","2018",0,NA
+"Trøndelag","Salmon","tonnes_fish","tonnes","2018",319783,NA
+"Trøndelag","Rainbow trout","tonnes_fish","tonnes","2018",0,"gapfilled"
+"Trøndelag","Char","tonnes_fish","tonnes","2018",0,"gapfilled"
+"Trøndelag","Cod","tonnes_fish","tonnes","2018",0,"gapfilled"
+"Trøndelag","Halibut","tonnes_fish","tonnes","2018",0,NA
+"Trøndelag","Shellfish","tonnes_fish","tonnes","2018",1083,NA
+"Trøndelag","Other fish species","tonnes_fish","tonnes","2018",0,NA
+"Sør-Trøndelag","Salmon","tonnes_fish","tonnes","2018",0,NA
+"Sør-Trøndelag","Rainbow trout","tonnes_fish","tonnes","2018",0,NA
+"Sør-Trøndelag","Char","tonnes_fish","tonnes","2018",0,NA
+"Sør-Trøndelag","Cod","tonnes_fish","tonnes","2018",0,NA
+"Sør-Trøndelag","Halibut","tonnes_fish","tonnes","2018",0,NA
+"Sør-Trøndelag","Shellfish","tonnes_fish","tonnes","2018",0,NA
+"Sør-Trøndelag","Other fish species","tonnes_fish","tonnes","2018",0,NA
+"Nord-Trøndelag","Salmon","tonnes_fish","tonnes","2018",0,NA
+"Nord-Trøndelag","Rainbow trout","tonnes_fish","tonnes","2018",0,NA
+"Nord-Trøndelag","Char","tonnes_fish","tonnes","2018",0,NA
+"Nord-Trøndelag","Cod","tonnes_fish","tonnes","2018",0,NA
+"Nord-Trøndelag","Halibut","tonnes_fish","tonnes","2018",0,NA
+"Nord-Trøndelag","Shellfish","tonnes_fish","tonnes","2018",0,NA
+"Nord-Trøndelag","Other fish species","tonnes_fish","tonnes","2018",0,NA
+"Nordland","Salmon","tonnes_fish","tonnes","2018",250532,NA
+"Nordland","Rainbow trout","tonnes_fish","tonnes","2018",1410.21233307929,"gapfilled"
+"Nordland","Char","tonnes_fish","tonnes","2018",240,NA
+"Nordland","Cod","tonnes_fish","tonnes","2018",2871.78766692071,"gapfilled"
+"Nordland","Halibut","tonnes_fish","tonnes","2018",0,NA
+"Nordland","Shellfish","tonnes_fish","tonnes","2018",555,NA
+"Nordland","Other fish species","tonnes_fish","tonnes","2018",0,"gapfilled"
+"Troms","Salmon","tonnes_fish","tonnes","2018",188398,NA
+"Troms","Rainbow trout","tonnes_fish","tonnes","2018",0,NA
+"Troms","Char","tonnes_fish","tonnes","2018",0,NA
+"Troms","Cod","tonnes_fish","tonnes","2018",21,"gapfilled"
+"Troms","Halibut","tonnes_fish","tonnes","2018",0,NA
+"Troms","Shellfish","tonnes_fish","tonnes","2018",0,"gapfilled"
+"Troms","Other fish species","tonnes_fish","tonnes","2018",0,NA
+"Finnmark","Salmon","tonnes_fish","tonnes","2018",113476,NA
+"Finnmark","Rainbow trout","tonnes_fish","tonnes","2018",30,"gapfilled"
+"Finnmark","Char","tonnes_fish","tonnes","2018",0,"gapfilled"
+"Finnmark","Cod","tonnes_fish","tonnes","2018",0,NA
+"Finnmark","Halibut","tonnes_fish","tonnes","2018",0,NA
+"Finnmark","Shellfish","tonnes_fish","tonnes","2018",0,NA
+"Finnmark","Other fish species","tonnes_fish","tonnes","2018",0,NA
+"Other Counties","Salmon","tonnes_fish","tonnes","2018",13411,NA
+"Other Counties","Rainbow trout","tonnes_fish","tonnes","2018",145,NA
+"Other Counties","Char","tonnes_fish","tonnes","2018",0,"gapfilled"
+"Other Counties","Cod","tonnes_fish","tonnes","2018",0,NA
+"Other Counties","Halibut","tonnes_fish","tonnes","2018",0,NA
+"Other Counties","Shellfish","tonnes_fish","tonnes","2018",4,NA
+"Other Counties","Other fish species","tonnes_fish","tonnes","2018",264,"gapfilled"

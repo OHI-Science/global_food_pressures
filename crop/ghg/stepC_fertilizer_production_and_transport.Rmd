@@ -1,0 +1,379 @@
+---
+title: "crop_ghg_fertilizer_production_and_transport"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Script Description
+Map GHG emissions stressor for the production and transport of fertilizer.
+
+# Data information
+Source: FAO 2017 LEAP report http://www.fao.org/3/a-i8275e.pdf [Accessed: 04/13/2020]
+
+FAO_LEAP programme used Kool et al 2012 and Blanca(?) 2011 to calculate emission factors for the production and transport of fertilizer NPK and lime.
+While we don't use potash (K2O) to calculate leaching, we are calculating emissions.
+
+# Preamble
+```{r setup, include = FALSE}
+# getting packages we want
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+library(janitor)
+library(furrr)
+
+# Import food_rgns xy df
+food_rgns_xy <- 
+  food_rgns_xy %>% 
+  select(x, y, iso3c)
+```
+
+-------------------------------------------------------------------------------
+
+# Tidy and transform
+
+## Import and wrangling
+```{r}
+nutrient_EF <- 
+  vroom::vroom(here("crop/ghg/data/FAO_2017_LEAP_EF.csv")) %>% 
+  clean_names() %>% 
+  rename(LEAP_region = region, 
+         N           = n,
+         P2O5        = p2o5,
+         K2O         = k2o)
+
+# Match LEAP regions with equivalent UNSD to get iso3c
+match_region <- 
+  vroom::vroom(here("_spatial/_output/UNSD_Methodology.csv")) %>% 
+  mutate(LEAP_region = case_when(
+    Sub_region_Name %in% "Western Europe" ~ "W. Europe",
+    Sub_region_Name %in% "Eastern Europe" ~ "E.Europe inclu Russian federation",
+    Intermediate_Region_Name %in% "Central America" ~ "Central & S.America",
+    Intermediate_Region_Name %in% "South America" ~ "Central & S.America",
+    Region_Name %in% "Asia" ~ "Asia",
+    iso3c %in% "AUS" ~ "Australia",
+    iso3c %in% "NZL" ~ "New Zealand",
+    TRUE ~ "Global Average")) %>% 
+  select(iso3c, LEAP_region) 
+
+# Join iso3c codes to respective global region.
+nutrient_EF <- 
+  left_join(nutrient_EF, match_region) %>% 
+  select(-LEAP_region)
+
+# Gapfill
+missing_rgns <- unique(nutrient_EF$iso3c)[!unique(nutrient_EF$iso3c) %in% food_rgns$iso3c]
+nutrient_EF <- nutrient_EF %>% filter(!iso3c %in% missing_rgns)
+
+# Change units
+nutrient_EF <- 
+  nutrient_EF %>% 
+  gather(key = "nutrient", 
+         value = "nutrient_CO2eq", 
+         -iso3c, 
+         na.rm = TRUE)
+
+# Save
+write_csv(nutrient_EF, here("crop/ghg/data/nutrient_EF.csv"))
+```
+
+Combine with nutrient dataframe (created in crop/nutrient folder)
+```{r}
+nutrient_EF <- read_csv(here("crop/ghg/data/nutrient_EF.csv"))
+nutrient_df <- vroom::vroom(here("crop/nutrient/data/nutrient_df.csv"))
+nutrient_EF <- left_join(nutrient_df, nutrient_EF)
+
+```
+
+# Data check
+```{r}
+# Must be the same #244
+n_distinct(unique(nutrient_EF$iso3c));+ 
+n_distinct(unique(nutrient_df$iso3c));+ 
+n_distinct(food_rgns$iso3c) 
+
+# Expecting reasonable values, XMI should be zeros due to absence of fertilizer data.
+nutrient_EF %>% 
+  filter(iso3c %in% c("USA", "BRA", "SRB", "SDN", "TWN", "ALA", "XMI", "XKO", "PRT", "GBR", "GGY")) %>%
+  group_by(iso3c) %>% 
+  summarize(total_tonnes = sum(allocated_nutrient))
+```
+
+
+-------------------------------------------------------------------------------
+
+# Mapping
+```{r}
+# Distinct variables for loops
+distinct_vars <- 
+  nutrient_df %>% 
+  distinct(split_rest_names, nutrient) 
+
+```
+
+## Rasterize
+```{r}
+# Read nutrient_EF_raster function 
+nutrient_EF_raster <- function(this_crop, this_nutrient) { #this_nutrient = "N"; this_crop="maiz"
+  
+    # Split by nutrient and crop
+  nutrient_EF %>% 
+    filter(split_rest_names %in% this_crop & 
+           nutrient %in% this_nutrient) %>%
+    select(iso3c, nutrient_CO2eq) %>% 
+    left_join(food_rgns_xy, .) %>% # add iso3c
+    select(-iso3c) %>% 
+    rasterFromXYZ(crs = food_crs) %>% # rasterize
+    
+    # Multiply emission factor by the tonnes of nutrients in each raster cell.
+    overlay(.,
+            raster(file.path(prep,
+                         "crop/nutrient/crop_",
+                         this_crop,
+                         "_application_",
+                         this_nutrient,
+                         ".tif", 
+                         fsep = "")), 
+            fun = function(r1, r2) {
+              
+              return(r1 * r2)
+              
+            }) %>% 
+    
+    writeRaster(.,
+                file.path(prep,
+                          "crop/ghg/crop_nutrient_ghg/crop_",
+                          this_crop,
+                          "_",
+                          this_nutrient,
+                          "_nutrient_CO2eq.tif",
+                          fsep = ""), 
+                format = "GTiff", 
+                overwrite = TRUE)
+  }
+
+plan(multisession, workers = 12)
+
+options <- furrr_options(seed = 54232)
+
+future_map2(distinct_vars$split_rest_names,
+            distinct_vars$nutrient,
+            nutrient_EF_raster,
+            .options = options)
+
+delete_aux <- list.files(file.path(prep, "crop/ghg/crop_nutrient_ghg"), pattern="aux", full=TRUE)
+file.remove(delete_aux)
+```                                      
+
+# Sum together NPK values
+```{r}
+total_nutrient_CO2eq <- function(crop){
+  
+  CO2eq_raster <- overlay(
+    raster(file.path(prep,
+                     "crop/ghg/crop_nutrient_ghg/crop_",
+                     crop,
+                     "_N_nutrient_CO2eq.tif", 
+                     fsep = "")), 
+    raster(file.path(prep,
+                     "crop/ghg/crop_nutrient_ghg/crop_",
+                     crop,
+                     "_P2O5_nutrient_CO2eq.tif", 
+                     fsep = "")),
+    raster(file.path(prep,
+                     "crop/ghg/crop_nutrient_ghg/crop_",
+                     crop,
+                     "_K2O_nutrient_CO2eq.tif", 
+                     fsep = "")),
+    
+    fun = function(r1, r2, r3) {
+       
+        r1[is.na(r1)] <- 0
+        r2[is.na(r2)] <- 0
+        r3[is.na(r3)] <- 0
+        return(r1 + r2 + r3)
+        
+       })
+  
+  names(CO2eq_raster) <- paste(crop, "_all_nutrient_CO2eq", sep = "")
+
+  writeRaster(CO2eq_raster, 
+              file.path(prep,
+                        "crop/ghg/crop_nutrient_ghg/crop_",
+                        crop,
+                        "_all_nutrient_CO2eq.tif", 
+                        fsep = ""), 
+              format = "GTiff", 
+              overwrite = TRUE)
+}
+
+future_map(unique(distinct_vars$split_rest_names),
+           total_nutrient_CO2eq,
+           .options = options)
+ 
+delete_aux <- list.files(file.path(prep, "crop/ghg/crop_nutrient_ghg"), pattern="aux", full=TRUE)
+file.remove(delete_aux) 
+```
+
+# Check output
+```{r}
+test <- 
+  raster(file.path(prep,
+                   "crop/ghg/crop_nutrient_ghg/crop_",
+                   "maiz",
+                   "_all_nutrient_CO2eq.tif", 
+                   fsep = ""))
+plot(test)
+
+final <- list.files(file.path(prep,
+                     "crop/ghg/crop_nutrient_ghg/",
+                     fsep = ""),
+           pattern = "all_nutrient_CO2eq",
+           full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, "sum") 
+
+plot(final) 
+
+# these should be approximately the same  
+cellStats(final, stat = "sum")
+
+
+start <- nutrient_EF %>% 
+  mutate(co2 = allocated_nutrient*nutrient_CO2eq)
+sum(start$co2)
+```
+
+
+-------------------------------------------------------------------------------
+
+# grassland 
+```{r}
+grassland_df <- vroom(here("crop/nutrient/data/fao_nutrient_grassland_2.csv"))
+
+nutrient_EF <- vroom(here("crop/ghg/data/nutrient_EF.csv"))
+
+grassland_df <- left_join(grassland_df, nutrient_EF)
+```
+
+```{r}
+
+grassland_EF_raster <- function(this_grazing_animal) {
+  
+  # N
+  grazing_N <- nutrient_EF %>% 
+      filter(nutrient %in% "N") %>%
+      select(iso3c, nutrient_CO2eq) %>% 
+      left_join(food_rgns_xy, .) %>% # add iso3c
+      select(-iso3c) %>% 
+      rasterFromXYZ(crs = food_crs) %>% # rasterize
+      
+      # Multiply emission factor by the tonnes of nutrients in each raster cell.
+      overlay(.,
+              raster(file.path(prep,
+                           "animal_farm/nutrient/grassland_fertilizer_application/",
+                           this_grazing_animal,
+                           "_N.tif", 
+                           fsep = "")), 
+              fun = function(r1, r2) {
+                
+                return(r1 * r2)
+                
+              })
+  
+  # P2O5
+  grazing_P2O5 <- nutrient_EF %>% 
+      filter(nutrient %in% "P2O5") %>%
+      select(iso3c, nutrient_CO2eq) %>% 
+      left_join(food_rgns_xy, .) %>% # add iso3c
+      select(-iso3c) %>% 
+      rasterFromXYZ(crs = food_crs) %>% # rasterize
+      
+      # Multiply emission factor by the tonnes of nutrients in each raster cell.
+      overlay(.,
+              raster(file.path(prep,
+                           "animal_farm/nutrient/grassland_fertilizer_application/",
+                           this_grazing_animal,
+                           "_P2O5.tif", 
+                           fsep = "")), 
+              fun = function(r1, r2) {
+                
+                return(r1 * r2)
+                
+              })
+  
+  # K2O
+  grazing_K2O <- nutrient_EF %>% 
+      filter(nutrient %in% "P2O5") %>%
+      select(iso3c, nutrient_CO2eq) %>% 
+      left_join(food_rgns_xy, .) %>% # add iso3c
+      select(-iso3c) %>% 
+      rasterFromXYZ(crs = food_crs) %>% # rasterize
+      
+      # Multiply emission factor by the tonnes of nutrients in each raster cell.
+      overlay(.,
+              raster(file.path(prep,
+                           "animal_farm/nutrient/grassland_fertilizer_application/",
+                           this_grazing_animal,
+                           "_K2O.tif", 
+                           fsep = "")), 
+              fun = function(r1, r2) {
+                
+                return(r1 * r2)
+                
+              })
+  
+  CO2eq_raster <- overlay(grazing_N, grazing_P2O5, grazing_K2O,
+    
+    fun = function(r1, r2, r3) {
+       
+        r1[is.na(r1)] <- 0
+        r2[is.na(r2)] <- 0
+        r3[is.na(r3)] <- 0
+        return(r1 + r2 + r3)
+        
+       })
+  
+  names(CO2eq_raster) <- paste("grassland_all_nutrient_CO2eq", sep = "")
+
+  writeRaster(CO2eq_raster, 
+              file.path(prep,
+                        "animal_farm/ghg/",
+                        str_extract(this_grazing_animal, ".+?(?=_)"),
+                        "_grassland_",
+                        str_extract(this_grazing_animal, "(?<=_).*$"),
+                        "_grss_fertilizer_CO2eq.tif", 
+                        fsep = ""), 
+              format = "GTiff", 
+              overwrite = TRUE)
+  }
+
+grazer_list <- 
+  list.files(file.path(prep, "animal_farm/nutrient/grassland_fertilizer_application"),
+           pattern = ".(N|P2O5|K2O)\\.tif$") %>% 
+  str_extract(., pattern = ".+?((meat|milk))") %>% 
+  unique()
+
+plan(multisession, workers = 12)
+
+options <- furrr_options(seed = 54232)
+
+future_map(grazer_list,
+            grassland_EF_raster,
+            .options = options)
+```
+
+```{r}
+tmp <- list.files(file.path(prep,
+                        "animal_farm/ghg/",
+                     fsep = ""),
+           pattern = "grss_fertilizer_CO2eq",
+           full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, "sum") 
+plot(tmp)
+
+```
+

@@ -1,0 +1,203 @@
+---
+title: 'Download and prep gridded population data'
+author: "*Compiled on `r date()` by `r Sys.info()['user']`*"
+output: 
+  html_document:
+    code_folding: show
+    toc: true
+    toc_depth: 1
+    toc_float: yes
+    number_sections: true
+    theme: cerulean
+    highlight: haddock
+    includes: 
+      in_header: '../../../workflow/templates/ohi_hdr.html'
+pdf_document:
+  toc: true
+editor_options: 
+  chunk_output_type: console
+---
+
+
+***
+
+
+***
+
+# Setup
+
+Load all relevant libraries including parallel processing packages
+```{r setup, message=FALSE, warning=FALSE, verbose=FALSE, eval=FALSE}
+
+## Set options for all chunks in code
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, fig.width = 6, fig.height = 4, fig.path = "figs/")
+
+## Load packages, installing them first where necessary
+pkg <- c("raster", "rgdal", "sp", "sf", "fasterize", "tidyverse", "foreach", "parallel","doParallel")
+new_pkg <- pkg[!(pkg %in% installed.packages())]
+if (length(new_pkg)){install.packages(new_pkg)}
+
+
+## Spatial libraries
+library(raster)
+library(rgdal)
+library(sp)
+library(sf)
+library(fasterize)
+
+## Data wrangling libraries
+library(tidyverse)
+library(here)
+library(plotly)
+
+## Parallel processing libraries
+library(parallel)
+library(foreach)
+library(doParallel)
+
+library(WDI)
+
+```
+
+Define frequently used pathnames. Change scenario and data years in file pathnames code chunk to reflect the most recent data (d) and current assessment year (v).
+```{r file paths, eval=FALSE}
+
+## Source common and spatial common files
+source(here('_workflow/common.R'))
+source(here('_workflow/common_spatial.R'))
+
+
+```
+
+
+Import cumulative stressor raster
+
+```{r}
+cum_pressure <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/cumulative_stress/all_systems_cumulative_stress.tif") 
+
+plot(cum_pressure)
+```
+
+
+Import population counts rasters 
+
+```{r}
+
+year_oi <- 2015
+pop_count <- raster(file.path(prep, sprintf("spatial/gridded_population_data/int/human_count_%s.tif", year_oi)))
+
+cellStats(pop_count, "sum", na.rm = TRUE)
+
+rgn_pop <- zonal(pop_count, food_rgns_tif, fun="sum", progress="text", na.rm=TRUE)
+
+ rgn_pop_df <- data.frame(rgn_pop) %>%
+        rename(ID_0 = zone, population = sum) %>%
+        left_join(food_rgns, by="ID_0") %>% 
+   select(iso3c, country = Country, population) %>%
+   mutate(population = population*1000000)
+ 
+ sum(rgn_pop_df$population) # 7465326705 - great
+ 
+ write_csv(rgn_pop_df, here(sprintf("_analysis/region_count_%s.csv", year_oi)))
+
+
+pop_2015 <- raster(file.path(prep, "spatial/gridded_population_data/int/human_count_2015.tif"))
+
+cellStats(pop_2015, "sum", na.rm = TRUE)*1000000 # 8105699405
+
+pop_2015_fix <- pop_2015*1000000 
+
+cellStats(pop_2015_fix, "sum", na.rm = TRUE) # 8105699405
+
+## reproject to the cumulative stressor raster 
+
+pop_2015_fix_area <- pop_2015_fix/raster::area(pop_2015_fix)
+
+
+## Fix CRS 
+pop_2015_food_crs <- projectRaster(pop_2015_fix_area, cum_pressure, method = "bilinear")
+
+cellStats(pop_2015_food_crs, "sum", na.rm = TRUE) # 233719414
+
+pop_2015_food_crs_fin <- pop_2015_food_crs*36
+
+cellStats(pop_2015_food_crs_fin, "sum", na.rm = TRUE)  # 8425463795
+
+plot(log(pop_2015_food_crs_fin+1))
+
+## ok this is really weird... population says 8.4 billion, but when zonal extract we lose about 1 billion and that seems right...
+```
+
+
+```{r}
+
+## grab world bank population data 
+
+indicators <-  data.frame(WDI_data[[1]])
+population_df = WDI(
+  indicator = WDIsearch('SP.POP.TOTL', field='indicator'),
+  country = 'all', start = 2017, end=2017, extra = TRUE) %>%
+  dplyr::select(iso3c, population = SP.POP.TOTL)
+
+
+food_rgns_tif_cea <- projectRaster(food_rgns_tif, cum_pressure, method = "ngb")
+ 
+# cum_pressure_pop <- cum_pressure*pop_2015_food_crs_fin
+# 
+# plot(log(cum_pressure_pop+1))
+# 
+# 
+# cum_pressure_pop_zonal <- zonal(cum_pressure_pop, food_rgns_tif_cea, fun = "sum", progress = "text", na.rm = TRUE)
+# 
+#  cum_pressure_pop_df <- data.frame(cum_pressure_pop_zonal) %>%
+#         rename(ID_0 = zone, pressure_pop = sum) %>%
+#         left_join(food_rgns, by="ID_0") %>% 
+#    select(iso3c, country = Country, pressure_pop) %>%
+#    left_join(population_df) %>%
+#    mutate(pressure = "cumulative") %>%
+#    mutate(exposure_per_capita = pressure_pop/population)
+ 
+ # write.csv(cum_pressure_pop_df, file.path("/home/shares/food-systems/social_justice/_prep_files/food_pressures/cum_pressure_exposure.csv"), row.names = FALSE)
+ 
+ 
+ # cum_pressures_pop_df <- cum_pressure_pop_df  %>%
+ #   dplyr::select(iso3c, country, pressure, population, exposure_per_capita)
+ # 
+ other_pressures_stack <- raster::stack(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/stressors", full.names = TRUE))
+ 
+ all_pressures_stack <- stack(other_pressures_stack, cum_pressure)
+ 
+ plot(all_pressures_stack[[5]])
+ 
+ plot(cum_pressure)
+ 
+all_pressures_pop <- all_pressures_stack*pop_2015_food_crs_fin
+plot(log(all_pressures_pop + 1))
+
+names(all_pressures_pop) <- c("disturbance", "ghg", "nutrient", "water", "cumulative")
+
+terra::writeRaster(terra::rast(all_pressures_pop), filename=file.path("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/exposure/pressures_population.tif"), overwrite=TRUE) ## convert to terra spatRast and save so that we can preserve the layer names.. or you could save as a .grd file using raster. Either way will preserve the names. 
+
+all_pressures_pop <- stack("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/exposure/pressures_population.tif")
+
+all_pressures_pop_zonal <- zonal(all_pressures_pop, food_rgns_tif_cea, fun = "sum", na.rm = TRUE)
+
+
+other_pressures_pop_df <- data.frame(other_pressures_pop_zonal) %>%
+        rename(ID_0 = zone) %>%
+        left_join(food_rgns, by="ID_0") %>% 
+   select(iso3c, country = Country, disturbance =layer.1, ghg = layer.2, nutrient = layer.3, water = layer.4) %>%
+   left_join(population_df) %>%
+  mutate(across(3:6, ~.x/population)) %>%
+  pivot_longer(cols = c(3:6), values_to = "exposure_per_capita", names_to = "pressure") 
+
+
+all_pressures_pop_df <- full_join(cum_pressures_pop_df, other_pressures_pop_df)
+
+
+ write.csv(all_pressures_pop_df, file.path("/home/shares/food-systems/social_justice/_prep_files/food_pressures/all_pressure_exposure.csv"), row.names = FALSE)
+
+```
+
+
+***

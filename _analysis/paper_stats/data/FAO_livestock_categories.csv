@@ -1,0 +1,51 @@
+Item,non_food_exclude,included_for_us,category, category2_production, category1_production
+"Eggs, hen, in shell",,yes,egg,chickens_eggs&meat,chickens_eggs
+"Eggs, hen, in shell (number)",exclude,,,NA,
+"Fat, camels",,no,meat,NA,
+"Fat, cattle",,no,meat,NA,
+"Fat, goats",,yes,meat,NA,
+"Fat, sheep",,yes,meat,NA,
+"Hides, cattle, fresh",exclude,,,NA,
+"Honey, natural",,no,other,NA,
+"Meat, camel",,no,meat,NA,
+"Meat, cattle",,yes,meat,cows_meat,cows_meat
+"Meat, chicken",,yes,meat,chickens_eggs&meat,chickens_meat
+"Meat, game",,no,meat,NA,
+"Meat, goat",,yes,meat,small_ruminant_meat,goats_meat
+"Meat, sheep",,yes,meat,small_ruminant_meat,sheep_meat
+"Milk, whole fresh camel",,no,milk,NA,
+"Milk, whole fresh cow",,yes,milk,large_ruminant_milk,cows_milk
+"Milk, whole fresh goat",,yes,milk,small_ruminant_milk,goats_milk
+"Milk, whole fresh sheep",,yes,milk,small_ruminant_milk,sheep_milk
+"Offals, edible, camels",,no,meat,NA,
+"Offals, edible, cattle",,yes,meat,cows_meat,cows_meat
+"Offals, edible, goats",,yes,meat,small_ruminant_meat,goats_meat
+"Offals, sheep,edible",,yes,meat,small_ruminant_meat,sheep_meat
+"Silk-worm cocoons, reelable",exclude,,,NA,
+"Skins, goat, fresh",exclude,,,NA,
+"Skins, sheep, fresh",exclude,,,NA,
+"Wool, greasy",exclude,,,NA,
+"Eggs, other bird, in shell",,no,egg,NA,
+"Eggs, other bird, in shell (number)",exclude,,,NA,
+"Fat, pigs",,yes,meat,NA,
+Meat nes,,no,meat,NA,
+"Meat, pig",,yes,meat,pigs_meat,pigs_meat
+"Milk, whole fresh buffalo",,yes,milk,large_ruminant_milk,buffaloes_milk
+"Offals, pigs, edible",,yes,meat,pigs_meat,pigs_meat
+"Meat, horse",,no,meat,NA,
+"Meat, rabbit",,no,meat,NA,
+"Meat, turkey",,no,meat,NA,
+"Offals, horses",,no,meat,NA,
+Beeswax,exclude,,,NA,
+"Meat, duck",,no,meat,NA,
+"Meat, goose and guinea fowl",,no,meat,NA,
+"Fat, buffaloes",,no,meat,NA,
+"Hides, buffalo, fresh",exclude,,,NA,
+"Meat, buffalo",,no,meat,NA,
+"Offals, edible, buffaloes",,no,meat,NA,
+"Meat, other camelids",,no,meat,NA,
+"Meat, other rodents",,no,meat,NA,
+"Meat, ass",,no,meat,NA,
+"Meat, bird nes",,no,meat,NA,
+"Meat, mule",,no,meat,NA,
+"Snails, not sea",,no,other,NA,

@@ -1,0 +1,188 @@
+---
+title: "step5_cell_allocation"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Create a raster that describes for each country the proportion of their production or area occurring in each raster cell. The values within a country should sum to 1.
+```{r setup, include = FALSE}
+# getting packages we want
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+library(janitor)
+library(furrr)
+
+# Distinct crop names and production systems to cycle through
+prod_system   <- c("_A","_H","_S","_I","_L")
+prod_crop_rgns  <- vroom::vroom(here("crop/farm/data/prod_crop_rgns_2017.csv"))
+distinct_vars <- expand.grid(prod_system, 
+                             unique(prod_crop_rgns$split_rest_names))
+``` 
+
+# Produce a raster for each crop where the value is the proportion of crop production allocated to each cell from its iso3c code area 
+```{r}
+
+cell_allocation <- function(crop, prod_system) {
+
+   if (crop == "fodd" & prod_system %in% c("_L", "_S", "_A")) {
+    
+  } else {
+    
+  # Calculate how much of the crop's production is allocated to each cell.
+  tmp<-  raster_df(
+      raster(file.path(
+        prep,
+        "crop/farm/scaled_maps_2017/crop_",
+        crop,
+        prod_system,
+        "_scaled.tif",
+        fsep = ""))) %>%
+      select(cellindex, scaled_production = paste("crop_", 
+                                       crop, 
+                                       prod_system, 
+                                       "_scaled",
+                                       sep = "")) %>% 
+      left_join(., food_rgns_xy) %>% # add iso3c
+      group_by(iso3c) %>% 
+      mutate(cell_prop = scaled_production / sum(scaled_production, na.rm = TRUE)) %>% 
+      ungroup() %>% 
+      select(x, y, cell_prop) %>% 
+      rasterFromXYZ(crs = food_crs) %>% 
+      writeRaster(., 
+                  file.path(prep,
+                            "crop/farm/cell_allocation/crop_",
+                            crop,
+                            prod_system,
+                            "_allocation.tif",
+                            fsep = ""),
+                  format = "GTiff", 
+                  overwrite = TRUE)
+  }
+}
+
+plan(multisession, workers = 12)
+
+options <- furrr_options(seed = 54232) #54232
+
+furrr::future_map2(distinct_vars$Var2,
+                   distinct_vars$Var1, 
+                   cell_allocation)
+
+# check to see looks ok. Should be between 0-1
+tmp <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/cell_allocation/crop_maiz_A_allocation.tif")
+tmp
+plot(tmp)
+```
+
+# Harvested area allocation
+```{r}
+
+cell_allocation <- function(crop, prod_system) {
+   if (crop == "fodd" & prod_system %in% c("_L", "_S", "_A")) {
+    
+   } else if (crop == "fodd" & prod_system %in% "_H") {
+    
+   raster_df(
+     raster(
+       file.path(prep, 
+                 "spatial/GAEZAct2015_HarvArea_Foddercrops_H.tif"))) %>% 
+       rename(harvested_area = GAEZAct2015_HarvArea_Foddercrops_H) %>% 
+       select(cellindex, harvested_area) %>%
+       left_join(food_rgns_xy, .) %>% # add iso3c
+       group_by(iso3c) %>% 
+       mutate(cell_prop = harvested_area / sum(harvested_area, na.rm = TRUE)) %>% 
+       ungroup() %>% 
+       select(x, y, cell_prop) %>% 
+       rasterFromXYZ(crs = food_crs) %>% 
+       writeRaster(., 
+                   file.path(prep,
+                             "crop/farm/cell_allocation/crop_",
+                             crop,
+                             prod_system,
+                             "_harvested_area_allocation.tif",
+                             fsep = ""),
+                   format = "GTiff", 
+                   overwrite = TRUE)
+       
+  } else if (crop == "fodd" & prod_system %in% "_I") {
+    
+  raster_df(
+    raster(
+      file.path(raw, 
+                "GAEZAct_2015/GAEZAct2015_HarvArea_Foddercrops_Irrigated.tif"))) %>% 
+      rename(harvested_area = GAEZAct2015_HarvArea_Foddercrops_Irrigated) %>% 
+      select(cellindex, harvested_area) %>%
+      left_join(food_rgns_xy, .) %>% # add iso3c
+      group_by(iso3c) %>% 
+      mutate(cell_prop = harvested_area / sum(harvested_area, na.rm = TRUE)) %>% 
+      ungroup() %>% 
+      select(x, y, cell_prop) %>% 
+      rasterFromXYZ(crs = food_crs) %>% 
+      writeRaster(., 
+                  file.path(prep,
+                            "crop/farm/cell_allocation/crop_",
+                            crop,
+                            prod_system,
+                            "_harvested_area_allocation.tif",
+                            fsep = ""),
+                  format = "GTiff", 
+                  overwrite = TRUE)
+    
+  } else {
+    
+  # Calculate how much of the crop's production is allocated to each cell.
+  prod <-   raster_df(
+      raster(file.path(
+        prep,
+        "/crop/farm/MapSPAM_correct_extent/spam2010V2r0_global_A_",
+        toupper(crop),
+        prod_system,
+        ".tif",
+        fsep = ""))) %>%
+      select(cellindex, harvested_area = paste("spam2010V2r0_global_A_", 
+                                     toupper(crop), 
+                                     prod_system,
+                                     sep = "")) %>% 
+      left_join(food_rgns_xy, .) %>% # add iso3c
+      group_by(iso3c) %>% 
+      mutate(cell_prop = harvested_area / sum(harvested_area, na.rm = TRUE)) %>% 
+      ungroup() %>% 
+      select(x, y, cell_prop) %>% 
+      rasterFromXYZ(crs = food_crs) %>% 
+      writeRaster(., 
+                  file.path(prep,
+                            "crop/farm/cell_allocation/crop_",
+                            crop,
+                            prod_system,
+                            "_harvested_area_allocation.tif",
+                            fsep = ""),
+                  format = "GTiff", 
+                  overwrite = TRUE)
+  } 
+}
+
+
+plan(multisession, workers = 12)
+options <- furrr_options(seed = 54232)
+furrr::future_map2(distinct_vars$Var2,
+                   distinct_vars$Var1, 
+                   cell_allocation,
+                   .options = options)
+
+aux_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/cell_allocation", full=TRUE, pattern = ".aux.xml")
+file.remove(aux_files)
+# Check we have the correct number of files.
+list.files(file.path(prep, "crop/farm/cell_allocation/"),
+           pattern = "harvested_area_allocation") %>% 
+  length() == 44 * 5 + 2
+
+
+# should be between 0-1, and look ok
+tmp <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/cell_allocation/crop_maiz_A_harvested_area_allocation.tif")
+plot(tmp)
+tmp
+
+```

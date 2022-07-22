@@ -1,0 +1,19 @@
+﻿category,action,value,irrigated,rain,crop
+fertlizer,knife-down ammonia,10.1,,,
+fertlizer,fertilizer spraying,0.9,0.2,0,all
+fertlizer,fertilizer spreading,7.6,0.8,1,all
+herbicide,spray herbicide,1.45,1,1,all
+herbicide,chemical incorporation,5.7,,,
+seed prep,moldboard plowing,16.75,0.75,0.75,all
+seed prep,average of reduced tilling,7.6,0.25,0.25,all
+seed prep,no-till planting,3.8,0.75,0.75,all
+seed prep,plant/sow/drill,3.05,0.25,0.25,all (minus potatoes)
+seed prep,potato planter,6.9,1,0.5,potatoes only
+harvesting,windrower ,4.8,1,1,cereals
+harvesting,rake ,1.7,1,1,cereals
+harvesting,"baler (rectangle and large round, averaged) ",5.2,1,1,cereals
+harvesting,corn silage ,19.6,1,1,corn only
+harvesting,soybean harvesting combine ,7.4,1,0.5,soybean
+harvesting,shred corn stalk ,4.4,1,0.5,corn only
+harvesting,corn harvesting combine,10,1,0.5,corn only
+harvesting,forage harvesting ,13.6,1,1,cereals and corn

@@ -1,0 +1,142 @@
+---
+title: "Crop feed: water consumption"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Script objective
+Wrangle WF datasets.
+
+# Data description
+Water consumption by crop: Mekonnen and Hoekstra (2011) Appendix 2 - Table 2. [Accessed 02/09/2020]
+Shapefiles for FIPS codes: http://www.fao.org/geonetwork/srv/en/resources.get?id=29036&fname=rwdb_ad2_py.zip&access=private [Accessed 02/20/2020]
+
+# Set-up
+```{r setup, include = FALSE}
+# getting packages we want
+library(tidyverse)
+library(here)
+library(raster)
+library(sf)
+library(janitor)
+
+# Raster templates
+source(here("_spatial/template_raster.R"))
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+``` 
+
+# Data wrangling
+```{r}
+# Get encoding type
+enc <- 
+  guess_encoding(here("crop/water/data/Report47_Appendix_II_codes.csv"), 
+                 n_max = 3500)[,"encoding"] %>% 
+  as.character() # Produces ASCII: american standard character
+
+# Remove country average and global average. These are marked by having 999 in their FIPS code.
+wf_df <- 
+  read_csv(here("crop/water/data/Report47_Appendix_II_codes.csv"),
+               locale = readr::locale(encoding = enc)) %>% 
+  select(-c(2:8, "ZW999_1")) %>%  
+  gather(key   = fips_code, 
+         value = m3_per_ton, 
+         -c(Product_code_FAOSTAT, 
+            WF_Type)) %>%
+  clean_names() %>% 
+  rename(item_code = product_code_faostat) %>%
+  mutate(item_code = case_when(
+    !is.na(item_code) ~ item_code,
+    (is.na(item_code) & !is.na(lag(item_code, n = 1L))) ~ lag(item_code, n = 1L),
+    (is.na(item_code) & !is.na(lag(item_code, n = 2L))) ~ lag(item_code, n = 2L))) %>%  
+  mutate(country = substr(fips_code, 0, 2)) %>%
+  na.omit(item_code) %>% 
+  left_join(., 
+            vroom(here("crop/farm/data/crop_codes_updated.csv")),
+            by = "item_code") %>% 
+  filter(!split_rest_names %in% c("acof","rcof","toba","teas")) %>% 
+  dplyr::select(item_code, wf_type, fips_code, m3_per_ton, country, split_rest_names) %>% 
+  na.omit(split_rest_names) %>% 
+  filter(!wf_type %in% "Grey") %>% # Impact not stressor
+  mutate(wf_type = recode(wf_type, "Green" = "green", "Blue" = "blue"))
+``` 
+
+# Irrigation
+```{r}
+wf_df_irrigation <- 
+  wf_df %>% 
+  filter(wf_type %in% "blue") %>% 
+  group_by(wf_type, fips_code, country, split_rest_names) %>% 
+  summarize(m3_per_ton = mean(m3_per_ton, na.rm = TRUE)) 
+
+write_csv(wf_df_irrigation, here("crop/water/data/wf_df_irrigation.csv"))
+```
+
+# Gapfilling
+```{r}
+country_averages <- 
+  wf_df %>% 
+  filter(grepl("*999$", fips_code)) %>%
+  dplyr::select(-fips_code) %>% 
+  filter(!country %in% "ZW") %>% 
+  rename(country_averages = m3_per_ton)
+
+global_average <- 
+  wf_df %>% 
+  filter(country %in% "ZW") %>%
+  dplyr::select(-c(country, fips_code)) %>% 
+  rename(global_average = m3_per_ton) %>% 
+  group_by(wf_type, split_rest_names) %>% 
+  summarize(global_average = mean(global_average))
+
+write_csv(global_average, here("crop/water/data/global_average.csv"))
+```
+
+# Finalize
+```{r}
+wf_df <- 
+  wf_df %>% 
+  filter(!country %in% "ZW") %>% 
+  left_join(., country_averages) %>% 
+  left_join(., global_average) %>% 
+  mutate(m3_per_ton = ifelse(is.na(m3_per_ton) & !is.na(country_averages), 
+                             country_averages, 
+                             m3_per_ton)) %>%
+  mutate(m3_per_ton = ifelse(is.na(m3_per_ton) & is.na(country_averages), 
+                             global_average, 
+                             m3_per_ton)) %>% 
+  group_by(wf_type, fips_code, country, split_rest_names) %>% 
+  summarize(m3_per_ton = mean(m3_per_ton, na.rm = TRUE)) %>% 
+  ungroup()
+write_csv(wf_df, here("crop/water/data/wf_df.csv"))
+```
+
+## Crop water data.frame check {.tabset .tabset-pills}
+
+### Water footprint dataframe
+```{r, echo = FALSE, message = FALSE}
+read_csv(here("crop/water/data/wf_df.csv")) %>% 
+  filter(split_rest_names %in% "whea" & country %in% "US") %>% 
+  head() %>% 
+  kableExtra::kable() %>%
+  kableExtra::kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
+```
+
+### Global average
+```{r, echo = FALSE, message = FALSE}
+read_csv(here("crop/water/data/global_average.csv")) %>% 
+  filter(split_rest_names %in% "whea") %>% 
+  kableExtra::kable() %>%
+  kableExtra::kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
+```
+
+### Irrigation
+```{r, echo = FALSE, message = FALSE}
+read_csv(here("crop/water/data/wf_df_irrigation.csv")) %>% 
+  filter(split_rest_names %in% "whea" & country %in% "US") %>% 
+  kableExtra::kable() %>%
+  kableExtra::kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
+```
+
+{-}

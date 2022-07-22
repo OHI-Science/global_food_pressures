@@ -1,0 +1,304 @@
+﻿Domain Code,Domain,Area Code (FAO),Area,Element Code,Element,Item Code (FAO),Item,Year Code,Year,Unit,Value,Flag,Flag Description
+QCL,Crops and livestock products,2,Afghanistan,5510,Production,767,Cotton lint,2017,2017,tonnes,12134,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,2,Afghanistan,5510,Production,329,Cottonseed,2017,2017,tonnes,23900,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,2,Afghanistan,5510,Production,328,Seed cotton,2017,2017,tonnes,36770,,Official data
+QCL,Crops and livestock products,3,Albania,5510,Production,767,Cotton lint,2017,2017,tonnes,246,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,3,Albania,5510,Production,329,Cottonseed,2017,2017,tonnes,540,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,3,Albania,5510,Production,328,Seed cotton,2017,2017,tonnes,820,F,FAO estimate
+QCL,Crops and livestock products,4,Algeria,5510,Production,767,Cotton lint,2017,2017,tonnes,26,F,FAO estimate
+QCL,Crops and livestock products,4,Algeria,5510,Production,329,Cottonseed,2017,2017,tonnes,52,F,FAO estimate
+QCL,Crops and livestock products,4,Algeria,5510,Production,328,Seed cotton,2017,2017,tonnes,80,F,FAO estimate
+QCL,Crops and livestock products,7,Angola,5510,Production,767,Cotton lint,2017,2017,tonnes,914,*,Unofficial figure
+QCL,Crops and livestock products,7,Angola,5510,Production,329,Cottonseed,2017,2017,tonnes,3200,F,FAO estimate
+QCL,Crops and livestock products,7,Angola,5510,Production,328,Seed cotton,2017,2017,tonnes,5500,F,FAO estimate
+QCL,Crops and livestock products,8,Antigua and Barbuda,5510,Production,767,Cotton lint,2017,2017,tonnes,30,F,FAO estimate
+QCL,Crops and livestock products,8,Antigua and Barbuda,5510,Production,329,Cottonseed,2017,2017,tonnes,65,F,FAO estimate
+QCL,Crops and livestock products,8,Antigua and Barbuda,5510,Production,328,Seed cotton,2017,2017,tonnes,105,F,FAO estimate
+QCL,Crops and livestock products,9,Argentina,5510,Production,767,Cotton lint,2017,2017,tonnes,260000,F,FAO estimate
+QCL,Crops and livestock products,9,Argentina,5510,Production,329,Cottonseed,2017,2017,tonnes,310000,*,Unofficial figure
+QCL,Crops and livestock products,9,Argentina,5510,Production,328,Seed cotton,2017,2017,tonnes,616160,,Official data
+QCL,Crops and livestock products,1,Armenia,5510,Production,328,Seed cotton,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,10,Australia,5510,Production,767,Cotton lint,2017,2017,tonnes,774488,,Official data
+QCL,Crops and livestock products,10,Australia,5510,Production,329,Cottonseed,2017,2017,tonnes,1260000,*,Unofficial figure
+QCL,Crops and livestock products,10,Australia,5510,Production,328,Seed cotton,2017,2017,tonnes,2150961,,Official data
+QCL,Crops and livestock products,52,Azerbaijan,5510,Production,767,Cotton lint,2017,2017,tonnes,37892,,Official data
+QCL,Crops and livestock products,52,Azerbaijan,5510,Production,329,Cottonseed,2017,2017,tonnes,110000,*,Unofficial figure
+QCL,Crops and livestock products,52,Azerbaijan,5510,Production,328,Seed cotton,2017,2017,tonnes,207525,,Official data
+QCL,Crops and livestock products,16,Bangladesh,5510,Production,767,Cotton lint,2017,2017,tonnes,42922,,Official data
+QCL,Crops and livestock products,16,Bangladesh,5510,Production,329,Cottonseed,2017,2017,tonnes,79000,F,FAO estimate
+QCL,Crops and livestock products,16,Bangladesh,5510,Production,328,Seed cotton,2017,2017,tonnes,119000,F,FAO estimate
+QCL,Crops and livestock products,53,Benin,5510,Production,767,Cotton lint,2017,2017,tonnes,164400,F,FAO estimate
+QCL,Crops and livestock products,53,Benin,5510,Production,329,Cottonseed,2017,2017,tonnes,400000,*,Unofficial figure
+QCL,Crops and livestock products,53,Benin,5510,Production,328,Seed cotton,2017,2017,tonnes,597986,,Official data
+QCL,Crops and livestock products,19,Bolivia (Plurinational State of),5510,Production,767,Cotton lint,2017,2017,tonnes,31600,F,FAO estimate
+QCL,Crops and livestock products,19,Bolivia (Plurinational State of),5510,Production,329,Cottonseed,2017,2017,tonnes,70095,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,19,Bolivia (Plurinational State of),5510,Production,328,Seed cotton,2017,2017,tonnes,117000,F,FAO estimate
+QCL,Crops and livestock products,20,Botswana,5510,Production,767,Cotton lint,2017,2017,tonnes,300,F,FAO estimate
+QCL,Crops and livestock products,20,Botswana,5510,Production,329,Cottonseed,2017,2017,tonnes,590,F,FAO estimate
+QCL,Crops and livestock products,20,Botswana,5510,Production,328,Seed cotton,2017,2017,tonnes,1000,F,FAO estimate
+QCL,Crops and livestock products,21,Brazil,5510,Production,767,Cotton lint,2017,2017,tonnes,1498720,,Official data
+QCL,Crops and livestock products,21,Brazil,5510,Production,329,Cottonseed,2017,2017,tonnes,2421009,*,Unofficial figure
+QCL,Crops and livestock products,21,Brazil,5510,Production,328,Seed cotton,2017,2017,tonnes,3842872,,Official data
+QCL,Crops and livestock products,27,Bulgaria,5510,Production,767,Cotton lint,2017,2017,tonnes,1446,F,FAO estimate
+QCL,Crops and livestock products,27,Bulgaria,5510,Production,329,Cottonseed,2017,2017,tonnes,2849,F,FAO estimate
+QCL,Crops and livestock products,27,Bulgaria,5510,Production,328,Seed cotton,2017,2017,tonnes,4383,,Official data
+QCL,Crops and livestock products,233,Burkina Faso,5510,Production,767,Cotton lint,2017,2017,tonnes,308822,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,233,Burkina Faso,5510,Production,329,Cottonseed,2017,2017,tonnes,524000,*,Unofficial figure
+QCL,Crops and livestock products,233,Burkina Faso,5510,Production,328,Seed cotton,2017,2017,tonnes,844337,,Official data
+QCL,Crops and livestock products,29,Burundi,5510,Production,767,Cotton lint,2017,2017,tonnes,779,,Official data
+QCL,Crops and livestock products,29,Burundi,5510,Production,329,Cottonseed,2017,2017,tonnes,1012,,Official data
+QCL,Crops and livestock products,29,Burundi,5510,Production,328,Seed cotton,2017,2017,tonnes,1835,,Official data
+QCL,Crops and livestock products,115,Cambodia,5510,Production,767,Cotton lint,2017,2017,tonnes,65,F,FAO estimate
+QCL,Crops and livestock products,115,Cambodia,5510,Production,329,Cottonseed,2017,2017,tonnes,176,F,FAO estimate
+QCL,Crops and livestock products,115,Cambodia,5510,Production,328,Seed cotton,2017,2017,tonnes,241,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,32,Cameroon,5510,Production,767,Cotton lint,2017,2017,tonnes,106000,*,Unofficial figure
+QCL,Crops and livestock products,32,Cameroon,5510,Production,329,Cottonseed,2017,2017,tonnes,185000,*,Unofficial figure
+QCL,Crops and livestock products,32,Cameroon,5510,Production,328,Seed cotton,2017,2017,tonnes,330000,F,FAO estimate
+QCL,Crops and livestock products,37,Central African Republic,5510,Production,767,Cotton lint,2017,2017,tonnes,5379,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,37,Central African Republic,5510,Production,329,Cottonseed,2017,2017,tonnes,8000,F,FAO estimate
+QCL,Crops and livestock products,37,Central African Republic,5510,Production,328,Seed cotton,2017,2017,tonnes,14700,F,FAO estimate
+QCL,Crops and livestock products,39,Chad,5510,Production,767,Cotton lint,2017,2017,tonnes,21772,*,Unofficial figure
+QCL,Crops and livestock products,39,Chad,5510,Production,329,Cottonseed,2017,2017,tonnes,30000,*,Unofficial figure
+QCL,Crops and livestock products,39,Chad,5510,Production,328,Seed cotton,2017,2017,tonnes,54545,F,FAO estimate
+QCL,Crops and livestock products,41,"China, mainland",5510,Production,767,Cotton lint,2017,2017,tonnes,5653000,,Official data
+QCL,Crops and livestock products,41,"China, mainland",5510,Production,329,Cottonseed,2017,2017,tonnes,9900000,*,Unofficial figure
+QCL,Crops and livestock products,41,"China, mainland",5510,Production,328,Seed cotton,2017,2017,tonnes,17130303,F,FAO estimate
+QCL,Crops and livestock products,214,"China, Taiwan Province of",5510,Production,767,Cotton lint,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,214,"China, Taiwan Province of",5510,Production,329,Cottonseed,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,214,"China, Taiwan Province of",5510,Production,328,Seed cotton,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,44,Colombia,5510,Production,767,Cotton lint,2017,2017,tonnes,8890,,Official data
+QCL,Crops and livestock products,44,Colombia,5510,Production,329,Cottonseed,2017,2017,tonnes,12867,,Official data
+QCL,Crops and livestock products,44,Colombia,5510,Production,328,Seed cotton,2017,2017,tonnes,23394,,Official data
+QCL,Crops and livestock products,48,Costa Rica,5510,Production,767,Cotton lint,2017,2017,tonnes,200,F,FAO estimate
+QCL,Crops and livestock products,48,Costa Rica,5510,Production,329,Cottonseed,2017,2017,tonnes,392,F,FAO estimate
+QCL,Crops and livestock products,48,Costa Rica,5510,Production,328,Seed cotton,2017,2017,tonnes,672,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,107,C?te d'Ivoire,5510,Production,767,Cotton lint,2017,2017,tonnes,137800,F,FAO estimate
+QCL,Crops and livestock products,107,C?te d'Ivoire,5510,Production,329,Cottonseed,2017,2017,tonnes,235000,*,Unofficial figure
+QCL,Crops and livestock products,107,C?te d'Ivoire,5510,Production,328,Seed cotton,2017,2017,tonnes,328000,,Official data
+QCL,Crops and livestock products,49,Cuba,5510,Production,767,Cotton lint,2017,2017,tonnes,0,F,FAO estimate
+QCL,Crops and livestock products,49,Cuba,5510,Production,329,Cottonseed,2017,2017,tonnes,0,F,FAO estimate
+QCL,Crops and livestock products,49,Cuba,5510,Production,328,Seed cotton,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,50,Cyprus,5510,Production,767,Cotton lint,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,50,Cyprus,5510,Production,329,Cottonseed,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,50,Cyprus,5510,Production,328,Seed cotton,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,116,Democratic People's Republic of Korea,5510,Production,767,Cotton lint,2017,2017,tonnes,11000,F,FAO estimate
+QCL,Crops and livestock products,116,Democratic People's Republic of Korea,5510,Production,329,Cottonseed,2017,2017,tonnes,25000,F,FAO estimate
+QCL,Crops and livestock products,116,Democratic People's Republic of Korea,5510,Production,328,Seed cotton,2017,2017,tonnes,38873,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,250,Democratic Republic of the Congo,5510,Production,767,Cotton lint,2017,2017,tonnes,7000,F,FAO estimate
+QCL,Crops and livestock products,250,Democratic Republic of the Congo,5510,Production,329,Cottonseed,2017,2017,tonnes,18000,F,FAO estimate
+QCL,Crops and livestock products,250,Democratic Republic of the Congo,5510,Production,328,Seed cotton,2017,2017,tonnes,29380,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,56,Dominican Republic,5510,Production,767,Cotton lint,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,56,Dominican Republic,5510,Production,329,Cottonseed,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,56,Dominican Republic,5510,Production,328,Seed cotton,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,58,Ecuador,5510,Production,767,Cotton lint,2017,2017,tonnes,1200,F,FAO estimate
+QCL,Crops and livestock products,58,Ecuador,5510,Production,329,Cottonseed,2017,2017,tonnes,1822,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,58,Ecuador,5510,Production,328,Seed cotton,2017,2017,tonnes,4027,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,59,Egypt,5510,Production,767,Cotton lint,2017,2017,tonnes,78678,*,Unofficial figure
+QCL,Crops and livestock products,59,Egypt,5510,Production,329,Cottonseed,2017,2017,tonnes,103798,,Official data
+QCL,Crops and livestock products,59,Egypt,5510,Production,328,Seed cotton,2017,2017,tonnes,258000,,Official data
+QCL,Crops and livestock products,60,El Salvador,5510,Production,767,Cotton lint,2017,2017,tonnes,15,F,FAO estimate
+QCL,Crops and livestock products,60,El Salvador,5510,Production,329,Cottonseed,2017,2017,tonnes,80,F,FAO estimate
+QCL,Crops and livestock products,60,El Salvador,5510,Production,328,Seed cotton,2017,2017,tonnes,110,,Official data
+QCL,Crops and livestock products,209,Eswatini,5510,Production,767,Cotton lint,2017,2017,tonnes,477,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,209,Eswatini,5510,Production,329,Cottonseed,2017,2017,tonnes,1009,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,209,Eswatini,5510,Production,328,Seed cotton,2017,2017,tonnes,1600,F,FAO estimate
+QCL,Crops and livestock products,238,Ethiopia,5510,Production,767,Cotton lint,2017,2017,tonnes,39000,*,Unofficial figure
+QCL,Crops and livestock products,238,Ethiopia,5510,Production,329,Cottonseed,2017,2017,tonnes,70000,*,Unofficial figure
+QCL,Crops and livestock products,238,Ethiopia,5510,Production,328,Seed cotton,2017,2017,tonnes,140000,F,FAO estimate
+QCL,Crops and livestock products,75,Gambia,5510,Production,767,Cotton lint,2017,2017,tonnes,155,F,FAO estimate
+QCL,Crops and livestock products,75,Gambia,5510,Production,329,Cottonseed,2017,2017,tonnes,235,F,FAO estimate
+QCL,Crops and livestock products,75,Gambia,5510,Production,328,Seed cotton,2017,2017,tonnes,544,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,73,Georgia,5510,Production,328,Seed cotton,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,81,Ghana,5510,Production,767,Cotton lint,2017,2017,tonnes,4800,F,FAO estimate
+QCL,Crops and livestock products,81,Ghana,5510,Production,329,Cottonseed,2017,2017,tonnes,7200,F,FAO estimate
+QCL,Crops and livestock products,81,Ghana,5510,Production,328,Seed cotton,2017,2017,tonnes,28000,*,Unofficial figure
+QCL,Crops and livestock products,84,Greece,5510,Production,767,Cotton lint,2017,2017,tonnes,304000,F,FAO estimate
+QCL,Crops and livestock products,84,Greece,5510,Production,329,Cottonseed,2017,2017,tonnes,405000,F,FAO estimate
+QCL,Crops and livestock products,84,Greece,5510,Production,328,Seed cotton,2017,2017,tonnes,808930,,Official data
+QCL,Crops and livestock products,86,Grenada,5510,Production,767,Cotton lint,2017,2017,tonnes,16,F,FAO estimate
+QCL,Crops and livestock products,86,Grenada,5510,Production,329,Cottonseed,2017,2017,tonnes,30,F,FAO estimate
+QCL,Crops and livestock products,86,Grenada,5510,Production,328,Seed cotton,2017,2017,tonnes,52,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,89,Guatemala,5510,Production,767,Cotton lint,2017,2017,tonnes,343,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,89,Guatemala,5510,Production,329,Cottonseed,2017,2017,tonnes,771,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,89,Guatemala,5510,Production,328,Seed cotton,2017,2017,tonnes,2676,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,90,Guinea,5510,Production,767,Cotton lint,2017,2017,tonnes,15560,F,FAO estimate
+QCL,Crops and livestock products,90,Guinea,5510,Production,329,Cottonseed,2017,2017,tonnes,22820,F,FAO estimate
+QCL,Crops and livestock products,90,Guinea,5510,Production,328,Seed cotton,2017,2017,tonnes,43924,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,175,Guinea-Bissau,5510,Production,767,Cotton lint,2017,2017,tonnes,1620,F,FAO estimate
+QCL,Crops and livestock products,175,Guinea-Bissau,5510,Production,329,Cottonseed,2017,2017,tonnes,3235,F,FAO estimate
+QCL,Crops and livestock products,175,Guinea-Bissau,5510,Production,328,Seed cotton,2017,2017,tonnes,5200,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,93,Haiti,5510,Production,767,Cotton lint,2017,2017,tonnes,260,F,FAO estimate
+QCL,Crops and livestock products,93,Haiti,5510,Production,329,Cottonseed,2017,2017,tonnes,480,F,FAO estimate
+QCL,Crops and livestock products,93,Haiti,5510,Production,328,Seed cotton,2017,2017,tonnes,963,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,95,Honduras,5510,Production,767,Cotton lint,2017,2017,tonnes,990,F,FAO estimate
+QCL,Crops and livestock products,95,Honduras,5510,Production,329,Cottonseed,2017,2017,tonnes,1985,F,FAO estimate
+QCL,Crops and livestock products,95,Honduras,5510,Production,328,Seed cotton,2017,2017,tonnes,3308,F,FAO estimate
+QCL,Crops and livestock products,100,India,5510,Production,767,Cotton lint,2017,2017,tonnes,5576850,,Official data
+QCL,Crops and livestock products,100,India,5510,Production,329,Cottonseed,2017,2017,tonnes,11848000,*,Unofficial figure
+QCL,Crops and livestock products,100,India,5510,Production,328,Seed cotton,2017,2017,tonnes,17425000,,Official data
+QCL,Crops and livestock products,101,Indonesia,5510,Production,767,Cotton lint,2017,2017,tonnes,106,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,101,Indonesia,5510,Production,329,Cottonseed,2017,2017,tonnes,211,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,101,Indonesia,5510,Production,328,Seed cotton,2017,2017,tonnes,332,,Official data
+QCL,Crops and livestock products,102,Iran (Islamic Republic of),5510,Production,767,Cotton lint,2017,2017,tonnes,40429,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,102,Iran (Islamic Republic of),5510,Production,329,Cottonseed,2017,2017,tonnes,88000,*,Unofficial figure
+QCL,Crops and livestock products,102,Iran (Islamic Republic of),5510,Production,328,Seed cotton,2017,2017,tonnes,145971,,Official data
+QCL,Crops and livestock products,103,Iraq,5510,Production,767,Cotton lint,2017,2017,tonnes,1134,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,103,Iraq,5510,Production,329,Cottonseed,2017,2017,tonnes,2087,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,103,Iraq,5510,Production,328,Seed cotton,2017,2017,tonnes,3266,*,Unofficial figure
+QCL,Crops and livestock products,105,Israel,5510,Production,767,Cotton lint,2017,2017,tonnes,12100,,Official data
+QCL,Crops and livestock products,105,Israel,5510,Production,329,Cottonseed,2017,2017,tonnes,18900,,Official data
+QCL,Crops and livestock products,105,Israel,5510,Production,328,Seed cotton,2017,2017,tonnes,31000,,Official data
+QCL,Crops and livestock products,106,Italy,5510,Production,767,Cotton lint,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,106,Italy,5510,Production,329,Cottonseed,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,106,Italy,5510,Production,328,Seed cotton,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,108,Kazakhstan,5510,Production,767,Cotton lint,2017,2017,tonnes,109000,*,Unofficial figure
+QCL,Crops and livestock products,108,Kazakhstan,5510,Production,329,Cottonseed,2017,2017,tonnes,181770,*,Unofficial figure
+QCL,Crops and livestock products,108,Kazakhstan,5510,Production,328,Seed cotton,2017,2017,tonnes,330491,,Official data
+QCL,Crops and livestock products,114,Kenya,5510,Production,767,Cotton lint,2017,2017,tonnes,5929,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,114,Kenya,5510,Production,329,Cottonseed,2017,2017,tonnes,12000,*,Unofficial figure
+QCL,Crops and livestock products,114,Kenya,5510,Production,328,Seed cotton,2017,2017,tonnes,14500,,Official data
+QCL,Crops and livestock products,113,Kyrgyzstan,5510,Production,767,Cotton lint,2017,2017,tonnes,21565,*,Unofficial figure
+QCL,Crops and livestock products,113,Kyrgyzstan,5510,Production,329,Cottonseed,2017,2017,tonnes,43130,*,Unofficial figure
+QCL,Crops and livestock products,113,Kyrgyzstan,5510,Production,328,Seed cotton,2017,2017,tonnes,65349,,Official data
+QCL,Crops and livestock products,120,Lao People's Democratic Republic,5510,Production,767,Cotton lint,2017,2017,tonnes,2235,,Official data
+QCL,Crops and livestock products,120,Lao People's Democratic Republic,5510,Production,329,Cottonseed,2017,2017,tonnes,3932,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,120,Lao People's Democratic Republic,5510,Production,328,Seed cotton,2017,2017,tonnes,6500,F,FAO estimate
+QCL,Crops and livestock products,129,Madagascar,5510,Production,767,Cotton lint,2017,2017,tonnes,4500,F,FAO estimate
+QCL,Crops and livestock products,129,Madagascar,5510,Production,329,Cottonseed,2017,2017,tonnes,8200,F,FAO estimate
+QCL,Crops and livestock products,129,Madagascar,5510,Production,328,Seed cotton,2017,2017,tonnes,14636,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,130,Malawi,5510,Production,767,Cotton lint,2017,2017,tonnes,7823,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,130,Malawi,5510,Production,329,Cottonseed,2017,2017,tonnes,19000,*,Unofficial figure
+QCL,Crops and livestock products,130,Malawi,5510,Production,328,Seed cotton,2017,2017,tonnes,29545,,Official data
+QCL,Crops and livestock products,133,Mali,5510,Production,767,Cotton lint,2017,2017,tonnes,298586,,Official data
+QCL,Crops and livestock products,133,Mali,5510,Production,329,Cottonseed,2017,2017,tonnes,396031,,Official data
+QCL,Crops and livestock products,133,Mali,5510,Production,328,Seed cotton,2017,2017,tonnes,728606,,Official data
+QCL,Crops and livestock products,138,Mexico,5510,Production,767,Cotton lint,2017,2017,tonnes,335000,*,Unofficial figure
+QCL,Crops and livestock products,138,Mexico,5510,Production,329,Cottonseed,2017,2017,tonnes,534000,*,Unofficial figure
+QCL,Crops and livestock products,138,Mexico,5510,Production,328,Seed cotton,2017,2017,tonnes,1009103,,Official data
+QCL,Crops and livestock products,143,Morocco,5510,Production,767,Cotton lint,2017,2017,tonnes,69,F,FAO estimate
+QCL,Crops and livestock products,143,Morocco,5510,Production,329,Cottonseed,2017,2017,tonnes,136,F,FAO estimate
+QCL,Crops and livestock products,143,Morocco,5510,Production,328,Seed cotton,2017,2017,tonnes,219,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,144,Mozambique,5510,Production,767,Cotton lint,2017,2017,tonnes,10000,F,FAO estimate
+QCL,Crops and livestock products,144,Mozambique,5510,Production,329,Cottonseed,2017,2017,tonnes,42000,*,Unofficial figure
+QCL,Crops and livestock products,144,Mozambique,5510,Production,328,Seed cotton,2017,2017,tonnes,52146,,Official data
+QCL,Crops and livestock products,28,Myanmar,5510,Production,767,Cotton lint,2017,2017,tonnes,110000,F,FAO estimate
+QCL,Crops and livestock products,28,Myanmar,5510,Production,329,Cottonseed,2017,2017,tonnes,220395,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,28,Myanmar,5510,Production,328,Seed cotton,2017,2017,tonnes,369488,,Official data
+QCL,Crops and livestock products,147,Namibia,5510,Production,767,Cotton lint,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,147,Namibia,5510,Production,329,Cottonseed,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,147,Namibia,5510,Production,328,Seed cotton,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,149,Nepal,5510,Production,767,Cotton lint,2017,2017,tonnes,38,F,FAO estimate
+QCL,Crops and livestock products,149,Nepal,5510,Production,329,Cottonseed,2017,2017,tonnes,80,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,149,Nepal,5510,Production,328,Seed cotton,2017,2017,tonnes,127,,Official data
+QCL,Crops and livestock products,157,Nicaragua,5510,Production,767,Cotton lint,2017,2017,tonnes,822,*,Unofficial figure
+QCL,Crops and livestock products,157,Nicaragua,5510,Production,329,Cottonseed,2017,2017,tonnes,4000,*,Unofficial figure
+QCL,Crops and livestock products,157,Nicaragua,5510,Production,328,Seed cotton,2017,2017,tonnes,4950,F,FAO estimate
+QCL,Crops and livestock products,158,Niger,5510,Production,767,Cotton lint,2017,2017,tonnes,2082,*,Unofficial figure
+QCL,Crops and livestock products,158,Niger,5510,Production,329,Cottonseed,2017,2017,tonnes,3683,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,158,Niger,5510,Production,328,Seed cotton,2017,2017,tonnes,6350,F,FAO estimate
+QCL,Crops and livestock products,159,Nigeria,5510,Production,767,Cotton lint,2017,2017,tonnes,99000,F,FAO estimate
+QCL,Crops and livestock products,159,Nigeria,5510,Production,329,Cottonseed,2017,2017,tonnes,93000,*,Unofficial figure
+QCL,Crops and livestock products,159,Nigeria,5510,Production,328,Seed cotton,2017,2017,tonnes,284554,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,154,North Macedonia,5510,Production,767,Cotton lint,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,154,North Macedonia,5510,Production,329,Cottonseed,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,154,North Macedonia,5510,Production,328,Seed cotton,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,165,Pakistan,5510,Production,767,Cotton lint,2017,2017,tonnes,2031909,,Official data
+QCL,Crops and livestock products,165,Pakistan,5510,Production,329,Cottonseed,2017,2017,tonnes,3823116,,Official data
+QCL,Crops and livestock products,165,Pakistan,5510,Production,328,Seed cotton,2017,2017,tonnes,5855025,,Official data
+QCL,Crops and livestock products,169,Paraguay,5510,Production,767,Cotton lint,2017,2017,tonnes,4200,F,FAO estimate
+QCL,Crops and livestock products,169,Paraguay,5510,Production,329,Cottonseed,2017,2017,tonnes,8824,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,169,Paraguay,5510,Production,328,Seed cotton,2017,2017,tonnes,14000,,Official data
+QCL,Crops and livestock products,170,Peru,5510,Production,767,Cotton lint,2017,2017,tonnes,22000,*,Unofficial figure
+QCL,Crops and livestock products,170,Peru,5510,Production,329,Cottonseed,2017,2017,tonnes,24000,*,Unofficial figure
+QCL,Crops and livestock products,170,Peru,5510,Production,328,Seed cotton,2017,2017,tonnes,23333,,Official data
+QCL,Crops and livestock products,171,Philippines,5510,Production,767,Cotton lint,2017,2017,tonnes,3,F,FAO estimate
+QCL,Crops and livestock products,171,Philippines,5510,Production,329,Cottonseed,2017,2017,tonnes,10,,Official data
+QCL,Crops and livestock products,171,Philippines,5510,Production,328,Seed cotton,2017,2017,tonnes,10,,Official data
+QCL,Crops and livestock products,117,Republic of Korea,5510,Production,767,Cotton lint,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,117,Republic of Korea,5510,Production,329,Cottonseed,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,117,Republic of Korea,5510,Production,328,Seed cotton,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,183,Romania,5510,Production,767,Cotton lint,2017,2017,tonnes,0,F,FAO estimate
+QCL,Crops and livestock products,183,Romania,5510,Production,329,Cottonseed,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,183,Romania,5510,Production,328,Seed cotton,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,184,Rwanda,5510,Production,767,Cotton lint,2017,2017,tonnes,0,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,184,Rwanda,5510,Production,329,Cottonseed,2017,2017,tonnes,0,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,184,Rwanda,5510,Production,328,Seed cotton,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,188,Saint Kitts and Nevis,5510,Production,767,Cotton lint,2017,2017,tonnes,1,F,FAO estimate
+QCL,Crops and livestock products,188,Saint Kitts and Nevis,5510,Production,329,Cottonseed,2017,2017,tonnes,2,F,FAO estimate
+QCL,Crops and livestock products,188,Saint Kitts and Nevis,5510,Production,328,Seed cotton,2017,2017,tonnes,1,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,191,Saint Vincent and the Grenadines,5510,Production,767,Cotton lint,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,191,Saint Vincent and the Grenadines,5510,Production,329,Cottonseed,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,191,Saint Vincent and the Grenadines,5510,Production,328,Seed cotton,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,194,Saudi Arabia,5510,Production,329,Cottonseed,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,195,Senegal,5510,Production,767,Cotton lint,2017,2017,tonnes,7032,*,Unofficial figure
+QCL,Crops and livestock products,195,Senegal,5510,Production,329,Cottonseed,2017,2017,tonnes,13000,*,Unofficial figure
+QCL,Crops and livestock products,195,Senegal,5510,Production,328,Seed cotton,2017,2017,tonnes,20000,,Official data
+QCL,Crops and livestock products,201,Somalia,5510,Production,767,Cotton lint,2017,2017,tonnes,2000,F,FAO estimate
+QCL,Crops and livestock products,201,Somalia,5510,Production,329,Cottonseed,2017,2017,tonnes,4500,F,FAO estimate
+QCL,Crops and livestock products,201,Somalia,5510,Production,328,Seed cotton,2017,2017,tonnes,7152,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,202,South Africa,5510,Production,767,Cotton lint,2017,2017,tonnes,15520,,Official data
+QCL,Crops and livestock products,202,South Africa,5510,Production,329,Cottonseed,2017,2017,tonnes,68000,*,Unofficial figure
+QCL,Crops and livestock products,202,South Africa,5510,Production,328,Seed cotton,2017,2017,tonnes,41945,,Official data
+QCL,Crops and livestock products,277,South Sudan,5510,Production,767,Cotton lint,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,277,South Sudan,5510,Production,329,Cottonseed,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,277,South Sudan,5510,Production,328,Seed cotton,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,203,Spain,5510,Production,767,Cotton lint,2017,2017,tonnes,66182,,Official data
+QCL,Crops and livestock products,203,Spain,5510,Production,329,Cottonseed,2017,2017,tonnes,88561,,Official data
+QCL,Crops and livestock products,203,Spain,5510,Production,328,Seed cotton,2017,2017,tonnes,198500,,Official data
+QCL,Crops and livestock products,38,Sri Lanka,5510,Production,767,Cotton lint,2017,2017,tonnes,0,F,FAO estimate
+QCL,Crops and livestock products,38,Sri Lanka,5510,Production,329,Cottonseed,2017,2017,tonnes,0,F,FAO estimate
+QCL,Crops and livestock products,38,Sri Lanka,5510,Production,328,Seed cotton,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,276,Sudan,5510,Production,767,Cotton lint,2017,2017,tonnes,172720,,Official data
+QCL,Crops and livestock products,276,Sudan,5510,Production,329,Cottonseed,2017,2017,tonnes,65000,*,Unofficial figure
+QCL,Crops and livestock products,276,Sudan,5510,Production,328,Seed cotton,2017,2017,tonnes,325120,,Official data
+QCL,Crops and livestock products,212,Syrian Arab Republic,5510,Production,767,Cotton lint,2017,2017,tonnes,33000,F,FAO estimate
+QCL,Crops and livestock products,212,Syrian Arab Republic,5510,Production,329,Cottonseed,2017,2017,tonnes,34042,,Official data
+QCL,Crops and livestock products,212,Syrian Arab Republic,5510,Production,328,Seed cotton,2017,2017,tonnes,70000,F,FAO estimate
+QCL,Crops and livestock products,208,Tajikistan,5510,Production,767,Cotton lint,2017,2017,tonnes,110000,F,FAO estimate
+QCL,Crops and livestock products,208,Tajikistan,5510,Production,329,Cottonseed,2017,2017,tonnes,213000,*,Unofficial figure
+QCL,Crops and livestock products,208,Tajikistan,5510,Production,328,Seed cotton,2017,2017,tonnes,386509,,Official data
+QCL,Crops and livestock products,216,Thailand,5510,Production,767,Cotton lint,2017,2017,tonnes,1008,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,216,Thailand,5510,Production,329,Cottonseed,2017,2017,tonnes,2000,*,Unofficial figure
+QCL,Crops and livestock products,216,Thailand,5510,Production,328,Seed cotton,2017,2017,tonnes,3200,F,FAO estimate
+QCL,Crops and livestock products,217,Togo,5510,Production,767,Cotton lint,2017,2017,tonnes,55000,F,FAO estimate
+QCL,Crops and livestock products,217,Togo,5510,Production,329,Cottonseed,2017,2017,tonnes,70000,F,FAO estimate
+QCL,Crops and livestock products,217,Togo,5510,Production,328,Seed cotton,2017,2017,tonnes,117160,,Official data
+QCL,Crops and livestock products,222,Tunisia,5510,Production,767,Cotton lint,2017,2017,tonnes,636,F,FAO estimate
+QCL,Crops and livestock products,222,Tunisia,5510,Production,329,Cottonseed,2017,2017,tonnes,1210,F,FAO estimate
+QCL,Crops and livestock products,222,Tunisia,5510,Production,328,Seed cotton,2017,2017,tonnes,1952,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,223,Turkey,5510,Production,767,Cotton lint,2017,2017,tonnes,882000,,Official data
+QCL,Crops and livestock products,223,Turkey,5510,Production,329,Cottonseed,2017,2017,tonnes,1470000,,Official data
+QCL,Crops and livestock products,223,Turkey,5510,Production,328,Seed cotton,2017,2017,tonnes,2450000,,Official data
+QCL,Crops and livestock products,213,Turkmenistan,5510,Production,767,Cotton lint,2017,2017,tonnes,228000,F,FAO estimate
+QCL,Crops and livestock products,213,Turkmenistan,5510,Production,329,Cottonseed,2017,2017,tonnes,380000,*,Unofficial figure
+QCL,Crops and livestock products,213,Turkmenistan,5510,Production,328,Seed cotton,2017,2017,tonnes,690900,*,Unofficial figure
+QCL,Crops and livestock products,226,Uganda,5510,Production,767,Cotton lint,2017,2017,tonnes,39300,F,FAO estimate
+QCL,Crops and livestock products,226,Uganda,5510,Production,329,Cottonseed,2017,2017,tonnes,75000,*,Unofficial figure
+QCL,Crops and livestock products,226,Uganda,5510,Production,328,Seed cotton,2017,2017,tonnes,119000,F,FAO estimate
+QCL,Crops and livestock products,215,United Republic of Tanzania,5510,Production,767,Cotton lint,2017,2017,tonnes,66548,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,215,United Republic of Tanzania,5510,Production,329,Cottonseed,2017,2017,tonnes,132934,,Official data
+QCL,Crops and livestock products,215,United Republic of Tanzania,5510,Production,328,Seed cotton,2017,2017,tonnes,164709,,Official data
+QCL,Crops and livestock products,231,United States of America,5510,Production,767,Cotton lint,2017,2017,tonnes,4555340,,Official data
+QCL,Crops and livestock products,231,United States of America,5510,Production,329,Cottonseed,2017,2017,tonnes,5825940,,Official data
+QCL,Crops and livestock products,231,United States of America,5510,Production,328,Seed cotton,2017,2017,tonnes,12000000,F,FAO estimate
+QCL,Crops and livestock products,234,Uruguay,5510,Production,767,Cotton lint,2017,2017,tonnes,0,,Official data
+QCL,Crops and livestock products,234,Uruguay,5510,Production,329,Cottonseed,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,234,Uruguay,5510,Production,328,Seed cotton,2017,2017,tonnes,,M,Data not available
+QCL,Crops and livestock products,235,Uzbekistan,5510,Production,767,Cotton lint,2017,2017,tonnes,943778,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,235,Uzbekistan,5510,Production,329,Cottonseed,2017,2017,tonnes,1595000,*,Unofficial figure
+QCL,Crops and livestock products,235,Uzbekistan,5510,Production,328,Seed cotton,2017,2017,tonnes,2853927,,Official data
+QCL,Crops and livestock products,236,Venezuela (Bolivarian Republic of),5510,Production,767,Cotton lint,2017,2017,tonnes,3000,F,FAO estimate
+QCL,Crops and livestock products,236,Venezuela (Bolivarian Republic of),5510,Production,329,Cottonseed,2017,2017,tonnes,5300,F,FAO estimate
+QCL,Crops and livestock products,236,Venezuela (Bolivarian Republic of),5510,Production,328,Seed cotton,2017,2017,tonnes,8991,,Official data
+QCL,Crops and livestock products,237,Viet Nam,5510,Production,767,Cotton lint,2017,2017,tonnes,118,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,237,Viet Nam,5510,Production,329,Cottonseed,2017,2017,tonnes,240,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,237,Viet Nam,5510,Production,328,Seed cotton,2017,2017,tonnes,359,,Official data
+QCL,Crops and livestock products,249,Yemen,5510,Production,767,Cotton lint,2017,2017,tonnes,11872,,Official data
+QCL,Crops and livestock products,249,Yemen,5510,Production,329,Cottonseed,2017,2017,tonnes,7796,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,249,Yemen,5510,Production,328,Seed cotton,2017,2017,tonnes,11872,,Official data
+QCL,Crops and livestock products,251,Zambia,5510,Production,767,Cotton lint,2017,2017,tonnes,27665,Im,FAO data based on imputation methodology
+QCL,Crops and livestock products,251,Zambia,5510,Production,329,Cottonseed,2017,2017,tonnes,57000,*,Unofficial figure
+QCL,Crops and livestock products,251,Zambia,5510,Production,328,Seed cotton,2017,2017,tonnes,89293,,Official data
+QCL,Crops and livestock products,181,Zimbabwe,5510,Production,767,Cotton lint,2017,2017,tonnes,13500,F,FAO estimate
+QCL,Crops and livestock products,181,Zimbabwe,5510,Production,329,Cottonseed,2017,2017,tonnes,70000,*,Unofficial figure
+QCL,Crops and livestock products,181,Zimbabwe,5510,Production,328,Seed cotton,2017,2017,tonnes,73260,,Official data

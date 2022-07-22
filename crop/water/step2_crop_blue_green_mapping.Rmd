@@ -1,0 +1,275 @@
+---
+title: "crop_water_separate.Rmd"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+## NOTE: If this file is updated, run crop/farm/step7 again
+
+# Script objective
+Calculate and map green and blue WF of crops separately.
+### NOTE: this is now serving as the final data layers! (vs. blue + green water use in previous iterations)
+
+
+# Data description
+WF data sourced from Mekonnen and Hoekstra 2011 Appendix 2 Table 2 [Accessed 02/09/2020]
+Shapefiles for FIPS codes:http://www.fao.org/geonetwork/srv/en/resources.get?id=29036&fname=rwdb_ad2_py.z
+ip&access=private [Accessed: 02/20/2020]
+
+
+# Set-up
+```{r setup, include = FALSE}
+
+# library and package
+library(here); library(janitor); library(fasterize); library(furrr); library(sf)
+source(here("_spatial/template_raster.R"))
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+# Import food_rgns xy df
+food_rgns_xy <- food_rgns_xy %>% dplyr::select(x, y, iso3c)
+
+``` 
+
+# Script-specific requisites
+```{r}
+## Water footprint data
+wf_df <- vroom::vroom(here("crop/water/data/wf_df.csv"))
+
+# A df through which to cycle functions
+distinct_vars <- 
+  expand.grid(
+    unique(wf_df$split_rest_names),
+     c("blue", "green"))
+
+global_average <- read_csv(here("crop/water/data/global_average.csv"))
+
+## Import shp files for FIPS codes
+fips_shp <- 
+  read_sf("/home/shares/food-systems/Food_footprint/_raw_data/GADM36/rwdb_ad2_py/RWDB_Ad2-Py.shp", 
+          stringsAsFactors = FALSE) %>% 
+  clean_names() %>% 
+  select("geometry", "fips_code")
+```
+
+# Create water footprint maps
+```{r}
+wf_raster <- function(crop, colour) {
+
+  # Filter by crop and wf_type
+  wf_df_filtered <- 
+    wf_df %>% 
+    filter(split_rest_names %in% crop & 
+           wf_type %in% colour) %>% 
+    dplyr::select(fips_code, 
+                  m3_per_ton) %>% 
+    left_join(fips_shp, 
+              ., 
+              by = "fips_code") %>% 
+    fasterize(., 
+              food_raster, 
+              field = "m3_per_ton")
+
+  # Assign global average value to empty raster cells
+  wf_df_filtered[is.na(wf_df_filtered)] <- 
+    global_average %>% 
+    filter(split_rest_names %in% crop &
+           wf_type %in% colour) %>% 
+    .$global_average
+
+  # Overlay to calculate m3 per raster
+  water_map <- 
+    overlay(
+      wf_df_filtered, 
+      raster(file.path(prep,
+                       "crop/farm/scaled_maps_2017/crop_",
+                       crop,
+                       "_A_scaled.tif", 
+                       fsep = "")),
+      fun = function(r1, r2) {
+     
+       return(r1 * r2)
+     
+       })
+
+ # Change layer names
+ names(water_map) <- "m3"
+ 
+ # Save rasters
+ if(colour=="blue"){
+ writeRaster(water_map, 
+             file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/stressors/land_",
+                       crop,
+                       "_crop_produce_water.tif", 
+                       fsep = ""), 
+             format    = "GTiff", 
+             overwrite = TRUE)} else{
+writeRaster(water_map, 
+             file.path("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/land_",
+                       crop,
+                       "_crop_produce_",
+                       colour,
+                       "_water.tif", 
+                       fsep = ""), 
+             format    = "GTiff", 
+             overwrite = TRUE)               
+             }
+}
+
+map2(distinct_vars$Var1, 
+     distinct_vars$Var2, 
+     wf_raster)
+
+delete_aux <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers", pattern="aux", full=TRUE)
+file.remove(delete_aux)
+delete_aux <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/stressors", pattern="aux", full=TRUE)
+file.remove(delete_aux)
+
+
+```
+
+# Map fodder water consumption
+```{r}
+fodder_green_water <- 
+  raster(file.path(prep,
+                   "crop/farm/scaled_maps_2017/crop_fodd_rainfed_scaled.tif",
+                   fsep = "")) * 
+  207
+
+fodder_blue_water <- 
+  raster(file.path(prep, 
+                   "crop/farm/scaled_maps_2017/crop_fodd_I_scaled.tif",
+                   fsep = "")) * 
+  27
+
+# Change layer names
+names(fodder_green_water) <- "m3"
+names(fodder_blue_water)  <- "m3"
+plot(fodder_green_water)
+plot(fodder_blue_water)
+
+writeRaster(fodder_green_water,
+            "/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/land_fodd_crop_produce_green_water.tif",
+            format    = "GTiff",
+            overwrite = TRUE)
+
+writeRaster(fodder_blue_water,
+            "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/stressors/land_fodd_crop_produce_water.tif", 
+            format    = "GTiff",
+            overwrite = TRUE)
+
+delete_aux <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers", pattern="aux", full=TRUE)
+file.remove(delete_aux)
+delete_aux <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/stressors", pattern="aux", full=TRUE)
+file.remove(delete_aux)
+
+```
+
+
+Exploring a cotton correction.
+```{r}
+
+cotton <- read_csv(here("crop/farm/data/FAOSTAT_cotton_seed_vs_lint_5-11-2022.csv")) %>%
+  select(Area, Item, Value) %>%
+  filter(!is.na(Value)) %>%
+  filter(Value > 0) %>%
+  pivot_wider(names_from="Item", values_from="Value") %>%
+  rowwise() %>%
+  mutate(percent_retained = (`Cotton lint` + Cottonseed)/(`Seed cotton`),
+         percent_seed = Cottonseed/(`Cotton lint` + Cottonseed))
+
+summary(cotton)
+(0.65 * 0.12) / (0.35 * 0.80)
+
+```
+
+Cotton correction: by weight
+```{r}
+
+cotton_correction = 0.65
+
+
+## correct the main data layer
+cotton_list <- 
+  list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/stressors",
+             pattern = "water", 
+             full.names = TRUE) %>% 
+  .[grepl("cott",.)]
+
+
+file.copy(from = cotton_list,
+to = gsub("_cott_", "_cott-seedlint_", cotton_list))
+
+
+cotton_seedlint_list <- 
+  list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/stressors",
+             pattern = "water", 
+             full.names = TRUE) %>% 
+  .[grepl("seedlint",.)]
+
+for(crop in cotton_seedlint_list){ # crop = cotton_seedlint_list[2]
+  data <- raster(crop) # raster::cellStats(data, "sum", na.rm=TRUE)
+  data_correct <- data*cotton_correction # raster::cellStats(data_correct, "sum", na.rm=TRUE)
+  writeRaster(data_correct, gsub("cott-seedlint", "cott", crop), overwrite=TRUE)
+}
+
+delete_aux <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/stressors", pattern="aux", full=TRUE)
+file.remove(delete_aux)
+
+
+cellStats(raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/stressors/land_cott_crop_produce_water.tif"),
+          "sum", na.rm=TRUE)
+cellStats(raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/stressors/land_cott-seedlint_crop_produce_water.tif"),
+          "sum", na.rm=TRUE)
+
+
+
+## correct green data
+cotton_list <- 
+  list.files("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers",
+             pattern = "water", 
+             full.names = TRUE) %>% 
+  .[grepl("cott_crop",.)]
+
+
+file.copy(from = cotton_list,
+to = gsub("_cott_", "_cott-seedlint_", cotton_list))
+
+
+cotton_seedlint_list <- 
+  list.files("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers",
+             pattern = "water", 
+             full.names = TRUE) %>% 
+  .[grepl("seedlint",.)]
+
+for(crop in cotton_seedlint_list){ # crop = cotton_seedlint_list[2]
+  data <- raster(crop) # raster::cellStats(data, "sum", na.rm=TRUE)
+  data_correct <- data*cotton_correction # raster::cellStats(data_correct, "sum", na.rm=TRUE)
+  writeRaster(data_correct, gsub("cott-seedlint", "cott", crop), overwrite=TRUE)
+}
+
+delete_aux <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers", pattern="aux", full=TRUE)
+file.remove(delete_aux)
+
+
+cellStats(raster("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/land_cott_crop_produce_green_water.tif"),
+          "sum", na.rm=TRUE)
+cellStats(raster("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/land_cott-seedlint_crop_produce_green_water.tif"),
+          "sum", na.rm=TRUE)
+
+
+```
+
+
+# to here, label as all_water:
+/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers
+
+
+# move "blue_water" files from here: 
+/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers
+
+# to here, and change name: "land_?crop?_produce_water.tif
+/home/shares/food-systems/Food_footprint/all_food_systems/datalayers
+
+```

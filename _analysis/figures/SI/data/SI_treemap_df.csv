@@ -1,0 +1,22 @@
+﻿Food category,"Included, tonnes, 1e6","Produced, tonnes, 1e6",Percent included1
+Crops: fruits and vegetables2,2632.1,2621.2,100
+Crops: cereals and grains2,2366.2,2336,100
+Crops: sugar crops2,2246.5,2162.6,100
+Crops: oil crops and seeds2,2083.3,2049.2,100
+Crops: starch and roots2,863.1,838.7,100
+Crops: rice2,774.7,769.8,100
+Crops: pulses and beans2,576.5,561.6,100
+Crops: soy2,335.7,353,95.1
+"Crops: other, tree nuts, spices, etc.2",47.3,45.6,100
+"Livestock, Meat3",341.8,370,92.4
+"Livestock, eggs",75.3,81.4,92.5
+"Livestock, milk",828.4,831.3,99.6
+Freshwater fisheries,7.1,12.7,62.2
+"Marine fisheries:
+excluding fish oil and fish meal taxa",84.6,84.6,100
+Marine fisheries: fish oil and fish meal taxa,41.7,41.7,100
+"Mariculture, seaweeds",0,32.6,0
+"Mariculture, animals",29.6,31,95.5
+Freshwater aquaculture,0,48.7,0
+"Other, reported by FAO",0,1.9,0
+"Other, not reported by FAO",0,??,0

@@ -1,0 +1,19 @@
+Group,Current_Mean,animal,Current_SD,Current_SE,Current_Mean_scaled,Current_SD_scaled,Current_SE_scaled,ID
+shads,114,NA,26,1,0,0,0,Aquaculture
+cods,1318,marine-fish-general,354,16,0.001,0,0,Aquaculture
+smelts,13930,salmon,5732,256,0.01,0.01,0,Aquaculture
+tunas,124585,tuna,58392,2611,0.12,0.06,0,Aquaculture
+diadromous fishes,128957,NA,31842,1424,0.13,0.03,0,Aquaculture
+flatfishes,158453,marine-fish-general,36744,1643,0.16,0.04,0,Aquaculture
+marine crustaceans,248667,crustaceans,53891,2410,0.25,0.05,0,Aquaculture
+eels,460298,NA,71956,3218,0.46,0.07,0,Aquaculture
+tilapias,513411,NA,188858,8446,0.51,0.19,0.01,Aquaculture
+poultry,530020,chickens,97219,4348,0.53,0.1,0,Agriculture
+trouts,698684,salmon,208243,9313,0.7,0.21,0.01,Aquaculture
+fw crustaceans,845431,NA,239670,10718,0.85,0.24,0.01,Aquaculture
+marine fishes,1753579,marine-fish-general,386946,17305,1.75,0.39,0.02,Aquaculture
+shrimps,2086368,shrimp,400745,17922,2.09,0.4,0.02,Aquaculture
+salmons,2101278,salmon,638556,28557,2.1,0.64,0.03,Aquaculture
+carps,2195075,NA,678566,30346,2.2,0.68,0.03,Aquaculture
+fw fishes,3118737,NA,720461,32220,3.12,0.72,0.03,Aquaculture
+pigs,3959808,pigs,748725,33484,3.96,0.75,0.03,Agriculture

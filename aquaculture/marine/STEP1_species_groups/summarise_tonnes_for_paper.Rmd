@@ -1,0 +1,161 @@
+---
+title: "Summarise total tonnes for report"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+This script is used as a datacheck to make sure the tonnes written in the supplemental methods match the tonnes that we actually used in the paper. 
+
+```{r}
+library(tidyverse)
+library(here)
+library(countrycode)
+
+source(here('aquaculture/R/fao_mar_clean.R')) # functions specific to mariculture dealing with compound countries
+source('https://raw.githubusercontent.com/OHI-Science/ohiprep_v2019/gh-pages/workflow/R/fao_fxn.R') # function for cleaning FAO files
+
+```
+
+```{r}
+
+fao <- read_csv("/home/shares/food-systems/Food_footprint/_raw_data/FAO_aquaculture/v_2020/FAO_GlobalAquacultureProduction_Quantity_1950_2018.csv") ## read in the foa data
+
+fao <- fao %>%
+  rename(country = `Country (Country)`,
+         species = `ASFIS species (ASFIS species)`, 
+         fao_major_area = `FAO major fishing area (FAO major fishing area)`, 
+         environment = `Environment (Environment)`) %>%
+  dplyr::select(-Unit)
+table(fao$environment)  
+## convert to long format and clean FAO codes:
+fao <- fao %>%
+  gather(key="year", value="value", -country, -species, -fao_major_area, -environment) %>%
+    fao_clean_data() %>%
+  dplyr::filter(year >= 2010) %>%
+  group_by(country, species, fao_major_area, environment) %>%
+  dplyr::mutate(total_harvest = sum(value, na.rm=TRUE)) %>%
+  filter(total_harvest > 0) %>% # data is cut if country/species/major area hasn't been harvested since 2010
+  dplyr::select(-total_harvest) %>%
+  ungroup()
+
+## convert to iso3c codes
+fao <- fao %>% 
+  filter(!country == "Totals") %>% 
+  filter(!is.na(species)) %>%
+  mutate(country = ifelse(country == "R\xe9union", "Reunion", country)) %>%
+  filter(!country %in% c("Yugoslavia SFR", "Un. Sov. Soc. Rep.")) %>%  # these countries no longer exist  
+  mutate(country = ifelse(country=='Zanzibar', "Tanzania", country)) %>%  #semiautonomous region of Tanzania
+  mutate(country = ifelse(country=="Eswatini", "Swaziland", country)) %>%  # also goes by this name
+  mar_split() %>%   # fixes channel islands, breaks into Guernsey and Jersey
+  mutate(iso3c = countrycode(country, "country.name", "iso3c"))
+
+```
+
+
+## explore freshwater
+```{r}
+
+fao <- read_csv("aquaculture/data/fao_mariculture_clean.csv")
+
+fw_test <- fao %>%
+  dplyr::filter(environment == "Freshwater") %>%
+  dplyr::filter(year == 2017)
+
+sum(fw_test$value, na.rm = TRUE) # 48671218
+
+fw <- fao %>%
+  dplyr::filter(environment == "Freshwater") %>%
+  dplyr::filter(year == 2017) %>%
+  group_by(species) %>%
+  summarize(total = sum(value, na.rm = TRUE)) %>%
+  ungroup() %>%
+  arrange(total) 
+
+sum(fw$total, na.rm = TRUE) # 48671218
+data.frame(fw)
+
+```
+
+
+## explore marine
+```{r}
+## Read in list of species from OHI so that we can add higher taxonomic classifications
+mar_sp_list <- read_csv("https://raw.githubusercontent.com/OHI-Science/ohiprep_v2020/gh-pages/globalprep/mar/v2020/raw/species_list.csv")
+
+marine <- fao %>%
+  filter(environment %in% c("Marine", "Brackishwater")) %>%
+  dplyr::filter(year == 2017) %>%
+  group_by(country, species) %>%
+  summarize(total = sum(value, na.rm = TRUE)) %>%
+  ungroup() %>%
+  arrange(total)
+
+#### get seaweeds totals 
+marine_seaweeds <- marine %>%
+  left_join(mar_sp_list, by = c("species" = "FAO_name")) %>%
+  dplyr::filter(Taxon_code == "AL"|
+                species == "Red oyas") 
+
+sum(marine_seaweeds$total, na.rm = TRUE) # 32560138 tonnes of seaweeds not included 
+
+#### get marine animals totals by filtering out the seaweeds
+marine_animals_total <- marine %>%
+  left_join(mar_sp_list, by = c("species" = "FAO_name")) %>%
+  dplyr::filter(Taxon_code != "AL",
+                  species != "Red oyas") ## filter out seaweeds
+sum(marine_animals_total$total, na.rm = TRUE) # 30991774 - total marine animals production (including those spp that we will not include in the analysis)
+
+
+marine_groups <- read_csv(here("/aquaculture/marine/STEP1_species_groups/int/marine_groups.csv")) %>%
+  dplyr::select(-notes, -notes_2) %>%
+  filter(year == 2017) %>%
+  distinct(species, aq_group)
+
+#### Now get what we included for marine animals:
+## filter out all seaweeds 
+## filter out all faux freshwater species listed as marine or brackishwater: "Freshwater|catfish|Cyprinids|ilapia|iver"
+## filter out all jellyfish
+## filter out and species/country producing <500 tonnes
+
+marine_included_analysis <- marine %>%
+  left_join(mar_sp_list, by = c("species" = "FAO_name")) %>%
+   dplyr::filter(Taxon_code != "AL",
+                species != "Red oyas") %>%
+  dplyr::filter(!str_detect(species, "Freshwater|catfish|Cyprinids|ilapia|iver|ellyfish")) %>%
+  dplyr::filter(total >= 500) %>%
+  dplyr::select(-notes, -notes_2, -exclude) %>%
+  left_join(marine_groups, by = "species")
+sum(marine_included_analysis$total, na.rm = TRUE) # 29630029 tonnes were included in our analysis
+
+write.csv(marine_included_analysis, "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/production_for_juliette.csv", row.names = FALSE)
+
+#### Now lets get a list of marine animals not included in our analysis (just do the opposite of above)
+marine_animal_spp_not_included_analysis <- marine %>%
+  left_join(mar_sp_list, by = c("species" = "FAO_name")) %>%
+   dplyr::filter(str_detect(species, "Freshwater|catfish|Cyprinids|ilapia|iver|ellyfish")) %>%
+  dplyr::filter(total > 0)
+unique(marine_animal_spp_not_included_analysis$species)
+
+marine_other_not_included_analysis <- marine %>%
+  left_join(mar_sp_list, by = c("species" = "FAO_name")) %>%
+  dplyr::filter(Taxon_code != "AL",
+                species != "Red oyas") %>%
+  dplyr::filter(!str_detect(species, "Freshwater|catfish|Cyprinids|ilapia|iver|ellyfish")) %>%
+  dplyr::filter(total < 500) %>%
+  dplyr::filter(total > 0)
+  
+marine_all_not_included_analysis <- rbind(marine_animal_spp_not_included_analysis, marine_other_not_included_analysis)
+sum(marine_all_not_included_analysis$total, na.rm = TRUE) # 1361746 - matches the difference... perfect
+
+unique(marine_all_not_included_analysis$species)
+
+
+```
+
+This is how we filtered for our production analysis: 
+ - we filtered out these species :
+[1] "Tilapias nei"          "River Plata mussel"    "River eels nei"        "Giant river prawn"     "Bagrid catfish"       
+ [6] "Freshwater fishes nei" "Mozambique tilapia"    "Nile tilapia"          "Blackchin tilapia"     "Sabaki tilapia"       
+[11] "Blue tilapia"          "North African catfish" "Cyprinids nei"         "Jellyfishes nei"  
+ - we filtered out species within countries that have production < 500

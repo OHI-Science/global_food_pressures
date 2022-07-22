@@ -1,0 +1,145 @@
+---
+title: "Extended Data Fig. 2"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 5
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+library(tidyverse)
+library(here)
+library(stringr)
+library(cowplot)
+library(vroom)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+alphanum <- 
+  tibble::tibble(letter = c("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"),
+                 number = c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26))
+```
+
+
+```{r, include = FALSE}
+SPAM_names <- 
+  vroom::vroom(here("crop/farm/data/crop_codes_updated.csv")) %>% 
+  dplyr::select(2, 4) %>% 
+  mutate(SPAM_full_name = case_when(SPAM_super == "xpul" ~ "Other pulses",
+                                    SPAM_super == "xoil" ~ "Other oil crops",
+                                    SPAM_super == "xmil" ~ "Millet",
+                                    SPAM_super == "xfru" ~ "Fruits",
+                                    SPAM_super == "tnut" ~ "Treenuts",
+                                    SPAM_super == "spis" ~ "Spices",
+                                    TRUE ~ Hmisc::capitalize(SPAM_full_name))) %>% 
+  add_row(SPAM_super = "fodd",
+          SPAM_full_name = "Fodder") %>% 
+  arrange(.$SPAM_full_name) %>% 
+  unique()
+
+production_ls <- list.files(here("_analysis/figures/extended_data/output/ed_fig_2_production_png"),
+                            full.names = TRUE)
+
+# Crops (sort alphabetically)
+crop_ls <- unique(production_ls[grepl(production_ls, pattern = "crop")])
+crop_ls <- crop_ls[!grepl("toba|teas|cof|othr|ofib", crop_ls)]
+crop_ls_names <- str_extract(crop_ls, pattern = "(?<=_png\\/crop_).+?(?=_production)") 
+  
+# Sort alphabetically
+crop_ls_names_ordered <- 
+  SPAM_names %>% 
+  filter(SPAM_super %in% crop_ls_names) %>% 
+  arrange(SPAM_full_name)
+
+# Other food systems
+livestock_ls <- unique(production_ls[!grepl(production_ls, pattern = "marine|crop|fisheries")])
+fisheries_ls <- unique(production_ls[grepl(production_ls, pattern = "fisheries")])
+
+aquaculture_ls <- unique(production_ls[grepl(production_ls, pattern = "aquaculture")])
+```
+  
+**Extended Data Fig. 2:**
+Spatial distribution of food production measured in tonnes, categorised by a) food crops, 
+b) livestock, c) fisheries, and d) mariculture.
+
+\newpage
+
+**Extended Data Fig. 2a:** Crops
+
+```{r, warning = FALSE, echo = FALSE, message = FALSE, results = "asis", cache=FALSE}
+
+for (i in seq_along(crop_ls_names_ordered$SPAM_super)) {
+
+    cat('<div style="width:691.2px; height:604.8px">')
+    cat(paste0("![](", crop_ls[grepl(crop_ls_names_ordered$SPAM_super[i], crop_ls)], ")", "\n"))
+    cat("</div>")    
+    
+    cat(paste(i, ")", sep = ""),
+        crop_ls_names_ordered$SPAM_full_name[i], 
+        '\n')
+}
+```
+
+\newpage
+
+**Extended Data Fig. 2b:** Livestock
+
+```{r, warning = FALSE, echo = FALSE, message = FALSE, results = "asis"}
+
+for (i in seq_along(livestock_ls)) {
+
+    val <- livestock_ls[i]
+
+    cat('<div style="width:691.2px; height:604.8px">')
+    cat(paste0("![](", val, ")", "\n"))
+    cat("</div>")
+    
+    cat(paste(i, ")", sep = ""),
+        Hmisc::capitalize(gsub("_|-", " ", str_extract(val, "(?<=_png\\/).+?(?=_production)"))),
+        '\n')    
+}
+```
+
+\newpage
+
+**Extended Data Fig. 2c:** Fisheries
+
+```{r, warning = FALSE, echo = FALSE, message = FALSE, results = "asis"}
+
+for (i in seq_along(fisheries_ls)) {
+
+    val <- fisheries_ls[i]
+
+    cat('<div style="width:691.2px; height:604.8px">')
+    cat(paste0("![](", val, ")", "\n"))
+    cat("</div>")
+    
+    cat(paste(i, ")", sep = ""),
+        Hmisc::capitalize(gsub("_|-", " ", 
+                               if_else(str_detect(val, "fw"),
+                                       "Freshwater fisheries",
+                                       gsub("fofm", "fish_oil_fish_meal", str_extract(val, "(?<=_png/).+?(?=_meat)"))))),
+        '\n')
+}
+```
+
+\newpage
+
+**Extended Data Fig. 2d:** Mariculture
+
+```{r, warning = FALSE, echo = FALSE, message = FALSE, results = "asis"}
+
+for (i in seq_along(aquaculture_ls)) {
+
+    val <- aquaculture_ls[i]
+
+    cat('<div style="width:691.2px; height:604.8px">')    
+    cat(paste0("![](", val, ")", "\n"))
+    cat("</div>")
+    
+    cat(paste(i, ")", sep = ""),
+    Hmisc::capitalize(gsub("_|-", " ", str_extract(val, "(?<=marine_).+?(?=_meat)"))),
+    '\n')
+}
+```

@@ -1,0 +1,264 @@
+---
+title: "step6_super_cats"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+## Script Author
+##Paul-Eric Rayner
+
+## Objectives
+##- Combine MapSPAM stressor maps based on super groupings (e.g. tropical fruit
+## and temperate fruit become the same category). 
+
+# Set-up
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source("./_workflow/common.R")
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+library(future); library(furrr)
+```
+
+# Rename all strings in datalayers folder with SPAM_super equivalent
+```{r}
+crop_list_ghg <- 
+  list.files(file.path(prep, "crop/farm/stressors"),
+             pattern = "land_.*_crop_produce_ghg.tif", 
+             full.names = TRUE) %>% 
+  .[!grepl("cof",.)] %>% 
+  .[!grepl("teas",.)] %>% 
+  .[!grepl("toba",.)] %>% 
+  .[!grepl("rest",.)] %>% 
+  .[!grepl("othr",.)] %>%
+  .[!grepl("seedlint",.)] %>%
+  .[!grepl("ofib",.)]
+
+crop_list_water <- 
+  list.files(file.path(prep, "crop/farm/stressors"),
+             pattern = "land_.*_crop_produce_water.tif", 
+             full.names = TRUE) %>% 
+  .[!grepl("cof",.)] %>% 
+  .[!grepl("teas",.)] %>% 
+  .[!grepl("toba",.)] %>% 
+  .[!grepl("rest",.)] %>% 
+  .[!grepl("othr",.)] %>%
+  .[!grepl("seedlint",.)] %>%
+  .[!grepl("ofib",.)]
+
+crop_list_nutrient <- 
+  list.files(file.path(prep, "crop/farm/stressors"),
+             pattern = "land_.*_crop_produce_nutrient.tif", 
+             full.names = TRUE) %>% 
+  .[!grepl("cof",.)] %>% 
+  .[!grepl("teas",.)] %>% 
+  .[!grepl("toba",.)] %>% 
+  .[!grepl("rest",.)] %>% 
+  .[!grepl("othr",.)] %>%
+  .[!grepl("seedlint",.)]%>%
+  .[!grepl("ofib",.)]
+
+crop_list_disturbance <- 
+  list.files(file.path(prep, "crop/farm/stressors"),
+             pattern = "land_.*_crop_produce_disturbance.tif", 
+             full.names = TRUE) %>% 
+  .[!grepl("cof",.)] %>% 
+  .[!grepl("teas",.)] %>% 
+  .[!grepl("toba",.)] %>% 
+  .[!grepl("rest",.)] %>% 
+  .[!grepl("othr",.)] %>%
+  .[!grepl("seedlint",.)]%>%
+  .[!grepl("ofib",.)]
+
+# all 39 crops
+length(crop_list_disturbance)
+length(crop_list_ghg)
+length(crop_list_nutrient)
+length(crop_list_water)
+```
+
+
+```{r}
+name_change <- function(group) { 
+  
+     # Disturbance
+     string_subset <- 
+       str_subset(crop_list_disturbance, 
+                  pattern = paste("('", 
+                                  paste(group$split_rest_names, collapse = '|'), 
+                                  "')",
+                                  sep = "|"))
+     
+     filepath_template <- 
+       str_extract(string_subset[[1]], 
+                   pattern = "(?<=stressors/).*")
+     
+     substr(filepath_template, 6, 9) <- group$SPAM_super[[1]]
+     
+     if(length(string_subset) > 1) { 
+       
+        lapply(string_subset, raster) %>% 
+        stack() %>% 
+        calc(., sum, na.rm = TRUE) %>% 
+        writeRaster(.,
+                    file.path(layers,
+                              filepath_template,
+                              fsep = ""), 
+                    format = "GTiff", 
+                    overwrite = TRUE)
+       
+     } else { 
+       
+       raster(string_subset) %>% 
+         writeRaster(.,
+                     file.path(layers,
+                               filepath_template,
+                               fsep = ""), 
+                     format = "GTiff", 
+                     overwrite = TRUE)
+       
+       }
+     
+     # Water
+     string_subset <- 
+       str_subset(crop_list_water, 
+                  pattern = paste("('", 
+                                  paste(group$split_rest_names, collapse = '|'), 
+                                  "')",
+                                  sep = "|"))
+     
+     filepath_template <- str_extract(string_subset[[1]], pattern = "(?<=stressors/).*")
+     
+     substr(filepath_template, 6, 9) <- group$SPAM_super[[1]]
+     
+     if(length(string_subset) > 1) { 
+       
+        lapply(string_subset, raster) %>% 
+        stack() %>% 
+        calc(., sum, na.rm = TRUE) %>% 
+        writeRaster(.,
+                    file.path(layers,
+                              filepath_template,
+                              fsep = ""), 
+                    format = "GTiff", 
+                    overwrite = TRUE)
+       
+     } else { 
+       
+       raster(string_subset) %>% 
+         writeRaster(.,
+                     file.path(layers,
+                               filepath_template,
+                               fsep = ""), 
+                     format = "GTiff", 
+                     overwrite = TRUE)
+       
+       }
+    
+    # GHG
+    string_subset <- 
+      str_subset(crop_list_ghg, 
+                 pattern = paste("('", 
+                                 paste(group$split_rest_names, collapse = '|'), 
+                                 "')",
+                                 sep = "|"))
+    
+    filepath_template <- str_extract(string_subset[[1]], pattern = "(?<=stressors/).*")
+    
+    substr(filepath_template, 6, 9) <- group$SPAM_super[[1]]
+    
+    if(length(string_subset) > 1) { 
+      
+       lapply(string_subset, raster) %>% 
+       stack() %>% 
+       calc(., sum, na.rm = TRUE) %>% 
+       writeRaster(.,
+                   file.path(layers,
+                             filepath_template,
+                             fsep = ""), 
+                   format = "GTiff", 
+                   overwrite = TRUE)
+      
+    } else { 
+      
+      raster(string_subset) %>% 
+        writeRaster(.,
+                    file.path(layers,
+                              filepath_template,
+                              fsep = ""), 
+                    format = "GTiff", 
+                    overwrite = TRUE)
+      
+      }
+     
+     # Nutrient
+     string_subset <- 
+       str_subset(crop_list_nutrient, 
+                  pattern = paste("('", 
+                                  paste(group$split_rest_names, collapse = '|'), 
+                                  "')",
+                                  sep = "|"))
+     
+     filepath_template <- str_extract(string_subset[[1]], pattern = "(?<=stressors/).*")
+     
+     substr(filepath_template, 6, 9) <- group$SPAM_super[[1]]
+     
+     if(length(string_subset) > 1) { 
+       
+        lapply(string_subset, raster) %>% 
+        stack() %>% 
+        calc(., sum, na.rm = TRUE) %>% 
+        writeRaster(.,
+                    file.path(layers,
+                              filepath_template,
+                              fsep = ""), 
+                    format = "GTiff", 
+                    overwrite = TRUE)
+       
+     } else { 
+       
+       raster(string_subset) %>% 
+         writeRaster(.,
+                     file.path(layers,
+                               filepath_template,
+                               fsep = ""), 
+                     format = "GTiff", 
+                     overwrite = TRUE)
+       
+       }
+     
+}
+
+list_of_crop_tibbles <- 
+  vroom::vroom(here("crop/farm/data/crop_codes_updated.csv"), 
+               col_select = c("split_rest_names", "SPAM_super")) %>% 
+    filter(!split_rest_names %in% c("acof", "rcof", "teas", "toba"),
+           !SPAM_super %in% c("othr", "ofib")) %>% 
+    add_row(split_rest_names = "fodd", SPAM_super = "fodd") %>% 
+    unique() %>%
+    group_split(SPAM_super)
+
+lapply(list_of_crop_tibbles, name_change)
+
+delete_aux <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers", pattern="aux", full=TRUE)
+file.remove(delete_aux)
+
+```
+          
+# Output check
+```{r}
+list.files(layers,
+           pattern = "land_.*_crop_produce_.*.tif", 
+           full.names = TRUE) %>% 
+  length()
+
+# We're expecting a total of 27 x 4 pressures: 26 crops plus fodder
+27 * 4
+
+unique_crop_cats <- 
+  vroom::vroom(here("crop/farm/data/crop_codes_updated.csv")) %>% 
+  select(SPAM_super) %>% 
+  unique()
+```
+

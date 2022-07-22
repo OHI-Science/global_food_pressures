@@ -1,0 +1,222 @@
+﻿rgn_typ,rgn_id,rgn_nam,iso3c
+eez,1,Cocos Islands,CCK
+eez,10,Nauru,NRU
+eez,100,Republique du Congo,COG
+eez,101,Namibia,NAM
+eez,102,South Africa,ZAF
+eez,103,Sao Tome and Principe,STP
+eez,104,Equatorial Guinea,GNQ
+eez,105,Bouvet Island,BVT
+eez,106,Ghana,GHA
+eez,107,Clipperton Island,NA
+eez,108,Bermuda,BMU
+eez,11,Marshall Islands,MHL
+eez,110,Bahamas,BHS
+eez,111,Turks and Caicos Islands,TCA
+eez,112,Cuba,CUB
+eez,113,Cayman Islands,CYM
+eez,114,Haiti,HTI
+eez,115,Dominican Republic,DOM
+eez,116,Puerto Rico and Virgin Islands of the United States,NA
+eez,117,British Virgin Islands,VGB
+eez,118,Anguilla,AIA
+eez,119,Saint Kitts and Nevis,KNA
+eez,12,Wake Island,NA
+eez,120,Antigua and Barbuda,ATG
+eez,121,Montserrat,MSR
+eez,122,Saint Lucia,LCA
+eez,123,Dominica,DMA
+eez,124,Barbados,BRB
+eez,125,Grenada,GRD
+eez,126,Trinidad and Tobago,TTO
+eez,127,Saint Vincent and the Grenadines,VCT
+eez,129,Panama,PAN
+eez,13,Northern Mariana Islands and Guam,NA
+eez,130,Costa Rica,CRI
+eez,131,Nicaragua,NIC
+eez,132,Colombia,COL
+eez,133,Honduras,HND
+eez,134,El Salvador,SLV
+eez,135,Mexico,MEX
+eez,136,Guatemala,GTM
+eez,137,Ecuador,ECU
+eez,138,Peru,PER
+eez,139,Venezuela,VEN
+eez,14,Taiwan,TWN
+eez,140,Guadeloupe and Martinique,NA
+eez,141,Faeroe Islands,FRO
+eez,143,Iceland,ISL
+eez,144,Jan Mayen,NA
+eez,145,Greenland,GRL
+eez,146,Pitcairn,PCN
+eez,147,French Polynesia,PYF
+eez,148,Line Group,NA
+eez,149,Jarvis Island,NA
+eez,15,Philippines,PHL
+eez,150,Palmyra Atoll,NA
+eez,151,American Samoa,ASM
+eez,152,Samoa,WSM
+eez,153,Cook Islands,COK
+eez,154,Niue,NIU
+eez,155,Tonga,TON
+eez,156,Tokelau,TKL
+eez,157,Phoenix Group,NA
+eez,158,Howland Island and Baker Island,NA
+eez,159,Johnston Atoll,NA
+eez,16,Australia,AUS
+eez,161,Wallis and Futuna,WLF
+eez,162,New Zealand,NZL
+eez,163,United States,USA
+eez,164,Belize,BLZ
+eez,166,Jamaica,JAM
+eez,167,Guyana,GUY
+eez,168,Suriname,SUR
+eez,169,French Guiana,GUF
+eez,17,Papua New Guinea,PNG
+eez,171,Brazil,BRA
+eez,172,Argentina,ARG
+eez,173,Uruguay,URY
+eez,174,Finland,FIN
+eez,175,Denmark,DNK
+eez,176,Germany,DEU
+eez,177,Netherlands,NLD
+eez,178,Poland,POL
+eez,179,France,FRA
+eez,18,Fiji,FJI
+eez,180,United Kingdom,GBR
+eez,181,Ireland,IRL
+eez,182,Spain,ESP
+eez,183,Portugal,PRT
+eez,184,Italy,ITA
+eez,185,Monaco,MCO
+eez,186,Montenegro,MNE
+eez,187,Croatia,HRV
+eez,188,Slovenia,SVN
+eez,189,Lithuania,LTU
+eez,19,Tuvalu,TUV
+eez,190,Qatar,QAT
+eez,191,Iran,IRN
+eez,192,Iraq,IRQ
+eez,193,Guinea Bissau,GNB
+eez,194,Guinea,GIN
+eez,195,Ivory Coast,CIV
+eez,196,Nigeria,NGA
+eez,197,Cameroon,CMR
+eez,198,Gabon,GAB
+eez,199,Democratic Republic of the Congo,COD
+eez,2,Christmas Island,CXR
+eez,20,South Korea,KOR
+eez,200,Angola,AGO
+eez,202,Tanzania,TZA
+eez,203,India,IND
+eez,204,Bangladesh,BGD
+eez,205,Myanmar,MMR
+eez,206,Malaysia,MYS
+eez,207,Vietnam,VNM
+eez,208,Singapore,SGP
+eez,209,China,CHN
+eez,21,North Korea,PRK
+eez,210,Japan,JPN
+eez,212,Kiribati,KIR
+eez,214,Egypt,EGY
+eez,215,Jordan,JOR
+eez,216,Indonesia,IDN
+eez,218,Canada,CAN
+eez,219,Saint Pierre and Miquelon,SPM
+eez,220,Sint Maarten,SXM
+eez,221,Northern Saint-Martin,NA
+eez,222,Sweden,SWE
+eez,223,Norway,NOR
+eez,224,Chile,CHL
+eez,227,Jersey,JEY
+eez,228,Guernsey,GGY
+eez,231,East Timor,TLS
+eez,232,Bosnia and Herzegovina,BIH
+eez,237,Oecussi Ambeno,NA
+eez,24,Cambodia,KHM
+eez,244,Curacao,CUW
+eez,245,Bonaire,NA
+eez,247,Brunei,BRN
+eez,248,Saba,NA
+eez,213,Antarctica,ATA
+eez,249,Sint Eustatius,NA
+eez,25,Thailand,THA
+eez,250,Aruba,ABW
+eez,26,Andaman and Nicobar,NA
+eez,28,Comoro Islands,COM
+eez,29,Mayotte,MYT
+eez,3,Norfolk Island,NFK
+eez,30,Glorioso Islands,NA
+eez,31,Seychelles,SYC
+eez,32,Reunion,REU
+eez,33,Juan de Nova Island,NA
+eez,34,Bassas da India,IND
+eez,35,Ile Europa,NA
+eez,36,Ile Tromelin,NA
+eez,37,Mauritius,MUS
+eez,38,British Indian Ocean Territory,IOT
+eez,39,Maldives,MDV
+eez,4,Macquarie Island,NA
+eez,40,Sri Lanka,LKA
+eez,41,Mozambique,MOZ
+eez,42,Madagascar,MDG
+eez,43,Kenya,KEN
+eez,44,Somalia,SOM
+eez,45,Eritrea,ERI
+eez,46,Djibouti,DJI
+eez,47,Yemen,YEM
+eez,48,Oman,OMN
+eez,49,Sudan,SDN
+eez,5,New Caledonia,NCL
+eez,50,Saudi Arabia,SAU
+eez,51,Kuwait,KWT
+eez,52,Bahrain,BHR
+eez,53,Pakistan,PAK
+eez,54,United Arab Emirates,ARE
+eez,55,Azores,NA
+eez,56,Cape Verde,CPV
+eez,57,Madeira,NA
+eez,58,Canary Islands,NA
+eez,59,Belgium,BEL
+eez,6,Vanuatu,VUT
+eez,60,Gibraltar,GIB
+eez,61,Tunisia,TUN
+eez,62,Morocco,MAR
+eez,63,Western Sahara,ESH
+eez,64,Mauritania,MRT
+eez,65,Gambia,GMB
+eez,66,Senegal,SEN
+eez,67,Libya,LBY
+eez,68,Malta,MLT
+eez,69,Latvia,LVA
+eez,7,Solomon Islands,SLB
+eez,70,Estonia,EST
+eez,71,Bulgaria,BGR
+eez,72,Romania,ROU
+eez,73,Russia,RUS
+eez,74,Georgia,GEO
+eez,75,Ukraine,UKR
+eez,76,Turkey,TUR
+eez,77,Syria,SYR
+eez,78,Lebanon,LBN
+eez,79,Israel,ISR
+eez,8,Palau,PLW
+eez,80,Greece,GRC
+eez,81,Cyprus,CYP
+eez,82,Albania,ALB
+eez,84,Algeria,DZA
+eez,85,Ascension,NA
+eez,86,Saint Helena,SHN
+eez,88,Tristan da Cunha,NA
+eez,89,South Georgia and the South Sandwich Islands,SGS
+eez,9,Micronesia,NA
+eez,90,Prince Edward Islands,NA
+eez,91,Crozet Islands,NA
+eez,92,Amsterdam Island and Saint Paul Island,NA
+eez,93,Kerguelen Islands,NA
+eez,94,Heard and McDonald Islands,HMD
+eez,95,Falkland Islands,FLK
+eez,96,Sierra Leone,SLE
+eez,97,Liberia,LBR
+eez,98,Togo,TGO
+eez,99,Benin,BEN

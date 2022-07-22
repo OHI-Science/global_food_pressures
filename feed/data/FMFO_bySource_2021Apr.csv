@@ -1,0 +1,915 @@
+"system","country","iso3c","tonnes"
+"chickens_industrial_meat","Angola","AGO",39.0575198409114
+"crustaceans_aquaculture_meat","Angola","AGO",78.5027527667796
+"marine-fish-general_aquaculture_meat","Angola","AGO",575.762033267962
+"pigs_backyard_meat","Angola","AGO",43.8636439223218
+"pigs_industrial_meat","Angola","AGO",4512.49987703632
+"pigs_intermediate_meat","Angola","AGO",1064.00876960008
+"salmon_aquaculture_meat","Angola","AGO",8415.69189271617
+"shrimp_aquaculture_meat","Angola","AGO",554.548549384142
+"tuna_aquaculture_meat","Angola","AGO",257.72421945755
+"marine-fish-general_aquaculture_meat","Albania","ALB",18.4217736915656
+"chickens_industrial_eggs","United Arab Emirates (the)","ARE",6994.98067771603
+"chickens_industrial_meat","United Arab Emirates (the)","ARE",2588.18227964588
+"marine-fish-general_aquaculture_meat","United Arab Emirates (the)","ARE",11098.1475696988
+"pigs_backyard_meat","United Arab Emirates (the)","ARE",69.7587365512426
+"pigs_industrial_meat","United Arab Emirates (the)","ARE",205.098347173516
+"pigs_intermediate_meat","United Arab Emirates (the)","ARE",987.264130051519
+"shrimp_aquaculture_meat","United Arab Emirates (the)","ARE",36004.0906861748
+"chickens_industrial_eggs","Argentina","ARG",13.649408175084
+"chickens_industrial_meat","Argentina","ARG",2224.60982238194
+"crustaceans_aquaculture_meat","Argentina","ARG",1688.5679792719
+"marine-fish-general_aquaculture_meat","Argentina","ARG",30455.5809652204
+"pigs_backyard_meat","Argentina","ARG",228.483538798265
+"pigs_industrial_meat","Argentina","ARG",39609.4398105026
+"pigs_intermediate_meat","Argentina","ARG",1435.56644448669
+"salmon_aquaculture_meat","Argentina","ARG",21534.1713718511
+"shrimp_aquaculture_meat","Argentina","ARG",17700.1048321803
+"tuna_aquaculture_meat","Argentina","ARG",372.254574072078
+"chickens_industrial_eggs","American Samoa","ASM",2485.74540522457
+"chickens_industrial_meat","American Samoa","ASM",2284.25875944323
+"marine-fish-general_aquaculture_meat","American Samoa","ASM",3378.77463704889
+"pigs_backyard_meat","American Samoa","ASM",21.260573424465
+"pigs_industrial_meat","American Samoa","ASM",1363.8916333653
+"pigs_intermediate_meat","American Samoa","ASM",318.728548589664
+"salmon_aquaculture_meat","American Samoa","ASM",11487.9885557651
+"shrimp_aquaculture_meat","American Samoa","ASM",11297.5715995543
+"tuna_aquaculture_meat","American Samoa","ASM",5876.36671380304
+"chickens_industrial_eggs","Antarctica","ATA",6.66839347013455
+"chickens_industrial_meat","Antarctica","ATA",32.7085035953914
+"pigs_backyard_meat","Antarctica","ATA",0.112646171326537
+"pigs_industrial_meat","Antarctica","ATA",85.9440714225387
+"pigs_intermediate_meat","Antarctica","ATA",2.37956528344723
+"salmon_aquaculture_meat","Antarctica","ATA",198.23809644798
+"chickens_industrial_eggs","Australia","AUS",278.044924556665
+"chickens_industrial_meat","Australia","AUS",888.522007228114
+"crustaceans_aquaculture_meat","Australia","AUS",63.2557421955979
+"marine-fish-general_aquaculture_meat","Australia","AUS",792.96532508971
+"pigs_backyard_meat","Australia","AUS",130.048849889828
+"pigs_industrial_meat","Australia","AUS",770.134033792887
+"pigs_intermediate_meat","Australia","AUS",407.696622368116
+"salmon_aquaculture_meat","Australia","AUS",4281.81441451057
+"shrimp_aquaculture_meat","Australia","AUS",659.748728286024
+"tuna_aquaculture_meat","Australia","AUS",8.73829693142311
+"chickens_industrial_eggs","Austria","AUT",47.0968445189075
+"chickens_industrial_meat","Austria","AUT",0.00168185014842093
+"marine-fish-general_aquaculture_meat","Austria","AUT",0.334553388955606
+"pigs_backyard_meat","Austria","AUT",0.000759091829544357
+"pigs_industrial_meat","Austria","AUT",371.101656066003
+"pigs_intermediate_meat","Austria","AUT",24.0769983639998
+"tuna_aquaculture_meat","Austria","AUT",0.19219564330804
+"chickens_industrial_meat","Belgium","BEL",0.219777961441754
+"marine-fish-general_aquaculture_meat","Belgium","BEL",55.1679138572372
+"pigs_backyard_meat","Belgium","BEL",0.118830376599582
+"pigs_industrial_meat","Belgium","BEL",1739.31593142366
+"pigs_intermediate_meat","Belgium","BEL",8.84494193007521
+"salmon_aquaculture_meat","Belgium","BEL",122.495116415215
+"shrimp_aquaculture_meat","Belgium","BEL",0.447440345798545
+"tuna_aquaculture_meat","Belgium","BEL",7.4607745143038
+"pigs_backyard_meat","Benin","BEN",0.00372785621308952
+"pigs_industrial_meat","Benin","BEN",0.022174943101715
+"pigs_intermediate_meat","Benin","BEN",0.0420360173088496
+"marine-fish-general_aquaculture_meat","Burkina Faso","BFA",9.00995654225422e-05
+"chickens_industrial_eggs","Bulgaria","BGR",38.7307377512922
+"chickens_industrial_meat","Bulgaria","BGR",34.5958899150034
+"marine-fish-general_aquaculture_meat","Bulgaria","BGR",2227.96086753914
+"pigs_backyard_meat","Bulgaria","BGR",0.227629555804268
+"pigs_industrial_meat","Bulgaria","BGR",726.712143829247
+"pigs_intermediate_meat","Bulgaria","BGR",24.2036060287954
+"salmon_aquaculture_meat","Bulgaria","BGR",17.4609213664189
+"tuna_aquaculture_meat","Bulgaria","BGR",7.49645386894724
+"chickens_industrial_meat","Bahrain","BHR",2.95378634891579
+"marine-fish-general_aquaculture_meat","Bosnia and Herzegovina","BIH",929.261461731809
+"pigs_backyard_meat","Bosnia and Herzegovina","BIH",1.27243281019355
+"pigs_industrial_meat","Bosnia and Herzegovina","BIH",1418.40265404751
+"pigs_intermediate_meat","Bosnia and Herzegovina","BIH",1.49574866072191
+"tuna_aquaculture_meat","Bosnia and Herzegovina","BIH",658.956385873966
+"chickens_industrial_eggs","Belarus","BLR",3.46069605027025
+"chickens_industrial_meat","Belarus","BLR",158.942226073632
+"pigs_backyard_meat","Belarus","BLR",0.761604206975739
+"pigs_industrial_meat","Belarus","BLR",1912.58797358342
+"pigs_intermediate_meat","Belarus","BLR",32.8870295307764
+"salmon_aquaculture_meat","Belarus","BLR",6.75280711833656
+"pigs_backyard_meat","Belize","BLZ",0.166183932704148
+"pigs_industrial_meat","Belize","BLZ",39.4706233090413
+"pigs_intermediate_meat","Belize","BLZ",7.90774122499439
+"shrimp_aquaculture_meat","Belize","BLZ",123.71971424372
+"pigs_backyard_meat","Bermuda","BMU",0.00201190198837007
+"pigs_industrial_meat","Bermuda","BMU",0.695236031665501
+"pigs_intermediate_meat","Bermuda","BMU",0.0688596551351995
+"chickens_industrial_meat","Bolivia (Plurinational State of)","BOL",13.9893770210678
+"marine-fish-general_aquaculture_meat","Bolivia (Plurinational State of)","BOL",0.0559002428561412
+"pigs_backyard_meat","Bolivia (Plurinational State of)","BOL",0.00492873842576483
+"pigs_industrial_meat","Bolivia (Plurinational State of)","BOL",49.7689659713094
+"pigs_intermediate_meat","Bolivia (Plurinational State of)","BOL",0.000273751607385646
+"salmon_aquaculture_meat","Bolivia (Plurinational State of)","BOL",1.04096949772931
+"shrimp_aquaculture_meat","Bolivia (Plurinational State of)","BOL",0.0463968295591966
+"chickens_industrial_eggs","Brazil","BRA",706.068030453798
+"chickens_industrial_meat","Brazil","BRA",730.021993881601
+"crustaceans_aquaculture_meat","Brazil","BRA",558.643494768617
+"marine-fish-general_aquaculture_meat","Brazil","BRA",4466.97589200134
+"pigs_backyard_meat","Brazil","BRA",6.98366119802641
+"pigs_industrial_meat","Brazil","BRA",978.417751740587
+"pigs_intermediate_meat","Brazil","BRA",73.9853551998754
+"salmon_aquaculture_meat","Brazil","BRA",22553.3756707493
+"shrimp_aquaculture_meat","Brazil","BRA",2400.29605689036
+"crustaceans_aquaculture_meat","Brunei Darussalam","BRN",15.3710962757118
+"marine-fish-general_aquaculture_meat","Brunei Darussalam","BRN",10981.6897509632
+"pigs_backyard_meat","Brunei Darussalam","BRN",1.67253634189804
+"pigs_industrial_meat","Brunei Darussalam","BRN",3152.25363367586
+"pigs_intermediate_meat","Brunei Darussalam","BRN",240.766174040997
+"shrimp_aquaculture_meat","Brunei Darussalam","BRN",7350.28409916897
+"pigs_backyard_meat","Botswana","BWA",0.0199274501975078
+"pigs_industrial_meat","Botswana","BWA",11.8805637196442
+"pigs_intermediate_meat","Botswana","BWA",0.434588269885559
+"chickens_industrial_eggs","Canada","CAN",1.47330203935574
+"chickens_industrial_meat","Canada","CAN",16120.5769726501
+"crustaceans_aquaculture_meat","Canada","CAN",4.67811399739285
+"marine-fish-general_aquaculture_meat","Canada","CAN",796.331646596871
+"pigs_backyard_meat","Canada","CAN",6.00678490413909
+"pigs_industrial_meat","Canada","CAN",57899.4548669229
+"pigs_intermediate_meat","Canada","CAN",6.97391975480488
+"salmon_aquaculture_meat","Canada","CAN",1422.64743968954
+"shrimp_aquaculture_meat","Canada","CAN",108.03189477038
+"tuna_aquaculture_meat","Canada","CAN",216.13825161746
+"marine-fish-general_aquaculture_meat","Switzerland","CHE",0.00878470812080419
+"chickens_industrial_eggs","Chile","CHL",3583.08943952739
+"chickens_industrial_meat","Chile","CHL",123787.517281568
+"crustaceans_aquaculture_meat","Chile","CHL",15249.9293994244
+"marine-fish-general_aquaculture_meat","Chile","CHL",82075.0794116748
+"pigs_backyard_meat","Chile","CHL",1509.88233677814
+"pigs_industrial_meat","Chile","CHL",770818.852392688
+"pigs_intermediate_meat","Chile","CHL",21730.8539422692
+"salmon_aquaculture_meat","Chile","CHL",48742.4037780434
+"shrimp_aquaculture_meat","Chile","CHL",128223.119149423
+"tuna_aquaculture_meat","Chile","CHL",9851.79766463328
+"chickens_industrial_eggs","China","CHN",233.160753203949
+"chickens_industrial_meat","China","CHN",2663.88871217272
+"crustaceans_aquaculture_meat","China","CHN",3061.33107358344
+"marine-fish-general_aquaculture_meat","China","CHN",3457.10400919987
+"pigs_backyard_meat","China","CHN",106.22004468485
+"pigs_industrial_meat","China","CHN",4557.1639433513
+"pigs_intermediate_meat","China","CHN",2261.10889438768
+"salmon_aquaculture_meat","China","CHN",266.743941818413
+"shrimp_aquaculture_meat","China","CHN",23813.8151599897
+"tuna_aquaculture_meat","China","CHN",91.9902901038298
+"pigs_industrial_meat","Côte d'Ivoire","CIV",0.166961112345452
+"pigs_intermediate_meat","Côte d'Ivoire","CIV",0.0881922296906918
+"pigs_industrial_meat","Cabo Verde","CPV",19.1601165158001
+"pigs_intermediate_meat","Cabo Verde","CPV",10.1207602951616
+"chickens_industrial_eggs","Costa Rica","CRI",26.5548628168238
+"chickens_industrial_meat","Costa Rica","CRI",146.334642213373
+"marine-fish-general_aquaculture_meat","Costa Rica","CRI",273.103307308936
+"pigs_backyard_meat","Costa Rica","CRI",4.14650175011863
+"pigs_industrial_meat","Costa Rica","CRI",197.666569111971
+"pigs_intermediate_meat","Costa Rica","CRI",110.011117286993
+"salmon_aquaculture_meat","Costa Rica","CRI",757.35995328964
+"shrimp_aquaculture_meat","Costa Rica","CRI",3707.70386011301
+"tuna_aquaculture_meat","Costa Rica","CRI",411.026015785816
+"pigs_backyard_meat","Cuba","CUB",0.0671710785271794
+"pigs_industrial_meat","Cuba","CUB",20.8844184452335
+"pigs_intermediate_meat","Cuba","CUB",1.76503899029102
+"shrimp_aquaculture_meat","Cuba","CUB",3.6001279626774
+"marine-fish-general_aquaculture_meat","Cyprus","CYP",249.385175550722
+"pigs_backyard_meat","Cyprus","CYP",0.00857663548460701
+"pigs_industrial_meat","Cyprus","CYP",25.7110579241981
+"pigs_intermediate_meat","Cyprus","CYP",0.111994308720976
+"chickens_industrial_eggs","Czechia","CZE",266.831663737686
+"chickens_industrial_meat","Czechia","CZE",8.36211254667642e-05
+"marine-fish-general_aquaculture_meat","Czechia","CZE",77.8048703333338
+"pigs_backyard_meat","Czechia","CZE",5.42487721700736
+"pigs_industrial_meat","Czechia","CZE",13520.7648790392
+"pigs_intermediate_meat","Czechia","CZE",334.945499723482
+"shrimp_aquaculture_meat","Czechia","CZE",4.43449115634413e-05
+"tuna_aquaculture_meat","Czechia","CZE",9.05079848937531
+"chickens_industrial_eggs","Germany","DEU",1716.13079073173
+"chickens_industrial_meat","Germany","DEU",94.1975534608508
+"crustaceans_aquaculture_meat","Germany","DEU",872.481741725256
+"marine-fish-general_aquaculture_meat","Germany","DEU",36039.9363375989
+"pigs_backyard_meat","Germany","DEU",162.257900955926
+"pigs_industrial_meat","Germany","DEU",121189.855347309
+"pigs_intermediate_meat","Germany","DEU",2843.27023823949
+"salmon_aquaculture_meat","Germany","DEU",406471.012592552
+"shrimp_aquaculture_meat","Germany","DEU",2230.67702767875
+"tuna_aquaculture_meat","Germany","DEU",2728.81026644666
+"chickens_industrial_eggs","Dominica","DMA",3.3539588737945
+"chickens_industrial_meat","Dominica","DMA",0.694160727613431
+"shrimp_aquaculture_meat","Dominica","DMA",3.1966189598885
+"chickens_industrial_eggs","Denmark","DNK",3777.03742822711
+"chickens_industrial_meat","Denmark","DNK",15668.6905432006
+"crustaceans_aquaculture_meat","Denmark","DNK",3435.78509310331
+"marine-fish-general_aquaculture_meat","Denmark","DNK",73407.2024436925
+"pigs_backyard_meat","Denmark","DNK",272.062726661705
+"pigs_industrial_meat","Denmark","DNK",190011.910481838
+"pigs_intermediate_meat","Denmark","DNK",6454.13243552599
+"salmon_aquaculture_meat","Denmark","DNK",315861.442515772
+"shrimp_aquaculture_meat","Denmark","DNK",27810.4247889374
+"tuna_aquaculture_meat","Denmark","DNK",6872.06877317592
+"pigs_backyard_meat","Dominican Republic (the)","DOM",0.757827327038347
+"pigs_industrial_meat","Dominican Republic (the)","DOM",0.133065008680788
+"pigs_intermediate_meat","Dominican Republic (the)","DOM",5.50352544912809
+"pigs_backyard_meat","Algeria","DZA",0.0165052564422656
+"pigs_industrial_meat","Algeria","DZA",2.74470247497739
+"pigs_intermediate_meat","Algeria","DZA",0.352822122654855
+"chickens_industrial_eggs","Ecuador","ECU",314.071233200878
+"chickens_industrial_meat","Ecuador","ECU",4642.07508720741
+"crustaceans_aquaculture_meat","Ecuador","ECU",3940.99701102187
+"marine-fish-general_aquaculture_meat","Ecuador","ECU",30582.0346641591
+"pigs_backyard_meat","Ecuador","ECU",349.045488893205
+"pigs_industrial_meat","Ecuador","ECU",62108.2148071612
+"pigs_intermediate_meat","Ecuador","ECU",6135.89701507779
+"salmon_aquaculture_meat","Ecuador","ECU",13100.8397922952
+"shrimp_aquaculture_meat","Ecuador","ECU",33529.1463677845
+"tuna_aquaculture_meat","Ecuador","ECU",9918.87662665869
+"marine-fish-general_aquaculture_meat","Egypt","EGY",46.1020833537964
+"pigs_backyard_meat","Egypt","EGY",3.1640059912064e-05
+"pigs_industrial_meat","Egypt","EGY",2.83527005740284
+"pigs_intermediate_meat","Egypt","EGY",0.930585693451045
+"pigs_backyard_meat","Eritrea","ERI",0.008721127
+"chickens_industrial_eggs","Spain","ESP",154.911862128592
+"chickens_industrial_meat","Spain","ESP",24.2312994617974
+"crustaceans_aquaculture_meat","Spain","ESP",105.476861043011
+"marine-fish-general_aquaculture_meat","Spain","ESP",9793.67183356489
+"pigs_backyard_meat","Spain","ESP",32.9585922615311
+"pigs_industrial_meat","Spain","ESP",37793.9310305132
+"pigs_intermediate_meat","Spain","ESP",371.01778253654
+"salmon_aquaculture_meat","Spain","ESP",8925.58172624265
+"shrimp_aquaculture_meat","Spain","ESP",1578.73484345236
+"tuna_aquaculture_meat","Spain","ESP",65.7037777535588
+"chickens_industrial_eggs","Estonia","EST",51.6889695939947
+"chickens_industrial_meat","Estonia","EST",2.57426621406162
+"marine-fish-general_aquaculture_meat","Estonia","EST",491.04448190093
+"pigs_backyard_meat","Estonia","EST",0.387754444594157
+"pigs_industrial_meat","Estonia","EST",3842.83748148175
+"pigs_intermediate_meat","Estonia","EST",50.1730987869962
+"salmon_aquaculture_meat","Estonia","EST",498.611974932919
+"tuna_aquaculture_meat","Estonia","EST",38.4487100662125
+"chickens_industrial_eggs","Finland","FIN",0.945639951740606
+"marine-fish-general_aquaculture_meat","Finland","FIN",15.3709901745232
+"pigs_backyard_meat","Finland","FIN",0.00238044383201668
+"pigs_industrial_meat","Finland","FIN",48.6200585436241
+"pigs_intermediate_meat","Finland","FIN",0.475969338418144
+"salmon_aquaculture_meat","Finland","FIN",64.6122855976903
+"shrimp_aquaculture_meat","Finland","FIN",10.1397247399931
+"chickens_industrial_meat","Fiji","FJI",2.72471457695394
+"crustaceans_aquaculture_meat","Fiji","FJI",34.6877415556816
+"marine-fish-general_aquaculture_meat","Fiji","FJI",1580.73540934761
+"pigs_backyard_meat","Fiji","FJI",1.56248528922353
+"pigs_industrial_meat","Fiji","FJI",85.85867646874
+"pigs_intermediate_meat","Fiji","FJI",28.7516383931567
+"salmon_aquaculture_meat","Fiji","FJI",6.04122730542828
+"shrimp_aquaculture_meat","Fiji","FJI",1555.65993825997
+"tuna_aquaculture_meat","Fiji","FJI",20.1347097207452
+"pigs_backyard_meat","Falkland Islands (the) [Malvinas]","FLK",3.25e-05
+"pigs_industrial_meat","Falkland Islands (the) [Malvinas]","FLK",0.254890952
+"chickens_industrial_eggs","France","FRA",4325.43910152904
+"chickens_industrial_meat","France","FRA",25367.3122169764
+"crustaceans_aquaculture_meat","France","FRA",55.8558417570745
+"marine-fish-general_aquaculture_meat","France","FRA",5144.2369983459
+"pigs_backyard_meat","France","FRA",26.4972903611373
+"pigs_industrial_meat","France","FRA",58363.3562056324
+"pigs_intermediate_meat","France","FRA",324.186788171601
+"salmon_aquaculture_meat","France","FRA",48449.778365657
+"shrimp_aquaculture_meat","France","FRA",6028.88727711514
+"tuna_aquaculture_meat","France","FRA",96.7475589473374
+"marine-fish-general_aquaculture_meat","Faroe Islands (the)","FRO",1659.48146612928
+"pigs_backyard_meat","Faroe Islands (the)","FRO",0.654793891657381
+"pigs_industrial_meat","Faroe Islands (the)","FRO",20096.1401764795
+"pigs_intermediate_meat","Faroe Islands (the)","FRO",96.8790693092266
+"salmon_aquaculture_meat","Faroe Islands (the)","FRO",52965.4774490643
+"tuna_aquaculture_meat","Faroe Islands (the)","FRO",241.178633250865
+"pigs_backyard_meat","Gabon","GAB",1.633122039
+"pigs_industrial_meat","Gabon","GAB",1902.970632
+"pigs_intermediate_meat","Gabon","GAB",14.59352364
+"chickens_industrial_eggs","United Kingdom","GBR",31.2669062538423
+"chickens_industrial_meat","United Kingdom","GBR",46.9623109129947
+"crustaceans_aquaculture_meat","United Kingdom","GBR",92.1318313366984
+"marine-fish-general_aquaculture_meat","United Kingdom","GBR",2084.22636335427
+"pigs_backyard_meat","United Kingdom","GBR",12.5738341786788
+"pigs_industrial_meat","United Kingdom","GBR",18706.5769343545
+"pigs_intermediate_meat","United Kingdom","GBR",143.692413298397
+"salmon_aquaculture_meat","United Kingdom","GBR",149156.348761714
+"shrimp_aquaculture_meat","United Kingdom","GBR",210.558027454646
+"tuna_aquaculture_meat","United Kingdom","GBR",66.2472618652818
+"chickens_industrial_eggs","Georgia","GEO",40.2086102362603
+"chickens_industrial_meat","Georgia","GEO",1918.46850209796
+"marine-fish-general_aquaculture_meat","Georgia","GEO",16656.3268008349
+"pigs_backyard_meat","Georgia","GEO",0.984463294846904
+"pigs_industrial_meat","Georgia","GEO",989.888980614571
+"pigs_intermediate_meat","Georgia","GEO",16.2181072710309
+"salmon_aquaculture_meat","Georgia","GEO",1353.59093842099
+"tuna_aquaculture_meat","Georgia","GEO",550.906339366349
+"chickens_industrial_meat","Ghana","GHA",0.00108707464512093
+"marine-fish-general_aquaculture_meat","Ghana","GHA",0.0113044028700129
+"pigs_backyard_meat","Ghana","GHA",0.487769363202557
+"pigs_industrial_meat","Ghana","GHA",34.4349988739447
+"pigs_intermediate_meat","Ghana","GHA",7.77715600617934
+"shrimp_aquaculture_meat","Ghana","GHA",0.000576483857777146
+"chickens_industrial_meat","Guinea","GIN",1.74867124601155
+"crustaceans_aquaculture_meat","Guinea","GIN",11.5598395954279
+"marine-fish-general_aquaculture_meat","Guinea","GIN",1.81974662862101
+"pigs_backyard_meat","Guinea","GIN",5.19467035499261
+"pigs_industrial_meat","Guinea","GIN",6.24691705993291
+"pigs_intermediate_meat","Guinea","GIN",15.3213717089337
+"salmon_aquaculture_meat","Guinea","GIN",0.130121121613418
+"shrimp_aquaculture_meat","Guinea","GIN",80.9438385304204
+"pigs_backyard_meat","Gambia (the)","GMB",0.611220919
+"pigs_industrial_meat","Gambia (the)","GMB",1.355550488
+"pigs_intermediate_meat","Gambia (the)","GMB",4.050173345
+"pigs_backyard_meat","Guinea-Bissau","GNB",18.21669777
+"pigs_industrial_meat","Guinea-Bissau","GNB",69.57371802
+"pigs_intermediate_meat","Guinea-Bissau","GNB",102.2544359
+"chickens_industrial_eggs","Greece","GRC",6.47357372899478
+"marine-fish-general_aquaculture_meat","Greece","GRC",125.863627459644
+"pigs_backyard_meat","Greece","GRC",0.0154215966239977
+"pigs_industrial_meat","Greece","GRC",391.568440315557
+"pigs_intermediate_meat","Greece","GRC",5.4861474165399
+"salmon_aquaculture_meat","Greece","GRC",3.18356019693421
+"tuna_aquaculture_meat","Greece","GRC",5.61306743538631
+"chickens_industrial_eggs","Grenada","GRD",6.71552410161661
+"chickens_industrial_meat","Grenada","GRD",1.38989572385834
+"shrimp_aquaculture_meat","Grenada","GRD",6.40048744680318
+"pigs_backyard_meat","Greenland","GRL",0.000156701089846255
+"pigs_industrial_meat","Greenland","GRL",311.350319434211
+"pigs_intermediate_meat","Greenland","GRL",0.150977693930402
+"salmon_aquaculture_meat","Greenland","GRL",52.7142277763666
+"chickens_industrial_eggs","Hong Kong","HKG",6.08428056206612
+"chickens_industrial_meat","Hong Kong","HKG",1.52837683345183
+"crustaceans_aquaculture_meat","Hong Kong","HKG",2.59932330657493
+"marine-fish-general_aquaculture_meat","Hong Kong","HKG",5.69649544270671
+"pigs_backyard_meat","Hong Kong","HKG",0.0606152188162115
+"pigs_industrial_meat","Hong Kong","HKG",4.90516661301308
+"pigs_intermediate_meat","Hong Kong","HKG",0.867800415471578
+"shrimp_aquaculture_meat","Hong Kong","HKG",20.7787586403061
+"chickens_industrial_meat","Honduras","HND",7.60952265637646
+"marine-fish-general_aquaculture_meat","Honduras","HND",79.13082155145
+"pigs_backyard_meat","Honduras","HND",0.644342489843415
+"pigs_industrial_meat","Honduras","HND",271.290224166361
+"pigs_intermediate_meat","Honduras","HND",12.0772225745442
+"shrimp_aquaculture_meat","Honduras","HND",104.067349141456
+"marine-fish-general_aquaculture_meat","Croatia","HRV",1711.38869227819
+"pigs_backyard_meat","Croatia","HRV",4.42086845107383
+"pigs_industrial_meat","Croatia","HRV",2377.79093893945
+"pigs_intermediate_meat","Croatia","HRV",61.238335653762
+"tuna_aquaculture_meat","Croatia","HRV",549.730558780539
+"chickens_industrial_eggs","Hungary","HUN",90.2348590113179
+"crustaceans_aquaculture_meat","Hungary","HUN",238.565405757332
+"marine-fish-general_aquaculture_meat","Hungary","HUN",3814.31523091485
+"pigs_backyard_meat","Hungary","HUN",34.7265087852647
+"pigs_industrial_meat","Hungary","HUN",666.461079144581
+"pigs_intermediate_meat","Hungary","HUN",276.48905614755
+"salmon_aquaculture_meat","Hungary","HUN",0.0112327411628994
+"shrimp_aquaculture_meat","Hungary","HUN",544.435747290341
+"chickens_industrial_eggs","Indonesia","IDN",207.602443473561
+"chickens_industrial_meat","Indonesia","IDN",188.700586098666
+"crustaceans_aquaculture_meat","Indonesia","IDN",1112.74723418765
+"marine-fish-general_aquaculture_meat","Indonesia","IDN",5201.08161614331
+"pigs_backyard_meat","Indonesia","IDN",4.97693348060919
+"pigs_industrial_meat","Indonesia","IDN",2391.48609741765
+"pigs_intermediate_meat","Indonesia","IDN",181.876620438674
+"salmon_aquaculture_meat","Indonesia","IDN",384.64488225038
+"shrimp_aquaculture_meat","Indonesia","IDN",8560.2220221207
+"tuna_aquaculture_meat","Indonesia","IDN",1281.97676699281
+"chickens_industrial_eggs","India","IND",8572.20936743193
+"chickens_industrial_meat","India","IND",11268.5323374971
+"crustaceans_aquaculture_meat","India","IND",7776.32528301312
+"marine-fish-general_aquaculture_meat","India","IND",49036.4893084194
+"pigs_backyard_meat","India","IND",33.3732200155195
+"pigs_industrial_meat","India","IND",8481.40550379732
+"pigs_intermediate_meat","India","IND",611.888170671824
+"salmon_aquaculture_meat","India","IND",5415.83216211119
+"shrimp_aquaculture_meat","India","IND",58350.9055534953
+"tuna_aquaculture_meat","India","IND",1090.29741400726
+"marine-fish-general_aquaculture_meat","Ireland","IRL",549.809604142275
+"pigs_backyard_meat","Ireland","IRL",0.417976183666195
+"pigs_industrial_meat","Ireland","IRL",10473.6807194106
+"pigs_intermediate_meat","Ireland","IRL",82.1890180688446
+"salmon_aquaculture_meat","Ireland","IRL",31647.4359994835
+"tuna_aquaculture_meat","Ireland","IRL",78.5659697452699
+"chickens_industrial_eggs","Iran (Islamic Republic of)","IRN",246.621490532295
+"chickens_industrial_meat","Iran (Islamic Republic of)","IRN",859.111547348492
+"marine-fish-general_aquaculture_meat","Iran (Islamic Republic of)","IRN",176.148276614791
+"pigs_backyard_meat","Iran (Islamic Republic of)","IRN",2.32334527978741e-06
+"pigs_industrial_meat","Iran (Islamic Republic of)","IRN",0.00225225996956963
+"pigs_intermediate_meat","Iran (Islamic Republic of)","IRN",7.30515841490475e-06
+"salmon_aquaculture_meat","Iran (Islamic Republic of)","IRN",1.71676419543835
+"shrimp_aquaculture_meat","Iran (Islamic Republic of)","IRN",295.467915382622
+"tuna_aquaculture_meat","Iran (Islamic Republic of)","IRN",0.737054094964024
+"chickens_industrial_meat","Iraq","IRQ",31.1077798055459
+"chickens_industrial_eggs","Iceland","ISL",79.6538014150719
+"chickens_industrial_meat","Iceland","ISL",6.74391331117978
+"marine-fish-general_aquaculture_meat","Iceland","ISL",3543.39338149718
+"pigs_backyard_meat","Iceland","ISL",1.28486693770655
+"pigs_industrial_meat","Iceland","ISL",35193.2921165316
+"pigs_intermediate_meat","Iceland","ISL",148.144783100718
+"salmon_aquaculture_meat","Iceland","ISL",694175.239964736
+"shrimp_aquaculture_meat","Iceland","ISL",21.9468596198233
+"tuna_aquaculture_meat","Iceland","ISL",159.272575624895
+"chickens_industrial_meat","Israel","ISR",21.4505011905267
+"marine-fish-general_aquaculture_meat","Israel","ISR",186.59910581708
+"pigs_backyard_meat","Israel","ISR",1.93596607910465e-05
+"pigs_industrial_meat","Israel","ISR",0.0187673306259974
+"pigs_intermediate_meat","Israel","ISR",6.08714469466871e-05
+"salmon_aquaculture_meat","Israel","ISR",14.3052230639354
+"tuna_aquaculture_meat","Israel","ISR",6.14162577869655
+"chickens_industrial_eggs","Italy","ITA",648.098431252931
+"chickens_industrial_meat","Italy","ITA",31.3098611518667
+"crustaceans_aquaculture_meat","Italy","ITA",3862.72373447802
+"marine-fish-general_aquaculture_meat","Italy","ITA",66513.9576472612
+"pigs_backyard_meat","Italy","ITA",491.743921939743
+"pigs_industrial_meat","Italy","ITA",9052.99467415736
+"pigs_intermediate_meat","Italy","ITA",3661.86432161952
+"salmon_aquaculture_meat","Italy","ITA",82.2919594746118
+"shrimp_aquaculture_meat","Italy","ITA",8989.97469500114
+"tuna_aquaculture_meat","Italy","ITA",91.2806320849039
+"chickens_industrial_eggs","Jordan","JOR",471.021165650196
+"chickens_industrial_meat","Jordan","JOR",188.338641645015
+"pigs_backyard_meat","Jordan","JOR",0.0918298807419939
+"pigs_intermediate_meat","Jordan","JOR",6.83835032858972e-06
+"chickens_industrial_eggs","Japan","JPN",0.734916929838138
+"chickens_industrial_meat","Japan","JPN",1785.05548290769
+"crustaceans_aquaculture_meat","Japan","JPN",147.466152019866
+"marine-fish-general_aquaculture_meat","Japan","JPN",5622.29238901297
+"pigs_backyard_meat","Japan","JPN",7.91126006620011
+"pigs_industrial_meat","Japan","JPN",6977.97962643267
+"pigs_intermediate_meat","Japan","JPN",126.907360090361
+"salmon_aquaculture_meat","Japan","JPN",144.995571006684
+"shrimp_aquaculture_meat","Japan","JPN",5584.29034657069
+"tuna_aquaculture_meat","Japan","JPN",43.4206107502937
+"chickens_industrial_eggs","Kazakhstan","KAZ",38.2374344343285
+"pigs_backyard_meat","Kazakhstan","KAZ",0.256711135466319
+"pigs_industrial_meat","Kazakhstan","KAZ",507.585399716691
+"pigs_intermediate_meat","Kazakhstan","KAZ",0.00890392536528219
+"salmon_aquaculture_meat","Kazakhstan","KAZ",56.2733926528047
+"pigs_backyard_meat","Kiribati","KIR",0.00218265896398913
+"pigs_industrial_meat","Kiribati","KIR",0.0704306783727778
+"pigs_intermediate_meat","Kiribati","KIR",0.0356290312009633
+"pigs_backyard_meat","Saint Kitts and Nevis","KNA",0.049957749
+"pigs_industrial_meat","Saint Kitts and Nevis","KNA",41.60827227
+"pigs_intermediate_meat","Saint Kitts and Nevis","KNA",0.063159875
+"chickens_industrial_eggs","Korea (the Republic of)","KOR",4343.56736544224
+"chickens_industrial_meat","Korea (the Republic of)","KOR",15382.5534453827
+"crustaceans_aquaculture_meat","Korea (the Republic of)","KOR",9362.63555295565
+"marine-fish-general_aquaculture_meat","Korea (the Republic of)","KOR",184584.465918217
+"pigs_backyard_meat","Korea (the Republic of)","KOR",410.54800922356
+"pigs_industrial_meat","Korea (the Republic of)","KOR",17323.793084065
+"pigs_intermediate_meat","Korea (the Republic of)","KOR",5620.70383677906
+"salmon_aquaculture_meat","Korea (the Republic of)","KOR",169.852040194319
+"shrimp_aquaculture_meat","Korea (the Republic of)","KOR",204414.147893101
+"tuna_aquaculture_meat","Korea (the Republic of)","KOR",566.09714415414
+"chickens_industrial_eggs","Kuwait","KWT",700.507223372772
+"chickens_industrial_meat","Kuwait","KWT",280.09904550771
+"pigs_backyard_meat","Kuwait","KWT",0.136570284888216
+"pigs_intermediate_meat","Kuwait","KWT",1.01700606054892e-05
+"chickens_industrial_meat","Lebanon","LBN",0.63136849004651
+"pigs_backyard_meat","Lebanon","LBN",1.37808742230526e-05
+"pigs_industrial_meat","Lebanon","LBN",22.7553199187905
+"pigs_intermediate_meat","Lebanon","LBN",0.0110774708227575
+"salmon_aquaculture_meat","Lebanon","LBN",3.85225459353443
+"chickens_industrial_eggs","Sri Lanka","LKA",6.58972999918301
+"chickens_industrial_meat","Sri Lanka","LKA",1.36386042379636
+"shrimp_aquaculture_meat","Sri Lanka","LKA",6.28059455961746
+"chickens_industrial_eggs","Lithuania","LTU",44.7292872990848
+"chickens_industrial_meat","Lithuania","LTU",963.124930158262
+"marine-fish-general_aquaculture_meat","Lithuania","LTU",139.907786245276
+"pigs_backyard_meat","Lithuania","LTU",2.57975035381199
+"pigs_industrial_meat","Lithuania","LTU",1119.44325375904
+"pigs_intermediate_meat","Lithuania","LTU",37.715682954763
+"salmon_aquaculture_meat","Lithuania","LTU",64.3037752722069
+"tuna_aquaculture_meat","Lithuania","LTU",16.7079943821814
+"marine-fish-general_aquaculture_meat","Luxembourg","LUX",7.53337790686652
+"pigs_backyard_meat","Luxembourg","LUX",0.00176317690266509
+"pigs_industrial_meat","Luxembourg","LUX",284.903619138474
+"pigs_intermediate_meat","Luxembourg","LUX",0.337656574927451
+"salmon_aquaculture_meat","Luxembourg","LUX",45.4682691805784
+"chickens_industrial_eggs","Latvia","LVA",47.851431788664
+"chickens_industrial_meat","Latvia","LVA",23.0304942437365
+"crustaceans_aquaculture_meat","Latvia","LVA",6.32557421955979
+"marine-fish-general_aquaculture_meat","Latvia","LVA",2605.18044153921
+"pigs_backyard_meat","Latvia","LVA",6.09413980931264
+"pigs_industrial_meat","Latvia","LVA",29917.7511315317
+"pigs_intermediate_meat","Latvia","LVA",315.688922234852
+"shrimp_aquaculture_meat","Latvia","LVA",24.7243631006923
+"tuna_aquaculture_meat","Latvia","LVA",286.033115829596
+"chickens_industrial_eggs","Morocco","MAR",18518.459882544
+"chickens_industrial_meat","Morocco","MAR",7714.17433677091
+"crustaceans_aquaculture_meat","Morocco","MAR",1473.42096789051
+"marine-fish-general_aquaculture_meat","Morocco","MAR",105360.172326927
+"pigs_backyard_meat","Morocco","MAR",245.803366969227
+"pigs_industrial_meat","Morocco","MAR",97931.6941112452
+"pigs_intermediate_meat","Morocco","MAR",3445.14641360879
+"salmon_aquaculture_meat","Morocco","MAR",22350.4583153199
+"shrimp_aquaculture_meat","Morocco","MAR",67061.4607486269
+"tuna_aquaculture_meat","Morocco","MAR",13828.7954678112
+"chickens_industrial_eggs","Maldives","MDV",180.455847232502
+"chickens_industrial_meat","Maldives","MDV",32.0850519880311
+"crustaceans_aquaculture_meat","Maldives","MDV",37.1943780693663
+"marine-fish-general_aquaculture_meat","Maldives","MDV",237.274191641744
+"pigs_backyard_meat","Maldives","MDV",0.00194100701964211
+"pigs_industrial_meat","Maldives","MDV",2.88745294165061
+"pigs_intermediate_meat","Maldives","MDV",0.0292830922649599
+"salmon_aquaculture_meat","Maldives","MDV",3.50831028500911
+"shrimp_aquaculture_meat","Maldives","MDV",275.568768969151
+"chickens_industrial_eggs","Mexico","MEX",65.4058018116157
+"chickens_industrial_meat","Mexico","MEX",35484.0905033027
+"crustaceans_aquaculture_meat","Mexico","MEX",3705.43325797406
+"marine-fish-general_aquaculture_meat","Mexico","MEX",16550.8833035151
+"pigs_backyard_meat","Mexico","MEX",247.009228794978
+"pigs_industrial_meat","Mexico","MEX",153331.695859967
+"pigs_intermediate_meat","Mexico","MEX",4675.77551108379
+"salmon_aquaculture_meat","Mexico","MEX",36454.6879348767
+"shrimp_aquaculture_meat","Mexico","MEX",16437.1840765538
+"tuna_aquaculture_meat","Mexico","MEX",133.192542542421
+"pigs_industrial_meat","Mali","MLI",27.6932093413568
+"pigs_intermediate_meat","Mali","MLI",14.6281121681319
+"marine-fish-general_aquaculture_meat","Malta","MLT",65.1955772222042
+"pigs_backyard_meat","Malta","MLT",0.00224214891606364
+"pigs_industrial_meat","Malta","MLT",6.72151926697299
+"pigs_intermediate_meat","Malta","MLT",0.0292781380711249
+"chickens_industrial_meat","Myanmar","MMR",307.491063349836
+"crustaceans_aquaculture_meat","Myanmar","MMR",539.883804805736
+"marine-fish-general_aquaculture_meat","Myanmar","MMR",6704.22005973351
+"pigs_backyard_meat","Myanmar","MMR",70.0110317338917
+"pigs_industrial_meat","Myanmar","MMR",18435.6013278066
+"pigs_intermediate_meat","Myanmar","MMR",2866.53502529352
+"salmon_aquaculture_meat","Myanmar","MMR",139.673163443245
+"shrimp_aquaculture_meat","Myanmar","MMR",46971.4207518591
+"tuna_aquaculture_meat","Myanmar","MMR",465.514449221437
+"pigs_backyard_meat","Montenegro","MNE",0.314567476869478
+"pigs_industrial_meat","Montenegro","MNE",38.372787690602
+"pigs_intermediate_meat","Montenegro","MNE",16.0709209821002
+"marine-fish-general_aquaculture_meat","Mozambique","MOZ",375.098024220477
+"pigs_backyard_meat","Mozambique","MOZ",0.00357814730925758
+"pigs_industrial_meat","Mozambique","MOZ",1.19658530218842
+"pigs_intermediate_meat","Mozambique","MOZ",0.0692731385268115
+"chickens_industrial_eggs","Mauritania","MRT",9153.39155367296
+"chickens_industrial_meat","Mauritania","MRT",1940.77798155726
+"crustaceans_aquaculture_meat","Mauritania","MRT",818.586695454488
+"marine-fish-general_aquaculture_meat","Mauritania","MRT",26366.0930650151
+"pigs_backyard_meat","Mauritania","MRT",85.024475537069
+"pigs_industrial_meat","Mauritania","MRT",60549.8574484985
+"pigs_intermediate_meat","Mauritania","MRT",1102.59090186476
+"salmon_aquaculture_meat","Mauritania","MRT",10199.9688695276
+"shrimp_aquaculture_meat","Mauritania","MRT",41236.4220925839
+"tuna_aquaculture_meat","Mauritania","MRT",1375.40889342452
+"pigs_backyard_meat","Martinique","MTQ",0.097645267
+"pigs_industrial_meat","Martinique","MTQ",61.85872352
+"pigs_intermediate_meat","Martinique","MTQ",0.48862259
+"chickens_industrial_meat","Mauritius","MUS",539.889014754397
+"crustaceans_aquaculture_meat","Mauritius","MUS",745.36227113356
+"marine-fish-general_aquaculture_meat","Mauritius","MUS",11964.2983788494
+"pigs_backyard_meat","Mauritius","MUS",67.7728073951133
+"pigs_industrial_meat","Mauritius","MUS",15565.5117911833
+"pigs_intermediate_meat","Mauritius","MUS",756.768438794544
+"salmon_aquaculture_meat","Mauritius","MUS",175.093525291959
+"shrimp_aquaculture_meat","Mauritius","MUS",5904.82472827256
+"tuna_aquaculture_meat","Mauritius","MUS",592.794076231868
+"chickens_industrial_eggs","Malaysia","MYS",988.749098518312
+"chickens_industrial_meat","Malaysia","MYS",984.360790029258
+"crustaceans_aquaculture_meat","Malaysia","MYS",4541.47847391357
+"marine-fish-general_aquaculture_meat","Malaysia","MYS",22173.1858152532
+"pigs_backyard_meat","Malaysia","MYS",75.1677889498061
+"pigs_industrial_meat","Malaysia","MYS",13270.659448349
+"pigs_intermediate_meat","Malaysia","MYS",2780.46231551625
+"salmon_aquaculture_meat","Malaysia","MYS",770.605844054401
+"shrimp_aquaculture_meat","Malaysia","MYS",46224.7627727691
+"tuna_aquaculture_meat","Malaysia","MYS",2525.70972167175
+"chickens_industrial_eggs","Namibia","NAM",63.7360022780139
+"chickens_industrial_meat","Namibia","NAM",667.911175490322
+"crustaceans_aquaculture_meat","Namibia","NAM",678.601836575993
+"marine-fish-general_aquaculture_meat","Namibia","NAM",3658.5185666801
+"pigs_backyard_meat","Namibia","NAM",57.3960377951133
+"pigs_industrial_meat","Namibia","NAM",14389.340231398
+"pigs_intermediate_meat","Namibia","NAM",1162.96118324261
+"salmon_aquaculture_meat","Namibia","NAM",3597.0168046194
+"shrimp_aquaculture_meat","Namibia","NAM",2172.59269393998
+"tuna_aquaculture_meat","Namibia","NAM",1253.1316262325
+"pigs_backyard_meat","Nigeria","NGA",0.0535889670997617
+"pigs_industrial_meat","Nigeria","NGA",1.26926992197392
+"pigs_intermediate_meat","Nigeria","NGA",0.975895217778184
+"marine-fish-general_aquaculture_meat","Nicaragua","NIC",0.000955332307515346
+"pigs_backyard_meat","Nicaragua","NIC",0.00062680243216647
+"pigs_industrial_meat","Nicaragua","NIC",0.0210636288196835
+"pigs_intermediate_meat","Nicaragua","NIC",0.0166747196473489
+"shrimp_aquaculture_meat","Nicaragua","NIC",0.561734386139342
+"chickens_industrial_eggs","Netherlands (the)","NLD",612.832444623612
+"chickens_industrial_meat","Netherlands (the)","NLD",143.078969605441
+"crustaceans_aquaculture_meat","Netherlands (the)","NLD",103.706842061071
+"marine-fish-general_aquaculture_meat","Netherlands (the)","NLD",2500.29193274789
+"pigs_backyard_meat","Netherlands (the)","NLD",15.7371381068448
+"pigs_industrial_meat","Netherlands (the)","NLD",13213.8230552709
+"pigs_intermediate_meat","Netherlands (the)","NLD",475.003237134787
+"salmon_aquaculture_meat","Netherlands (the)","NLD",820.456780003721
+"shrimp_aquaculture_meat","Netherlands (the)","NLD",672.216209479634
+"tuna_aquaculture_meat","Netherlands (the)","NLD",74.5449028309629
+"chickens_industrial_eggs","Norway","NOR",256.262801185593
+"chickens_industrial_meat","Norway","NOR",11664.5696240695
+"crustaceans_aquaculture_meat","Norway","NOR",269.998525719907
+"marine-fish-general_aquaculture_meat","Norway","NOR",9825.52894453662
+"pigs_backyard_meat","Norway","NOR",25.4711515334002
+"pigs_industrial_meat","Norway","NOR",114041.448668171
+"pigs_intermediate_meat","Norway","NOR",849.716171306111
+"salmon_aquaculture_meat","Norway","NOR",93515.0699694655
+"shrimp_aquaculture_meat","Norway","NOR",11261.177725136
+"tuna_aquaculture_meat","Norway","NOR",3204.52715128427
+"chickens_industrial_eggs","New Zealand","NZL",3.78310192482621
+"chickens_industrial_meat","New Zealand","NZL",1855.83335318205
+"crustaceans_aquaculture_meat","New Zealand","NZL",2501.5892243723
+"marine-fish-general_aquaculture_meat","New Zealand","NZL",14163.7802899106
+"pigs_backyard_meat","New Zealand","NZL",149.766011575216
+"pigs_industrial_meat","New Zealand","NZL",25555.1396630941
+"pigs_intermediate_meat","New Zealand","NZL",2958.77259820137
+"salmon_aquaculture_meat","New Zealand","NZL",570.153915605183
+"shrimp_aquaculture_meat","New Zealand","NZL",9270.71106798173
+"tuna_aquaculture_meat","New Zealand","NZL",828.947341047813
+"chickens_industrial_eggs","Oman","OMN",4768.32063502511
+"chickens_industrial_meat","Oman","OMN",760.977945804312
+"crustaceans_aquaculture_meat","Oman","OMN",51.5778885158676
+"marine-fish-general_aquaculture_meat","Oman","OMN",8066.1958760604
+"pigs_backyard_meat","Oman","OMN",48.9060956488568
+"pigs_industrial_meat","Oman","OMN",162.327566520296
+"pigs_intermediate_meat","Oman","OMN",693.4105602974
+"salmon_aquaculture_meat","Oman","OMN",0.0858382097719173
+"shrimp_aquaculture_meat","Oman","OMN",25479.3599012852
+"tuna_aquaculture_meat","Oman","OMN",0.0368527047482012
+"chickens_industrial_eggs","Pakistan","PAK",82.5940742485912
+"chickens_industrial_meat","Pakistan","PAK",947.846389295115
+"crustaceans_aquaculture_meat","Pakistan","PAK",2996.88470031991
+"marine-fish-general_aquaculture_meat","Pakistan","PAK",32640.2015051996
+"pigs_backyard_meat","Pakistan","PAK",123.302835853223
+"pigs_industrial_meat","Pakistan","PAK",15973.664163177
+"pigs_intermediate_meat","Pakistan","PAK",2398.76293796821
+"salmon_aquaculture_meat","Pakistan","PAK",8.65453929322223
+"shrimp_aquaculture_meat","Pakistan","PAK",13294.1270871399
+"tuna_aquaculture_meat","Pakistan","PAK",28.8445753860704
+"chickens_industrial_meat","Panama","PAN",2225.49800394891
+"crustaceans_aquaculture_meat","Panama","PAN",1017.25453547377
+"marine-fish-general_aquaculture_meat","Panama","PAN",4405.25979977403
+"pigs_backyard_meat","Panama","PAN",67.2702113741238
+"pigs_industrial_meat","Panama","PAN",15629.1723125613
+"pigs_intermediate_meat","Panama","PAN",1294.82827824137
+"salmon_aquaculture_meat","Panama","PAN",1199.26960357517
+"shrimp_aquaculture_meat","Panama","PAN",3927.64482784751
+"tuna_aquaculture_meat","Panama","PAN",62.6189420205436
+"chickens_industrial_eggs","Peru","PER",388.707145841667
+"chickens_industrial_meat","Peru","PER",52050.1660836935
+"crustaceans_aquaculture_meat","Peru","PER",97267.108582255
+"marine-fish-general_aquaculture_meat","Peru","PER",409855.858956784
+"pigs_backyard_meat","Peru","PER",5631.64542360505
+"pigs_industrial_meat","Peru","PER",787338.749382498
+"pigs_intermediate_meat","Peru","PER",107056.651266332
+"salmon_aquaculture_meat","Peru","PER",622060.088890895
+"shrimp_aquaculture_meat","Peru","PER",562336.381620199
+"tuna_aquaculture_meat","Peru","PER",9369.61936332536
+"chickens_industrial_eggs","Philippines (the)","PHL",25.712250856233
+"chickens_industrial_meat","Philippines (the)","PHL",435.200955734146
+"crustaceans_aquaculture_meat","Philippines (the)","PHL",77.2532073905391
+"marine-fish-general_aquaculture_meat","Philippines (the)","PHL",5116.85467812496
+"pigs_backyard_meat","Philippines (the)","PHL",7.22739109030072
+"pigs_industrial_meat","Philippines (the)","PHL",3741.9375224032
+"pigs_intermediate_meat","Philippines (the)","PHL",44.2508266350313
+"salmon_aquaculture_meat","Philippines (the)","PHL",627.214902169836
+"shrimp_aquaculture_meat","Philippines (the)","PHL",264.530765975449
+"tuna_aquaculture_meat","Philippines (the)","PHL",2051.79112177454
+"chickens_industrial_eggs","Papua New Guinea","PNG",235.306618123447
+"chickens_industrial_meat","Papua New Guinea","PNG",768.980476863777
+"crustaceans_aquaculture_meat","Papua New Guinea","PNG",6.08070059571663
+"marine-fish-general_aquaculture_meat","Papua New Guinea","PNG",785.270450291714
+"pigs_backyard_meat","Papua New Guinea","PNG",0.872962525430264
+"pigs_industrial_meat","Papua New Guinea","PNG",338.483127744448
+"pigs_intermediate_meat","Papua New Guinea","PNG",5.70465166678835
+"salmon_aquaculture_meat","Papua New Guinea","PNG",4463.62952174297
+"shrimp_aquaculture_meat","Papua New Guinea","PNG",246.224860322328
+"tuna_aquaculture_meat","Papua New Guinea","PNG",2445.82109349402
+"chickens_industrial_eggs","Poland","POL",694.900046630566
+"chickens_industrial_meat","Poland","POL",141.122584340544
+"marine-fish-general_aquaculture_meat","Poland","POL",1467.79206898005
+"pigs_backyard_meat","Poland","POL",11.8957854888613
+"pigs_industrial_meat","Poland","POL",9730.50416928413
+"pigs_intermediate_meat","Poland","POL",370.4349989847
+"salmon_aquaculture_meat","Poland","POL",6358.3722120002
+"tuna_aquaculture_meat","Poland","POL",15.968800036487
+"pigs_backyard_meat","Puerto Rico","PRI",0.591824524
+"pigs_industrial_meat","Puerto Rico","PRI",323.2527899
+"pigs_intermediate_meat","Puerto Rico","PRI",0.701624368
+"crustaceans_aquaculture_meat","Korea (the Democratic People's Republic of)","PRK",36.8527350120018
+"marine-fish-general_aquaculture_meat","Korea (the Democratic People's Republic of)","PRK",589.221844679915
+"pigs_backyard_meat","Korea (the Democratic People's Republic of)","PRK",4.63933057282712
+"pigs_industrial_meat","Korea (the Democratic People's Republic of)","PRK",42.4700327912836
+"pigs_intermediate_meat","Korea (the Democratic People's Republic of)","PRK",30.7506191629364
+"shrimp_aquaculture_meat","Korea (the Democratic People's Republic of)","PRK",84.1024970165252
+"chickens_industrial_eggs","Portugal","PRT",2.45120357121759
+"chickens_industrial_meat","Portugal","PRT",28.6257749896704
+"marine-fish-general_aquaculture_meat","Portugal","PRT",3053.05732178522
+"pigs_backyard_meat","Portugal","PRT",4.84099071513263
+"pigs_industrial_meat","Portugal","PRT",18629.1166555221
+"pigs_intermediate_meat","Portugal","PRT",186.504269855702
+"salmon_aquaculture_meat","Portugal","PRT",664.595231516047
+"tuna_aquaculture_meat","Portugal","PRT",276.372893806673
+"chickens_industrial_eggs","Paraguay","PRY",20024.1041015224
+"chickens_industrial_meat","Paraguay","PRY",8006.67324881928
+"pigs_backyard_meat","Paraguay","PRY",3.90388208790954
+"pigs_intermediate_meat","Paraguay","PRY",0.000290712708575081
+"chickens_industrial_meat","Palestine, State of","PSE",152.6423984
+"pigs_backyard_meat","Réunion","REU",1.024847367
+"pigs_industrial_meat","Réunion","REU",144.8070053
+"pigs_intermediate_meat","Réunion","REU",29.82181512
+"chickens_industrial_eggs","Romania","ROU",0.0473882750182165
+"pigs_backyard_meat","Romania","ROU",0.000193969887730129
+"pigs_industrial_meat","Romania","ROU",8.38769156308251
+"pigs_intermediate_meat","Romania","ROU",0.0313779337751224
+"salmon_aquaculture_meat","Romania","ROU",1.38681161494984
+"chickens_industrial_eggs","Russian Federation (the)","RUS",616.647999577198
+"chickens_industrial_meat","Russian Federation (the)","RUS",5982.99952193436
+"crustaceans_aquaculture_meat","Russian Federation (the)","RUS",9320.62630744763
+"marine-fish-general_aquaculture_meat","Russian Federation (the)","RUS",48149.7699040866
+"pigs_backyard_meat","Russian Federation (the)","RUS",572.369928009802
+"pigs_industrial_meat","Russian Federation (the)","RUS",90667.8411623077
+"pigs_intermediate_meat","Russian Federation (the)","RUS",11338.0986709352
+"salmon_aquaculture_meat","Russian Federation (the)","RUS",434.798293740191
+"shrimp_aquaculture_meat","Russian Federation (the)","RUS",29424.8116098672
+"tuna_aquaculture_meat","Russian Federation (the)","RUS",690.079095051371
+"chickens_industrial_meat","Saudi Arabia","SAU",0.0106923596854231
+"marine-fish-general_aquaculture_meat","Saudi Arabia","SAU",0.00583445464166918
+"shrimp_aquaculture_meat","Saudi Arabia","SAU",0.0247077290449466
+"chickens_industrial_eggs","Senegal","SEN",3406.01143730481
+"chickens_industrial_meat","Senegal","SEN",768.007543547096
+"crustaceans_aquaculture_meat","Senegal","SEN",28.197182457807
+"marine-fish-general_aquaculture_meat","Senegal","SEN",4669.36044136285
+"pigs_backyard_meat","Senegal","SEN",106.207328096714
+"pigs_industrial_meat","Senegal","SEN",4353.84312462964
+"pigs_intermediate_meat","Senegal","SEN",1108.46734125098
+"salmon_aquaculture_meat","Senegal","SEN",243.354108336297
+"shrimp_aquaculture_meat","Senegal","SEN",18343.316126283
+"tuna_aquaculture_meat","Senegal","SEN",432.416964278676
+"chickens_industrial_eggs","Singapore","SGP",0.000320122680273561
+"chickens_industrial_meat","Singapore","SGP",3.62701696967942
+"crustaceans_aquaculture_meat","Singapore","SGP",665.005500416248
+"marine-fish-general_aquaculture_meat","Singapore","SGP",10503.5381227186
+"pigs_backyard_meat","Singapore","SGP",82.0658093001975
+"pigs_industrial_meat","Singapore","SGP",787.906565560296
+"pigs_intermediate_meat","Singapore","SGP",558.743165999965
+"salmon_aquaculture_meat","Singapore","SGP",0.269871239290013
+"shrimp_aquaculture_meat","Singapore","SGP",1701.13366214569
+"chickens_industrial_eggs","Solomon Islands","SLB",14.0364529780461
+"chickens_industrial_meat","Solomon Islands","SLB",63.8302742297164
+"crustaceans_aquaculture_meat","Solomon Islands","SLB",55.5001455377644
+"marine-fish-general_aquaculture_meat","Solomon Islands","SLB",2487.64609274819
+"pigs_backyard_meat","Solomon Islands","SLB",2.48996097168638
+"pigs_industrial_meat","Solomon Islands","SLB",88.4614107517579
+"pigs_intermediate_meat","Solomon Islands","SLB",46.0024217116552
+"salmon_aquaculture_meat","Solomon Islands","SLB",388.293855943233
+"shrimp_aquaculture_meat","Solomon Islands","SLB",2501.3311560891
+"tuna_aquaculture_meat","Solomon Islands","SLB",196.722449723849
+"pigs_backyard_meat","Sierra Leone","SLE",3.682042505
+"pigs_industrial_meat","Sierra Leone","SLE",7.994045781
+"pigs_intermediate_meat","Sierra Leone","SLE",15.92559689
+"marine-fish-general_aquaculture_meat","El Salvador","SLV",86.4575776030381
+"pigs_backyard_meat","El Salvador","SLV",33.2718797989595
+"pigs_industrial_meat","El Salvador","SLV",5444.63750148599
+"pigs_intermediate_meat","El Salvador","SLV",567.167574529738
+"shrimp_aquaculture_meat","El Salvador","SLV",13746.3947376845
+"pigs_backyard_meat","Sao Tome and Principe","STP",0.0433309946038741
+"pigs_industrial_meat","Sao Tome and Principe","STP",0.0058514336966473
+"pigs_intermediate_meat","Sao Tome and Principe","STP",0.314584523607923
+"chickens_industrial_eggs","Slovakia","SVK",229.905656226319
+"chickens_industrial_meat","Slovakia","SVK",6.9258667060564
+"pigs_backyard_meat","Slovakia","SVK",0.000712037902309943
+"pigs_industrial_meat","Slovakia","SVK",1564.20643906453
+"pigs_intermediate_meat","Slovakia","SVK",100.518508946378
+"salmon_aquaculture_meat","Slovakia","SVK",3.50835955925684
+"shrimp_aquaculture_meat","Slovakia","SVK",31.8937040739209
+"marine-fish-general_aquaculture_meat","Slovenia","SVN",419.161783905169
+"pigs_backyard_meat","Slovenia","SVN",16.7426424254149
+"pigs_industrial_meat","Slovenia","SVN",6859.45852220518
+"pigs_intermediate_meat","Slovenia","SVN",208.400716706118
+"salmon_aquaculture_meat","Slovenia","SVN",0.00676844653610197
+"tuna_aquaculture_meat","Slovenia","SVN",16.4739096468491
+"marine-fish-general_aquaculture_meat","Sweden","SWE",104.684351730661
+"pigs_backyard_meat","Sweden","SWE",0.0227639824676855
+"pigs_industrial_meat","Sweden","SWE",291.835262873809
+"pigs_intermediate_meat","Sweden","SWE",3.61988529826987
+"salmon_aquaculture_meat","Sweden","SWE",15.5792989642524
+"shrimp_aquaculture_meat","Sweden","SWE",4.72221565922663
+"chickens_industrial_eggs","Seychelles","SYC",973.733375736135
+"chickens_industrial_meat","Seychelles","SYC",560.35514015511
+"marine-fish-general_aquaculture_meat","Seychelles","SYC",2759.33019346861
+"pigs_backyard_meat","Seychelles","SYC",17.1821219905232
+"pigs_industrial_meat","Seychelles","SYC",4484.66220456447
+"pigs_intermediate_meat","Seychelles","SYC",451.130926681733
+"salmon_aquaculture_meat","Seychelles","SYC",1909.09421871782
+"shrimp_aquaculture_meat","Seychelles","SYC",1435.80909225498
+"tuna_aquaculture_meat","Seychelles","SYC",2066.02387717267
+"chickens_industrial_meat","Syrian Arab Republic (the)","SYR",0.24395916914551
+"pigs_backyard_meat","Syrian Arab Republic (the)","SYR",3.21186442574774e-07
+"pigs_industrial_meat","Syrian Arab Republic (the)","SYR",0.000103462054115999
+"pigs_intermediate_meat","Syrian Arab Republic (the)","SYR",1.45428520908454e-06
+"pigs_backyard_meat","Togo","TGO",0.592301405845057
+"pigs_industrial_meat","Togo","TGO",3.52327161320279
+"pigs_intermediate_meat","Togo","TGO",6.6789035641276
+"chickens_industrial_eggs","Thailand","THA",13223.7648638862
+"chickens_industrial_meat","Thailand","THA",8678.58240423738
+"crustaceans_aquaculture_meat","Thailand","THA",26435.9088189455
+"marine-fish-general_aquaculture_meat","Thailand","THA",117380.720496333
+"pigs_backyard_meat","Thailand","THA",1092.38290706364
+"pigs_industrial_meat","Thailand","THA",95172.5411413528
+"pigs_intermediate_meat","Thailand","THA",17224.400124989
+"salmon_aquaculture_meat","Thailand","THA",9215.73308202255
+"shrimp_aquaculture_meat","Thailand","THA",208921.02032445
+"tuna_aquaculture_meat","Thailand","THA",9497.07516772282
+"pigs_backyard_meat","Trinidad and Tobago","TTO",3.05982814437288e-07
+"pigs_industrial_meat","Trinidad and Tobago","TTO",0.00046648612720684
+"marine-fish-general_aquaculture_meat","Tunisia","TUN",7061.70461998151
+"pigs_backyard_meat","Tunisia","TUN",0.048718693185831
+"pigs_industrial_meat","Tunisia","TUN",8.47396666542845
+"pigs_intermediate_meat","Tunisia","TUN",1.21112864561233
+"chickens_industrial_meat","Turkey","TUR",1571.79761258294
+"marine-fish-general_aquaculture_meat","Turkey","TUR",106.2756223124
+"pigs_backyard_meat","Turkey","TUR",0.00536461087942149
+"pigs_industrial_meat","Turkey","TUR",20.3157531287703
+"pigs_intermediate_meat","Turkey","TUR",3.46213404596247e-05
+"salmon_aquaculture_meat","Turkey","TUR",6.89368452484984
+"tuna_aquaculture_meat","Turkey","TUR",2.95964840246062
+"chickens_industrial_meat","Taiwan (Province of China)","TWN",2165.114259
+"marine-fish-general_aquaculture_meat","Taiwan (Province of China)","TWN",36243.92286
+"pigs_backyard_meat","Taiwan (Province of China)","TWN",117.4809437
+"pigs_industrial_meat","Taiwan (Province of China)","TWN",11038.38528
+"pigs_intermediate_meat","Taiwan (Province of China)","TWN",5962.850333
+"shrimp_aquaculture_meat","Taiwan (Province of China)","TWN",2048.211857
+"pigs_backyard_meat","Tanzania, the United Republic of","TZA",124.576832573195
+"pigs_industrial_meat","Tanzania, the United Republic of","TZA",983.158448467973
+"pigs_intermediate_meat","Tanzania, the United Republic of","TZA",1152.8453827148
+"pigs_backyard_meat","Uganda","UGA",30.283543895
+"pigs_industrial_meat","Uganda","UGA",245.9448601
+"pigs_intermediate_meat","Uganda","UGA",431.437893839
+"chickens_industrial_eggs","Ukraine","UKR",0.838348857341976
+"chickens_industrial_meat","Ukraine","UKR",57.7313913388892
+"marine-fish-general_aquaculture_meat","Ukraine","UKR",61.230046344989
+"pigs_backyard_meat","Ukraine","UKR",0.00976242029303065
+"pigs_industrial_meat","Ukraine","UKR",303.736373016749
+"pigs_intermediate_meat","Ukraine","UKR",1.50124138042797
+"salmon_aquaculture_meat","Ukraine","UKR",457.267395611893
+"shrimp_aquaculture_meat","Ukraine","UKR",0.318468584080559
+"tuna_aquaculture_meat","Ukraine","UKR",30.6047544443335
+"chickens_industrial_meat","Uruguay","URY",235.81356099417
+"crustaceans_aquaculture_meat","Uruguay","URY",12.1885887407601
+"marine-fish-general_aquaculture_meat","Uruguay","URY",394.592489770512
+"pigs_backyard_meat","Uruguay","URY",1.32825479684482
+"pigs_industrial_meat","Uruguay","URY",2402.21984048892
+"pigs_intermediate_meat","Uruguay","URY",21.8979717552179
+"salmon_aquaculture_meat","Uruguay","URY",61795.3676096913
+"shrimp_aquaculture_meat","Uruguay","URY",151.154319606555
+"tuna_aquaculture_meat","Uruguay","URY",30.2020611973684
+"chickens_industrial_eggs","United States of America (the)","USA",609.697020983751
+"chickens_industrial_meat","United States of America (the)","USA",15888.3417635389
+"crustaceans_aquaculture_meat","United States of America (the)","USA",15829.1006330559
+"marine-fish-general_aquaculture_meat","United States of America (the)","USA",90560.3622926228
+"pigs_backyard_meat","United States of America (the)","USA",1312.27862377671
+"pigs_industrial_meat","United States of America (the)","USA",210923.976395645
+"pigs_intermediate_meat","United States of America (the)","USA",45876.4395140119
+"salmon_aquaculture_meat","United States of America (the)","USA",64718.1721744262
+"shrimp_aquaculture_meat","United States of America (the)","USA",121860.126402188
+"tuna_aquaculture_meat","United States of America (the)","USA",17492.9402169518
+"pigs_backyard_meat","Saint Vincent and the Grenadines","VCT",0.099538392
+"pigs_industrial_meat","Saint Vincent and the Grenadines","VCT",31.3629045
+"pigs_intermediate_meat","Saint Vincent and the Grenadines","VCT",1.523417386
+"shrimp_aquaculture_meat","Venezuela (Bolivarian Republic of)","VEN",66.5997126610014
+"chickens_industrial_eggs","Viet Nam","VNM",617.020278818405
+"chickens_industrial_meat","Viet Nam","VNM",12385.1627805835
+"crustaceans_aquaculture_meat","Viet Nam","VNM",25554.7071993874
+"marine-fish-general_aquaculture_meat","Viet Nam","VNM",211942.913908997
+"pigs_backyard_meat","Viet Nam","VNM",1607.97951921789
+"pigs_industrial_meat","Viet Nam","VNM",231403.453634533
+"pigs_intermediate_meat","Viet Nam","VNM",33556.9146109226
+"salmon_aquaculture_meat","Viet Nam","VNM",7434.07692384655
+"shrimp_aquaculture_meat","Viet Nam","VNM",232115.390172991
+"tuna_aquaculture_meat","Viet Nam","VNM",10001.4567221206
+"chickens_industrial_eggs","Samoa","WSM",3.04366372041754
+"chickens_industrial_meat","Samoa","WSM",13.8409532836503
+"marine-fish-general_aquaculture_meat","Samoa","WSM",4.89145712925534
+"salmon_aquaculture_meat","Samoa","WSM",84.1976191594783
+"shrimp_aquaculture_meat","Samoa","WSM",2.73679977462142
+"tuna_aquaculture_meat","Samoa","WSM",42.6572855800989
+"chickens_industrial_meat","Yemen","YEM",1711.64074588671
+"marine-fish-general_aquaculture_meat","Yemen","YEM",9127.72541427881
+"pigs_backyard_meat","Yemen","YEM",0.00626439757076334
+"pigs_industrial_meat","Yemen","YEM",1.44186681335613
+"pigs_intermediate_meat","Yemen","YEM",0.355525176435317
+"chickens_industrial_eggs","South Africa","ZAF",135.467184953016
+"chickens_industrial_meat","South Africa","ZAF",4042.39709575267
+"crustaceans_aquaculture_meat","South Africa","ZAF",2118.85316211761
+"marine-fish-general_aquaculture_meat","South Africa","ZAF",32046.0820750208
+"pigs_backyard_meat","South Africa","ZAF",344.892706780319
+"pigs_industrial_meat","South Africa","ZAF",35184.1397470388
+"pigs_intermediate_meat","South Africa","ZAF",4729.96879835861
+"salmon_aquaculture_meat","South Africa","ZAF",14281.6219153765
+"shrimp_aquaculture_meat","South Africa","ZAF",8982.58994458535
+"tuna_aquaculture_meat","South Africa","ZAF",3007.55822415303
+"pigs_backyard_meat","Zambia","ZMB",1.77717692095828
+"pigs_industrial_meat","Zambia","ZMB",67.7083138156792
+"pigs_intermediate_meat","Zambia","ZMB",42.3785441312082
+"chickens_industrial_eggs",NA,NA,NA
+"chickens_industrial_meat",NA,NA,NA
+"pigs_backyard_meat",NA,NA,NA
+"pigs_industrial_meat",NA,NA,NA
+"pigs_intermediate_meat",NA,NA,NA

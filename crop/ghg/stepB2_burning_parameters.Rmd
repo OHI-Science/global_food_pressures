@@ -1,0 +1,209 @@
+---
+title: "Estimating emissions from burning crop residue"
+author: "Juliette Verstaen"
+output: html_document
+---
+
+In the markdown we are using IPCC tier 1 method for estimating green house gas emissions from burning of crop residues. The methods and parameters for selected crops are in the [Revised 1996 IPCC Guidelines for National Greenhouse Gas Inventories](https://www.ipcc-nggip.iges.or.jp/public/gl/invs1.html). For now we are only going to use the crops listed in the IPCC crop residue section as crops where the crop residue is burned. 
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Read in libraries and paths
+```{r}
+#Load libraries
+library(readr)
+library(dplyr)
+library(tidyverse)
+library(raster)
+library(rgdal)
+library(here)
+library(doParallel)
+
+source(here("_spatial/template_raster.R"))
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+#Files we will need:
+param_raw <- read_csv("crop/ghg/data/ghg_factors_crop_residue_burning.csv") %>% 
+   ## other cereals and other vegetables is an average of oats/rye and feedbeet/artichokes done in csv file. we need to remove these 
+  filter(product !="oats" & product != "rye" & product !="jerusalem artichoke") %>% 
+  mutate(split_rest_names = case_when(product %in% "feedbeet" ~ "fodd",
+                                      TRUE ~ SPAM_short_name)) %>% 
+  select(-contains("SPAM"))
+```
+
+Adding in our MapSPAM crops
+Create df with all mapspam crops
+```{r}
+crop_df <- list.files(file.path(prep, "crop/farm/scaled_maps_2017"), pattern = "A_scaled.tif") 
+
+crop_df <- 
+  crop_df %>% 
+  as.data.frame() %>% 
+  mutate(split_rest_names = str_sub(., -17, -14)) %>% 
+  dplyr::select(split_rest_names)
+```
+
+Merge
+```{r}
+param_merge <- left_join(crop_df, param_raw, by = "split_rest_names")
+```
+
+Gapfill with values from GLEAM 2.0 Supplement Table 3.1
+```{r}
+'%notin%' <- Negate('%in%')
+
+param_gapfill <- param_merge %>% 
+  rename(dm_avg = dm) %>% 
+  ## this dm is values from GLEAM supplement table 3.1
+  mutate(dm = case_when(split_rest_names == "bana" ~ 0.20,
+                        split_rest_names == "barl" ~ 0.89,
+                        split_rest_names == "cott" ~ 0.935,
+                        split_rest_names == "pmil" ~ 0.90,
+                        split_rest_names == "smil" ~ 0.90,
+                        split_rest_names == "maiz" ~ 0.87,
+                        split_rest_names == "ocer" ~ 0.89,
+                        split_rest_names == "oilp" ~ 0.53,
+                        split_rest_names == "bean" ~ 0.91,
+                        split_rest_names == "chic" ~ 0.91,
+                        split_rest_names == "opul" ~ 0.91,
+                        split_rest_names == "cowp" ~ 0.91,
+                        split_rest_names == "lent" ~ 0.91,
+                        split_rest_names == "pige" ~ 0.91,
+                        split_rest_names == "rice" ~ 0.89,
+                        split_rest_names == "rape" ~ 0.923,
+                        split_rest_names == "cass" ~ 0.33,
+                        split_rest_names == "sunf" ~ 0.923,
+                        split_rest_names == "soyb" ~ 0.91,
+                        split_rest_names == "sorg" ~ 0.89,
+                        split_rest_names == "sugb" ~ 0.25,
+                        split_rest_names == "sugc" ~ 0.32,
+                        split_rest_names == "whea" ~ 0.89),
+         dm = ifelse(is.na(dm), dm_avg, dm)) %>% 
+  filter(split_rest_names %notin% c("acof", "rcof", "teas","toba"))
+```
+
+
+For missing values is how we will gapfil (at least for now) the missing crops
+
+legumes:
+chick, cowp, lentils, pige
+use average of: bean, opul, soyb
+
+tubers
+yams, cass, orts, swpo
+use average of pota
+
+Cereal and fiber plants
+ofib, cott, oilp, ooil, rape, sesa, sugc, sunf
+Trees with large leaves/husk residue
+bana, cnut, plnt 
+
+use average of whea, sorg, pmil, smil, maiz, ocer
+
+rest = average of all
+
+Zeros:
+temf, trof, coco
+
+Gapfilling values for ratio_res_prod, dm, and carb_frac
+```{r}
+cereal_gap <- param_gapfill %>% 
+  filter(split_rest_names %in% c("whea", "sorg", "pmil", "smil", "maiz", "ocer")) %>% 
+  summarise(cer_res = mean(ratio_res_prod, na.rm = TRUE),
+            cer_dm = mean(dm, na.rm = TRUE),
+            cer_carb = mean(carb_frac, na.rm = TRUE))
+
+## legumes dont have dm or carbon fraction values so we will use the average of all for these values. leaving like this for now in case get better data down the line
+legume_gap <- param_gapfill %>% 
+  filter(split_rest_names %in% c("bean", "opul", "soyb")) %>% 
+  summarise(leg_res = mean(ratio_res_prod, na.rm = TRUE),
+            leg_dm = mean(dm, na.rm = TRUE),
+            leg_carb = mean(carb_frac, na.rm = TRUE))
+  
+tuber_gap <- param_gapfill %>% 
+  filter(split_rest_names == "pota") %>% 
+  summarise(tub_res = mean(ratio_res_prod, na.rm = TRUE),
+            tub_dm = mean(dm, na.rm = TRUE),
+            tub_carb = mean(carb_frac, na.rm = TRUE))
+
+rest_gap <- param_gapfill %>% 
+  summarise(rest_res = mean(ratio_res_prod, na.rm = TRUE),
+            rest_dm = mean(dm, na.rm = TRUE),
+            rest_carb = mean(carb_frac, na.rm = TRUE))
+
+```
+
+Gap filling for frac_ox and n_c_ratio
+For fraction oxidized will use a value of 0.9 and for the nitrogen carbon ration we will gapfil with 0.015, as recommended by the IPCC and for fraction oxidized with 0.9
+
+Grab the gap filling values
+```{r}
+ox_avg <- 0.9
+nc_avg <- 0.015
+```
+
+
+Gap fill it. This turned out to be a giant hunk of code, might want to go back and split it up or clean it up
+```{r}
+param_gapfill2 <- param_gapfill %>% 
+  dplyr::select(-product, -dm_min, -dm_max, -dm_avg) %>% 
+  
+  ## making sure we're documenting what values are being gapfilled
+  mutate(gapfilled = case_when(is.na(ratio_res_prod) & is.na(frac_ox) & is.na(dm) & is.na(carb_frac) & is.na(n_c_ratio) ~ "all values gapfilled",
+                               is.na(dm) & is.na(carb_frac) & is.na(n_c_ratio) ~ "dm, carb_frac, nc_ratio gapfilled",
+                               is.na(dm) & is.na(carb_frac) ~ "dm, carb_frac gapfilled",
+                               is.na(carb_frac) & is.na(n_c_ratio) ~ "carb_frac, nc_ratio gapfilled",
+                               is.na(n_c_ratio) ~ "nc_ratio gapfilled")) %>% 
+  
+  ## gapfill nc ratios and fraction oxidized
+  mutate(frac_ox = ox_avg,
+         n_c_ratio = ifelse(is.na(n_c_ratio), nc_avg, n_c_ratio)) %>% 
+  
+  ## gapfill legumes
+  mutate(ratio_res_prod = ifelse(split_rest_names %in% c("chic", "cowp", "lent", "pige") & is.na(ratio_res_prod), legume_gap$leg_res, ratio_res_prod),
+         dm = ifelse(split_rest_names %in% c("chic", "cowp", "lent", "pige", "swpo", "bean", "opul", "soyb") & is.na(dm), rest_gap$rest_dm, dm),
+         carb_frac = ifelse(split_rest_names %in% c("chic", "cowp", "lent", "pige", "swpo","bean", "opul", "soyb") & is.na(carb_frac), rest_gap$rest_carb, carb_frac)) %>% 
+  
+  ## gapfill cereals and large residue crops
+  mutate(ratio_res_prod = ifelse(split_rest_names %in% c("ofib", "cott", "oilp", "ooil", "rape", "sesa", "sugc", "sunf", "bana", "cnut", "plnt", "ocer") & is.na(ratio_res_prod),cereal_gap$cer_res, ratio_res_prod),
+         dm = ifelse(split_rest_names %in% c("ofib", "cott", "oilp", "ooil", "rape", "sesa", "sugc", "sunf", "bana", "cnut", "plnt", "ocer", "pmil", "smil", "sorg") & is.na(dm), cereal_gap$cer_dm, dm),
+         carb_frac = ifelse(split_rest_names %in% c("ofib", "cott", "oilp", "ooil", "rape", "sesa", "sugc", "sunf", "bana", "cnut", "plnt", "ocer", "pmil", "smil", "sorg") & is.na(carb_frac), cereal_gap$cer_carb, carb_frac)) %>% 
+  
+  ## gapfill tubers
+   mutate(ratio_res_prod = ifelse(split_rest_names %in% c("yams", "cass", "orts","swpo") & is.na(ratio_res_prod), tuber_gap$tub_res, ratio_res_prod),
+         dm = ifelse(split_rest_names %in% c("yams", "cass", "orts", "swpo") & is.na(dm), tuber_gap$tub_dm, dm),
+         carb_frac = ifelse(split_rest_names %in% c("yams", "cass", "orts", "swpo") & is.na(carb_frac), tuber_gap$tub_carb, carb_frac)) %>% 
+  
+  ## gapfil rest and groundnuts
+    mutate(ratio_res_prod = ifelse(split_rest_names %in% c("rest", "grou", "vege") & is.na(ratio_res_prod), rest_gap$rest_res, ratio_res_prod),
+         dm = ifelse(split_rest_names %in% c("rest", "grou", "vege") & is.na(dm), rest_gap$rest_dm, dm),
+         carb_frac = ifelse(split_rest_names %in% c("rest", "grou", "vege") & is.na(carb_frac), rest_gap$rest_carb, carb_frac)) %>% 
+  
+  ##gapfill cocoa, temperate and tropical fruit trees with 0 because these do not have large amounts of residue and fields are not burned
+   mutate(ratio_res_prod = ifelse(split_rest_names %in% c("coco", "cnut", "temf", "trof", "bana", "plnt", "oilp"), 0, ratio_res_prod),
+         dm = ifelse(split_rest_names %in% c("coco", "cnut", "temf", "trof", "bana", "plnt", "oilp"), 0, dm),
+         carb_frac = ifelse(split_rest_names %in% c("coco", "cnut", "temf", "trof", "bana", "plnt", "oilp"), 0, carb_frac),
+         frac_ox =  ifelse(split_rest_names %in% c("coco", "cnut", "temf", "trof", "bana", "plnt", "oilp"), 0, frac_ox),
+         n_c_ratio =  ifelse(split_rest_names %in% c("coco", "cnut", "temf", "trof", "bana", "plnt", "oilp"), 0, n_c_ratio))
+```
+
+# Gapfill rest categories with 0 values
+```{r}
+param_gapfill2 <- 
+  param_gapfill2 %>% 
+  filter(!split_rest_names %in% c("tnut", "spis", "othr"))
+
+param_gapfill2 <- 
+  param_gapfill2 %>%
+  add_row(split_rest_names = c("tnut", "spis", "othr"),
+          param_gapfill2[1, 2:ncol(param_gapfill2)])
+```
+
+Save 
+```{r}
+write_csv(param_gapfill2, here("crop/ghg/data/burning_parameters_gf.csv"))
+```

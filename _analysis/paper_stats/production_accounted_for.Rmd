@@ -1,0 +1,280 @@
+---
+title: "Untitled"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Data summaries for paper:
+  
+```{r setup, include=FALSE}
+
+library(here)
+library(tidyverse)
+
+```
+
+
+# proportion of animal products we account for
+```{r}
+livestock_cats <- read_csv(here("_analysis/paper_stats/data/FAO_livestock_categories.csv")) %>%
+  filter(is.na(non_food_exclude))
+
+livestock <- read_csv(here("_analysis/paper_stats/data/FAOSTAT_data_12-18-2020_livestock_primary.csv")) %>%
+  filter(Area != "China") %>%
+  filter(!(is.na(Value))) %>%
+  filter(Item %in% livestock_cats$Item) %>%
+  left_join(livestock_cats, by="Item") %>%
+  group_by(included_for_us, category) %>%
+  summarize(tonnes = sum(Value)) 
+
+livestock_compare <- livestock %>%
+  spread(included_for_us, tonnes) %>%
+  mutate(yes = ifelse(is.na(yes), 0, yes)) %>%
+  rowwise() %>%
+  mutate(total = no+yes) %>%
+  mutate(percent_counted = yes/(yes + no))
+  
+```
+
+
+# proportion of crops we account for
+```{r}
+
+crop_translate<- read_csv(here("feed/data/MapSPAM_to_FAO.csv")) %>%
+  select(SPAM_short_name, SPAM_super, FAO_item_code) %>%
+  filter(!is.na(FAO_item_code)) %>%
+  unique()
+
+pe_crop_translate <- vroom::vroom(here("crop/farm/data/crop_codes.csv"))
+
+not_in_pe <- setdiff(crop_translate$FAO_item_code, pe_crop_translate$item_code)
+
+crop_super_cats <- read_csv(here("feed/data/MapSPAM_crop_info.csv"))
+Mapspam_prod <- read_csv(here("feed/data/MAPSPAMcrop_production.csv"))
+fao_crop_prod <- read_csv(here("_analysis/checking_data/data/FAOSTAT_data_12-21-2020_crops.csv")) %>%
+  select(Area, FAO_item_code=`Item Code`, Item, Unit, Value) %>%
+  filter(Area != "China")
+
+fao_not_in_pe <- filter(fao_crop_prod, FAO_item_code %in% not_in_pe)
+
+
+fao_tonnes <- left_join(fao_crop_prod,crop_translate) %>%
+  left_join(crop_super_cats, by="SPAM_super") %>%
+  dplyr::filter(!(is.na(food_group))) %>%
+  dplyr::filter(food_group != "exclude") %>%
+  group_by(food_group) %>%
+  summarize(tonnes_fao = sum(Value, na.rm=TRUE))
+
+spam_tonnes <- read_csv(here("feed/data/MAPSPAMcrop_production.csv")) %>%
+  left_join(crop_super_cats)%>%
+  dplyr::filter(!(is.na(food_group))) %>%
+  dplyr::filter(food_group != "exclude") %>%
+  group_by(food_group) %>%
+  summarize(tonnes_mapspam = sum(tonnes_producing_crop, na.rm=TRUE))
+
+## ID crop categories not counted in Mapspam but in FAO:
+fao_extra <- left_join(fao_crop_prod, crop_translate, by="FAO_item_code")
+filter(fao_extra, is.na(SPAM_super)) %>% data.frame()
+
+
+compare <- left_join(spam_tonnes, fao_tonnes) %>%
+  mutate(spam_percent = tonnes_mapspam/tonnes_fao)
+plot(compare$tonnes_mapspam, compare$tonnes_fao)
+abline(0,1, col="red")
+
+
+rice <- list.files("/home/shares/food-systems/Food_footprint/_raw_data/map_spam_crop_data/mapspam_2010v2.0/spam2010v2r0_global_prod.geotiff", pattern="RICE", full=TRUE)
+rice <- grep("_A.tif|_R.tif", rice, value=TRUE, invert=TRUE)
+rice_stack <- stack(rice)
+rice_rast <- calc(rice_stack, sum, na.rm=TRUE)
+cellStats(rice_rast, "sum", na.rm=TRUE)
+
+rice <- raster(list.files("/home/shares/food-systems/Food_footprint/_raw_data/map_spam_crop_data/mapspam_2010v2.0/spam2010v2r0_global_prod.geotiff", pattern="RICE_A.tif", full=TRUE))
+cellStats(rice, "sum", na.rm=TRUE)
+```
+
+# description of other category
+```{r}
+
+crop_other_translate <- read_csv(here("_analysis/paper_stats/int/other_cat.csv"))
+fao_crop_prod <- read_csv(here("_analysis/checking_data/data/FAOSTAT_data_12-21-2020_crops.csv")) %>%
+  select(Area, FAO_item_code=`Item Code`, Item, Unit, Value)
+
+## ID crop categories not counted in Mapspam but in FAO:
+left_join(fao_crop_prod, crop_other_translate, by="FAO_item_code") %>%
+  filter(SPAM_super=="rest") %>%
+  group_by(category) %>%
+  summarize(tonnes = sum(Value, na.rm=TRUE))
+
+left_join(fao_crop_prod, crop_other_translate, by="FAO_item_code") %>%
+  filter(SPAM_super=="rest") %>%
+  filter(category == "other") %>%
+  group_by(product_description_FAOSTAT) %>%
+  summarize(tonnes = sum(Value, na.rm=TRUE))
+
+
+
+filter(fao_extra, is.na(SPAM_super))
+fao_tonnes <- left_join(fao_extra, crop_super_cats, by="SPAM_super") %>%
+  dplyr::filter(!(is.na(food_group))) %>%
+  dplyr::filter(food_group != "exclude") %>%
+  group_by(food_group) %>%
+  summarize(tonnes_fao = sum(Value, na.rm=TRUE))
+
+spam_tonnes <- left_join(Mapspam_prod, crop_super_cats, by="SPAM_super") %>%
+  group_by(food_group) %>%
+  summarize(tonnes_mapspam = sum(tonnes_producing_crop, na.rm=TRUE))
+
+compare <- left_join(spam_tonnes, fao_tonnes) %>%
+  mutate(spam_percent = tonnes_mapspam/tonnes_fao)
+plot(compare$tonnes_mapspam, compare$tonnes_fao)
+abline(0,1, col="red")
+
+
+rice <- list.files("/home/shares/food-systems/Food_footprint/_raw_data/map_spam_crop_data/mapspam_2010v2.0/spam2010v2r0_global_prod.geotiff", pattern="RICE", full=TRUE)
+rice <- grep("_A.tif|_R.tif", rice, value=TRUE, invert=TRUE)
+rice_stack <- stack(rice)
+rice_rast <- calc(rice_stack, sum, na.rm=TRUE)
+cellStats(rice_rast, "sum", na.rm=TRUE)
+
+rice <- raster(list.files("/home/shares/food-systems/Food_footprint/_raw_data/map_spam_crop_data/mapspam_2010v2.0/spam2010v2r0_global_prod.geotiff", pattern="RICE_A.tif", full=TRUE))
+cellStats(rice, "sum", na.rm=TRUE)
+```
+
+
+
+### proportion of food accounting for
+```{r}
+# crops, including seaweeds
+sum(c(2632.1, 2366.2, 2246.5, 2083.3, 863.1, 774.7, 576.5, 335.7, 47.3, 0))/
+sum(c(3638.0, 2747.0, 2277.0, 2380.4, 985.8, 984.3, 591.7, 366.2, 51.4, 32.6))
+
+# meat and egg production (livestock, aquaculture, marine and freshwater fisheries)
+sum(c(341.8, 75.3, 7.1, 72.2, 39.1*0.1, 29.6))/
+sum(c(370, 81.4, 7.9, 72.2, 39.1, 31, 73.6, 1.9))
+
+73.6/                   #freshwater aquaculture contribution
+sum(c(370, 81.4, 7.9, 72.2, 39.1, 31, 73.6, 1.9))
+#milk
+828.4/831.3
+
+
+((11737-18) + 1245 + 7.1 + 72.2 + 39.1 + 0 + 29.6 + 0 + 0)/(11737 + 1285 + 12.7 + 72.2 + 39.1 + 32.6 + 31.0 + 48.7 + 1.9)
+
+```
+
+
+## some random checks, delete
+```{r}
+
+## check disturbance for all grazing animals (summed across animals) is around 0.8 
+files <- read_csv(here("_analysis/checking_data/data/raster_check.csv"))
+
+check <- grep("marine", files$file, value=TRUE)
+check <- grep("water", check, value=TRUE)
+check <- grep("_x_", check, value=TRUE, invert=TRUE)
+
+marine_files <- files %>%
+  filter(file %in% check)
+
+
+files <- read_csv(here("_analysis/checking_data/data/raster_check.csv"))
+
+check <- grep("grassland", files$file, value=TRUE)
+check <- grep("disturbance", check, value=TRUE)
+check <- grep("_x_", check, value=TRUE, invert=TRUE)
+
+grassland_files <- files %>%
+  filter(file %in% check) %>%
+  pull(file)
+
+grassland_stack <- stack(
+raster(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/%s", grassland_files[1])),
+raster(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/%s", grassland_files[2])),
+raster(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/%s", grassland_files[3])),
+raster(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/%s", grassland_files[4])),
+raster(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/%s", grassland_files[5])),
+raster(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/%s", grassland_files[6])),
+raster(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers/%s", grassland_files[7])))
+
+tmp <- calc(grassland_stack, sum, na.rm=TRUE, progress="text")
+tmp_area <- tmp/area(tmp)
+plot(tmp_area)
+tmp_area
+
+
+## Juliette reporting water use in marine stuff:
+
+## not seeing in rasters:
+tmp <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell_rescaled/gall_peter_wildcaught_marine_benthic_fisheries_meat_water_rescaled.tif")
+tmp
+
+tmp <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell_rescaled/gall_peter_wildcaught_marine_demersal_fisheries_meat_water_rescaled.tif")
+tmp
+
+tmp <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell_rescaled/gall_peter_wildcaught_marine_fofm_fisheries_meat_water_rescaled.tif")
+tmp
+
+tmp <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell_rescaled/gall_peter_wildcaught_marine_large-pelagic_fisheries_meat_water_rescaled.tif")
+tmp
+
+tmp <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell_rescaled/gall_peter_wildcaught_marine_medium-pelagic_fisheries_meat_water_rescaled.tif")
+tmp
+
+tmp <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell_rescaled/gall_peter_wildcaught_marine_reef_fisheries_meat_water_rescaled.tif")
+tmp
+
+tmp <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell_rescaled/gall_peter_wildcaught_marine_salmon_aquaculture_meat_water_rescaled.tif")
+tmp
+
+tmp <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell_rescaled/gall_peter_wildcaught_marine_small-pelagic_fisheries_meat_water_rescaled.tif")
+tmp
+
+check <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw_df_summary/rgn_raw_summary.csv") %>%
+  filter(origin=="marine" & pressure == "water") %>%
+  filter(sum>0)
+
+table(check$category)
+
+## appears to be only marine
+check <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw_df_summary/rgn_raw_summary.csv") %>%
+  filter(origin=="marine" & category == "feedfodder") %>%
+  filter(sum>0)
+
+
+```
+
+```{r}
+
+rescale <- read_csv(here("_analysis/rescale_values.csv"))
+
+
+check <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw_df_summary/rgn_raw_summary.csv") %>%
+  filter(iso3c=="USA") %>%
+  group_by(category, organism, pressure) %>%
+  summarize(pressure_val = sum(sum, na.rm=TRUE))
+
+cows <- filter(check, organism == "cows") %>%
+  left_join(rescale) %>%
+  mutate(prop_pressure = pressure_val/global_total)
+
+cows %>%
+  group_by(category) %>%
+  summarize(prop_pressure = sum(prop_pressure))
+
+crops <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw_df_summary/rgn_raw_summary.csv") %>%
+  filter(iso3c=="USA") %>%
+  filter(category == "farm" & product == "produce") %>%
+  group_by(category, pressure) %>%
+  summarize(pressure_val = sum(sum, na.rm=TRUE))
+
+crops <- crops %>%
+  left_join(rescale) %>%
+  mutate(prop_pressure = pressure_val/global_total)
+
+crops %>%
+  group_by(category) %>%
+  summarize(prop_pressure = sum(prop_pressure))
+
+```

@@ -1,0 +1,95 @@
+---
+title: "check_rest_categories.Rmd"
+output: html_document
+---
+
+# Set-up
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source("./_workflow/common.R")
+source(here("_workflow/common_spatial.R"))
+```
+
+List rasters per stressor
+```{r}
+
+# GHG
+
+# rest_ghg <- 
+#   raster(file.path(prep, "crop/farm/stressors/land_rest_crop_produce_ghg.tif")) %>% 
+#   cellStats(., stat = "sum")
+
+# crop_list_ghg <-
+#   list.files(file.path(prep, "crop/farm/stressors"),
+#              pattern = "land_(rest|tnut|othr|spis)_crop_produce_ghg.tif",
+#              full.names = TRUE)
+
+# Water
+
+rest_water <- 
+  raster(file.path(prep, "crop/farm/stressors/land_rest_crop_produce_water.tif")) %>% 
+  cellStats(., stat = "sum")
+
+new_water <- 
+  list.files(file.path(prep, "crop/farm/stressors"),
+           pattern = "land_(tnut|othr|spis)_crop_produce_water.tif",
+           full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, fun = sum) %>% 
+  cellStats(., stat = "sum")
+
+rest_water - new_water
+new_water/rest_water
+
+## Irrigation
+
+rest_irrigation <- 
+  raster(file.path(prep, "crop/water/irrigation/crop_rest_irrigation.tif")) %>% 
+  cellStats(., stat = "sum")
+
+new_irrigation <- 
+  list.files(file.path(prep, "crop/water/irrigation"),
+             pattern = "tnut|othr|spis",
+             full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, fun = sum) %>% 
+  cellStats(., stat = "sum")
+
+rest_water - new_water # -875956204
+new_water / rest_water # 1.027966
+
+# Nutrient
+
+rest_nutrient <- 
+  raster(file.path(prep, "crop/farm/stressors/land_rest_crop_produce_nutrient.tif")) %>% 
+  cellStats(., stat = "sum")
+
+new_nutrient <-
+  list.files(file.path(prep, "crop/farm/stressors"),
+             pattern = "land_(tnut|othr|spis)_crop_produce_nutrient.tif",
+             full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, fun = sum) %>% 
+  cellStats(., stat = "sum")
+
+rest_nutrient - new_nutrient
+new_nutrient/rest_nutrient
+
+# Disturbance
+
+rest_dist <- 
+  raster(file.path(prep, "crop/farm/stressors/land_rest_crop_produce_disturbance.tif")) %>% 
+  cellStats(., stat = "sum")
+
+new_dist <-
+  list.files(file.path(prep, "crop/farm/stressors"),
+             pattern = "land_(tnut|othr|spis)_crop_produce_disturbance.tif",
+             full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, fun = sum) %>% 
+  cellStats(., stat = "sum")
+
+rest_dist - new_dist
+new_dist/rest_dist
+```
+

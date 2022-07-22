@@ -1,0 +1,353 @@
+﻿region,species,variable,units,2010,2011,2012,2013,2014,2015,2016,2017,2018
+Rogaland,Total,Stock_Jan1_count,1000x,25936,29822,27816,27966,27432,28974,27990,29076,27731
+Rogaland,Salmon,Stock_Jan1_count,1000x,24934,28705,26753,26729,26292,28003,26761,27589,26354
+Rogaland,Rainbow trout,Stock_Jan1_count,1000x,25,43,26,19,19,37,30,NA,NA
+Rogaland,Other fish species,Stock_Jan1_count,1000x,977,1074,1037,1218,1121,934,1199,NA,NA
+Hordaland,Total,Stock_Jan1_count,1000x,59913,60375,71408,64757,67034,61911,66551,59880,65149
+Hordaland,Salmon,Stock_Jan1_count,1000x,48986,48402,58092,51023,55393,49892,54359,50621,55332
+Hordaland,Rainbow trout,Stock_Jan1_count,1000x,10477,11465,12277,12529,11621,12014,12112,9042,NA
+Hordaland,Other fish species,Stock_Jan1_count,1000x,450,508,1039,1205,20,5,80,217,NA
+Sogn og Fjordane,Total,Stock_Jan1_count,1000x,31711,35071,37951,36116,36530,35882,36846,36687,36633
+Sogn og Fjordane,Salmon,Stock_Jan1_count,1000x,26388,29355,30641,30627,30135,29690,30581,31002,31092
+Sogn og Fjordane,Rainbow trout,Stock_Jan1_count,1000x,3516,4710,5863,5191,NA,NA,NA,5313,NA
+Sogn og Fjordane,Other fish species,Stock_Jan1_count,1000x,1807,1006,1447,298,NA,NA,NA,372,NA
+Møre og Romsdal,Total,Stock_Jan1_count,1000x,43598,42731,38299,48487,33218,52538,25033,49155,23794
+Møre og Romsdal,Salmon,Stock_Jan1_count,1000x,35814,36347,31965,43319,29098,48410,21886,46026,19554
+Møre og Romsdal,Rainbow trout,Stock_Jan1_count,1000x,3372,3390,4291,NA,NA,NA,NA,NA,3757
+Møre og Romsdal,Other fish species,Stock_Jan1_count,1000x,4412,2994,2043,NA,NA,NA,NA,NA,483
+Trøndelag,Total,Stock_Jan1_count,1000x,0,0,0,0,0,0,0,0,90216
+Trøndelag,Salmon,Stock_Jan1_count,1000x,0,0,0,0,0,0,0,0,89199
+Trøndelag,Rainbow trout,Stock_Jan1_count,1000x,0,0,0,0,0,0,0,0,NA
+Trøndelag,Other fish species,Stock_Jan1_count,1000x,0,0,0,0,0,0,0,0,NA
+Sør-Trøndelag,Total,Stock_Jan1_count,1000x,40421,41313,46368,33773,57875,34889,56706,32256,0
+Sør-Trøndelag,Salmon,Stock_Jan1_count,1000x,39625,40271,46016,33694,57233,34035,56026,32256,0
+Sør-Trøndelag,Rainbow trout,Stock_Jan1_count,1000x,75,27,NA,NA,NA,NA,NA,NA,0
+Sør-Trøndelag,Other fish species,Stock_Jan1_count,1000x,721,NA,NA,NA,NA,NA,NA,NA,0
+Nord-Trøndelag,Total,Stock_Jan1_count,1000x,25304,31666,28929,30417,27548,28853,30458,27417,0
+Nord-Trøndelag,Salmon,Stock_Jan1_count,1000x,23713,30530,28929,NA,NA,28853,30286,27281,0
+Nord-Trøndelag,Rainbow trout,Stock_Jan1_count,1000x,0,0,NA,0,0,NA,NA,0,0
+Nord-Trøndelag,Other fish species,Stock_Jan1_count,1000x,1591,1136,NA,NA,NA,NA,NA,136,0
+Nordland,Total,Stock_Jan1_count,1000x,65926,66928,69106,69581,69229,75213,75355,78243,80196
+Nordland,Salmon,Stock_Jan1_count,1000x,55652,59616,64670,65163,65893,72830,72895,75961,78434
+Nordland,Rainbow trout,Stock_Jan1_count,1000x,818,1225,1481,2275,NA,1931,2115,1885,NA
+Nordland,Other fish species,Stock_Jan1_count,1000x,9456,6087,2955,2143,NA,452,345,397,NA
+Troms,Total,Stock_Jan1_count,1000x,37321,37125,43543,45348,47438,54166,55717,56892,57647
+Troms,Salmon,Stock_Jan1_count,1000x,36057,35197,41245,44710,NA,53345,55717,56772,57626
+Troms,Rainbow trout,Stock_Jan1_count,1000x,815,1296,2050,NA,NA,NA,NA,NA,NA
+Troms,Other fish species,Stock_Jan1_count,1000x,449,632,248,NA,0,NA,NA,NA,NA
+Finnmark,Total,Stock_Jan1_count,1000x,22302,23609,31678,34443,30783,30680,31698,34180,37994
+Finnmark,Salmon,Stock_Jan1_count,1000x,19732,22507,29796,32835,29998,30680,31531,34034,37910
+Finnmark,Rainbow trout,Stock_Jan1_count,1000x,2039,743,NA,NA,NA,0,NA,NA,NA
+Finnmark,Other fish species,Stock_Jan1_count,1000x,531,NA,NA,NA,NA,0,NA,NA,NA
+Other Counties,Total,Stock_Jan1_count,1000x,5468,6456,6045,6665,7302,6796,7321,5238,7952
+Other Counties,Salmon,Stock_Jan1_count,1000x,5140,5493,5486,NA,6932,6380,6893,4799,7244
+Other Counties,Rainbow trout,Stock_Jan1_count,1000x,23,24,59,20,60,61,62,68,248
+Other Counties,Other fish species,Stock_Jan1_count,1000x,305,939,500,NA,310,355,366,371,460
+Rogaland,Total,supplies_count,1000x,23672,18408,19850,20275,19418,19858,21220,19624,21349
+Rogaland,Salmon,supplies_count,1000x,23209,18038,18980,19163,19122,19392,20747,19309,20660
+Rogaland,Rainbow trout,supplies_count,1000x,41,14,14,21,20,8,0,NA,NA
+Rogaland,Other fish species,supplies_count,1000x,422,356,856,1092,276,458,473,NA,NA
+Hordaland,Total,supplies_count,1000x,46766,59774,51480,57774,52363,56660,55329,61858,61050
+Hordaland,Salmon,supplies_count,1000x,36198,47220,40490,46647,40960,45944,44908,49982,48514
+Hordaland,Rainbow trout,supplies_count,1000x,10471,10605,10576,9813,11390,10600,10230,11840,NA
+Hordaland,Other fish species,supplies_count,1000x,97,1949,414,1314,13,116,191,36,NA
+Sogn og Fjordane,Total,supplies_count,1000x,26579,27599,27447,28534,29181,29623,29952,29972,27128
+Sogn og Fjordane,Salmon,supplies_count,1000x,21757,21626,22529,22931,23820,24201,25217,25918,22496
+Sogn og Fjordane,Rainbow trout,supplies_count,1000x,4240,4429,4292,4760,NA,NA,NA,3891,NA
+Sogn og Fjordane,Other fish species,supplies_count,1000x,582,1544,626,843,NA,NA,NA,163,NA
+Møre og Romsdal,Total,supplies_count,1000x,32061,29507,41947,18346,50495,17385,51451,16728,58213
+Møre og Romsdal,Salmon,supplies_count,1000x,28120,25442,37778,14123,47175,14952,48116,13065,54031
+Møre og Romsdal,Rainbow trout,supplies_count,1000x,2656,3035,3011,NA,NA,NA,NA,NA,3895
+Møre og Romsdal,Other fish species,supplies_count,1000x,1285,1030,1158,NA,NA,NA,NA,NA,287
+Trøndelag,Total,supplies_count,1000x,0,0,0,0,0,0,0,0,45666
+Trøndelag,Salmon,supplies_count,1000x,0,0,0,0,0,0,0,0,44072
+Trøndelag,Rainbow trout,supplies_count,1000x,0,0,0,0,0,0,0,0,NA
+Trøndelag,Other fish species,supplies_count,1000x,0,0,0,0,0,0,0,0,NA
+Sør-Trøndelag,Total,supplies_count,1000x,29240,44334,23417,54462,16463,53418,19563,56366,0
+Sør-Trøndelag,Salmon,supplies_count,1000x,28692,44034,23359,53881,16094,53243,19563,54886,0
+Sør-Trøndelag,Rainbow trout,supplies_count,1000x,10,0,NA,NA,NA,NA,NA,NA,0
+Sør-Trøndelag,Other fish species,supplies_count,1000x,538,NA,NA,NA,NA,NA,NA,NA,0
+Nord-Trøndelag,Total,supplies_count,1000x,24510,19091,27570,20855,25931,25796,21529,26337,0
+Nord-Trøndelag,Salmon,supplies_count,1000x,24510,19087,27566,NA,NA,25619,21367,26049,0
+Nord-Trøndelag,Rainbow trout,supplies_count,1000x,0,0,NA,0,0,NA,NA,0,0
+Nord-Trøndelag,Other fish species,supplies_count,1000x,0,4,NA,NA,NA,NA,NA,288,0
+Nordland,Total,supplies_count,1000x,53023,51430,50000,58068,59589,59565,68133,65909,71180
+Nordland,Salmon,supplies_count,1000x,48815,48800,47811,54915,57834,57614,66040,64338,69640
+Nordland,Rainbow trout,supplies_count,1000x,724,920,598,1697,NA,1539,1583,958,NA
+Nordland,Other fish species,supplies_count,1000x,3484,1710,1591,1456,NA,412,510,613,NA
+Troms,Total,supplies_count,1000x,27838,31915,35655,35648,38855,41159,40858,50389,48125
+Troms,Salmon,supplies_count,1000x,25635,30812,34670,35056,NA,41159,40593,50168,48116
+Troms,Rainbow trout,supplies_count,1000x,1377,998,935,NA,NA,NA,NA,NA,NA
+Troms,Other fish species,supplies_count,1000x,826,105,50,NA,0,NA,NA,NA,NA
+Finnmark,Total,supplies_count,1000x,17974,23295,22700,21125,21930,24880,25757,27870,31647
+Finnmark,Salmon,supplies_count,1000x,17104,22039,22694,21065,21870,24880,25677,27870,31567
+Finnmark,Rainbow trout,supplies_count,1000x,582,1096,NA,NA,NA,0,NA,NA,NA
+Finnmark,Other fish species,supplies_count,1000x,288,NA,NA,NA,NA,0,NA,NA,NA
+Other Counties,Total,supplies_count,1000x,3603,5089,4068,5653,4866,6034,2894,6969,3638
+Other Counties,Salmon,supplies_count,1000x,3279,4122,3451,NA,4502,5723,2531,6294,2428
+Other Counties,Rainbow trout,supplies_count,1000x,159,201,186,229,151,146,148,366,949
+Other Counties,Other fish species,supplies_count,1000x,165,766,431,NA,213,165,215,309,261
+Rogaland,Total,delivered_for_sale_count,1000x,14214,15240,17014,16999,12920,16569,15533,16615,14489
+Rogaland,Salmon,delivered_for_sale_count,1000x,13984,14987,16430,16129,12747,16446,15382,16324,14230
+Rogaland,Rainbow trout,delivered_for_sale_count,1000x,6,29,4,9,10,8,11,NA,NA
+Rogaland,Other fish species,delivered_for_sale_count,1000x,224,224,580,861,163,115,140,NA,NA
+Hordaland,Total,delivered_for_sale_count,1000x,37675,40310,50472,43958,46614,41321,50536,41198,47836
+Hordaland,Salmon,delivered_for_sale_count,1000x,30259,31970,41095,34900,37338,32538,38761,32435,39047
+Hordaland,Rainbow trout,delivered_for_sale_count,1000x,7087,8322,9107,8962,9276,8783,11775,8763,NA
+Hordaland,Other fish species,delivered_for_sale_count,1000x,329,18,270,96,0,0,0,0,NA
+Sogn og Fjordane,Total,delivered_for_sale_count,1000x,19779,21135,24752,24824,25460,24680,25356,24086,22696
+Sogn og Fjordane,Salmon,delivered_for_sale_count,1000x,16686,17466,19721,21088,20810,20207,20910,20292,18491
+Sogn og Fjordane,Rainbow trout,delivered_for_sale_count,1000x,2437,2999,4124,3377,NA,NA,NA,3787,NA
+Sogn og Fjordane,Other fish species,delivered_for_sale_count,1000x,656,670,907,358,NA,NA,NA,7,NA
+Møre og Romsdal,Total,delivered_for_sale_count,1000x,26951,27582,28066,28728,26433,39326,21476,35236,19643
+Møre og Romsdal,Salmon,delivered_for_sale_count,1000x,22707,23499,24348,25406,23541,36319,18422,32952,16157
+Møre og Romsdal,Rainbow trout,delivered_for_sale_count,1000x,2701,2871,2913,NA,NA,NA,NA,NA,3294
+Møre og Romsdal,Other fish species,delivered_for_sale_count,1000x,1543,1212,805,NA,NA,NA,NA,NA,192
+Trøndelag,Total,delivered_for_sale_count,1000x,0,0,0,0,0,0,0,0,68000
+Trøndelag,Salmon,delivered_for_sale_count,1000x,0,0,0,0,0,0,0,0,67231
+Trøndelag,Rainbow trout,delivered_for_sale_count,1000x,0,0,0,0,0,0,0,0,NA
+Trøndelag,Other fish species,delivered_for_sale_count,1000x,0,0,0,0,0,0,0,0,NA
+Sør-Trøndelag,Total,delivered_for_sale_count,1000x,20509,29661,30205,25350,37414,26206,34092,20310,0
+Sør-Trøndelag,Salmon,delivered_for_sale_count,1000x,20277,29494,29920,25313,37348,26027,34062,20310,0
+Sør-Trøndelag,Rainbow trout,delivered_for_sale_count,1000x,48,18,NA,NA,NA,NA,NA,NA,0
+Sør-Trøndelag,Other fish species,delivered_for_sale_count,1000x,184,NA,NA,NA,NA,NA,NA,NA,0
+Nord-Trøndelag,Total,delivered_for_sale_count,1000x,16867,16495,23098,20563,21241,26348,21175,21301,0
+Nord-Trøndelag,Salmon,delivered_for_sale_count,1000x,16333,15700,23098,NA,NA,26348,21057,21256,0
+Nord-Trøndelag,Rainbow trout,delivered_for_sale_count,1000x,0,0,NA,0,0,NA,NA,0,0
+Nord-Trøndelag,Other fish species,delivered_for_sale_count,1000x,534,795,NA,NA,NA,NA,NA,45,0
+Nordland,Total,delivered_for_sale_count,1000x,41207,36959,46704,48739,47266,52772,57181,56145,54277
+Nordland,Salmon,delivered_for_sale_count,1000x,36005,33272,44155,45948,44808,51358,55260,54302,52587
+Nordland,Rainbow trout,delivered_for_sale_count,1000x,267,545,741,1038,NA,976,1521,1393,NA
+Nordland,Other fish species,delivered_for_sale_count,1000x,4935,3142,1808,1753,NA,438,400,450,NA
+Troms,Total,delivered_for_sale_count,1000x,21591,21076,27630,27489,28367,33812,35168,43960,37739
+Troms,Salmon,delivered_for_sale_count,1000x,20453,20399,26124,26927,NA,33074,35018,43835,37730
+Troms,Rainbow trout,delivered_for_sale_count,1000x,793,388,1343,NA,NA,NA,NA,NA,NA
+Troms,Other fish species,delivered_for_sale_count,1000x,345,289,163,NA,0,NA,NA,NA,NA
+Finnmark,Total,delivered_for_sale_count,1000x,12153,10930,15209,19356,18597,16902,18261,18861,21802
+Finnmark,Salmon,delivered_for_sale_count,1000x,10176,10600,14974,18617,18015,16902,18194,18803,21742
+Finnmark,Rainbow trout,delivered_for_sale_count,1000x,1607,188,NA,NA,NA,0,NA,NA,NA
+Finnmark,Other fish species,delivered_for_sale_count,1000x,370,NA,NA,NA,NA,0,NA,NA,NA
+Other Counties,Total,delivered_for_sale_count,1000x,2760,3603,3306,3591,5249,3593,3705,3789,3181
+Other Counties,Salmon,delivered_for_sale_count,1000x,2474,3154,2866,NA,4972,3344,3377,3408,2801
+Other Counties,Rainbow trout,delivered_for_sale_count,1000x,143,183,182,58,137,109,142,196,202
+Other Counties,Other fish species,delivered_for_sale_count,1000x,143,266,258,NA,140,140,186,185,178
+Rogaland,Total,loss_count,1000x,5575,5166,2685,4179,5260,4276,4196,4354,4831
+Rogaland,Salmon,loss_count,1000x,5455,5041,2576,3843,4955,4188,4071,4220,4702
+Rogaland,Rainbow trout,loss_count,1000x,18,6,14,9,6,10,10,NA,NA
+Rogaland,Other fish species,loss_count,1000x,102,119,95,327,299,78,115,NA,NA
+Hordaland,Total,loss_count,1000x,9118,8291,8053,9980,11607,10872,10643,15621,13098
+Hordaland,Salmon,loss_count,1000x,6794,5423,6552,7406,9875,8970,9123,13362,10698
+Hordaland,Rainbow trout,loss_count,1000x,2218,1511,1216,1760,1722,1871,1465,2168,NA
+Hordaland,Other fish species,loss_count,1000x,106,1357,285,814,10,31,55,91,NA
+Sogn og Fjordane,Total,loss_count,1000x,2441,3491,3961,2989,4609,3979,4917,6411,6861
+Sogn og Fjordane,Salmon,loss_count,1000x,1734,2693,2832,2132,3695,3104,3885,5535,5987
+Sogn og Fjordane,Rainbow trout,loss_count,1000x,426,364,797,794,NA,NA,NA,820,NA
+Sogn og Fjordane,Other fish species,loss_count,1000x,281,434,332,63,NA,NA,NA,56,NA
+Møre og Romsdal,Total,loss_count,1000x,5942,7795,5304,3624,4884,5667,5749,6762,6100
+Møre og Romsdal,Salmon,loss_count,1000x,4618,6804,3686,2697,4463,5261,5452,6400,5526
+Møre og Romsdal,Rainbow trout,loss_count,1000x,141,222,1014,NA,NA,NA,NA,NA,511
+Møre og Romsdal,Other fish species,loss_count,1000x,1183,769,604,NA,NA,NA,NA,NA,63
+Trøndelag,Total,loss_count,1000x,0,0,0,0,0,0,0,0,7964
+Trøndelag,Salmon,loss_count,1000x,0,0,0,0,0,0,0,0,7839
+Trøndelag,Rainbow trout,loss_count,1000x,0,0,0,0,0,0,0,0,NA
+Trøndelag,Other fish species,loss_count,1000x,0,0,0,0,0,0,0,0,NA
+Sør-Trøndelag,Total,loss_count,1000x,7375,8322,4140,5040,3679,5386,10411,6253,0
+Sør-Trøndelag,Salmon,loss_count,1000x,7307,7501,4093,5029,3666,5215,9761,6219,0
+Sør-Trøndelag,Rainbow trout,loss_count,1000x,8,5,NA,NA,NA,NA,NA,NA,0
+Sør-Trøndelag,Other fish species,loss_count,1000x,60,NA,NA,NA,NA,NA,NA,NA,0
+Nord-Trøndelag,Total,loss_count,1000x,3455,4967,2984,3160,2277,2398,3971,3602,0
+Nord-Trøndelag,Salmon,loss_count,1000x,3445,4622,2980,NA,NA,2392,3891,3529,0
+Nord-Trøndelag,Rainbow trout,loss_count,1000x,0,0,NA,0,0,NA,NA,0,0
+Nord-Trøndelag,Other fish species,loss_count,1000x,10,345,NA,NA,NA,NA,NA,73,0
+Nordland,Total,loss_count,1000x,8954,10513,5809,8999,7590,9580,9035,6914,7298
+Nordland,Salmon,loss_count,1000x,6904,9011,5084,7659,7338,9125,8683,6739,7501
+Nordland,Rainbow trout,loss_count,1000x,50,184,125,219,NA,377,293,142,NA
+Nordland,Other fish species,loss_count,1000x,2000,1318,600,1121,NA,78,59,33,NA
+Troms,Total,loss_count,1000x,6146,5175,5483,4865,3722,5354,4869,5958,5842
+Troms,Salmon,loss_count,1000x,5861,4979,5297,4802,NA,5271,4867,5946,5830
+Troms,Rainbow trout,loss_count,1000x,103,111,111,NA,NA,NA,NA,NA,NA
+Troms,Other fish species,loss_count,1000x,182,85,75,NA,0,NA,NA,NA,NA
+Finnmark,Total,loss_count,1000x,4578,4395,4725,3604,3236,7127,5014,5195,4204
+Finnmark,Salmon,loss_count,1000x,4153,4251,4679,3460,3174,7127,4980,5191,4198
+Finnmark,Rainbow trout,loss_count,1000x,270,143,NA,NA,NA,0,NA,NA,NA
+Finnmark,Other fish species,loss_count,1000x,155,NA,NA,NA,NA,0,NA,NA,NA
+Other Counties,Total,loss_count,1000x,614,1003,332,541,463,1128,1274,489,610
+Other Counties,Salmon,loss_count,1000x,580,646,200,NA,422,1098,1247,431,566
+Other Counties,Rainbow trout,loss_count,1000x,17,17,7,11,13,6,4,30,20
+Other Counties,Other fish species,loss_count,1000x,17,340,125,NA,28,24,23,28,24
+Rogaland,Total,stock_dec_31_count,1000x,29821,27824,27967,27063,28671,27987,29481,27731,29761
+Rogaland,Salmon,stock_dec_31_count,1000x,28705,26715,26727,25920,27712,26761,28055,26354,28082
+Rogaland,Rainbow trout,stock_dec_31_count,1000x,43,22,22,22,23,27,10,NA,NA
+Rogaland,Other fish species,stock_dec_31_count,1000x,1073,1087,1218,1121,936,1199,1416,NA,NA
+Hordaland,Total,stock_dec_31_count,1000x,59886,71548,64362,68593,61175,66376,60701,64919,65266
+Hordaland,Salmon,stock_dec_31_count,1000x,48131,58229,50935,55364,49139,54327,51383,54807,54102
+Hordaland,Rainbow trout,stock_dec_31_count,1000x,11643,12237,12529,11621,12014,11959,9102,9950,NA
+Hordaland,Other fish species,stock_dec_31_count,1000x,112,1082,898,1609,22,90,216,162,NA
+Sogn og Fjordane,Total,stock_dec_31_count,1000x,36072,38046,36685,36837,35642,36846,36527,36163,34203
+Sogn og Fjordane,Salmon,stock_dec_31_count,1000x,29725,30822,30617,30337,29450,30581,31003,31093,29109
+Sogn og Fjordane,Rainbow trout,stock_dec_31_count,1000x,4894,5777,5234,5780,NA,NA,NA,4597,NA
+Sogn og Fjordane,Other fish species,stock_dec_31_count,1000x,1453,1447,834,720,NA,NA,NA,473,NA
+Møre og Romsdal,Total,stock_dec_31_count,1000x,42765,36860,46876,34480,52397,24931,49260,23884,56265
+Møre og Romsdal,Salmon,stock_dec_31_count,1000x,36609,31485,41710,29338,48270,21783,46129,19739,51903
+Møre og Romsdal,Rainbow trout,stock_dec_31_count,1000x,3185,3332,3375,NA,NA,NA,NA,NA,3847
+Møre og Romsdal,Other fish species,stock_dec_31_count,1000x,2971,2043,1791,NA,NA,NA,NA,NA,515
+Trøndelag,Total,stock_dec_31_count,1000x,0,0,0,0,0,0,0,0,59919
+Trøndelag,Salmon,stock_dec_31_count,1000x,0,0,0,0,0,0,0,0,58201
+Trøndelag,Rainbow trout,stock_dec_31_count,1000x,0,0,0,0,0,0,0,0,NA
+Trøndelag,Other fish species,stock_dec_31_count,1000x,0,0,0,0,0,0,0,0,NA
+Sør-Trøndelag,Total,stock_dec_31_count,1000x,41776,47664,35442,57846,33245,56717,31767,62058,0
+Sør-Trøndelag,Salmon,stock_dec_31_count,1000x,40732,47310,35362,57233,32314,56037,31767,60613,0
+Sør-Trøndelag,Rainbow trout,stock_dec_31_count,1000x,29,4,NA,NA,NA,NA,NA,NA,0
+Sør-Trøndelag,Other fish species,stock_dec_31_count,1000x,1015,NA,NA,NA,NA,NA,NA,NA,0
+Nord-Trøndelag,Total,stock_dec_31_count,1000x,29492,29296,30418,27548,29960,25904,26841,28850,0
+Nord-Trøndelag,Salmon,stock_dec_31_count,1000x,28446,29296,30418,NA,NA,25733,26705,28545,0
+Nord-Trøndelag,Rainbow trout,stock_dec_31_count,1000x,0,0,NA,0,0,NA,NA,0,0
+Nord-Trøndelag,Other fish species,stock_dec_31_count,1000x,1046,0,NA,NA,NA,NA,NA,305,0
+Nordland,Total,stock_dec_31_count,1000x,68789,70886,66593,69911,73963,72423,77274,81093,89801
+Nordland,Salmon,stock_dec_31_count,1000x,61559,66133,63242,66471,71581,69960,74992,79258,87985
+Nordland,Rainbow trout,stock_dec_31_count,1000x,1225,1416,1213,2715,NA,2115,1885,1308,NA
+Nordland,Other fish species,stock_dec_31_count,1000x,6005,3337,2138,725,NA,348,397,527,NA
+Troms,Total,stock_dec_31_count,1000x,37421,42789,46083,48642,54204,56159,56538,57363,62190
+Troms,Salmon,stock_dec_31_count,1000x,35376,40631,44494,48037,NA,56159,56425,57159,62181
+Troms,Rainbow trout,stock_dec_31_count,1000x,1296,1795,1530,NA,NA,NA,NA,NA,NA
+Troms,Other fish species,stock_dec_31_count,1000x,749,363,59,NA,0,NA,NA,NA,NA
+Finnmark,Total,stock_dec_31_count,1000x,23544,31577,34444,32608,30880,31531,34180,37994,43635
+Finnmark,Salmon,stock_dec_31_count,1000x,22507,29695,32837,31823,30680,31531,34034,37910,43537
+Finnmark,Rainbow trout,stock_dec_31_count,1000x,743,1507,NA,NA,NA,0,NA,NA,NA
+Finnmark,Other fish species,stock_dec_31_count,1000x,294,NA,NA,NA,NA,0,NA,NA,NA
+Other Counties,Total,stock_dec_31_count,1000x,5696,6940,6475,8186,6456,8109,5235,7927,7800
+Other Counties,Salmon,stock_dec_31_count,1000x,5365,5815,5871,NA,6040,7661,4799,7253,6305
+Other Counties,Rainbow trout,stock_dec_31_count,1000x,22,25,56,180,61,92,64,207,975
+Other Counties,Other fish species,stock_dec_31_count,1000x,309,1100,548,NA,355,356,372,467,520
+Rogaland,Total,loss_percent,percent,20.0,17.9,9.6,15.2,18.8,15.0,14.6,15.3,16.8
+Rogaland,Salmon,loss_percent,percent,20.3,18.2,9.6,14.6,18.4,15.3,14.9,15.6,17.3
+Rogaland,Rainbow trout,loss_percent,percent,52.9,18.4,59.2,43.7,29.2,30.3,48.1,NA,NA
+Rogaland,Other fish species,loss_percent,percent,10.0,11.0,8.4,28.0,29.1,7.3,8.8,NA,NA
+Hordaland,Total,loss_percent,percent,15.2,12.6,11.9,15.0,18.1,16.9,16.7,25.0,20.1
+Hordaland,Salmon,loss_percent,percent,14.0,10.2,12.0,13.9,18.9,17.2,17.3,25.3,19.6
+Hordaland,Rainbow trout,loss_percent,percent,20.1,12.8,9.8,14.6,14.6,15.6,13.8,22.8,NA
+Hordaland,Other fish species,loss_percent,percent,37.7,170.8,29.4,57.9,49.5,65.4,37.0,48.0,NA
+Sogn og Fjordane,Total,loss_percent,percent,7.2,9.5,10.6,8.2,12.8,10.9,13.4,17.6,19.4
+Sogn og Fjordane,Salmon,loss_percent,percent,6.2,8.9,9.2,7.0,12.4,10.3,12.6,17.8,19.9
+Sogn og Fjordane,Rainbow trout,loss_percent,percent,10.1,6.9,14.4,14.5,NA,NA,NA,16.5,NA
+Sogn og Fjordane,Other fish species,loss_percent,percent,17.2,35.3,29.1,12.4,NA,NA,NA,13.2,NA
+Møre og Romsdal,Total,loss_percent,percent,13.8,19.6,12.5,8.7,11.4,14.6,15.5,18.5,15.2
+Møre og Romsdal,Salmon,loss_percent,percent,12.8,20.1,10.0,7.4,11.5,15.0,16.0,19.5,15.5
+Møre og Romsdal,Rainbow trout,loss_percent,percent,4.3,6.6,26.5,NA,NA,NA,NA,NA,13.4
+Møre og Romsdal,Other fish species,loss_percent,percent,32.1,30.5,31.5,NA,NA,NA,NA,NA,12.5
+Trøndelag,Total,loss_percent,percent,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,10.6
+Trøndelag,Salmon,loss_percent,percent,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,10.6
+Trøndelag,Rainbow trout,loss_percent,percent,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,NA
+Trøndelag,Other fish species,loss_percent,percent,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,NA
+Sør-Trøndelag,Total,loss_percent,percent,17.9,18.7,10.1,11.0,8.1,11.8,23.5,13.3,0.0
+Sør-Trøndelag,Salmon,loss_percent,percent,18.2,17.1,10.1,11.1,8.2,11.6,22.2,13.4,0.0
+Sør-Trøndelag,Rainbow trout,loss_percent,percent,15.4,34.8,NA,NA,NA,NA,NA,NA,0.0
+Sør-Trøndelag,Other fish species,loss_percent,percent,6.9,NA,NA,NA,NA,NA,NA,NA,0.0
+Nord-Trøndelag,Total,loss_percent,percent,12.6,16.3,10.1,10.9,7.9,8.8,13.9,12.8,0.0
+Nord-Trøndelag,Salmon,loss_percent,percent,13.2,15.5,10.0,NA,NA,8.8,13.7,12.6,0.0
+Nord-Trøndelag,Rainbow trout,loss_percent,percent,0,0.0,NA,0,0.0,NA,NA,0.0,0.0
+Nord-Trøndelag,Other fish species,loss_percent,percent,0.8,60.7,NA,NA,NA,NA,NA,33.3,0.0
+Nordland,Total,loss_percent,percent,13.3,15.3,8.6,12.9,10.6,13.0,11.8,8.7,8.6
+Nordland,Salmon,loss_percent,percent,11.8,14.3,7.9,11.6,10.7,12.8,11.7,8.7,9.0
+Nordland,Rainbow trout,loss_percent,percent,4.9,13.9,9.2,8.8,NA,18.7,14.6,8.9,NA
+Nordland,Other fish species,loss_percent,percent,25.9,28.0,23.6,78.2,NA,19.5,15.9,7.1,NA
+Troms,Total,loss_percent,percent,16.4,13.0,12.2,10.4,7.3,9.7,8.7,10.4,9.7
+Troms,Salmon,loss_percent,percent,16.4,13.1,12.4,10.4,NA,9.6,8.7,10.4,9.7
+Troms,Rainbow trout,loss_percent,percent,9.8,7.2,6.2,NA,NA,NA,NA,NA,NA
+Troms,Other fish species,loss_percent,percent,30.3,17.0,49.0,NA,0.0,NA,NA,NA,NA
+Finnmark,Total,loss_percent,percent,20.0,15.9,14.3,10.8,10.5,22.9,15.2,14.4,10.3
+Finnmark,Salmon,loss_percent,percent,19.7,16.3,14.9,10.7,10.5,22.9,15.2,14.4,10.3
+Finnmark,Rainbow trout,loss_percent,percent,19.4,12.7,NA,NA,NA,0.0,NA,NA,NA
+Finnmark,Other fish species,loss_percent,percent,37.6,NA,NA,NA,NA,0.0,NA,NA,NA
+Other Counties,Total,loss_percent,percent,11.0,15.0,5.3,7.3,6.7,15.1,20.3,7.4,7.7
+Other Counties,Salmon,loss_percent,percent,11.0,11.4,3.5,NA,6.5,15.6,21.3,7.2,8.4
+Other Counties,Rainbow trout,loss_percent,percent,75.6,69.6,12.6,10.7,22.2,7.3,6.4,21.8,3.2
+Other Counties,Other fish species,loss_percent,percent,5.5,33.3,24.0,NA,8.5,6.7,6.2,6.7,4.8
+Rogaland,Total,tonnes_fish,tonnes,65669,70240,84030,77816,62144,83580,76324,79748,65243
+Rogaland,Salmon,tonnes_fish,tonnes,64336,69054,82732,76872,61436,83055,75661,78723,64019
+Rogaland,Rainbow trout,tonnes_fish,tonnes,32,111,NA,NA,NA,NA,NA,NA,NA
+Rogaland,Char,tonnes_fish,tonnes,0,NA,0,0,0,0,NA,0,0
+Rogaland,Cod,tonnes_fish,tonnes,50,136,321,NA,NA,NA,NA,NA,0
+Rogaland,Halibut,tonnes_fish,tonnes,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Rogaland,Shellfish,tonnes_fish,tonnes,52,4,NA,NA,21,7,NA,12,26
+Rogaland,Other fish species,tonnes_fish,tonnes,NA,0,NA,0,0,0,0,0,0
+Hordaland,Total,tonnes_fish,tonnes,164298,188474,241125,197481,208907,199715,224508,199686,207584
+Hordaland,Salmon,tonnes_fish,tonnes,136972,156419,203525,160524,172004,164058,173790,160061,172670
+Hordaland,Rainbow trout,tonnes_fish,tonnes,26407,32004,37586,36905,36867,35628,50698,39580,34867
+Hordaland,Char,tonnes_fish,tonnes,0,NA,0,0,0,0,0,0,0
+Hordaland,Cod,tonnes_fish,tonnes,888,38,0,NA,0,0,0,0,0
+Hordaland,Halibut,tonnes_fish,tonnes,0,0,0,0,NA,0,0,0,NA
+Hordaland,Shellfish,tonnes_fish,tonnes,31,13,15,NA,NA,29,19,45,NA
+Hordaland,Other fish species,tonnes_fish,tonnes,0,NA,0,0,0,0,0,0,0
+Sogn og Fjordane,Total,tonnes_fish,tonnes,88636,107381,114886,116126,112873,120202,120775,107982,96304
+Sogn og Fjordane,Salmon,tonnes_fish,tonnes,78220,94063,NA,102132,97071,100484,104647,93529,81408
+Sogn og Fjordane,Rainbow trout,tonnes_fish,tonnes,8856,11592,16358,12875,14643,19562,16084,14394,14668
+Sogn og Fjordane,Char,tonnes_fish,tonnes,0,NA,0,0,0,0,0,0,0
+Sogn og Fjordane,Cod,tonnes_fish,tonnes,1435,1725,0,NA,1098,0,0,0,NA
+Sogn og Fjordane,Halibut,tonnes_fish,tonnes,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Sogn og Fjordane,Shellfish,tonnes_fish,tonnes,66,1,25,307,NA,120,NA,NA,NA
+Sogn og Fjordane,Other fish species,tonnes_fish,tonnes,NA,NA,0,0,0,NA,0,0,0
+Møre og Romsdal,Total,tonnes_fish,tonnes,124011,141336,131738,142608,133631,179692,105264,171880,90370
+Møre og Romsdal,Salmon,tonnes_fish,tonnes,111683,127120,118000,128337,123476,171091,89363,162953,78306
+Møre og Romsdal,Rainbow trout,tonnes_fish,tonnes,8719,10215,NA,NA,NA,NA,NA,8319,NA
+Møre og Romsdal,Char,tonnes_fish,tonnes,0,NA,0,0,0,0,0,0,0
+Møre og Romsdal,Cod,tonnes_fish,tonnes,3249,2591,NA,NA,0,0,0,0,0
+Møre og Romsdal,Halibut,tonnes_fish,tonnes,351,1401,NA,474,NA,NA,NA,NA,NA
+Møre og Romsdal,Shellfish,tonnes_fish,tonnes,9,9,9,NA,NA,NA,NA,NA,NA
+Møre og Romsdal,Other fish species,tonnes_fish,tonnes,0,NA,0,0,0,0,0,0,0
+Trøndelag,Total,tonnes_fish,tonnes,0,0,0,0,0,0,0,0,324080
+Trøndelag,Salmon,tonnes_fish,tonnes,0,0,0,0,0,0,0,0,319783
+Trøndelag,Rainbow trout,tonnes_fish,tonnes,0,0,0,0,0,0,0,0,NA
+Trøndelag,Char,tonnes_fish,tonnes,0,0,0,0,0,0,0,0,NA
+Trøndelag,Cod,tonnes_fish,tonnes,0,0,0,0,0,0,0,0,NA
+Trøndelag,Halibut,tonnes_fish,tonnes,0,0,0,0,0,0,0,0,0
+Trøndelag,Shellfish,tonnes_fish,tonnes,0,0,0,0,0,0,0,0,1083
+Trøndelag,Other fish species,tonnes_fish,tonnes,0,0,0,0,0,0,0,0,0
+Sør-Trøndelag,Total,tonnes_fish,tonnes,108541,147031,142142,134613,206476,144231,167925,99694,0
+Sør-Trøndelag,Salmon,tonnes_fish,tonnes,107325,146085,141316,133716,205471,142527,167256,98825,0
+Sør-Trøndelag,Rainbow trout,tonnes_fish,tonnes,175,56,0,0,NA,NA,NA,0,0
+Sør-Trøndelag,Char,tonnes_fish,tonnes,NA,NA,NA,NA,NA,NA,NA,0,0
+Sør-Trøndelag,Cod,tonnes_fish,tonnes,NA,NA,0,0,0,0,0,0,0
+Sør-Trøndelag,Halibut,tonnes_fish,tonnes,0,NA,0,0,0,0,0,0,0
+Sør-Trøndelag,Shellfish,tonnes_fish,tonnes,522,702,NA,NA,970,1137,650,869,0
+Sør-Trøndelag,Other fish species,tonnes_fish,tonnes,0,0,0,0,0,0,0,0,0
+Nord-Trøndelag,Total,tonnes_fish,tonnes,82373,83416,121978,93147,104089,110584,94695,90521,0
+Nord-Trøndelag,Salmon,tonnes_fish,tonnes,80162,80803,121526,92651,103572,109298,93968,89800,0
+Nord-Trøndelag,Rainbow trout,tonnes_fish,tonnes,0,0,0,0,0,0,NA,0,0
+Nord-Trøndelag,Char,tonnes_fish,tonnes,0,NA,0,0,0,0,0,NA,0
+Nord-Trøndelag,Cod,tonnes_fish,tonnes,NA,NA,0,0,0,0,0,NA,0
+Nord-Trøndelag,Halibut,tonnes_fish,tonnes,NA,NA,0,0,0,0,NA,0,0
+Nord-Trøndelag,Shellfish,tonnes_fish,tonnes,608,378,452,496,517,1286,487,611,0
+Nord-Trøndelag,Other fish species,tonnes_fish,tonnes,0,0,0,0,0,0,0,0,0
+Nordland,Total,tonnes_fish,tonnes,205687,227943,239861,240795,240255,267660,256625,261241,255609
+Nordland,Salmon,tonnes_fish,tonnes,191316,217345,230144,234503,233568,262252,249831,255601,250532
+Nordland,Rainbow trout,tonnes_fish,tonnes,1622,1915,2955,3447,NA,NA,NA,NA,NA
+Nordland,Char,tonnes_fish,tonnes,373,178,NA,234,219,238,245,289,240
+Nordland,Cod,tonnes_fish,tonnes,11789,7624,5634,NA,253,NA,0,NA,NA
+Nordland,Halibut,tonnes_fish,tonnes,NA,NA,NA,NA,NA,NA,NA,0,0
+Nordland,Shellfish,tonnes_fish,tonnes,587,658,601,620,384,180,912,791,555
+Nordland,Other fish species,tonnes_fish,tonnes,NA,NA,0,0,0,0,0,0,NA
+Troms,Total,tonnes_fish,tonnes,110547,107430,144060,137217,149642,168046,169265,187227,188419
+Troms,Salmon,tonnes_fish,tonnes,106679,104770,138674,134483,149638,163767,168813,186851,188398
+Troms,Rainbow trout,tonnes_fish,tonnes,2884,1887,5125,NA,0,NA,0,0,0
+Troms,Char,tonnes_fish,tonnes,NA,NA,0,0,0,0,0,0,0
+Troms,Cod,tonnes_fish,tonnes,971,759,NA,NA,NA,0,NA,NA,NA
+Troms,Halibut,tonnes_fish,tonnes,0,NA,0,0,0,0,0,0,0
+Troms,Shellfish,tonnes_fish,tonnes,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Troms,Other fish species,tonnes_fish,tonnes,0,NA,0,0,0,0,0,0,0
+Finnmark,Total,tonnes_fish,tonnes,58037,57064,86850,92459,97688,90482,92745,95614,113506
+Finnmark,Salmon,tonnes_fish,tonnes,51249,56178,86168,89734,95676,90482,92702,95585,113476
+Finnmark,Rainbow trout,tonnes_fish,tonnes,5900,665,NA,NA,NA,0,NA,NA,NA
+Finnmark,Char,tonnes_fish,tonnes,NA,NA,NA,NA,NA,0,NA,NA,NA
+Finnmark,Cod,tonnes_fish,tonnes,766,NA,0,0,0,0,0,0,0
+Finnmark,Halibut,tonnes_fish,tonnes,0,NA,0,0,0,0,0,0,0
+Finnmark,Shellfish,tonnes_fish,tonnes,NA,NA,0,0,0,0,0,0,0
+Finnmark,Other fish species,tonnes_fish,tonnes,0,NA,0,0,0,0,0,0,0
+Other Counties,Total,tonnes_fish,tonnes,12010,13589,14457,15603,16791,16649,18030,14894,13824
+Other Counties,Salmon,tonnes_fish,tonnes,11596,13032,NA,15372,16443,16332,17588,14426,13411
+Other Counties,Rainbow trout,tonnes_fish,tonnes,80,111,118,40,96,101,100,137,145
+Other Counties,Char,tonnes_fish,tonnes,0,NA,NA,0,NA,NA,NA,NA,NA
+Other Counties,Cod,tonnes_fish,tonnes,0,NA,0,0,0,0,0,0,0
+Other Counties,Halibut,tonnes_fish,tonnes,0,NA,0,0,0,0,0,0,0
+Other Counties,Shellfish,tonnes_fish,tonnes,78,0,NA,NA,41,2,NA,NA,4
+Other Counties,Other fish species,tonnes_fish,tonnes,256,NA,NA,NA,NA,NA,NA,NA,NA

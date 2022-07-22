@@ -1,0 +1,147 @@
+common_name,family,paper_name,protein_mean,energy_mean
+Albacore,Scombridae,Thunnus alalunga,24.2,134
+"Anchovy, striped",Engraulidae,Anchoa hepsetus,17.4,NA
+Barracouta,Gempylidae,Thyrsites atun,22,132
+"Bream, Ig-eyed",Lethrinidae,Monotaxis grandoculis,18.4,90.5
+Burbot,Lotidae,Lota lota,18,NA
+Carp,Cyprinidae,Cirrhinus mrigala,18.9,86.7
+Carp,Cyprinidae,Cyprinus carpio,18,NA
+"Cisco, longjaw, trout",Salmonidae,Coregonus alpenae,15.5,NA
+"Cod, Atlantic",Gadidae,Gadus morhua,17.9,NA
+"Flounder, winter",Pleuronectidae,Pseudopleuronectes americanus,17.4,NA
+"Goatfish, dwarf",Mullidae,Upeneus parvus,19.8,NA
+Haddock,Gadidae,Melanogrammus aeglefinus,18.3,79
+"Halibut, Atlantic",Pleuronectidae,Hippoglossus hippoglossus,17.7,126
+"Halibut, Pacific",Pleuronectidae,Hippoglossus stenolepis,21.1,NA
+"Herring, Atlantic",Clupeidae,Clupea harengus,18.2,NA
+"Herring, fimbriata",Clupeidae,Sardinella fimbriata,20,102.3
+Jack mackerel,Carangidae,Trachurus trachurus,19.7,NA
+Leatherjacket,Carangidae,Scomberoides lysan,19.9,109
+Lingcod,Hexagrammidae,Ophiodon elongatus,17.5,99
+Lizardfish,Synodontidae,Saurida tumbil,19.3,NA
+Lizardfish,Synodontidae,Saurida undosquamis,19.4,88
+"Mackerel, Atlantic",Scombridae,Scomber scombrus,19.1,169
+"Mullet, striped",Mugilidae,Mugil cephalus,19.4,143
+"Ocean perch, Pacific",Sebastidae,Sebastes alutus,18.1,NA
+"Perch, yellow",Percidae,Perca flavescens,19,NA
+"Pollack, coalfish",Gadidae,Pollachius virens,18.6,NA
+Sablefish,Anoplopomatidae,Anoplopoma fimbria,13.3,NA
+"Salmon, chinook",Salmonidae,Oncorhynchus tshawytscha,16.2,NA
+"Salmon, chum",Salmonidae,Oncorhynchus keta,20.7,NA
+"Slmon, coho",Salmonidae,Oncorhynchus kisutch,21.5,NA
+"Salmon, pink",Salmonidae,Oncorhynchus gorbuscha,19.4,NA
+"Salmon, sockeye",Salmonidae,Oncorhynchus nerka,20.9,NA
+"Sardine, gilt",Clupeidae,Sardinella aurita,20.5,NA
+"Sardine, Indian",Clupeidae,Sardinella longiceps,19.3,103
+Scup,Sparidae,Stenotomus chrysops,18.8,NA
+Shad,Clupeidae,Alosa sapidissima,18.5,NA
+Skipjack,Scombridae,Katsuwonus pelamis,25.5,NA
+"Sole, Dover",Pleuronectidae,Microstomus pacificus,15,NA
+Spot,Sciaenidae,Leiostomus xanthurus,17.9,NA
+"Squawfish, northern",Cyprinidae,Ptychocheilus oregonensis,17,NA
+Swordfish,Xiphiidae,Xiphias gladius,19.5,100
+"Trout, brook",Salmonidae,Salvelinus fontinalis,17.5,NA
+"Trout, Dolly Varden",Salmonidae,Salvelinus malma,19.9,NA
+"Tuna, big eye",Scombridae,Thunnus obesus,22.5,98
+"Tuna, bluefin",Scombridae,Thunnus thynnus,24.7,122
+"Tuna, yellowfin",Scombridae,Thunnus albacares,24.3,NA
+"Tunny, little",Scombridae,Euthynnus alletteratus,22.8,NA
+Turbot,Scophthalmidae,Scophthalmus maximus,16.4,94
+Walleye,Percidae,Sander vitreus,19.3,NA
+Weakfish,Sciaenidae,Cynoscion regalis,18.7,NA
+Whiting,Merlucciidae,Merluccius bilinearis,16.1,87.7
+Abalone,Haliotidae,Haliotis kamtschatkana,14.9,NA
+"Clam, short neck",Veneridae,Venerupis semi decussata,12.8,NA
+"Clam, soft shell",Myidae,Mya arenaria,11.2,89
+"Crab, blue",Portunidae,Callinectes sapidus,16.1,81.5
+"Crab, Dungeness",Cancridae,Cancer magister,17.2,85
+"Crab, king",Lithodidae,Parahthodes camtschatica,17.2,NA
+"Crab, samaon",Portunidae,Scylla serrata,14.9,NA
+Dolphin,Coryphaenidae,Coryphaena equisetis,19,94.3
+"Herring, Pacific",Clupeidae,Clupea harengus pallasi,14.6,NA
+"Mackerel, Pacific",Scombridae,Pneumatophorus japonicus,21.2,NA
+"Mullet, red",Mullidae,Mullus barbatus,19,NA
+"Oyster, blue point",	Ostreidae,Crassotrea virginica,6.9,NA
+Pilchards,Clupeidae,Sardina caerulea,19.2,NA
+"Pollack, walleye",Gadidae,Theragra chalcogramma,17.4,NA
+Redfish,Sebastidae,Sebastes marinus,18,NA
+Sandianches,Ammodytidae,Ammodytes lancedatus,17.9,87
+Sardine,Clupeidae,Sardinella eba,19,NA
+"Scallop, Atlantic Bay",Pectinidae,Pecten irradians,15.4,NA
+"Scallop, calico",Pectinidae,Aequipecten gibbus,15.9,NA
+"Sole, English",Pleuronectidae,Parophys ventulus,17.1,NA
+"Sole, Petrole",Pleuronectidae,Esopsetta jordani,17.4,85
+Sprat,Clupeidae,Clupea sprattus,16.9,176
+"Trout, raimbow",Salmonidae,Salmo gairdneri,22,NA
+Anchovies,Engraulidae,Engraulidae,20.2,93
+Barracudas,Sphyraenidae,Sphyraenidae,19.8,94
+Basses,Percichthyidae,Percichthyidae,18.1,113
+Basses,Serranidae,Serranidae,18.6,NA
+Bluefishes,Pomatomidae,Pomatomidae,21,NA
+Butterfishes,Stromateidae,Stromateidae,17.7,95
+"Catfishes, air-breathing",Clariidae,Clariidae,17.3,103
+"Catfishes, freshwater",Ictaluridae,Ictaluridae,17.6,NA
+"Catfishes, sea",Ariidae,Ariidae,18.3,84.2
+"Chubs, sea",Kyphosidae,Kyphosidae,21,102
+"Congers, pike",Muraenesocidae,Muraenesocidae,18.4,85
+Croakers,Sciaenidae,Sciaenidae,19,103
+Dories,Zeidae,Zeidae,18.4,80
+Drum,Sciaenidae,Sciaenidae,19.3,91
+"Eel, conger",Congridae,Congridae,16.4,110.5
+"Eels, freshwater",Anguillidae,Anguillidae,18,246
+"Eels, snakes",Ophichthidae,Ophichthidae,17.7,81.4
+Flatheads,Percophididae,Percophididae,19,87
+Flounders,Bothidae,Bothidae,19,84.3
+Flounders,Pleuronectidae,Pleuronectidae,17.3,87.7
+Flyingfish and halfbeaks,Exocoetidae,Exocoetidae,20.1,92.3
+Goatfishes,Mullidae,Mullidae,20.1,106.3
+Gobies,Gobiidae,Gobiidae,17.4,75
+Goosefishes,Lophiidae,Lophiidae,13.2,62.7
+Groupers,Serranidae,Serranidae,19.2,87.4
+Mojarras,Gerreidae,Gerreidae,18.6,NA
+Needlefishes,Belonidae,Belonidae,23.2,84.5
+Oyster,Ostreidae,Ostreidae,7.8,78.5
+Perches,Serranidae,Serranidae,18,NA
+Pikes,Escoidae,Escoidae,19,NA
+Pomfrets,Bramidae,Bramidae,18.9,93.3
+Scallop,Pectinidae,Pectinidae,17.2,NA
+Shad,Clupeidae,Clupeidae,17.4,87
+Skates,Rajidae,Rajidae,20.3,80
+Smelts,Osmeridae,Osmeridae,16.6,NA
+Snappers,Lutjanidae,Lutjanidae,19.2,99.5
+Snooks,Centropomidae,Centropomidae,18.5,82.5
+Squid,Loliginidae,Loliginidae,15.3,89
+Surgeonfish,Acanthuridae,Acanthuridae,18.7,92.2
+Trouts,Salmonidae,Salmonidae,16.1,NA
+Amberjacks,Carangidae,Seriola,21.1,96
+Bonita,Scombridae,Sarda,24.7,NA
+Bream,Sparidae,Pagellus,17.9,82.3
+Carp,Cyprinidae,Barbus,20.6,NA
+"Carp, Indian",Cyprinidae,Labeo,16.8,NA
+Clam,NA,miscellaneous,11.7,NA
+Cods,Gadidae,Gadus,18.8,86
+Crab,NA,miscellaneous,15.8,NA
+"Crab, deep sea",NA,Neptunnis,166.5,NA
+Crayfish,NA,miscellaneous,18.7,NA
+Hakes,Merlucciidae,Merluccius,16.3,86
+Jacks,Carangidae,Caranx,19.9,96.6
+Kingfishes,Sciaenidae,Menticirrhus,17.2,NA
+Lobster,Palinuridae,Panulirus,19.6,95
+Mackerel,Scombridae,Scomber,22,114
+Mackerel,Scombridae,Scombermorus,18.9,103.4
+Mackerel,Scombridae,Auxis,24.8,NA
+"Mackerel, Indian",Scombridae,Rastrelliger,19.1,97.7
+Mullet,Mugilidae,Mugil,19.2,128.4
+Parrotfishes,Scaridae,Scaridaw,19.7,105
+Pilchards,Clupeidae,Sardinops,16.7,87.3
+Pompano,Carangidae,Trachinotus,19.3,86.2
+Porgies,Sparidae,Dentex,19.9,94.7
+Porgies,Sparidae,Sparus,20.8,100.7
+Porgies,Sparidae,Pagrus,20.3,102
+Prawns,NA,miscellaneous,16.8,NA
+Puffer,Tetraodontidae,Sphoeroides,23.2,NA
+Rockfishes,Sebastidae,Sebastes,18.8,NA
+Scad,Carangidae,Decapterus,21.8,109
+Sharks,NA,Mixed,22.7,101
+Shrimp,NA,miscellaneous,20.5,88.3
+Soles,Pleuronectidae,Limanda,18,NA

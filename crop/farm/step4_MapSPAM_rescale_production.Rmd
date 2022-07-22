@@ -1,0 +1,206 @@
+---
+title: "MapSPAM"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Script Description
+
+1. Map crop production coefficients from 2010 to 2017.
+2. Produce maps scaled to 2017 for each crop category 
+3. Calculate how much of the crop's production is allocated to each cell.
+
+# Data information
+Crop Allocation Source: MapSPAM 2010 v2.0 [Accessed: 10/18/2020]
+
+```{r setup, include = FALSE}
+# getting packages we want
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+library(janitor)
+library(furrr)
+library(vroom)
+
+# Raster templates
+source(here("_spatial/template_raster.R"))
+
+# Distinct crop names and production systems to cycle through
+prod_system   <- c("_A","_H","_S","_I","_L")
+scaling_coef  <- vroom::vroom(here("crop/farm/data/scaling_coef.csv"))
+distinct_vars <- expand.grid(prod_system, 
+                             unique(scaling_coef$SPAM_short_name))
+food_rgns_xy <- select(food_rgns_xy, c(x, y, iso3c))
+
+predatalayers_path <- "/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/"
+``` 
+
+# Produce maps scaled to 2017 for each crop category 
+```{r}
+scale_from_2010_to_2017 <- function(crop, prod_system) {
+  
+  coef_raster <- 
+    scaling_coef %>% 
+    filter(SPAM_short_name %in% crop) %>% 
+    dplyr::select(-SPAM_short_name) %>% 
+    left_join(food_rgns_xy, ., by = "iso3c") %>% 
+    dplyr::select(x, y, coef) %>% 
+    mutate(coef = ifelse(is.na(coef), 1, coef)) %>% 
+    rasterFromXYZ(crs = food_crs)
+  
+  # Save raster of coefficients
+  writeRaster(coef_raster, 
+              file.path(prep,
+                        "crop/farm/coefficients/crop_coef_",
+                        crop,
+                        ".tif",
+                        fsep = ""), 
+              format = "GTiff", 
+              overwrite = TRUE)
+  
+  # Multiply MAPSPAM crop data by scaling coefficient.  
+  scaled_raster <- overlay(
+    coef_raster, 
+    raster(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/crop/farm/MapSPAM_correct_extent/spam2010V2r0_global_P_", 
+                     toupper(crop), 
+                     prod_system, 
+                     ".tif",
+                     fsep = "")), 
+           fun = function(r1, r2) {
+             
+             return(r1 * r2)
+             
+             }
+           )
+      
+ #Save raster with scaled MAPSPAM crop data
+  writeRaster(scaled_raster, 
+              file.path(
+                prep,
+                "crop/farm/scaled_maps_2017/crop_",
+                crop,
+                prod_system,
+                "_scaled.tif",
+                fsep = ""),
+              format = "GTiff", 
+              overwrite = TRUE)
+  
+  # Save in predatalayers
+  writeRaster(scaled_raster, 
+              file.path(
+                predatalayers_path,
+                crop,
+                prod_system,
+                "_production_2017.tif",
+                fsep = ""),
+              format = "GTiff", 
+              overwrite = TRUE)
+}
+
+plan(multisession, workers = 12)
+
+options <- furrr_options(seed = 54232)
+
+furrr::future_map2(distinct_vars$Var2,
+                   distinct_vars$Var1, 
+                   scale_from_2010_to_2017,
+                   .options = options)
+```
+
+-------------------------------------------------------------------------------
+
+# Split rest map into three maps.
+
+```{r}
+rest_category_proportion <- 
+  vroom(here("crop/farm/data/rest_category_proportion.csv")) %>% 
+  select(!tonnes)
+
+rest_scaled_maps <- 
+  list.files(file.path(prep, "crop/farm/scaled_maps_2017"), 
+             pattern = "rest",
+             full.names = TRUE)
+
+split_rest_maps <- function(scaled_map, crop) {
+  
+  crop_map <- 
+    rest_category_proportion %>% 
+    filter(SPAM_super %in% crop) %>% 
+    left_join(food_rgns_xy, .) %>% 
+    select(x, y, prop) %>% 
+    rasterFromXYZ(crs = food_crs)
+  
+  overlay(raster(scaled_map),
+          crop_map,
+          fun = function(r1, r2) {
+            
+            return(r1 * r2)
+            
+            }) %>% 
+    
+    writeRaster(., 
+                file.path(
+                  prep,
+                  "crop/farm/scaled_maps_2017/crop_",
+                  crop,
+                  str_extract(scaled_map, 
+                              pattern = "_H_|_I_|_L_|_A_|_S_"),
+                  "scaled.tif",
+                  fsep = ""),
+                format = "GTiff", 
+                overwrite = TRUE) %>% 
+    
+    # Save in predatalayers
+    writeRaster(., 
+                file.path(
+                  predatalayers_path,
+                  crop,
+                  str_extract(scaled_map, 
+                              pattern = "_H_|_I_|_L_|_A_|_S_"),
+                  "production_2017.tif",
+                  fsep = ""),
+                format = "GTiff", 
+                overwrite = TRUE)
+    
+}
+
+variables <- expand_grid(map = rest_scaled_maps, 
+                         crop = unique(rest_category_proportion$SPAM_super))
+
+map2(.x = variables$map,
+     .y = variables$crop,
+     split_rest_maps)
+
+
+```
+
+-------------------------------------------------------------------------------
+
+
+# Test Plots
+```{r}
+# Check number of files in each folder is a multiple of 42.
+length(list.files(file.path(prep, "crop/farm/coefficients/")))     # 42
+length(list.files(file.path(prep, "crop/farm/scaled_maps_2017/"))) # 228
+length(list.files(file.path(prep, "crop/farm/cell_allocation/")))  
+
+length(list.files(file.path(predatalayers_path), pattern = "production_2017")) # 228
+
+# Coefficients maps
+coef_test <- raster(file.path(prep, "crop/farm/coefficients/crop_coef_cnut.tif"))
+plot(coef_test)
+plot(log(coef_test + 1))
+
+# Scaled maps
+scaled_test <- raster(file.path(prep, "crop/farm/scaled_maps_2017/crop_cnut_A_scaled.tif"))
+plot(scaled_test)
+plot(log(scaled_test + 1))
+
+# Allocation maps
+allocation_test <- raster(file.path(prep, "crop/farm/cell_allocation/crop_cnut_A_allocation.tif"))
+plot(allocation_test)
+```
+
+
+

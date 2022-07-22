@@ -1,0 +1,736 @@
+iso3c,system,prop,gapfilled
+ABW,backyard,0.25,gf with continental medians
+ABW,intermediate,0.125,gf with continental medians
+ABW,industrial,0.625,gf with continental medians
+AFG,backyard,0.10500010501938183,NA
+AFG,intermediate,0.1969644310502641,NA
+AFG,industrial,0.6980354639303541,NA
+AGO,backyard,0.5460458193163689,NA
+AGO,intermediate,0.19985061918846872,NA
+AGO,industrial,0.2541035614951625,NA
+AIA,backyard,0.25,gf with continental medians
+AIA,intermediate,0.125,gf with continental medians
+AIA,industrial,0.625,gf with continental medians
+ALA,backyard,7.151172951650962e-4,NA
+ALA,intermediate,0.006895755280497466,NA
+ALA,industrial,0.9923891274243375,NA
+ALB,backyard,0.3263128430942954,NA
+ALB,intermediate,0.12754171560559346,NA
+ALB,industrial,0.5461454413001111,NA
+AND,backyard,0.0625,gf with continental medians
+AND,intermediate,0.0625,gf with continental medians
+AND,industrial,0.875,gf with continental medians
+ARE,backyard,0.4375,gf with continental medians
+ARE,intermediate,0.125,gf with continental medians
+ARE,industrial,0.4375,gf with continental medians
+ARG,backyard,0.11063157139461378,NA
+ARG,intermediate,2.6273184179250367e-5,NA
+ARG,industrial,0.8893421554212071,NA
+ARM,backyard,0.39463990275018107,NA
+ARM,intermediate,0.17070577452285618,NA
+ARM,industrial,0.43465432272696275,NA
+ASM,backyard,0,NA
+ASM,intermediate,0.33711816930590704,NA
+ASM,industrial,0.6628818306940929,NA
+ATG,backyard,0.07464333572171207,NA
+ATG,intermediate,0,NA
+ATG,industrial,0.9253566642782879,NA
+AUS,backyard,0.022452766847654463,NA
+AUS,intermediate,0,NA
+AUS,industrial,0.9775472331523456,NA
+AUT,backyard,0.018115634259119905,NA
+AUT,intermediate,0.006400904228252297,NA
+AUT,industrial,0.9754834615126279,NA
+AZE,backyard,0.2714808776096095,NA
+AZE,intermediate,0.09119380960517845,NA
+AZE,industrial,0.6373253127852121,NA
+BDI,backyard,0.9000559489742833,NA
+BDI,intermediate,0.08990975278890963,NA
+BDI,industrial,0.010034298236807071,NA
+BEL,backyard,1.0218950146590085e-4,NA
+BEL,intermediate,0.002902565769520082,NA
+BEL,industrial,0.996995244729014,NA
+BEN,backyard,0.8338560393937073,NA
+BEN,intermediate,0.14122236658248127,NA
+BEN,industrial,0.02492159402381135,NA
+BES,backyard,0.25,gf with continental medians
+BES,intermediate,0.125,gf with continental medians
+BES,industrial,0.625,gf with continental medians
+BFA,backyard,0.9300823715050862,NA
+BFA,intermediate,2.3520458923065326e-5,NA
+BFA,industrial,0.06989410803599068,NA
+BGD,backyard,0.8001281175793558,NA
+BGD,intermediate,0.18249171872199804,NA
+BGD,industrial,0.01738016369864623,NA
+BGR,backyard,0.20065604662641154,NA
+BGR,intermediate,0.08987357809720611,NA
+BGR,industrial,0.7094703752763823,NA
+BHR,backyard,0.4375,gf with continental medians
+BHR,intermediate,0.125,gf with continental medians
+BHR,industrial,0.4375,gf with continental medians
+BHS,backyard,0.029834414270452487,NA
+BHS,intermediate,0,NA
+BHS,industrial,0.9701655857295475,NA
+BIH,backyard,0.30102002044692605,NA
+BIH,intermediate,0.12038081438719143,NA
+BIH,industrial,0.5785991651658825,NA
+BLM,backyard,0.25,gf with continental medians
+BLM,intermediate,0.125,gf with continental medians
+BLM,industrial,0.625,gf with continental medians
+BLR,backyard,0.1456783532970784,NA
+BLR,intermediate,0.022736200051521657,NA
+BLR,industrial,0.8315854466514,NA
+BLZ,backyard,0.38223179907046034,NA
+BLZ,intermediate,0.16334375430502457,NA
+BLZ,industrial,0.4544244466245151,NA
+BMU,backyard,0.25,gf with continental medians
+BMU,intermediate,0.125,gf with continental medians
+BMU,industrial,0.625,gf with continental medians
+BOL,backyard,0.3814914150657554,NA
+BOL,intermediate,0.3189319938888771,NA
+BOL,industrial,0.29957659104536755,NA
+BRA,backyard,0.34976632916013833,NA
+BRA,intermediate,7.386238946534991e-6,NA
+BRA,industrial,0.6502262846009151,NA
+BRB,backyard,0.041658869247950474,NA
+BRB,intermediate,0,NA
+BRB,industrial,0.9583411307520495,NA
+BRN,backyard,0.008009520899129765,NA
+BRN,intermediate,0.003626602774762829,NA
+BRN,industrial,0.9883638763261074,NA
+BTN,backyard,0.4912821594363989,NA
+BTN,intermediate,0.05511492980869364,NA
+BTN,industrial,0.4536029107549075,NA
+BWA,backyard,0.2750741301403792,NA
+BWA,intermediate,0.5177337174343843,NA
+BWA,industrial,0.2071921524252364,NA
+CAF,backyard,0.8999312649819554,NA
+CAF,intermediate,0.0833396898359556,NA
+CAF,industrial,0.016729045182088915,NA
+CAN,backyard,9.924879165027297e-5,NA
+CAN,intermediate,0.0098999988460904,NA
+CAN,industrial,0.9900007523622594,NA
+CCK,backyard,0.625,gf with continental medians
+CCK,intermediate,0.1875,gf with continental medians
+CCK,industrial,0.1875,gf with continental medians
+CHE,backyard,0.004007439787684909,NA
+CHE,intermediate,0.013481131351915622,NA
+CHE,industrial,0.9825114288603994,NA
+CHL,backyard,0.050223339499938555,NA
+CHL,intermediate,0,NA
+CHL,industrial,0.9497766605000615,NA
+CHN,backyard,0.42941846427528374,NA
+CHN,intermediate,0.1590069940262942,NA
+CHN,industrial,0.41157454169842206,NA
+CIV,backyard,0.615162911487659,NA
+CIV,intermediate,0.23486594180060508,NA
+CIV,industrial,0.1499711467117359,NA
+CMR,backyard,0.6114463677160161,NA
+CMR,intermediate,0.2913481960583006,NA
+CMR,industrial,0.09720543622568328,NA
+COD,backyard,0.655344083926509,NA
+COD,intermediate,0.34182774408823724,NA
+COD,industrial,0.002828171985253724,NA
+COG,backyard,0.648734453077063,NA
+COG,intermediate,0.19966682651362527,NA
+COG,industrial,0.15159872040931174,NA
+COK,backyard,0.625,gf with continental medians
+COK,intermediate,0.1875,gf with continental medians
+COK,industrial,0.1875,gf with continental medians
+COL,backyard,0.50001752165532,NA
+COL,intermediate,0.05000670605255311,NA
+COL,industrial,0.449975772292127,NA
+COM,backyard,0.75,gf with continental medians
+COM,intermediate,0.125,gf with continental medians
+COM,industrial,0.125,gf with continental medians
+CPV,backyard,0.8032407372782756,NA
+CPV,intermediate,0.18674791403270624,NA
+CPV,industrial,0.010011348689018127,NA
+CRI,backyard,0.16091884677888135,NA
+CRI,intermediate,0.03172233013589203,NA
+CRI,industrial,0.8073588230852267,NA
+CUB,backyard,0.25,gf with continental medians
+CUB,intermediate,0.125,gf with continental medians
+CUB,industrial,0.625,gf with continental medians
+CUW,backyard,0.25,gf with continental medians
+CUW,intermediate,0.125,gf with continental medians
+CUW,industrial,0.625,gf with continental medians
+CXR,backyard,1,NA
+CXR,intermediate,0,NA
+CXR,industrial,0,NA
+CYM,backyard,0.25,gf with continental medians
+CYM,intermediate,0.125,gf with continental medians
+CYM,industrial,0.625,gf with continental medians
+CYP,backyard,0.00400000001054371,NA
+CYP,intermediate,0.0049999999844067425,NA
+CYP,industrial,0.9910000000050495,NA
+CZE,backyard,0.003045593276404676,NA
+CZE,intermediate,0.019977031708035633,NA
+CZE,industrial,0.9769773750155597,NA
+DEU,backyard,0.0019955736180658668,NA
+DEU,intermediate,0.020943032043862393,NA
+DEU,industrial,0.9770613943380718,NA
+DJI,backyard,0.75,gf with continental medians
+DJI,intermediate,0.125,gf with continental medians
+DJI,industrial,0.125,gf with continental medians
+DMA,backyard,0.1776104830956469,NA
+DMA,intermediate,0.04092660161883581,NA
+DMA,industrial,0.7814629152855173,NA
+DNK,backyard,9.919622472754476e-5,NA
+DNK,intermediate,9.00000724729105e-4,NA
+DNK,industrial,0.9990008030505434,NA
+DOM,backyard,0.2884723007972541,NA
+DOM,intermediate,0.1113363354226147,NA
+DOM,industrial,0.6001913637801312,NA
+DZA,backyard,0.5798862207205799,NA
+DZA,intermediate,0.09522684016211277,NA
+DZA,industrial,0.32488693911730737,NA
+ECU,backyard,0.32256605060840016,NA
+ECU,intermediate,0.5774135867564651,NA
+ECU,industrial,0.1000203626351347,NA
+EGY,backyard,0.4611270577042291,NA
+EGY,intermediate,0.19596473418434507,NA
+EGY,industrial,0.3429082081114259,NA
+ERI,backyard,1,NA
+ERI,intermediate,0,NA
+ERI,industrial,0,NA
+ESH,backyard,0.75,gf with continental medians
+ESH,intermediate,0.125,gf with continental medians
+ESH,industrial,0.125,gf with continental medians
+ESP,backyard,0.004990247896751904,NA
+ESP,intermediate,0.013000114969068059,NA
+ESP,industrial,0.9820096371341801,NA
+EST,backyard,0.009014124857018302,NA
+EST,intermediate,0.009999730702934613,NA
+EST,industrial,0.9809861444400471,NA
+ETH,backyard,0.9060496240071483,NA
+ETH,intermediate,0.0048776871200904735,NA
+ETH,industrial,0.08907268887276129,NA
+FIN,backyard,1.0263867559519103e-4,NA
+FIN,intermediate,0.006900384240521544,NA
+FIN,industrial,0.9929969770838833,NA
+FJI,backyard,0.609956083945082,NA
+FJI,intermediate,0.20520138740150795,NA
+FJI,industrial,0.18484252865341,NA
+FLK,backyard,0.020773101511591705,NA
+FLK,intermediate,0,NA
+FLK,industrial,0.9792268984884083,NA
+FRA,backyard,0.002000469739591833,NA
+FRA,intermediate,0.007003501967016873,NA
+FRA,industrial,0.9909960282933914,NA
+FRO,backyard,0.0625,gf with continental medians
+FRO,intermediate,0.0625,gf with continental medians
+FRO,industrial,0.875,gf with continental medians
+FSM,backyard,1,NA
+FSM,intermediate,0,NA
+FSM,industrial,0,NA
+GAB,backyard,0.1411069772788314,NA
+GAB,intermediate,0.019000403248948007,NA
+GAB,industrial,0.8398926194722206,NA
+GBR,backyard,0.003998529432546596,NA
+GBR,intermediate,0.01899990698530335,NA
+GBR,industrial,0.97700156358215,NA
+GEO,backyard,0.5751702359927701,NA
+GEO,intermediate,0.20833829728218523,NA
+GEO,industrial,0.21649146672504474,NA
+GGY,backyard,0.0625,gf with continental medians
+GGY,intermediate,0.0625,gf with continental medians
+GGY,industrial,0.875,gf with continental medians
+GHA,backyard,0.6208706302846876,NA
+GHA,intermediate,0.15076022720779972,NA
+GHA,industrial,0.22836914250751275,NA
+GIB,backyard,0.0625,gf with continental medians
+GIB,intermediate,0.0625,gf with continental medians
+GIB,industrial,0.875,gf with continental medians
+GIN,backyard,0.9570763645883714,NA
+GIN,intermediate,0.042899063891511414,NA
+GIN,industrial,2.457152011731468e-5,NA
+GLP,backyard,0.25,gf with continental medians
+GLP,intermediate,0.125,gf with continental medians
+GLP,industrial,0.625,gf with continental medians
+GMB,backyard,0.9015897836424677,NA
+GMB,intermediate,0.08857621579962269,NA
+GMB,industrial,0.00983400055790969,NA
+GNB,backyard,0.9012661771427994,NA
+GNB,intermediate,0.07956386835153188,NA
+GNB,industrial,0.01916995450566865,NA
+GNQ,backyard,0.051582395754509104,NA
+GNQ,intermediate,0,NA
+GNQ,industrial,0.9484176042454909,NA
+GRC,backyard,0.037914105159203806,NA
+GRC,intermediate,0.009365392883640447,NA
+GRC,industrial,0.9527205019571557,NA
+GRD,backyard,0.23466266809748507,NA
+GRD,intermediate,0.07635608006310761,NA
+GRD,industrial,0.6889812518394074,NA
+GRL,backyard,0.25,gf with continental medians
+GRL,intermediate,0.125,gf with continental medians
+GRL,industrial,0.625,gf with continental medians
+GTM,backyard,0.47967349262451786,NA
+GTM,intermediate,0.06590216119925768,NA
+GTM,industrial,0.45442434617622446,NA
+GUF,backyard,0.38464317716123325,NA
+GUF,intermediate,0.16566124231500484,NA
+GUF,industrial,0.4496955805237619,NA
+GUM,backyard,0.03244763776398178,NA
+GUM,intermediate,0,NA
+GUM,industrial,0.9675523622360183,NA
+GUY,backyard,0.743994438811218,NA
+GUY,intermediate,0.16483629354291757,NA
+GUY,industrial,0.09116926764586444,NA
+HKG,backyard,0.4375,gf with continental medians
+HKG,intermediate,0.125,gf with continental medians
+HKG,industrial,0.4375,gf with continental medians
+HND,backyard,0.4337576528399192,NA
+HND,intermediate,0.1994840083864905,NA
+HND,industrial,0.3667583387735903,NA
+HRV,backyard,0.09809928684570828,NA
+HRV,intermediate,7.56659946243047e-4,NA
+HRV,industrial,0.9011440532080487,NA
+HTI,backyard,0.8889250414421719,NA
+HTI,intermediate,0.0901447651866664,NA
+HTI,industrial,0.020930193371161757,NA
+HUN,backyard,0.08934054145962154,NA
+HUN,intermediate,7.808813731284126e-6,NA
+HUN,industrial,0.9106516497266471,NA
+IDN,backyard,0.6384235391152279,NA
+IDN,intermediate,0.20008091167544162,NA
+IDN,industrial,0.16149554920933043,NA
+IMN,backyard,0.0625,gf with continental medians
+IMN,intermediate,0.0625,gf with continental medians
+IMN,industrial,0.875,gf with continental medians
+IND,backyard,0.7823356096750655,NA
+IND,intermediate,0.198633107361052,NA
+IND,industrial,0.019031282963882564,NA
+IOT,backyard,0.75,gf with continental medians
+IOT,intermediate,0.125,gf with continental medians
+IOT,industrial,0.125,gf with continental medians
+IRL,backyard,9.94557649734018e-4,NA
+IRL,intermediate,0.004095854742935572,NA
+IRL,industrial,0.9949095876073304,NA
+IRN,backyard,0.18406574987584348,NA
+IRN,intermediate,0.1742658093634859,NA
+IRN,industrial,0.6416684407606706,NA
+IRQ,backyard,0.0415186444008496,NA
+IRQ,intermediate,0.0067229221788921946,NA
+IRQ,industrial,0.9517584334202582,NA
+ISL,backyard,9.996344223631799e-5,NA
+ISL,intermediate,0,NA
+ISL,industrial,0.9999000365577638,NA
+ISR,backyard,0.03218771906691803,NA
+ISR,intermediate,5.605949290837937e-7,NA
+ISR,industrial,0.9678117203381529,NA
+ITA,backyard,0.005998746994875023,NA
+ITA,intermediate,0.019999991540837415,NA
+ITA,industrial,0.9740012614642876,NA
+JAM,backyard,0.5599999968601216,NA
+JAM,intermediate,0.10999999988878631,NA
+JAM,industrial,0.33000000325109213,NA
+JEY,backyard,0.0625,gf with continental medians
+JEY,intermediate,0.0625,gf with continental medians
+JEY,industrial,0.875,gf with continental medians
+JOR,backyard,0.4375,gf with continental medians
+JOR,intermediate,0.125,gf with continental medians
+JOR,industrial,0.4375,gf with continental medians
+JPN,backyard,0.023068825094320334,NA
+JPN,intermediate,0,NA
+JPN,industrial,0.9769311749056797,NA
+KAZ,backyard,0.18524580056516612,NA
+KAZ,intermediate,0.045757863508183935,NA
+KAZ,industrial,0.76899633592665,NA
+KEN,backyard,0.631062316991277,NA
+KEN,intermediate,0.333887800912022,NA
+KEN,industrial,0.03504988209670099,NA
+KGZ,backyard,0.8073767364102588,NA
+KGZ,intermediate,0.13452327668733557,NA
+KGZ,industrial,0.05809998690240571,NA
+KHM,backyard,0.7999957295210237,NA
+KHM,intermediate,0.1452081847945208,NA
+KHM,industrial,0.05479608568445551,NA
+KIR,backyard,0.625,gf with continental medians
+KIR,intermediate,0.1875,gf with continental medians
+KIR,industrial,0.1875,gf with continental medians
+KNA,backyard,0.10207976993134225,NA
+KNA,intermediate,0.0031567474067759485,NA
+KNA,industrial,0.8947634826618818,NA
+KOR,backyard,1.0027904706059864e-4,NA
+KOR,intermediate,0.0233281040334296,NA
+KOR,industrial,0.9765716169195099,NA
+KWT,backyard,0.4375,gf with continental medians
+KWT,intermediate,0.125,gf with continental medians
+KWT,industrial,0.4375,gf with continental medians
+LAO,backyard,0.8495912582299252,NA
+LAO,intermediate,0.14736055420756775,NA
+LAO,industrial,0.003048187562506999,NA
+LBN,backyard,0.1501137333807512,NA
+LBN,intermediate,0.025281356951386797,NA
+LBN,industrial,0.824604909667862,NA
+LBR,backyard,0.9280435527757359,NA
+LBR,intermediate,0.06609397751145171,NA
+LBR,industrial,0.005862469712812428,NA
+LBY,backyard,0,NA
+LBY,intermediate,0.22667376918728335,NA
+LBY,industrial,0.7733262308127167,NA
+LCA,backyard,0.2147892437209501,NA
+LCA,intermediate,0.06299220487639591,NA
+LCA,industrial,0.722218551402654,NA
+LIE,backyard,0.002759878880737962,NA
+LIE,intermediate,0,NA
+LIE,industrial,0.9972401211192621,NA
+LKA,backyard,0.6053193460423573,NA
+LKA,intermediate,0.17477755586706548,NA
+LKA,industrial,0.21990309809057726,NA
+LSO,backyard,0.7727712105870739,NA
+LSO,intermediate,0.020712286454742174,NA
+LSO,industrial,0.20651650295818397,NA
+LTU,backyard,0.10070109974779844,NA
+LTU,intermediate,2.0127391131991526e-5,NA
+LTU,industrial,0.8992787728610696,NA
+LUX,backyard,1.00999126970495e-4,NA
+LUX,intermediate,0.006511086391700876,NA
+LUX,industrial,0.9933879144813287,NA
+LVA,backyard,0.11026143850745085,NA
+LVA,intermediate,0.0019710589034713974,NA
+LVA,industrial,0.8877675025890778,NA
+MAC,backyard,0.4375,gf with continental medians
+MAC,intermediate,0.125,gf with continental medians
+MAC,industrial,0.4375,gf with continental medians
+MAF,backyard,0.25,gf with continental medians
+MAF,intermediate,0.125,gf with continental medians
+MAF,industrial,0.625,gf with continental medians
+MAR,backyard,0.6715032643289397,NA
+MAR,intermediate,0.1691152550480391,NA
+MAR,industrial,0.1593814806230211,NA
+MCO,backyard,0.0625,gf with continental medians
+MCO,intermediate,0.0625,gf with continental medians
+MCO,industrial,0.875,gf with continental medians
+MDA,backyard,0.7368989247018504,NA
+MDA,intermediate,0.16464290510400584,NA
+MDA,industrial,0.09845817019414377,NA
+MDG,backyard,0.6371531100202864,NA
+MDG,intermediate,0.19592332059505876,NA
+MDG,industrial,0.16692356938465486,NA
+MDV,backyard,0.4375,gf with continental medians
+MDV,intermediate,0.125,gf with continental medians
+MDV,industrial,0.4375,gf with continental medians
+MEX,backyard,0.19541661541796407,NA
+MEX,intermediate,0.41664670662259573,NA
+MEX,industrial,0.38793667795944015,NA
+MHL,backyard,0.625,gf with continental medians
+MHL,intermediate,0.1875,gf with continental medians
+MHL,industrial,0.1875,gf with continental medians
+MKD,backyard,0.2099376589993454,NA
+MKD,intermediate,0.05643127375177864,NA
+MKD,industrial,0.733631067248876,NA
+MLI,backyard,0.6246851200443498,NA
+MLI,intermediate,0.3751576960457133,NA
+MLI,industrial,1.5718390993692017e-4,NA
+MLT,backyard,0,NA
+MLT,intermediate,0.013768655682999925,NA
+MLT,industrial,0.9862313443170001,NA
+MMR,backyard,0.9498120898339536,NA
+MMR,intermediate,0.04981791783209595,NA
+MMR,industrial,3.6999233395036273e-4,NA
+MNE,backyard,0.34518963607557146,NA
+MNE,intermediate,0.32359817244006334,NA
+MNE,industrial,0.3312121914843652,NA
+MNG,backyard,0.660135293591224,NA
+MNG,intermediate,0.1922752859935745,NA
+MNG,industrial,0.14758942041520148,NA
+MNP,backyard,0.625,gf with continental medians
+MNP,intermediate,0.1875,gf with continental medians
+MNP,industrial,0.1875,gf with continental medians
+MOZ,backyard,0.9056308901101727,NA
+MOZ,intermediate,0.08002512956226478,NA
+MOZ,industrial,0.014343980327562476,NA
+MRT,backyard,0.9998362356727948,NA
+MRT,intermediate,3.71210760370928e-5,NA
+MRT,industrial,1.2664325116808707e-4,NA
+MSR,backyard,0.25,gf with continental medians
+MSR,intermediate,0.125,gf with continental medians
+MSR,industrial,0.625,gf with continental medians
+MTQ,backyard,0.13485725753764982,NA
+MTQ,intermediate,0.015594327992932363,NA
+MTQ,industrial,0.8495484144694178,NA
+MUS,backyard,0.40699716808743996,NA
+MUS,intermediate,0,NA
+MUS,industrial,0.5930028319125601,NA
+MWI,backyard,0.8697561216620303,NA
+MWI,intermediate,0.12010806018455808,NA
+MWI,industrial,0.010135818153411618,NA
+MYS,backyard,0.089074498152070275,NA
+MYS,intermediate,0.11123479589680736,NA
+MYS,industrial,0.7996907059511223,NA
+MYT,backyard,0.75,gf with continental medians
+MYT,intermediate,0.125,gf with continental medians
+MYT,industrial,0.125,gf with continental medians
+NAM,backyard,0.6524952306136919,NA
+NAM,intermediate,0.228360763331189,NA
+NAM,industrial,0.11914400605511925,NA
+NCL,backyard,0.625,gf with continental medians
+NCL,intermediate,0.1875,gf with continental medians
+NCL,industrial,0.1875,gf with continental medians
+NER,backyard,0.6806220345047552,NA
+NER,intermediate,0.3105096473164506,NA
+NER,industrial,0.008868318178794068,NA
+NFK,backyard,0.625,gf with continental medians
+NFK,intermediate,0.1875,gf with continental medians
+NFK,industrial,0.1875,gf with continental medians
+NGA,backyard,0.9103067185905697,NA
+NGA,intermediate,0.025023660994337102,NA
+NGA,industrial,0.06466962041509323,NA
+NIC,backyard,0.69494907317142,NA
+NIC,intermediate,0.18429467707353472,NA
+NIC,industrial,0.12075624975504527,NA
+NIU,backyard,1,NA
+NIU,intermediate,0,NA
+NIU,industrial,0,NA
+NLD,backyard,1.0071739393793162e-4,NA
+NLD,intermediate,9.144382970545371e-4,NA
+NLD,industrial,0.9989848443090076,NA
+NOR,backyard,9.996417948494422e-4,NA
+NOR,intermediate,0.011934326770851445,NA
+NOR,industrial,0.9870660314342992,NA
+NPL,backyard,0.6240285639207224,NA
+NPL,intermediate,0.14915387740344174,NA
+NPL,industrial,0.2268175586758358,NA
+NRU,backyard,0.625,gf with continental medians
+NRU,intermediate,0.1875,gf with continental medians
+NRU,industrial,0.1875,gf with continental medians
+NZL,backyard,0.027955516424310205,NA
+NZL,intermediate,0,NA
+NZL,industrial,0.9720444835756898,NA
+OMN,backyard,0.4375,gf with continental medians
+OMN,intermediate,0.125,gf with continental medians
+OMN,industrial,0.4375,gf with continental medians
+PAK,backyard,0.9999985708359821,NA
+PAK,intermediate,1.3048888911550187e-6,NA
+PAK,industrial,1.2427512674928804e-7,NA
+PAN,backyard,0.3799133455223224,NA
+PAN,intermediate,2.195361187344094e-6,NA
+PAN,industrial,0.6200844591164902,NA
+PCN,backyard,0.625,gf with continental medians
+PCN,intermediate,0.1875,gf with continental medians
+PCN,industrial,0.1875,gf with continental medians
+PER,backyard,0.6160354654207593,NA
+PER,intermediate,0.37376354708812654,NA
+PER,industrial,0.010200987491114222,NA
+PHL,backyard,0.7137843281741499,NA
+PHL,intermediate,0.15052182963707966,NA
+PHL,industrial,0.1356938421887704,NA
+PLW,backyard,0.625,gf with continental medians
+PLW,intermediate,0.1875,gf with continental medians
+PLW,industrial,0.1875,gf with continental medians
+PNG,backyard,0.928563701219503,NA
+PNG,intermediate,0.06145035933901259,NA
+PNG,industrial,0.009985939441484327,NA
+POL,backyard,0.04398220938404551,NA
+POL,intermediate,0.037168803108353375,NA
+POL,industrial,0.9188489875076011,NA
+PRI,backyard,0.10609359335039699,NA
+PRI,intermediate,0.004472473732375489,NA
+PRI,industrial,0.8894339329172275,NA
+PRK,backyard,0.8365984296735217,NA
+PRK,intermediate,0.12102385319638484,NA
+PRK,industrial,0.042377717130093445,NA
+PRT,backyard,0.09410231140585623,NA
+PRT,intermediate,0.005600737201206469,NA
+PRT,industrial,0.9002969513929373,NA
+PRY,backyard,0.699805381621905,NA
+PRY,intermediate,0.1799411170222707,NA
+PRY,industrial,0.12025350135582437,NA
+PSE,backyard,0.4375,gf with continental medians
+PSE,intermediate,0.125,gf with continental medians
+PSE,industrial,0.4375,gf with continental medians
+PYF,backyard,1,NA
+PYF,intermediate,0,NA
+PYF,industrial,0,NA
+QAT,backyard,0.4375,gf with continental medians
+QAT,intermediate,0.125,gf with continental medians
+QAT,industrial,0.4375,gf with continental medians
+REU,backyard,0.4720630717709681,NA
+REU,intermediate,0.1987218731620295,NA
+REU,industrial,0.3292150550670024,NA
+ROU,backyard,0.12953464678005855,NA
+ROU,intermediate,0.1722143556294174,NA
+ROU,industrial,0.698250997590524,NA
+RUS,backyard,0.08808102289083897,NA
+RUS,intermediate,2.82684609537019e-5,NA
+RUS,industrial,0.9118907086482074,NA
+RWA,backyard,0.883806190523767,NA
+RWA,intermediate,0.09337770567732585,NA
+RWA,industrial,0.02281610379890722,NA
+SAU,backyard,0.4375,gf with continental medians
+SAU,intermediate,0.125,gf with continental medians
+SAU,industrial,0.4375,gf with continental medians
+SDN,backyard,0.75,gf with continental medians
+SDN,intermediate,0.125,gf with continental medians
+SDN,industrial,0.125,gf with continental medians
+SEN,backyard,0.7994866498617272,NA
+SEN,intermediate,0.19957827175776585,NA
+SEN,industrial,9.350783805069454e-4,NA
+SGP,backyard,0,NA
+SGP,intermediate,0,NA
+SGP,industrial,1,NA
+SHN,backyard,0.75,gf with continental medians
+SHN,intermediate,0.125,gf with continental medians
+SHN,industrial,0.125,gf with continental medians
+SJM,backyard,0.0625,gf with continental medians
+SJM,intermediate,0.0625,gf with continental medians
+SJM,industrial,0.875,gf with continental medians
+SLB,backyard,0.7685759351578623,NA
+SLB,intermediate,0.15143312368806522,NA
+SLB,industrial,0.07999094115407251,NA
+SLE,backyard,0.8951588052457353,NA
+SLE,intermediate,0.08518876565151473,NA
+SLE,industrial,0.019652429102749915,NA
+SLV,backyard,0.5316439146417885,NA
+SLV,intermediate,0.10490443265007351,NA
+SLV,industrial,0.363451652708138,NA
+SMR,backyard,0.0625,gf with continental medians
+SMR,intermediate,0.0625,gf with continental medians
+SMR,industrial,0.875,gf with continental medians
+SOM,backyard,0.19817083212088488,NA
+SOM,intermediate,0.0416291240653308,NA
+SOM,industrial,0.7602000438137843,NA
+SPM,backyard,0.25,gf with continental medians
+SPM,intermediate,0.125,gf with continental medians
+SPM,industrial,0.625,gf with continental medians
+SRB,backyard,0.17263242500197282,NA
+SRB,intermediate,0.0646469625072257,NA
+SRB,industrial,0.7627206124908015,NA
+SSD,backyard,0.8128833436525829,NA
+SSD,intermediate,0.14907780580066538,NA
+SSD,industrial,0.038038850546751726,NA
+STP,backyard,0.9000000011438601,NA
+STP,intermediate,0.09934085669572608,NA
+STP,industrial,6.591421604137255e-4,NA
+SUR,backyard,0.3586753151936481,NA
+SUR,intermediate,0.15199478858427792,NA
+SUR,industrial,0.48932989622207396,NA
+SVK,backyard,0.040988866882769544,NA
+SVK,intermediate,0.02274112893907996,NA
+SVK,industrial,0.9362700041781505,NA
+SVN,backyard,0.06545713421834627,NA
+SVN,intermediate,2.0028323045153532e-4,NA
+SVN,industrial,0.9343425825512022,NA
+SWE,backyard,9.988990445084945e-4,NA
+SWE,intermediate,0.024477465758339798,NA
+SWE,industrial,0.9745236351971517,NA
+SWZ,backyard,0.7587447512287875,NA
+SWZ,intermediate,0.005290787603846622,NA
+SWZ,industrial,0.23596446116736589,NA
+SXM,backyard,0.25,gf with continental medians
+SXM,intermediate,0.125,gf with continental medians
+SXM,industrial,0.625,gf with continental medians
+SYC,backyard,0.75,gf with continental medians
+SYC,intermediate,0.125,gf with continental medians
+SYC,industrial,0.125,gf with continental medians
+SYR,backyard,0.15692070033746033,NA
+SYR,intermediate,0.025078872222667078,NA
+SYR,industrial,0.8180004274398726,NA
+TCA,backyard,0.25,gf with continental medians
+TCA,intermediate,0.125,gf with continental medians
+TCA,industrial,0.625,gf with continental medians
+TCD,backyard,0.7768413857760859,NA
+TCD,intermediate,0.17509393926122033,NA
+TCD,industrial,0.04806467496269383,NA
+TGO,backyard,0.9005840051632833,NA
+TGO,intermediate,0.0828728193658585,NA
+TGO,industrial,0.016543175470858172,NA
+THA,backyard,0.21788085425178327,NA
+THA,intermediate,0.2221886346392562,NA
+THA,industrial,0.5599305111089605,NA
+TJK,backyard,0.7900793818663899,NA
+TJK,intermediate,0.15188734026450829,NA
+TJK,industrial,0.058033277869101854,NA
+TKL,backyard,0.625,gf with continental medians
+TKL,intermediate,0.1875,gf with continental medians
+TKL,industrial,0.1875,gf with continental medians
+TKM,backyard,0.3454105836738166,NA
+TKM,intermediate,0.1438160743195517,NA
+TKM,industrial,0.5107733420066317,NA
+TLS,backyard,0.8578686306569415,NA
+TLS,intermediate,0.10989066095449178,NA
+TLS,industrial,0.032240708388566706,NA
+TON,backyard,0.6443039729038077,NA
+TON,intermediate,0.1878532134483894,NA
+TON,industrial,0.16784281364780293,NA
+TTO,backyard,0.04099191865654202,NA
+TTO,intermediate,0,NA
+TTO,industrial,0.9590080813434579,NA
+TUN,backyard,0.33347985705280353,NA
+TUN,intermediate,0.09718192184254724,NA
+TUN,industrial,0.5693382211046493,NA
+TUR,backyard,0.11058951419003005,NA
+TUR,intermediate,0.006238449736646752,NA
+TUR,industrial,0.8831720360733232,NA
+TUV,backyard,0.625,gf with continental medians
+TUV,intermediate,0.1875,gf with continental medians
+TUV,industrial,0.1875,gf with continental medians
+TWN,backyard,0.3873403390111923,NA
+TWN,intermediate,0.3063298304944038,NA
+TWN,industrial,0.3063298304944038,NA
+TZA,backyard,0.6280394462889347,NA
+TZA,intermediate,0.1491697963176323,NA
+TZA,industrial,0.22279075739343301,NA
+UGA,backyard,0.8756816941364775,NA
+UGA,intermediate,0.0992751686490042,NA
+UGA,industrial,0.02504313721451832,NA
+UKR,backyard,0.6384631889914951,NA
+UKR,intermediate,0.29941532758223877,NA
+UKR,industrial,0.06212148342626611,NA
+URY,backyard,0.2472415292077095,NA
+URY,intermediate,0.3011033881215673,NA
+URY,industrial,0.4516550826707232,NA
+USA,backyard,0.011831107464386275,NA
+USA,intermediate,1.2342498175239682e-5,NA
+USA,industrial,0.9881565500374384,NA
+UZB,backyard,0.73564099199684585,NA
+UZB,intermediate,0.15899378954331658,NA
+UZB,industrial,0.1053652184598376,NA
+VCT,backyard,0.23643298880995917,NA
+VCT,intermediate,0.0774492510402508,NA
+VCT,industrial,0.6861177601497901,NA
+VEN,backyard,0.1861800112509461,NA
+VEN,intermediate,0.04606712005497551,NA
+VEN,industrial,0.7677528686940783,NA
+VGB,backyard,0.25,gf with continental medians
+VGB,intermediate,0.125,gf with continental medians
+VGB,industrial,0.625,gf with continental medians
+VIR,backyard,0.25,gf with continental medians
+VIR,intermediate,0.125,gf with continental medians
+VIR,industrial,0.625,gf with continental medians
+VNM,backyard,0.7996719622873109,NA
+VNM,intermediate,0.15020270050631784,NA
+VNM,industrial,0.050125337206371356,NA
+VUT,backyard,0.6252820373648768,NA
+VUT,intermediate,0.20373730220036573,NA
+VUT,industrial,0.17098066043475751,NA
+WLF,backyard,0.625,gf with continental medians
+WLF,intermediate,0.1875,gf with continental medians
+WLF,industrial,0.1875,gf with continental medians
+WSM,backyard,1,NA
+WSM,intermediate,0,NA
+WSM,industrial,0,NA
+XKO,backyard,0.9653615153848925,NA
+XKO,intermediate,0.0027012049454040953,NA
+XKO,industrial,0.03193727966970346,NA
+XMI,backyard,0.75,gf with continental medians
+XMI,intermediate,0.125,gf with continental medians
+XMI,industrial,0.125,gf with continental medians
+YEM,backyard,0.4375,gf with continental medians
+YEM,intermediate,0.125,gf with continental medians
+YEM,industrial,0.4375,gf with continental medians
+ZAF,backyard,0.23430382431972374,NA
+ZAF,intermediate,0.07578011558253972,NA
+ZAF,industrial,0.6899160600977364,NA
+ZMB,backyard,0.8577215119154865,NA
+ZMB,intermediate,0.10988197959178336,NA
+ZMB,industrial,0.03239650849273019,NA
+ZWE,backyard,0.6304658299212348,NA
+ZWE,intermediate,0.3645034453955082,NA
+ZWE,industrial,0.005030724683256979,NA
+NA,backyard,0.6922013167938804,NA
+NA,intermediate,0.06157193111487506,NA
+NA,industrial,0.24622675209124453,NA

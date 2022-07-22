@@ -1,0 +1,129 @@
+---
+title: "expore domiant pressures masking"
+author: "Juliette"
+date: "1/27/2021"
+output: html_document
+---
+
+Grab all the livestock head count rasters and ID where areas have <10 heads per cell
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+
+```
+
+
+
+```{r}
+
+animal_list <- c("chickens", "sheep", "goats", "cows", "pigs", "buffaloes")
+
+file_list <- list.files(file.path(prep, "animal_farm/farm/location_tifs"), full.names = TRUE)
+file_list<-  Filter(function(x) !any(grepl("buffaloes_mixed_meat", x)), file_list)  
+file_list<-  Filter(function(x) !any(grepl("buffaloes_grassland_meat", x)), file_list)  
+
+for(animal in animal_list){
+ # animal <- animal_list[1]
+  
+raster_paths <-  Filter(function(x) any(grepl(animal, x)), file_list)  
+  
+stack <- stack(lapply(raster_paths, raster))
+  
+  sum <- sum(stack, na.rm = TRUE) 
+    names(sum) <- paste(animal)
+  
+  writeRaster(sum, file.path(prep, paste0("animal_farm/farm/updated_maps_grouped_livestock/", animal, "_total.tif", sep = "")), format = "GTiff", overwrite = TRUE)
+      }
+
+```
+
+
+## look at it as total livestock
+```{r}
+file_list <- list.files(file.path(prep, "animal_farm/farm/updated_maps_grouped_livestock/"), full.names = TRUE)
+
+stack <- stack(lapply(file_list, raster))
+  
+  sum <- sum(stack, na.rm = TRUE)
+    
+    density <- sum/area(sum)
+    
+plot(log(1+density))   
+
+mask_raster_1 <- calc(density, fun = function(x){ifelse(x >= 1, 1, NA)})
+plot(mask_raster_1, main = "density >= 1 head/km2")
+
+mask_raster_5 <- calc(density, fun = function(x){ifelse(x >= 5, 1, NA)})
+plot(mask_raster_5, main = "density >= 5 head/km2")
+#summary(mask_raster_5) 
+
+mask_raster_10 <- calc(density, fun = function(x){ifelse(x >= 10, 1, NA)})
+plot(mask_raster_10, main = "density >= 10 head/km2")
+#summary(mask_raster_10) ##  8330989 NAs
+
+mask_raster_20 <- calc(density, fun = function(x){ifelse(x >= 20, 1, NA)})
+plot(mask_raster_20, main = "density >= 20 head/km2")
+#summary(mask_raster_20) #  8494628 NAs
+
+###where is the density less than 1
+mask_raster_less <- calc(density, fun = function(x){ifelse(x < 1, 1, NA)})
+plot(mask_raster_less,  main = "density < 1 head/km2")
+
+```
+
+## Crop mask + add in fodder
+```{r}
+
+crop_files <- list.files(file.path(prep, "crop/farm/scaled_maps_2017"), full.names = TRUE)
+crop_files<-  Filter(function(x) any(grepl("A", x)), crop_files)  
+crop_files<-  Filter(function(x) !any(grepl("acof", x)), crop_files)  
+crop_files<-  Filter(function(x) !any(grepl("teas", x)), crop_files)  
+crop_files<-  Filter(function(x) !any(grepl("toba", x)), crop_files)  
+crop_files<-  Filter(function(x) !any(grepl("rcof", x)), crop_files) 
+
+stack <- stack(lapply(crop_files, raster))
+  
+sum <- sum(stack, na.rm = TRUE)
+
+mask_crop <- calc(sum, fun = function(x){ifelse(x > 0, 1, NA)})
+
+plot(mask_crop,  main = "> 0 tonnes of crop per cell")
+
+```
+
+
+## Fisheries mask
+```{r}
+fish <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/ghg/watson_v5_emissions/catch_rasters/all_tonnes_2017.tif")
+
+plot(fish)
+
+fish_density <- fish/area(fish)
+
+mask_fish_1 <- calc(fish_density, fun = function(x){ifelse(x >= 0.01, 1, NA)})
+plot(mask_fish_1, main = "density >= 0.01 tonne/km2")
+#summary(mask_fish_1) 
+
+mask_fish_less <- calc(fish_density, fun = function(x){ifelse(x < 1, 1, NA)})
+plot(mask_fish_less, main = "density < 1 tonne/km2")
+
+mask_fish_1_repro <- resample(mask_fish_1, food_raster, method = "ngb")
+
+```
+
+
+##Create one mask
+
+```{r}
+
+mask_sum <- sum(stack(mask_raster_5, mask_crop, mask_fish_1_repro), na.rm = TRUE)
+plot(mask_sum)
+
+mask_all <- calc(mask_sum, fun = function(x){ifelse(x > 0, 1, NA)})
+plot(mask_all)
+```
+

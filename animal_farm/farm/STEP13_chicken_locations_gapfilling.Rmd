@@ -1,0 +1,511 @@
+---
+title: "STEP 13: Gapfilling Chicken Locations"
+author: "Juliette"
+date: "7/21/2020"
+output: html_document
+---
+
+# Objective
+To gapfill our 2 industrial chicken maps. We are not gapfilling the backyard counts, because of our decision to only use the gridded global distribution maps to inform us on backyard chicken counts and locations.
+
+# Inputs
+industrial chicken maps created in STEP 8
+prop_industrial_chickens_gf.csv calcualted in STEP 12
+fao_livestock_headcount.csv calculated in STEP 1
+
+# Output
+Gapfilled versions of our input maps
+
+## Setup
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Methods
+
+1. Look to see which regions in the maps are missing from our food_systems_rgn list
+
+2. There are some countries that FAO reports counts for but that we lost when distributing with the FAO gridded maps because those data reports 0 counts. We will gap fill these first by applying the counts evenly across the cells of the region. 
+
+3. Next, we will look at the gridded livestock maps to see if they report counts where FAO does not. If this is the case we will have lost those chickens. We will pull those countries out, and multiply by the proportional change from 2010 to 2016. Then we will gap fill these countries by applying the counts evenly across the cells of the region.
+
+4. Lastly we will look so see if GLEAM reports counts where our updated maps do not. We will pull those countries out, and multiply by the proportional change from 2010 to 2016. Then we will gap fill these countries by applying the counts evenly across the cells of the region.
+
+## Load our libraries and read in the maps and data we need
+```{r}
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+'%notin%' <- Negate('%in%')
+
+## our maps
+meat <- read_csv(file.path(prep, "animal_farm/farm/ungapfilled_chickens_pigs/chickens_industrial_meat_location_df_ungf.csv"), col_type = c("ddnnnccnnccncnn"))
+
+eggs <- read_csv(file.path(prep, "animal_farm/farm/ungapfilled_chickens_pigs/chickens_industrial_eggs_location_df_ungf.csv"), col_type = c("ddnnnccnnccncnn"))
+
+by <- read_csv(file.path(prep, "animal_farm/farm/ungapfilled_chickens_pigs/chickens_backyard_eggs&meat_location_df_ungf.csv"), col_type = c("ddnnnccnnccncnn"))
+
+## FAO stat data
+fao_meat <- read_csv(here("animal_farm/farm/data/fao_livestock_headcount_chicken_adjusted.csv")) %>% 
+  filter(animal == "chickens" & product =="meat",
+         year == 2017)
+fao_eggs <- read_csv(here("animal_farm/farm/data/fao_livestock_headcount_chicken_adjusted.csv")) %>% 
+  filter(animal == "chickens" & product =="eggs",
+         year == 2017)
+fao_by <- read_csv(here("animal_farm/farm/data/fao_livestock_headcount_chicken_adjusted.csv")) %>% 
+  filter(animal == "chickens" & product =="eggs&meat",
+         year == 2017)
+
+# un gapfilling regions
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>% 
+  dplyr::select(iso3c, Global_Name, Region_Name, Sub_region_Name, Intermediate_Region_Name, Region_Name)
+```
+
+
+
+## 1. Check that we have all our regions in the maps we are working from
+```{r}
+setdiff(meat$iso3c, food_rgns$iso3c)
+setdiff(eggs$iso3c, food_rgns$iso3c)
+setdiff(by$iso3c, food_rgns$iso3c)
+## we're good!
+```
+
+## 2. Check that we didn't loose FAO stat data along the way
+```{r}
+our_meat <- meat %>% 
+  group_by(iso3c) %>% 
+  dplyr::summarise(our_count = sum(current_count, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  na.omit()
+
+our_eggs <- eggs %>% 
+  group_by(iso3c)%>% 
+  dplyr::summarise(our_count = sum(current_count, na.rm = TRUE)) %>% 
+  ungroup()%>% 
+  na.omit()
+
+our_by <- by %>% 
+  group_by(iso3c)%>% 
+  dplyr::summarise(our_count = sum(current_count, na.rm = TRUE)) %>% 
+  ungroup()%>% 
+  na.omit()
+
+##compare with FAO
+meat_fao_lost <- left_join(our_meat, fao_meat, by = "iso3c") %>% 
+  filter(our_count == 0 & fao_headcount > 0) %>% 
+  select(iso3c, fao_headcount)
+## 0 countries
+
+eggs_fao_lost <- left_join(our_eggs, fao_eggs, by = "iso3c") %>% 
+  filter(our_count == 0 & fao_headcount > 0)%>% 
+  select(iso3c, fao_headcount)
+## 0 countries
+
+by_fao_lost <- left_join(our_by, fao_by, by = "iso3c") %>% 
+  filter(our_count == 0 & fao_headcount > 0)%>% 
+  select(iso3c, fao_headcount)
+## 7 countries
+
+```
+
+There are no missing industrial chickens from FAO, but there are missing backyard. So we will add those in and distribute evenly across the country's cells.
+```{r}
+
+missing_by <- c(by_fao_lost$iso3c)
+
+by_map_missing <- by %>% 
+  filter(iso3c %in% missing_by) %>% 
+  group_by(iso3c) %>% 
+  mutate(cell_total = n()) %>% 
+  ungroup() %>%
+  mutate(current_count = fao_headcount/cell_total) %>% 
+  select(-cell_total) %>% 
+  mutate(gapfill = "fao stat values evenly distributed among cells in region")
+
+by_gf1 <- by %>% 
+  mutate(gapfill = NA) %>% 
+  filter(iso3c %notin% missing_by) %>% 
+  rbind(by_map_missing)
+  
+```
+
+
+Recalculate our region totals
+```{r}
+
+our_ind <- rbind(our_meat, our_eggs) %>% 
+  group_by(iso3c) %>% 
+  dplyr::summarise(our_count = sum(our_count, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  na.omit()
+
+our_by <- by_gf1 %>% 
+  group_by(iso3c) %>% 
+  dplyr::summarise(our_count = sum(current_count, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  na.omit()
+
+
+```
+
+## 3.Now we want to see if there are any chicken head counts accounted for in the gridded fao data that we are missing (ie: not in FAOSTAT). 
+
+As a starting check I think we can just add up our industrial counts. If we are missing countries we can go from there. If we use gleam proportions off the bat we risk loosing countries that gleam doesnt report on or reports 0.
+```{r}
+
+gridded_ind <- raster(file.path(raw, "FAO_livestock_maps/d2019/chickens/07_ChInt_2010_Da.tif"))%>% 
+  zonal(food_rgns_tif, fun = "sum") %>% 
+  as_tibble() %>% 
+  dplyr::rename(ID_0 = zone) %>% 
+  left_join(food_rgns, by = "ID_0") %>% 
+  rename(gridded_count = sum)
+
+gridded_by <- raster(file.path(raw, "FAO_livestock_maps/d2019/chickens/06_ChExt_2010_Da.tif"))%>% 
+  zonal(food_rgns_tif, fun = "sum") %>% 
+  as_tibble() %>% 
+  dplyr::rename(ID_0 = zone) %>% 
+  left_join(food_rgns, by = "ID_0") %>% 
+  rename(gridded_count = sum)
+
+```
+
+Compare ours with gridded
+
+```{r}
+##industrial
+setdiff(gridded_ind$iso3c, our_ind$iso3c)
+setdiff(our_ind$iso3c, gridded_ind$iso3c)
+
+##bys
+setdiff(gridded_by$iso3c, our_by$iso3c)
+setdiff(our_by$iso3c, gridded_by$iso3c)
+
+## does gridded report counts were we do not?
+missing_ind_gridded <- left_join(gridded_ind, our_ind, by = "iso3c") %>% 
+  filter(our_count == 0 & gridded_count > 0)
+## 17 countries
+missing_iso3c_gridded_ind <- missing_ind_gridded$iso3c
+
+##by
+missing_by_gridded <- left_join(gridded_by, our_by, by = "iso3c") %>% 
+  filter(our_count == 0 & gridded_count > 0)
+## 15 countries
+missing_iso3c_gridded_by <- missing_by_gridded$iso3c
+
+```
+
+
+For the industrial chickens, we will need to 1) use GLEAM proportions to allocate egg vs meat chickens and 2) use 'proportional_change_industrial_chickens_gf.csv to determine 2017 values
+
+For backyard chickens we will just need to adjust to 2017 values
+
+```{r}
+gleam_prop_ind <- read_csv(here("animal_farm/farm/data/prop_industrial_chickens_gf.csv")) %>% 
+  select(iso3c, prop_broilers, prop_layers)
+
+prop_change <- read_csv(here("animal_farm/farm/data/prop_change_2010_2017.csv")) %>% 
+  filter(animal == "layer chicken" | animal == "broiler chicken" | animal == "backyard chicken") %>% 
+  mutate(type = case_when(animal == "layer chicken" ~ "layers",
+                           animal == "broiler chicken" ~ "broilers",
+                          animal == "backyard chicken" ~ "backyard")) %>% 
+  select(iso3c, type, prop_change) %>% 
+  pivot_wider(names_from = type, values_from = prop_change) %>% 
+  rename(broilers_prop_change = broilers,
+         layers_prop_change = layers,
+         backyard_prop_change = backyard)
+
+```
+
+Industrial
+
+```{r}
+gridded_ind_gf <- missing_ind_gridded %>% 
+  left_join(gleam_prop_ind, by = "iso3c") %>% 
+  mutate(gridded_broilers = gridded_count*prop_broilers,
+         gridded_layers = gridded_count*prop_layers) %>% 
+  left_join(prop_change, by = "iso3c") %>% 
+  mutate(gridded_broilers_scaled = gridded_broilers*broilers_prop_change,
+         gridded_layers_scaled = gridded_layers*layers_prop_change) 
+
+check <- gridded_ind_gf %>% 
+  dplyr::summarise(extra_broiler = sum(gridded_broilers_scaled),
+                   extra_layer = sum(gridded_layers_scaled)) %>% 
+  mutate(total = extra_broiler+extra_layer) ## 1,013,408 extra chickens
+
+## grab the meat chickens and gf our maps
+gridded_meat_gf <-gridded_ind_gf %>% 
+  select(iso3c, gridded_broilers_scaled)
+  
+meat_gf1 <- meat %>% 
+  left_join(gridded_meat_gf, by = "iso3c") %>% 
+  mutate(gapfill = ifelse(iso3c %in% missing_iso3c_gridded_ind, "gf with gridded scaled values", NA),
+          current_count = ifelse(iso3c %in% missing_iso3c_gridded_ind, gridded_broilers_scaled*map_prop, current_count)) %>% 
+  select(- gridded_broilers_scaled)
+
+## fao meat is #12,960,279,418	and we are adding 916,390.8 extra broilers so the sum should be ~ 12,961,195,809
+
+## grab the eggs chickens and gf our maps
+gridded_eggs_gf <-gridded_ind_gf %>% 
+  select(iso3c, gridded_layers_scaled)
+  
+eggs_gf1 <- eggs %>% 
+  left_join(gridded_eggs_gf, by = "iso3c") %>% 
+  mutate(gapfill = ifelse(iso3c %in% missing_iso3c_gridded_ind, "gf with gridded scaled values", NA),
+          current_count = ifelse(iso3c %in% missing_iso3c_gridded_ind, gridded_layers_scaled*map_prop, current_count))%>% 
+  select(- gridded_layers_scaled)
+
+## fao eggs is #5,939,603,235	and we are adding 97,017.02
+  
+```
+
+
+Backyard
+
+```{r}
+gridded_by_gf <- missing_by_gridded %>% 
+  left_join(prop_change, by = "iso3c") %>% 
+  mutate(gridded_by_scaled = gridded_count*backyard_prop_change) %>% 
+  select(iso3c, gridded_by_scaled)
+  
+by_gf2 <- by_gf1 %>% 
+  left_join(gridded_by_gf, by = "iso3c") %>% 
+  mutate(gapfill = ifelse(iso3c %in% missing_iso3c_gridded_by, "gf with gridded scaled values", gapfill),
+         current_count = ifelse(iso3c %in% missing_iso3c_gridded_by, gridded_by_scaled*map_prop, current_count)) %>% 
+  select(- gridded_by_scaled)
+
+  
+```
+
+
+Recalculate our region totals
+```{r}
+our_meat <- meat_gf1 %>% 
+  group_by(iso3c) %>% 
+  dplyr::summarise(our_count = sum(current_count, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  na.omit()
+
+our_eggs <- eggs_gf1 %>% 
+  group_by(iso3c)%>% 
+  dplyr::summarise(our_count = sum(current_count, na.rm = TRUE)) %>% 
+  ungroup()%>% 
+  na.omit()
+
+our_by <- by_gf2 %>% 
+  group_by(iso3c)%>% 
+  dplyr::summarise(our_count = sum(current_count, na.rm = TRUE)) %>% 
+  ungroup()%>% 
+  na.omit()
+
+```
+
+4. Last check! Make sure that there are no missing values from GLEAM
+
+GLEAM Data
+```{r}
+gleam <- read_csv(here("animal_farm/farm/data/chickens_GLEAMi_v2.csv")) %>% 
+  filter(Production_system != "All systems",
+         Variable == "HERD: total number of animals")
+
+gleam_meat <- gleam %>% 
+  filter(Production_system == "Broilers") %>% 
+  select(iso3c, system = Production_system, gleam_count = Value) %>% 
+  right_join(food_rgns, by = "iso3c")
+
+gleam_eggs <- gleam %>% 
+  filter(Production_system == "Layers") %>% 
+  select(iso3c, system = Production_system, gleam_count = Value)%>% 
+  right_join(food_rgns, by = "iso3c")
+
+gleam_by <- gleam %>% 
+  filter(Production_system == "Backyard") %>% 
+  select(iso3c, system = Production_system, gleam_count = Value)%>% 
+  right_join(food_rgns, by = "iso3c")
+  
+```
+
+Compare with our gf values as of now
+
+```{r}
+## check for missing countries or countries where counts are reported in one source but not the other
+
+meat_missing_gleam <- left_join(our_meat, gleam_meat, by = "iso3c") %>% 
+  filter(our_count == 0 & gleam_count > 0)
+## 7 countries
+
+eggs_missing_gleam <- left_join(our_eggs, gleam_eggs, by = "iso3c") %>% 
+  filter(our_count == 0 & gleam_count > 0)
+## 2 countries
+
+by_missing_gleam <- left_join(our_by, gleam_by, by = "iso3c") %>% 
+  filter(our_count == 0 & gleam_count > 0)
+# 0 countries
+
+```
+
+**Industrial meat chickens**
+According to our checks, GLEAM reports industrial meat chickens in Iceland, Latvia, and North Korea. However, according to FAO stat data these countries reported broiler chickens in 2010 and reported 0 broiler chickens in 2016, so the proportional change would be 0. We are going to keep these broiler counts as 0 because FAO stat is the most up to date data. 
+
+French Guiana reports 0 both years (for broiler chickens, they do have data for layers) so proportional change is 0. Since we assume FAO to be correct we won't gapfull these.
+
+Anguilla, Norfolk Islands, and British Virgin Islands don't have fao data so their prop change is gapfilled. double check that the gridded reports 0. if so this makes sense and we can gapfill these with the gleam values after adjusting them
+
+Grab the 3 countries we will actually use GLEAM values to gapfill our current maps. We only need to worry about the industrial meat chickens here.
+
+<!-- For French Guiana we will use the map cell proportion to allocate the broilers. As a reminder (because I keep forgetting this!) The reason that we have map proportions for broilers in GUF is that there are chickens there in the gridded (layers and meat). So this country got skipped over when gapfilling with gridded values, because we added together eggs and layers from our counts. Fro gridded gapfilling we were only checking industrial. -->
+
+**Industrial egg chickens**
+GLEAM reports chickens for KIR and FSM, but FAO reports 0 for those countries in 2010 and 2017 (not NAs). So we won't gapfill these as to keep with the "FAO is always correct. Note, this value is due to the backyard correction.
+
+**Backyard chickens**
+no missing countries
+
+```{r}
+missing_gleam_list <- c("AIA", "NFK", "VGB")
+
+missing_gleam <- left_join(our_meat, gleam_meat, by = "iso3c") %>% 
+  filter(iso3c %in% missing_gleam_list) %>% 
+  left_join(prop_change, by = "iso3c") %>% 
+  mutate(gleam_count_scaled = gleam_count*broilers_prop_change) %>% 
+  select(iso3c, gleam_count_scaled)
+
+meat_map_gle_missing <- meat_gf1 %>% 
+  filter(iso3c %in% missing_gleam_list) %>% 
+  group_by(iso3c) %>% 
+  mutate(cell_total = n()) %>% 
+  ungroup() %>%
+  left_join(missing_gleam, by = "iso3c") %>% 
+  rowwise() %>% 
+   mutate(#current_count = ifelse(iso3c == "GUF", gleam_count_scaled*map_prop, current_count),
+         current_count = gleam_count_scaled/cell_total,
+         gapfill = "gleam rescaled values evenly distributed across cells") %>% 
+  select(-cell_total, -gleam_count_scaled)
+
+meat_gf2 <- meat_gf1 %>% 
+  mutate(gapfill = NA) %>% 
+  filter(iso3c %notin% missing_gleam_list)  %>% 
+  rbind(meat_map_gle_missing)
+
+meat_gf2 <- meat_gf2 %>% 
+  mutate(current_count = ifelse(is.na(current_count), 0, current_count))
+
+eggs_gf1 <- eggs_gf1 %>% 
+  mutate(current_count = ifelse(is.na(current_count), 0, current_count))
+
+by_gf2 <- by_gf2 %>% 
+  mutate(current_count = ifelse(is.na(current_count), 0, current_count))
+```
+
+
+## 5.Let's check them!! Any countries weirdly standing out? 
+
+```{r}
+library(plotly)
+
+## meat
+meat_summarize <- meat_gf2 %>% 
+  group_by(iso3c, Country) %>% 
+  dplyr::summarise(region_total = sum(current_count))
+
+p1 <- ggplot(meat_summarize) +
+  geom_point(aes(x= region_total, y = Country, color = iso3c)) +
+  theme_minimal()+
+  theme(legend.position = "none")
+
+ggplotly(p1)
+
+## eggs
+eggs_summarize <- eggs_gf1 %>% 
+  group_by(iso3c, Country) %>% 
+  dplyr::summarise(region_total = sum(current_count))
+
+p2 <- ggplot(eggs_summarize) +
+  geom_point(aes(x= region_total, y = Country, color = iso3c)) +
+  theme_minimal()+
+  theme(legend.position = "none")
+
+ggplotly(p2)
+
+## backyard
+by_summarize <- by_gf2 %>% 
+  group_by(iso3c, Country) %>% 
+  dplyr::summarise(region_total = sum(current_count))
+
+p2 <- ggplot(by_summarize) +
+  geom_point(aes(x= region_total, y = Country, color = iso3c)) +
+  theme_minimal()+
+  theme(legend.position = "none")
+
+ggplotly(p2)
+
+```
+
+
+
+## 5. Save the new maps under "gf"
+
+```{r}
+write_csv(meat_gf2, file.path(prep, "animal_farm/farm/chickens_industrial_meat_location_df.csv"))
+write_csv(eggs_gf1, file.path(prep, "animal_farm/farm/chickens_industrial_eggs_location_df.csv"))
+write_csv(by_gf2, file.path(prep, "animal_farm/farm/chickens_backyard_eggs&meat_location_df.csv"))
+```
+
+
+look at the maps as a visual check
+```{r}
+meat_check_map <- meat_gf2 %>% 
+  select(x,y,current_count) %>% 
+  rasterFromXYZ(crs = food_crs)
+plot(log(1+meat_check_map))
+```
+
+
+total chickens check
+```{r}
+
+fao_total <- read_csv(here("animal_farm/farm/data/fao_livestock_headcount_chicken_adjusted.csv")) %>% 
+  filter(animal == "chickens",
+         year == 2017) %>% 
+  dplyr::summarise(total_chickens = sum(fao_headcount))
+## 23,212,563,000	; google says there are 25 billion so this magnitude is correct
+
+meat_count <- meat_gf2 %>% 
+  select(x,y, iso3c, meat_count = current_count)
+
+eggs_count <- eggs_gf1%>% 
+  select(x,y, iso3c,  egg_count = current_count)
+
+by_count<- by_gf2 %>% 
+  select(x,y, iso3c, by_count = current_count)
+
+our_total <- left_join(meat_count,eggs_count,by = c("x","y", "iso3c")) %>% 
+  left_join(by_count, by = c("x","y", "iso3c")) %>% 
+  rowwise() %>% 
+  mutate(total = meat_count + egg_count + by_count) %>% 
+  group_by(iso3c) %>% 
+  dplyr::summarise(total_count = sum(total, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  filter(!is.na(iso3c)) %>% 
+  dplyr::summarise(total_count = sum(total_count, na.rm = TRUE)) 
+
+##23,217,758,910	
+
+### look at them separately
+fao_meat_total <- dplyr::summarise(fao_meat, fao_meat_total = sum(fao_headcount))
+#12,960,279,418	
+fao_eggs_total <- dplyr::summarise(fao_eggs, fao_egg_total = sum(fao_headcount))
+#5,939,603,235	
+fao_by_total <- dplyr::summarise(fao_by, fao_by_total = sum(fao_headcount))
+#4,312,680,346
+
+meat_count_total <-  dplyr::summarise(meat_count, meat_count_total = sum(meat_count))
+#12,963,541,808	
+egg_count_total <-  dplyr::summarise(eggs_count, egg_count_total = sum(egg_count))
+##5,939,700,252
+by_count_total <-  dplyr::summarise(by_count, by_count_total = sum(by_count))	
+#4,314,516,850	
+
+```
+

@@ -1,0 +1,147 @@
+---
+title: "wf_df_mapping"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+## NOTE: originally we conceived this stressor to be the sum of blue and green water use.
+Now we provide blue and green water use separately and the pressure is based on blue water consumption.
+
+
+# Script objective
+Rasterize WF data.
+Calculate and map WF of crops.
+
+# Data description
+WF data sourced from Mekonnen and Hoekstra 2011 Appendix 2 Table 2 [Accessed 02/09/2020]
+Shapefiles for FIPS codes:http://www.fao.org/geonetwork/srv/en/resources.get?id=29036&fname=rwdb_ad2_py.z
+ip&access=private [Accessed: 02/20/2020]
+
+# Set-up
+```{r setup, include = FALSE}
+
+# library and package
+library(here); library(janitor); library(fasterize); library(furrr)
+source(here("_spatial/template_raster.R"))
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+# Import food_rgns xy df
+food_rgns_xy <- food_rgns_xy %>% dplyr::select(x, y, iso3c)
+``` 
+
+# Load dependencies
+```{r}
+## Water footprint data
+wf_df <- 
+  read_csv(here("crop/water/data/wf_df.csv")) %>%
+  group_by(fips_code, country, split_rest_names) %>%
+  summarize(m3_per_ton = sum(m3_per_ton, na.rm=TRUE)) %>% 
+  ungroup()
+
+global_average <- 
+  read_csv(here("crop/water/data/global_average.csv")) %>%
+  group_by(split_rest_names) %>%
+  summarize(global_average = sum(global_average, na.rm = TRUE)) %>% 
+  ungroup()
+
+## Import shp files for FIPS codes
+fips_shp <- 
+  read_sf("/home/shares/food-systems/Food_footprint/_raw_data/GADM36/rwdb_ad2_py/RWDB_Ad2-Py.shp", 
+          stringsAsFactors = FALSE) %>% 
+  clean_names() %>% 
+  select("geometry", "fips_code")
+
+# A df through which to cycle functions
+distinct_vars <- unique(wf_df$split_rest_names)
+```
+
+# Create water footprint maps
+```{r}
+wf_raster <- function(crop) {
+
+  # Filter by crop and wf_type
+  wf_df_filtered <- 
+    wf_df %>% 
+    filter(split_rest_names %in% crop) %>% 
+    dplyr::select(fips_code, 
+                  m3_per_ton, 
+                  split_rest_names) %>% 
+    left_join(fips_shp, 
+              ., 
+              by = "fips_code") %>% 
+    fasterize(., 
+              food_raster, 
+              field = "m3_per_ton")
+
+  # Assign global average value to empty raster cells
+  wf_df_filtered[is.na(wf_df_filtered)] <- 
+    global_average %>% 
+    filter(split_rest_names %in% crop) %>% 
+    .$global_average
+
+  # Overlay to calculate m3 per raster
+  water_map <- 
+    overlay(
+      wf_df_filtered, 
+      raster(file.path(prep,
+                       "crop/farm/scaled_maps_2017/crop_",
+                       crop,
+                       "_A_scaled.tif", 
+                       fsep = "")),
+      fun = function(r1, r2) {
+     
+       return(r1 * r2)
+     
+       })
+
+   # Change layer names
+ names(water_map) <- "m3"
+ 
+ # Save rasters
+   writeRaster(water_map, 
+               file.path(prep, 
+                         "crop/farm/stressors/land_",
+                         crop,
+                         "_crop_produce_water.tif", 
+                         fsep = ""), 
+               format    = "GTiff", 
+               overwrite = TRUE)
+}
+map(distinct_vars, wf_raster)
+```
+
+# Map fodder water consumption
+```{r}
+fodder_water <- 
+  overlay(raster(file.path(prep,
+                           "crop/farm/scaled_maps_2017/crop_fodd_rainfed_scaled.tif",
+                           fsep = "")),
+          raster(file.path(prep,
+                           "crop/farm/scaled_maps_2017/crop_fodd_I_scaled.tif",
+                           fsep = "")),
+          fun = function(r1, r2) {
+            
+            return((r1 + r2) * (207 + 27))
+            
+            })
+
+# Change layer names
+names(fodder_water) <- "m3"
+
+plot(fodder_water)
+
+writeRaster(fodder_water,
+            file.path(prep, "crop/farm/stressors/land_fodd_crop_produce_water.tif", fsep = ""), 
+            format    = "GTiff",
+            overwrite = TRUE)
+```
+
+```{r}
+map(.x = list.files(file.path(prep, "crop/farm/stressors/"),
+                    pattern = "water",
+                    full.names = TRUE),
+    ~ cellStats(raster(.x),
+                stat = "sum"))
+```
+

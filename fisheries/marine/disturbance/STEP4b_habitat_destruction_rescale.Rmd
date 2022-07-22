@@ -1,0 +1,165 @@
+---
+title: "New disturbance"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Here we:
+1. rescale the habitat destruction data 
+2. partition between marine fisheries food groups.
+
+```{r setup, include=FALSE}
+#load relevant packages, etc.
+
+library(here)
+library(raster)
+library(tidyverse)
+
+# raster template
+# raster template
+r <- raster::raster(ncol=720, nrow=360, vals=c(1:259200))
+food_raster_template <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+
+fishery_raster_template <- raster(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/destructive_proportions", full=TRUE)[1])
+```
+
+Rescale the hours of habitat destructive fisheries to values between 0-1 using the 99.9th quantile.
+```{r}
+
+destructive_hours <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/global_fishing_watch/FishingWatch_annual_effort_destructive_hours_2017.tif")
+
+destructive_hours_low_res <- aggregate(destructive_hours, fact=50, fun=sum, progress="text")
+# both have 259200 cells now!
+plot(log(destructive_hours_low_res+1))
+cellStats(destructive_hours_low_res, "sum")
+cellStats(destructive_hours, "sum", na.rm=TRUE)
+# both equal 16009799
+
+## divide by area to get hours effort per km2 to control for differences in raster area in lat/long projection
+destructive_hours_per_km2 <- destructive_hours_low_res/area(destructive_hours_low_res)
+
+## get the rescaling raster by removing land zero values:
+land_remove_template <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/spatial/food_rgns.tif") %>%
+  resample(destructive_hours_per_km2) %>%
+  raster::calc(fun=function(x){ifelse(is.na(x), 1, NA)})
+
+land_remove_template
+plot(land_remove_template)
+
+destructive_hours_per_km2_rescale_data <- destructive_hours_per_km2 * land_remove_template
+destructive_hours_per_km2_rescale_data
+plot(destructive_hours_per_km2_rescale_data)
+rescale_value <- quantile(destructive_hours_per_km2_rescale_data, c(0.999))
+#rescale_value <- quantile(destructive_hours_per_km2[destructive_hours_per_km2>0], c(0.999))
+
+destructive_hours_per_km2_rescaled <- destructive_hours_per_km2 %>%
+  raster::calc(fun=function(x){ifelse(x<0, 0,
+                                      ifelse(x>rescale_value, 1, x/rescale_value))})
+
+plot(destructive_hours_per_km2_rescaled)
+
+```
+
+Partition the rescaled pressures among the marine fisheries food categories.
+
+```{r}
+
+food_cat_props_rasters <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/destructive_proportions", full=TRUE)
+
+cellStats(stack(food_cat_props_rasters), sum, na.rm=TRUE)
+
+for(food_cat in food_cat_props_rasters){ # food_cat = food_cat_props_rasters[1]
+  saveName <- basename(food_cat)
+  saveName <- gsub("ben_hab_dest_prop_", "", saveName)
+  food_cat_hab_dest <- raster(food_cat) * destructive_hours_per_km2_rescaled 
+  writeRaster(food_cat_hab_dest, sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/benthic_habitat_destruction/benthic_habitat_destruction_%s", saveName), overwrite=TRUE)
+  
+  #plot(food_cat_hab_dest)
+}
+
+
+# change name to match Gage names
+list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/benthic_habitat_destruction", full=TRUE)
+file.rename(from=
+"/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/benthic_habitat_destruction/benthic_habitat_destruction_forage_fish.tif",
+to="/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/benthic_habitat_destruction/benthic_habitat_destruction_fofm.tif")
+
+```
+
+Quick check that things are ok
+```{r}
+
+all_hab_dest <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/benthic_habitat_destruction", full=TRUE)
+
+all_hab_dest_stack <- stack(all_hab_dest)
+all_hab_total <- calc(all_hab_dest_stack, sum, na.rm=TRUE)
+
+diff <- all_hab_total - destructive_hours_per_km2_rescaled
+plot(diff)
+
+```
+
+
+## Uncertainty analysis
+Rescale the hours of habitat destructive fisheries to values between 0-1 using the 99.99th quantile.  These data will be saved elsewhere and ran as a different scenario.
+```{r}
+
+destructive_hours <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/global_fishing_watch/FishingWatch_annual_effort_destructive_hours_2017.tif")
+
+destructive_hours_low_res <- aggregate(destructive_hours, fact=50, fun=sum, progress="text")
+# both have 259200 cells now!
+plot(log(destructive_hours_low_res+1))
+cellStats(destructive_hours_low_res, "sum")
+cellStats(destructive_hours, "sum", na.rm=TRUE)
+# both equal 16009799
+
+## divide by area to get hours effort per km2 to control for differences in raster area in lat/long projection
+destructive_hours_per_km2 <- destructive_hours_low_res/area(destructive_hours_low_res)
+
+## get the rescaling raster by removing land zero values:
+land_remove_template <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/spatial/food_rgns.tif") %>%
+  resample(destructive_hours_per_km2) %>%
+  raster::calc(fun=function(x){ifelse(is.na(x), 1, NA)})
+
+land_remove_template
+plot(land_remove_template)
+
+destructive_hours_per_km2_rescale_data <- destructive_hours_per_km2 * land_remove_template
+destructive_hours_per_km2_rescale_data
+plot(destructive_hours_per_km2_rescale_data)
+rescale_value <- quantile(destructive_hours_per_km2_rescale_data, c(0.9999))
+
+destructive_hours_per_km2_rescaled <- destructive_hours_per_km2 %>%
+  raster::calc(fun=function(x){ifelse(x<0, 0,
+                                      ifelse(x>rescale_value, 1, x/rescale_value))})
+
+plot(destructive_hours_per_km2_rescaled)
+
+```
+
+Partition the rescaled pressures among the marine fisheries food categories.
+
+```{r}
+
+food_cat_props_rasters <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/disturbance/rasters/destructive_proportions", full=TRUE)
+
+cellStats(stack(food_cat_props_rasters), sum, na.rm=TRUE)
+
+for(food_cat in food_cat_props_rasters){ # food_cat = food_cat_props_rasters[1]
+  saveName <- basename(food_cat)
+  saveName <- gsub("ben_hab_dest_prop_", "", saveName)
+  food_cat_hab_dest <- raster(food_cat) * destructive_hours_per_km2_rescaled 
+  writeRaster(food_cat_hab_dest, sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/scenarios/scenarios_dataprep/fis_benthic_destructive/benthic_habitat_destruction_%s", saveName), overwrite=TRUE)
+  
+  #plot(food_cat_hab_dest)
+}
+
+
+# change name to match Gage names
+list.files("/home/shares/food-systems/Food_footprint/all_food_systems/scenarios/scenarios_dataprep/fis_benthic_destructive", full=TRUE)
+file.rename(from=
+"/home/shares/food-systems/Food_footprint/all_food_systems/scenarios/scenarios_dataprep/fis_benthic_destructive/benthic_habitat_destruction_forage_fish.tif",
+to="/home/shares/food-systems/Food_footprint/all_food_systems/scenarios/scenarios_dataprep/fis_benthic_destructive/benthic_habitat_destruction_fofm.tif")
+
+```

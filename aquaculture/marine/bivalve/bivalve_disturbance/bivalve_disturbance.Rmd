@@ -1,0 +1,382 @@
+---
+title: "Bivalve disturbance"
+author: "Gage Clawson (NCEAS, OHI, UCSB)"
+date: "12/29/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r read in libaries and paths}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(readr)
+library(tidyverse)
+library(raster)
+library(data.table)
+library(raster)
+library(rgdal)
+library(here)
+library(taxize)
+
+path_final <- "/home/shares/food-systems/Food_footprint/all_food_systems/datalayers"
+
+path_prep <- "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/bivalve"
+
+food_crs <- "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"
+
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+
+```
+
+Bivalve specifications: 
+
+ - 100 long lines in each km2 
+ - each line 4000 meters of rope (13000 feet)
+ - each foot of line has 100 bivalves
+
+Which means 130000000 bivalves per km2
+
+We assume that the rearing time is about 1 year, so no lost bivalves. What is reported is the actual tonnage. 
+
+Now all we need to figure out is the number of bivalves per cell. 
+ 
+## Estimate number bivalves/tonne production at family level
+
+Using the information in this paper, table 1: https://www.researchgate.net/publication/259436886_Weight_-_Length_relationships_of_25_bivalve_species_Mollusca_Bivalvia_from_the_Algarve_coastsouthern_Portugal
+
+First I need to put the information in table 1 into an excel sheet (do this manually and upload to aurora). I will add a "family_2" column, for the families which do not match our data. It will be the family in our data that is closest in relation (i.e. in the same super family, or the same order)
+
+
+I will do the same thing with this paper, using table 1 and table 2: http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.825.2317&rep=rep1&type=pdf
+
+
+We will also use information for oyster species from here (Ostreidae): 
+
+Assume this number for all Ostreidae, regardless of if they are pacific cupped or not (pacific cupped is the most common in our data). 
+http://www.ccpo.odu.edu/~klinck/Reprints/PDF/kobayashiAqua1997.pdf
+http://www.ccpo.odu.edu/~klinck/Reprints/PDF/kobayashiAqua1997.pdf
+Pacific Oyster
+
+Assume live-weight estimates: From Figure 4a
+
+L = 21.4*W^0.377
+
+W = 0.000295836*L^2.563
+
+
+1. For each species, use their equation and parameter estimates to calculate # bivalves/tonne
+2. Average these values at the family level
+3. Calculate an average that you can use to gapfill families not included in these studies
+
+
+```{r}
+#### GASPAR (first paper)
+## read in the Weight and Length data and wrangle 
+gaspar <- read_csv(file.path("/home/shares/food-systems/Food_footprint/_raw_data/gaspar_bivalve/gaspar_bivalve_WL.csv"))
+
+unique(gaspar$family)
+
+## now lets wrangle a bit, to get family, avg alpga, avg beta
+
+# filter for those that have a "family_2" and get those averages
+gaspar_fam_2 <- gaspar %>%
+  dplyr::filter(!is.na(family_2)) %>%
+  group_by(family_2) %>%
+  summarise(alpha = mean(alpha),
+            beta = mean(beta)) %>%
+  dplyr::rename("family" = "family_2")
+
+# get averages for those that have na for family_2
+gaspar_fam <- gaspar %>%
+  dplyr::filter(is.na(family_2)) %>%
+  group_by(family) %>%
+  summarise(alpha = mean(alpha),
+            beta = mean(beta)) 
+
+## bind together and get averages for families
+gaspar_final <- rbind(gaspar_fam, gaspar_fam_2) %>%
+  group_by(family) %>%
+  summarise(alpha = mean(alpha), 
+            beta = mean(beta))
+
+#### Park (second paper)
+
+park <- read_csv(file.path("/home/shares/food-systems/Food_footprint/_raw_data/park_and_oh_bivalve_WL/park_and_oh_bivalve_WL.csv"))
+
+park_final <- park %>%
+  group_by(family) %>%
+  summarise(alpha = mean(alpha), 
+            beta = mean(beta))
+
+## third paper for oysters
+koboyashi_final <- data.frame(family = "Ostreidae", alpha = 0.000295836, beta = 2.563)
+
+
+## combine them all
+
+bivalve_w_l_final <- rbind(park_final, gaspar_final, koboyashi_final) %>%
+  group_by(family) %>%
+  dplyr::summarise(alpha = mean(alpha), 
+            beta = mean(beta))
+
+write.csv(bivalve_w_l_final, file.path("aquaculture/marine/bivalve/bivalve_disturbance/data/weight_length_relationships.csv"), row.names = FALSE)
+
+```
+
+
+## Convert FAO tonnes of production to number of bivalves
+Use FAO mariculture production data for bivalves
+
+1. assign each bivalve to a family
+2. merge with paper data by family to add in the number bivalves per tonne production, gapfill missing family data with average (assume an average bivalve length of 4cm (40 mm))
+3. Calculate number of bivalves for each taxa/country by dividing tonnes production by number bivalves per tonne 
+4. Calculate the number of bivalves for each country (group by country and summarize)
+5. Distribute the number of bivalves across the raster based on country and proportion of production for each raster cell
+6. Apply model to each raster cell to estimate area:  number bivalves / 130,000,000 bivalves per km2
+
+
+
+
+```{r}
+# read in spp specific country bivalve data: 
+bivalve_spp <- read_csv(file.path("aquaculture/marine/bivalve/data/fao_mariculture_bivalve_taxa_production.csv"))
+
+
+## read in family information
+spp_families <- read_csv(file.path("aquaculture/marine/STEP1_species_groups/int/marine_groups.csv")) %>%
+  dplyr::filter(year == 2017) %>%
+  dplyr::select(species, family) %>%
+  distinct()
+
+
+## left join
+bivalve_spp_family <- bivalve_spp %>%
+  left_join(spp_families) %>%
+  mutate(family = ifelse(species == "Australian mussel", "Mytilidae", family)) %>% ## fix a mistake
+  mutate(family = ifelse(species == "Sea snails", "Haliotidae", family)) ## fix mistake (sea snails from fao likely mean abalone)
+
+
+summary(bivalve_spp_family) ## check to see there are no NAs in family - there aren't
+  
+```
+
+Now compare our families in the weight-length data with our fao data
+
+```{r}
+sort(unique(bivalve_spp_family$family))
+
+sort(unique(bivalve_w_l_final$family))
+
+sort(setdiff(bivalve_spp_family$family, bivalve_w_l_final$family))
+
+sort(setdiff(bivalve_w_l_final$family, bivalve_spp_family$family))
+```
+
+Now do steps 1-6 listed above 
+```{r}
+# bivalve_w_l_fix <- bivalve_w_l_final %>%
+#   dplyr::filter(!(family %in% c("Donacidae", "Phasianellidae", "Solenidae")))
+
+avg_alpha <- mean(bivalve_w_l_final$alpha)
+avg_beta <- mean(bivalve_w_l_final$beta)
+
+# avg_alpha_fix <- mean(bivalve_w_l_fix$alpha)
+# avg_beta_fix <- mean(bivalve_w_l_fix$beta)
+
+## join them together 
+fao_W_L_explore <- bivalve_spp_family %>%
+  left_join(bivalve_w_l_final, by = "family") %>%
+  dplyr::mutate(weight = alpha*40**beta) %>% ## assume 40 mm 
+  group_by(family) %>%
+  summarise(weight = mean(weight),
+            number_rows = n(),
+            total_tonnes = sum(fao_tonnes_production))
+
+
+## join them and gapfill the missing rows with the average
+fao_W_L <- bivalve_spp_family %>%
+  left_join(bivalve_w_l_final, by = "family") %>%
+  mutate(alpha = ifelse(is.na(alpha), avg_alpha, alpha),
+         beta = ifelse(is.na(beta), avg_beta, beta))
+
+## group by family and country to get tonnes
+fao_W_L_summarise <- fao_W_L %>%
+  dplyr::group_by(country, iso3c, year, family) %>%
+  dplyr::summarise(fao_tonnes_production = sum(fao_tonnes_production),
+                   alpha = mean(alpha),
+                   beta = mean(beta))
+
+
+## figure out number of bivalves per country 
+
+bivalve_per_country <- fao_W_L_summarise %>%
+  dplyr::mutate(bivalve_avg_weight_g = alpha*40**beta) %>%
+  dplyr::mutate(bivalve_avg_weight_t = bivalve_avg_weight_g/1000000) %>%
+  dplyr::mutate(n_bivalves = fao_tonnes_production/bivalve_avg_weight_t) %>%
+  group_by(country, iso3c, year) %>%
+  dplyr::summarise(fao_tonnes_production = sum(fao_tonnes_production),
+                   total_bivalves = sum(n_bivalves),
+                   avg_weight = mean(bivalve_avg_weight_t))
+
+## fix HKG and CHN 
+CHN_HKG_biv <- bivalve_per_country %>%
+  dplyr::filter((iso3c %in% c("CHN", "HKG")))
+
+sum(CHN_HKG_biv$fao_tonnes_production) # 14646903
+chn_bivalves <- sum(CHN_HKG_biv$total_bivalves)
+
+CHN_fix <- data.frame(country = "China", iso3c = "CHN/MAC/HKG", year = 2017, fao_tonnes_production = 14646903, total_bivalves = chn_bivalves)
+
+bivalve_per_country_final <- bivalve_per_country %>%
+  dplyr::filter(!(iso3c %in% c("CHN", "HKG"))) %>%
+  rbind(CHN_fix) %>%
+  dplyr::select(country, iso3c, year, total_bivalves)
+
+# 1. stack with the region raster and convert to data.frame. Merge with the dataframe that will convert the ID_0 values to iso3c. 
+# 2.  group-by(iso3c), mutate(country_tonnes = sum(tonnes, na.rm=tRUE)), rowwise(), mutate(prop_cell = tonnes/country_tonnes)
+# 3.  Then you merge the country count of bivalves to the raster data and multiply by prop_cell.
+# 4. This will give you the estimated number of bivalves in each cell
+# 5. Apply space model to raster
+
+
+## read in production csv
+production <- read_csv(file.path(path_prep, "updated/bivalve_farm_updated.csv"))
+sum(production$tonnes_production)
+
+iso3c_codes <- read_csv(file.path("_spatial/_output/eez_food_rgns.csv"))
+
+land_eez_region_raster <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/spatial/land_eez_rgns.tif")
+
+land_eez_region_raster_df <- as.data.frame(land_eez_region_raster, xy = TRUE)
+
+region_raster_iso3c_df <- land_eez_region_raster_df %>%
+  left_join(iso3c_codes, by = c("land_eez_rgns" = "ID_0"))
+
+
+production_cell_iso3c <- production %>%
+  left_join(region_raster_iso3c_df, by = c("x", "y")) %>%
+  group_by(iso3c) %>%
+  mutate(country_tonnes = sum(tonnes_production, na.rm = TRUE)) %>%
+  rowwise() %>%
+  mutate(prop_cell = tonnes_production/country_tonnes) %>%
+  dplyr::mutate(prop_cell = ifelse(prop_cell == "NaN", NA, prop_cell)) %>%
+  ungroup()
+
+biv_per_cell <- production_cell_iso3c %>%
+  left_join(bivalve_per_country_final, by = "iso3c") %>%
+  mutate(bivalves_per_cell = total_bivalves*prop_cell) 
+
+
+sum(biv_per_cell$bivalves_per_cell, na.rm = TRUE) # 3.801619e+12
+
+sum(bivalve_per_country_final$total_bivalves) # 3.801619e+12
+
+
+## apply our disturbance model
+biv_disturbance <- biv_per_cell %>%
+  dplyr::mutate(disturbance_km2 = bivalves_per_cell/130000000) %>%
+  dplyr::select(x, y, disturbance_km2)
+
+sum(biv_disturbance$disturbance_km2, na.rm = TRUE) 
+# 29243.22 km2 disturbance
+# 17435623 tonnes production bivalve
+# tonnes/disturbance = 596.2279
+
+## compare to salmon: 
+# 70.82 km2 disturbance
+# 2746086 tonnes produciton salmon
+# tonnes/disturbance = 38775.57
+
+
+# 412 times bigger disturbance for bivalves
+# ~ 6 times bigger production for bivalves
+
+## compare to tuna:
+#  2.817567 km2 disturbance
+# 37072.56 tonnes production tuna
+# tonnes/disturbance = 13157.65 
+
+# 10378.89 times bigger disturbance for bivalves
+# 470 times bigger production for bivalves
+
+
+## Now multiply the disturbance by 0.1, since bivalve aquaculture likely actually creates more habitat than it disturbs.
+
+biv_disturbance <- biv_disturbance %>%
+  dplyr::mutate(disturbance_km2 = disturbance_km2*0.1)
+
+sum(biv_disturbance$disturbance_km2, na.rm = TRUE) # 2924.322
+# 2924.322 km2 disturbance
+# 17435623 tonnes production bivalve
+# tonnes/disturbance = 5962.279
+
+## compare to salmon: 
+# 70.82 km2 disturbance
+# 2746086 tonnes produciton salmon
+# tonnes/disturbance = 38775.57
+
+
+# 41.29232 times bigger disturbance for bivalves
+# ~ 6 times bigger production for bivalves
+
+## compare to tuna:
+#  2.817567 km2 disturbance
+# 37072.56 tonnes production tuna
+# tonnes/disturbance = 13157.65 
+
+# 1037.889 times bigger disturbance for bivalves
+# 470 times bigger production for bivalves
+write.csv(biv_disturbance, file.path(path_prep, "bivalve_disturbance.csv"), row.names = FALSE)
+
+# final_layer_dist <- read_csv(file.path(path_prep, "bivalve_disturbance.csv"))
+
+final_rast <- rasterFromXYZ(biv_disturbance, crs = food_crs)
+crs(final_rast)
+plot(log(final_rast+1))
+cellStats(final_rast, "sum") # 2924.322
+final_rast
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 2924.322
+final_rast
+plot(log(final_rast+1))
+
+writeRaster(final_rast, file.path(path_final, "marine_bivalve_aquaculture_meat_disturbance.tif"), overwrite = TRUE)
+
+```
+
+Datacheck: 
+
+```{r}
+# 2924.322 km2 bivalve disturbance
+# 17435623 tonnes production bivalve
+# tonnes/km2 disturbance = 5962.279
+
+## compare to salmon: 
+# 70.82 km2 disturbance
+# 2746086 tonnes production salmon
+# tonnes/km2 disturbance = 38775.57
+
+
+# 41.29232 times bigger disturbance for bivalves
+# ~ 6 times bigger production for bivalves
+
+## compare to tuna:
+#  2.817567 km2 disturbance
+# 37072.56 tonnes production tuna
+# tonnes/disturbance = 13157.65 
+
+# 1037.889 times bigger disturbance for bivalves
+# 470 times bigger production for bivalves
+```
+

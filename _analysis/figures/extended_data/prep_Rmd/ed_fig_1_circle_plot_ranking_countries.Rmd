@@ -1,0 +1,372 @@
+---
+title: 'SI circle plots: ranking countries'
+author: "Juliette"
+date: "11/17/2020"
+output: html_document
+---
+
+Ranking countries.
+
+a) Radial plot of each country, with stacked bars for amount of each of 4 stressors (from all foods). Outside ring is land and freshwater; inner ring is country EEZs (asterix for land-locked countries);
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(hrbrthemes)
+library(RColorBrewer)
+library(colorspace)
+source(here("_workflow/common.R"))
+
+summary_df_raw <- read_csv(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw_df_summary/rgn_raw_summary.csv"))
+
+rescaling_values <- read_csv(here("_analysis/rescale_values.csv"))
+
+un_geopolitical <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>%
+  dplyr::select(iso3c, georegion=Region_Name)
+
+```
+
+
+Create DF that works for the circle plot
+```{r}
+summary_df <- summary_df_raw %>% 
+  mutate(origin = ifelse(category == "feedfofm", "marine", origin)) %>% 
+  mutate(land_ocean = case_when(origin %in% c("land", "freshwater") ~ "land",
+                                origin == "marine" ~ "ocean")) %>% 
+  mutate(sum = ifelse(iso3c == "HSX" & category == "feedfodd", 0, sum)) %>% 
+  group_by(country, iso3c, land_ocean, pressure) %>% 
+  dplyr::summarise(pressure_sum = sum(sum)) %>% 
+  left_join(rescaling_values, by = "pressure") %>% 
+  ungroup() %>% 
+  rowwise() %>% 
+  mutate(prop_of_global = pressure_sum/global_total)  %>% 
+  unite(source, c("land_ocean", "pressure"), sep = "-", remove = FALSE) %>% 
+  left_join(un_geopolitical, by = "iso3c") %>% 
+  mutate(georegion = ifelse(country == "High Seas", "High Seas", georegion))
+
+## get georegion ranks
+chi <- summary_df %>%
+  group_by(georegion, country, iso3c) %>%
+  summarize(chi = sum(prop_of_global, na.rm=TRUE)) %>%
+  arrange(-chi)
+
+rank_georgn <- chi %>%
+  group_by(georegion) %>%
+  summarize(sum_chi = sum(chi), ## we can also do it by mean
+            count = length(chi)) %>%
+  ungroup() %>%
+  data.frame() %>%
+  arrange(sum_chi)
+
+rank_georgn$georegion <- factor(rank_georgn$georegion, 
+                                         levels=unique(rank_georgn$georegion))
+chi$georegion <- factor(chi$georegion, 
+                                         levels=unique(rank_georgn$georegion))
+
+### Organize the chi data and add a few extra variables to help plotting
+# Including empty spaces to add a y-axes
+rank_rgn <- chi %>%
+  arrange(georegion, chi) %>%
+  data.frame()
+ 
+```
+
+```{r}
+ ## modfiy region names to be shorter
+ rank_rgn <- rank_rgn %>% 
+   mutate(rgn_name_short = country, 
+         rgn_name_short = gsub("Islands", "Isl", rgn_name_short),
+         rgn_name_short = gsub("Island", "Isl", rgn_name_short),
+         rgn_name_short = gsub("Democratic", "Dem", rgn_name_short),
+         rgn_name_short = gsub("Republic", "Rep", rgn_name_short),
+         rgn_name_short = gsub("South", "S", rgn_name_short),
+         rgn_name_short = gsub("American", "Am", rgn_name_short),
+         rgn_name_short = gsub("the United States", "US", rgn_name_short),
+         rgn_name_short = gsub("Territory", "Terr", rgn_name_short),
+         rgn_name_short = gsub("Saint", "St", rgn_name_short),
+         rgn_name_short = gsub(" and ", " & ", rgn_name_short),
+         rgn_name_short = gsub("Republique", "Rep", rgn_name_short),
+         rgn_name_short = gsub("Dem Rep of the", "Dem Rep of", rgn_name_short),
+         rgn_name_short = gsub("Georgia and the", "Georgia and", rgn_name_short),
+         rgn_name_short = gsub("St Vincent and the", "St Vincent and", rgn_name_short),
+         rgn_name_short = gsub("Howland Isl & Baker Isl", "Howland & Baker Isl", rgn_name_short),
+         rgn_name_short = gsub("Northern", "N", rgn_name_short), 
+         rgn_name_short = gsub("Reunion", "Reunion", rgn_name_short))
+```
+
+
+## Stuff for both plots
+i think that this would look better with each stressor having its own color that is paired with ocean/land
+
+pick 4 distinct colors and then create a pair with one being more brown or green and the other being more blue
+```{r}
+
+source_name <- data.frame(source = c("land-disturbance", "land-ghg", "land-water", "land-nutrient",
+                                     "ocean-disturbance", "ocean-ghg", "ocean-water", "ocean-nutrient"),
+                          ## this may be where i remove the part before the source later on
+                            source_name = c("Land: Disturbance", "Land: GHG", "Land: Water", "Land: Nutrient",
+                                     "Ocean: Disturbance", "Ocean: GHG", "Ocean: Water", "Ocean: Nutrient"))
+
+dist_1 <- "#D5BD75"
+dist_1 <- lighten(dist_1, amount = -0.05)
+dist_2 <- "#FFEAB1"
+dist_2 <- lighten(dist_2, amount = -0.05)
+
+ghg_1 <- "#DA6098"
+ghg_1 <- lighten(ghg_1, amount = -0.05)
+ghg_2 <- "#FFCEE0"
+ghg_2 <- lighten(ghg_2, amount = -0.05)
+
+nut_1 <- "#795B48"
+nut_2 <- "#E7C7B5"
+
+wat_1 <- "#3E638E"
+wat_2 <- "#C5F0FF"
+
+jv_palette <- c(dist_1, ghg_1, nut_1, wat_1,
+                dist_2, ghg_2, nut_2, wat_2)
+scales::show_col(jv_palette, n = 4)
+#dist, ghg, water, nut
+
+pal_df <- as_tibble(jv_palette) %>% 
+  rename(fill_value = value) %>% 
+  mutate(source = case_when(fill_value == dist_1 ~ "land-disturbance",
+                            fill_value == dist_2 ~ "ocean-disturbance",
+                            fill_value == wat_1 ~ "land-water",
+                            fill_value == wat_2 ~ "ocean-water",
+                            fill_value == nut_1 ~ "land-nutrient",
+                            fill_value == nut_2 ~ "ocean-nutrient",
+                            fill_value == ghg_1 ~ "land-ghg",
+                            fill_value == ghg_2 ~ "ocean-ghg")) 
+
+
+```
+
+
+## circle part
+
+```{r}
+
+#filter to include only countries in circle
+
+# cutoff_value <-  0.04653524 
+
+cutoff_value <- 0.03531988 # ukraine chi value; this is the value that corresponds with the top 23 regions (i.e. the circle plot includes all regions but the top 23)
+
+pressures_adj_circle <- summary_df %>%
+  group_by(country, iso3c) %>%
+  mutate(chi = sum(prop_of_global, na.rm=TRUE)) %>%
+  ungroup() %>%
+  arrange(chi) %>% 
+ filter(chi< cutoff_value)
+
+
+pressures_adj_circle_test <- summary_df %>%
+  group_by(country, iso3c) %>%
+  mutate(chi = sum(prop_of_global, na.rm=TRUE)) %>%
+  ungroup() %>%
+  arrange(chi) %>%
+# filter(chi>cutoff_value) %>%
+  mutate(prop_of_global_test = prop_of_global/4) %>%
+  mutate(chi = chi/4)
+
+sum(pressures_adj_circle_test$prop_of_global_test)
+# [1] 0.9999999
+
+sum(pressures_adj_circle_test$prop_of_global)
+# 3.999999
+
+
+# temp <- summary_df %>%
+#   group_by(country, iso3c) %>%
+#   mutate(chi = sum(prop_of_global, na.rm=TRUE)) %>%
+#   ungroup() %>%
+#   dplyr::select(country, chi) %>%
+#   unique()
+# hist(temp$chi)
+
+
+##grab the highest country to highlight red and id where the circle ends and then side bar chart begins
+highest_country <- pressures_adj_circle[dim(pressures_adj_circle)[1], "iso3c"]
+pressures_highest_country <- filter(pressures_adj_circle, iso3c %in% highest_country$iso3c) #used below
+
+# adjust the rank_rgn-adjust dataframe to match above
+rank_rgn_adj <- rank_rgn %>%
+  filter(iso3c %in% pressures_adj_circle$iso3c) 
+
+# add empty space to create space in the circleplot for axes
+ empty_bar <- 5
+ to_add <- data.frame(matrix(NA, empty_bar, ncol(rank_rgn_adj)) )
+ colnames(to_add) = colnames(rank_rgn_adj)
+ to_add$country <- as.character(1:empty_bar)
+ rank_rgn_adj  <- rbind(to_add, rank_rgn_adj)
+ 
+ # some code to orient the country labels
+sequence_length = length(unique(rank_rgn_adj$country))
+first_sequence = c(1:(sequence_length%/%2)) 
+second_sequence = c((sequence_length%/%2+1):sequence_length) 
+first_angles = c(90 - 180/length(first_sequence) * first_sequence)
+second_angles = c(-90 - 180/length(second_sequence) * second_sequence)
+rank_rgn_adj$angle <- c(first_angles, second_angles)
+rank_rgn_adj$hjust <- c(rep(0, length(first_sequence)), 
+                    rep(1, length(second_sequence)))
+
+# color for region labels
+rank_rgn_adj <- rank_rgn_adj %>%
+  mutate(country = factor(country, unique(country))) %>%
+  mutate(georegion = factor(georegion, unique(georegion))) %>%
+  mutate(color = "black") %>%
+  mutate(color = ifelse(is.na(chi), "white", color)) %>%
+  mutate(color = ifelse(iso3c %in% highest_country$iso3c, "red", color))
+
+# get dataframe for georegion shift locations
+rgn_shift <- rank_rgn_adj %>%
+  mutate(georegion = ifelse(is.na(georegion), "tmp", georegion)) %>%
+  mutate(georegion = as.factor(georegion)) %>%
+  mutate(region_shift = as.numeric(georegion) - lag(as.numeric(georegion)), default=first(as.numeric(georegion)))
+
+rgn_shift <- which(rgn_shift$region_shift > 0)
+rgn_shift <- c(1, rgn_shift) -0.5
+rgn_shift <- data.frame(rgn_shift_x=rgn_shift,
+                         georegion = rank_georgn$georegion,
+                         name_x= c(2, 15, 60, 115, 150, 200), # 140
+                         name_y=c(55, 55, 55, 55, 55, 55))
+rgn_shift <- rgn_shift %>%
+   mutate(georegion = as.character(georegion))
+
+# # add some blanks rows to match the master region list
+empty_bar2 <-10
+to_add <-  data.frame( matrix(NA, empty_bar2*nlevels(as.factor(pressures_adj_circle$source)), ncol(pressures_adj_circle)) )
+  colnames(to_add) <- colnames(pressures_adj_circle)
+  to_add$source <- rep(levels(as.factor(pressures_adj_circle$source)), each=empty_bar2)
+  to_add$chi<-  0
+  to_add$country <- as.character(rep(1:empty_bar2, nlevels(as.factor(pressures_adj_circle$source))))
+  pressures_adj_circle <- rbind(to_add, pressures_adj_circle, to_add)
+  
+  pressures_adj_circle %>%
+  group_by(source) %>%
+  summarize(mean = mean(prop_of_global, na.rm=TRUE)) %>%
+  arrange(mean)
+  
+pressures_adj_circle <- pressures_adj_circle %>%
+  left_join(source_name, by = "source")
+
+pressures_adj_circle$source_name <- factor(pressures_adj_circle$source_name, levels=rev(source_name$source_name))
+pressures_adj_circle$country <- factor(pressures_adj_circle$country, levels=unique(rank_rgn_adj$country))
+pressures_adj_circle$georegion <- factor(pressures_adj_circle$georegion, 
+                                         levels=unique(rank_georgn$georegion))
+
+```
+
+make the plot
+```{r}
+
+circle_theme <- theme(axis.line=element_blank(),
+                      axis.text.y=element_blank(),
+                      axis.ticks=element_blank(),
+                      axis.title.x=element_blank(),
+                      axis.title.y=element_blank(),
+                      legend.position="none",
+                      # legend.position="left",
+                      panel.background=element_blank(),
+                      panel.border=element_blank(),
+                      panel.grid.major=element_blank(),
+                      panel.grid.minor=element_blank(),
+                      plot.background=element_blank(),
+                      axis.text.x = element_blank())
+
+color_order <- c(dist_2, ghg_2, wat_2, nut_2, dist_1, ghg_1, wat_1, nut_1)
+
+## WE DIVIDE EVERYTHING BY 4 HERE SO THAT WE CAN GET PROPORTION OUT OF 1 INSTEAD OF 4
+
+pressures_adj_circle_plot <- pressures_adj_circle %>% 
+  mutate(prop_of_global_stacked = abs(prop_of_global)/4) %>% 
+  left_join(pal_df) %>% 
+  mutate(fill_value = factor(fill_value, levels = color_order))
+
+sum(pressures_adj_circle_plot$prop_of_global, na.rm = TRUE) # 1.179597
+
+test <- pressures_adj_circle_plot %>%
+  filter(!is.na(prop_of_global)) %>%
+  mutate(testing = prop_of_global/4) 
+
+sum(test$testing) # 0.2948992; this plot accounts for about 29% of all food here
+
+rgn_shift <- rgn_shift %>% 
+  mutate(georegion = ifelse(georegion == "High Seas", " ", georegion))
+
+  ggplot(data=pressures_adj_circle_plot, aes(x=country, y=prop_of_global_stacked, fill = fill_value)) + 
+  
+  geom_bar(stat="identity") +
+  
+  # ## this adjust the inner circle size (ymin) and outer circle size (ymax), which can be expanded to include names
+   geom_errorbar(aes(
+       x     = 1, 
+        ymin = (-0.01/4),   # ymin  = -0.03, this is for when ocean bars stack inwards -0.01 for when not
+       ymax  = 0.00875),  # 0.035
+       alpha = 0) +
+      # Country name text placement
+     geom_text(
+       data = rank_rgn_adj,
+       aes(x     = country,
+           y     = max(pressures_adj_circle$chi/4, na.rm=TRUE),
+           label = rgn_name_short,
+           angle = angle,
+           hjust = hjust),
+       inherit.aes = FALSE,
+       fontface = "bold",
+       alpha = 0.9,
+       size = 5,
+       color = rank_rgn_adj$color) +
+    # 
+   # georegion names
+    geom_text(
+      data=rgn_shift,
+      aes(y = 0.00375, x = name_x, label = georegion), # y=0.02
+      # aes(x=name_x,
+      #     y=name_y,
+      #     label=georegion),
+      inherit.aes=FALSE, size=7) +
+  #  
+  # # # Scale bar circles
+  # ## This adds the 0 line
+      geom_segment(
+        x = 0, 
+         y = 0, 
+         xend = dim(rank_rgn_adj)[1]+1, 
+         yend = 0, 
+         fill = NULL,
+        alpha = 1, color = "white", size = 0.1) + #color = "black for internal
+  #    
+  #  # Scale bar annotation, this adds the y-axis numbers
+      # annotate("text",
+      #   x     = c(3, 3, 3),
+      #   y     = c(0, 0.0175, 0.035),
+      #   label = c(0, 0.0175, 0.035),
+      #   color = "darkgray", angle = -4, size = 4) +
+    
+          annotate("text",
+        x     = c(3, 3, 3),
+        y     = c(0, 0.004375, 0.00875),
+        label = c(0, 0.004375, 0.00875),
+        color = "darkgray", angle = -4, size = 5) +
+    
+    
+  #     
+ scale_color_identity() +
+ scale_fill_identity() +
+   # scale_fill_manual(values= rev(myPalette), c("Land: Disturbance", "Land: GHG", "Land: Water", "Land: Nutrient",
+   #                                    "Ocean: Disturbance", "Ocean: GHG", "Ocean: Water", "Ocean: Nutrient")) +
+  # scale_fill_manual(values= rev(jv_palette), c("Land: Disturbance", "Land: GHG", "Land: Water", "Land: Nutrient",
+  #                                     "Ocean: Disturbance", "Ocean: GHG", "Ocean: Water", "Ocean: Nutrient")) +
+  coord_polar() +
+ circle_theme 
+  
+  ggsave(here("_analysis/figures/extended_data/output/ed_fig_1_circle_country.png"), height=18, width=18, units=c("in"))
+# ggsave(here("_analysis/figures/extended_data/output/circle_plots_no_legends/ed_fig_4_circle_country.png"), height=18, width=18, units=c("in"))
+# # bg="transparent"
+
+```
+

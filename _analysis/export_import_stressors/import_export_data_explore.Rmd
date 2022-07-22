@@ -1,0 +1,44 @@
+---
+title: "Exploring trade data pressures"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+
+library(tidyverse)
+library(here)
+library(ggplot2)
+
+trade <- read_csv(here("_analysis/export_import_stressors/data/cumulative_stress_imports_exports.csv"))
+trade %>% arrange(-prop_ds_imported) %>%
+  data.frame()
+
+trade %>% arrange(-prop_exported) %>%
+  data.frame()
+
+ggplot(trade, aes(x=prop_ds_imported)) +
+  geom_histogram() +
+  xlab("Proportion of domestic supply pressures displaced") +
+  ylab("# countries") + 
+  theme_bw()
+
+hist(trade$prop_exported, xlab="prop exported pressures")
+hist(trade$prop_ds_imported, xlab="prop imported pressures")
+
+plot(trade$prop_exported, trade$prop_ds_imported, ylab="imported pressure", xlab="exported pressure")
+
+trade %>% arrange(-exported_cumstress)
+trade %>% arrange(-imported_ds_cumstress)
+
+dim(trade)
+export_pressures <- trade %>% filter(prop_ds_imported > 0) %>%
+  arrange(-prop_ds_imported)
+summary(export_pressures)
+
+filter(trade, prop_ds_imported > 0.5)
+
+plot(trade$exported_cumstress, trade$imported_ds_cumstress)
+```
+

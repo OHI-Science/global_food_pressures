@@ -1,0 +1,10 @@
+﻿region,solid_mms,solid_mms_low,solid_mms_high,liquid_mms,liquid_mms_high,liquid_mms_low
+North America,4,,,2,,
+Russian Federation,4,,,4,,
+Western Europe,4,,,2,,
+Eastern Europe,4,,,4,,
+Near East and North Africa,6,2,10,18,15,20
+Oceania,2,,,15,,
+South Asia,6,2,10,18,15,20
+Latin America and the Caribbean,6,2,10,18,15,20
+Sub-Saharan Africa,6,2,10,18,15,20

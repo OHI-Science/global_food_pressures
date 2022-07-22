@@ -1,0 +1,64 @@
+---
+title: "STEP 12: Broiler and layer proportions"
+author: "Juliette"
+date: "8/26/2020"
+output: html_document
+---
+
+# Objective
+Determine proportion of Industrial Broilers (relative to Industrial layers). The FAO maps of chicken industrial location combine layer and broiler chickens.  We need to disentangle this.  We have the corresponding GLEAM data for 2010 which we can use to get the proportion of layers to broilers chickens.  We use the herd data because we want to know the actual number of existing chickens (vs. production).  
+
+# Input: GLEAM 
+
+# Output: prop_industrial_chickens_gf.csv
+
+## Setup
+```{r setup, include=FALSE}
+library(here)
+source(here("_workflow/common.R"))
+
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>% 
+  dplyr::select(iso3c, Global_Name, Region_Name, Sub_region_Name, Intermediate_Region_Name, Region_Name)
+```
+
+## Methods
+
+### Get the GLEAM data
+```{r cars}
+
+gleam <- read_csv(here("animal_farm/farm/data/chickens_GLEAMi_v2.csv")) %>%
+  dplyr::filter(Variable == "HERD: total number of animals") %>%
+  dplyr::filter(Production_system %in% c("Broilers", "Layers"))
+
+prop_chickens <- gleam %>%
+  tidyr::spread(key=Production_system, value=Value) %>%
+  rowwise() %>%
+  mutate(prop_broilers = Broilers/(Broilers+Layers),
+         prop_layers = Layers/(Broilers+Layers),
+         prop_broilers = ifelse(is.na(prop_broilers), 0, prop_broilers),
+         prop_layers = ifelse(is.na(prop_layers), 0, prop_layers)) %>% 
+  rename(gleam_country = Country) 
+
+
+## run these to     
+ggplot(prop_chickens, aes(x=prop_broilers)) +
+  geom_histogram() +
+  theme_bw()
+ggplot(prop_chickens, aes(x=prop_layers)) +
+  geom_histogram() +
+  theme_bw()
+
+
+prop_chickens_gf <- food_rgns %>% 
+  left_join(prop_chickens, by = c("iso3c")) %>%
+  left_join(un, by = "iso3c") %>% 
+  group_by(Intermediate_Region_Name) %>% 
+  mutate(gapfilled = ifelse(is.na(prop_broilers) | is.na(prop_layers), "prop gf with regional average", NA),
+         prop_broilers = ifelse(is.na(prop_broilers), median(prop_broilers, na.rm = TRUE), prop_broilers),
+         prop_layers = ifelse(is.na(prop_layers), 1- prop_broilers, prop_layers)) %>% ## need total chickens to add up to 100
+  ungroup()
+
+#filter(prop_broilers, iso3c=="USA")
+#filter(prop_broilers, prop_broilers==0)
+write_csv(prop_chickens_gf, here("animal_farm/farm/data/prop_industrial_chickens_gf.csv"))
+```

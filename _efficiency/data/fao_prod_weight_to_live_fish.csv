@@ -1,0 +1,81 @@
+﻿type,presentation,"gutted, head on","gutted, head off",species_class_final
+pike ,,1.04,,Freshwater
+eel,,1.11,,Freshwater
+trout,,1.4,,Demersal
+trout,,1.4,,Medium pelagic
+trout,,1.4,,Small pelagic
+salmon,whole,1.13,1.3,Demersal
+salmon,whole,1.13,1.3,Medium pelagic
+salmon,whole,1.13,1.3,Small pelagic
+salmon,dressed,1,,Demersal
+salmon,dressed,1,,Medium pelagic
+salmon,dressed,1,,Small pelagic
+flatfish,dressed,1.1,1.4,Demersal
+cod,,1.2,1.69,Demersal
+cod,,1.2,1.69,Medium pelagic
+haddock,,1.14,1.61,Demersal
+haddock,,1.14,1.61,Medium pelagic
+saithe,,1.15,1.45,Medium pelagic
+saithe,,1.15,1.45,Medium pelagic
+hake,dressed,1.16,1.55,Medium pelagic
+hake,dressed,1.16,1.55,Medium pelagic
+hake,whole,1,,Medium pelagic
+hake,whole,1,,Medium pelagic
+Alaska pollack,dressed,1.16,1.55,Medium pelagic
+Alaska pollack,dressed,1.16,1.55,Medium pelagic
+Alaska pollack,whole,1,,Medium pelagic
+Alaska pollack,whole,1,,Medium pelagic
+mackerel,,1.11,1.46,Demersal
+mackerel,,1.11,1.46,Large pelagic
+mackerel,,1.11,1.46,Medium pelagic
+mackerel,,1.11,1.46,Reef-associated
+mackerel,,1.11,1.46,Small pelagic
+jack and horse mackerel,,1.09,1.65,Demersal
+jack and horse mackerel,,1.09,1.65,Large pelagic
+jack and horse mackerel,,1.09,1.65,Medium pelagic
+jack and horse mackerel,,1.09,1.65,Reef-associated
+jack and horse mackerel,,1.09,1.65,Small pelagic
+sardine,whole,1,1.43,Demersal
+sardine,whole,1,1.43,Large pelagic
+sardine,whole,1,1.43,Medium pelagic
+sardine,whole,1,1.43,Reef-associated
+sardine,whole,1,1.43,Small pelagic
+anchovy,whole,1,,Demersal
+anchovy,whole,1,,Large pelagic
+anchovy,whole,1,,Medium pelagic
+anchovy,whole,1,,Reef-associated
+anchovy,whole,1,,Small pelagic
+sprat,whole,1,,
+herring,whole,1,1.52,Demersal
+herring,whole,1,1.52,Large pelagic
+herring,whole,1,1.52,Medium pelagic
+herring,whole,1,1.52,Reef-associated
+herring,whole,1,1.52,Small pelagic
+shark,,1.1,2,Demersal
+sea bream,,1.1,1.47,Demersal
+sea bream,,1.1,1.47,Medium pelagic
+sea bream,,1.1,1.47,Small pelagic
+sea bream,,1.1,1.47,Reef-associated
+sea bass,,1.12,1.79,Demersal
+sea bass,,1.12,1.79,Medium pelagic
+sea bass,,1.12,1.79,Small pelagic
+sea bass,,1.12,1.79,Reef-associated
+snapper,,1.14,,Reef-associated
+yellowfin,,1.1,,Reef-associated
+yellowfin,,1.1,,Large pelagic
+yellowfin,,1.1,,Medium pelagic
+skipjack,,1.1,,Reef-associated
+skipjack,,1.1,,Large pelagic
+skipjack,,1.1,,Medium pelagic
+bonito,,,1.29,Reef-associated
+bonito,,,1.29,Large pelagic
+bonito,,,1.29,Medium pelagic
+marlin,,1.1,,Reef-associated
+marlin,,1.1,,Large pelagic
+marlin,,1.1,,Medium pelagic
+swordfish,,,1.31,Reef-associated
+swordfish,,,1.31,Large pelagic
+swordfish,,,1.31,Medium pelagic
+tunas,,1.16,1.36,Reef-associated
+tunas,,1.16,1.36,Large pelagic
+tunas,,1.16,1.36,Medium pelagic

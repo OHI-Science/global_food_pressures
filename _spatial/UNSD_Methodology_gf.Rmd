@@ -1,0 +1,25 @@
+---
+title: "gapfill UNSD data"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(here)
+```
+
+```{r}
+food <- read_csv(here("_spatial/_output/food_rgns.csv"))
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv"))
+setdiff(food$iso3c, un$iso3c) # I added, by hand, XKO (Kosovo), XMI (Madeira Island), and TWN (Taiwan)
+setdiff(un$iso3c, food$iso3c)  # ok, all basically uninhabited
+```
+
+Missing values in our data include:
+ATF: French Southern and Antarctic Lands, only military, researchers, support staff live here (n=150-310)
+BVT: Bouvet Island, uninhabited
+SGS: South Georgia and the South Sandwich Islands, n = 30
+ATA: Antarctica
+VAT: Vatican City State
+HMD: Heard Island and McDonald Islands, uninhabited
+UMI: United States Minor Outlying Islands, uninhabited

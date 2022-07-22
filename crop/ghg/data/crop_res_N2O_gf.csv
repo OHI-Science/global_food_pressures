@@ -1,0 +1,39 @@
+﻿SPAM_short,SPAM_long_name,material,nag,ag_bg_frac,nbg,gapfilled
+whea,wheat,WHEAT, 0.006 , 0.240 , 0.009 ,
+rice,rice,RICE, 0.007 , 0.160 , 0.007 ,
+maiz,maize,MAIZE, 0.006 , 0.220 , 0.007 ,
+barl,barley,BARLEY, 0.007 , 0.220 , 0.014 ,
+pmil,pearl millet,MILLET, 0.007 , 0.200 , 0.007 ,
+smil,small millet,MILLET, 0.007 , 0.200 , 0.007 ,
+sorg,sorghum,SORGHUM, 0.007 , 0.200 , 0.006 ,
+ocer,other cereals,GRAINS, 0.007 , 0.220 , 0.014 ,gapfilled with general grains values
+pota,potato,CASSAVA, 0.019 , 0.200 , 0.014 ,"gapfilled with only other root veg values, cassava"
+swpo,sweet potato,CASSAVA, 0.019 , 0.200 , 0.014 ,"gapfilled with only other root veg values, cassava"
+yams,yams,CASSAVA, 0.019 , 0.200 , 0.014 ,"gapfilled with only other root veg values, cassava"
+cass,cassava,CASSAVA, 0.019 , 0.200 , 0.014 ,"gapfilled with only other root veg values, cassava"
+orts,other roots,CASSAVA, 0.019 , 0.200 , 0.014 ,"gapfilled with only other root veg values, cassava"
+bean,bean,PULSES, 0.008 , 0.190 , 0.014 ,gapfilled with pulses values
+chic,chickpea,PULSES, 0.008 , 0.190 , 0.014 ,gapfilled with pulses values
+cowp,cowpea,PULSES, 0.008 , 0.190 , 0.014 ,gapfilled with pulses values
+pige,pigeonpea,PULSES, 0.008 , 0.190 , 0.014 ,gapfilled with pulses values
+lent,lentil,PULSES, 0.008 , 0.190 , 0.014 ,gapfilled with pulses values
+opul,other pulses,PULSES, 0.008 , 0.190 , 0.014 ,gapfilled with pulses values
+soyb,soybean,SOY, 0.008 , 0.190 , 0.008 ,
+grou,groundnut,RSTRAW, 0.007 , 0.160 , 0.007 ,"gapfilled with ""Fibrous residual plant material such as straw, from leguminous plants cultivation"""
+cnut,coconut,BNSTEM, 28 , 28 , 28 ,gapfilled with banana values
+oilp,oilpalm,PKEXP, 40 , 40 , 40 ,
+sunf,sunflower,MLOILSDS, 0.008 , 0.190 , 0.008 ,
+rape,rapeseed,MLRAPE, 0.008 , 0.190 , 0.008 ,
+sesa,sesameseed,MLOILSDS, 0.008 , 0.190 , 0.008 ,
+ooil,other oil crops,MLOILSDS, 0.008 , 0.190 , 0.008 ,
+sugc,sugarcane,TOPS, 0.006 , 0.200 , 0.006 ,
+sugb,sugarbeet,BPULP, 0.019 , 0.200 , 0.0014 ,
+cott,cotton,MLCTTN, 0.008 , 0.190 , 0.008 ,
+ofib,other fibre crops,MLCTTN, 0.008 , 0.190 , 0.008 ,"gapfilled with only other fiber crop, cotton"
+coco,cocoa,, 0.009 , 0.197 , 0.009 ,"gapfilled with average of all except bannana values (probably underestimate because it’s a tree, maybe include banana values in the future)"
+bana,banana,BNSTEM, 28 , 28 , 28 ,
+plnt,plantain,BNSTEM, 28 , 28 , 28 ,gapfilled with banana values
+trof,tropical fruit,BNFRUIT, 28 , 28 , 28 ,"gapfilled with average of all except bannana values (probably underestimate because it’s a tree, maybe include banana values in the future)"
+temf,temperate fruit,, 0.009 , 0.197 , 0.009 ,gapfilled with average of all except bannana values
+vege,vegetables,, 0.009 , 0.197 , 0.009 ,gapfilled with average of all except bannana values
+rest,rest of crops,, 0.009 , 0.197 , 0.009 ,gapfilled with average of all except bannana values

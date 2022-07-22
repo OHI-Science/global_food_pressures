@@ -1,0 +1,200 @@
+---
+title: "shrimp_nutrient_pollution"
+author: "Gage Clawson (NCEAS, UCSB, OHI)"
+date: "12/22/2020"
+output: 
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_depth: 3
+    toc_float: yes
+    includes: 
+toc: true
+---
+
+This markdown uses models and species specific parameters from the paper *Aquaculture Production is a Large, Spatially Concentrated Source of Nutrients in Chinese Freshwater and Coastal Seas* (2020 Wang et al)
+
+## Set up
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(sf)
+library(raster)
+library(readr)
+library(data.table)
+
+source(here("_spatial/template_raster.R"))
+
+path_prep <- "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/shrimp"
+path_final <-"/home/shares/food-systems/Food_footprint/all_food_systems/datalayers"
+path_pre <- "/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers"
+
+production <- read_csv(file.path(path_prep, "updated/shrimp_farm_updated.csv"))
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+```
+
+shrimp N/P pollution values
+
+N: 57 kg/tonne of growth
+P: 9.2 kg/tonne of growth
+
+Steps: 
+1. Multiply tonnes production by 0.95 (this corrects for the growth that occurs outside the seapen on land), this is the value Lex uses
+2. Then multiply growth by the N value and the P value
+3. We report in total excess nutrients: Sum the N and P values.
+4. We report in tonnes, so divide by 1000. 
+
+```{r}
+
+shrimp_pollution <- production %>%
+  dplyr::mutate(prod_growth = tonnes_production*0.95) %>%
+  dplyr::mutate(prod_growth_N_poll = prod_growth*57,
+                prod_growth_P_poll = prod_growth*9.2) %>% ## in kg pollution now
+  # dplyr::mutate(PO4eq_kg = prod_growth_N_poll*0.42 + prod_growth_P_poll*3.07) %>% cut (01/14/2021)
+  dplyr::mutate(N_P_tonnes = (prod_growth_N_poll + prod_growth_P_poll)/1000,
+                N_tonnes = prod_growth_N_poll/1000,
+                P_tonnes = prod_growth_P_poll/1000) %>%
+  dplyr::select(x, y, N_P_tonnes, N_tonnes, P_tonnes)
+
+sum(shrimp_pollution$N_P_tonnes) # 320602.1
+sum(production$tonnes_production) # 5097823
+
+## save to dataprep folder: 
+write.csv(shrimp_pollution, file.path(path_prep, "shrimp_nutrient.csv"))
+
+
+## save N + P layer
+N_P_df <- shrimp_pollution %>%
+  dplyr::select(x,y, N_P_tonnes)
+
+final_rast <- rasterFromXYZ(N_P_df, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+final_rast
+cellStats(final_rast, "sum") # 320602.1
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 320602.1
+final_rast
+
+## Save to datalayers 
+writeRaster(final_rast, file.path(path_final, "marine_shrimp_aquaculture_meat_nutrient.tif"), overwrite = T)
+
+
+## save N layer
+N_df <- shrimp_pollution %>%
+  dplyr::select(x,y, N_tonnes)
+
+final_rast <- rasterFromXYZ(N_df, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+final_rast
+cellStats(final_rast, "sum") # 276047.1
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 276047.1
+final_rast
+
+## Save to datalayers 
+writeRaster(final_rast, file.path(path_pre, "marine_shrimp_aquaculture_meat_nutrientN.tif"), overwrite = T)
+
+
+
+## save P layer
+P_df <- shrimp_pollution %>%
+  dplyr::select(x,y, P_tonnes)
+
+final_rast <- rasterFromXYZ(P_df, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+final_rast
+cellStats(final_rast, "sum") # 44554.97 
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 44554.97
+final_rast
+
+## Save to datalayers 
+writeRaster(final_rast, file.path(path_pre, "marine_shrimp_aquaculture_meat_nutrientP.tif"), overwrite = T)
+
+```
+
+
+Data check: 
+
+Values from this paper: https://pubs.acs.org/doi/pdf/10.1021/acs.est.9b03340
+
+
+   - 57 kg N / tonne
+   - 9.2 kg P / tonne 
+
+I believe the estimates from their paper for "crustaceans" lumps shrimp in with that, so we just used the same values for shrimp and crustaceans. There are no issues with the code. 
+
+When just looking at China (and lumping shrimp/crustacean production together for 2017) and comparing to the paper, we see this: 
+
+Our results:
+ - 88328.67 tonnes N
+ - 14256.56 tonnes P
+ 
+Their results: 
+ - 102000 tonnes N
+ - 16600 tonnes P
+ 
+This seems pretty reasonable to me... 
+
+
+```{r}
+shrimp_nutrient_N <- raster(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/marine_shrimp_aquaculture_meat_nutrientN.tif"))
+cellStats(shrimp_nutrient_N, "sum") # 275847.3 N tonnes
+
+shrimp_nutrient_P <- raster(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/marine_shrimp_aquaculture_meat_nutrientP.tif"))
+cellStats(shrimp_nutrient_P, "sum") # 44522.72 P tonnes
+
+sum(production$tonnes_production) # 5094133
+
+## Total production is 5094133 tonnes for 2017
+
+## Used 57 N kg and  9.2 P kg for shrimp
+
+5094133*0.95*57/1000 # 275847.3 N tonnes
+5094133*0.95*9.2/1000 # 44522.72 P tonnes
+
+## both match our final layers 
+
+final_rast <- raster(file.path(path_final, "marine_shrimp_aquaculture_meat_nutrient.tif"))
+cellStats(final_rast, "sum") # 320370
+
+
+## add crustaceans to this to check against paper
+275847.3 + 21753.09 # 297600.4
+44522.72 + 3511.025 # 48033.75
+
+## now look at china production and see if it matches up 
+china_shrimp_prod <- read.csv(file.path(here(),"aquaculture/marine/shrimp/shrimp_farms/data/fao_mariculture_shrimp.csv")) %>%
+  filter(iso3c == "CHN",
+         year == 2017) # 1345154
+
+china_crust_prod <-  read.csv(file.path(here(),"aquaculture/marine/crustaceans/crustacean_farms/data/fao_mariculture_crustaceans.csv")) %>%
+  filter(iso3c == "CHN",
+         year == 2017) #286031
+
+((1345154+286031)*0.95*57)/1000 # 88328.67
+((1345154+286031)*0.95*9.2)/1000 # 14256.56
+
+
+```
+

@@ -1,0 +1,132 @@
+---
+title: "crop_pressures_rescaled"
+author: "Juliette"
+date: "6/10/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Determine rescaled pressures for all crops (including: human food, animal feed, other).
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(doParallel)
+library(raster)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+#This is normally what we would use, but need to use a slightly different approach to account for pressures
+# lost to "other"
+#rescale <- read_csv(here::here("_analysis/rescale_values.csv"))
+
+```
+
+
+Use land/eez raster to extract the summed pressures on land in eez areas.
+
+```{r}
+rgns_ezz_land <- raster(file.path(prep, "spatial/land_eez_rgns.tif"))
+rgns_ezz_land <-calc(rgns_ezz_land, fun = function(x){ifelse(is.na(x), 9999, x)})
+
+par(mar=c(1,1,1,1))
+plot(rgns_ezz_land)
+
+food_rgns <- food_rgns %>% 
+  add_row(iso3c = "HSX", ID_0 = 9999, Country = "High Seas")
+```
+
+```{r}
+
+crop_files_list <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers", full.names = TRUE, pattern = "crop_produce_")
+
+crop_summary_df <- data.frame(country = NA,
+                              iso3c = NA,
+                              category = NA,
+                              organism=NA,
+                              system = NA, 
+                              product = NA,
+                              pressure = NA,
+                              sum = NA)
+
+for(file in crop_files_list){
+  
+#  file = crop_files_list[1]
+  beginCluster(n=8) ## lets see if we can parallelize this 
+  country_sum <- zonal(raster(file), rgns_ezz_land, fun="sum", progress="text", na.rm=TRUE) %>% 
+    data.frame() %>%
+    rename(ID_0 = zone) %>%
+    left_join(food_rgns, by="ID_0")
+  
+  endCluster()
+  
+    cat <- str_split(str_split(file, pattern = "/")[[1]][8], pattern = "_")[[1]][1]
+    org <- str_split(str_split(file, pattern = "/")[[1]][8], pattern = "_")[[1]][2]
+    sys <- str_split(str_split(file, pattern = "/")[[1]][8], pattern = "_")[[1]][3]
+    pro <- str_split(str_split(file, pattern = "/")[[1]][8], pattern = "_")[[1]][4]
+    pre <- str_split(str_split(file, pattern = "/")[[1]][8], pattern = "_")[[1]][5]
+    pre <- str_split(pre, pattern = ".tif")[[1]][1]
+  
+country_sum_clean <- country_sum %>% 
+  mutate(category = cat,
+          organism = org,
+          system = sys,
+          product = pro,
+          pressure = pre) %>% 
+  select(-ID_0) %>% 
+  rename(country = Country) %>% 
+  relocate(sum, .after = last_col()) 
+
+  crop_summary_df <- rbind(crop_summary_df, country_sum_clean) %>% 
+  filter(!is.na(product))
+}
+
+## make high seas regions 0
+crop_summary_df <- crop_summary_df %>%
+  mutate(sum= ifelse(iso3c=="HSX", 0, sum))
+
+```
+
+# correct pressure values for non-feed/food portion of crops
+```{r}
+# correction <- read_csv(here("feed/data/proportion_feed_and_other_per_country_system.csv"))
+# 
+# crop_summary_df_correct <- crop_summary_df %>%
+#   mutate(iso3c_producing = iso3c,
+#          SPAM_super = organism) %>%
+#   left_join(correction, by=c("SPAM_super", "iso3c_producing")) %>%
+#   filter(!is.na(total_non_human_prop)) %>%   #high seas
+#   mutate(food_feed_prop = 1 - other_prop) %>%
+#   mutate(sum_correct = sum*food_feed_prop) %>%
+#   select(iso3c, organism, system, product, pressure, sum=sum_correct)
+```
+
+# rescale 
+In this case, this includes all the crop (pressures are calculated without the other), so we must use a slightly different
+rescaling value (pressures from entire crop including "other" portion)
+```{r}
+
+rescale <- read_csv(here("_analysis/checking_data/data/raster_check.csv")) %>%
+  select(file, sum_cells) %>%
+  filter(!(str_detect(file, "_x_"))) %>%
+  separate(file, c("origin", "organism", "category", "product", "pressure"), sep="_") %>%
+  group_by(pressure) %>%
+  summarize(global_total = sum(sum_cells)) %>%
+  mutate(pressure = gsub(".tif", "", pressure))
+  
+crop_pressures_rescaled <- crop_summary_df %>%
+  left_join(rescale, by="pressure") %>% 
+  mutate(prop_global = sum/global_total) %>% 
+  group_by(iso3c, organism, system, product, pressure) %>% 
+  dplyr::summarise(prop_global = sum(prop_global, na.rm = TRUE))
+
+```
+
+```{r}
+write_csv(crop_pressures_rescaled, here::here("_analysis/figures/paper/data_prep/crops_rescaled.csv" ))
+
+```
+

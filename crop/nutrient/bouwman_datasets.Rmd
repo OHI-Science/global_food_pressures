@@ -1,0 +1,297 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+Citation: Bouwman, A. F., A. H. W. Beusen, and G. Billen (2009), Human alteration of the global nitrogen and phosphorus soil balances for the period 1970 – 2050, Global Biogeochem. Cycles, 23, GB0A04, doi:10.1029/2009GB003576.
+
+```{r}
+library(here)
+library(vroom)
+library(janitor)
+source(here("_spatial/template_raster.R"))
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+# Import food_rgns xy df
+food_rgns_xy <- 
+  food_rgns_xy %>% 
+  dplyr::select(x, y, iso3c)
+```
+
+We need to convert table 2 “Overall efficiency of N and P Use of the Total Agricultural System" to a dataframe with all our iso3c regions and gapfilling any missing regions.
+
+# Browse regions
+```{r}
+regions <- 
+  vroom::vroom(here("_spatial/_output/UNSD_Methodology.csv"), 
+               .name_repair = make_clean_names)
+unique(regions$intermediate_region_name)
+```
+
+# Wrangle dataframe with iso3c according to each 
+```{r}
+# Add UN `region` column to dataframe
+bouwman_2009_regions <- 
+  vroom::vroom(here("_spatial/_output/UNSD_Methodology.csv"), 
+               .name_repair = make_clean_names) %>%
+  mutate(IMAGE_region = 
+           case_when(sub_region_name %in% "Northern America" ~ "north_america",
+                     region_name     %in% "Africa" ~ "africa",
+                     region_name     %in% "Oceania" ~ "oceania",
+                     region          %in% c("Russian Federation", "Belarus", 
+                                            "Ukraine", "Republic of Moldova") ~ 
+                       "north_asia",
+                     region_name     %in% "Europe" ~ "europe",
+                     region_name     %in% "Asia" ~ "south_asia",
+                     sub_region_name %in% "Latin America and the Caribbean" ~ 
+                       "central_and_south_america")) %>% 
+  select(sub_region_name, region_name, region, IMAGE_region, iso3c) %>% 
+  left_join(food_rgns, ., by = "iso3c") %>% 
+  select(iso3c, IMAGE_region)
+```
+
+# Import nutrient dataset table from Bouwman 2009
+```{r}
+bouwman_2009_tbl2 <- 
+  vroom(here("crop/nutrient/data/bouwman_2009_tbl2_N_raw.csv"),
+             .name_repair = make_clean_names) %>% 
+  mutate(nutrient = "N") %>% 
+  bind_rows(., vroom(here("crop/nutrient/data/bouwman_2009_tbl2_P_raw.csv"),
+                 .name_repair = make_clean_names)) %>% 
+  mutate(nutrient = if_else(is.na(nutrient), 
+                            "P",
+                            nutrient)) %>% 
+  pivot_longer(data = .,
+               cols = !c(year_scenario, nutrient),
+               names_to = "IMAGE_region", 
+               values_to = "efficiency") %>% 
+  mutate(year_scenario = case_when(
+    year_scenario %in% c("2030-GO", 
+                         "2030-AM",
+                         "2030-OS",
+                         "2030-TG") ~ "2030",
+    TRUE ~ year_scenario)) %>% 
+  filter(year_scenario %in% c("2000", "2030")) %>%
+  group_by(year_scenario, IMAGE_region, nutrient) %>%
+  summarise(efficiency = mean(efficiency)) %>% 
+  ungroup() %>% 
+  mutate(efficiency = if_else(year_scenario == 2000,
+                              efficiency * (12.5 / 31),
+                              efficiency * (18.5 / 31))) %>% 
+  group_by(IMAGE_region, nutrient) %>% 
+  summarise(efficiency = sum(efficiency)) %>% 
+  ungroup()
+```
+
+# Which data is most representative of 2017?
+we only have 2000 data and projected data for 2030. We could potentially find some
+middle ground value?
+
+```{r}
+# Rasterize the change in values between 1970, 2000 and 2030
+bouwman_2009_tbl2_tidy <- 
+  left_join(bouwman_2009_tbl2, 
+            bouwman_2009_regions, 
+            by = "IMAGE_region") %>% 
+  select(!IMAGE_region)
+
+write_csv(bouwman_2009_tbl2_tidy,
+         here("crop/nutrient/data/bouwman_2009_tbl2.csv"))
+```
+
+# I visually compared the numbers to see if they were in the right ballpark.
+```{r}
+view(bouwman_2009_tbl2)
+view(vroom::vroom(here("crop/nutrient/data/bouwman_2009_tbl2_N_raw.csv"),
+                  .name_repair = make_clean_names))
+```
+
+-------------------------------------------------------------------------------
+
+# Wrangle dataframe with iso3c according to each 
+```{r}
+# Add UN `region` column to dataframe
+bouwman_2005_regions <- 
+  vroom::vroom(here("_spatial/_output/UNSD_Methodology.csv"), 
+               .name_repair = make_clean_names) %>%
+  mutate(IMAGE_region = 
+           case_when(sub_region_name %in% "Northern America" ~ "north_america",
+                     region %in% c("Albania", "Bosnia and Herzegovina",
+                                   "Montenegro", "Serbia", "Macedonia", 
+                                   "Armenia", "Azerbaijan", "Belarus", 
+                                   "Georgia", "Kazakhstan", "Kyrgyzstan", 
+                                   "Republic of Moldova", "Russian Federation",
+                                   "Tajikistan", "Turkmenistan", "Ukraine",
+                                   "Uzbekistan") ~ "transition_countries",
+                     sub_region_name %in% "Northern Africa" ~ "north_africa",
+                     sub_region_name %in% "Sub-Saharan Africa" ~ "subsaharan_africa",
+                     intermediate_region_name %in% "Western Europe" ~ "western_europe",
+                     sub_region_name %in% "South-eastern Asia" ~ "southeast_asia",
+                     sub_region_name %in% "Southern Asia" ~ "south_asia",
+                     sub_region_name %in% "Eastern Asia" ~ "east_asia",
+                     sub_region_name %in% "Latin America and the Caribbean" ~ "latin_america",
+                     intermediate_region_name %in% "Western Asia"  ~ "middle_east",
+                     developed_developing %in% "Developed" ~ "industrialized",
+                     developed_developing %in% "Developing" ~ "developing",
+                     iso3c %in% "IRN" ~ "middle_east",
+                     TRUE ~ "world")) %>% 
+  select(sub_region_name, region_name, region, IMAGE_region, iso3c) %>% 
+  left_join(food_rgns, ., by = "iso3c") %>% 
+  select(iso3c, IMAGE_region, region)
+```
+
+```{r}
+bouwman_2005_tbl5 <- 
+  tibble(IMAGE_region = rep(c("north_america",
+                              "western_europe",
+                              "transition_countries",
+                              "latin_america",
+                              "middle_east",
+                              "north_africa",
+                              "subsaharan_africa",
+                              "south_asia",
+                              "east_asia",
+                              "southeast_asia",
+                              "world",
+                              "developing",
+                              "industrialized"),
+                              2),
+         year = c(rep("1995", 13), 
+                  rep("2030", 13)),
+         NUE  = c(48, 54, 67, 49, 58, 58, 108, 41, 48, 78, 52, 51, 49, 
+                  63, 68, 83, 66, 63, 63, 131, 58, 42, 90, 61, 58, 62),
+         system_n_recovery = c(43, 49, 46, 43, 47, 47, 51, 31, 43, 55, 43, 42, 45,
+                               51, 58, 55, 49, 50, 50, 58, 38, 39, 61, 47, 45, 52))
+
+bouwman_2005_tbl5_final <- 
+  bouwman_2005_tbl5 %>% 
+  mutate(NUE = if_else(year == 1995,
+                       NUE * (12.5 / 36),
+                       NUE * (23.5 / 36)),
+         system_n_recovery = if_else(year == 1995,
+                                     system_n_recovery * (12.5 / 36),
+                                     system_n_recovery * (23.5 / 36))) %>% 
+  group_by(IMAGE_region) %>% 
+  summarise(NUE = sum(NUE),
+            system_n_recovery = sum(system_n_recovery)) %>% 
+  ungroup() %>% 
+  left_join(bouwman_2005_regions, .) %>% 
+  na.omit()
+
+write_csv(bouwman_2005_tbl5_final,
+          here("crop/nutrient/data/bouwman_2005_tbl5.csv"))
+```
+
+-------------------------------------------------------------------------------
+
+Boumwan et al 2002 - 
+"Estimation of global NH3 volatilization loss from synthetic fertilizers and 
+animal manure applied to arable lands and grasslands
+
+Table 4 from here (all three categories, columns "N use, kt" and "NH3-N loss, kt"):
+
+```{r}
+bouwman_2002_regions <- 
+  vroom::vroom(here("_spatial/_output/UNSD_Methodology.csv"), 
+               .name_repair = make_clean_names) %>%
+  mutate(IMAGE_region = 
+           case_when(region %in% c("Albania", "Bosnia and Herzegovina",
+                                   "Montenegro", "Serbia", "Macedonia", 
+                                   "Armenia", "Azerbaijan", "Belarus", 
+                                   "Georgia", "Kazakhstan", "Kyrgyzstan", 
+                                   "Republic of Moldova", "Russian Federation",
+                                   "Tajikistan", "Turkmenistan", "Ukraine",
+                                   "Uzbekistan") ~ "former_ussr",
+                     iso3c %in% c("GRL", "XMI") ~ "oecd_europe",
+                     sub_region_name %in% "Western Europe" ~ "oecd_europe",
+                     sub_region_name %in% "Northern Europe" ~ "oecd_europe",
+                     sub_region_name %in% "Southern Europe" ~ "oecd_europe",
+                     sub_region_name %in% "Eastern Europe" ~ "eastern_europe",
+                     iso3c %in% "SDN" ~ "eastern_africa",
+                     iso3c %in% c("TZA", "AGO", "ZMB", "ZWE", "MWI", "MOZ") ~ "southern_africa",
+                     intermediate_region_name %in% "Northern Africa" ~ "north_africa",
+                     intermediate_region_name %in% "Western Africa" ~ "western_africa",
+                     intermediate_region_name %in% "Eastern Africa" ~ "eastern_africa",
+                     intermediate_region_name %in% "Southern Africa" ~ "southern_africa",
+                     intermediate_region_name %in% "Middle Africa" ~ "western_africa",
+                     iso3c %in% c("USA", "SPM") ~ "usa",
+                     region %in% "Canada" ~ "canada",
+                     iso3c %in% "BMU" ~ "central_america",
+                     intermediate_region_name %in% "Caribbean" ~ "central_america",
+                     intermediate_region_name %in% "Central America" ~ "central_america",
+                     intermediate_region_name %in% "South America" ~ "south_america",
+                     region %in% "Japan" ~ "japan",
+                     iso3c %in% "IRN" ~ "middle_east",
+                     intermediate_region_name %in% "Western Asia"  ~ "middle_east",
+                     sub_region_name %in% "South-eastern Asia" ~ "southeast_asia",
+                     sub_region_name %in% "Southern Asia" ~ "south_asia",
+                     sub_region_name %in% "Eastern Asia" ~ "east_asia",
+                     region_name %in% "Oceania" ~ "oceania")) %>% 
+  select(sub_region_name, region_name, region, IMAGE_region, iso3c) %>% 
+  left_join(food_rgns, ., by = "iso3c") %>% 
+  select(iso3c, IMAGE_region, region)
+```
+
+# Merge iso3c with regions in the table
+```{r}
+bouwman_2002_tbl4 <- 
+  vroom(here("crop/nutrient/data/bouwman_2002_tbl4_raw.csv"),
+        .name_repair = make_clean_names)[c(1,9,10)] %>% 
+  rename(IMAGE_region = region)
+bouwman_2002_tbl4$IMAGE_region <- make_clean_names(bouwman_2002_tbl4$IMAGE_region)
+
+bouwman_2002_tbl4_tidy <- 
+  left_join(bouwman_2002_tbl4,
+          bouwman_2002_regions,
+          by = "IMAGE_region") %>% 
+  na.omit()
+
+write_csv(bouwman_2002_tbl4_tidy,
+            here("crop/nutrient/data/bouwman_2002_tbl4.csv"))
+```
+
+# grasslands
+```{r}
+bouwman_2002_tbl4_grasslands <- 
+  vroom(here("crop/nutrient/data/bouwman_2002_tbl4_raw.csv"),
+        .name_repair = make_clean_names)[c(1:3)] %>% 
+  mutate(prop_nh3_total_grasslands = nh3_n_grassland_loss / n_use_fertilized_grasslands_kt) %>% 
+  mutate(prop_nh3_total_grasslands = if_else(is.finite(prop_nh3_total_grasslands),
+                                             prop_nh3_total_grasslands,
+                                             0)) %>% 
+  rename(IMAGE_region = region) %>% 
+  select(IMAGE_region, prop_nh3_total_grasslands)
+
+bouwman_2002_tbl4_grasslands$IMAGE_region <- 
+  make_clean_names(bouwman_2002_tbl4_grasslands$IMAGE_region)
+
+bouwman_2002_tbl4_grasslands_tidy <- 
+  left_join(bouwman_2002_tbl4_grasslands,
+            bouwman_2002_regions,
+            by = "IMAGE_region") %>% 
+  na.omit()
+
+write_csv(bouwman_2002_tbl4_grasslands_tidy,
+            here("crop/nutrient/data/bouwman_2002_tbl4_grasslands.csv"))
+```
+
+
+# Merge iso3c with regions in the table
+```{r}
+bouwman_2002_tbl5 <- 
+  vroom(here("crop/nutrient/data/bouwman_2002_tbl5_raw.csv"),
+        .name_repair = make_clean_names,
+        skip = 1)[c(1,9,10,11,14)] %>% 
+  rename(IMAGE_region = region)
+bouwman_2002_tbl5$IMAGE_region <- make_clean_names(bouwman_2002_tbl5$IMAGE_region)
+
+bouwman_2002_tbl5_tidy <- 
+  left_join(bouwman_2002_tbl5,
+            bouwman_2002_regions,
+            by = "IMAGE_region")[2:6] %>% 
+  na.omit()
+
+write_csv(bouwman_2002_tbl5_tidy,
+            here("crop/nutrient/data/bouwman_2002_tbl5.csv"))
+```

@@ -1,0 +1,247 @@
+---
+title: "Calculate disturbance layers for chicken (industrial and backyard)"
+author: "Juliette"
+date: "10/12/2020"
+output: html_document
+---
+
+**Information on the extra building and farm space multipliers:**
+
+We use a kg/m2 value to calculate the amount of space a chicken needs in its lifetime. However this does not account for the rest of building space or the rest of the farm space. From our research we concluded that adding an additional 10% more area for building walls, etc is appropriate. To do so we multiply the calculated area but 1.1. We also concluded that the building accounts for 40% of the space the entire chicken farm needs, meaning that 60% is missing. This is really 1/0.4 = 2.5, so to account for this we can multiply by 2.5. The math to prove this is below:
+ 
+Proof: 
+If you have a pen that is 100m2 there would be 10% more for the chicken building: 100m2 x 1.1 = 110m2
+This would only be 40% of the farm
+0.4 x ? = 110
+? = 275 = total farm area
+Can check: 110/275 = 40%
+
+
+## Setup
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+
+industrial_meat_conversion_values <- read_csv(here("animal_farm/disturbance/data/chicken_pigs_live_weights.csv")) %>% filter(production_system == "broilers")
+
+backyard_value <- read_csv(here("animal_farm/disturbance/data/space_rec.csv")) %>% 
+  filter(animal == "chickens")
+
+conversion_values <- read_csv(here("animal_farm/disturbance/data/livestock_conversion_values.csv")) %>% 
+  filter(animal == "chicken")
+
+```
+
+## Industrial Meat Chickens
+Let's do the industrial meat chickens first
+```{r}
+
+## load in the location df map and convert to raster format
+industrial_meat <- read_csv(file.path(prep, "animal_farm/farm/chickens_industrial_meat_location_df.csv"), col_types = "ddnnnccnnccncnnc") 
+
+ind_meat_raster <- industrial_meat %>% 
+  select(x,y, current_count) %>% 
+  rasterFromXYZ(crs = food_crs)
+
+## create raster of head count to live weight conversion values
+ind_meat_convert_raster <- industrial_meat_conversion_values %>% 
+  right_join(food_rgns_xy) %>% 
+  select(x, y, kg_live_wt) %>% 
+  rasterFromXYZ(crs = food_crs)
+
+## save the space values for math ease
+broiler_space_m2 <- as.numeric(conversion_values$value[conversion_values$product == "meat"]) ## kg live weight/m2
+building_space <- 1.1
+rest_farm_space <- 2.5
+
+## Calculate total area map, make sure it's in km2 not m2
+
+area_chicken_industrial_meat <- (ind_meat_raster*ind_meat_convert_raster/broiler_space_m2)/(1000000)*building_space*rest_farm_space
+plot(area_chicken_industrial_meat)
+plot(log(1+area_chicken_industrial_meat))
+
+writeRaster(area_chicken_industrial_meat, file.path(prep, "animal_farm/disturbance/total_area_rasters/chicken_industrial_meat_disturbance_area.tif"), format = "GTiff", overwrite = TRUE)
+
+## save as a disturbance layer, scale to the area of each cell
+
+names(area_chicken_industrial_meat) <- "km2_eq"
+
+writeRaster(area_chicken_industrial_meat, file.path(layers, "land_chickens_industrial_meat_disturbance.tif"), format = "GTiff", overwrite = TRUE)
+```
+
+
+## Industrial egg chickens 
+```{r}
+
+## load in the location df map and convert to raster format
+industrial_egg <- read_csv(file.path(prep, "animal_farm/farm/chickens_industrial_eggs_location_df.csv"), col_types = "ddnnnccnnccncnnc")
+
+indus_egg_raster <- industrial_egg %>% 
+  select(x,y, current_count) %>% 
+  rasterFromXYZ(crs = food_crs)
+
+## save the space values for math ease
+layer_space_m2 <- as.numeric(conversion_values$value[conversion_values$product == "eggs"]) ## heads/m2
+building_space <- 1.1
+rest_farm_space <- 2.5
+
+## Calculate total area map, make sure it's in km2 not m2
+
+area_chicken_industrial_eggs <- (indus_egg_raster*(layer_space_m2/1000000))*building_space*rest_farm_space
+
+plot(area_chicken_industrial_eggs)
+plot(log(1+area_chicken_industrial_eggs))
+
+## create a total area and a disturbance raster
+writeRaster(area_chicken_industrial_eggs, file.path(prep, "animal_farm/disturbance/total_area_rasters/chicken_industrial_eggs_disturbance_area.tif"), format = "GTiff", overwrite = TRUE)
+
+## save as a disturbance layer, scale to the area of each cell
+
+names(area_chicken_industrial_eggs) <- "km2_eq"
+
+writeRaster(area_chicken_industrial_eggs, file.path(layers, "land_chickens_industrial_eggs_disturbance.tif"), format = "GTiff", overwrite = TRUE)
+
+```
+
+
+backyard chickens next
+```{r}
+backyard <- read_csv(file.path(prep, "animal_farm/farm/chickens_backyard_eggs&meat_location_df.csv"), col_types = "ddnnnccnnccncnnc")
+
+backyard_raster <- backyard %>% 
+  select(x,y, current_count) %>% 
+  rasterFromXYZ(crs = food_crs)
+
+backyard_space_m2 <- as.numeric(backyard_value$meters_sq[backyard_value$system == "backyard"]) ## heads/m2
+
+## Calculate total area map, make sure it's in km2 not m2
+
+area_chicken_backyard <- backyard_raster*backyard_space_m2/1000000
+# area_chicken_backyard[is.na(area_chicken_backyard)] <- 0
+# area_chicken_backyard[!is.finite(area_chicken_backyard)] <- 0
+
+plot(area_chicken_backyard)
+plot(log(1+area_chicken_backyard))
+
+## create a total area and a disturbance raster
+writeRaster(area_chicken_backyard, file.path(prep, "animal_farm/disturbance/total_area_rasters/chicken_backyard_eggs&meat_disturbance_area.tif"), format = "GTiff", overwrite = TRUE)
+
+## save as a disturbance layer, scale to the area of each cell
+
+names(area_chicken_backyard) <- "km2_eq"
+
+writeRaster(area_chicken_backyard, file.path(layers, "land_chickens_backyard_eggs&meat_disturbance.tif"), format = "GTiff", overwrite = TRUE)
+
+```
+
+## Do a data check
+Do zonal stats for the number of chickens in each system, the space used, and calculate a space/chicken (to compare between the three. layers and broilers should be similar, backyard should be less)
+
+```{r}
+
+## industrial meat
+ind_meat_counts <- zonal(ind_meat_raster, food_rgns_tif, fun="sum", progress="text", na.rm=TRUE) %>% 
+  data.frame() %>% 
+  rename(ID_0 = zone,
+         meat_counts = sum) %>%
+  left_join(food_rgns, by="ID_0") %>% 
+  select(-ID_0)
+
+ind_meat_area <- zonal(area_chicken_industrial_meat, food_rgns_tif, fun="sum", progress="text", na.rm=TRUE) %>% 
+  data.frame() %>% 
+  rename(ID_0 = zone,
+         meat_area = sum) %>%
+  left_join(food_rgns, by="ID_0") %>% 
+  select(-ID_0)
+
+meat_check <- left_join(ind_meat_counts, ind_meat_area, by = c("iso3c", "Country")) %>% 
+  mutate(km2_per_chicken_meat = meat_area/meat_counts)
+
+## industrial eggs
+ind_eggs_counts <- zonal(indus_egg_raster, food_rgns_tif, fun="sum", progress="text", na.rm=TRUE) %>% 
+  data.frame() %>% 
+  rename(ID_0 = zone,
+         egg_count = sum) %>%
+  left_join(food_rgns, by="ID_0") %>% 
+  select(-ID_0)
+
+ind_eggs_area <- zonal(area_chicken_industrial_eggs, food_rgns_tif, fun="sum", progress="text", na.rm=TRUE) %>%
+  data.frame() %>% 
+  rename(ID_0 = zone,
+         egg_area = sum) %>%
+  left_join(food_rgns, by="ID_0") %>% 
+  select(-ID_0)
+
+eggs_check <- left_join(ind_eggs_counts, ind_eggs_area, by = c("iso3c", "Country")) %>% 
+  data.frame() %>% 
+  mutate(km2_per_chicken_eggs = egg_area/egg_count)
+
+## backyard
+backyard_counts <- zonal(backyard_raster, food_rgns_tif, fun="sum", progress="text", na.rm=TRUE) %>% 
+  data.frame() %>% 
+  rename(ID_0 = zone,
+         backyard_count = sum) %>%
+  left_join(food_rgns, by="ID_0") %>% 
+  select(-ID_0)
+
+backyard_area <- zonal(area_chicken_backyard, food_rgns_tif, fun="sum", progress="text", na.rm=TRUE) %>% 
+  data.frame() %>% 
+  rename(ID_0 = zone,
+         backyard_area = sum) %>%
+  left_join(food_rgns, by="ID_0") %>% 
+  select(-ID_0)
+
+backyard_check <- left_join(backyard_counts, backyard_area, by = c("iso3c", "Country")) %>% 
+  mutate(km2_per_chicken_backyard = backyard_area/backyard_count)
+
+```
+
+```{r}
+library(plotly)
+
+all_check <- left_join(meat_check, eggs_check) %>% 
+  left_join(backyard_check)
+
+
+check_graph <- ggplot(all_check) +
+  geom_point(aes(x = km2_per_chicken_meat, y = Country), 
+             color = "brown") + 
+  
+  geom_point(aes(x = km2_per_chicken_eggs, y = Country), 
+             color = "blue") +
+  
+  geom_point(aes(x = km2_per_chicken_backyard, y = Country),
+             color = "darkgreen") +
+  labs(x = "km2_per_chicken",
+       title = "Area per chicken",
+       subtitle = "industrial meat(brown), industrial eggs (blue), and backyard (green)")
+          
+
+ggsave("plots/area_per_chicken.jpg",width = 15, height = 30, dpi=300) 
+
+```
+
+Check the broiler total area from this project to the one from chicken salmon, should be similar except we used 2017 counts here instead of 2016
+```{r}
+old_area_csv <- read_csv("/home/verstaen/github/food_chicken_salmon/chicken_disturbance/data/summary_stats.csv")
+global_old_area <-  old_area_csv %>% 
+  summarise(total_area = sum(total_area),
+            total_count = sum(count))
+# 406,684.9 km2
+# 15,059,060,451 heads
+
+new_area <- cellStats(area_chicken_industrial_meat, 'sum')
+new_count <- cellStats(ind_meat_raster, 'sum')
+## 2,022,313 km2
+## 15,803,802,499 heads
+
+
+```
+
+
+

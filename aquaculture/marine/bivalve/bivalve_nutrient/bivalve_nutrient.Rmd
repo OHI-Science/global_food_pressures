@@ -1,0 +1,283 @@
+---
+title: "Creating a file for bivalve farming nutrient pollution"
+author: "Gage Clawson (NCEAS, UCSB, OHI)"
+date: "12/23/2020"
+output: html_document
+---
+
+This markdown creates a nutrient pollution impact layer for bivalve aquaculture. This impact is zero for bivalves, but there is an impact from gastropods. This markdown uses models and species specific parameters from the paper *Aquaculture Production is a Large, Spatially Concentrated Source of Nutrients in Chinese Freshwater and Coastal Seas* (Wang et al. 2020; table 1).
+
+## Set up
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(sf)
+library(raster)
+library(readr)
+library(data.table)
+library(here)
+
+source(here("_spatial/template_raster.R"))
+
+path_prep <- "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/bivalve"
+path_final <-"/home/shares/food-systems/Food_footprint/all_food_systems/datalayers"
+
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+```
+
+
+Because we have multiple values and species for nutrient pollution for bivalves (bivalves and gastropods), we will have to do this analysis in a series of steps. Workflow will follow these rules: 
+
+1. Apply the gastropod value to places with gastropod production (and in the right proportion)
+2. Apply 0 for other bivalves 
+
+Steps: 
+1. Multiply tonnes production by 0.95 (this corrects for the growth that occurs outside the seapen on land), this is the value Lex uses
+2. Then multiply growth by the N value and the P value
+3. We report in summed N and P (total excess nutrients), so sum the N and P rasters (and save each separately as a prep file).
+4. We report in tonnes, so divide by 1000
+
+
+**Numbers for each category:** 
+Gastropods: 
+N = 110 kg/tonne production, P = 15 kg/tonne production
+
+Bivalves:
+N = 0, P = 0
+
+```{r}
+fao <- read.csv(here("aquaculture/data/fao_mariculture_clean.csv")) %>%
+  filter(environment %in% c("Marine", "Brackishwater"))
+
+
+## Read in fao data and get a species list for salmon
+species_list <- read.csv(here("aquaculture/marine/STEP1_species_groups/int/marine_groups.csv"))  %>%
+  distinct(species, aq_group)
+
+taxon_list <- read.csv(here("aquaculture/marine/STEP1_species_groups/int/marine_groups.csv"))  %>%
+  distinct(species, Taxon_code, aq_group)
+
+gastropod_list <- taxon_list %>%
+  dplyr::filter(Taxon_code == "GAST") %>%
+  dplyr::filter(species != "Marine molluscs nei") %>%
+  distinct(species) 
+
+gastropod_list <- gastropod_list$species
+
+# the list of species we are including
+bivalves_list <- species_list$species[species_list$aq_group=="bivalves"]
+bivalves_list
+
+## write out shrimp taxa and production for Juliette
+fao_bivalves_taxa_prod <- fao %>%
+  filter(species %in% bivalves_list) %>%
+  filter(!is.na(value)) %>%
+  arrange(-value, country) %>%
+  filter(value>=500) %>%  # countries with less do not appear to be stable producers at this point
+  group_by(country, iso3c, species, year) %>%
+  dplyr::filter(year == 2017) %>%
+  summarize(fao_tonnes_production = sum(value)) %>%
+  arrange(country, iso3c, species, year)
+
+
+## Now we need to get the proportion of catch that falls into each species category (i.e. pelagic or non-pelagic) 
+prop_df <- fao_bivalves_taxa_prod %>%
+  dplyr::mutate(species_cat = ifelse(species %in% gastropod_list, "gastropod", "bivalves")) %>%
+  group_by(iso3c, species_cat) %>%
+  summarise(tonnes = sum(fao_tonnes_production)) %>%
+  ungroup() %>%
+  group_by(iso3c) %>%
+  mutate(total_tonnes = sum(tonnes)) %>%
+  ungroup()
+
+prop_bivalve_df <- prop_df %>%
+  dplyr::filter(species_cat == "bivalves") %>%
+  dplyr::mutate(prop_bivalve = tonnes/total_tonnes) %>%
+  dplyr::mutate(prop_gastropod = 1-prop_bivalve) %>%
+  dplyr::select(iso3c, prop_gastropod, prop_bivalve, total_tonnes)
+
+
+sum(prop_bivalve_df$total_tonnes) # 17435623
+sum(fao_bivalves_taxa_prod$fao_tonnes_production) # 17435623
+
+
+## Read in production data  - taken from the aquaculture mapping project.. this is just the farms data matched to the production data 
+production_sf <- st_read(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/bivalve/updated/prod_data_by_cell_iso3c.shp")) %>%
+  dplyr::rename("tonnes_per_farm" = "tnns_p_")
+
+## join with our proportion data so that we can get tonnes of pelagic and tonnes of non-pelagic per farm 
+production_spp_props <- production_sf %>%
+  left_join(prop_bivalve_df, by = "iso3c") %>%
+  dplyr::mutate(tonnes_gastropod = prop_gastropod*tonnes_per_farm, 
+                tonnes_bivalve = prop_bivalve*tonnes_per_farm)
+
+sum(production_spp_props$tonnes_bivalve) + sum(production_spp_props$tonnes_gastropod) # 17436803
+
+## Now we can do the actual analysis outlined above
+nutrient_data <- production_spp_props %>%
+  dplyr::mutate(tonnes_gastropod_growth = tonnes_gastropod*0.95,
+                tonnes_bivalve_growth = tonnes_bivalve*0.95) %>%   ## multiply by 0.95 to correct for growth outside seapen
+  
+  dplyr::mutate(N_poll_gast = tonnes_gastropod_growth*110,
+                P_poll_gast = tonnes_gastropod_growth*15,
+                N_poll_bivalve = 0*tonnes_bivalve_growth,
+                P_poll_bivalve = 0*tonnes_bivalve_growth) %>%  ## get pollution values by species group
+  
+  dplyr::mutate(N_poll_kg = N_poll_gast + N_poll_bivalve,
+                P_poll_kg = P_poll_gast + P_poll_bivalve) %>% ## get total pollution values for each cell in kg
+  
+  # dplyr::mutate(po4eq_kg = N_poll*0.42 + P_poll*3.07) %>% ## get po4eq; not doing this anymore (01/14/2021)
+  
+   dplyr::mutate(N_poll_t = N_poll_kg/1000,
+                P_poll_t = P_poll_kg/1000) %>% ## get total pollution values for each cell in tonnes
+  
+  dplyr::mutate(total_N_P_t = N_poll_t + P_poll_t) %>%
+  dplyr::select(N_poll_t, P_poll_t, total_N_P_t)
+
+sum(nutrient_data$total_N_P_t) #  50166.36
+
+sum(production_spp_props$tonnes_gastropod) # 422453.6
+
+
+
+## Save total N_P layer
+bivalves_raster_total <- rasterize(nutrient_data, food_raster, field = "total_N_P_t", fun=sum, background=0)
+plot(log(bivalves_raster_total+1))
+
+bivalves_raster_df <- as.data.frame(bivalves_raster_total, xy=TRUE) %>%
+  dplyr::select(x,y, N_P_tonnes=layer)
+
+cellStats(bivalves_raster_total, stat = "sum") # 50166.36
+sum(bivalves_raster_df$N_P_tonnes) # 50166.36
+sum(nutrient_data$total_N_P_t, na.rm = TRUE) # 50166.36
+
+## save to dataprep folder with the correct naming conventions: 
+write.csv(bivalves_raster_df, file.path(path_prep, "bivalves_nutrient.csv"))
+
+
+final_rast <- rasterFromXYZ(bivalves_raster_df, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+final_rast
+cellStats(final_rast, "sum") # 50166.36
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 50166.36
+final_rast
+
+## Save to datalayers 
+writeRaster(final_rast, file.path(path_final, "marine_bivalve_aquaculture_meat_nutrient.tif"), overwrite = T)
+writeRaster(final_rast, file.path(path_prep, "datalayers/marine_bivalve_aquaculture_meat_nutrient.tif"), overwrite = T)
+
+
+
+
+## Save N nutrient layer
+bivalves_raster_N <- rasterize(nutrient_data, food_raster, field = "N_poll_t", fun=sum, background=0)
+plot(log(bivalves_raster_N+1))
+
+bivalves_raster_df <- as.data.frame(bivalves_raster_N, xy=TRUE) %>%
+  dplyr::select(x,y, N_tonnes=layer)
+
+cellStats(bivalves_raster_N, stat = "sum") # 44146.4
+sum(bivalves_raster_df$N_tonnes) # 44146.4
+sum(nutrient_data$N_poll_t, na.rm = TRUE) # 44146.4
+
+## save to dataprep folder with the correct naming conventions: 
+write.csv(bivalves_raster_df, file.path(path_prep, "bivalves_nutrient_N.csv"))
+
+
+final_rast <- rasterFromXYZ(bivalves_raster_df, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+final_rast
+cellStats(final_rast, "sum") # 44147.69
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 44147.69
+final_rast
+
+## Save to datalayers 
+writeRaster(final_rast, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/marine_bivalve_aquaculture_meat_nutrientN.tif"), overwrite = T)
+
+
+
+## Save P nutrient layer
+bivalves_raster_P <- rasterize(nutrient_data, food_raster, field = "P_poll_t", fun=sum, background=0)
+plot(log(bivalves_raster_P+1))
+
+bivalves_raster_df <- as.data.frame(bivalves_raster_P, xy=TRUE) %>%
+  dplyr::select(x,y, P_tonnes=layer)
+
+cellStats(bivalves_raster_P, stat = "sum") # 6020.14
+sum(bivalves_raster_df$P_tonnes) # 6020.14
+sum(nutrient_data$P_poll_t, na.rm = TRUE) # 6020.14
+
+## save to dataprep folder with the correct naming conventions: 
+write.csv(bivalves_raster_df, file.path(path_prep, "bivalves_nutrient_P.csv"))
+
+
+final_rast <- rasterFromXYZ(bivalves_raster_df, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+final_rast
+cellStats(final_rast, "sum") # 6020.14
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 6019.964
+final_rast
+
+## Save to datalayers 
+writeRaster(final_rast, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/marine_bivalve_aquaculture_meat_nutrientP.tif"), overwrite = T)
+```
+
+Datacheck:
+
+```{r}
+biv_nutrient_N <- read_csv(file.path(path_prep, "bivalves_nutrient_N.csv"))
+sum(biv_nutrient_N$N_tonnes) # 44147.69 N tonnes
+
+biv_nutrient_P <- read_csv(file.path(path_prep, "bivalves_nutrient_P.csv"))
+sum(biv_nutrient_P$P_tonnes) # 6020.14 P tonnes 
+
+## Total production is 17435623 tonnes for 2017
+
+## Used 110 N kg and 15 P kg for gastropods and 0 for bivalves
+
+## Since only quantifying gastropods the gastropod production is 422466 
+## 44147.69 + 6020.14 = 50167.83 total excess nutrients 
+
+
+422466*0.95*110/1000 # 44147.7 N tonnes
+422466*0.95*15/1000 # 6020.14 P tonnes
+
+## both match out final layers 
+
+final_rast <- raster(file.path(path_final, "marine_bivalve_aquaculture_meat_nutrient.tif"))
+cellStats(final_rast, "sum") # 50167.83
+
+
+## from paper: Aquaculture Production is a Large, Spatially Concentrated Source of Nutrients in Chinese Freshwater and Coastal Seas: 
+# 44000 metric tonne N release for gastropods for 2017
+# 3000 metric tonne P release for gatropods for 2017
+
+## The total N and P output from this paper for Gastropods is ~ 47000 metric tonnes from China. This matches so well to ours, because 85% of our production for this category comes from China.
+
+# This seems ok to me. 
+```
+
+

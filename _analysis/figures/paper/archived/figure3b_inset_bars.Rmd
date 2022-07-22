@@ -1,0 +1,339 @@
+---
+title: 'Figure 3: Ranking Foods'
+author: "Juliette"
+date: "11/17/2020"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(hrbrthemes)
+library(RColorBrewer)
+library(colorspace)
+library(scales)
+library(colorspace)
+source(here("_workflow/common.R"))
+
+summary_df_raw <- read_csv(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw_df_summary/rgn_raw_summary.csv")) %>%
+  unite(name_long, 3:7, sep = "-", remove = FALSE)
+
+rescaling_values <- read_csv(here("_analysis/rescale_values.csv"))
+
+food_categories <- read_csv(here("_analysis/figures/paper/data/food_categories.csv")) %>%
+  unite(name_long, 1:5, sep = "-")
+
+food_categories_short <- food_categories %>% 
+  select(food_name_3, food_name_legend_3, food_name_1) %>% 
+  unique()
+
+```
+
+
+Create DF that works for the circle plot
+```{r}
+summary_df <- summary_df_raw %>% 
+      mutate(land_ocean = case_when(origin %in% c("land", "freshwater") ~ "land",
+                                origin == "marine" ~ "ocean")) %>% 
+  mutate(sum = ifelse(iso3c == "HSX" & category == "feedfodd", 0, sum)) %>% 
+  group_by(name_long, pressure) %>% 
+  dplyr::summarise(pressure_sum = sum(sum)) %>% 
+  left_join(rescaling_values, by = "pressure") %>% 
+  ungroup() %>% 
+  rowwise() %>% 
+  mutate(prop_of_global = pressure_sum/global_total)  %>% 
+  left_join(food_categories, by = "name_long") %>% 
+  group_by(food_name_3, pressure) %>% 
+  dplyr::summarise(prop_of_global = sum(prop_of_global)) %>% 
+  left_join(food_categories_short, by = "food_name_3") %>% 
+  select(food_name_3, food_name_legend_3, food_category = food_name_1, pressure,prop_of_global) %>% 
+  ungroup()
+
+## get food catgory ranks
+chi <- summary_df %>%
+  group_by(food_name_3, food_name_legend_3 ,food_category) %>%
+  summarize(chi = sum(prop_of_global, na.rm=TRUE)) %>%
+  arrange(-chi)
+
+#summary_df$food_name_legend_3 <- factor(summary_df$food_name_legend_3, levels = chi$food_name_legend_3)
+
+summary_df <- summary_df %>% 
+  unite(long_name, c(food_category, pressure), sep = "-", remove = FALSE)
+
+food_order <- chi %>% 
+  select(food_name_legend_3) %>% 
+  unique() 
+
+summary_df$food_name_legend_3 <- factor(summary_df$food_name_legend_3, levels = food_order$food_name_legend_3)
+```
+
+
+``````{r}
+
+# ran the colors_food_category to get these colors loaded. if we like them we will need to throw that code in
+source(here("_analysis/figures/paper/colors_food_category.R"))
+jv_palette
+scales::show_col(jv_palette)
+
+
+source_name <- data.frame(source = c("aquaculture-disturbance", "aquaculture-ghg", "aquaculture-water", "aquaculture-nutrient",
+                                     "fresh_fish-disturbance", "fresh_fish-ghg", "fresh_fish-water", "fresh_fish-nutrient",
+                                     "livestock_second-disturbance", "livestock_second-ghg", "livestock_second-water", "livestock_second-nutrient",
+                                     "marine_fishery-disturbance", "marine_fishery-ghg", "marine_fishery-water", "marine_fishery-nutrient",
+                                     "livestock_meat-disturbance", "livestock_meat-ghg", "livestock_meat-water", "livestock_meat-nutrient",
+                                     "human_crop_consump-disturbance", "human_crop_consump-ghg", "human_crop_consump-water", "human_crop_consump-nutrient",
+                                     "animal_feed-disturbance", "animal_feed-ghg", "animal_feed-water", "animal_feed-nutrient"),
+                          
+                          ## this may be where i remove the part before the source later on
+                            source_name = c("Aquaculture: Disturbance", "Aquaculture: GHG", "Aquaculture: Water", "Aquaculture: Nutrient",
+                                     "Freshwater Fisheries: Disturbance", "Freshwater Fisheries: GHG", "Freshwater Fisheries: Water", "Freshwater Fisheries: Nutrient",
+                                     "Livestock Secondary Products: Disturbance", "Livestock Secondary Products: GHG", "Livestock Secondary Products: Water", "Livestock Secondary Products: Nutrient",
+                                     "Marine fisheries: Disturbance", "Marine fisheries: GHG", "Marine fisheries: Water", "Marine fisheries: Nutrient",
+                                     "Livestock Meat: Disturbance", "Livestock Meat: GHG", "Livestock Meat: Water", "Livestock Meat: Nutrient",
+                                     "Human Consumption Crops: Disturbance", "Human Consumption Crops: GHG", "Human Consumption Crops: Water", "Human Consumption Crops: Nutrient",
+                                     "Animal Feed: Disturbance", "Animal Feed: GHG", "Animal Feed: Water", "Animal Feed: Nutrient"))
+
+```
+
+Colors
+```{r}
+library(scales)
+
+palette <- rev(jv_palette)
+show_col(palette, n = 4)
+
+stressors <- c("disturbance", "nutrient", "water", "ghg")
+food_cat <- c("mariculture", "human_crop_consump",  "livestock_second", "livestock_meat", "marine_fishery", "animal_feed", "fresh_fishery")
+  
+palette_df <- as_tibble(palette) %>% 
+  mutate(pressure = rep(stressors, times = 7)) %>% 
+  mutate(food_category = rep(food_cat, each = 4)) %>% 
+  unite(long_name, c(food_category, pressure), sep = "-") %>% 
+  rename(fill_value = value)
+
+
+```
+
+
+
+
+
+
+```{r}
+bar_theme_b <- theme(axis.line=element_blank(),
+                      # axis.text.y=element_blank(),
+                       axis.ticks=element_blank(),
+                     axis.title.x=element_blank(),
+                      #axis.title.y=element_blank(),
+                      legend.position="none",
+                      panel.background=element_blank(),
+                      panel.border=element_blank(),
+                      panel.grid.major=element_blank(),
+                      panel.grid.minor=element_blank(),
+                      plot.background=element_blank(),
+                      legend.title = element_blank())
+                     # axis.text.x = element_blank())
+
+summary_df_plot <- summary_df %>% 
+  left_join(palette_df, by = "long_name") 
+
+summary_df_plot$fill_value <- factor(summary_df_plot$fill_value, levels = c(palette_df$fill_value))
+
+```
+
+
+```{r}
+ggplot(data = summary_df_plot, aes(y=food_name_legend_3, x = prop_of_global, fill= fill_value)) + 
+  geom_bar(stat="identity")  +
+  scale_fill_identity() +
+  geom_errorbar(aes(
+        x     = 1, 
+        ymin  = 0,   
+        ymax  = 10), 
+        alpha = 0) +
+   geom_errorbar(aes(
+       y     = 0,
+       xmin  = -2,
+       xmax  = 0.8),
+       alpha = 0) +
+  geom_text(
+      data = food_order,
+      aes(x = -0.04,
+          y = 1:length(food_order$food_name_legend_3),
+          label = food_name_legend_3),
+      inherit.aes = FALSE,
+      #fontface = "bold",
+      alpha = 0.9,
+      size = 3,
+      color = "black",
+      hjust = 1) +
+  xlim(-0.4, 1) +
+    bar_theme_b +
+    xlab(bquote("Proportion of Global Pressures"))
+
+
+#ggsave(here("_analysis/figures/paper/output/fig_3b_foodcat_bar.png"), height=7, width=10, units=c("in"))
+
+```
+
+
+Make it into 3 separate ones
+```{r}
+library(patchwork)
+
+## first plot
+summary_df_plot_part1 <- summary_df_plot %>% 
+  left_join(chi, by= c("food_name_3", "food_name_legend_3", "food_category")) %>% 
+  filter(chi >= 0.25) %>%  ## includes 12
+  arrange(chi)
+
+summary_df_plot_part1$fill_value <- factor(summary_df_plot_part1$fill_value, levels = c(palette_df$fill_value))
+summary_df_plot_part1$food_name_legend_3 <- factor(summary_df_plot_part1$food_name_legend_3, levels = food_order$food_name_legend_3)
+
+#food_order_pl1 <- filter(food_order, food_name_legend_3 %in% unique(summary_df_plot_part1$food_name_legend_3))
+
+pl_1 <- ggplot(data = summary_df_plot_part1, aes(y=food_name_legend_3, x = prop_of_global, fill= fill_value)) + 
+  geom_bar(stat="identity") +
+  xlab(bquote("Proportion of Global Stressors")) +
+  scale_fill_identity() +
+  bar_theme_b +
+  xlim(-0, 0.8) +
+   coord_flip() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+## second plot
+summary_df_plot_part2 <- summary_df_plot %>% 
+  left_join(chi, by= c("food_name_3", "food_name_legend_3", "food_category")) %>% 
+  filter( chi <=  0.25 & chi >= 0.05 ) ##includes 7
+
+summary_df_plot_part2$fill_value <- factor(summary_df_plot_part2$fill_value, levels = c(palette_df$fill_value))
+summary_df_plot_part2$food_name_legend_3 <- factor(summary_df_plot_part2$food_name_legend_3, levels = food_order$food_name_legend_3)
+
+pl_2 <- ggplot(data = summary_df_plot_part2, aes(y=food_name_legend_3, x = prop_of_global, fill= fill_value)) + 
+  geom_bar(stat="identity") +
+  xlab(bquote("Proportion of Global Stressors")) +
+  scale_fill_identity() +
+  bar_theme_b +
+  xlim(0, 0.05) +
+   coord_flip() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  xlab("")
+
+## third plot
+summary_df_plot_part3 <- summary_df_plot %>% 
+  left_join(chi, by= c("food_name_3", "food_name_legend_3", "food_category")) %>% 
+  filter(chi < 0.05) ## includes 5
+
+summary_df_plot_part3$fill_value <- factor(summary_df_plot_part3$fill_value, levels = c(palette_df$fill_value))
+summary_df_plot_part3$food_name_legend_3 <- factor(summary_df_plot_part3$food_name_legend_3, levels = food_order$food_name_legend_3)
+
+pl_3 <- ggplot(data = summary_df_plot_part3, aes(y=food_name_legend_3, x = prop_of_global, fill= fill_value)) + 
+  geom_bar(stat="identity") +
+  xlab(bquote("Proportion of Global Stressors")) +
+  scale_fill_identity() +
+  bar_theme_b +
+  xlim(0, 0.01) +
+   coord_flip() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+  xlab("")
+
+combined <- pl_1 + pl_2 +pl_3
+combined
+#ggsave(here("_analysis/figures/paper/output/fig_3b_inset_bar.png"), height=7, width=10, units=c("in"))
+```
+
+
+
+
+
+
+
+
+
+
+
+######
+make the plot
+```{r}
+
+
+circle_theme <- theme(axis.line=element_blank(),
+                      axis.text.y=element_blank(),
+                      axis.ticks=element_blank(),
+                      axis.title.x=element_blank(),
+                      axis.title.y=element_blank(),
+                      legend.position="none",
+                      panel.background=element_blank(),
+                      panel.border=element_blank(),
+                      panel.grid.major=element_blank(),
+                      panel.grid.minor=element_blank(),
+                      plot.background=element_blank(),
+                      axis.text.x = element_blank())
+
+pressures_adj_circle_remove_unapl <- pressures_adj_circle  %>% 
+  filter(chi>0)
+
+ggplot(data=pressures_adj_circle, aes(x=name_long, y=prop_of_global, fill=source_name)) + 
+  
+  geom_bar(stat="identity") +
+  
+  # ## this adjust the inner circle size (ymin) and outer circle size (ymax), which can be expanded to include names
+   geom_errorbar(aes(
+       x     = 1, 
+        ymin = -0.02,   # ymin  = -0.03 for when ocean bars stack inwards 
+       ymax  = 0.11), 
+       alpha = 0) +
+      # Country name text placement
+    geom_text(
+      data = rank_all_foods_adj,
+      aes(x     = name_long,
+          y     = max(pressures_adj_circle$chi, na.rm=TRUE),
+          label = name_long,
+          angle = angle,
+          hjust = hjust),
+      inherit.aes = FALSE,
+      fontface = "bold",
+      alpha = 0.9,
+      size = 4,
+      color = rank_all_foods_adj$color) +
+
+  # #georegion names
+  # geom_text(
+  #   data=rgn_shift,
+  #   aes(y = 0.05, x = name_x, label = food_name_1),
+  #   # aes(x=name_x,
+  #   #     y=name_y,
+  #   #     label=georegion),
+  #   inherit.aes=FALSE, size=7) +
+
+  # # # Scale bar circles
+  # ## This adds the 0 line
+      geom_segment(
+        x = 0, 
+         y = 0, 
+         xend = dim(rank_all_foods_adj)[1]+1, 
+         yend = 0, 
+         fill = NULL,
+        alpha = 1, color = "white", size = 0.1) + #color = "black for internal
+  #    
+
+  scale_color_identity() +
+    # scale_fill_identity() +
+  scale_fill_manual(values= rev(jv_palette), c("Aquaculture: Disturbance", "Aquaculture: GHG", "Aquaculture: Water", "Aquaculture: Nutrient",
+                                     "Freshwater Fisheries: Disturbance", "Freshwater Fisheries: GHG", "Freshwater Fisheries: Water", "Freshwater Fisheries: Nutrient",
+                                     "Livestock Secondary Products: Disturbance", "Livestock Secondary Products: GHG", "Livestock Secondary Products: Water", "Livestock Secondary Products: Nutrient",
+                                     "Marine fisheries: Disturbance", "Marine fisheries: GHG", "Marine fisheries: Water", "Marine fisheries: Nutrient",
+                                     "Livestock Meat: Disturbance", "Livestock Meat: GHG", "Livestock Meat: Water", "Livestock Meat: Nutrient",
+                                     "Human Consumption Crops: Disturbance", "Human Consumption Crops: GHG", "Human Consumption Crops: Water", "Human Consumption Crops: Nutrient",
+                                     "Animal Feed: Disturbance", "Animal Feed: GHG", "Animal Feed: Water", "Animal Feed: Nutrient")) +
+  coord_polar() +
+ circle_theme
+  
+ggsave(here("_analysis/figures/paper/output/fig_3a_circular_foods_stressor_global.png"), height=18, width=18, units=c("in"))
+#bg="transparent"
+
+
+```
+

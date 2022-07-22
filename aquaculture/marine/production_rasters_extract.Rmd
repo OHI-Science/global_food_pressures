@@ -1,0 +1,115 @@
+---
+title: "Create production rasters and extract per food raster"
+author: "Gage Clawson (UCSB, NCEAS, OHI)"
+date: "May 13, 2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Here we need to take the mariculture production rasters and extract per each region to make a csv, so that we avoid any weird mismatches between our pressure rasters and production reporting. (The output of this will really only be used for the efficiency calculations). We will also re-save the production rasters to predatalayers folder on Aurora.
+
+```{r, eval = FALSE}
+#load relevant packages, etc.
+
+library(here)
+library(raster)
+library(tidyverse)
+library(doParallel)
+library(foreach)
+library(parallel)
+
+# raster template
+r <- raster::raster(ncol=720, nrow=360, vals=c(1:259200))
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+
+prep <- file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep")
+
+
+source(here("_workflow/common_spatial.R"))
+
+food_rgns <- food_rgns %>% 
+  add_row(iso3c = "HSX", ID_0 = 9999, Country = "High Seas")
+
+
+cat_msg <- function(x, ...) {
+  if(is.null(knitr:::.knitEnv$input.dir)) {
+    ### not in knitr environment, so use cat()
+    cat(x, ..., '\n')
+  } else {
+    ### in knitr env, so use message()
+    message(x, ...)
+  }
+  return(invisible(NULL))
+}
+
+```
+
+
+
+Mariculture code 
+
+Read in the data
+```{r, eval = FALSE}
+aq_group = c("marine_fish_general", "shrimp", "bivalve", "tuna", "salmon", "crustaceans")
+species_classes <- as.data.frame(aq_group) %>%
+  mutate(aq_group_fix = ifelse(aq_group == "marine_fish_general", "marine-fish-general", aq_group))
+
+
+for(i in 1:nrow(species_classes)){
+  
+ # i = 1
+  spp_class <- species_classes$aq_group[i]
+  
+  spp_class_fix <- species_classes$aq_group_fix[i]
+
+production_raster <- rasterFromXYZ(read_csv(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/%s/%s_farm_updated.csv", spp_class, spp_class)), crs = food_crs) 
+
+# production_raster
+print(cellStats(production_raster, "sum")) # 3901214
+# plot(production_raster)
+
+## save this production raster to the predatalayers folder
+
+writeRaster(production_raster, sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/marine_%s_aquaculture_meat_tonnes_production.tif", spp_class_fix), overwrite = TRUE) ## save to predatalayers
+
+land_eez_rgns <- raster(file.path(prep, "spatial/land_eez_rgns.tif"))
+
+land_eez_rgns_hsx <- calc(land_eez_rgns, fun = function(x){ifelse(is.na(x), 9999, x)})
+
+
+tonnes_df <- as.data.frame(raster::zonal(production_raster, land_eez_rgns_hsx, fun = "sum"))
+
+print(sum(tonnes_df$sum)) # 3901214
+
+
+tonnes_df_species <- tonnes_df %>%
+  mutate(aq_group = spp_class) %>%
+  left_join(food_rgns, by = c("zone" = "ID_0")) %>%
+  rename("total_tonnes" = "sum", rgn_id = "zone")
+
+print(sum(tonnes_df_species$total_tonnes)) # 3901214
+
+
+write.csv(tonnes_df_species, sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/production/csvs_rgn/tonnes_%s.csv", spp_class), row.names = FALSE)
+}
+
+
+## compile all the files together
+prod_files <- list.files(file.path(prep, 'aquaculture/marine/production/csvs_rgn'), 
+                                    pattern = 'tonnes_', 
+                                    full.names = TRUE)
+
+all_prod <- lapply(prod_files, FUN = function(x) {
+    read.csv(x)}) %>%
+    bind_rows()
+
+sum(all_prod$total_tonnes) # 29623515
+
+401719.1 +2753752 + 37072.56 + 17435623 + 5094133 + 3901214  # 29623514 nearly perfect 
+
+write.csv(all_prod, file.path(prep, "aquaculture/marine/production_extracted_final.csv"), row.names = FALSE)
+```
+
+
+

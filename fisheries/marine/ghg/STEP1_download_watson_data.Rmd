@@ -1,0 +1,51 @@
+---
+title: "Data Download"
+author: "Gage Clawson (UCSB, NCEAS, OHI)"
+date: "September 17, 2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+library(xlsx)
+```
+
+# New Global Fisheries Catch Data
+
+Catch (1950 - 2017) - reported, iuu, and discard catch data for each cell location and unique identifier
+
+* DATA CODE DEFINITIONS (gear/taxa/country codes and cell lat/lon references)
+
+* For this, we will only download the final data year... 2017. So it will be the Catch2015_2019 file.
+
+* The download link is in the README on aurora..
+
+```{r, eval = FALSE}
+
+## Download catch data from web and save into mazu
+
+web_year <- "Catch2015_2019"
+
+data <- read.csv(sprintf("URLgoeshere/%s.csv", web_year)) ## the download URL is located in the README on aurora... place it right before the %s
+
+write.csv(data, file.path( sprintf("/home/shares/food-systems/Food_footprint/_raw_data/watson_data/v5.0/%s.csv", web_year)), row.names = FALSE) 
+```
+
+# How to download the data code definitions. 
+
+For this, it is saved as an .xlsx file (Codes.xlsx). This file has 4 sheets in it which contain meta data that explain columns in the Index files, and one sheet with is "Spatial Cells Reference - contains geospatial information associated wtih the Industrial Catch data". 
+To download this data, go to the IMAS website: http://data.imas.utas.edu.au/portal/search?uuid=ff1274e1-c0ab-411b-a8a2-5a12eb27f2c0 and dowload it manually.
+
+This .xlsx file contains these sheets:
+
+* Spatial Cells Reference (Cells) - contains geospatial information associated wtih the Industrial Catch data
+* Gear Reference (Gear) - contains information regarding how different fishing gear is classified in the index datasets.
+* Taxa Reference (Taxa) - contains information regarding how different taxa is classified in the index datasets.
+* Country Reference (Country) - contains informations regarding how different countries are labeled in the index datasets. 
+
+I split these up into separate .csv files in the folder on aurora. 
+
+
+

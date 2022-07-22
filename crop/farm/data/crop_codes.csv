@@ -1,0 +1,517 @@
+SPAM_short_name	SPAM_full_name	item_code	SPAM_super
+whea	wheat	15	whea
+rice	rice	27	rice
+maiz	maize	56	maiz
+barl	barley	44	barl
+pmil	pearl millet	79	xmil
+smil	small millet	79	xmil
+sorg	sorghum	83	sorg
+ocer	other cereals	68	ocer
+ocer	other cereals	71	ocer
+ocer	other cereals	75	ocer
+ocer	other cereals	89	ocer
+ocer	other cereals	92	ocer
+ocer	other cereals	94	ocer
+ocer	other cereals	97	ocer
+ocer	other cereals	101	ocer
+ocer	other cereals	103	ocer
+ocer	other cereals	108	ocer
+pota	potato	116	pota
+swpo	sweet potato	122	swpo
+yams	yams	137	yams
+cass	cassava	125	cass
+orts	other roots	135	orts
+orts	other roots	136	orts
+orts	other roots	149	orts
+bean	bean	176	xpul
+chic	chickpea	191	xpul
+cowp	cowpea	195	xpul
+pige	pigeonpea	197	xpul
+lent	lentil	201	xpul
+opul	other pulses	181	xpul
+opul	other pulses	187	xpul
+opul	other pulses	203	xpul
+opul	other pulses	205	xpul
+opul	other pulses	210	xpul
+opul	other pulses	211	xpul
+soyb	soybean	236	soyb
+grou	groundnut	242	xoil
+cnut	coconut	249	cnut
+oilp	oilpalm	254	oilp
+sunf	sunflower	267	xoil
+rape	rapeseed	270	xoil
+rape	rapeseed	292	xoil
+sesa	sesameseed	289	xoil
+sugc	sugarcane	156	sugc
+sugb	sugarbeet	157	sugb
+cott	cotton	328	xoil
+acof	arabica coffee	656	xcof
+rcof	robusta coffee	656	xcof
+coco	cocoa	661	coco
+teas	tea	667	teas
+toba	tobacco	826	toba
+bana	banana	486	bana
+plnt	plantain	489	plnt
+temf	temperate fruit	592	xfru
+temf	temperate fruit	619	xfru
+rest	rest of crops	161	rest
+rest	rest of crops	671	rest
+ooil	other oil crops	260	xoil
+ooil	other oil crops	261	xoil
+ooil	other oil crops	262	xoil
+ooil	other oil crops	263	xoil
+ooil	other oil crops	264	xoil
+ooil	other oil crops	265	xoil
+ooil	other oil crops	266	xoil
+ooil	other oil crops	268	xoil
+ooil	other oil crops	269	xoil
+ooil	other oil crops	271	xoil
+ooil	other oil crops	272	xoil
+ooil	other oil crops	273	xoil
+ooil	other oil crops	274	xoil
+ooil	other oil crops	275	xoil
+ooil	other oil crops	276	xoil
+ooil	other oil crops	277	xoil
+ooil	other oil crops	278	xoil
+ooil	other oil crops	279	xoil
+ooil	other oil crops	280	xoil
+ooil	other oil crops	281	xoil
+ooil	other oil crops	282	xoil
+ooil	other oil crops	283	xoil
+ooil	other oil crops	284	xoil
+ooil	other oil crops	285	xoil
+ooil	other oil crops	286	xoil
+ooil	other oil crops	287	xoil
+ooil	other oil crops	288	xoil
+ooil	other oil crops	290	xoil
+ooil	other oil crops	291	xoil
+ooil	other oil crops	293	xoil
+ooil	other oil crops	294	xoil
+ooil	other oil crops	295	xoil
+ooil	other oil crops	296	xoil
+ooil	other oil crops	297	xoil
+ooil	other oil crops	298	xoil
+ooil	other oil crops	299	xoil
+ooil	other oil crops	300	xoil
+ooil	other oil crops	301	xoil
+ooil	other oil crops	302	xoil
+ooil	other oil crops	303	xoil
+ooil	other oil crops	304	xoil
+ooil	other oil crops	305	xoil
+ooil	other oil crops	306	xoil
+ooil	other oil crops	307	xoil
+ooil	other oil crops	308	xoil
+ooil	other oil crops	309	xoil
+ooil	other oil crops	310	xoil
+ooil	other oil crops	312	xoil
+ooil	other oil crops	313	xoil
+ooil	other oil crops	314	xoil
+ooil	other oil crops	315	xoil
+ooil	other oil crops	316	xoil
+ooil	other oil crops	317	xoil
+ooil	other oil crops	318	xoil
+ooil	other oil crops	319	xoil
+ooil	other oil crops	320	xoil
+ooil	other oil crops	321	xoil
+ooil	other oil crops	322	xoil
+ooil	other oil crops	323	xoil
+ooil	other oil crops	324	xoil
+ooil	other oil crops	325	xoil
+ooil	other oil crops	326	xoil
+ooil	other oil crops	327	xoil
+ooil	other oil crops	329	xoil
+ooil	other oil crops	330	xoil
+ooil	other oil crops	331	xoil
+ooil	other oil crops	332	xoil
+ooil	other oil crops	333	xoil
+ooil	other oil crops	334	xoil
+ooil	other oil crops	335	xoil
+ooil	other oil crops	336	xoil
+ooil	other oil crops	337	xoil
+ooil	other oil crops	338	xoil
+ooil	other oil crops	339	xoil
+ofib	other fibre crops	773	ofib
+ofib	other fibre crops	774	ofib
+ofib	other fibre crops	775	ofib
+ofib	other fibre crops	776	ofib
+ofib	other fibre crops	777	ofib
+ofib	other fibre crops	778	ofib
+ofib	other fibre crops	779	ofib
+ofib	other fibre crops	780	ofib
+ofib	other fibre crops	781	ofib
+ofib	other fibre crops	782	ofib
+ofib	other fibre crops	783	ofib
+ofib	other fibre crops	784	ofib
+ofib	other fibre crops	785	ofib
+ofib	other fibre crops	786	ofib
+ofib	other fibre crops	787	ofib
+ofib	other fibre crops	788	ofib
+ofib	other fibre crops	789	ofib
+ofib	other fibre crops	790	ofib
+ofib	other fibre crops	791	ofib
+ofib	other fibre crops	792	ofib
+ofib	other fibre crops	793	ofib
+ofib	other fibre crops	794	ofib
+ofib	other fibre crops	795	ofib
+ofib	other fibre crops	796	ofib
+ofib	other fibre crops	797	ofib
+ofib	other fibre crops	798	ofib
+ofib	other fibre crops	799	ofib
+ofib	other fibre crops	800	ofib
+ofib	other fibre crops	801	ofib
+ofib	other fibre crops	802	ofib
+ofib	other fibre crops	803	ofib
+ofib	other fibre crops	804	ofib
+ofib	other fibre crops	805	ofib
+ofib	other fibre crops	806	ofib
+ofib	other fibre crops	807	ofib
+ofib	other fibre crops	808	ofib
+ofib	other fibre crops	809	ofib
+ofib	other fibre crops	810	ofib
+ofib	other fibre crops	811	ofib
+ofib	other fibre crops	812	ofib
+ofib	other fibre crops	813	ofib
+ofib	other fibre crops	814	ofib
+ofib	other fibre crops	815	ofib
+ofib	other fibre crops	816	ofib
+ofib	other fibre crops	817	ofib
+ofib	other fibre crops	818	ofib
+ofib	other fibre crops	819	ofib
+ofib	other fibre crops	820	ofib
+ofib	other fibre crops	821	ofib
+trof	tropical fruit	490	xfru
+trof	tropical fruit	491	xfru
+trof	tropical fruit	492	xfru
+trof	tropical fruit	493	xfru
+trof	tropical fruit	494	xfru
+trof	tropical fruit	495	xfru
+trof	tropical fruit	496	xfru
+trof	tropical fruit	497	xfru
+trof	tropical fruit	498	xfru
+trof	tropical fruit	499	xfru
+trof	tropical fruit	500	xfru
+trof	tropical fruit	501	xfru
+trof	tropical fruit	502	xfru
+trof	tropical fruit	503	xfru
+trof	tropical fruit	504	xfru
+trof	tropical fruit	505	xfru
+trof	tropical fruit	506	xfru
+trof	tropical fruit	507	xfru
+trof	tropical fruit	508	xfru
+trof	tropical fruit	509	xfru
+trof	tropical fruit	510	xfru
+trof	tropical fruit	511	xfru
+trof	tropical fruit	512	xfru
+trof	tropical fruit	567	xfru
+trof	tropical fruit	568	xfru
+trof	tropical fruit	569	xfru
+trof	tropical fruit	570	xfru
+trof	tropical fruit	571	xfru
+trof	tropical fruit	572	xfru
+trof	tropical fruit	573	xfru
+trof	tropical fruit	574	xfru
+trof	tropical fruit	575	xfru
+trof	tropical fruit	576	xfru
+trof	tropical fruit	577	xfru
+trof	tropical fruit	578	xfru
+trof	tropical fruit	579	xfru
+trof	tropical fruit	580	xfru
+trof	tropical fruit	581	xfru
+trof	tropical fruit	582	xfru
+trof	tropical fruit	583	xfru
+trof	tropical fruit	584	xfru
+trof	tropical fruit	585	xfru
+trof	tropical fruit	586	xfru
+trof	tropical fruit	587	xfru
+trof	tropical fruit	588	xfru
+trof	tropical fruit	589	xfru
+trof	tropical fruit	590	xfru
+trof	tropical fruit	591	xfru
+trof	tropical fruit	600	xfru
+trof	tropical fruit	601	xfru
+trof	tropical fruit	602	xfru
+trof	tropical fruit	603	xfru
+temf	temperate fruit	515	xfru
+temf	temperate fruit	516	xfru
+temf	temperate fruit	517	xfru
+temf	temperate fruit	518	xfru
+temf	temperate fruit	519	xfru
+temf	temperate fruit	520	xfru
+temf	temperate fruit	521	xfru
+temf	temperate fruit	522	xfru
+temf	temperate fruit	523	xfru
+temf	temperate fruit	524	xfru
+temf	temperate fruit	525	xfru
+temf	temperate fruit	526	xfru
+temf	temperate fruit	527	xfru
+temf	temperate fruit	528	xfru
+temf	temperate fruit	529	xfru
+temf	temperate fruit	530	xfru
+temf	temperate fruit	531	xfru
+temf	temperate fruit	532	xfru
+temf	temperate fruit	533	xfru
+temf	temperate fruit	534	xfru
+temf	temperate fruit	535	xfru
+temf	temperate fruit	536	xfru
+temf	temperate fruit	537	xfru
+temf	temperate fruit	538	xfru
+temf	temperate fruit	539	xfru
+temf	temperate fruit	540	xfru
+temf	temperate fruit	541	xfru
+temf	temperate fruit	542	xfru
+temf	temperate fruit	543	xfru
+temf	temperate fruit	544	xfru
+temf	temperate fruit	545	xfru
+temf	temperate fruit	546	xfru
+temf	temperate fruit	547	xfru
+temf	temperate fruit	548	xfru
+temf	temperate fruit	549	xfru
+temf	temperate fruit	550	xfru
+temf	temperate fruit	551	xfru
+temf	temperate fruit	552	xfru
+temf	temperate fruit	553	xfru
+temf	temperate fruit	554	xfru
+temf	temperate fruit	555	xfru
+temf	temperate fruit	556	xfru
+temf	temperate fruit	557	xfru
+temf	temperate fruit	558	xfru
+temf	temperate fruit	559	xfru
+temf	temperate fruit	560	xfru
+vege	vegetables	358	vege
+vege	vegetables	359	vege
+vege	vegetables	360	vege
+vege	vegetables	361	vege
+vege	vegetables	362	vege
+vege	vegetables	363	vege
+vege	vegetables	364	vege
+vege	vegetables	365	vege
+vege	vegetables	366	vege
+vege	vegetables	367	vege
+vege	vegetables	368	vege
+vege	vegetables	369	vege
+vege	vegetables	370	vege
+vege	vegetables	371	vege
+vege	vegetables	372	vege
+vege	vegetables	373	vege
+vege	vegetables	374	vege
+vege	vegetables	375	vege
+vege	vegetables	376	vege
+vege	vegetables	377	vege
+vege	vegetables	378	vege
+vege	vegetables	379	vege
+vege	vegetables	380	vege
+vege	vegetables	381	vege
+vege	vegetables	382	vege
+vege	vegetables	383	vege
+vege	vegetables	384	vege
+vege	vegetables	385	vege
+vege	vegetables	386	vege
+vege	vegetables	387	vege
+vege	vegetables	388	vege
+vege	vegetables	389	vege
+vege	vegetables	390	vege
+vege	vegetables	391	vege
+vege	vegetables	392	vege
+vege	vegetables	393	vege
+vege	vegetables	394	vege
+vege	vegetables	395	vege
+vege	vegetables	396	vege
+vege	vegetables	397	vege
+vege	vegetables	398	vege
+vege	vegetables	399	vege
+vege	vegetables	400	vege
+vege	vegetables	401	vege
+vege	vegetables	402	vege
+vege	vegetables	403	vege
+vege	vegetables	404	vege
+vege	vegetables	405	vege
+vege	vegetables	406	vege
+vege	vegetables	407	vege
+vege	vegetables	408	vege
+vege	vegetables	409	vege
+vege	vegetables	410	vege
+vege	vegetables	411	vege
+vege	vegetables	412	vege
+vege	vegetables	413	vege
+vege	vegetables	414	vege
+vege	vegetables	415	vege
+vege	vegetables	416	vege
+vege	vegetables	417	vege
+vege	vegetables	418	vege
+vege	vegetables	419	vege
+vege	vegetables	420	vege
+vege	vegetables	421	vege
+vege	vegetables	422	vege
+vege	vegetables	423	vege
+vege	vegetables	424	vege
+vege	vegetables	425	vege
+vege	vegetables	426	vege
+vege	vegetables	427	vege
+vege	vegetables	428	vege
+vege	vegetables	429	vege
+vege	vegetables	430	vege
+vege	vegetables	431	vege
+vege	vegetables	432	vege
+vege	vegetables	433	vege
+vege	vegetables	434	vege
+vege	vegetables	435	vege
+vege	vegetables	436	vege
+vege	vegetables	437	vege
+vege	vegetables	438	vege
+vege	vegetables	439	vege
+vege	vegetables	440	vege
+vege	vegetables	441	vege
+vege	vegetables	442	vege
+vege	vegetables	443	vege
+vege	vegetables	444	vege
+vege	vegetables	445	vege
+vege	vegetables	446	vege
+vege	vegetables	447	vege
+vege	vegetables	448	vege
+vege	vegetables	449	vege
+vege	vegetables	450	vege
+vege	vegetables	451	vege
+vege	vegetables	452	vege
+vege	vegetables	453	vege
+vege	vegetables	454	vege
+vege	vegetables	455	vege
+vege	vegetables	456	vege
+vege	vegetables	457	vege
+vege	vegetables	458	vege
+vege	vegetables	459	vege
+vege	vegetables	460	vege
+vege	vegetables	461	vege
+vege	vegetables	462	vege
+vege	vegetables	463	vege
+rest	rest of crops	216	rest
+rest	rest of crops	217	rest
+rest	rest of crops	218	rest
+rest	rest of crops	219	rest
+rest	rest of crops	220	rest
+rest	rest of crops	221	rest
+rest	rest of crops	222	rest
+rest	rest of crops	223	rest
+rest	rest of crops	224	rest
+rest	rest of crops	225	rest
+rest	rest of crops	226	rest
+rest	rest of crops	227	rest
+rest	rest of crops	228	rest
+rest	rest of crops	229	rest
+rest	rest of crops	230	rest
+rest	rest of crops	231	rest
+rest	rest of crops	232	rest
+rest	rest of crops	233	rest
+rest	rest of crops	234	rest
+rest	rest of crops	677	rest
+rest	rest of crops	678	rest
+rest	rest of crops	679	rest
+rest	rest of crops	680	rest
+rest	rest of crops	681	rest
+rest	rest of crops	682	rest
+rest	rest of crops	683	rest
+rest	rest of crops	684	rest
+rest	rest of crops	685	rest
+rest	rest of crops	686	rest
+rest	rest of crops	687	rest
+rest	rest of crops	688	rest
+rest	rest of crops	689	rest
+rest	rest of crops	690	rest
+rest	rest of crops	691	rest
+rest	rest of crops	692	rest
+rest	rest of crops	693	rest
+rest	rest of crops	694	rest
+rest	rest of crops	695	rest
+rest	rest of crops	696	rest
+rest	rest of crops	697	rest
+rest	rest of crops	698	rest
+rest	rest of crops	699	rest
+rest	rest of crops	700	rest
+rest	rest of crops	701	rest
+rest	rest of crops	702	rest
+rest	rest of crops	703	rest
+rest	rest of crops	704	rest
+rest	rest of crops	705	rest
+rest	rest of crops	706	rest
+rest	rest of crops	707	rest
+rest	rest of crops	708	rest
+rest	rest of crops	709	rest
+rest	rest of crops	710	rest
+rest	rest of crops	711	rest
+rest	rest of crops	712	rest
+rest	rest of crops	713	rest
+rest	rest of crops	714	rest
+rest	rest of crops	715	rest
+rest	rest of crops	716	rest
+rest	rest of crops	717	rest
+rest	rest of crops	718	rest
+rest	rest of crops	719	rest
+rest	rest of crops	720	rest
+rest	rest of crops	721	rest
+rest	rest of crops	722	rest
+rest	rest of crops	723	rest
+rest	rest of crops	724	rest
+rest	rest of crops	725	rest
+rest	rest of crops	726	rest
+rest	rest of crops	727	rest
+rest	rest of crops	728	rest
+rest	rest of crops	729	rest
+rest	rest of crops	730	rest
+rest	rest of crops	731	rest
+rest	rest of crops	732	rest
+rest	rest of crops	733	rest
+rest	rest of crops	734	rest
+rest	rest of crops	735	rest
+rest	rest of crops	736	rest
+rest	rest of crops	737	rest
+rest	rest of crops	738	rest
+rest	rest of crops	739	rest
+rest	rest of crops	740	rest
+rest	rest of crops	741	rest
+rest	rest of crops	742	rest
+rest	rest of crops	743	rest
+rest	rest of crops	744	rest
+rest	rest of crops	745	rest
+rest	rest of crops	746	rest
+rest	rest of crops	747	rest
+rest	rest of crops	748	rest
+rest	rest of crops	749	rest
+rest	rest of crops	750	rest
+rest	rest of crops	751	rest
+rest	rest of crops	752	rest
+rest	rest of crops	753	rest
+rest	rest of crops	754	rest
+rest	rest of crops	755	rest
+rest	rest of crops	756	rest
+rest	rest of crops	757	rest
+rest	rest of crops	758	rest
+rest	rest of crops	759	rest
+rest	rest of crops	760	rest
+rest	rest of crops	761	rest
+rest	rest of crops	762	rest
+rest	rest of crops	763	rest
+rest	rest of crops	764	rest
+rest	rest of crops	765	rest
+rest	rest of crops	766	rest
+rest	rest of crops	767	rest
+rest	rest of crops	768	rest
+rest	rest of crops	769	rest
+rest	rest of crops	770	rest
+rest	rest of crops	771	rest
+rest	rest of crops	772	rest
+rest	rest of crops	822	rest
+rest	rest of crops	823	rest
+rest	rest of crops	824	rest
+rest	rest of crops	825	rest
+rest	rest of crops	827	rest
+rest	rest of crops	828	rest
+rest	rest of crops	829	rest
+rest	rest of crops	830	rest
+rest	rest of crops	831	rest
+rest	rest of crops	832	rest
+rest	rest of crops	833	rest
+rest	rest of crops	834	rest
+rest	rest of crops	835	rest
+rest	rest of crops	836	rest
+rest	rest of crops	837	rest
+rest	rest of crops	838	rest
+rest	rest of crops	839	rest

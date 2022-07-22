@@ -1,0 +1,135 @@
+---
+title: "GHG emissions from N2O volatilization of synthetic fertilizers"
+author: "Juliette"
+date: "4/30/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Calculate CO2-eq emissions from synthetic fertilizers left on fields. We used methods from Global Livestock Environmental Assessment Model Version 2.0
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readr)
+library(raster)
+library(dplyr)
+library(tidyverse)
+library(here)
+library(foreach)
+library(doParallel)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+conversion <- read_csv(here("crop/ghg/data/co2_eq_factors.csv"))
+```
+
+
+Using equation 6.6 in the GLEAM document
+
+Equation: 
+
+N2O = app_rate* (ef_dir + frac_vol* ef_vol + frac_leach * ef_leach) * 44/28
+
+**N2O** = total nitrous oxide emissions from application of nitrogen fertilizer per hectare of feed material (kg N2O / ha)
+
+**app_rate** = application rate of nitrogen fertilizer for feed material kg N/ha
+
+**ef_dir** = emission factor for direct nitrous oxide emissions, kg N2O-N·kg N-1. Default value of 0.01. (0.003 is reported for flooded rice feed materials but we used the default value because of uncertainty about the location of flooded rice). 
+
+**frac_vol** = fraction of nitrogen from synthetic fertilizers or crop residues that volatilizes as NH3 and NOx, fraction. Default value of 0.1 is used.
+
+**ef_vol** = emission factor for N2O emissions from N volatilized as NH3 and NOx, kg N2O-N·kg N volatilized-1. Default value of 0.01 is used.
+
+**frac_leach** = fraction of nitrogen lost due to leaching and runoff, fraction. Default value of 0.3 is used.
+
+**ef_leach** = emission factor for N2O emissions from leaching and runoff, kg N2O-N·kg N leached-1. Default value of 0.0075 is used.
+
+Emission factors
+```{r}
+ef_dir <- 0.01
+ef_dir_rice <- 0.01  # gleam documents report 0.03, but orginal source is 0.003, https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/4_Volume4/V4_11_Ch11_N2O&CO2.pdf, Table 11.1
+frac_vol <- 0.1
+ef_vol <- 0.01
+frac_leach <- 0.3
+ef_leach <- 0.0075
+```
+
+Need to convert the tonnnes of fertilizer applied to kg for these calcualtions and then back to tonnes for the final layer
+
+Read in fertilizer application rasters
+```{r}
+fertilizer_list <- list.files(paste0(prep, "crop/nutrient", sep = ""), pattern = "application_N", full = TRUE)
+fertilizer_list <- fertilizer_list[!grepl(pattern = "toba|cof|teas", fertilizer_list)]
+registerDoParallel(6)   
+
+foreach(fertilizer = fertilizer_list) %dopar% {
+
+   #fertilizer <- fertilizer_list[38]
+    crop <- str_sub(fertilizer, -22, -19)
+    
+    app_rate <- raster(fertilizer, crs = food_crs)*1000 #convert from tonnes to kg
+    app_rate_df <- as.data.frame(app_rate, xy= TRUE)
+    
+    n2o <- app_rate_df %>% 
+      mutate(crop = crop) %>% 
+      mutate(ef_dir = ifelse(crop == "rice", ef_dir_rice, ef_dir),
+           frac_vol = frac_vol,
+           ef_vol = ef_vol,
+           frac_leach =frac_leach,
+           ef_leach = ef_leach) %>%
+      rename(n_app = paste0("crop_", crop, "_application_N")) %>% 
+      mutate(n2o_tonnes = n_app* (ef_dir + frac_vol*ef_vol + frac_leach*ef_leach)*(44/28)/1000) %>% 
+      dplyr::select(x,y,n2o_tonnes)
+      
+  n2o_raster <- rasterFromXYZ(n2o, crs= food_crs)
+
+    writeRaster(n2o_raster, filename =
+                  paste(prep, "crop/ghg/crop_fertilizer_N2O/n2o/fertilizer_n2o_",crop,".tif", sep = ""), format="GTiff", overwrite=TRUE)
+    
+}
+
+delete_aux <- list.files(file.path(prep, "crop/ghg/crop_fertilizer_N2O/n2o"), pattern="aux", full=TRUE)
+file.remove(delete_aux)
+
+```
+
+
+Calculate the CO2 equivalent
+```{r}
+
+n2o_list <- list.files(file.path(prep, "crop/ghg/crop_fertilizer_N2O/n2o"), full = TRUE)
+n2o_list <- n2o_list[!grepl(pattern = "toba|cof|teas", n2o_list)]
+
+foreach(file = n2o_list) %dopar% {
+
+  #  file <- n2o_list[38]
+    crop <- str_sub(file, -8, -5)
+    
+    co2_eq <- as.numeric(conversion$gwp[conversion$source == "n2o"])
+  
+    co2_eq_raster <- raster(file)*co2_eq
+
+    writeRaster(co2_eq_raster, filename =
+                  paste(prep, "crop/ghg/crop_fertilizer_N2O/co2_eq/fert_n2o_co2eq_",crop,".tif", sep = ""), format="GTiff", overwrite=TRUE)
+    
+}
+
+delete_aux <- list.files(file.path(prep, "crop/ghg/crop_fertilizer_N2O/co2_eq"), pattern="aux", full=TRUE)
+file.remove(delete_aux)
+
+```
+
+
+
+
+
+
+
+
+
+

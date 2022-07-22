@@ -1,0 +1,311 @@
+---
+title: "Calculate disturbance layers for grassland ruminants"
+author: "Juliette"
+date: "10/12/2020"
+output: html_document
+---
+
+## Setup
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(countrycode)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+
+un_rgns <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>%
+  filter(!is.na(iso3c)) %>%
+  filter(iso3c %in% food_rgns$iso3c)
+
+```
+
+
+```{r}
+
+ruminant_feed_intake <- read_csv(here("animal_farm/farm/data/ruminants_GLEAMi_v2.csv")) %>% 
+  filter(Variable %in% c("HERD: total number of animals", "INTAKE: Total intake - Roughages"),
+         Herd_type != "Whole herd",
+         Production_system == "Grassland systems") %>% 
+  select(-Unit) %>% 
+  pivot_wider(names_from = Variable, values_from = Value) %>% 
+  rename(headcount = 'HERD: total number of animals',
+         kg_dm = 'INTAKE: Total intake - Roughages' ) %>% 
+  rename(country = Country,
+         animal = Species,
+         system = Production_system,
+         product = Herd_type) %>% 
+  mutate(animal = case_when(animal == "Cattle" ~ "cows",
+                            animal == "Buffalo" ~ "buffaloes",
+                            animal == "Goats" ~ "goats",
+                            animal == "Sheep" ~ "sheep"),
+         product = case_when(product == "Dairy" ~ "milk",
+                             product == "Non-dairy" ~ "meat"),
+         system = "grassland") %>% 
+ mutate(kg_dm_per_head = kg_dm/headcount,
+         kg_dm_per_head = ifelse(headcount == 0 | kg_dm == 0, NA, kg_dm_per_head)) %>% 
+  select(-country)
+
+```
+
+```{r}
+
+missing_countries <- setdiff(food_rgns$iso3c, ruminant_feed_intake$iso3c) %>% 
+  as_tibble() %>% 
+  rename(iso3c = value) %>% 
+  slice(rep(1:n(), each =4)) %>% 
+  mutate(animal = rep(c("cows", "buffaloes", "goats", "sheep"), times = 11)) %>% 
+  slice(rep(1:n(), each = 2)) %>% 
+  mutate(product = rep(c("meat", "milk"), times = 44)) %>% 
+  mutate(system = "grassland",
+         headcount = NA,
+         kg_dm = NA,
+         kg_dm_per_head = NA)
+
+ruminant_feed_intake_gf <- ruminant_feed_intake %>%
+  rbind(missing_countries) %>% 
+  left_join(un_rgns, by = "iso3c") %>% 
+  group_by(animal, product, Intermediate_Region_Name) %>% 
+  mutate(kg_dm_per_head = ifelse(is.na(kg_dm_per_head), mean(kg_dm_per_head, na.rm = TRUE), kg_dm_per_head)) %>% 
+  ungroup() %>% 
+  group_by(animal, product, Sub_region_Name) %>% 
+  mutate(kg_dm_per_head = ifelse(is.na(kg_dm_per_head), mean(kg_dm_per_head, na.rm = TRUE), kg_dm_per_head)) %>% 
+  ungroup() %>% 
+  group_by(animal, product, Region_Name) %>% 
+  mutate(kg_dm_per_head = ifelse(is.na(kg_dm_per_head), mean(kg_dm_per_head, na.rm = TRUE), kg_dm_per_head)) %>% 
+  ungroup() %>% 
+  group_by(animal, product, Global_Name) %>% 
+  mutate(kg_dm_per_head = ifelse(is.na(kg_dm_per_head), mean(kg_dm_per_head, na.rm = TRUE), kg_dm_per_head)) %>% 
+  ungroup() %>% 
+  select(iso3c, animal, system, product, headcount, kg_dm, kg_dm_per_head)
+
+write_csv(ruminant_feed_intake_gf, here("animal_farm/disturbance/data/grazing_ruminant_feed_intake.csv"))
+
+```
+
+
+## Calculate grazing intensity
+
+1. Create a map for each ruminant of total 
+2. Add them up - need units in C tonnes/km2/year. it will be in kg_dm_cell/year
+3. Calculate the C dry matter using the 50% 
+4. Calculate above ground NPP with 60% as above ground biomass
+5. Calculate grazing intensity
+
+Calculate total dry mass eaten
+```{r}
+
+kg_dm_per_head <- read_csv(here("animal_farm/disturbance/data/grazing_ruminant_feed_intake.csv"))
+
+file_list <- list.files(file.path(prep, "animal_farm/farm/location_tifs"),  pattern = "grassland", full = TRUE)
+rum_list <- c("sheep", "goats", "cows", "buffaloes")
+product_list <- c("milk", "meat")
+
+ for(ruminant_name in rum_list){
+    for(product_name in product_list){
+
+  # ruminant_name <- rum_list[1]
+  # product_name <- product_list[1]
+      
+      file <- str_subset(file_list, ruminant_name) 
+      file <- str_subset(file, product_name)
+      
+      headcount <- raster(file)
+      
+      perhead_tif <- kg_dm_per_head %>% 
+        filter(animal == ruminant_name,
+               product == product_name) %>% 
+        select(iso3c, kg_dm_per_head) %>% 
+        right_join(food_rgns_xy) %>% 
+        select(x,y, kg_dm_per_head) %>% 
+        rasterFromXYZ(crs = food_crs)
+      
+      total_eaten <- perhead_tif*headcount
+      
+      writeRaster(total_eaten, filename = paste(prep, "animal_farm/disturbance/dm_grazed/", ruminant_name, "_grassland", "_", product_name, "_grazed", sep = ""), format = "GTiff", overwrite = TRUE)
+  
+      }}
+
+```
+
+
+Add up all the grazing mass 
+
+```{r}
+
+files <- list.files(file.path(prep, "animal_farm/disturbance/dm_grazed/"), full = TRUE) 
+files <- grep(files, pattern= 'buffaloes_grassland_meat_grazed', inv=T, value=T)
+
+grazing_stack <- stack(lapply(files, raster))
+
+total_raster <- sum(grazing_stack)
+
+# C tonnes/km2/year. it will be in kg_dm_cell/year
+C_dm <- (total_raster*0.5/1000)/area(total_raster)
+# make NAs 0
+C_dm <- calc(C_dm, fun = function(x){ifelse(is.na(x), 0, x)})
+
+npp <- raster(file.path(prep, "animal_farm/disturbance/npp_2013_2015_rasters/mean_npp_2013_2015.tif")) 
+npp_above <- npp*0.6 
+
+grazing_intensity <- C_dm/npp_above
+grazing_intensity <- calc(grazing_intensity, fun = function(x){ifelse(x > 0.8, 0.8, x)})
+grazing_intensity[grazing_intensity < 0.1] <- 0
+
+plot(grazing_intensity)
+
+writeRaster(grazing_intensity, file.path(prep, ("animal_farm/disturbance/grazing_intensity_all.tif"), sep = ""), format = "GTiff", overwrite = TRUE ) 
+```
+
+
+Next we want to create rasters for the conversion value of all our grazing animals in each country
+
+
+```{r}
+
+grazing_animals <-  c("buffaloes", "cows", "sheep", "goats")
+
+lsu_values <- read_csv(here("animal_farm/disturbance/data/across_country_conversions.csv")) %>% 
+  select(iso3c, animal, lsu_value) %>% 
+  filter(animal %in% grazing_animals) %>% 
+  pivot_wider(names_from = animal, values_from = lsu_value) %>%
+  right_join(food_rgns_xy) %>% 
+  select(-iso3c, -cellindex, -ID_0, - Country)
+
+for(animal in grazing_animals){
+ 
+ # animal <- grazing_animals[1]
+  
+  lsu_raster <- lsu_values %>% 
+    select(x,y, paste0(animal)) %>% 
+    rasterFromXYZ(crs = food_crs)
+  
+  names(lsu_raster) <- paste0(animal, "lsu_conversios")
+  
+  writeRaster(lsu_raster, file.path(paste0(prep, "animal_farm/disturbance/lsu_conversion_rasters/", animal, "_lsu_conversions.tif"), sep = ""), format = "GTiff", overwrite = TRUE ) 
+  
+}
+    
+  
+```
+
+grab all the grassland animal rasters 
+```{r}
+
+location_list <- list.files(file.path(prep, "animal_farm/farm/location_tifs"), pattern = "grassland", full = TRUE)
+location_list <- grep(location_list, pattern= 'buffaloes_grassland_meat', inv=T, value=T)
+
+conversion_list <-list.files(file.path(prep, "animal_farm/disturbance/lsu_conversion_rasters"), full = TRUE)
+
+stack1 <- stack(lapply(location_list, raster))
+stack2 <- stack(lapply(conversion_list, raster))
+
+stack_all <- stack(stack1, stack2) %>% 
+  raster_df()
+
+df_all <- stack_all %>% 
+  rowwise() %>% 
+  mutate(cows_milk_lsu = cows_grassland_milk*cows_lsu_conversions,
+         cows_meat_lsu = cows_grassland_meat*cows_lsu_conversions,
+         sheep_meat_lsu = sheep_grassland_meat*sheep_lsu_conversions,
+         sheep_milk_lsu = sheep_grassland_milk*sheep_lsu_conversions,
+         goats_milk_lsu = goats_grassland_milk*goats_lsu_conversions,
+         goats_meat_lsu = goats_grassland_meat*goats_lsu_conversions,
+         buffaloes_milk_lsu = buffaloes_grassland_milk*buffaloes_lsu_conversions) %>% 
+  mutate(sum_lsu = sum(cows_milk_lsu, cows_meat_lsu, sheep_meat_lsu, sheep_milk_lsu, goats_milk_lsu, goats_meat_lsu, buffaloes_milk_lsu, na.rm = TRUE)) %>%
+  mutate(prop_cows_milk = cows_milk_lsu/sum_lsu,
+         prop_cows_meat = cows_meat_lsu/sum_lsu,
+         prop_sheep_meat = sheep_meat_lsu/sum_lsu,
+         prop_sheep_milk = sheep_milk_lsu/sum_lsu,
+         prop_goats_milk = goats_milk_lsu/sum_lsu,
+         prop_goats_meat = goats_meat_lsu/sum_lsu,
+         prop_buffaloes_milk = buffaloes_milk_lsu/sum_lsu)
+
+
+## do some checks
+
+
+```
+
+Save a proportion of the total lsu in each cell an animal is contributing to. Use this to allocate the total grazing intensity
+
+
+
+```{r}
+
+animals <- c("buffaloes", "cows", "goats", "sheep")
+products <- c("milk", "meat")
+
+for(animal in animals){
+  for(product in products){
+    
+    # animal <- animals[1]
+    # product <- products[1]
+    
+    if(animal == "buffaloes" && product == "meat") {
+      
+      print("meat buffaloes is not one of our categories")
+      
+    }else{
+     raster <- df_all %>% 
+      select(x,y, paste0("prop_", animal, "_", product)) %>% 
+     rasterFromXYZ(crs = food_crs)
+     
+      writeRaster(raster, file.path(paste0(prep, "animal_farm/disturbance/grazing_intensity_allocation_rasters/", animal, "_", product, "_grazing_allocation.tif", sep = "")), format = "GTiff", overwrite = TRUE ) 
+  
+    } 
+  }
+}
+
+```
+
+
+Allocate grazing intensity to create disturbance layer
+
+```{r}
+animals <- c("buffaloes", "cows", "goats", "sheep")
+products <- c("milk", "meat")
+
+grazing_intensity <- raster(file.path(prep, "animal_farm/disturbance/grazing_intensity_all.tif"))
+
+for(animal in animals){
+  for(product in products){
+    
+    # animal <- animals[1]
+    # product <- products[1]
+    
+    if(animal == "buffaloes" && product == "meat") {
+      
+      print("meat buffaloes is not one of our categories")
+      
+    }else{
+      
+      raster <- raster(file.path(prep, paste0("animal_farm/disturbance/grazing_intensity_allocation_rasters/", animal, "_", product, "_grazing_allocation.tif")))
+      
+      disturbance <- grazing_intensity*raster
+      disturbance <- disturbance*area(disturbance)
+      names(disturbance) <- "km2_eq"
+      disturbance[is.na(disturbance)] <- 0
+     
+      writeRaster(disturbance, file.path(paste0(layers, "land_", animal, "_grassland_", product, "_disturbance.tif", sep = "")), format = "GTiff", overwrite = TRUE ) 
+  
+    
+    } 
+  }
+}
+
+
+```
+
+Check 
+```{r}
+test <- raster(file.path(layers, "land_cows_grassland_meat_disturbance.tif"))
+plot(test)
+
+
+allocation <-   raster(file.path(prep, "animal_farm/disturbance/grazing_intensity_allocation_rasters/cows_meat_grazing_allocation.tif"))
+
+```
+

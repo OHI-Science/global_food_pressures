@@ -1,0 +1,179 @@
+---
+title: "GHG_rgns"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Script Description
+
+This markdown calculates the GHG emissions from salmon aquaculture. 
+
+# Data information
+
+We used [Pelletier *et al*., 2009](https://pubs.acs.org/doi/10.1021/es9010114)'s table S7 to extract ghg emissions associated with live weight of salmon from salmon farming. One factor that we considered adding was aquatic N<sub>2</sub>O emissions as discussed in [Hu *et al*., 2012](https://pubs.acs.org/doi/full/10.1021/es300110x) and [MacLoid *et al*., 2019](http://www.fao.org/3/ca7130en/ca7130en.pdf). This source of emissions is considered too inaccurate and uncertain across different farming systems.
+
+# Preamble
+```{r setup, include = FALSE}
+# getting packages we want
+library(tidyverse)
+library(here)
+library(raster)
+library(sf)
+library(janitor)
+
+# Raster templates
+source(here("_spatial/template_raster.R"))
+
+# File paths
+raw   <- "/home/shares/food-systems/Food_footprint/_raw_data/"
+prep_salmon <- "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/salmon"
+prep <- "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/" 
+path_final <- "/home/shares/food-systems/Food_footprint/all_food_systems/datalayers" 
+
+# Import master_rgns xy df
+master_rgns <- read_csv(here("_spatial/_output/food_rgns.csv"))
+
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+``` 
+
+# Import 
+```{r}
+pelletier_tbl <- vroom::vroom(here("aquaculture/marine/salmon/salmon_ghg/data/Pelletier_2009_S7.csv")) %>% 
+  clean_names()
+```
+
+# Wrangling Pelletier GHG emissions data
+```{r}
+# Convert <0.1 values to 0
+pelletier_tbl$ghg_emissions <- pelletier_tbl$ghg_emissions %>% recode("<0.1" = "0")
+pelletier_tbl$ghg_emissions <- as.numeric(gsub(",", "", pelletier_tbl$ghg_emissions))
+pelletier_tbl$ghg_emissions <- as.numeric(as.character(pelletier_tbl$ghg_emissions))
+
+pelletier_tbl <- pelletier_tbl %>% 
+  mutate(iso3c = case_when(
+    country %in% "Chile"  ~ "CHL", 
+    country %in% "UK"     ~ "GBR", 
+    country %in% "Norway" ~ "NOR", 
+    country %in% "Canada" ~ "CAN"))
+
+# Select non-feed related ghg emission sources
+pelletier_ghg <- pelletier_tbl %>% 
+  dplyr::select(iso3c, source, ghg_emissions) %>%  
+  filter(source %in% c("Farm_energy", 
+                       "Smolt_production", 
+                       "Smolt_transport")) 
+
+# Summarise each country's on farm ghg emissions
+pelletier_ghg <- pelletier_ghg %>%
+  group_by(iso3c) %>%
+  summarise(GHG_KgCO2e_tLW = sum(as.numeric(ghg_emissions)))
+```
+
+# Integrate with master_rgns
+
+```{r}
+
+salmon_GHG <- full_join(master_rgns, pelletier_ghg) 
+
+# If not one of the top 4 countries, assign global value
+salmon_GHG$GHG_KgCO2e_tLW <- replace_na(salmon_GHG$GHG_KgCO2e_tLW, 118.0)
+salmon_GHG <- na.omit(salmon_GHG)
+```
+
+# Adding Aquatic N2O
+0.791 kgCO2e/kgLW production
+```{r}
+# Convert aquatic_N2O units from kgLW to tLW
+aquatic_N2O <- 0.791/0.001
+
+# Addition
+salmon_GHG_aquatic <- salmon_GHG %>% 
+  mutate(., GHG_aquatic_KgCO2e_tLW = GHG_KgCO2e_tLW + aquatic_N2O)
+
+class(salmon_GHG_aquatic$iso3c)
+
+write_csv(salmon_GHG_aquatic, here("aquaculture/marine/salmon/salmon_ghg/data/salmon_GHG_aquatic.csv"))
+```
+
+
+## Calcualte total GHG emissions from salmon farms
+For this calculation we want to use the GHG_KgCO2e_tLW emissions factor. GHG_aquatic_KgCO2e_tLW refers to aquatic N2O that is released during the microbial nitrification process in freshwater. 
+
+Bring in the stuff we want and do some minor wrangling
+```{r}
+production <- read_csv(file.path(prep_salmon, "salmon_farm.csv"))
+production_wt <- rasterFromXYZ(production)
+
+land_eez <- raster(file.path(prep, "spatial/land_eez_rgns.tif")) %>% 
+  # raster_df() %>% 
+  as.data.frame(xy=TRUE) %>% 
+  rename(ID_0 = land_eez_rgns)
+
+
+land_eez_rast <- raster(file.path(prep, "spatial/land_eez_rgns.tif")) 
+
+```
+
+
+```{r}
+
+ghg_rgn <- land_eez %>% 
+  left_join(salmon_GHG_aquatic, by = c("ID_0")) %>% 
+  mutate(GHG_MtCO2e_tLHW = GHG_aquatic_KgCO2e_tLW/1000) %>% 
+  dplyr::select(x,y, GHG_MtCO2e_tLHW) %>% 
+  mutate(GHG_MtCO2e_tLHW = ifelse(is.na(GHG_MtCO2e_tLHW), 0, GHG_MtCO2e_tLHW)) %>%  
+  rasterFromXYZ(crs= food_crs)
+
+
+ghg_em <- production_wt*ghg_rgn
+summary(ghg_em)
+cellStats(production_wt, "sum")
+cellStats(ghg_em, "sum")
+## should be nearly equal...about 10% less for emissions
+
+freq(ghg_em, value = 0)
+# 9329488
+freq(production_wt, value = 0)
+# 9329488
+test <- raster_df(ghg_em) %>% filter(layer >0)
+#1,740 cells greater than 0
+
+#### 
+summary(ghg_em)
+##look at it more closely
+norway <- raster::crop(ghg_em, extent(-25, 50, 50, 75))
+par(mar=c(1,1,1,1))
+plot(norway)
+chile <- raster::crop(ghg_em, extent(-80, -60, -60, -35))
+par(mar=c(1,1,1,1))
+plot(chile)
+
+##Save as csv file
+ghg_em_csv <- as.data.frame(ghg_em, xy=TRUE) %>% 
+  rename(salmon_ghg_CO2eq = layer)
+write_csv(ghg_em_csv, file.path(prep_salmon, "salmon_ghg.csv"))
+
+
+## save to datalayers folder with the correct naming conventions: 
+final_layer_ghg <- read_csv(file.path(prep_salmon, "salmon_ghg.csv"))
+
+final_rast <- rasterFromXYZ(final_layer_ghg, crs = food_crs)
+crs(final_rast)
+plot(log(final_rast+1))
+final_rast
+cellStats(final_rast, "sum") # 2478743
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 2478743
+final_rast
+
+writeRaster(final_rast, file.path(path_final, "marine_salmon_aquaculture_meat_ghg.tif"), overwrite = TRUE)
+
+
+
+```

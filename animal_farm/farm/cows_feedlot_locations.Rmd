@@ -1,0 +1,80 @@
+---
+title: "Wrangling feedlot cattle locations"
+author: "Juliette"
+date: "7/17/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(here)
+library(mapview)
+library(sf)
+#devtools::install_github("jessecambon/tidygeocoder")
+#devtools::install_github("cran/zipcode")
+library(tidygeocoder)
+library(zipcode)
+library(ggplot2)
+library(maps)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+```
+
+
+```{r}
+
+data(zipcode)
+
+codes <- zipcode %>% 
+  dplyr::select(zip, latitude, longitude)
+
+feedlots <- read_csv(here("animal_farm/farm/data/feedlot_locations_raw.csv")) %>% 
+  filter(!is.na(Address)) %>% 
+  rename(city_state_zip = 'City, State Zip') %>% 
+  select(-X4, -X5) %>% 
+  mutate(street = Address) %>% 
+  separate(city_state_zip, c("city", "state_zip"), sep = ", ", remove = FALSE) %>% 
+  separate(state_zip, c("state", "zip_1"), sep = " ", remove = TRUE) %>% 
+  separate(zip_1, c("zip", "zip_2"), sep = "-", remove = TRUE) %>% 
+  unite(address, c("Address", "city_state_zip"), sep = " ") %>% 
+  select(compnay_name = 'Company Name', address, street, city, state, zip, zip_2)
+
+feedlot_geocodes <- feedlots %>%
+  geocode(address, method = 'census', lat = latitude , long = longitude) 
+## missing a lot of locations, so now we will just assign lat/long based on zipcode not entire address
+
+feed_geo_full <- feedlot_geocodes %>% 
+  filter(!is.na(latitude))
+
+feed_geo_zip <- feedlot_geocodes %>% 
+  filter(is.na(latitude)) %>% 
+  select(-latitude, -longitude) %>% 
+  left_join(codes, by = "zip")
+
+feed_geo <- rbind(feed_geo_full, feed_geo_zip) %>% 
+  filter(!is.na(latitude)) ##there is one farm in wyoming that doesnt have a zip code that matchs
+
+```
+
+
+Map it
+```{r}
+ggplot(feed_geo, aes(longitude, latitude), color="grey99") +
+  borders("state") + geom_point() + 
+  theme_void()
+
+library(mapview)
+## create as sf to look in mapview
+feed_geo_sf <- st_as_sf(feed_geo, coords = c("longitude", "latitude")) %>% 
+  st_set_crs(st_crs(food_crs))
+
+mapview(feed_geo_sf)
+```
+
+
+

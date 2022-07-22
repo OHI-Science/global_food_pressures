@@ -1,0 +1,100 @@
+---
+title: "Global distributing fodder consumption"
+author: "Juliette"
+date: "11/13/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+'%notin%' <- Negate('%in%')
+
+```
+
+Fodder production
+```{r}
+
+I_fodd <- raster::raster(file.path(prep, "crop/farm/scaled_maps_2017/crop_fodd_I_scaled.tif")) # Irrigated from GAEZ
+H_fodd <- raster(file.path(prep, "crop/farm/scaled_maps_2017/crop_fodd_H_scaled.tif")) # High Input, rainfed (portion of rainfed with hihg inputs based on proportion of inputs used in country on other crops)
+rainfed <- raster(file.path(prep, "crop/farm/scaled_maps_2017/crop_fodd_rainfed_scaled.tif")) # Rainfed from GAEZ
+plot(rainfed)
+
+production_raster <- sum(stack(raster(file.path(prep, "crop/farm/scaled_maps_2017/crop_fodd_I_scaled.tif")), raster(file.path(prep, "crop/farm/scaled_maps_2017/crop_fodd_rainfed_scaled.tif"))))
+
+total_fodder <- cellStats(production_raster, "sum", na.rm=TRUE)
+# 2,815,136,951 produced
+# 1,854,902,576 estimated consumption (calculated below)
+```
+
+
+Fodder consumption
+```{r}
+
+fodder_consumption_country <- read_csv(here("feed/data/livestock_system_country_fodder_consumption.csv"))
+
+fodder_consumption_global <- fodder_consumption_country %>% 
+  group_by(animal_system) %>% 
+  dplyr::summarise(tonnes_product= sum(tonnes_product)) 
+#%>% 
+#  filter(animal_system %notin% c("buffaloes_grassland_meat", "buffaloes_mixed_meat"))
+sum(fodder_consumption_global$tonnes_product)
+```
+
+Calculate the proportion
+
+```{r}
+
+fodder_prop <- fodder_consumption_global %>% 
+  mutate(map_production = total_fodder) %>% 
+  rowwise() %>% 
+  mutate(prop = tonnes_product/map_production)
+sum(fodder_prop$prop)
+
+```
+
+
+Create the proportion maps
+```{r}
+
+animal_system_list <- fodder_consumption_global %>% pull(animal_system)
+  
+for(animal in animal_system_list) {
+  
+  # animal <- animal_system_list[1]
+  
+  prop <- fodder_prop %>% 
+    filter(animal_system == animal) %>% 
+    pull(prop)
+  
+  raster <- production_raster
+  raster[raster>=0] <- prop
+  
+  writeRaster(raster, file.path(layers, paste0("land_", animal,  "_x_land_fodd_crop_produce.tif", sep = "")), format = "GTiff", overwrite = TRUE)
+  
+}
+
+## need rasters for all the animals that don't consume cultivated fodder
+
+animal_system_nofodder_list <- c("buffaloes_grassland_milk", "cows_grassland_meat", "cows_grassland_milk", "goats_grassland_meat", "goats_grassland_milk", "sheep_grassland_meat", "sheep_grassland_milk", "chickens_industrial_meat", "chickens_industrial_eggs", "chickens_backyard_eggs&meat", "pigs_industrial_meat", "pigs_intermediate_meat", "pigs_backyard_meat")
+
+for(animal in animal_system_nofodder_list) {
+  
+  # animal <- animal_system_nofodder_list[1]
+  
+  raster <- food_rgns_tif
+  raster[raster >0] <- 0
+  
+  writeRaster(raster, file.path(layers, paste0("land_", animal,  "_x_land_fodd_crop_feed.tif", sep = "")), format = "GTiff", overwrite = TRUE)
+  
+}
+
+
+```
+

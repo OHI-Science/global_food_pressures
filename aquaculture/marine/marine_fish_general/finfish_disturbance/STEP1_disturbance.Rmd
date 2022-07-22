@@ -1,0 +1,161 @@
+---
+title: "Marine finfish disturbance"
+author: "Gage Clawson (UCSB, NCEAS, OHI)"
+date: "12/29/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r read in libaries and paths}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(readr)
+library(tidyverse)
+library(raster)
+library(data.table)
+library(raster)
+library(rgdal)
+library(here)
+
+path_final <- "/home/shares/food-systems/Food_footprint/all_food_systems/datalayers"
+
+path_prep <- "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/marine_fish_general/"
+
+food_crs <- "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"
+
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+
+```
+
+Because there are so many species of finfish included in our analysis, we will treat them all the same (i.e. same stocking density, cage volume, etc.). Although some fish likely do rear for longer than 1 year, we will assume that most are 1 year or less, and that the loss is minimal. Meaning that the production reported from the FAO is the true live weight tonnes. 
+
+
+Assumptions: 
+
+stocking density = 20 kg/m3 (Froelich et al. 2017)
+
+depth = 10 m (Froelich et al. 2017)
+
+volume = 9000 m3
+
+##Methods
+
+Read in the appropriate values 
+```{r parameters from conversion table}
+
+
+stocking_density <- 20
+cage_volume <- 9000
+```
+
+###Calculate the total number of fish in the water (occupancy)
+Read in production map
+
+```{r}
+production_raster <- rasterFromXYZ(read_csv(paste0(path_prep, "updated/marine_fish_general_farm_updated.csv")), crs = food_crs) 
+
+#plot(production_raster)
+cellStats(production_raster, stat = "sum") # 3909255
+
+```
+
+```{r calculate finfish}
+# Assume all kg are live weight 
+# as live weight of finfish, in kg
+finfish_live_kg  <- production_raster*1000
+finfish_live_tonnes  <- production_raster
+
+writeRaster(finfish_live_tonnes, file.path(path_prep, "finfish_occupancy/finfish_live_tonnes.tif"), format = "GTiff", overwrite = TRUE)
+```
+
+
+### Calculate the total area (from an aerial view) used for general finfish aquaculture
+
+First we determine how many cages are required given cage dimensions, stocking densities, and kg living fish. 
+
+We used Gentry 2017 data to estimate 180,000 kg finfish (harvest weight) per cage.
+
+This is based on 9000 m3 cage that we assume to be circular with a depth of 10 m.  We assume a stocking density of 20kg/m3.
+
+```{r}
+
+kg_per_cage <- cage_volume*stocking_density
+
+```
+
+Given the kg of finfish per cell we determine the number of cages needed as:
+
+kg_finfish/180,000
+
+```{r}
+
+cages <- ceiling(finfish_live_kg/kg_per_cage)
+cellStats(cages,"sum") # 22701
+
+```
+
+We the determine how much surface area the cages disturb including the inner cage area, a 5 meter buffer around the cage, and area for infrastructure.
+
+```{r}
+cage_depth_m <- 10
+buffer <- 5
+infrastructure <- 1.5 #50% of area to infrastructure
+
+cage_area <- cage_volume/cage_depth_m
+cage_radius <- sqrt(cage_area/pi)
+cage_radius_buffer <- cage_radius + buffer
+cage_area_with_buffer <- pi*cage_radius_buffer^2
+cage_disturbance_m2 <- cage_area_with_buffer*infrastructure
+
+total_disturbance_km2 <- cages * cage_disturbance_m2/1000000
+total_disturbance_prop <- total_disturbance_km2/raster::area(total_disturbance_km2)
+plot(total_disturbance_prop)
+plot(total_disturbance_km2)
+cellStats(total_disturbance_km2, "sum") # 51.42716
+
+finfish_aquaculture_area_df <- as.data.frame(total_disturbance_prop, xy=TRUE) %>% 
+  dplyr::rename(finfish_disturbance_prop = layer )
+
+write_csv(finfish_aquaculture_area_df, file.path(path_prep, "marine_fish_general_disturbance_prop.csv"))
+
+finfish_aquaculture_area_df_km2 <- as.data.frame(total_disturbance_km2, xy=TRUE) %>% 
+  dplyr::rename(finfish_disturbance_km2 = layer)
+
+write_csv(finfish_aquaculture_area_df_km2, file.path(path_prep, "marine_fish_general_disturbance_km2.csv"))
+
+## save to datalayers folder with the correct naming conventions: 
+final_layer_dist <- read_csv(file.path(path_prep, "marine_fish_general_disturbance_km2.csv"))
+
+final_rast <- rasterFromXYZ(final_layer_dist, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+cellStats(final_rast, "sum") # 51.42716
+final_rast
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 51.42716
+final_rast
+
+writeRaster(final_rast, file.path(path_final, "marine_marine-fish-general_aquaculture_meat_disturbance.tif"), overwrite = TRUE)
+```
+
+
+Look at the pieces more closely
+```{r}
+norway <- raster::crop(total_disturbance_km2, extent(-25, 50, 50, 75))
+plot(norway)
+writeRaster(norway, file.path(path_prep, "finfish_occupancy/norway.tif"), overwrite=TRUE)
+
+```
+
+

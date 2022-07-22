@@ -1,0 +1,64 @@
+---
+title: "Create land + eez raster"
+author: "Juliette"
+date: "5/28/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Create a land_eez_rgns.tif file
+
+Note: there will likely be some cells that are in both land and ocean (the resolution is not good enough to be specific enough)
+
+This combines the eez_food_rgns.tif and the food_rgns.tiff. Will be useful for extracting all impacts of a country at once regardless or ocean or land.
+
+```{r}
+
+source(here("_workflow/common_spatial.R"))
+eez_rgns_tif <- raster("/home/shares/food-systems/Food_footprint/dataprep/spatial/eez_food_rgns.tif")
+
+plot(eez_rgns_tif)
+unique(eez_rgns_tif)
+```
+
+
+```{r}
+eez_rgns <- as.data.frame(eez_rgns_tif, xy = TRUE) %>% 
+  rename(ID_0 = eez_food_rgns) %>% 
+  left_join(rgn_info) %>% 
+  rename(iso3c_eez = iso3c,
+         country_eez = Country, 
+         ID_0_eez = ID_0)
+rgns <- as.data.frame(rgns_tif, xy = TRUE) %>% 
+  rename(ID_0 = food_rgns) %>% 
+  left_join(rgn_info) %>% 
+  rename(iso3c_land = iso3c,
+         country_land = Country, 
+         ID_0_land = ID_0)
+land_eez_rgn_join <- left_join(rgns, eez_rgns, by = c("x", "y"))
+land_eez_rgn_int <- land_eez_rgn_join %>% 
+  mutate(iso3c = case_when(iso3c_land == iso3c_eez ~ iso3c_land,
+                           iso3c_land != iso3c_eez ~ iso3c_land,
+                           is.na(iso3c_eez) & !is.na(iso3c_land) ~ iso3c_land,
+                           !is.na(iso3c_eez) & is.na(iso3c_land)~ iso3c_eez))
+  
+land_eez_rgn <- land_eez_rgn_int %>% 
+  dplyr::select(x, y, iso3c) %>% 
+  left_join(rgn_info, by = "iso3c")
+### data checks
+length(unique(land_eez_rgn$iso3c))
+length(unique(land_eez_rgn_int$iso3c))
+setdiff(land_eez_rgn$iso3c, rgn_info$iso3c)
+setdiff(rgn_info$iso3c, land_eez_rgn$iso3c)
+test <- land_eez_rgn_int %>% 
+  filter(is.na(iso3c_land))
+## convert to raster and plot
+land_eez_rgn_raster <- land_eez_rgn %>% 
+  dplyr::select(x, y, ID_0) %>% 
+  rasterFromXYZ(crs = food_crs)
+plot(land_eez_rgn_raster)
+writeRaster(land_eez_rgn_raster, "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/spatial/land_eez_rgns.tif", format="GTiff", overwrite=TRUE)
+```

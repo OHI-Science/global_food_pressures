@@ -1,0 +1,393 @@
+---
+title: "Global fisheries catch"
+author: "Gage Clawson (UCSB, NCEAS, OHI)"
+date: "September 25, 2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+The purpose of this script is to prep the catch data from Watson et al. 2018 (version 5.0). We will calculate total catch and FOFM catch for industrial and non-industrial catch (landings + IUU). We will also reclassify the Watson gear types into corresponding gear types of the Seafood Carbon Emissions Tool data. 
+
+We use the data from:
+
+1. Watson, R. A. and Tidd, A. 2018. Mapping nearly a century and a half of global marine fishing: 1869–2015. Marine Policy, 93, pp. 171-177. [(Paper URL)](https://doi.org/10.1016/j.marpol.2018.04.023)
+
+2. [Seafood Carbon Emissions Tool](http://seafoodco2.dal.ca/(overlay:menu/5bcb48abaaea53205a2de526)
+
+```{r, eval = FALSE}
+#load relevant packages, etc.
+
+library(here)
+library(raster)
+library(tidyverse)
+library(countrycode)
+
+# function to project raster
+## Use correct CRS
+
+watson_raster_template <- raster::raster(ncol=720, nrow=360, vals=c(1:259200))
+source(here("fisheries/marine/ghg/raster_crs.R"))
+
+
+raw_folder <- file.path("/home/shares/food-systems/Food_footprint/_raw_data")
+raw_folder_watson <- file.path("/home/shares/food-systems/Food_footprint/_raw_data/watson_data/v5.0/")
+ghg_folder <- file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/ghg")
+```
+
+
+
+# Standardize country data
+We are assigning the proportion of chicken/salmon feed from forage fish based on country export data.  
+
+The first step is to assign the Watson catch data to country using standardized iso3c codes.  This will then be aligned with the regions in the trade data.
+
+Get the Watson country codes and assign iso3c codes:
+```{r, eval = FALSE}
+
+guess_encoding(read_lines_raw(file.path(raw_folder_watson, "Codes_country.csv")))
+
+watson_rgn <- read_csv(file.path(raw_folder_watson, "Codes_country.csv")) %>%
+  rename(country = "FAO name")
+
+watson_rgn$country_corrected <- iconv(watson_rgn$country, "ASCII", "UTF-8")
+
+watson_rgn$iso3c <- countrycode(watson_rgn$country_corrected, origin = 'country.name', destination = 'iso3c')
+
+## Combine these regions in our data:
+# Channel Is : Jersey and Guernsey
+# Yugoslavia is now many things...may have to combine some of our regions if any of them are in the trade table, this may be in older years of data.
+#
+watson_rgn <- watson_rgn %>%
+  mutate(iso3c = ifelse(country_corrected == "Amer Samoa", "ASM", iso3c)) %>%
+    mutate(iso3c = ifelse(country_corrected == "Br Virgin Is", "VGB", iso3c)) %>%
+   mutate(iso3c = ifelse(country_corrected == "Dominican Rp", "DOM", iso3c)) %>%
+  mutate(iso3c = ifelse(country_corrected == "Fr Guiana", "GUF", iso3c)) %>%
+    mutate(iso3c = ifelse(country_corrected == "Micronesia", "FSM", iso3c)) %>%
+      mutate(iso3c = ifelse(country_corrected == "St Pier Mq", "SPM", iso3c)) %>%
+    mutate(iso3c = ifelse(country_corrected == "Untd Arab Em", "ARE", iso3c)) %>%
+mutate(iso3c = ifelse(country_corrected == "Br Ind Oc Tr", "IOT", iso3c)) %>% 
+  mutate(iso3c = ifelse(country_corrected == "Fr Polynesia", "PYF", iso3c)) %>% 
+mutate(iso3c = ifelse(country_corrected == "US Virgin Is", "VIR", iso3c)) %>%
+mutate(iso3c = ifelse(country_corrected == "NethAntilles", "BES", iso3c)) %>%
+  mutate(iso3c = ifelse(country_corrected == "Br Ind Oc Tr", "IOT", iso3c)) %>%
+    mutate(iso3c = ifelse(country == "Curaçao", "CUW", iso3c)) %>%
+  mutate(country_corrected = ifelse(country == "Curaçao", "Curacao", country_corrected))
+
+# These are all regions that include several countries in our list.  We can combine them in the trade data.
+filter(watson_rgn, is.na(iso3c))
+
+## compare to master list to make sure all regions are present in Watson data.
+master_rgn <- read_csv(here("_spatial/_output/food_rgns.csv"))
+setdiff(watson_rgn$iso3c, master_rgn$iso3c) # none, good!
+excluded <- setdiff(master_rgn$iso3c, watson_rgn$iso3c)
+
+#eliminate the landlocked regions
+landlocked <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>%
+  filter(Land_Locked == "x") %>%
+  dplyr::select(iso3c)
+
+# Not included in Watson data and are not landlocked
+setdiff(excluded, landlocked$iso3c)
+# "ALA" "CXR" "CCK" "GGY" "JEY" "XMI" "BLM" "MAF" "SXM" "SJM" "ESH"
+
+# Determine duplicates
+watson_rgn$iso3c[duplicated(watson_rgn$iso3c)]
+
+write_csv(watson_rgn, here("fisheries/marine/ghg/data/Watson_rgns_with_iso3c.csv"))
+```
+
+
+# Create a master list of forage species
+
+The following is a list from:
+Froehlich, H.E., Jacobsen, N.S., Essington, T.E., Clavelle, T., and Halpern, B.S. (2018). Avoiding the ecological limits of forage fish for fed aquaculture. Nature Sustainability 1, 298.
+
+They identify 238 forage fish species which account for >99% of forage fish catches in 2012.
+
+31 million tons per year of captured forage fish (since 1980).
+
+Get the list of forage fish used for fish oil/meal:
+```{r, eval = FALSE}
+
+forage <- read_csv(file.path(raw_folder, "froehlich_foragefish/msleckman.61.1-CatchMSY_Nis_FAOAreas.csv.csv"))
+sort(unique(forage$Species)) #238 forage fish groups listed
+
+## compare this with Watson list of species (IDed forage fish by hand)
+watson <- read_csv(file.path(raw_folder_watson, "Codes_taxa.csv"))
+sort(setdiff(forage$Species, watson$TaxonName))
+sort(setdiff(watson$TaxonName[watson$foragefish %in% 1], forage$Species))
+
+## combine list:
+foragefish_list <- data.frame(forage_fish = sort(unique(c(unique(forage$Species), watson$TaxonName[watson$foragefish %in% 1]))))
+
+missing <- setdiff(foragefish_list$forage_fish, watson$TaxonName)
+foragefish_list <- foragefish_list %>%
+  mutate(inWatson = ifelse(forage_fish %in% missing, NA, "yes"))
+
+write.csv(foragefish_list, here("fisheries/marine/ghg/data/master_taxa_list.csv"), row.names=FALSE)
+
+```
+
+
+# Combine Industrial and Non-Industrial Catch
+The raw Watson data is separated into industrial and non-industrial fishing. Combine both types for each year from 2015-2017. For this project we will only use reported landings and IUU landings. 
+
+```{r, eval=FALSE}
+
+years <- c(2015:2017)
+data_files <- file.path(raw_folder, "Catch2015_2019.csv")
+
+data <- read.csv(data_files)
+
+for(year in years){
+  #year = 2016
+
+  data_yr <- data %>%
+    filter(IYear == year) %>%
+    mutate(catch = ReportedIND + IUUIND + ReportedNIND + IUUNIND)
+ 
+write.csv(data_yr, file.path(paste0("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/ghg/watson_v5_emissions/", "annual_catch_", year, ".csv")), row.names = FALSE)   
+}
+
+```
+
+
+Look at catch data
+```{r, eval=FALSE}
+
+## read in one of the catch data
+catch <- read_csv(file.path(ghg_folder, "watson_v5_emissions/annual_catch_2017.csv"))
+
+head(catch)
+dim(catch)
+summary(catch)
+
+```
+
+# Format catch data to include both feed fish and all species and create rasters 
+
+Match the catch data with the appropriate indices to get gear type, taxon information, and iso3c regions 
+
+
+First we need to reclassify the gear types in the gear index to match the Seafood Carbon Emissions data (from Parker) gears. We'll do this by matching to the best of our abilities. First looking at the names, and then looking at ear individual gear index and its row to make sure we are matching correctly. 
+
+New categories for Watson data:
+ - Purse seine
+ - Midwater trawl
+ - Longlines
+ - Troll lines
+ - Pole and line
+ - Gillnets
+ - Bottom trawl
+ - Traps
+ - Dredge
+ 
+ Old watson gear types:
+ [1]  100  110  120  213  214  221  225  312  400  420  421  421  422  422  423  424  432  433  440  450  500  540  551  552
+[25]  553  560  563  700  830  831  840  850  900  900  920  921  922 1000 1000 1010 1020 1020 1030 1050 1100 1200 1210 1320
+[49] 1400 1400 1400 1410 1410 1420 1420 1500 1540 
+
+Conversions: 
+ - 100, Other
+ - 110, Other 
+ - 120, Other
+ - 213, Other
+ - 214, Other
+ - 221, Other
+ - 225, Other
+ - 312, Other
+ - 400, Lines Non-tuna : Troll lines
+ - 420, Lines Non-tuna : Troll lines
+ - 421, Lines Non-tuna : Pole and line
+ - 421, Lines Non-tuna : Pole and line
+ - 422, Longline Non-tuna : Longlines
+ - 422, Longline Non-tuna : Longlines 
+ - 423, Longline Non-tuna : Longlines
+ - 424, Lines Non-tuna : Troll lines
+ - 432, Lines Non-tuna : Troll lines
+ - 433, Lines Non-tuna : Troll lines
+ - 440,	Pole and Line Tuna : Pole and line
+ - 450, LonglineTuna : Longlines
+ - 500, Trap : Traps
+ - 540, Trap : Traps
+ - 551, Trap : Traps
+ - 552, Trap : Traps
+ - 553, Trap : Traps
+ - 560, Trap : Traps
+ - 563, Trap : Traps
+ - 700, Trap : Traps
+ - 830, Dredge : Dredge
+ - 831, Dredge : Dredge 
+ - 840, Trawl : Bottom trawl
+ - 850, Trawl midwater : Midwater trawl 
+ - 900, Seine : Purse seine
+ - 900, Seine : Purse seine
+ - 920, Seine : Purse seine
+ - 921, Seine : Purse seine
+ - 922, Seine : Purse seine
+ - 1000, Trawl : Bottom trawl
+ - 1000, Trawl : Bottom trawl
+ - 1010, Purse seine Non-tuna : Purse seine
+ - 1020, Purse seine Non-tuna : Purse seine
+ - 1020, Purse seine Non-tuna : Purse seine
+ - 1030, Seine : Purse seine
+ - 1050, Purse seine Tuna : Purse seine
+ - 1100, Seine : Purse seine
+ - 1200, Seine : Purse seine
+ - 1210, Seine : Purse seine
+ - 1320, Other : 
+ - 1400, Gillnet : Gillnets
+ - 1400, Gillnet : Gillnets
+ - 1400, Gillnet : Gillnets
+ - 1410, Gillnet : Gillnets 
+ - 1410, Gillnet : Gillnets 
+ - 1420, Gillnet : Gillnets 
+ - 1420, Gillnet : Gillnets
+ - 1500, Gillnet : Gillnets
+ - 1540, Gillnet : Gillnets
+ 
+
+```{r, eval = FALSE}
+## read in the emissions data 
+ei_direct <- read_csv("fisheries/marine/ghg/int/direct_ei.csv")
+
+## read in gear index 
+gear_index <- read_csv(file.path(raw_folder_watson, "Codes_gear.csv"))
+
+
+## look at unique gears in emissions intensity data
+unique(ei_direct$gear)
+
+# [1] "Purse seine"    "Midwater trawl" "Longlines"      "Troll lines"    "Pole and line"  "Gillnets"       "Bottom trawl"  
+# [8] "Traps"          "Dredge"
+
+## look at unique gear types from watson data 
+unique(gear_index$FleetGearName)
+
+#  [1] "Other"                "Lines Non-tuna"       "Longline Non-tuna"    "Pole and Line Tuna"   "LonglineTuna"        
+#  [6] "Trap"                 "Dredge"               "Trawl"                "Trawl midwater"       "Seine"               
+# [11] "Purse seine Non-tuna" "Purse seine Tuna"     "Gillnet"  
+
+## now lets make a new gear index based on the codes and new categories above...
+gear_index_new <- gear_index %>%
+  dplyr::select(Gear, FleetGearName) %>%
+  mutate(ParkerGearName = 
+           case_when(
+             Gear %in% c(400, 420, 424, 432, 433) ~ "Troll lines",
+             Gear %in% c(421, 440) ~ "Pole and line",
+             Gear %in% c(422, 423, 450) ~ "Longlines", 
+             Gear %in% c(500, 540, 551, 552, 553, 560, 563, 700) ~ "Traps", 
+             Gear %in% c(830, 831) ~ "Dredge", 
+             Gear %in% c(840, 1000) ~ "Bottom trawl", 
+             Gear %in% c(850) ~ "Midwater trawl", 
+             Gear %in% c(900, 920, 921, 922, 1010, 1020, 1030, 1050, 1100, 1200, 1210) ~ "Purse seine",
+             Gear %in% c(1400, 1410, 1420, 1500, 1540) ~ "Gillnets",
+             TRUE ~ "Other"
+            )) %>%
+  distinct(Gear, ParkerGearName)
+
+write.csv(gear_index_new, "fisheries/marine/ghg/int/gear_index_parker.csv", row.names = FALSE)
+```
+
+**Now that we have fixed our gear index to not have duplicates, we can match our catch data with all of our indices, and save our catch data for further analyses**
+```{r, eval = FALSE}
+
+catch <- read_csv(file.path(ghg_folder, "watson_v5_emissions/annual_catch_2017.csv"))
+
+taxa_index <- read_csv(file.path(raw_folder, "watson_data/v5.0/Codes_taxa.csv"))
+
+country_index <- read_csv(here("fisheries/marine/ghg/data/Watson_rgns_with_iso3c.csv")) %>%
+  dplyr::select(CNumber = Cnumber, iso3c)
+
+
+gear_index_parker <- read_csv("fisheries/marine/ghg/int/gear_index_parker.csv")
+
+
+dim(catch)
+foragefish <- left_join(catch, taxa_index, by= "Taxonkey")
+dim(foragefish)
+foragefish <- left_join(foragefish, country_index, by="CNumber")
+dim(foragefish)
+foragefish <- left_join(foragefish, gear_index_parker, by = c("Gear"))
+dim(foragefish)
+
+forage_fish_list <- read_csv(here("fisheries/marine/ghg/data/master_taxa_list.csv"))
+
+## checking all the raster blanks, appears to not have catch records in those regions.
+# allfish <- foragefish %>%
+#  dplyr::group_by(Cell) %>%
+#  dplyr::summarize(tonnes = sum(catch, na.rm=TRUE))
+# 
+# all_fish_raster <- raster::subs(watson_raster_template, allfish, by = "Cell", which = "tonnes", subsWithNA=TRUE)
+# plot(all_fish_raster)
+# cellStats(all_fish_raster, "sum", na.rm=TRUE)
+
+foragefish <- foragefish %>%
+  mutate(forage_fish = ifelse(TaxonName %in% forage_fish_list$forage_fish, 1, 0)) %>%
+  mutate(forage_fish = ifelse(Descript == "krill", 1, forage_fish)) %>%
+  mutate(FOFM_catch = catch*forage_fish)
+
+forage_tonnes <- sum(foragefish$FOFM_catch, na.rm=TRUE) 
+## industrial and non-industrial 2017: 39054068
+
+write_csv(foragefish, file.path(ghg_folder, "watson_v5_emissions/full_watson_catch_data_2017.csv"))
+
+```
+
+### Save a raster of all catch, and a raster of all forage fish catch
+
+```{r, eval = FALSE}
+foragefish <- read_csv(file.path(ghg_folder, "watson_v5_emissions/full_watson_catch_data_2017.csv"))
+
+allforagefish_raster <- foragefish %>%
+  dplyr::group_by(Cell) %>%
+  dplyr::summarize(forage_tonnes = sum(FOFM_catch, na.rm=TRUE))
+
+allcatch_raster <- foragefish %>%
+  dplyr::group_by(Cell) %>%
+  dplyr::summarise(all_tonnes = sum(catch, na.rm= TRUE))
+
+
+nofofm_raster <- foragefish %>%
+  filter(forage_fish == 0) %>%
+  group_by(Cell) %>%
+  summarise(nofofm_tonnes = sum(catch, na.rm = TRUE))
+  
+
+
+
+### Create forage fish rasters
+# template raster
+
+forage_fish_raster <- raster::subs(watson_raster_template, allforagefish_raster, by = "Cell", which = "forage_tonnes", subsWithNA=TRUE)
+
+plot(log(forage_fish_raster + 1))
+
+writeRaster(forage_fish_raster, file.path(ghg_folder, "watson_v5_emissions/catch_rasters/forage_fish_tonnes_2017.tif"), overwrite=TRUE)
+
+cellStats(forage_fish_raster, "sum", na.rm=TRUE) 
+
+
+### Create all catch rasters
+# template raster
+
+all_raster <- raster::subs(watson_raster_template, allcatch_raster, by = "Cell", which = "all_tonnes", subsWithNA=TRUE)
+
+plot(log(all_raster + 1))
+
+writeRaster(all_raster, file.path(ghg_folder, "watson_v5_emissions/catch_rasters/all_tonnes_2017.tif"), overwrite=TRUE)
+
+cellStats(all_raster, "sum", na.rm=TRUE) 
+
+
+### Create catch rasters EXCLUDING FORAGE FISH
+# template raster
+noFOFM_raster <- raster::subs(watson_raster_template, nofofm_raster, by = "Cell", which = "nofofm_tonnes", subsWithNA=TRUE)
+plot(log(noFOFM_raster + 1))
+
+writeRaster(noFOFM_raster, file.path(ghg_folder, "watson_v5_emissions/catch_rasters/nofofm_tonnes_2017.tif"), overwrite=TRUE)
+cellStats(noFOFM_raster, "sum", na.rm=TRUE) #72172118
+
+
+```

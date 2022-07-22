@@ -1,0 +1,187 @@
+---
+title: "Wrangle and calculate FAO protein and calories CF for crops"
+author: "Juliette"
+date: "3/8/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(countrycode)
+source(here("_workflow/common.R"))
+
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>% 
+  dplyr::select(iso3c, Global_Name, Region_Name, Sub_region_Name, Intermediate_Region_Name) %>% 
+  filter(iso3c %in% food_rgns$iso3c)
+
+crops_raw <- read_csv(file.path(raw, "FAO_data/v2021/supply_utlilization_accounts/crops/FAOSTAT_data_2-5-2021.csv"))
+```
+
+# Crops
+
+## Wrangle, calculate conversion factors, and calculate tonnes product to tonnes protein and million kcals
+```{r}
+
+nutri_contents_crops <- crops_raw %>% 
+  select(Area, Element, Item, Year, Unit, Value) %>% 
+  filter(Year == 2017,
+         Element %in% c("Food supply quantity (tonnes)", "Calories/Year", "Proteins/Year")) %>% 
+  
+  ## country code wrangling
+   filter(Area != "China") %>% 
+   mutate(Area = ifelse(Area == "Eswatini", "Swaziland", Area),
+         Area = ifelse(Area == "Netherlands Antilles (former)", "Bonaire, Sint Eustatius and Saba", Area),
+         Area = ifelse(Area == "French Guyana", "French Guiana", Area),
+         Area = ifelse(Area == "China, mainland", "China", Area),
+         iso3c = countrycode(Area, origin="country.name", destination = "iso3c")) %>% 
+  
+  ## final wrangling
+  select(-Area, -Year, -Unit) %>% ##units for production are tonnes, protein is tonnes, and calories is million kcals
+  pivot_wider(names_from = "Element", values_from = "Value") %>% 
+  select(iso3c, item = Item, production = 'Food supply quantity (tonnes)' , million_kcal_year = 'Calories/Year', tonnes_protein_year = 'Proteins/Year') %>% 
+  filter(!is.na(million_kcal_year),
+         !is.na(production)) %>% 
+  
+  ## calculate the mult factor
+  mutate(million_kcal_per_prod_tonne = million_kcal_year/production,
+         tonne_protein_per_prod_tonne = tonnes_protein_year/production)
+
+## see how well the fao to mapsam csv works
+temp <- nutri_contents_crops %>% 
+  select(item) %>% 
+  unique()
+
+spam_fao_names <- read_csv(here("feed/data/MapSPAM_to_FAO.csv"))
+
+##doesnt seem very well aligned
+setdiff(spam_fao_names$product_description_FAOSTAT, temp$item) 
+save <- setdiff(temp$item, spam_fao_names$product_description_FAOSTAT) %>% as_tibble()
+#write_csv(save, here("_efficiency/data/save_fao_missing_crops.csv"))
+## eh not great... so I'm just going to go through and create a file that will work best for this
+
+#write_csv(temp, here("_efficiency/data/temp.csv"))
+
+# names <- pressures_summary %>% 
+#   ungroup() %>% 
+#   filter(product == "produce") %>% 
+#   select(organism) %>% 
+#   unique()
+
+```
+
+Assign SPAM names to the fao product descriptions
+```{r}
+fix_missing_names <- read_csv(here("_efficiency/data/missing_fao_names.csv")) %>% 
+  rename(item = fao_name)
+
+name_match <- spam_fao_names %>% 
+  select(spam_name = SPAM_super, item = product_description_FAOSTAT)
+
+nutri_contents_crops_named <- left_join(nutri_contents_crops, name_match) 
+
+fix_missing <- nutri_contents_crops_named %>% 
+  filter(is.na(spam_name)) %>% 
+  left_join(fix_missing_names) %>% 
+  select(-spam_name) %>% 
+  rename(spam_name = SPAM_super)
+
+nutri_contents_crops_named_2 <- nutri_contents_crops_named %>% 
+  filter(!is.na(spam_name)) %>% 
+  rbind(fix_missing) %>% 
+  group_by(iso3c, spam_name) %>% 
+  dplyr::summarise(tonnes = sum(production, na.rm = TRUE),
+                   million_kcal = sum(million_kcal_year, na.rm = TRUE),
+                   tonnes_protein = sum(tonnes_protein_year, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(protein_cf = tonnes_protein/tonnes,
+         protein_cf = ifelse(is.na(protein_cf) | is.infinite(protein_cf), 0, protein_cf),
+         calorie_cf = million_kcal/tonnes,
+         calorie_cf = ifelse(is.na(calorie_cf) | is.infinite(calorie_cf), 0, calorie_cf))
+```
+
+
+Lets see what it looks like
+
+```{r}
+ggplot(nutri_contents_crops_named_2, aes(x = tonnes, y = million_kcal)) +
+  geom_point()+
+  theme_minimal()+
+  geom_smooth(method='lm', formula= y~x) +
+  facet_wrap(vars(spam_name), scales = "free")
+
+ggplot(nutri_contents_crops_named_2, aes(x = tonnes, y = tonnes_protein)) +
+  geom_point()+
+  theme_minimal()+
+  geom_smooth(method='lm', formula= y~x) +
+  facet_wrap(vars(spam_name), scales = "free")
+```
+
+
+```{r}
+crop_protein_cfs <- nutri_contents_crops_named_2 %>% 
+  group_by(spam_name) %>% 
+  filter(protein_cf >0) %>% 
+  dplyr::summarise(protein_cf = mean(protein_cf, na.rm = TRUE))
+
+crop_calorie_cfs <- nutri_contents_crops_named_2 %>% 
+  group_by(spam_name) %>% 
+  filter(calorie_cf >0) %>% 
+  dplyr::summarise(calorie_cf = mean(calorie_cf, na.rm = TRUE))
+
+crop_cfs <- left_join(crop_calorie_cfs, crop_protein_cfs) %>% 
+  filter(!is.na(spam_name)) %>%  ## is is mate
+  add_row(spam_name = "oilp", calorie_cf = 4.289197, protein_cf = 0.1540623) %>%  ## gapfilled with xoil values
+  rename(product = spam_name)
+```
+
+
+## Do the conversion for the crops 
+
+This one  contains all the crop production (used for general efficiency calculations).
+```{r}
+crop_product_tonnes <- read_csv(here("_efficiency/data/product_tonnes.csv"))
+filter(crop_product_tonnes, iso3c=="USA" & category1_production=="maiz_produce")
+
+crop_product_tonnes <- read_csv(here("_efficiency/data/product_tonnes.csv")) %>% 
+  rename(product = category1_production) %>% 
+  separate(product, c("product", "source"), sep = "_") %>% 
+  filter(product %in% crop_cfs$product) %>% 
+  dplyr::select(-category2_production) %>% 
+  left_join(crop_cfs) %>% 
+  mutate(million_kcal = tonnes*calorie_cf,
+         tonnes_protein = tonnes*protein_cf) %>% 
+  select(iso3c, product, tonnes, million_kcal, tonnes_protein) 
+
+write_csv(crop_product_tonnes, here::here("_efficiency", "data", "crops_protein_calories.csv"))
+
+```
+
+This one contains the crop production only consumed by humans.
+This is used in figure 4 for the points.
+```{r}
+
+
+crop_product_tonnes <- read_csv(here("_efficiency/data/product_tonnes_human_crop_consumption.csv"))
+filter(crop_product_tonnes, iso3c=="USA" & category1_production=="maiz_produce")
+
+crop_product_tonnes_humans <- crop_product_tonnes %>% 
+  rename(product = category1_production) %>% 
+  separate(product, c("product", "source"), sep = "_") %>% 
+  filter(product %in% crop_cfs$product) %>% 
+  dplyr::select(-category2_production) %>% 
+  left_join(crop_cfs) %>% 
+  mutate(million_kcal = tonnes*calorie_cf,
+         tonnes_protein = tonnes*protein_cf) %>% 
+  select(iso3c, product, tonnes, million_kcal, tonnes_protein) 
+
+write_csv(crop_product_tonnes_humans, here::here("_efficiency", "data", "crops_protein_calories_humans_only.csv"))
+
+
+
+
+```

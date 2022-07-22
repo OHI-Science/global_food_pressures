@@ -1,0 +1,482 @@
+---
+title: "Matching gear and species classes between Watson and Parker data"
+author: "Gage Clawson (UCSB, NCEAS, OHI)"
+date: "September 25, 2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+The purpose of this script is to reclassify the Watson fisheries catch data into the species types represented in Parker et al. 2018. We will then join together the reclassified Watson data with the data from Seafood Carbon Emissions Tool. 
+
+We use the data and information from:
+
+1. Watson, R. A. and Tidd, A. 2018. Mapping nearly a century and a half of global marine fishing: 1869–2015. Marine Policy, 93, pp. 171-177. [(Paper URL)](https://doi.org/10.1016/j.marpol.2018.04.023)
+
+2. [Seafood Carbon Emissions Tool](http://seafoodco2.dal.ca/(overlay:menu/5bcb48abaaea53205a2de526)
+
+3. Parker, R.W.R., Blanchard, J.L., Gardner, C., Green, B.S., Hartmann, K., Tyedmers, P.H., and Watson, R.A. (2018). Fuel use and greenhouse gas emissions of world fisheries. Nature Climate Change 8, 333.
+
+```{r, eval = FALSE}
+#load relevant packages, etc.
+
+library(here)
+library(raster)
+library(tidyverse)
+library(countrycode)
+
+# function to project raster
+## Use correct CRS
+
+source(here("fisheries/marine/ghg/raster_crs.R"))
+
+
+raw_folder <- file.path("/home/shares/food-systems/Food_footprint/_raw_data")
+raw_folder_watson <- file.path("/home/shares/food-systems/Food_footprint/_raw_data/watson_data/v5.0/")
+ghg_folder <- file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/ghg")
+
+```
+
+```{r, eval = FALSE}
+## read in catch data to compare species name and gear types to emissions intensity data
+catch <- read_csv(file.path(ghg_folder, "watson_v5_emissions/full_watson_catch_data_2017.csv"))
+
+
+## read in emissions intensity data 
+emissions_intensity_df <- read_csv("fisheries/marine/ghg/int/direct_ei.csv")
+```
+
+Categorize Watson data into species classifications similar to Parker data so that we can gapfill some emissions intensities
+
+New categories:
+ - Pelagic fish <30 cm
+ - Pelagic fish >30 cm
+ - Demersal molluscs
+ - Demersal fish
+ - Cephalopods
+ - Crustaceans 
+ 
+ Old categories
+ [1] "pelagic >=90 cm"            "demersal <30 cm"            "shark >=90 cm"              "pelagic <30 cm"            
+ [5] "demersal 30 - 90 cm"        "bathydemersal <30 cm"       "bathydemersal >=90 cm"      "pelagic 30 - 90 cm"        
+ [9] "reef-associated 30 - 90 cm" "flatfish <90 cm"            "cephalopods"                "demersal >=90 cm"          
+[13] "benthopelagic >=90 cm"      "reef-associated >=90 cm"    "flatfish >=90 cm"           "shrimp"                    
+[17] "demersal mollusc"           "rays <90 cm"                "lobsters crab"              "shark <90 cm"              
+[21] "benthopelagic 30 - 90 cm"   "benthopelagic <30 cm"       "reef-associated <30 cm"     "rays >=90 cm"              
+[25] "bathypelagic <30 cm"        "bathypelagic 30 - 90 cm"    "bathypelagic >=90 cm"       "bathydemersal 30 - 90 cm"  
+[29] "krill"  
+
+Conversions: 
+ - pelagic >=90 cm : Pelagic fish >30cm **
+ - demersal <30cm : Demersal fish **
+ - shark >=90cm : Demersal fish **
+ - pelagic <30cm : Pelagic fish <30cm **
+ - demersal 30 - 90 cm : Demersal fish **
+ - bathydemersal <30 cm : Demersal fish **
+ - bathydemersal >= 90cm : Demersal fish **
+ - pelagic 30 - 90cm : Pelagic fish >30cm **
+ - reef-associated 30 - 90 cm : Pelagic fish >30cm **
+ - flatfish <90 cm : Demersal fish **
+ - cephalopods : Cephalopods **
+ - demersal >=90 cm : Demersal fish **
+ - benthopelagic >=90 cm : Demersal fish **
+ - reef-associated >=90 cm : Pelagic fish  >30cm **
+ - flatfish >=90 cm : Demersal fish **
+ - shrimp : Crustaceans **
+ - demersal mollusc : Demersal molluscs **
+ - rays <90 cm : Demersal fish **
+ - lobsters crab : crustaceans **
+ - shark <90 cm : Demersal fish **
+ - benthopelagic 30 - 90 cm : Demersal fish **
+ - benthopelagic <30 cm : Demersal fish **
+ - reef-associated <30 cm : Pelagic fish <30cm **
+ - rays >=90 cm : Demersal fish **
+ - bathypelagic <30 cm : Pelagic fish <30cm **
+ - bathypelagic 30 - 90 cm : Pelagic fish >30cm **
+ - bathypelagic >=90 cm : Pelagic fish >30cm  **
+ - bathydemersal 30 - 90 cm : Demersal fish **
+ - krill : Crustaceans **
+ 
+Handcheck the not-so-intuitive species classes from Watson
+```{r, eval = FALSE, include = FALSE}
+unique(catch$Descript)
+
+#  [1] "pelagic >=90 cm"            "demersal <30 cm"            "shark >=90 cm"              "pelagic <30 cm"            
+#  [5] "demersal 30 - 90 cm"        "bathydemersal <30 cm"       "bathydemersal >=90 cm"      "pelagic 30 - 90 cm"        
+#  [9] "reef-associated 30 - 90 cm" "flatfish <90 cm"            "cephalopods"                "demersal >=90 cm"          
+# [13] "benthopelagic >=90 cm"      "reef-associated >=90 cm"    "flatfish >=90 cm"           "shrimp"                    
+# [17] "demersal mollusc"           "rays <90 cm"                "lobsters crab"              "shark <90 cm"              
+# [21] "benthopelagic 30 - 90 cm"   "benthopelagic <30 cm"       "reef-associated <30 cm"     "rays >=90 cm"              
+# [25] "bathypelagic <30 cm"        "bathypelagic 30 - 90 cm"    "bathypelagic >=90 cm"       "bathydemersal 30 - 90 cm"  
+# [29] "krill"  
+
+## Filter catch for the classifications that aren't obvious and look at ISCAAP codes : 
+# rays, shark, reef-associated and look here: http://www.fao.org/3/W3244E/w3244e05.htm#:~:text=Demersal%20fish%20species%20are%20here,%2C%20sharks%2C%20rays%20and%20chimaeras.
+
+check_species_class <- catch %>%
+  dplyr::filter(str_detect(Descript, 'shark')) ## all of those classified as "shark" have ISSCAAP code 38 which fall under demersal fish according to the FAO 
+
+check_species_class <- catch %>%
+  dplyr::filter(str_detect(Descript, 'rays')) ## all of those classified as "rays" have ISSCAAP code 38 which fall under demersal fish according to the FAO 
+
+check_species_class <- catch%>%
+  dplyr::filter(str_detect(Descript, 'reef-associated')) ## These fall under ISSCAAP codes 33 (demersal), 37 (pelagic), 39, 36 (pelagic), 35 (pelagic), 34 (pelagic)
+
+
+check_species_class <- catch %>%
+  dplyr::filter(ISSCAAP == 39, 
+                str_detect(Descript, 'reef-associated'))
+
+ unique(check_species_class$CommonName)
+# [1] "Filefishes"           "Sea chubs"            "Rabbitfishes"         "Obtuse barracuda"     "Pickhandle barracuda"
+# [6] "Moonfish"             "Fusiliers"            "Damselfish"           "Canary damsel" 
+ 
+ # File fishes - pelagic 
+ # Sea chubs - pelagic
+ # Rabbitfishes - pelagic
+ # Obtuse barracude - pelagic
+ # Pickhandle barracude - pelagic
+ # Moonfish - pelagic
+ # Fusiliers - pelagic
+ # Damselfish - pelagic
+ 
+ 
+check_species_class <- catch %>%
+  dplyr::filter(str_detect(Descript, 'flatfish'))
+
+unique(check_species_class$ISSCAAP) # 31  - these are demersal fish 
+
+
+
+check_species_class <- catch %>%
+  dplyr::filter(str_detect(Descript, 'shrimp'))
+
+sum(check_species_class$catch) # 5542262 tonnes
+unique(check_species_class$TaxonName)
+```
+
+Reclassify the Watson species classes to our own:
+```{r, eval = FALSE}
+catch_species_class <- catch %>%
+  dplyr::mutate(species_class =
+                  case_when(
+                    str_detect(Descript, "demersal mollusc") ~ "Demersal molluscs",
+                    str_detect(Descript, "demersal|shark|flatfish|benthopelagic|rays") ~ "Demersal fish", 
+                    str_detect(Descript, "pelagic >=90 cm|pelagic 30 - 90 cm|reef-associated 30 - 90 cm|reef-associated >=90 cm|bathypelagic 30 - 90 cm|bathypelagic >=90 cm") ~ "Pelagic fish >=30cm",
+                    str_detect(Descript, "pelagic <30 cm|reef-associated <30 cm|bathypelagic <30 cm") ~ "Pelagic fish <30cm",
+                    str_detect(Descript, "cephalopods") ~ "Cephalopods",
+                    str_detect(Descript, "shrimp|krill|lobsters crab") ~ "Crustaceans"
+                  ))
+
+
+## take a look to see if we caught all the cases... we did
+catch_species_class_summary <- catch_species_class %>%
+  group_by(species_class) %>%
+  summarise(catch_sum = sum(catch))
+
+```
+
+For intermediate and final rasters, we need to split our species into coarser groups: 
+
+Intermediate categories
+ - Benthic
+ - Small Demersal or Small bentho-pelagic
+ - Medium Demersal or Medium bentho-pelagic
+ - Large Demersal or Large bentho-pelagic
+ - Large Pelagics (>90cm)
+ - Medium Pelagic (30-60cm)
+ - Small pelagics (<30cm)
+ - Small Reef-associated
+ - Medium Reef-associated
+ - Large Reef-associated
+ - FOFM
+ 
+ Conversions: 
+ - pelagic >=90 cm : Large pelagics **
+ - demersal <30cm : Small Demersal **
+ - shark >=90cm : Large Demersal **
+ - pelagic <30cm : Small Pelagics **
+ - demersal 30 - 90 cm : Medium Demersal **
+ - bathydemersal <30 cm : Small Demersal **
+ - bathydemersal >= 90cm : Large Demersal **
+ - pelagic 30 - 90cm : Medium pelagics **
+ - reef-associated 30 - 90 cm : Medium Reef associated **
+ - flatfish <90 cm : Medium Demersal **
+ - cephalopods : See below
+ - demersal >=90 cm : Large Demersal **
+ - benthopelagic >=90 cm : Large Demersal **
+ - reef-associated >=90 cm : Large Reef associated **
+ - flatfish >=90 cm : Large Demersal **
+ - shrimp : Small demersal **
+ - demersal mollusc : Small Demersal **
+ - rays <90 cm : Medium Demersal **
+ - lobsters crab : Benthic **
+ - shark <90 cm : Medium Demersal **
+ - benthopelagic 30 - 90 cm : Medium Demersal **
+ - benthopelagic <30 cm : Small Demersal **
+ - reef-associated <30 cm : Small Reef associated **
+ - rays >=90 cm : Large Demersal **
+ - bathypelagic <30 cm : Small Pelagics **
+ - bathypelagic 30 - 90 cm : Medium Pelagics **
+ - bathypelagic >=90 cm : Large Pelagic **
+ - bathydemersal 30 - 90 cm : Medium Demersal **
+ - krill : FOFM 
+
+Final raster categories:
+ - Benthic
+ - Demersal or bentho-pelagic
+ - Large Pelagics (>90cm)
+ - Medium Pelagic (30-60cm) 
+ - Small pelagics (<30cm)
+ - Reef-associated
+ - FOFM
+
+Conversions: 
+ - pelagic >=90 cm : Large pelagics
+ - demersal <30cm : Demersal
+ - shark >=90cm : Demersal
+ - pelagic <30cm : Small Pelagics
+ - demersal 30 - 90 cm : Demersal
+ - bathydemersal <30 cm : Demersal
+ - bathydemersal >= 90cm : Demersal
+ - pelagic 30 - 90cm : Medium pelagics
+ - reef-associated 30 - 90 cm : Reef associated
+ - flatfish <90 cm : Demersal
+ - cephalopods : species dependent, see below 
+ - demersal >=90 cm : Demersal
+ - benthopelagic >=90 cm : Demersal
+ - reef-associated >=90 cm : Reef associated
+ - flatfish >=90 cm : Demersal
+ - shrimp : Demersal
+ - demersal mollusc : Demersal
+ - rays <90 cm : Demersal
+ - lobsters crab : Benthic
+ - shark <90 cm : Demersal
+ - benthopelagic 30 - 90 cm : Demersal
+ - benthopelagic <30 cm : Demersal
+ - reef-associated <30 cm : Reef associated
+ - rays >=90 cm : Demersal
+ - bathypelagic <30 cm : Small Pelagics
+ - bathypelagic 30 - 90 cm : Medium Pelagics
+ - bathypelagic >=90 cm : Large Pelagic 
+ - bathydemersal 30 - 90 cm : Demersal
+ - krill : FOFM 
+
+
+Hand check those that don't immediately fall into one of our categories: 
+```{r}
+check_species_class <- catch %>%
+  dplyr::filter(str_detect(Descript, 'cepha'))
+unique(check_species_class$CommonName)
+
+## Squid are pelagic, octopus and cuttle fish are reef-associated
+
+## cuttlefish - small reef associated **
+## common octopus, Octopuses - large reef associated **
+## Argentine shortfin squid - small pelagic **
+## Patagonian squid - small pelagic **
+## Northern shortfin squid - small pelagic **
+## Jumbo flying squid - medium pelagic **
+## Horned and musky octopuses - medium reef associated **
+## Broadtail shortfin squid - medium pelagic **
+## Arrow squids - large pelagic
+## European flying squid - medium pelagic **
+## Horned octopus - Medium reef associated **
+## Japanese flying squid - medium pelagic **
+## Wellington flying squid - medium pelagic **
+## Neon flying squid - medium pelagic **
+## California market squid - small pelagic **
+## Veined Squid - medium pelagic **
+## Cape Hope squid - small pelagic **
+## Longfin squid - small pelagic **
+
+check_species_class <- catch %>%
+  dplyr::filter(str_detect(Descript, 'shrimp'))
+unique(check_species_class$CommonName)
+
+
+check_species_class <- catch %>%
+  dplyr::filter(str_detect(Descript, 'krill'))
+unique(check_species_class$CommonName)
+
+```
+
+
+Reclassify the Watson species classes to intermediate supplementary classes:
+```{r, eval = FALSE}
+catch_species_class_int <- catch_species_class %>%
+  dplyr::mutate(species_class_int =
+                  case_when(
+                    str_detect(Descript, "demersal mollusc|demersal <30 cm|bathydemersal <30 cm|shrimp|benthopelagic <30 cm") ~ "Small demersal",
+                    str_detect(Descript, "shark >=90 cm|bathydemersal >= 90cm|demersal >=90 cm|benthopelagic >=90 cm|flatfish >=90 cm|rays >=90 cm") ~ "Large demersal",
+                    str_detect(Descript, "demersal 30 - 90 cm|flatfish <90 cm|rays <90 cm|shark <90 cm|benthopelagic 30 - 90 cm|bathydemersal 30 - 90 cm") ~ "Medium demersal",
+                    str_detect(Descript, "lobsters crab") ~ "Benthic",
+                    str_detect(Descript, "pelagic >=90 cm|bathypelagic >=90 cm") ~ "Large pelagic",
+                    str_detect(Descript, "pelagic 30 - 90 cm|bathypelagic 30 - 90 cm") ~ "Medium pelagic",
+                    str_detect(Descript, "pelagic <30 cm|bathypelagic <30 cm|krill") ~ "Small pelagic",
+                    str_detect(Descript, "reef-associated >=90 cm") ~ "Large reef-associated",
+                    str_detect(Descript, "reef-associated 30 - 90 cm") ~ "Medium reef-associated",
+                    str_detect(Descript, "reef-associated <30 cm") ~ "Small reef-associated",
+                    str_detect(CommonName, "uttlefish") & str_detect(Descript, "cephalopods") ~ "Small reef-associated",
+                    str_detect(CommonName, "Horned") & str_detect(Descript, "cephalopods") ~ "Medium reef-associated",
+                    str_detect(CommonName, "Common octopus|Octopuses") & str_detect(Descript, "cephalopods") ~ "Large reef-associated", 
+                    str_detect(CommonName, "Argentine shortfin squid|Patagonian squid|Northern shortfin squid|California market squid|Cape Hope squid|Longfin squid") & str_detect(Descript, "cephalopods") ~ "Small pelagic", 
+                    str_detect(CommonName, "Jumbo flying squid|Broadtail shortfin squid|European flying squid|Japanese flying squid|Wellington flying squid|Neon flying squid|Veined Squid|Squids|Common squids|Cephalopods") & str_detect(Descript, "cephalopods") ~ "Medium pelagic", 
+                    str_detect(CommonName, "Arrow squids") & str_detect(Descript, "cephalopods") ~ "Large pelagic"
+                  ))
+
+## take a look to see if we caught all the cases... we did
+catch_species_class_summary <- catch_species_class_int %>%
+  group_by(species_class_int) %>%
+  summarise(catch_sum = sum(catch),
+            n_obs = n())
+
+```
+
+
+Reclassify the Watson species classes to final raster classes:
+
+```{r, eval = FALSE}
+catch_species_class_fin <- catch_species_class_int %>%
+  dplyr::mutate(species_class_fin =
+                  case_when(
+                    str_detect(species_class_int, "demersal") ~ "Demersal",
+                    str_detect(species_class_int, "reef-associated") ~ "Reef-associated",
+                    TRUE  ~ species_class_int
+                  ))
+
+
+test <- catch_species_class_fin %>%
+  filter(CommonName == "Marine fishes")
+
+## take a look to see if we caught all the cases... we did
+catch_species_class_summary <- catch_species_class_fin %>%
+  filter(forage_fish == 0) %>%
+  group_by(species_class_fin, CommonName) %>%
+  summarise(catch_sum = sum(catch), 
+            n_obs = n())  %>%
+  ungroup() %>%
+  group_by(species_class_fin) %>%
+  summarise(n = n())
+sum(catch_species_class_summary$catch_sum) # 72172118
+
+catch_species_class_summary_2 <- catch_species_class_fin %>%
+  filter(forage_fish == 1) %>%
+  group_by(species_class_fin) %>%
+  summarise(catch_sum = sum(catch), 
+            n_obs = n())
+sum(catch_species_class_summary_2$catch_sum) # 39054068
+
+```
+
+
+Join the the two datasets together first by species and gear type
+```{r, eval = FALSE}
+
+
+## First check to see that all emissions intensity species are in the watson data
+setdiff(emissions_intensity_df$scientific_name, catch_species_class_fin$TaxonName)
+#[1] "Portunus armatus"   "Penaeus esculentus" .. we need to fix these if possible
+
+test <- catch_species_class_fin %>%
+  filter(str_detect(TaxonName, "Portunus|Penaeus"))
+
+# "Portunus armatus" is the same as Portunus pelagicus in the watson data... 
+# Penaeus esculentus" is the same as Penaeus... 
+# we need to fix these in the emissions intensity data 
+
+emissions_intensity_df <- emissions_intensity_df %>%
+  mutate(scientific_name =
+           case_when(
+             scientific_name == "Portunus armatus" ~ "Portunus pelagicus",
+             scientific_name == "Penaeus esculentus" ~ "Penaeus",
+             TRUE ~ scientific_name
+           ))
+
+setdiff(emissions_intensity_df$scientific_name, catch_species_class_fin$TaxonName)
+#character(0) ... what we want
+
+# Now we can join together 
+catch_watson_parker <- catch_species_class_fin %>%
+  left_join(emissions_intensity_df, by = c("TaxonName" = "scientific_name", "ParkerGearName" = "gear"))
+
+summary(catch_watson_parker)
+
+6685211/9894741 ## around 67% of the observations will need to be gapfilled for emissions intensity - 2017
+
+## Write to Aurora
+write.csv(catch_watson_parker, file.path(ghg_folder, "watson_v5_emissions/catch_watson_parker_matched_2017.csv"), row.names = FALSE)
+```
+
+
+I need to save a file with catch by country and species class for the final paper: 
+```{r}
+
+explore <- read_csv(file.path(ghg_folder, "watson_v5_emissions/catch_watson_parker_matched_2017.csv"))
+
+explore_df <- explore %>%
+  dplyr::select(Cell, CNumber, species_class_fin, Descript, TaxonName, common_name, ReportedIND, IUUIND, DiscardsIND, ReportedNIND, IUUNIND, DiscardsNIND, catch, forage_fish)
+
+iso3c_rgns <- read_csv(file.path("fisheries/marine/ghg/data/Watson_rgns_with_iso3c.csv"))
+
+explore_df_rgns <- explore_df %>%
+  left_join(iso3c_rgns, by = c("CNumber" = "Cnumber")) %>%
+  dplyr::mutate(species_class_fofm = ifelse(forage_fish == 1, "forage_fish", species_class_fin)) 
+
+unique(explore_df_rgns$species_class_fofm)
+
+
+final_df <- explore_df_rgns %>%
+  group_by(country_corrected, iso3c, species_class_fofm) %>%
+  summarise(catch_tonnes = sum(catch, na.rm = TRUE)) %>%
+  rename("species_class" = "species_class_fofm")
+
+sum(final_df$catch_tonnes) # 111226186
+
+
+write.csv(final_df, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/catch_by_rgn_spp_class.csv"), row.names = FALSE)
+
+
+SI_table <- final_df %>%
+  group_by(species_class) %>%
+  summarise(catch_tonnes = sum(catch_tonnes, na.rm = TRUE))
+
+SI_table_2 <- explore_df_rgns %>%
+  group_by(species_class_fofm, common_name) %>%
+  summarise(n())
+
+reef <- explore_df_rgns %>%
+  dplyr::filter(species_class_fofm == "Reef-associated") %>%
+  group_by(TaxonName, Descript) %>%
+  summarise(catch_tonnes = sum(catch, na.rm = TRUE))
+
+small_pel <- explore_df_rgns %>%
+  dplyr::filter(species_class_fofm == "Small pelagic") %>%
+  group_by(TaxonName, Descript) %>%
+  summarise(catch_tonnes = sum(catch, na.rm = TRUE))
+
+med_pel <- explore_df_rgns %>%
+  dplyr::filter(species_class_fofm == "Medium pelagic") %>%
+  group_by(TaxonName, Descript) %>%
+  summarise(catch_tonnes = sum(catch, na.rm = TRUE))
+```
+
+```{r}
+explore <- read_csv(file.path(ghg_folder, "watson_v5_emissions/catch_watson_parker_matched_2017.csv"))
+
+explore_df_rgns <- explore %>%
+  left_join(iso3c_rgns, by = c("CNumber" = "Cnumber")) %>%
+  dplyr::mutate(species_class_fofm = ifelse(forage_fish == 1, "forage_fish", species_class_fin)) %>%
+  rename("species_class_final" = "species_class_fofm") %>%
+  dplyr::select(Cell, CNumber, "iso3c" = "iso3c.y", species_class_final, Descript, TaxonName, common_name, ISSCAAP, ISSCAAPName, ReportedIND, IUUIND, DiscardsIND, ReportedNIND, IUUNIND, DiscardsNIND, catch)
+
+unique(explore_df_rgns$species_class_final)
+
+sum(explore_df_rgns$catch) # 111226186
+
+write.csv(explore_df_rgns, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/catch_for_juliette.csv"), row.names = FALSE)
+```
+
+
+
+

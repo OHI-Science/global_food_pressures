@@ -1,0 +1,245 @@
+iso3c,ID_0,Country
+AFG,1,Afghanistan
+CYP,61,Cyprus
+ALA,3,Åland
+ALB,4,Albania
+DZA,5,Algeria
+ASM,6,American Samoa
+AND,7,Andorra
+AGO,8,Angola
+AIA,9,Anguilla
+ATG,11,Antigua and Barbuda
+ARG,12,Argentina
+ARM,13,Armenia
+ABW,14,Aruba
+AUS,15,Australia
+AUT,16,Austria
+AZE,17,Azerbaijan
+BHS,18,Bahamas
+BHR,19,Bahrain
+BGD,20,Bangladesh
+BRB,21,Barbados
+BLR,22,Belarus
+BEL,23,Belgium
+BLZ,24,Belize
+BEN,25,Benin
+BMU,26,Bermuda
+BTN,27,Bhutan
+BOL,28,Bolivia
+BES,29,"Bonaire, Sint Eustatius and Saba"
+BIH,30,Bosnia and Herzegovina
+BWA,31,Botswana
+BRA,33,Brazil
+IOT,34,British Indian Ocean Territory
+VGB,35,British Virgin Islands
+BRN,36,Brunei
+BGR,37,Bulgaria
+BFA,38,Burkina Faso
+BDI,39,Burundi
+KHM,40,Cambodia
+CMR,41,Cameroon
+CAN,42,Canada
+CPV,43,Cape Verde
+CYM,45,Cayman Islands
+CAF,46,Central African Republic
+TCD,47,Chad
+CHL,48,Chile
+CHN,49,China
+CXR,50,Christmas Island
+CCK,52,Cocos Islands
+COL,53,Colombia
+COM,54,Comoros
+COK,55,Cook Islands
+CRI,56,Costa Rica
+CIV,57,Côte d'Ivoire
+HRV,58,Croatia
+CUB,59,Cuba
+CUW,60,Curaçao
+CZE,62,Czech Republic
+COD,301,Democratic Republic of the Congo
+DNK,64,Denmark
+DJI,65,Djibouti
+DOM,67,Dominican Republic
+DMA,66,Dominica
+ECU,68,Ecuador
+EGY,69,Egypt
+SLV,70,El Salvador
+GNQ,71,Equatorial Guinea
+ERI,72,Eritrea
+EST,73,Estonia
+ETH,74,Ethiopia
+FLK,75,Falkland Islands
+FRO,76,Faroe Islands
+FJI,77,Fiji
+FIN,78,Finland
+FRA,79,France
+GUF,80,French Guiana
+PYF,81,French Polynesia
+GAB,83,Gabon
+GMB,84,Gambia
+GEO,85,Georgia
+DEU,86,Germany
+GHA,87,Ghana
+GIB,88,Gibraltar
+GRC,89,Greece
+GRL,90,Greenland
+GRD,91,Grenada
+GLP,92,Guadeloupe
+GUM,93,Guam
+GTM,94,Guatemala
+GGY,95,Guernsey
+GNB,97,Guinea-Bissau
+GIN,96,Guinea
+GUY,98,Guyana
+HTI,99,Haiti
+HND,101,Honduras
+HKG,102,Hong Kong
+HUN,103,Hungary
+ISL,104,Iceland
+IND,105,India
+IDN,106,Indonesia
+IRN,107,Iran
+IRQ,108,Iraq
+IRL,109,Ireland
+IMN,110,Isle of Man
+ISR,111,Israel
+ITA,112,Italy
+JAM,113,Jamaica
+JPN,114,Japan
+JEY,115,Jersey
+JOR,116,Jordan
+KAZ,117,Kazakhstan
+KEN,118,Kenya
+KIR,119,Kiribati
+XKO,120,Kosovo
+KWT,121,Kuwait
+KGZ,122,Kyrgyzstan
+LAO,123,Laos
+LVA,124,Latvia
+LBN,125,Lebanon
+LSO,126,Lesotho
+LBR,127,Liberia
+LBY,128,Libya
+LIE,129,Liechtenstein
+LTU,130,Lithuania
+LUX,131,Luxembourg
+MAC,132,Macao
+MKD,133,Macedonia
+MDG,134,Madagascar
+MWI,135,Malawi
+MYS,136,Malaysia
+MDV,137,Maldives
+MLI,138,Mali
+MLT,139,Malta
+MHL,140,Marshall Islands
+MTQ,141,Martinique
+MRT,142,Mauritania
+MUS,143,Mauritius
+MYT,144,Mayotte
+MEX,145,Mexico
+FSM,146,Micronesia
+MDA,147,Moldova
+MCO,148,Monaco
+MNG,149,Mongolia
+MNE,150,Montenegro
+MSR,151,Montserrat
+MAR,152,Morocco
+MOZ,153,Mozambique
+MMR,154,Myanmar
+NAM,155,Namibia
+NRU,156,Nauru
+NPL,157,Nepal
+NLD,158,Netherlands
+NCL,159,New Caledonia
+NZL,160,New Zealand
+NIC,161,Nicaragua
+NER,162,Niger
+NGA,163,Nigeria
+NIU,164,Niue
+NFK,165,Norfolk Island
+PRK,166,North Korea
+MNP,168,Northern Mariana Islands
+NOR,169,Norway
+OMN,170,Oman
+PAK,171,Pakistan
+PLW,172,Palau
+PSE,173,Palestina
+PAN,174,Panama
+PNG,175,Papua New Guinea
+PRY,177,Paraguay
+PER,178,Peru
+PHL,179,Philippines
+PCN,180,Pitcairn Islands
+POL,181,Poland
+PRT,182,Portugal
+XMI,300,Madeira Island
+PRI,183,Puerto Rico
+QAT,184,Qatar
+COG,185,Republic of Congo
+REU,186,Reunion
+ROU,187,Romania
+RUS,188,Russia
+RWA,189,Rwanda
+BLM,190,Saint-Barthélemy
+MAF,191,Saint-Martin
+SHN,192,Saint Helena
+KNA,193,Saint Kitts and Nevis
+LCA,194,Saint Lucia
+SPM,195,Saint Pierre and Miquelon
+VCT,196,Saint Vincent and the Grenadines
+WSM,197,Samoa
+SMR,198,San Marino
+STP,199,São Tomé and Príncipe
+SAU,200,Saudi Arabia
+SEN,201,Senegal
+SRB,202,Serbia
+SYC,203,Seychelles
+SLE,204,Sierra Leone
+SGP,205,Singapore
+SXM,206,Sint Maarten
+SVK,207,Slovakia
+SVN,208,Slovenia
+SLB,209,Solomon Islands
+SOM,210,Somalia
+ZAF,211,South Africa
+KOR,213,South Korea
+SSD,214,South Sudan
+ESP,215,Spain
+LKA,217,Sri Lanka
+SDN,218,Sudan
+SUR,219,Suriname
+SJM,220,Svalbard and Jan Mayen
+SWZ,221,Swaziland
+SWE,222,Sweden
+CHE,223,Switzerland
+SYR,224,Syria
+TWN,225,Taiwan
+TJK,226,Tajikistan
+TZA,227,Tanzania
+THA,228,Thailand
+TLS,229,Timor-Leste
+TGO,230,Togo
+TKL,231,Tokelau
+TON,232,Tonga
+TTO,233,Trinidad and Tobago
+TUN,234,Tunisia
+TUR,235,Turkey
+TKM,236,Turkmenistan
+TCA,237,Turks and Caicos Islands
+TUV,238,Tuvalu
+UGA,239,Uganda
+UKR,240,Ukraine
+ARE,241,United Arab Emirates
+GBR,242,United Kingdom
+USA,243,United States
+URY,245,Uruguay
+UZB,246,Uzbekistan
+VUT,247,Vanuatu
+VEN,249,Venezuela
+VNM,250,Vietnam
+VIR,251,"Virgin Islands, U.S."
+WLF,252,Wallis and Futuna
+ESH,253,Western Sahara
+YEM,254,Yemen
+ZMB,255,Zambia
+ZWE,256,Zimbabwe

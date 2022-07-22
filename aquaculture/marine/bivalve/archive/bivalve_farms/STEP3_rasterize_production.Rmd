@@ -1,0 +1,200 @@
+---
+title: "Rasterizing prodution per each region"
+author: "Gage Clawson (USCB, NCEAS, OHI)"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+```{r}
+
+library(here)
+library(dplyr)
+library(sf)
+library(raster)
+library(mapview)
+
+source(here::here("_spatial/template_raster.R"))
+
+
+```
+
+
+# Global regions
+
+```{r}
+
+# this file includes ocean regions:
+gadm <- raster("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/gadm36mol_pyfill_10km.tif")
+
+gadm_latlon <- raster::projectRaster(gadm, food_raster, method="ngb", over=TRUE)
+plot(gadm_latlon)
+
+gadm_codes <- read.csv("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/gadm_reg_codes.csv") %>% 
+  mutate(reg_id = as.numeric(reg_id))
+
+```
+
+# read in points and converted to spatial dataframe
+```{r}
+
+farms <- read.csv(here::here("aquaculture/marine/bivalve/bivalve_farms/data/global_bivalve_farm_lat_lon.csv"))
+
+farms_sf <-  st_as_sf(farms, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_sf)
+```
+
+
+# determine subregions where points are located
+
+```{r}
+
+farms_sf$reg_id <- raster::extract(gadm_latlon, farms_sf) 
+
+farms_sf <- farms_sf %>%
+  left_join(gadm_codes, by="reg_id") %>%
+  dplyr::mutate(NAME_1 = as.character(NAME_1))
+
+farms_sf$check <-  paste(farms_sf$iso3c, farms_sf$GID_0, sep=":")
+table(farms_sf$check)
+
+
+## read in those needed to check 
+ireland <- read_csv(here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_IRL_BGR_NOR_NLD_ITA_GRC.csv")) %>%
+  dplyr::filter(iso3c == "IRL")
+
+britain <- read_csv(here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/ASC_bivalve_farm_lat_lon.csv")) %>%
+  dplyr::filter(iso3c == "GBR")
+
+taiwan <- read_csv(here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_twn.csv")) 
+
+## Need to be changed to this 
+# GBR:JEY - GBR
+# HRV:MNE - HRV
+# TWN:CHN - TWN
+# IRL:GBR - IRL
+# PRK:RUS - PRK
+# SVN:HRV - SVN
+# SVN:ITA - SVN
+# HKG:CHN - HKG
+
+
+# some annoying mismatches due to raster resolution. Fix these
+
+unique(farms_sf$NAME_1)
+
+farms_sf_correct <- farms_sf %>%
+  mutate(GID_0 = as.character(GID_0)) %>%
+  mutate(NAME_0 = as.character(NAME_0)) %>%
+  mutate(NAME_1 = as.character(NAME_1)) %>%
+  mutate(GID_0 = ifelse(check %in% "GBR:JEY", "GBR", GID_0)) %>%
+  mutate(NAME_0 = ifelse(check %in% "GBR:JEY", "United Kingdom", NAME_0)) %>%
+  mutate(GID_0 = ifelse(check %in% "HRV:MNE", "HRV", GID_0)) %>%
+  mutate(NAME_0 = ifelse(check %in% "HRV:MNE", "Croatia", NAME_0)) %>%
+  mutate(GID_0 = ifelse(check %in% "TWN:CHN", "TWN", GID_0)) %>%
+  mutate(NAME_0 = ifelse(check %in% "TWN:CHN", "Taiwan", NAME_0)) %>%
+  mutate(GID_0 = ifelse(check %in% "IRL:GBR", "IRL", GID_0)) %>%
+  mutate(NAME_0 = ifelse(check %in% "IRL:GBR", "Ireland", NAME_0)) %>%
+  mutate(GID_0 = ifelse(check %in% "PRK:RUS", "PRK", GID_0)) %>%
+  mutate(NAME_0 = ifelse(check %in% "PRK:RUS", "North Korea", NAME_0)) %>%
+  mutate(GID_0 = ifelse(check %in% "SVN:HRV", "SVN", GID_0)) %>%
+  mutate(NAME_0 = ifelse(check %in% "SVN:HRV", "Slovenia", NAME_0)) %>%
+  mutate(GID_0 = ifelse(check %in% "SVN:ITA", "SVN", GID_0)) %>%
+  mutate(NAME_0 = ifelse(check %in% "SVN:ITA", "Slovenia", NAME_0)) %>%
+  mutate(GID_0 = ifelse(check %in% "HKG:CHN", "HKG", GID_0)) %>%
+  mutate(NAME_0 = ifelse(check %in% "HKG:CHN", "Hong Kong", NAME_0))
+
+farms_sf_correct$check <-  paste(farms_sf_correct$iso3c, farms_sf_correct$GID_0, sep=":")
+table(farms_sf_correct$check)
+
+```
+
+
+# FAO bivalve production data per country
+```{r}
+
+fao <- read.csv(here::here("aquaculture/marine/bivalve/bivalve_farms/data/fao_mariculture_bivalve.csv")) %>%
+  dplyr::filter(year == 2017) %>%
+  dplyr::select(iso3c, fao_tonnes_production)
+
+setdiff(fao$iso3c, farms_sf$iso3c)
+setdiff(farms_sf$iso3c, fao$iso3c)
+
+```
+
+
+# join country production to farms by iso3c
+
+```{r}
+
+farms_sf_correct <- farms_sf_correct %>%
+  left_join(fao, by="iso3c")
+
+summary(farms_sf_correct) # make sure no production NA values
+
+```
+
+
+# get areas with no regional production data and calculate production per farm
+
+```{r}
+
+## calculate farm production
+farms_prod <- farms_sf_correct %>%
+  group_by(NAME_0) %>%
+  add_tally() %>%
+  ungroup() %>%
+  mutate(tonnes_per_farm = fao_tonnes_production/n) %>%
+  dplyr::select(iso3c, tonnes_per_farm, geometry)
+
+```
+
+# combine and check it all matches ok
+
+```{r}
+
+test <- farms_prod %>%
+  dplyr::group_by(iso3c) %>%
+  dplyr::summarize(total_tonnes = sum(tonnes_per_farm, na.rm=TRUE)) %>%
+  left_join(fao, by = "iso3c") %>%
+  mutate(difference = fao_tonnes_production - total_tonnes)
+
+farms_sf_prod <- st_as_sf(farms_prod)
+
+## write the production data so that we can use it for the nutrient layer. 
+st_write(farms_sf_prod, "aquaculture/marine/bivalve/bivalve_nutrient/prod_data_by_cell_iso3c.shp")
+
+```
+
+## convert to raster, with the value of each cell equalling the sum tonnes per farm for all farms landing in cell.
+
+```{r}
+
+farms_sf <- st_as_sf(farms_prod)
+mapview(farms_sf)
+
+sum(farms_sf$tonnes_per_farm) # 17435623
+
+bivalve_raster_check <- rasterize(farms_sf, food_raster, field = "tonnes_per_farm", fun=sum)
+plot(log(bivalve_raster_check+1))
+cellStats(bivalve_raster_check, stat = "sum", na.rm = TRUE) # 17435623
+
+bivalve_raster <- rasterize(farms_sf, food_raster, field = "tonnes_per_farm", fun=sum, background=0)
+
+plot(log(bivalve_raster+1))
+
+bivalve_raster_df <- as.data.frame(bivalve_raster, xy=TRUE) %>%
+  dplyr::select(x,y, tonnes_production=layer)
+
+cellStats(bivalve_raster, stat = "sum") # 17435623
+sum(bivalve_raster_df$tonnes_production) # 17435623
+sum(farms_sf$tonnes_per_farm, na.rm = TRUE) # 17435623
+sum(fao$fao_tonnes_production) # 17435623
+
+write_csv(bivalve_raster_df, "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/bivalve/bivalve_farm.csv")
+
+```

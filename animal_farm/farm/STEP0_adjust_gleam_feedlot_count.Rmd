@@ -1,0 +1,67 @@
+---
+title: "Adjust cattle feedlot counts"
+author: "Juliette"
+date: "11/6/2020"
+output: html_document
+---
+
+
+Cattle feedlot counts as reported is total number of feedlot cows that have entered a feedlot. Since the total number of days on a lot varies by country and is less than a year, we need to adjust it to total number of feedlot cows on a lot at once for our method to work.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(countrycode)
+source(here("_workflow/common.R"))
+
+rum <- read_csv(here("animal_farm/farm/data/ruminants_GLEAMi_v2_unmodified.csv"))
+gleam_herd <- read_csv(here("animal_farm/disturbance/data/herd_GLEAMi.csv"))
+
+```
+
+```{r}
+
+feedlot <- gleam_herd %>% 
+  filter(orientation == "Feedlot") %>% 
+  mutate(variable = case_when(name == "Feedlots fattening period" ~ "days_on_lot",
+                             name == "Live weight of feedlot females at the end of the fattening period (Meat females feedlot)" ~ "kg_female_end",
+                             name == "Live weight of feedlot females starting the fattening period (Meat females feedlot)"~ "kg_female_start",
+                             name == "Live weight of feedlot males at the end of the fattening period (Meat males feedlot)" ~ "kg_male_end",
+                             name == "Live weight of feedlot males starting the fattening period (Meat males feedlot)" ~ "kg_male_start",
+                             name == "Number of animals entering feedlots" ~ "entering_count")) %>% 
+  select(iso3c, str_value, production_system, variable) %>% 
+  pivot_wider(names_from = variable, values_from = str_value) %>% 
+  filter(entering_count >0) %>% 
+  select(-production_system, - entering_count) %>% 
+  unique()
+
+write_csv(feedlot, here("animal_farm/farm/data/feedlot_stats.csv"))
+
+```
+
+```{r}
+
+feedlot_join <- feedlot %>% 
+  select(iso3c, days_on_lot) %>% 
+  mutate(Species = "Cattle",
+         Production_system = "Feedlot operations") %>% 
+  slice(rep(1:n(), each =7)) %>% 
+  mutate(Variable = rep(c("HERD: total number of animals",
+                        "HERD: adult females",
+                        "HERD: adult males",
+                        "HERD: replacement females",
+                        "HERD: replacement males",
+                        "HERD: fattening females",
+                        "HERD: fattening males"), times = 12)) 
+  
+rum_fix <- left_join(rum, feedlot_join) %>% 
+  mutate(Value = ifelse(!is.na(days_on_lot), Value*days_on_lot/365, Value)) %>% 
+  select(-days_on_lot)
+
+write_csv(rum_fix, here("animal_farm/farm/data/ruminants_GLEAMi_v2.csv"))
+
+```
+
+
+

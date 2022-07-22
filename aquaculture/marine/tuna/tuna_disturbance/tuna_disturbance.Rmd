@@ -1,0 +1,166 @@
+---
+title: "Tuna disturbance"
+author: "Gage Clawson (NCEAS, OHI, UCSB)"
+date: "12/29/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r read in libaries and paths}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(readr)
+library(tidyverse)
+library(raster)
+library(data.table)
+library(raster)
+library(rgdal)
+library(here)
+
+path_final <- "/home/shares/food-systems/Food_footprint/all_food_systems/datalayers"
+
+path_prep <- "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/tuna/"
+
+food_crs <- "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"
+
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+
+```
+
+Because the pacific, atlantic, and southern blue fin tuna are so similar, we will treat them the same in this analysis (i.e. same average weight, stocking density, cage volume, etc.). Although Croatia and Japan rear their tuna for 1 - 3 years, the rest of the countries only rear for 2 - 10 months. Because of this, we will make the assumption that tuna are only farmed for 1 year, and there is minimal loss. Meaning that the production reported from the FAO is the true live weight tonnes in each cage. 
+
+
+Assumptions:
+
+stocking density = 2 - 5 kg/m3 (from http://www.fao.org/3/a1290e/a1290e04.pdf): We will assume 3 kg/m3
+
+diameter = 50 - 120 m (from http://www.fao.org/fishery/culturedspecies/Thunnus_thynnus/en)
+
+depth = 25 - 35 m (from http://www.fao.org/fishery/culturedspecies/Thunnus_thynnus/en)
+
+To get the cage volume we will take the midpoint of diameter/2 and depth
+
+radius = 85/2 = 42.5 m
+depth = 30 m 
+
+volume = pi*42.5*42.5*30 = 170235.1 m3
+
+
+## Method 
+
+Establish the necessary parameters from above
+```{r parameters}
+# harvest_weight = 38.98
+
+stocking_density = 3
+cage_depth = 30
+radius = 42.5
+
+cage_volume = pi*radius**2*cage_depth
+
+```
+
+###Calculate the total number of fish in the water (occupancy)
+Read in production map
+
+```{r}
+production_raster <- rasterFromXYZ(read_csv(paste0(path_prep, "updated/tuna_farm_updated.csv")), crs = food_crs) 
+
+plot(production_raster)
+cellStats(production_raster, stat = "sum") # 37072.56
+
+fao_tuna <- read_csv("aquaculture/marine/tuna/data/fao_mariculture_tuna.csv") %>%
+  filter(year == 2017)
+sum(fao_tuna$fao_tonnes_production) # 37072.56
+```
+
+```{r calculate tuna occupancy}
+# Assume all kg are live weight 
+# as live weight of tuna, in kg
+tuna_live_kg  <- production_raster*1000
+tuna_live_tonnes  <- production_raster
+
+writeRaster(tuna_live_tonnes, file.path(path_prep, "tuna_occupancy/tuna_live_tonnes.tif"), format = "GTiff", overwrite = TRUE)
+```
+
+
+### Calculate the total area (from an aerial view) used for tuna aquaculture
+
+First we determine how many cages are required given cage dimensions, stocking densities, and kg living fish. 
+
+We used FAO data to estimate ~510705 kg tuna (harvest weight) per cage.
+
+This is based on ~170000 m3 cage that we assume to be circular with a depth of 30 m.  We assume a stocking density of 3 kg/m3.
+
+```{r}
+
+kg_per_cage <- cage_volume*stocking_density
+
+```
+
+Given the kg of tuna per cell we determine the number of cages needed as:
+
+kg_tuna/510705
+
+```{r}
+
+cages <- ceiling(tuna_live_kg/kg_per_cage)
+cellStats(cages, "sum") # 151 cages... we estimate 169 farms in our mapping... so not too bad
+```
+
+2. We the determine how much surface area the cages disturb including the inner cage area, a 5 meter buffer around the cage, and area for infrastructure.
+
+```{r}
+buffer <- 5
+infrastructure <- 1.5 #50% of area to infrastructure
+
+cage_area <- cage_volume/cage_depth
+cage_radius <- sqrt(cage_area/pi)
+cage_radius_buffer <- cage_radius + buffer
+cage_area_with_buffer <- pi*cage_radius_buffer^2
+cage_disturbance_m2 <- cage_area_with_buffer*infrastructure
+
+total_disturbance_km2 <- cages * cage_disturbance_m2/1000000
+cellStats(total_disturbance_km2, "sum")
+
+total_disturbance_prop <- total_disturbance_km2/raster::area(total_disturbance_km2)
+plot(total_disturbance_prop)
+
+tuna_aquaculture_area_df <- as.data.frame(total_disturbance_prop, xy=TRUE) %>% 
+  dplyr::rename(tuna_disturbance_prop = layer )
+
+write_csv(tuna_aquaculture_area_df, file.path(path_prep, "tuna_disturbance_prop.csv"))
+
+tuna_aquaculture_area_df_km2 <- as.data.frame(total_disturbance_km2, xy = TRUE) %>%
+  dplyr::rename(tuna_disturbance_km2 = layer)
+
+write_csv(tuna_aquaculture_area_df_km2, file.path(path_prep, "tuna_disturbance_km2.csv"))
+
+
+## save to datalayers folder with the correct naming conventions: 
+final_layer_dist <- read_csv(file.path(path_prep, "tuna_disturbance_km2.csv"))
+
+final_rast <- rasterFromXYZ(final_layer_dist, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+cellStats(final_rast, "sum") # 1.605481
+final_rast
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 1.605481
+final_rast
+
+writeRaster(final_rast, file.path(path_final, "marine_tuna_aquaculture_meat_disturbance.tif"), overwrite = TRUE)
+```
+
+

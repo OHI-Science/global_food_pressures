@@ -1,0 +1,177 @@
+---
+title: "Tuna: Aquaculture GHG"
+author: "Gage Clawson (NCEAS, UCSB, OHI)"
+date: "12/21/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Script Description
+
+This markdown calculates the GHG emissions from general tuna aquaculture. 
+
+# Data information
+We used [Seafood Carbon Emissions Tool data](http://seafoodco2.dal.ca/) to extract ghg emissions associated with carcass weight of tuna from tuna farming.
+
+One factor that we added was aquatic N<sub>2</sub>O emissions as discussed in [Hu *et al*., 2012](https://pubs.acs.org/doi/full/10.1021/es300110x) and [MacLoid *et al*., 2019](http://www.fao.org/3/ca7130en/ca7130en.pdf).
+
+
+# Methods 
+ - Take midpoint of ghg low and ghg high from [seafood carbon emissions tool data](http://seafoodco2.dal.ca/) for all tuna species
+ - Multiply by % energy (to cut out the feed emissions)
+ - Add the N20 value from the MacLeod paper to the emissions intensity estimate we got for tuna
+ - Multiply emissions intensity estimate by tonnes of production in each cell
+ 
+ 
+# Preamble
+```{r setup, include = FALSE}
+# getting packages we want
+library(tidyverse)
+library(here)
+library(raster)
+library(sf)
+library(janitor)
+
+# Raster templates
+source(here("_spatial/template_raster.R"))
+
+# File paths
+raw   <- "/home/shares/food-systems/Food_footprint/_raw_data/"
+prep_tuna <- "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/tuna"
+prep <- "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/" 
+path_final <- "/home/shares/food-systems/Food_footprint/all_food_systems/datalayers" 
+
+# Import master_rgns xy df
+master_rgns <- read_csv(here("_spatial/_output/food_rgns.csv"))
+```  
+ 
+## Import
+```{r}
+## Read in farmed emissions data 
+
+farmed_emissions <- read_csv(file.path("/home/shares/food-systems/Food_footprint/_raw_data/seafood_carbon_emmisions_tool/d2020/Specie_List_-_11_24_2020,_11_39_21_AM_Farmed.csv")) %>%
+  clean_names()
+
+tuna_production <- read_csv(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/tuna/updated/tuna_farm_updated.csv"))
+
+fao_tuna_spp <- read_csv(here("aquaculture/marine/tuna/data/fao_mariculture_tuna_taxa_production.csv"))
+sum(fao_tuna_spp$fao_tonnes_production) # 37072.56
+```
+ 
+ 
+# Wrangle
+
+```{r}
+unique(sort(fao_tuna_spp$species))
+# [1] "Atlantic bluefin tuna" "Pacific bluefin tuna"  "Southern bluefin tuna"
+
+unique(sort(farmed_emissions$common_name))
+## we only want tunas that are in fao
+ #  Emissions spp   -   FAO spp
+ ###############################################
+# "Atlantic bluefin tuna" - "Atlantic bluefin tuna"
+# "Pacific bluefin tuna" - Pacific bluefin tuna
+# "Southern bluefin tuna" - Southern bluefin tuna
+
+## Filter for the appropriate species... also filter for "Marine net pen"... since we don't want any inland aquaculture
+tuna_emissions_spp <- farmed_emissions %>%
+  dplyr::filter(common_name %in% c("Atlantic bluefin tuna", "Pacific bluefin tuna", "Southern bluefin tuna")) 
+
+
+## multiply the ghg low and ghg high by the percent energy
+## take the mean of new ghg low and high (the 25th and 75th quantiles)
+tuna_emissions <- tuna_emissions_spp %>%
+  dplyr::mutate(ghg_low_energy = ghg_low*(percent_energy/100),
+                ghg_high_energy = ghg_high*(percent_energy/100)) %>%
+  rowwise() %>%
+  dplyr::mutate(ghg_kgCO2_kg_fish_mean = mean(c(ghg_low_energy, ghg_high_energy))) 
+
+ghg_kgCO2_kg_fish <- mean(tuna_emissions$ghg_kgCO2_kg_fish_mean)
+
+## now multiply by the percent of that which is energy emissions (100%)
+ghg_energy_kgCO2_kg_fish <- ghg_kgCO2_kg_fish # *1 ##   0.172 kg CO2eq/ kg fish (live/carcass weight, ratioed)
+
+# Adding Aquatic N2O
+# From MacLeod et al. 
+# "The amount of N2O per species-group was determined by multiplying the
+# production by the N2O emission factor per kg of production (Hu et al., 2012), i.e.
+# 1.69 gN2O-N per kg of production, or 0.791 kgCO2e/kgLW production. This equates
+# to a conversion rate of N to N2O-N of 1.8 percent, which is higher that the 0.71
+# percent used in Henriksson et al. (2014a). "
+
+# 0.791 kgCO2e/kgLW production 
+ghg_total_kgCO2_kg_fish <- 0.791 + ghg_energy_kgCO2_kg_fish ## 0.963
+
+## convert to kgco2/tfish
+GHG_kgCO2e_tfish <- ghg_total_kgCO2_kg_fish/0.001
+
+## convert to MTco2e/tfish
+GHG_MTCO2e_tfish <- GHG_kgCO2e_tfish/1000
+
+
+tuna_ghg <- tuna_production %>%
+  dplyr::mutate(tuna_ghg_tonnes = GHG_MTCO2e_tfish*tonnes_production) %>%
+  dplyr::select(x,y, tuna_ghg_tonnes)
+
+sum(tuna_ghg$tuna_ghg_tonnes) # 35700.88
+
+write.csv(tuna_ghg, file.path(prep_tuna, "tuna_ghg.csv"))
+
+
+## Now multiply this by our production raster
+tuna_production_raster <- rasterFromXYZ(tuna_production)
+plot(log(tuna_production_raster + 1))
+cellStats(tuna_production_raster, "sum") # 37072.56
+
+ghg_em <- tuna_production_raster*GHG_MTCO2e_tfish
+plot(log(ghg_em + 1))
+cellStats(ghg_em, "sum") # 35700.88
+ghg_em
+
+#check
+37072.56*GHG_MTCO2e_tfish # 35700.88
+# it worked
+
+## Transform CRS to be appropriate
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+
+crs(ghg_em) <- crs(food_raster)
+ghg_em
+
+ghg_em_final <- projectRaster(ghg_em, food_raster, method = "ngb")
+plot(log(ghg_em_final+1))
+cellStats(ghg_em_final, "sum") # 35700.88 
+ghg_em_final
+
+
+## Save the raster to datalayers folder
+writeRaster(ghg_em_final, file.path(path_final, "marine_tuna_aquaculture_meat_ghg.tif"), overwrite = TRUE)
+
+
+```
+
+Datacheck: 
+
+```{r}
+tuna_production <- read_csv(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/tuna/tuna_farm.csv"))
+
+## sum production
+sum(tuna_production$tonnes_production) # 37072.56
+
+# now multiply that production by the ghg intensity calculated above: 
+ 
+37072.56*0.963 # 35700.88
+
+
+## now check against the final ghg raster for bivalves 
+tuna_ghg <- raster(file.path(path_final, "marine_tuna_aquaculture_meat_ghg.tif"))
+cellStats(tuna_ghg, "sum") # 35700.88 matches perfectly
+
+
+## check our emissions against that of macleod et al... 
+
+## tuna arent specifically included in macleod et al... so we will just compare to marine fish general. And will only look at the emissions intensity
+
+# Their emissions intensity appears to be a little less than 1 kgco2/LW for on farm energy and N20, which is the only ones we include. Our EI is ~0.963, so it it actually really close, and seems reasonable. 
+```

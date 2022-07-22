@@ -1,0 +1,188 @@
+---
+title: "Calculate protien and calories for aquaculture"
+author: "Juliette"
+date: "3/5/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+'%!in%' <- function(x,y)!('%in%'(x,y))
+
+```
+
+Wrangle protein and calories conversions
+```{r}
+
+cf_fish_raw <- read_csv(here::here("_efficiency", "data", "fao_prod_weight_to_live_fish.csv"))
+cf_moll_raw <- read_csv(here::here("_efficiency", "data", "fao_prod_weight_to_live_moll_crust.csv"))
+
+```
+
+
+```{r}
+mariculture <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/production_extracted_final.csv") %>%
+ # filter(!(aq_group %in% "bivalves")) %>%
+  mutate(aq_group = ifelse(aq_group=="marine_fish_general", "marine-fish-general", aq_group),
+         aq_group = ifelse(aq_group=="salmonids", "salmon", aq_group),
+         aq_group = ifelse(aq_group=="shrimps_prawns", "shrimp", aq_group)) %>%
+  select(iso3c, species = aq_group, tonnes=total_tonnes) %>% 
+  mutate(category1_production = paste(species, "_meat", sep = ""),
+         category2_production = "mariculture") 
+
+cats <- unique(mariculture$category1_production)
+```
+
+Create an aquaculture specific CF df
+```{r}
+
+##fish
+salmon_cf <- cf_fish_raw %>% 
+  filter(type == "salmon",
+         presentation == "whole") %>% 
+  select(type, gutted_head_on = 'gutted, head on') %>% 
+  mutate(cf = 1/gutted_head_on) %>% 
+  unique() %>% 
+  select(cf) %>% 
+  mutate(category1_production = "salmon_meat")
+
+tuna_cf <- cf_fish_raw %>% 
+  filter(type == "tunas") %>% 
+  select(type, gutted_head_on = 'gutted, head on') %>% 
+  mutate(cf = 1/gutted_head_on) %>% 
+  unique() %>% 
+  select(cf) %>% 
+  mutate(category1_production = "tuna_meat")
+
+general_cf <- cf_fish_raw %>% 
+  filter(presentation == "whole" | is.na(presentation)) %>% 
+  select(type, gutted_head_on = 'gutted, head on') %>% 
+  mutate(cf = 1/gutted_head_on) %>% 
+  unique() %>% 
+  dplyr::summarise(cf = mean(cf, na.rm = TRUE)) %>% 
+  mutate(category1_production = "marine-fish-general_meat")
+
+##mollusks and crustaceans
+bivalves_cf <- cf_moll_raw %>% 
+  filter(type %in% c("oysters", "clams", "scallop", "mussles"),
+         presentation == "meat") %>% 
+  dplyr::summarise(indicative_cf = mean(indicative_cf)) %>% 
+  mutate(cf = 1/indicative_cf,
+         category1_production = "bivalve_meat") %>% 
+  select(-indicative_cf)
+
+shrimp_cf <- cf_moll_raw %>% 
+  filter(Descript == "shrimp",
+         presentation == "meat") %>% 
+  mutate(cf = 1/indicative_cf,
+         category1_production = "shrimp_meat") %>% 
+  select(category1_production, cf ) %>% 
+  unique()
+
+crustaceans_cf <- cf_moll_raw %>% 
+  filter(Descript == "lobsters crab",
+         presentation == "meat") %>% 
+   dplyr::summarise(indicative_cf = mean(indicative_cf)) %>% 
+  mutate(cf = 1/indicative_cf,
+         category1_production = "crustaceans_meat") %>% 
+  select(-indicative_cf)
+
+```
+
+Combine and apply
+
+```{r}
+
+aquculture_cfs <- rbind(salmon_cf, tuna_cf, general_cf, bivalves_cf, shrimp_cf, crustaceans_cf)
+
+mariculture_edible <- left_join(mariculture, aquculture_cfs) %>% 
+  mutate(edible_tonnes = tonnes*cf)
+```
+
+Wrangle the calorie and protein data for aquaculture
+Note: the calories are in g protein/100 g of fish, so we need to do a calc to go to g protein/tonne of fish and then tonnes protein/tonne fish
+```{r}
+genus_compiled_fisheries_general <- read_csv(here("_efficiency/data/genus_compiled_fisheries_general.csv"))
+
+##fish
+salmon_nut <- genus_compiled_fisheries_general %>% 
+  filter(general == "salmon") %>% 
+  dplyr::summarise(calorie_mean = mean(Calories, na.rm = TRUE),
+                   protein_mean = mean(Protein, na.rm = TRUE)) %>% 
+  mutate(category1_production = "salmon_meat",
+         calorie_cf = (calorie_mean*10000)/1000000,
+         protein_cf = (protein_mean*10000/1000000)) %>% 
+  select(category1_production, calorie_cf, protein_cf)
+
+tuna_nut <- genus_compiled_fisheries_general %>% 
+  filter(general == "tuna",
+         FCT_FoodName != "Tuna, Skipjackkk or Yellow  Fin, canned  in water, drained") %>% 
+  dplyr::summarise(calorie_mean = mean(Calories, na.rm = TRUE),
+                   protein_mean = mean(Protein, na.rm = TRUE)) %>% 
+  mutate(category1_production = "tuna_meat",
+         calorie_cf = (calorie_mean*10000)/1000000,
+         protein_cf = (protein_mean*10000)/1000000) %>% 
+  select(category1_production, calorie_cf, protein_cf)
+
+general_nut <- genus_compiled_fisheries_general %>% 
+  filter(GENuS_FoodName %in% c( "Demersal Fish", "Pelagic Fish", "Marine Fish; Other")) %>% 
+  dplyr::summarise(calorie_mean = mean(Calories, na.rm = TRUE),
+                   protein_mean = mean(Protein, na.rm = TRUE)) %>% 
+  mutate(category1_production = "marine-fish-general_meat",
+         calorie_cf = (calorie_mean*10000)/1000000,
+         protein_cf = (protein_mean*10000)/1000000) %>% 
+  select(category1_production, calorie_cf, protein_cf)
+
+##mollusks and crustaceans
+bivalves_nut <- genus_compiled_fisheries_general %>% 
+  filter(general %in% c("clam", "cockle", "mussel", "oyster", "scallop")) %>% 
+  dplyr::summarise(calorie_mean = mean(Calories, na.rm = TRUE),
+                   protein_mean = mean(Protein, na.rm = TRUE)) %>% 
+  mutate(category1_production = "bivalve_meat",
+         calorie_cf = (calorie_mean*10000)/1000000,
+         protein_cf = (protein_mean*10000)/1000000) %>% 
+  select(category1_production, calorie_cf, protein_cf)
+
+shrimp_nut <- genus_compiled_fisheries_general %>% 
+  filter(general %in% c("shrimp", "prawn")) %>% 
+  dplyr::summarise(calorie_mean = mean(Calories, na.rm = TRUE),
+                   protein_mean = mean(Protein, na.rm = TRUE)) %>% 
+  mutate(category1_production = "shrimp_meat",
+         calorie_cf = (calorie_mean*10000)/1000000,
+         protein_cf = (protein_mean*10000)/1000000) %>% 
+  select(category1_production, calorie_cf, protein_cf)
+
+crustacean_nut <- genus_compiled_fisheries_general %>% 
+  filter(general %in% c("crab", "lobster")) %>% 
+  dplyr::summarise(calorie_mean = mean(Calories, na.rm = TRUE),
+                   protein_mean = mean(Protein, na.rm = TRUE)) %>% 
+  mutate(category1_production = "crustaceans_meat",
+         calorie_cf = (calorie_mean*10000)/1000000,
+         protein_cf = (protein_mean*10000)/1000000) %>% 
+  select(category1_production, calorie_cf, protein_cf)
+
+
+```
+
+
+Combine calorie and protein data and apply
+
+```{r}
+mari_nut <-  rbind(salmon_nut, tuna_nut, general_nut, bivalves_nut, shrimp_nut, crustacean_nut)
+
+mariculture_cal_pro <- left_join(mariculture_edible, mari_nut) %>% 
+  mutate(million_kcals = edible_tonnes*calorie_cf,
+         tonnes_protein = edible_tonnes*protein_cf) %>% 
+  separate(category1_production, c("organism", "product"), sep = "_") %>% 
+  mutate(organism = ifelse(organism == "bivalves", "bivalve", organism)) %>% 
+  select(iso3c, organism, tonnes_product = tonnes, million_kcals,  tonnes_protein)
+
+write_csv(mariculture_cal_pro, here::here("_efficiency", "data", "mariculture_protein_calories.csv"))
+```
+
+

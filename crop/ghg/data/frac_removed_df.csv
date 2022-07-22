@@ -1,0 +1,245 @@
+iso3c,ID_0,Country,FracReMove
+AFG,1,Afghanistan,0.45
+CYP,61,Cyprus,0.45
+ALA,3,Åland,0.45
+ALB,4,Albania,0.45
+DZA,5,Algeria,0.45
+ASM,6,American Samoa,0.45
+AND,7,Andorra,0.45
+AGO,8,Angola,0.45
+AIA,9,Anguilla,0.45
+ATG,11,Antigua and Barbuda,0.45
+ARG,12,Argentina,0.45
+ARM,13,Armenia,0.45
+ABW,14,Aruba,0.45
+AUS,15,Australia,0.45
+AUT,16,Austria,0.34
+AZE,17,Azerbaijan,0.45
+BHS,18,Bahamas,0.45
+BHR,19,Bahrain,0.45
+BGD,20,Bangladesh,0.45
+BRB,21,Barbados,0.45
+BLR,22,Belarus,0.45
+BEL,23,Belgium,0.5
+BLZ,24,Belize,0.45
+BEN,25,Benin,0.45
+BMU,26,Bermuda,0.45
+BTN,27,Bhutan,0.45
+BOL,28,Bolivia,0.45
+BES,29,"Bonaire, Sint Eustatius and Saba",0.45
+BIH,30,Bosnia and Herzegovina,0.45
+BWA,31,Botswana,0.45
+BRA,33,Brazil,0.45
+IOT,34,British Indian Ocean Territory,0.45
+VGB,35,British Virgin Islands,0.45
+BRN,36,Brunei,0.45
+BGR,37,Bulgaria,0.45
+BFA,38,Burkina Faso,0.45
+BDI,39,Burundi,0.45
+KHM,40,Cambodia,0.45
+CMR,41,Cameroon,0.45
+CAN,42,Canada,0.47
+CPV,43,Cape Verde,0.45
+CYM,45,Cayman Islands,0.45
+CAF,46,Central African Republic,0.45
+TCD,47,Chad,0.45
+CHL,48,Chile,0.45
+CHN,49,China,0.45
+CXR,50,Christmas Island,0.45
+CCK,52,Cocos Islands,0.45
+COL,53,Colombia,0.45
+COM,54,Comoros,0.45
+COK,55,Cook Islands,0.45
+CRI,56,Costa Rica,0.45
+CIV,57,Côte d'Ivoire,0.45
+HRV,58,Croatia,0.45
+CUB,59,Cuba,0.45
+CUW,60,Curaçao,0.45
+CZE,62,Czech Republic,0.45
+COD,301,Democratic Republic of the Congo,0.45
+DNK,64,Denmark,0.45
+DJI,65,Djibouti,0.45
+DOM,67,Dominican Republic,0.45
+DMA,66,Dominica,0.45
+ECU,68,Ecuador,0.45
+EGY,69,Egypt,0.45
+SLV,70,El Salvador,0.45
+GNQ,71,Equatorial Guinea,0.45
+ERI,72,Eritrea,0.45
+EST,73,Estonia,0.45
+ETH,74,Ethiopia,0.45
+FLK,75,Falkland Islands,0.45
+FRO,76,Faroe Islands,0.45
+FJI,77,Fiji,0.45
+FIN,78,Finland,0.45
+FRA,79,France,0.45
+GUF,80,French Guiana,0.45
+PYF,81,French Polynesia,0.45
+GAB,83,Gabon,0.45
+GMB,84,Gambia,0.45
+GEO,85,Georgia,0.45
+DEU,86,Germany,0.63
+GHA,87,Ghana,0.45
+GIB,88,Gibraltar,0.45
+GRC,89,Greece,0.52
+GRL,90,Greenland,0.45
+GRD,91,Grenada,0.45
+GLP,92,Guadeloupe,0.45
+GUM,93,Guam,0.45
+GTM,94,Guatemala,0.45
+GGY,95,Guernsey,0.45
+GNB,97,Guinea-Bissau,0.45
+GIN,96,Guinea,0.45
+GUY,98,Guyana,0.45
+HTI,99,Haiti,0.45
+HND,101,Honduras,0.45
+HKG,102,Hong Kong,0.45
+HUN,103,Hungary,0.45
+ISL,104,Iceland,0.45
+IND,105,India,0.45
+IDN,106,Indonesia,0.45
+IRN,107,Iran,0.45
+IRQ,108,Iraq,0.45
+IRL,109,Ireland,0.52
+IMN,110,Isle of Man,0.45
+ISR,111,Israel,0.45
+ITA,112,Italy,0.45
+JAM,113,Jamaica,0.45
+JPN,114,Japan,0.45
+JEY,115,Jersey,0.45
+JOR,116,Jordan,0.45
+KAZ,117,Kazakhstan,0.45
+KEN,118,Kenya,0.45
+KIR,119,Kiribati,0.45
+XKO,120,Kosovo,0.45
+KWT,121,Kuwait,0.45
+KGZ,122,Kyrgyzstan,0.45
+LAO,123,Laos,0.45
+LVA,124,Latvia,0.45
+LBN,125,Lebanon,0.45
+LSO,126,Lesotho,0.45
+LBR,127,Liberia,0.45
+LBY,128,Libya,0.45
+LIE,129,Liechtenstein,0.45
+LTU,130,Lithuania,0.45
+LUX,131,Luxembourg,0.45
+MAC,132,Macao,0.45
+MKD,133,Macedonia,0.45
+MDG,134,Madagascar,0.45
+MWI,135,Malawi,0.45
+MYS,136,Malaysia,0.45
+MDV,137,Maldives,0.45
+MLI,138,Mali,0.45
+MLT,139,Malta,0.45
+MHL,140,Marshall Islands,0.45
+MTQ,141,Martinique,0.45
+MRT,142,Mauritania,0.45
+MUS,143,Mauritius,0.45
+MYT,144,Mayotte,0.45
+MEX,145,Mexico,0.45
+FSM,146,Micronesia,0.45
+MDA,147,Moldova,0.45
+MCO,148,Monaco,0.45
+MNG,149,Mongolia,0.45
+MNE,150,Montenegro,0.45
+MSR,151,Montserrat,0.45
+MAR,152,Morocco,0.45
+MOZ,153,Mozambique,0.45
+MMR,154,Myanmar,0.45
+NAM,155,Namibia,0.45
+NRU,156,Nauru,0.45
+NPL,157,Nepal,0.45
+NLD,158,Netherlands,0.45
+NCL,159,New Caledonia,0.45
+NZL,160,New Zealand,0.45
+NIC,161,Nicaragua,0.45
+NER,162,Niger,0.45
+NGA,163,Nigeria,0.45
+NIU,164,Niue,0.45
+NFK,165,Norfolk Island,0.45
+PRK,166,North Korea,0.45
+MNP,168,Northern Mariana Islands,0.45
+NOR,169,Norway,0.65
+OMN,170,Oman,0.45
+PAK,171,Pakistan,0.45
+PLW,172,Palau,0.45
+PSE,173,Palestina,0.45
+PAN,174,Panama,0.45
+PNG,175,Papua New Guinea,0.45
+PRY,177,Paraguay,0.45
+PER,178,Peru,0.45
+PHL,179,Philippines,0.45
+PCN,180,Pitcairn Islands,0.45
+POL,181,Poland,0.53
+PRT,182,Portugal,0.71
+XMI,300,Madeira Island,0.45
+PRI,183,Puerto Rico,0.45
+QAT,184,Qatar,0.45
+COG,185,Republic of Congo,0.45
+REU,186,Reunion,0.45
+ROU,187,Romania,0.45
+RUS,188,Russia,0.45
+RWA,189,Rwanda,0.45
+BLM,190,Saint-Barthélemy,0.45
+MAF,191,Saint-Martin,0.45
+SHN,192,Saint Helena,0.45
+KNA,193,Saint Kitts and Nevis,0.45
+LCA,194,Saint Lucia,0.45
+SPM,195,Saint Pierre and Miquelon,0.45
+VCT,196,Saint Vincent and the Grenadines,0.45
+WSM,197,Samoa,0.45
+SMR,198,San Marino,0.45
+STP,199,São Tomé and Príncipe,0.45
+SAU,200,Saudi Arabia,0.45
+SEN,201,Senegal,0.45
+SRB,202,Serbia,0.45
+SYC,203,Seychelles,0.45
+SLE,204,Sierra Leone,0.45
+SGP,205,Singapore,0.45
+SXM,206,Sint Maarten,0.45
+SVK,207,Slovakia,0.45
+SVN,208,Slovenia,0.47
+SLB,209,Solomon Islands,0.45
+SOM,210,Somalia,0.45
+ZAF,211,South Africa,0.45
+KOR,213,South Korea,0.45
+SSD,214,South Sudan,0.45
+ESP,215,Spain,0.45
+LKA,217,Sri Lanka,0.45
+SDN,218,Sudan,0.45
+SUR,219,Suriname,0.45
+SJM,220,Svalbard and Jan Mayen,0.45
+SWZ,221,Swaziland,0.45
+SWE,222,Sweden,0.64
+CHE,223,Switzerland,0.72
+SYR,224,Syria,0.45
+TWN,225,Taiwan,0.45
+TJK,226,Tajikistan,0.45
+TZA,227,Tanzania,0.45
+THA,228,Thailand,0.45
+TLS,229,Timor-Leste,0.45
+TGO,230,Togo,0.45
+TKL,231,Tokelau,0.45
+TON,232,Tonga,0.45
+TTO,233,Trinidad and Tobago,0.45
+TUN,234,Tunisia,0.45
+TUR,235,Turkey,0.45
+TKM,236,Turkmenistan,0.45
+TCA,237,Turks and Caicos Islands,0.45
+TUV,238,Tuvalu,0.45
+UGA,239,Uganda,0.45
+UKR,240,Ukraine,0.45
+ARE,241,United Arab Emirates,0.45
+GBR,242,United Kingdom,0.52
+USA,243,United States,0.45
+URY,245,Uruguay,0.45
+UZB,246,Uzbekistan,0.45
+VUT,247,Vanuatu,0.45
+VEN,249,Venezuela,0.45
+VNM,250,Vietnam,0.45
+VIR,251,"Virgin Islands, U.S.",0.45
+WLF,252,Wallis and Futuna,0.45
+ESH,253,Western Sahara,0.45
+YEM,254,Yemen,0.45
+ZMB,255,Zambia,0.45
+ZWE,256,Zimbabwe,0.45

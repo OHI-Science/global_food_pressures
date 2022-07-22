@@ -1,0 +1,151 @@
+---
+title: "MapSPAM_wrangling"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Script Description
+## Wrangle MapSPAM crop category dataset
+
+# Data information
+## FAOSTAT coffee #656 is both arabica and robusta coffee, so Millet #79 is pmil and smil
+
+# Preamble
+```{r setup, include = FALSE}
+# getting packages we want
+library(tidyverse)
+library(here)
+library(raster)
+library(sf)
+library(janitor)
+
+# Raster templates
+source(here("_spatial/template_raster.R"))
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+``` 
+
+```{r}
+# Match with MapSPAM names
+MapSPAM_crops <- 
+  vroom(here("crop/farm/data/MapSPAM_crop_info.csv")) %>% 
+  rename(item_code = FAOCODE)
+
+# Filter out non-item_code of interest according to MapSPAMS definitions of crop categories.
+MapSPAM_crops$item_code <- gsub(" - ", ":", MapSPAM_crops$item_code, fixed = TRUE)
+MapSPAM_crops$item_code <- gsub("-", ":", MapSPAM_crops$item_code, fixed = TRUE)
+MapSPAM_crops$item_code[[27]] <- "260:310,312:339"
+MapSPAM_crops$item_code <- gsub(" ", "", MapSPAM_crops$item_code, fixed = TRUE)
+```
+
+# Splitting data 
+```{r}
+# split data 
+MapSPAM_crops <- 
+  MapSPAM_crops %>% 
+  mutate(item_code = strsplit(as.character(item_code), ",")) %>%
+  unnest(item_code)
+
+# Remove 'rest' crops (677:839) that are nested inside ofib range (773:821).
+MapSPAM_crops <- 
+  MapSPAM_crops %>% 
+  mutate(item_code = if_else(item_code %in% "677:839", "677:772", item_code)) %>%  
+  bind_rows(MapSPAM_crops) %>%
+  mutate(item_code = if_else(item_code %in% "677:839", "822:839", item_code)) %>%  
+  unique() 
+
+MapSPAM_ranges <- MapSPAM_crops %>% 
+  filter(str_detect(item_code, pattern = ":")) 
+MapSPAM_remainder <- MapSPAM_crops %>% 
+  filter(!str_detect(item_code, pattern = ":"))
+MapSPAM_remainder$item_code <- as.integer(unlist(MapSPAM_remainder$item_code))
+
+# Replace number ranges with separate numbers.
+get_numbers <- function(x, y) {
+    item_code <- (x:y)
+    return(as.vector(item_code))
+}
+
+MapSPAM_ranges <- 
+  MapSPAM_ranges %>% 
+    filter(str_detect(item_code, pattern = ":")) %>% 
+    separate(item_code,
+             into = c("x", "y"),
+             sep = ":") %>% 
+    mutate(x = as.integer(x),
+           y = as.integer(y)) %>% 
+    mutate(item_code = map2(x, y , get_numbers)) %>% 
+    unnest(item_code) %>%
+    dplyr::select(-c(x, y)) 
+
+# These are double counted
+MapSPAM_ranges <- MapSPAM_ranges %>% filter(!item_code %in% c(267, 270, 289, 292, 328, 826))
+
+# Merge back together
+MapSPAM_names <- rbind(MapSPAM_remainder, MapSPAM_ranges)
+```
+
+# Check for duplicates
+```{r}
+MapSPAM_names$item_code[duplicated(MapSPAM_names$item_code)] # This should only say true for `79` which is Millet.
+```
+
+# Supplementary information table
+```{r}
+SI_tbl <- 
+  MapSPAM_crops %>%
+  dplyr::select(2, 3, 5) %>% 
+  rename(FAO_item_code = item_code) %>% 
+  left_join(vroom::vroom(here("feed/data/MapSPAM_crop_info.csv"), 
+                         col_select = c("SPAM_short_name", "SPAM_super"))) %>% 
+  add_row(SPAM_short_name = "NA",
+          SPAM_full_name = "NA",
+          FAO_item_code = "636:649, 651, 655, and 'Forage_&_Silage_crops' (no FAO code)",
+          SPAM_super = "fodd") %>% 
+  filter(!SPAM_super == "rest") %>% 
+  group_by(SPAM_short_name, SPAM_full_name, SPAM_super) %>% 
+  summarize(FAO_item_code = toString(FAO_item_code)) %>%
+  ungroup() %>% 
+  mutate(inclusion = if_else(SPAM_super %in% c("ofib", "xcof", "teas", "toba"),
+                             "omitted from study",
+                             "included")) %>% 
+  relocate(SPAM_super, inclusion, SPAM_full_name, FAO_item_code) %>% 
+  arrange(SPAM_super)
+
+write_csv(SI_tbl, here("crop/farm/data/SI_SPAM_crops_tbl.csv"))
+```
+
+# Save
+```{r}
+write_csv(MapSPAM_names, here("crop/farm/data/MapSPAM_names.csv"))
+```
+
+# Check what crops are in each category.
+```{r}
+dsdf <- 
+  vroom::vroom(here("crop/farm/data/FAOSTAT_crop_production_2010_2017.csv")) %>% 
+  clean_names() %>% 
+  select(item, item_code) %>% 
+  unique() %>% 
+  left_join(MapSPAM_names) 
+
+dsfdsf <- vroom::vroom(here("crop/farm/data/FAO_crop_definitions.csv")) %>% 
+  clean_names() %>% 
+  select(item_code, item, description) %>% 
+  right_join(MapSPAM_names)
+```
+
+# Add super categories
+```{r}
+crop_codes <- 
+  vroom::vroom(here("crop/farm/data/MapSPAM_names.csv")) %>% 
+  select(SPAM_short_name, SPAM_full_name, item_code) %>% 
+  left_join(vroom::vroom(here("feed/data/MapSPAM_crop_info.csv"), 
+                         col_select = c("SPAM_short_name", "SPAM_super")))
+
+str(crop_codes)
+
+vroom::vroom_write(crop_codes, 
+                   here("crop/farm/data/crop_codes.csv"))
+```

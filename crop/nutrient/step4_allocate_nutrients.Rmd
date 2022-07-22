@@ -1,0 +1,228 @@
+---
+title: "step4_fubc_merge"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+# determine application of each FAO nutrient to each country/crop based on crop area, fubc application data,
+# SPAM agricultural system.
+
+# Preamble
+```{r setup, include = FALSE}
+# getting packages we want
+library(here)
+library(janitor)
+library(vroom)
+
+# Raster templates
+source(here("_spatial/template_raster.R"))
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+# Import food_rgns xy df
+food_rgns_xy <- 
+  food_rgns_xy %>% 
+  select(x, y, iso3c)
+``` 
+
+# Import
+
+```{r}
+fubc_2002 <- vroom(here("crop/nutrient/data/fubc_2002_gf.csv"))
+fubc_2017 <- vroom(here("crop/nutrient/data/fubc_2017_gf.csv"))
+```
+
+# Checks
+
+```{r}
+45 == length(unique(fubc_2002$split_rest_names)) + length(unique(fubc_2017$split_rest_names)) #45
+```
+
+# Merge fubc 2002 w/ fubc 2017
+
+```{r}
+fubc <- 
+  bind_rows(fubc_2002,
+            fubc_2017) %>% 
+  rename(kg_per_ha = rate) %>% 
+  mutate(t_per_ha = kg_per_ha / 1000) %>% # unit conversion
+  select(- kg_per_ha)
+
+# make sure this is TRUE
+244 * 3 * 45 == 
+  length(unique(fubc$iso3c)) * # 244 countries
+  length(unique(fubc$nutrient)) * # 3 nutrients
+  length(unique(fubc$split_rest_names)) # 45 crops
+  
+244 * 3 * 45 == nrow(fubc)
+```
+
+-------------------------------------------------------------------------------
+
+# Add FAO national fertilizer allocation data
+
+```{r}
+fao_application <- vroom(here("crop/nutrient/data/fao_nutrient_application.csv"))
+nrow(fao_application) == 244 * 3
+nutrient_df <- left_join(fubc, fao_application)
+```
+
+-------------------------------------------------------------------------------
+
+# Add HarvArea column
+
+```{r}
+harvested_area_tbl <- 
+  vroom(here("crop/farm/data/harvested_area_tbl.csv"),
+        col_select = c(iso3c, split_rest_names, harvested_area, prod_system)) %>% 
+  filter(prod_system %in% c("H", "I"))
+
+244 * 45 * 2 == nrow(harvested_area_tbl)
+
+nutrient_df <- left_join(nutrient_df, harvested_area_tbl)
+```
+
+-------------------------------------------------------------------------------
+
+# Analysis
+& total weight is spam_intensity_wt x total_ha x fert_kg_per_ha
+&& prop_fert is: total weight divided by the sum of the weights across all crops within a country
+```{r}
+nutrient_df_full <- 
+  nutrient_df %>% 
+  mutate(weighting = case_when(prod_system == "I" ~ 2,
+                               prod_system == "H" ~ 1,
+                               prod_system == "L" ~ 0,
+                               prod_system == "S" ~ 0)) %>%
+  mutate(total_nutrient = t_per_ha * harvested_area * weighting) %>% 
+  
+  # Calculate proportion of each type of fertilizer applied to each crop in each country
+  
+  group_by(iso3c, nutrient) %>% 
+  mutate(prop_nutrient = total_nutrient / sum(total_nutrient, na.rm = TRUE)) %>% 
+  ungroup() %>%
+  mutate(prop_nutrient = if_else(is.finite(prop_nutrient) == FALSE,
+                                 0,
+                                 prop_nutrient)) %>% 
+  
+  # Allocate FAO national fertilizer application based on the previously calculated proportion
+  
+  mutate(allocated_nutrient = country_application * prop_nutrient)  %>% 
+  mutate(allocated_nutrient = if_else(reported_by_fao == "No",
+                                      total_nutrient,
+                                      allocated_nutrient)) %>% 
+  
+  # Relocate
+  relocate(iso3c, split_rest_names, nutrient, prod_system,
+           weighting, t_per_ha, harvested_area, 
+           total_nutrient, prop_nutrient,
+           country_application, reported_by_fao, allocated_nutrient)
+
+```
+
+# Add gapfilled grassland nutrient to the table
+```{r}
+fao_nutrient_grassland <- vroom(here("crop/nutrient/data/fao_nutrient_grassland_1.csv")) %>% 
+  filter(reported_by_fao == "Yes") %>% 
+  select(-reported_by_fao)
+fao_nutrient_grassland %>%
+  group_by(nutrient) %>%
+  summarize(total= sum(country_application, na.rm=TRUE))
+  
+fubc_grass <- vroom(here("crop/nutrient/data/fubc_2017_grassland.csv"))
+
+fao_nutrient_grassland_2 <- 
+  nutrient_df_full %>% 
+  filter(reported_by_fao == "No") %>% 
+  left_join(., fubc_grass) %>%
+  select(iso3c, nutrient, allocated_nutrient, grassland) %>% 
+  mutate(allocated_grassland_nutrient = allocated_nutrient * grassland) %>% 
+  group_by(iso3c, nutrient) %>% 
+  summarise(country_application = sum(allocated_grassland_nutrient, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  bind_rows(fao_nutrient_grassland) 
+
+fao_nutrient_grassland_2 %>%
+  group_by(nutrient) %>%
+  summarize(total= sum(country_application, na.rm=TRUE))
+  
+write_csv(fao_nutrient_grassland_2, here("crop/nutrient/data/fao_nutrient_grassland_2.csv"))
+```
+
+# Data check
+
+```{r}
+nutrient_df_full %>%
+  group_by(nutrient, iso3c, country_application, reported_by_fao) %>%
+  summarise(total = sum(prop_nutrient)) %>%
+  view()
+
+nrow(nutrient_df_full) == 244 * 2 * 3 * 45 
+
+sum(fao_application$country_application, na.rm=TRUE)
+fao_application %>%
+  group_by(nutrient) %>%
+  summarize(total_nutrient = sum(country_application, na.rm=TRUE))
+
+sum(nutrient_df_full$total_nutrient)
+sum(unique(nutrient_df_full$country_application), na.rm = TRUE)
+sum(nutrient_df_full$allocated_nutrient)
+
+nutrient_df_full %>% 
+  group_by(reported_by_fao) %>% 
+  summarise(total_nutrient = sum(total_nutrient, na.rm = TRUE),
+            harvested_area = sum(harvested_area, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(rate = total_nutrient / harvested_area)
+  
+
+nutrient_df_full %>% 
+  filter(iso3c == "ALA") %>% 
+  group_by(nutrient) %>% 
+  summarise(sum(allocated_nutrient)) %>% 
+  arrange(nutrient
+  )
+
+
+tbl1 <- 
+  nutrient_df_full %>% 
+  group_by(nutrient, iso3c) %>% 
+  summarise(allocated = sum(allocated_nutrient)) %>% 
+  ungroup() %>% 
+  arrange(nutrient)
+
+nutrient_df_full %>% 
+  group_by(nutrient, iso3c) %>% 
+  select(nutrient, country_application) %>% 
+  unique() %>% 
+  arrange(nutrient) %>%
+  left_join(tbl1) %>% 
+  mutate(diff = country_application / allocated) %>% 
+  view()
+
+write_csv(nutrient_df_full, here("crop/nutrient/data/nutrient_df_full.csv"))
+```
+
+# Trim
+```{r}
+nutrient_df_trim <- 
+  nutrient_df_full %>% 
+  select(iso3c, nutrient, prod_system, split_rest_names, allocated_nutrient)
+
+fao_application %>%
+   group_by(nutrient) %>%
+   summarize(total_nutrient = sum(country_application, na.rm=TRUE))
+
+tmp <- nutrient_df_trim %>%
+  filter(nutrient == "N") 
+sum(tmp$allocated_nutrient)
+
+```
+
+# Save
+```{r}
+write_csv(nutrient_df_trim, here("crop/nutrient/data/nutrient_df.csv"))
+
+```
+
+

@@ -1,0 +1,120 @@
+category,origin,organism,system,product,food_name_legend_1,food_name_1,food_name_legend_2,food_name_2,food_name_legend_3,food_name_3
+farm,land,chickens,industrial,eggs,Livestock Secondary,livestock_second,Eggs,eggs,Eggs,eggs
+farm,land,chickens,backyard,eggs&meat,Livestock Secondary,livestock_second,Eggs,eggs,Eggs,eggs
+farm,land,chickens,industrial,meat,Livestock Meat,livestock_meat,Chickens & Pigs Livestock Meat,non_rum_livestock_meat,Chicken,chicken
+farm,land,cows,feedlot,meat,Livestock Meat,livestock_meat,Ruminants Livestock Meat,ruminants_livestock_meat,Beef,beef
+farm,land,cows,grassland,meat,Livestock Meat,livestock_meat,Ruminants Livestock Meat,ruminants_livestock_meat,Beef,beef
+farm,land,cows,mixed,meat,Livestock Meat,livestock_meat,Ruminants Livestock Meat,ruminants_livestock_meat,Beef,beef
+farm,land,goats,grassland,meat,Livestock Meat,livestock_meat,Ruminants Livestock Meat,ruminants_livestock_meat,Goat,goat
+farm,land,goats,mixed,meat,Livestock Meat,livestock_meat,Ruminants Livestock Meat,ruminants_livestock_meat,Goat,goat
+farm,land,pigs,backyard,meat,Livestock Meat,livestock_meat,Chickens & Pigs Livestock Meat,non_rum_livestock_meat,Pig,pig
+farm,land,pigs,industrial,meat,Livestock Meat,livestock_meat,Chickens & Pigs Livestock Meat,non_rum_livestock_meat,Pig,pig
+farm,land,pigs,intermediate,meat,Livestock Meat,livestock_meat,Chickens & Pigs Livestock Meat,non_rum_livestock_meat,Pig,pig
+farm,land,sheep,grassland,meat,Livestock Meat,livestock_meat,Ruminants Livestock Meat,ruminants_livestock_meat,Sheep,sheep
+farm,land,sheep,mixed,meat,Livestock Meat,livestock_meat,Ruminants Livestock Meat,ruminants_livestock_meat,Sheep,sheep
+farm,land,buffaloes,grassland,milk,Livestock Secondary,livestock_second,Milk,milk,Large Ruminant Milk,large_rum_milk
+farm,land,buffaloes,mixed,milk,Livestock Secondary,livestock_second,Milk,milk,Large Ruminant Milk,large_rum_milk
+farm,land,cows,grassland,milk,Livestock Secondary,livestock_second,Milk,milk,Large Ruminant Milk,large_rum_milk
+farm,land,cows,mixed,milk,Livestock Secondary,livestock_second,Milk,milk,Large Ruminant Milk,large_rum_milk
+farm,land,goats,grassland,milk,Livestock Secondary,livestock_second,Milk,milk,Small Ruminant Milk,small_rum_milk
+farm,land,goats,mixed,milk,Livestock Secondary,livestock_second,Milk,milk,Small Ruminant Milk,small_rum_milk
+farm,land,sheep,grassland,milk,Livestock Secondary,livestock_second,Milk,milk,Small Ruminant Milk,small_rum_milk
+farm,land,sheep,mixed,milk,Livestock Secondary,livestock_second,Milk,milk,Small Ruminant Milk,small_rum_milk
+farm,land,bana,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Fruits and Vegetables,fruits_veg
+farm,land,barl,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Cereals and Grains,cereals_grains
+farm,land,cass,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Starches and Roots,starch_roots
+farm,land,cnut,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Fruits and Vegetables,fruits_veg
+farm,land,coco,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Fruits and Vegetables,fruits_veg
+farm,land,maiz,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Cereals and Grains,cereals_grains
+farm,land,ocer,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Cereals and Grains,cereals_grains
+farm,land,oilp,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Oil Crops and Seeds,oil_seeds
+farm,land,orts,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Starches and Roots,starch_roots
+farm,land,plnt,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Fruits and Vegetables,fruits_veg
+farm,land,pota,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Starches and Roots,starch_roots
+farm,land,rest,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Rest,rest
+farm,land,rice,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Rice,rice
+farm,land,sorg,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Cereals and Grains,cereals_grains
+farm,land,soyb,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Soy,soy
+farm,land,sugb,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Sugar,sugar
+farm,land,sugc,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Sugar,sugar
+farm,land,swpo,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Starches,starches
+farm,land,vege,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Fruits and Vegetables,fruits_veg
+farm,land,whea,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Cereals and Grains,cereals_grains
+farm,land,xfru,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Fruits and Vegetables,fruits_veg
+farm,land,xmil,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Cereals and Grains,cereals_grains
+farm,land,xoil,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Oil Crops and Seeds,oil_seeds
+farm,land,xpul,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Pulses and Beans,pulses_beans
+farm,land,yams,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Starches and Roots,starch_roots
+farm,land,tnut,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Tree Nuts,tree_nuts
+farm,land,spis,crop,produce,Human Crop Consumption,human_crop_consump,Human Crop Consumption,human_crop_consump,Spices,spices
+farm,marine,salmon,aquaculture,meat,Mariculture,mariculture,Mariculture,mariculture,Salmon Mariculture,salmon_mari
+farm,marine,shrimp,aquaculture,meat,Mariculture,mariculture,Mariculture,mariculture,Shrimp Mariculture,shrimp_mari
+feedcrop,land,chickens,industrial,eggs,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Chicken Feed,chicken_feed
+feedcrop,land,chickens,backyard,eggs&meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Chicken Feed,chicken_feed
+feedcrop,land,chickens,industrial,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Chicken Feed,chicken_feed
+feedcrop,land,cows,feedlot,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Large Ruminant Feed,large_rum_feed
+feedcrop,land,cows,grassland,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Large Ruminant Feed,large_rum_feed
+feedcrop,land,cows,mixed,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Large Ruminant Feed,large_rum_feed
+feedcrop,land,goats,grassland,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Small Ruminant Feed,small_rum_feed
+feedcrop,land,goats,mixed,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Small Ruminant Feed,small_rum_feed
+feedcrop,land,pigs,backyard,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Pig Feed,pig_feed
+feedcrop,land,pigs,industrial,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Pig Feed,pig_feed
+feedcrop,land,pigs,intermediate,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Pig Feed,pig_feed
+feedcrop,land,sheep,grassland,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Small Ruminant Feed,small_rum_feed
+feedcrop,land,sheep,mixed,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Small Ruminant Feed,small_rum_feed
+feedcrop,land,buffaloes,grassland,milk,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Large Ruminant Feed,large_rum_feed
+feedcrop,land,buffaloes,mixed,milk,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Large Ruminant Feed,large_rum_feed
+feedcrop,land,cows,grassland,milk,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Large Ruminant Feed,large_rum_feed
+feedcrop,land,cows,mixed,milk,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Large Ruminant Feed,large_rum_feed
+feedcrop,land,goats,grassland,milk,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Small Ruminant Feed,small_rum_feed
+feedcrop,land,goats,mixed,milk,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Small Ruminant Feed,small_rum_feed
+feedcrop,land,sheep,grassland,milk,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Small Ruminant Feed,small_rum_feed
+feedcrop,land,sheep,mixed,milk,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Small Ruminant Feed,small_rum_feed
+feedcrop,marine,salmon,aquaculture,meat,Animal Feed,animal_feed,Mariculture Feed,mariculture_feed,Mariculture Feed,mari_feed
+feedcrop,marine,shrimp,aquaculture,meat,Animal Feed,animal_feed,Mariculture Feed,mariculture_feed,Mariculture Feed,mari_feed
+feedfodd,land,chickens,industrial,eggs,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Chicken Feed,chicken_feed
+feedfodd,land,chickens,backyard,eggs&meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Chicken Feed,chicken_feed
+feedfodd,land,chickens,industrial,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Chicken Feed,chicken_feed
+feedfodd,land,cows,feedlot,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Large Ruminant Feed,large_rum_feed
+feedfodd,land,cows,grassland,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Large Ruminant Feed,large_rum_feed
+feedfodd,land,cows,mixed,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Large Ruminant Feed,large_rum_feed
+feedfodd,land,goats,grassland,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Small Ruminant Feed,small_rum_feed
+feedfodd,land,goats,mixed,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Small Ruminant Feed,small_rum_feed
+feedfodd,land,pigs,backyard,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Pig Feed,pig_feed
+feedfodd,land,pigs,industrial,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Pig Feed,pig_feed
+feedfodd,land,pigs,intermediate,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Pig Feed,pig_feed
+feedfodd,land,sheep,grassland,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Small Ruminant Feed,small_rum_feed
+feedfodd,land,sheep,mixed,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Small Ruminant Feed,small_rum_feed
+feedfodd,land,buffaloes,grassland,milk,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Large Ruminant Feed,large_rum_feed
+feedfodd,land,buffaloes,mixed,milk,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Large Ruminant Feed,large_rum_feed
+feedfodd,land,cows,grassland,milk,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Large Ruminant Feed,large_rum_feed
+feedfodd,land,cows,mixed,milk,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Large Ruminant Feed,large_rum_feed
+feedfodd,land,goats,grassland,milk,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Small Ruminant Feed,small_rum_feed
+feedfodd,land,goats,mixed,milk,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Small Ruminant Feed,small_rum_feed
+feedfodd,land,sheep,grassland,milk,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Small Ruminant Feed,small_rum_feed
+feedfodd,land,sheep,mixed,milk,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Small Ruminant Feed,small_rum_feed
+feedfofm,land,chickens,industrial,eggs,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Chicken Feed,chicken_feed
+feedfofm,land,chickens,industrial,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Chicken Feed,chicken_feed
+feedfofm,land,pigs,backyard,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Pig Feed,pig_feed
+feedfofm,land,pigs,industrial,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Pig Feed,pig_feed
+feedfofm,land,pigs,intermediate,meat,Animal Feed,animal_feed,Livestock Feed,livestock_feed,Pig Feed,pig_feed
+feedfofm,marine,salmon,aquaculture,meat,Animal Feed,animal_feed,Mariculture Feed,mariculture_feed,Mariculture Feed,mari_feed
+wildcaught,freshwater,fish,fisheries,meat,Freshwater Fishery,fresh_fishery,Freshwater Fishery,fresh_fishery,Freshwater Fisheries,fresh_fish
+wildcaught,marine,benthic,fisheries,meat,Marine Fishery,marine_fishery,Marine Fishery,marine_fishery,Marine Fisheries,marine_fish
+wildcaught,marine,demersal,fisheries,meat,Marine Fishery,marine_fishery,Marine Fishery,marine_fishery,Marine Fisheries,marine_fish
+wildcaught,marine,fofm,fisheries,meat,Marine Fishery,marine_fishery,Marine Fishery,marine_fishery,Marine Fisheries,marine_fish
+wildcaught,marine,large-pelagic,fisheries,meat,Marine Fishery,marine_fishery,Marine Fishery,marine_fishery,Marine Fisheries,marine_fish
+wildcaught,marine,medium-pelagic,fisheries,meat,Marine Fishery,marine_fishery,Marine Fishery,marine_fishery,Marine Fisheries,marine_fish
+wildcaught,marine,reef,fisheries,meat,Marine Fishery,marine_fishery,Marine Fishery,marine_fishery,Marine Fisheries,marine_fish
+wildcaught,marine,small-pelagic,fisheries,meat,Marine Fishery,marine_fishery,Marine Fishery,marine_fishery,Marine Fisheries,marine_fish
+farm,marine,bivalve,aquaculture,meat,Mariculture,mariculture,Mariculture,mariculture,Bivalve Mariculture,bivalve_mari
+farm,marine,crustaceans,aquaculture,meat,Mariculture,mariculture,Mariculture,mariculture,Crustaceans Mariculture,crustaceans_mari
+farm,marine,marine-fish-general,aquaculture,meat,Mariculture,mariculture,Mariculture,mariculture,Marine-fish-general Mariculture,marine-fish-general_mari
+farm,marine,tuna,aquaculture,meat,Mariculture,mariculture,Mariculture,mariculture,Tuna Mariculture,tuna_mari
+feedcrop,marine,crustaceans,aquaculture,meat,Mariculture,mariculture,Mariculture Feed,mariculture_feed,Mariculture Feed,mari_feed
+feedcrop,marine,marine-fish-general,aquaculture,meat,Mariculture,mariculture,Mariculture Feed,mariculture_feed,Mariculture Feed,mari_feed
+feedcrop,marine,tuna,aquaculture,meat,Mariculture,mariculture,Mariculture Feed,mariculture_feed,Mariculture Feed,mari_feed
+feedfofm,marine,crustaceans,aquaculture,meat,Mariculture,mariculture,Mariculture Feed,mariculture_feed,Mariculture Feed,mari_feed
+feedfofm,marine,marine-fish-general,aquaculture,meat,Mariculture,mariculture,Mariculture Feed,mariculture_feed,Mariculture Feed,mari_feed
+feedfofm,marine,tuna,aquaculture,meat,Mariculture,mariculture,Mariculture Feed,mariculture_feed,Mariculture Feed,mari_feed
+feedfofm,marine,shrimp,aquaculture,meat,Mariculture,mariculture,Mariculture Feed,mariculture_feed,Mariculture Feed,mari_feed

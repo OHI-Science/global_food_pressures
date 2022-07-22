@@ -1,0 +1,464 @@
+---
+title: "KNB data"
+output: html_document
+date: '2022-07-21'
+editor_options: 
+  chunk_output_type: console
+---
+Script to prepare data for KNB repository.
+I will be organizing and zipping relevant files into manageable chunks.
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(raster)
+
+```
+# Raw 
+ ## Crops
+ ### All crops
+```{r, raw}
+## 27 crops (includes fodder), 4 pressures (feed and human use, includes fodder, excludes portion of sugarcane, maize, and cassava crop used for non-food purposes)
+crop_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers", pattern="crop", full=TRUE)
+crop_files <- grep("_x_", crop_files, invert=TRUE, value=TRUE)
+
+# Need to get these into the proper format
+do.call(file.remove, list(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/crop_feed_food_tiff_latlong_per_km2", full.names = TRUE)))
+
+for(crop_file in crop_files){ # 
+  
+  # crop_file = crop_files[1] 
+  
+  stressor_raster <- raster(crop_file)
+  
+  name <- basename(crop_file)
+  name <- gsub(".tif", "", name)
+  
+  raster_area <- area(stressor_raster)
+  #plot(raster_area)
+  
+if(grepl("disturbance", crop_file)){
+  
+   stressor_area_adjust <-  stressor_raster/raster_area
+   #stressor_area_adjust[stressor_area_adjust >1] <- 1 # given the correction from 2010 to 2017, it is ok for this to go over 1.
+
+   writeRaster(stressor_area_adjust,
+               sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/crop_feed_food_tiff_latlong_per_km2/%s_per_area.tif", name),
+               overwrite=TRUE)
+
+} else {
+  
+   stressor_area_adjust <- stressor_raster/raster_area
+   
+   writeRaster(stressor_area_adjust,
+               sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/crop_feed_food_tiff_latlong_per_km2/%s_per_area.tif", name),
+               overwrite=TRUE)
+
+  }
+}
+
+
+aux_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/crop_feed_food_tiff_latlong_per_km2", full=TRUE, pattern = ".aux.xml")
+file.remove(aux_files)
+
+ 
+```
+
+Next: project rasters to equal area gall peters so we can more easily scale data and such.
+```{r}
+
+gall_peters <- "+proj=cea +lon_0=0 +x_0=0 +y_0=0 +lat_ts=45 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+#raster template 
+template_eq_area <- raster(res=0.083333333333333333)
+extent(template_eq_area) <- c(-180, 180, -90, 90)
+template_eq_area <- projectRaster(template_eq_area, crs=gall_peters, res=3000) 
+
+```
+
+
+```{r}
+
+rasters_to_new_crs <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/crop_feed_food_tiff_latlong_per_km2", pattern=".tif", full=TRUE)
+
+library(foreach)
+library(doParallel)
+
+registerDoParallel(6)
+
+foreach(rast=rasters_to_new_crs) %dopar% {
+#for(rast in rasters_to_new_crs){ # rast <- rasters_to_new_crs[1]
+  
+rast_name <- basename(rast)
+ getraster <- raster(rast)
+ highres_raster <- disaggregate(getraster, fact=2)
+ projectRaster(highres_raster, template_eq_area, method="ngb", over=TRUE, progress="text",
+                       filename=sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/tif_equal_area_proj_per_km2/hi_res_gall_peter_%s", rast_name), overwrite=TRUE)
+
+ gp_raster <- raster(sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/tif_equal_area_proj_per_km2/hi_res_gall_peter_%s", rast_name))
+#plot(gp_raster)
+ 
+ aggregate(gp_raster, fact=2, fun=mean, filename=sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/tif_equal_area_proj_per_km2/gall_peter_%s", rast_name), overwrite=TRUE)
+}
+
+stopCluster()
+    
+```
+
+Delete the hi_res version which is just a temp file.
+```{r}
+
+aux_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/tif_equal_area_proj_per_km2", full=TRUE, pattern = ".aux.xml")
+file.remove(aux_files)
+
+remove <- list.files(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/tif_equal_area_proj_per_km2"), full=TRUE, pattern="hi_res")
+file.remove(remove)
+
+```
+
+## convert to total per cell
+```{r}
+
+per_km_rasts <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/tif_equal_area_proj_per_km2", full=TRUE)
+
+for(rast in per_km_rasts){ # rast = per_km_rasts[1]
+ save_name <- basename(rast)
+ save_name <- gsub("_per_area", "_per_cell", save_name)
+    new_raster <- raster(rast)
+  per_cell_rast <- new_raster*6000*6000/1000000
+writeRaster(per_cell_rast, sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/tif_equal_area_proj_per_cell/%s", save_name), overwrite=TRUE)
+#check <- raster(sprintf("/home/shares/food-systems/Food_footprint/final_data/_tif_equal_area_proj_per_cell/%s", save_name))
+#cellStats(check, "sum", na.rm=TRUE)
+}
+
+aux_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/tif_equal_area_proj_per_cell", full=TRUE, pattern = ".aux.xml")
+file.remove(aux_files)
+
+```
+
+Zip
+```{r}
+files_to_zip <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/tif_equal_area_proj_per_cell', full=TRUE)
+files_to_zip <- c(files_to_zip,
+                 here("crop/farm/data/crop_codes_updated.csv"))
+zip(zipfile = '/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/crops_food_feed_raw.zip', files = files_to_zip, extras = '-j')
+
+```
+
+## Crops
+### Estimated human consumption
+```{r}
+
+files_to_zip <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell', full=TRUE, pattern="_crop_")
+files_to_zip <- c(files_to_zip,
+                 here("crop/farm/data/crop_codes_updated.csv"))
+
+zip(zipfile = '/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/crops_food_raw.zip', files = files_to_zip, extras = '-j')
+
+
+```
+
+## Mariculture
+### 
+```{r}
+
+files_to_zip <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell', full=TRUE, pattern="_aquaculture_")
+zip(zipfile = '/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/mariculture_farm_feed_raw.zip', files = files_to_zip, extras = '-j')
+
+
+```
+
+## Marine fisheries
+### 
+```{r}
+
+files_to_zip <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell', full=TRUE, pattern="_wildcaught_")
+zip(zipfile = '/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/fisheries_raw.zip', files = files_to_zip, extras = '-j')
+
+```
+
+## Animals
+### Goats: going to combine grassland, mixed, milk and meat into one category
+```{r}
+
+## Goats
+goat_combos <- expand.grid(category = c("feedcrop", "feedfodd", "farm"), 
+                           pressure = c("disturbance", "ghg", "nutrient", "water"))
+
+for(i in 1:length(goat_combos$pressure)){ # i=1
+  goat_combo = goat_combos[i,]
+  all_files <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell', full=TRUE, pattern="_goats_")
+  files <- grep(goat_combo[[1]], all_files, value=TRUE) 
+  files <- grep(goat_combo[[2]], files, value=TRUE)
+  raster_files <- stack(files)
+  calc(raster_files, sum, na.rm=TRUE,
+       filename = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/combined_animals/gall_peter_%s_land_goats_%s_per_cell.tif", goat_combo[[1]], goat_combo[[2]]),
+       overwrite=TRUE)
+}
+
+## sheep
+sheep_combos <- expand.grid(category = c("feedcrop", "feedfodd", "farm"), 
+                           pressure = c("disturbance", "ghg", "nutrient", "water"))
+
+for(i in 1:length(sheep_combos$pressure)){ # i=1
+  sheep_combo = sheep_combos[i,]
+  all_files <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell', full=TRUE, pattern="_sheep_")
+  files <- grep(sheep_combo[[1]], all_files, value=TRUE) 
+  files <- grep(sheep_combo[[2]], files, value=TRUE)
+  raster_files <- stack(files)
+  calc(raster_files, sum, na.rm=TRUE,
+       filename = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/combined_animals/gall_peter_%s_land_sheep_%s_per_cell.tif", sheep_combo[[1]], sheep_combo[[2]]),
+       overwrite=TRUE)
+}
+
+## cows: combines grassland and mixed and feedlot
+cows_combos <- expand.grid(product = c("milk", "meat"),
+                           category = c("feedcrop", "feedfodd", "farm"), 
+                           pressure = c("disturbance", "ghg", "nutrient", "water"))
+
+for(i in 1:length(cows_combos$pressure)){ # i=1
+  cows_combo = cows_combos[i,]
+  all_files <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell', full=TRUE, pattern="_cows_")
+  files <- grep(cows_combo[[1]], all_files, value=TRUE) 
+  files <- grep(cows_combo[[2]], files, value=TRUE)
+  files <- grep(cows_combo[[3]], files, value=TRUE)
+  raster_files <- stack(files)
+  calc(raster_files, sum, na.rm=TRUE,
+       filename = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/combined_animals/gall_peter_%s_land_cows_%s_%s_per_cell.tif", cows_combo[[2]], cows_combo[[1]], cows_combo[[3]]),
+       overwrite=TRUE)
+}
+
+## buffaloes: combines grassland and mixed (only milk)
+buffs_combos <- expand.grid(category = c("feedcrop", "feedfodd", "farm"), 
+                           pressure = c("disturbance", "ghg", "nutrient", "water"))
+
+for(i in 1:length(buffs_combos$pressure)){ # i=1
+  buffs_combo = buffs_combos[i,]
+  all_files <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell', full=TRUE, pattern="_buffaloes_")
+  files <- grep(buffs_combo[[1]], all_files, value=TRUE) 
+  files <- grep(buffs_combo[[2]], files, value=TRUE)
+  raster_files <- stack(files)
+  calc(raster_files, sum, na.rm=TRUE,
+       filename = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/combined_animals/gall_peter_%s_land_buffaloes_milk_%s_per_cell.tif", buffs_combo[[1]], buffs_combo[[2]]),
+       overwrite=TRUE)
+}
+
+
+## pigs/chickens
+### just move all files over
+  all_files <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell', full=TRUE, pattern="_chickens_|_pigs_")
+file.copy(all_files, 
+       "/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/combined_animals")
+
+
+
+```
+
+Cleaning and zipping
+```{r}
+
+aux_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/combined_animals", full=TRUE, pattern = ".aux.xml")
+file.remove(aux_files)
+
+files_to_zip <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/combined_animals', full=TRUE)
+zip(zipfile = '/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/livestock_raw.zip', files = files_to_zip, extras = '-j')
+
+```
+
+
+
+# Rescaled data
+
+## Crops
+Rescale all crops.
+```{r}
+rescaling_data <- read_csv(here("_analysis/rescale_values.csv"))
+
+pressure_list <- c("ghg", "nutrient", "disturbance", "water")
+
+for(stressor in pressure_list){ # stressor = "nutrient"
+  
+  resc_num <- rescaling_data$global_total[rescaling_data$pressure==stressor] 
+  
+stressor_system_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/tif_equal_area_proj_per_cell", pattern=stressor, full=TRUE)
+  
+
+  for(stressor_raster_filename in stressor_system_files){ #stressor_raster_filename= stressor_system_files[1]
+file_name <- basename(stressor_raster_filename)
+file_name <- gsub("_per_cell.tif", "", file_name)
+file_name <- paste0(file_name, "_rescaled.tif")
+
+stressor_raster <- raster(stressor_raster_filename)
+rescaled_raster = raster::calc(stressor_raster, fun=function(x){ifelse(x>0, 
+                                      (x/resc_num) * 1000000, 
+                                       0)})
+writeRaster(rescaled_raster, sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/tif_equal_area_proj_per_cell_rescaled/%s", file_name),
+              overwrite=TRUE)
+}
+}
+
+aux_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/tif_equal_area_proj_per_cell_rescaled", full=TRUE, pattern = ".aux.xml")
+file.remove(aux_files)
+
+```
+
+Zip
+```{r}
+files_to_zip <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/tif_equal_area_proj_per_cell_rescaled', full=TRUE)
+files_to_zip <- c(files_to_zip,
+                 here("crop/farm/data/crop_codes_updated.csv"))
+files_to_zip <- c(files_to_zip,
+                 here("_analysis/rescale_values.csv"))
+
+
+zip(zipfile = '/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/crops_food_feed_rescaled.zip', files = files_to_zip, extras = '-j')
+
+```
+
+
+### Estimated human consumption
+```{r, rescaled}
+
+files_to_zip <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell_rescaled', full=TRUE, pattern="_crop_")
+files_to_zip <- c(files_to_zip,
+                 here("crop/farm/data/crop_codes_updated.csv"))
+files_to_zip <- c(files_to_zip,
+                 here("_analysis/rescale_values.csv"))
+
+zip(zipfile = '/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/crops_food_rescaled.zip', files = files_to_zip, extras = '-j')
+
+
+```
+
+## Mariculture
+### 
+```{r}
+
+files_to_zip <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell_rescaled', full=TRUE, pattern="_aquaculture_")
+files_to_zip <- c(files_to_zip,
+                 here("_analysis/rescale_values.csv"))
+
+zip(zipfile = '/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/mariculture_farm_feed_rescaled.zip', files = files_to_zip, extras = '-j')
+
+
+```
+
+## Marine fisheries
+### 
+```{r}
+
+files_to_zip <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell_rescaled', full=TRUE, pattern="_wildcaught_")
+files_to_zip <- c(files_to_zip,
+                 here("_analysis/rescale_values.csv"))
+
+
+zip(zipfile = '/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/fisheries_rescaled.zip', files = files_to_zip, extras = '-j')
+
+```
+
+## Animals
+### Goats: going to combine grassland, mixed, milk and meat into one category
+```{r}
+
+## Goats
+goat_combos <- expand.grid(category = c("feedcrop", "feedfodd", "farm"), 
+                           pressure = c("disturbance", "ghg", "nutrient", "water"))
+
+for(i in 1:length(goat_combos$pressure)){ # i=1
+  goat_combo = goat_combos[i,]
+  all_files <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell_rescaled', full=TRUE, pattern="_goats_")
+  files <- grep(goat_combo[[1]], all_files, value=TRUE) 
+  files <- grep(goat_combo[[2]], files, value=TRUE)
+  raster_files <- stack(files)
+  calc(raster_files, sum, na.rm=TRUE,
+       filename = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/combined_animals_rescaled/gall_peter_%s_land_goats_%s_per_cell.tif", goat_combo[[1]], goat_combo[[2]]),
+       overwrite=TRUE)
+}
+
+## sheep
+sheep_combos <- expand.grid(category = c("feedcrop", "feedfodd", "farm"), 
+                           pressure = c("disturbance", "ghg", "nutrient", "water"))
+
+for(i in 1:length(sheep_combos$pressure)){ # i=1
+  sheep_combo = sheep_combos[i,]
+  all_files <- list.files('//home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell_rescaled', full=TRUE, pattern="_sheep_")
+  files <- grep(sheep_combo[[1]], all_files, value=TRUE) 
+  files <- grep(sheep_combo[[2]], files, value=TRUE)
+  raster_files <- stack(files)
+  calc(raster_files, sum, na.rm=TRUE,
+       filename = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/combined_animals_rescaled/gall_peter_%s_land_sheep_%s_per_cell.tif", sheep_combo[[1]], sheep_combo[[2]]),
+       overwrite=TRUE)
+}
+
+## cows: combines grassland and mixed and feedlot
+cows_combos <- expand.grid(product = c("milk", "meat"),
+                           category = c("feedcrop", "feedfodd", "farm"), 
+                           pressure = c("disturbance", "ghg", "nutrient", "water"))
+
+for(i in 1:length(cows_combos$pressure)){ # i=1
+  cows_combo = cows_combos[i,]
+  all_files <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell_rescaled', full=TRUE, pattern="_cows_")
+  files <- grep(cows_combo[[1]], all_files, value=TRUE) 
+  files <- grep(cows_combo[[2]], files, value=TRUE)
+  files <- grep(cows_combo[[3]], files, value=TRUE)
+  raster_files <- stack(files)
+  calc(raster_files, sum, na.rm=TRUE,
+       filename = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/combined_animals_rescaled/gall_peter_%s_land_cows_%s_%s_per_cell.tif", cows_combo[[2]], cows_combo[[1]], cows_combo[[3]]),
+       overwrite=TRUE)
+}
+
+## buffaloes: combines grassland and mixed (only milk)
+buffs_combos <- expand.grid(category = c("feedcrop", "feedfodd", "farm"), 
+                           pressure = c("disturbance", "ghg", "nutrient", "water"))
+
+for(i in 1:length(buffs_combos$pressure)){ # i=1
+  buffs_combo = buffs_combos[i,]
+  all_files <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell_rescaled', full=TRUE, pattern="_buffaloes_")
+  files <- grep(buffs_combo[[1]], all_files, value=TRUE) 
+  files <- grep(buffs_combo[[2]], files, value=TRUE)
+  raster_files <- stack(files)
+  calc(raster_files, sum, na.rm=TRUE,
+       filename = sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/combined_animals_rescaled/gall_peter_%s_land_buffaloes_milk_%s_per_cell.tif", buffs_combo[[1]], buffs_combo[[2]]),
+       overwrite=TRUE)
+}
+
+
+## pigs/chickens
+### just move all files over
+  all_files <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/analysis/_tif_equal_area_proj_per_cell_rescaled', full=TRUE, pattern="_chickens_|_pigs_")
+file.copy(all_files, 
+       "/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/combined_animals_rescaled")
+
+
+
+```
+
+Cleaning and zipping
+```{r}
+
+aux_files <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/combined_animals_rescaled", full=TRUE, pattern = ".aux.xml")
+file.remove(aux_files)
+
+files_to_zip <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/combined_animals_rescaled', full=TRUE)
+files_to_zip <- c(files_to_zip,
+                 here("_analysis/rescale_values.csv"))
+
+zip(zipfile = '/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/livestock_rescaled.zip', files = files_to_zip, extras = '-j')
+
+```
+
+cumulative pressures
+```{r}
+
+  all_files <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/cumulative_stress', full=TRUE)
+file.copy(all_files, 
+       "/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/cumulative_pressures")
+
+  all_files <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/stressors', full=TRUE)
+file.copy(all_files, 
+       "/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/cumulative_pressures")
+
+files_to_zip <- list.files('/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/cumulative_pressures', full=TRUE)
+zip(zipfile = '/home/shares/food-systems/Food_footprint/all_food_systems/KNB_data/cumulative_rescaled_pressures.zip', files = files_to_zip, extras = '-j')
+
+```
+
+

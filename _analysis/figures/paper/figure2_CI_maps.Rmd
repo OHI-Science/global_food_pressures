@@ -1,0 +1,473 @@
+---
+title: 'Figure 2: Cumulative footprint maps'
+author: "Juliette"
+date: "11/17/2020"
+output: html_document
+---
+
+Figure 1. Cumulative footprint maps. a) map of full (‘comprehensive’) cumulative stressors from all foods; b-e) global maps of footprint of each stressor across all foods
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(sf)
+library(scales)
+library(rnaturalearth)
+library(rnaturalearthdata)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_analysis/figures/paper/colors_stressors_fig_1_2.R"))
+
+## save the gall peters projection
+gall_peters <- "+proj=cea +lon_0=0 +x_0=0 +y_0=0 +lat_ts=45 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+
+## create a water raster
+water <- readOGR(dsn = here("_analysis/raw/rgn_all_gcs_med_res.shp"))
+water <- water[!water$rgn_nam == "Antarctica",]
+proj4string(water) <- CRS("+proj=longlat +datum=WGS84")
+water <- spTransform(water, CRS("+proj=cea +lon_0=0 +x_0=0 +y_0=0 +lat_ts=45 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
+plot(water)
+
+## create a land raster
+land <- ne_countries(scale = "medium", returnclass = "sp") 
+land <- land[!land$sov_a3 == "ATA",]
+land <- st_as_sf(land)
+land <- st_transform(land, crs=gall_peters)
+land <- as(land, "Spatial")
+plot(land)
+
+library(RColorBrewer)
+display.brewer.all()
+
+stressor_df <- data.frame(stressor = c("ghg", "water", "nutrient", "disturbance"),
+                          stressor_unit = c("CO2eq_tonnes", "m3", "PO4eq_tonnes", "proportion"))
+
+```
+
+
+## Cummulative stressors all food systems (livestock, aquaculture, fisheries, human)
+
+Create the color pallette
+```{r}
+
+d_brown <- "#515256"
+m_brown <- "#B27B54"
+l_brown <- "#BC995F"
+green <- "#A8B072"
+yellow<- "#EFCE71"
+l_yellow <- "#F7F6C1"
+
+jv_pal <- c(l_yellow, yellow, green, l_brown, m_brown, d_brown)
+
+continuous_pal <-  colorRampPalette(jv_pal, space="Lab", bias = 3.5)(10000)
+image(volcano, asp=1, col=continuous_pal)
+
+# jv_pal_new <- jv_pal[7000:length(continuous_pal)]
+# image(volcano, asp=1, col=jv_pal_new)
+
+light_gray <- "#F8F9FA"
+final_palette <- c(light_gray, continuous_pal)
+scales::show_col(final_palette)
+
+```
+
+
+## Make the map top 1% a red color
+```{r}
+chi <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/cumulative_stress/all_systems_cumulative_stress.tif")
+#plot(log(1+chi))
+
+#hist(chi)
+
+## quantile
+chi_99_quant <- quantile(chi, 0.99)
+
+palette_red <- c(final_palette, "#B90000")
+scales::show_col(palette_red)
+
+# chi_cols = c("NA", paste0(palette_red))
+
+chi[chi > chi_99_quant ] <- chi_99_quant
+#chi[chi > chi_999_quant] <- chi_999_quant
+raster_data = chi
+
+title = "" 
+cols = palette_red
+
+png(here(sprintf("_analysis/figures/paper/output/fig_2a_all_cumulative_map_99_red_top.png", system)), res=500, width=7, height=3, units="in")
+
+par(oma=c(1,1,1,0), new = TRUE) # bottom, left, top, and right
+par(mfrow=c(1, 1), mar=c(1, 0, 1, 2))
+
+plot(water, border= "#F8F9FA", col="#F8F9FA", lwd=0.5, cex=0.75)
+plot(raster_data, 
+     col=cols, 
+     axes=FALSE, 
+     box=FALSE, 
+     add=TRUE,  
+     legend=TRUE, 
+     legend.shrink = 0.7, 
+     legend.width =.4, 
+     margin = FALSE,
+     axis.args = list(cex.axis = 0.6, cex.sub=0.6, cex=0.6, lwd.ticks=1, at = c(0,
+                                                                                round(chi_99_quant/3, 0),
+                                                                                round((chi_99_quant/3)*2, 0),
+                                                                                round(chi_99_quant, 0)- 0.3), 
+                       labels=c("0",
+                                round(chi_99_quant/3, 0),
+                                round((chi_99_quant/3)*2, 0),
+                                round(chi_99_quant, 0))), 
+
+      legend.args=list(text = "Proportion of Global\nPressures(millionths)", cex = 0.7, side = 3, line = 1))
+plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.2, add=TRUE)
+
+dev.off()
+
+# Proportion of Global\nPressures(millionth
+```
+
+### Make a histogram distribution of scores, and color code it like the legend
+
+```{r}
+library(scales)
+library(ggforce)
+library(hrbrthemes)
+
+chi <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/cumulative_stress/all_systems_cumulative_stress.tif")
+
+chi_99_quant <- quantile(chi, 0.99)
+raster_data_99 = chi
+raster_data_99[raster_data_99 > chi_99_quant ] <- chi_99_quant
+
+number_cells <- 14208000
+set.seed(30)
+raster_data_sample <- sample(raster_data_99, number_cells*0.5)
+
+# set.seed(30)
+# raster_brown_data_sample <- sample(chi, number_cells*0.5) 
+
+## first we need to create a df of the values
+chi_df_sample <- as.data.frame(raster_data_sample)
+max <- round(max(chi_df_sample$raster_data_sample)) 
+## with this new rerun the max is now 6.07 instead of 5.96, so I think we want the max to be 7... not too sure so writting this note
+max <- max + 1 
+
+# chi_brown_df_sample <- as.data.frame(raster_brown_data_sample) %>% 
+#   filter(raster_brown_data_sample > max(chi_df_sample$raster_data_sample))
+# max_brown <- round(max(chi_brown_df_sample$raster_brown_data_sample))
+
+## assign color breaks
+pal_hist <-  colorRampPalette(jv_pal, space="Lab", bias = 3.5)((max/0.1)) ## max of the 99th quant
+light_gray <- "#F8F9FA"
+pal_hist <- c(light_gray, pal_hist)
+image(volcano, asp=1, col=pal_hist)
+scales::show_col(pal_hist)
+length(pal_hist)
+# need to make all the values between 99th quant and max of the rest the dark brown
+# time_rep <- round(max-6)
+# add_brown<- c(rep("#515256", time_rep))
+# pal_hist <- c(pal_hist, add_brown)
+
+## for the colors that are included in the legend
+col.brks <- seq(0, max, by = 0.1)
+col.assign <- cut(col.brks, breaks=col.brks, include.lowest = TRUE)
+
+colors_df <- data.frame(colors_plot = pal_hist, col.assign)
+colors_df$col.assign <- as.character(colors_df$col.assign) 
+ colors_df <- colors_df %>% 
+   mutate(col.assign = ifelse(colors_plot == "#F8F9FA", '[0,0]',
+                              ifelse(col.assign == '[0,1]', '(0,1]', col.assign)))
+
+chi_df_sample <- chi_df_sample %>% 
+  arrange(raster_data_sample)
+chi_df_sample$col.assign <- cut(chi_df_sample$raster_data_sample, breaks=col.brks, include.lowest=TRUE) 
+chi_df_sample$col.assign <- as.character(chi_df_sample$col.assign)
+chi_df_sample <- chi_df_sample %>% 
+   mutate(col.assign = ifelse(raster_data_sample == 0, '[0,0]', 
+                              ifelse( col.assign == '[0,1]', '(0,1]', col.assign)))
+
+# brown <- chi_brown_df_sample %>% 
+#   mutate(col.assign = '(5.9,6]', 
+#          raster_data_sample = 5.902967) %>% 
+#   select(-raster_brown_data_sample)
+
+# chi_df_sample_hist <- rbind(chi_df_sample,brown) %>% 
+chi_df_sample_hist <- chi_df_sample %>% 
+  left_join(colors_df, by="col.assign") %>%
+  mutate(colors_plot = ifelse(raster_data_sample == chi_99_quant, '#B90000', colors_plot),
+    colors_plot = as.character(colors_plot)) %>% 
+  arrange(raster_data_sample) %>% 
+  group_by(col.assign) 
+
+#class(chi_df_sample_hist$raster_data_sample)
+
+cols <- chi_df_sample_hist %>% 
+  mutate(colors_plot = as.character(colors_plot)) %>% 
+  select(col.assign, colors_plot) %>% 
+  unique() %>% 
+  pull(colors_plot) 
+
+image(volcano, asp=1, col=cols)
+scales::show_col(cols)
+
+ch <- filter(chi_df_sample_hist, colors_plot == "#B90000")
+```
+ 
+
+facet zoom method
+```{r}
+
+## create a ggplot histogram
+hist_facet <- ggplot(chi_df_sample_hist) +
+  geom_histogram(aes(x = raster_data_sample, fill = colors_plot), bins = 30) +
+  scale_fill_identity() +
+  facet_zoom(xlim = c(0.6, 6), ylim = c(0,180000), zoom.size = 1, horizontal = TRUE)+
+  #theme(zoom.y = element_blank(), validate = FALSE)
+  labs(title = "",
+       y = "Number Raster Cells",
+       x = "Cumulative Impact")+
+  theme_minimal() +
+  theme(text = element_text(size=25),
+        axis.title.x = element_text(hjust=0.2),
+        plot.background = element_rect(fill = "white", color = NA))
+       #  panel.background = element_rect(fill = "transparent", colour = "transparent"), # bg of the panel
+       #  plot.background = element_rect(fill = "transparent", color = NA), # bg of the plot
+       #  #panel.grid.major = element_blank(), # get rid of major grid
+       # # panel.grid.minor = element_blank(), # get rid of minor grid
+       #  legend.background = element_rect(fill = "transparent"), # get rid of legend bg
+       #  legend.box.background = element_rect(fill = "transparent"))
+      
+
+hist_facet
+
+ggsave(here("_analysis/figures/paper/output/fig_2a_histogram.jpg"), width = 30, height = 10, dpi=300, bg = "transparent") # bg = "transparent"
+
+```
+
+
+
+## Summary of each stressors of all food systems (livestock, aquaculture, fisheries, human)
+
+
+
+```{r}
+
+source(here("_analysis/figures/paper/colors_stressors_fig_1_2.R"))
+
+test_color <- function(stressor){
+  
+  ## stressor = "disturbance"
+  ## get the max value
+  ## chi
+
+  chi <- raster(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/stressor_per_km2/stressor", pattern = stressor, full=TRUE))
+  
+  # chi_cols = c("NA", paste0(final_palette, "BF"))
+  
+ #quant <- quantile(chi, 0.9999)
+ quant <- quantile(chi, 0.99)
+ 
+ ## disturbance quant = 0.6841217 
+ ## water quant = 67150.8 
+ ## nutrient quant = 6.06812 
+ ## ghg quant = 262.4513 
+
+chi[chi > quant ] <- quant
+
+  raster_data=chi
+  
+  max_value <- max(raster_data)
+  
+  title="" 
+  
+if(stressor == "disturbance"){
+  cols <- dist_palette
+}else if (stressor == "water"){
+  cols <- wat_palette
+  } else if (stressor == "nutrient"){
+    cols <- nut_palette
+      }else{
+        cols <- ghg_palette}
+      
+
+  if(stressor == "water"){
+   # stressor <- "water"
+    raster_data <- raster_data/1000
+    
+      png(here(sprintf("_analysis/figures/paper/output/fig_2b_%s_cumulative.png", stressor)), res=500, width=6, height=3, units="in")
+  par(oma=c(0,0,0,0), new = TRUE, mar=c(0, 0, 0, 4))  # bottom, left, top, and right  
+plot(water, border = "#FFFFFF", col= "#FFFFFF", lwd=0.5,  cex= 0.75, main= "") 
+plot(raster_data, 
+     col=cols, 
+     axes=FALSE, 
+     box=FALSE, 
+     add=TRUE,  
+     legend=TRUE, 
+     legend.shrink= 0.6, 
+     legend.width=.4,
+      legend.args=list(text = expression(paste("Thousand ", 'm'^3)), cex = 0.7, side = 3, line = 1))
+plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.2, add=TRUE)
+dev.off()
+    
+
+  }else if(stressor == "ghg"){
+    
+    png(here(sprintf("_analysis/figures/paper/output/fig_2b_%s_cumulative.png", stressor)), res=500, width=6, height=3, units="in")
+  par(oma=c(0,0,0,0), new = TRUE, mar=c(0, 0, 0, 4))  # bottom, left, top, and right
+  #par(mfrow=c(1, 1), mar=c(1, 0, 1, 2))
+  
+plot(water, border = "#FFFFFF", col= "#FFFFFF", lwd=0.5, main="", cex=0.75)
+plot(raster_data, 
+     col=cols, 
+     axes=FALSE, 
+     box=FALSE, 
+     add=TRUE,  
+     legend=TRUE, 
+     legend.shrink= 0.6, 
+     legend.width=.4,
+      legend.args = list(text = expression(paste('CO'[2], "-eq")), cex = 0.7, side = 3, line = 1))
+plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.2, add=TRUE)
+dev.off()
+
+  }else if(stressor == "disturbance"){
+    
+    png(here(sprintf("_analysis/figures/paper/output/fig_2b_%s_cumulative.png", stressor)), res=500, width=6, height=3, units="in")
+  par(oma=c(0,0,0,0), new = TRUE, mar=c(0, 0, 0, 4))  # bottom, left, top, and right
+
+plot(water, border = "#FFFFFF", col= "#FFFFFF", lwd=0.5, main="", cex=0.75)
+
+plot(raster_data, 
+     col=cols, 
+     axes=FALSE, 
+     box=FALSE, 
+     #  new = TRUE,
+     add=TRUE,  
+     legend=TRUE, 
+     legend.shrink= 0.6, 
+     legend.width=.4,
+      legend.args = list(text = "km2-eq", cex = 0.7, side = 3, line = 1))
+
+plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.2, add=TRUE)
+dev.off()
+
+  
+}else{
+  png(here(sprintf("_analysis/figures/paper/output/fig_2b_%s_cumulative.png", stressor)), res=500, width=6, height=3, units="in")
+  par(oma=c(0,0,0,0), new = TRUE, mar=c(0, 0, 0, 4))  # bottom, left, top, and right
+  
+plot(water, border = "#FFFFFF", col= "#FFFFFF", lwd=0.5, main="", cex=0.75)
+plot(raster_data, 
+     col=cols, 
+     axes=FALSE, 
+     box=FALSE, 
+     new=TRUE,  
+     legend=TRUE, 
+     legend.shrink= 0.6, 
+     legend.width=.4,
+      legend.args = list(text = "Tonnes P and N", cex = 0.7, side = 3, line = 1))
+plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.2, add=TRUE)
+plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.2, add=TRUE)
+dev.off()
+}
+}
+
+test_color(stressor = "nutrient")
+test_color(stressor = "water")
+test_color(stressor = "disturbance")
+test_color(stressor = "ghg")
+
+
+```
+
+Extra code that we aren't currently using
+
+Some code for if we want to do them separably instead of with the facet for the CI histrogram legend
+```{r}
+
+## the subset plot
+ chi_df_sample_hist_subset <-chi_df_sample_hist  %>%
+   filter(raster_data_sample >= 4) %>% ## will need to check this math with someone: 
+   arrange(raster_data_sample)
+ 
+ subset_col <- chi_df_sample_hist_subset %>% 
+  mutate(colors_plot = as.character(colors_plot)) %>% 
+  select(col.assign, colors_plot) %>% 
+  unique() %>% 
+  pull(colors_plot) 
+ scales::show_col(subset_col)
+
+## separated
+hist_1 <- ggplot(chi_df_sample_hist)  +
+  geom_histogram(aes(x = raster_data_sample, fill = colors_plot), bins = 30) +
+  scale_fill_manual("", values = rev(cols)) +
+  # guides(fill=FALSE)
+  theme_bw()
+
+hist_2 <- ggplot(chi_df_sample_hist_subset)  +
+  geom_histogram(aes(x = raster_data_sample, fill = colors_plot), bins = 43) +
+  scale_fill_identity()
+  
+summary(chi_df_sample_hist_subset)  
+
+  # scale_fill_manual("", values = rev(cols)) +
+  # theme_bw()
+
+hist_2
+
+chi_df_sample_hist_subset$colors_plot
+#AA7754
+#imits = seq(0:38), breaks = seq(0:38)
+
+
+check <- chi_df_sample_hist %>% 
+  mutate(test = round(raster_data_sample, digits = 1)) %>% 
+  select(test, col.assign, test) %>% 
+  unique()
+
+
+```
+
+
+Calculate interesting stats
+Summarize top 1% of pixels contribute to X % total impact
+Do this for 1%, 5%, and 10%
+Sym the total in the top X percent and divide by sum across all pixels
+
+```{r}
+
+chi <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/cumulative_stress/all_systems_cumulative_stress.tif")
+cellStats(chi, stat = 'sum')
+##4028759
+
+## top 1%
+top_1_per <- quantile(chi, 0.99)
+chi_1 <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/cumulative_stress/all_systems_cumulative_stress.tif")
+
+chi_1[chi_1 < top_1_per ] <- 0
+cellStats(chi_1, stat = 'sum')
+##1583522
+1583522/4028759
+## 0.3930545
+
+## top 5%
+top_5_per <- quantile(chi, 0.95)
+chi_5 <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/cumulative_stress/all_systems_cumulative_stress.tif")
+chi_5[chi_5 < top_5_per ] <- 0
+cellStats(chi_5, stat = 'sum')
+# 3150170
+3150170/4028759
+## 0.7819207
+
+## top 10%
+top_10_per <- quantile(chi, 0.90)
+chi_10 <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/cumulative_stress/all_systems_cumulative_stress.tif")
+chi_10[chi_10 < top_10_per ] <- 0
+cellStats(chi_10, stat = 'sum')
+# 3742118
+3742118/4028759
+## 0.9288513
+
+```
+

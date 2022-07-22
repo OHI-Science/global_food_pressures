@@ -1,0 +1,23 @@
+---
+title: "Freshwater Aquaculture Farm"
+output: html_document
+---
+## Script Author
+
+## Objectives
+
+## Inputs
+
+## Outputs
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+source(here("_workflow/common.R"))
+## load libraries, read in data
+
+```
+
+## Gapfilling
+
+## Data Checks

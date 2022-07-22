@@ -1,0 +1,733 @@
+iso3c,country,production_system,species,kg_live_wt
+ABW,Aruba,broilers,chickens,2.45
+AGO,Angola,broilers,chickens,1.5
+AIA,Anguilla,broilers,chickens,2.45
+ALB,Albania,broilers,chickens,2.6
+AND,Andorra,broilers,chickens,2.6
+ARE,United Arab Emirates,broilers,chickens,2.1
+ARG,Argentina,broilers,chickens,2.45
+ARM,Armenia,broilers,chickens,2.1
+ASM,American Samoa,broilers,chickens,2.28
+ATG,Antigua and Barbuda,broilers,chickens,2.45
+AUS,Australia,broilers,chickens,2.28
+AUT,Austria,broilers,chickens,2.167
+AZE,Azerbaijan,broilers,chickens,2.1
+BDI,Burundi,broilers,chickens,1.5
+BEL,Belgium,broilers,chickens,2.3
+BEN,Benin,broilers,chickens,1.5
+BFA,Burkina Faso,broilers,chickens,1.5
+BGD,Bangladesh,broilers,chickens,2
+BGR,Bulgaria,broilers,chickens,2.185
+BHR,Bahrain,broilers,chickens,2.1
+BHS,Bahamas,broilers,chickens,2.45
+BIH,Bosnia and Herzegovina,broilers,chickens,2.6
+BLR,Belarus,broilers,chickens,2.185
+BLZ,Belize,broilers,chickens,2.45
+BMU,Bermuda,broilers,chickens,2.67
+BOL,Bolivia,broilers,chickens,2.45
+BRA,Brazil,broilers,chickens,2.5
+BRB,Barbados,broilers,chickens,2.45
+BRN,Brunei,broilers,chickens,2.2
+BTN,Bhutan,broilers,chickens,2
+BWA,Botswana,broilers,chickens,1.5
+CAF,Central African Republic,broilers,chickens,1.5
+CAN,Canada,broilers,chickens,2.67
+CHE,Switzerland,broilers,chickens,2.167
+CHL,Chile,broilers,chickens,2.45
+CHN,China,broilers,chickens,2.1
+CIV,Côte d'Ivoire,broilers,chickens,1.5
+CMR,Cameroon,broilers,chickens,1.5
+COD,Democratic Republic of the Congo,broilers,chickens,1.5
+COG,Republic of Congo,broilers,chickens,1.5
+COK,Cook Islands,broilers,chickens,2.28
+COL,Colombia,broilers,chickens,2.45
+COM,Comoros,broilers,chickens,1.5
+CPV,Cape Verde,broilers,chickens,1.5
+CRI,Costa Rica,broilers,chickens,2.45
+CUB,Cuba,broilers,chickens,2.45
+CYM,Cayman Islands,broilers,chickens,2.45
+CYP,Cyprus,broilers,chickens,2.1
+CZE,Czech Republic,broilers,chickens,2.185
+DEU,Germany,broilers,chickens,2
+DJI,Djibouti,broilers,chickens,1.5
+DMA,Dominica,broilers,chickens,2.45
+DNK,Denmark,broilers,chickens,2.2
+DOM,Dominican Republic,broilers,chickens,2.45
+DZA,Algeria,broilers,chickens,1.5
+ECU,Ecuador,broilers,chickens,2.45
+EGY,Egypt,broilers,chickens,1.5
+ERI,Eritrea,broilers,chickens,1.5
+ESH,Western Sahara,broilers,chickens,1.5
+ESP,Spain,broilers,chickens,2.6
+EST,Estonia,broilers,chickens,2.2
+ETH,Ethiopia,broilers,chickens,1.5
+FIN,Finland,broilers,chickens,2.1
+FJI,Fiji,broilers,chickens,2.28
+FLK,Falkland Islands,broilers,chickens,2.45
+FRA,France,broilers,chickens,2.167
+FRO,Faroe Islands,broilers,chickens,2.2
+FSM,Micronesia,broilers,chickens,2.28
+GAB,Gabon,broilers,chickens,1.5
+GBR,United Kingdom,broilers,chickens,2.2
+GEO,Georgia,broilers,chickens,2.1
+GGY,Guernsey,broilers,chickens,2.2
+GHA,Ghana,broilers,chickens,1.5
+GIN,Guinea,broilers,chickens,1.5
+GLP,Guadeloupe,broilers,chickens,2.45
+GMB,Gambia,broilers,chickens,1.5
+GNB,Guinea-Bissau,broilers,chickens,1.5
+GNQ,Equatorial Guinea,broilers,chickens,1.5
+GRC,Greece,broilers,chickens,2.6
+GRD,Grenada,broilers,chickens,2.45
+GRL,Greenland,broilers,chickens,2.67
+GTM,Guatemala,broilers,chickens,2.45
+GUF,French Guiana,broilers,chickens,2.45
+GUM,Guam,broilers,chickens,2.28
+GUY,Guyana,broilers,chickens,2.45
+HKG,Hong Kong,broilers,chickens,2.1
+HND,Honduras,broilers,chickens,2.45
+HRV,Croatia,broilers,chickens,2.6
+HTI,Haiti,broilers,chickens,2.45
+HUN,Hungary,broilers,chickens,2.17
+IDN,Indonesia,broilers,chickens,1.25
+IMN,Isle of Man,broilers,chickens,2.2
+IND,India,broilers,chickens,2
+IRL,Ireland,broilers,chickens,2.2
+IRN,Iran,broilers,chickens,2
+IRQ,Iraq,broilers,chickens,2.1
+ISL,Iceland,broilers,chickens,2.2
+ISR,Israel,broilers,chickens,2.1
+ITA,Italy,broilers,chickens,2.6
+JAM,Jamaica,broilers,chickens,2.45
+JEY,Jersey,broilers,chickens,2.2
+JOR,Jordan,broilers,chickens,2.1
+JPN,Japan,broilers,chickens,2.1
+KAZ,Kazakhstan,broilers,chickens,2.1
+KEN,Kenya,broilers,chickens,1.5
+KGZ,Kyrgyzstan,broilers,chickens,2.1
+KHM,Cambodia,broilers,chickens,2.2
+KIR,Kiribati,broilers,chickens,2.28
+KNA,Saint Kitts and Nevis,broilers,chickens,2.45
+KOR,South Korea,broilers,chickens,2.1
+KWT,Kuwait,broilers,chickens,2.1
+LAO,Laos,broilers,chickens,2.2
+LBN,Lebanon,broilers,chickens,2.1
+LBR,Liberia,broilers,chickens,1.5
+LBY,Libya,broilers,chickens,1.5
+LCA,Saint Lucia,broilers,chickens,2.45
+LIE,Liechtenstein,broilers,chickens,2.167
+LKA,Sri Lanka,broilers,chickens,2
+LSO,Lesotho,broilers,chickens,1.5
+LTU,Lithuania,broilers,chickens,2.2
+LUX,Luxembourg,broilers,chickens,2.167
+LVA,Latvia,broilers,chickens,2.2
+MAC,Macao,broilers,chickens,2.1
+MAR,Morocco,broilers,chickens,1.5
+MCO,Monaco,broilers,chickens,2.34828947368421
+MDA,Moldova,broilers,chickens,2.185
+MDG,Madagascar,broilers,chickens,1.5
+MDV,Maldives,broilers,chickens,2
+MEX,Mexico,broilers,chickens,2.45
+MHL,Marshall Islands,broilers,chickens,2.29772727272727
+MKD,Macedonia,broilers,chickens,2.6
+MLI,Mali,broilers,chickens,1.5
+MLT,Malta,broilers,chickens,2.6
+MMR,Myanmar,broilers,chickens,2.2
+MNE,Montenegro,broilers,chickens,2.6
+MNG,Mongolia,broilers,chickens,2.1
+MNP,Northern Mariana Islands,broilers,chickens,2.28
+MOZ,Mozambique,broilers,chickens,1.5
+MRT,Mauritania,broilers,chickens,1.5
+MSR,Montserrat,broilers,chickens,2.45
+MTQ,Martinique,broilers,chickens,2.45
+MUS,Mauritius,broilers,chickens,1.5
+MWI,Malawi,broilers,chickens,1.5
+MYS,Malaysia,broilers,chickens,2.2
+MYT,Mayotte,broilers,chickens,1.5
+NAM,Namibia,broilers,chickens,1.5
+NCL,New Caledonia,broilers,chickens,2.28
+NER,Niger,broilers,chickens,1.5
+NFK,Norfolk Island,broilers,chickens,2.28
+NGA,Nigeria,broilers,chickens,1.5
+NIC,Nicaragua,broilers,chickens,2.45
+NIU,Niue,broilers,chickens,2.28
+NLD,Netherlands,broilers,chickens,2.2
+NOR,Norway,broilers,chickens,2.2
+NPL,Nepal,broilers,chickens,2
+NRU,Nauru,broilers,chickens,2.29772727272727
+NZL,New Zealand,broilers,chickens,2.28
+OMN,Oman,broilers,chickens,2.1
+PAK,Pakistan,broilers,chickens,2
+PAN,Panama,broilers,chickens,2.45
+PCN,Pitcairn Islands,broilers,chickens,2.28
+PER,Peru,broilers,chickens,2.45
+PHL,Philippines,broilers,chickens,2.2
+PLW,Palau,broilers,chickens,2.28
+PNG,Papua New Guinea,broilers,chickens,2.28
+POL,Poland,broilers,chickens,2.2
+PRI,Puerto Rico,broilers,chickens,2.45
+PRK,North Korea,broilers,chickens,2.1
+PRT,Portugal,broilers,chickens,2.6
+PRY,Paraguay,broilers,chickens,2.45
+PSE,Palestina,broilers,chickens,2.1
+PYF,French Polynesia,broilers,chickens,2.28
+QAT,Qatar,broilers,chickens,2.1
+REU,Reunion,broilers,chickens,1.5
+ROU,Romania,broilers,chickens,2.185
+RUS,Russia,broilers,chickens,2.185
+RWA,Rwanda,broilers,chickens,1.5
+SAU,Saudi Arabia,broilers,chickens,2.1
+SDN,Sudan,broilers,chickens,1.5
+SEN,Senegal,broilers,chickens,1.5
+SGP,Singapore,broilers,chickens,2.2
+SHN,Saint Helena,broilers,chickens,1.5
+SJM,Svalbard and Jan Mayen,broilers,chickens,2.2
+SLB,Solomon Islands,broilers,chickens,2.28
+SLE,Sierra Leone,broilers,chickens,1.5
+SLV,El Salvador,broilers,chickens,2.45
+SMR,San Marino,broilers,chickens,2.6
+SOM,Somalia,broilers,chickens,1.5
+SPM,Saint Pierre and Miquelon,broilers,chickens,2.67
+SRB,Serbia,broilers,chickens,2.6
+STP,São Tomé and Príncipe,broilers,chickens,1.5
+SUR,Suriname,broilers,chickens,2.45
+SVK,Slovakia,broilers,chickens,2.185
+SVN,Slovenia,broilers,chickens,2.6
+SWE,Sweden,broilers,chickens,2.2
+SWZ,Swaziland,broilers,chickens,1.5
+SYC,Seychelles,broilers,chickens,1.5
+SYR,Syria,broilers,chickens,2.1
+TCA,Turks and Caicos Islands,broilers,chickens,2.45
+TCD,Chad,broilers,chickens,1.5
+TGO,Togo,broilers,chickens,1.5
+THA,Thailand,broilers,chickens,2.2
+TJK,Tajikistan,broilers,chickens,2.1
+TKL,Tokelau,broilers,chickens,2.29772727272727
+TKM,Turkmenistan,broilers,chickens,2.1
+TLS,Timor-Leste,broilers,chickens,2.2
+TON,Tonga,broilers,chickens,2.28
+TTO,Trinidad and Tobago,broilers,chickens,2.45
+TUN,Tunisia,broilers,chickens,1.5
+TUR,Turkey,broilers,chickens,2.1
+TUV,Tuvalu,broilers,chickens,2.29772727272727
+TZA,Tanzania,broilers,chickens,1.5
+UGA,Uganda,broilers,chickens,1.5
+UKR,Ukraine,broilers,chickens,2.185
+URY,Uruguay,broilers,chickens,2.45
+USA,United States,broilers,chickens,2.67
+UZB,Uzbekistan,broilers,chickens,2.1
+VCT,Saint Vincent and the Grenadines,broilers,chickens,2.45
+VEN,Venezuela,broilers,chickens,2.45
+VGB,British Virgin Islands,broilers,chickens,2.45
+VIR,"Virgin Islands, U.S.",broilers,chickens,2.45
+VNM,Vietnam,broilers,chickens,2.2
+VUT,Vanuatu,broilers,chickens,2.28
+WLF,Wallis and Futuna,broilers,chickens,2.28
+WSM,Samoa,broilers,chickens,2.28
+YEM,Yemen,broilers,chickens,2.1
+ZAF,South Africa,broilers,chickens,1.5
+ZMB,Zambia,broilers,chickens,1.5
+ZWE,Zimbabwe,broilers,chickens,1.5
+AFG,Afghanistan,broilers,chickens,2
+ALA,Åland,broilers,chickens,2.1933333333333334
+BES,"Bonaire, Sint Eustatius and Saba",broilers,chickens,2.45
+IOT,British Indian Ocean Territory,broilers,chickens,1.5
+CXR,Christmas Island,broilers,chickens,2.28
+CCK,Cocos Islands,broilers,chickens,2.28
+CUW,Curaçao,broilers,chickens,2.45
+GIB,Gibraltar,broilers,chickens,2.6
+XKO,Kosovo,broilers,chickens,2.6
+XMI,Madeira Island,broilers,chickens,1.5
+BLM,Saint-Barthélemy,broilers,chickens,2.45
+MAF,Saint-Martin,broilers,chickens,2.45
+SXM,Sint Maarten,broilers,chickens,2.45
+SSD,South Sudan,broilers,chickens,1.5
+TWN,Taiwan,broilers,chickens,2.1
+ABW,Aruba,industrial,pigs,115
+AGO,Angola,industrial,pigs,116
+AIA,Anguilla,industrial,pigs,115
+ALB,Albania,industrial,pigs,116
+AND,Andorra,industrial,pigs,116
+ARE,United Arab Emirates,industrial,pigs,115
+ARG,Argentina,industrial,pigs,115
+ARM,Armenia,industrial,pigs,115
+ASM,American Samoa,industrial,pigs,73
+ATG,Antigua and Barbuda,industrial,pigs,115
+AUS,Australia,industrial,pigs,73
+AUT,Austria,industrial,pigs,118
+AZE,Azerbaijan,industrial,pigs,115
+BDI,Burundi,industrial,pigs,116
+BEL,Belgium,industrial,pigs,112
+BEN,Benin,industrial,pigs,116
+BFA,Burkina Faso,industrial,pigs,116
+BGD,Bangladesh,industrial,pigs,115
+BGR,Bulgaria,industrial,pigs,116
+BHR,Bahrain,industrial,pigs,115
+BHS,Bahamas,industrial,pigs,115
+BIH,Bosnia and Herzegovina,industrial,pigs,116
+BLR,Belarus,industrial,pigs,116
+BLZ,Belize,industrial,pigs,115
+BMU,Bermuda,industrial,pigs,115
+BOL,Bolivia,industrial,pigs,115
+BRA,Brazil,industrial,pigs,115
+BRB,Barbados,industrial,pigs,115
+BRN,Brunei,industrial,pigs,115
+BTN,Bhutan,industrial,pigs,115
+BWA,Botswana,industrial,pigs,116
+CAF,Central African Republic,industrial,pigs,116
+CAN,Canada,industrial,pigs,115
+CHE,Switzerland,industrial,pigs,116
+CHL,Chile,industrial,pigs,115
+CHN,China,industrial,pigs,115
+CIV,Côte d'Ivoire,industrial,pigs,116
+CMR,Cameroon,industrial,pigs,116
+COD,Democratic Republic of the Congo,industrial,pigs,116
+COG,Republic of Congo,industrial,pigs,116
+COK,Cook Islands,industrial,pigs,73
+COL,Colombia,industrial,pigs,115
+COM,Comoros,industrial,pigs,116
+CPV,Cape Verde,industrial,pigs,116
+CRI,Costa Rica,industrial,pigs,115
+CUB,Cuba,industrial,pigs,115
+CYM,Cayman Islands,industrial,pigs,115
+CYP,Cyprus,industrial,pigs,115
+CZE,Czech Republic,industrial,pigs,116
+DEU,Germany,industrial,pigs,119
+DJI,Djibouti,industrial,pigs,116
+DMA,Dominica,industrial,pigs,115
+DNK,Denmark,industrial,pigs,107
+DOM,Dominican Republic,industrial,pigs,115
+DZA,Algeria,industrial,pigs,116
+ECU,Ecuador,industrial,pigs,115
+EGY,Egypt,industrial,pigs,116
+ERI,Eritrea,industrial,pigs,116
+ESH,Western Sahara,industrial,pigs,116
+ESP,Spain,industrial,pigs,103
+EST,Estonia,industrial,pigs,116
+ETH,Ethiopia,industrial,pigs,116
+FIN,Finland,industrial,pigs,116
+FJI,Fiji,industrial,pigs,73
+FLK,Falkland Islands,industrial,pigs,115
+FRA,France,industrial,pigs,115
+FRO,Faroe Islands,industrial,pigs,116
+FSM,Micronesia,industrial,pigs,73
+GAB,Gabon,industrial,pigs,116
+GBR,United Kingdom,industrial,pigs,101
+GEO,Georgia,industrial,pigs,115
+GGY,Guernsey,industrial,pigs,116
+GHA,Ghana,industrial,pigs,116
+GIN,Guinea,industrial,pigs,116
+GLP,Guadeloupe,industrial,pigs,115
+GMB,Gambia,industrial,pigs,116
+GNB,Guinea-Bissau,industrial,pigs,116
+GNQ,Equatorial Guinea,industrial,pigs,116
+GRC,Greece,industrial,pigs,116
+GRD,Grenada,industrial,pigs,115
+GRL,Greenland,industrial,pigs,115
+GTM,Guatemala,industrial,pigs,115
+GUF,French Guiana,industrial,pigs,115
+GUM,Guam,industrial,pigs,73
+GUY,Guyana,industrial,pigs,115
+HKG,Hong Kong,industrial,pigs,106
+HND,Honduras,industrial,pigs,115
+HRV,Croatia,industrial,pigs,116
+HTI,Haiti,industrial,pigs,115
+HUN,Hungary,industrial,pigs,116
+IDN,Indonesia,industrial,pigs,115
+IMN,Isle of Man,industrial,pigs,116
+IND,India,industrial,pigs,115
+IRL,Ireland,industrial,pigs,100
+IRN,Iran,industrial,pigs,115
+IRQ,Iraq,industrial,pigs,115
+ISL,Iceland,industrial,pigs,116
+ISR,Israel,industrial,pigs,115
+ITA,Italy,industrial,pigs,166
+JAM,Jamaica,industrial,pigs,115
+JEY,Jersey,industrial,pigs,116
+JOR,Jordan,industrial,pigs,115
+JPN,Japan,industrial,pigs,106
+KAZ,Kazakhstan,industrial,pigs,106
+KEN,Kenya,industrial,pigs,116
+KGZ,Kyrgyzstan,industrial,pigs,106
+KHM,Cambodia,industrial,pigs,115
+KIR,Kiribati,industrial,pigs,73
+KNA,Saint Kitts and Nevis,industrial,pigs,115
+KOR,South Korea,industrial,pigs,106
+KWT,Kuwait,industrial,pigs,115
+LAO,Laos,industrial,pigs,115
+LBN,Lebanon,industrial,pigs,115
+LBR,Liberia,industrial,pigs,116
+LBY,Libya,industrial,pigs,116
+LCA,Saint Lucia,industrial,pigs,115
+LIE,Liechtenstein,industrial,pigs,116
+LKA,Sri Lanka,industrial,pigs,115
+LSO,Lesotho,industrial,pigs,116
+LTU,Lithuania,industrial,pigs,116
+LUX,Luxembourg,industrial,pigs,116
+LVA,Latvia,industrial,pigs,116
+MAC,Macao,industrial,pigs,111.764705882353
+MAR,Morocco,industrial,pigs,116
+MCO,Monaco,industrial,pigs,116
+MDA,Moldova,industrial,pigs,116
+MDG,Madagascar,industrial,pigs,116
+MDV,Maldives,industrial,pigs,115
+MEX,Mexico,industrial,pigs,115
+MHL,Marshall Islands,industrial,pigs,73
+MKD,Macedonia,industrial,pigs,116
+MLI,Mali,industrial,pigs,116
+MLT,Malta,industrial,pigs,116
+MMR,Myanmar,industrial,pigs,115
+MNE,Montenegro,industrial,pigs,116
+MNG,Mongolia,industrial,pigs,106
+MNP,Northern Mariana Islands,industrial,pigs,73
+MOZ,Mozambique,industrial,pigs,116
+MRT,Mauritania,industrial,pigs,116
+MSR,Montserrat,industrial,pigs,115
+MTQ,Martinique,industrial,pigs,115
+MUS,Mauritius,industrial,pigs,116
+MWI,Malawi,industrial,pigs,116
+MYS,Malaysia,industrial,pigs,115
+MYT,Mayotte,industrial,pigs,116
+NAM,Namibia,industrial,pigs,116
+NCL,New Caledonia,industrial,pigs,73
+NER,Niger,industrial,pigs,116
+NFK,Norfolk Island,industrial,pigs,73
+NGA,Nigeria,industrial,pigs,116
+NIC,Nicaragua,industrial,pigs,115
+NIU,Niue,industrial,pigs,73
+NLD,Netherlands,industrial,pigs,115
+NOR,Norway,industrial,pigs,116
+NPL,Nepal,industrial,pigs,115
+NRU,Nauru,industrial,pigs,73
+NZL,New Zealand,industrial,pigs,73
+OMN,Oman,industrial,pigs,115
+PAK,Pakistan,industrial,pigs,115
+PAN,Panama,industrial,pigs,115
+PCN,Pitcairn Islands,industrial,pigs,73
+PER,Peru,industrial,pigs,115
+PHL,Philippines,industrial,pigs,110
+PLW,Palau,industrial,pigs,73
+PNG,Papua New Guinea,industrial,pigs,73
+POL,Poland,industrial,pigs,116
+PRI,Puerto Rico,industrial,pigs,115
+PRK,North Korea,industrial,pigs,106
+PRT,Portugal,industrial,pigs,116
+PRY,Paraguay,industrial,pigs,115
+PSE,Palestina,industrial,pigs,115
+PYF,French Polynesia,industrial,pigs,73
+QAT,Qatar,industrial,pigs,115
+REU,Reunion,industrial,pigs,116
+ROU,Romania,industrial,pigs,116
+RUS,Russia,industrial,pigs,116
+RWA,Rwanda,industrial,pigs,116
+SAU,Saudi Arabia,industrial,pigs,115
+SDN,Sudan,industrial,pigs,116
+SEN,Senegal,industrial,pigs,116
+SGP,Singapore,industrial,pigs,115
+SHN,Saint Helena,industrial,pigs,116
+SJM,Svalbard and Jan Mayen,industrial,pigs,116
+SLB,Solomon Islands,industrial,pigs,73
+SLE,Sierra Leone,industrial,pigs,116
+SLV,El Salvador,industrial,pigs,115
+SMR,San Marino,industrial,pigs,116
+SPM,Saint Pierre and Miquelon,industrial,pigs,115
+SRB,Serbia,industrial,pigs,116
+STP,São Tomé and Príncipe,industrial,pigs,116
+SUR,Suriname,industrial,pigs,115
+SVK,Slovakia,industrial,pigs,116
+SVN,Slovenia,industrial,pigs,116
+SWE,Sweden,industrial,pigs,116
+SWZ,Swaziland,industrial,pigs,116
+SYC,Seychelles,industrial,pigs,116
+SYR,Syria,industrial,pigs,115
+TCA,Turks and Caicos Islands,industrial,pigs,115
+TCD,Chad,industrial,pigs,116
+TGO,Togo,industrial,pigs,116
+THA,Thailand,industrial,pigs,115
+TJK,Tajikistan,industrial,pigs,106
+TKL,Tokelau,industrial,pigs,73
+TKM,Turkmenistan,industrial,pigs,106
+TLS,Timor-Leste,industrial,pigs,115
+TON,Tonga,industrial,pigs,73
+TTO,Trinidad and Tobago,industrial,pigs,115
+TUN,Tunisia,industrial,pigs,116
+TUR,Turkey,industrial,pigs,115
+TUV,Tuvalu,industrial,pigs,73
+TZA,Tanzania,industrial,pigs,116
+UGA,Uganda,industrial,pigs,116
+UKR,Ukraine,industrial,pigs,116
+URY,Uruguay,industrial,pigs,115
+USA,United States,industrial,pigs,115
+UZB,Uzbekistan,industrial,pigs,106
+VCT,Saint Vincent and the Grenadines,industrial,pigs,115
+VEN,Venezuela,industrial,pigs,115
+VGB,British Virgin Islands,industrial,pigs,115
+VIR,"Virgin Islands, U.S.",industrial,pigs,115
+VNM,Vietnam,industrial,pigs,110
+VUT,Vanuatu,industrial,pigs,73
+WLF,Wallis and Futuna,industrial,pigs,73
+WSM,Samoa,industrial,pigs,73
+YEM,Yemen,industrial,pigs,115
+ZAF,South Africa,industrial,pigs,116
+ZMB,Zambia,industrial,pigs,116
+ZWE,Zimbabwe,industrial,pigs,116
+AFG,Afghanistan,industrial,pigs,115
+ALA,Åland,industrial,pigs,113.33333333333333
+BES,"Bonaire, Sint Eustatius and Saba",industrial,pigs,115
+IOT,British Indian Ocean Territory,industrial,pigs,116
+CXR,Christmas Island,industrial,pigs,73
+CCK,Cocos Islands,industrial,pigs,73
+CUW,Curaçao,industrial,pigs,115
+GIB,Gibraltar,industrial,pigs,118.64285714285714
+XKO,Kosovo,industrial,pigs,118.64285714285714
+XMI,Madeira Island,industrial,pigs,116
+BLM,Saint-Barthélemy,industrial,pigs,115
+MAF,Saint-Martin,industrial,pigs,115
+SXM,Sint Maarten,industrial,pigs,115
+SOM,Somalia,industrial,pigs,116
+SSD,South Sudan,industrial,pigs,116
+TWN,Taiwan,industrial,pigs,108.109243697479
+ABW,Aruba,intermediate,pigs,100
+AGO,Angola,intermediate,pigs,90
+AIA,Anguilla,intermediate,pigs,100
+ALB,Albania,intermediate,pigs,100
+AND,Andorra,intermediate,pigs,100
+ARE,United Arab Emirates,intermediate,pigs,100
+ARG,Argentina,intermediate,pigs,100
+ARM,Armenia,intermediate,pigs,100
+ASM,American Samoa,intermediate,pigs,100
+ATG,Antigua and Barbuda,intermediate,pigs,100
+AUS,Australia,intermediate,pigs,100
+AUT,Austria,intermediate,pigs,100
+AZE,Azerbaijan,intermediate,pigs,100
+BDI,Burundi,intermediate,pigs,90
+BEL,Belgium,intermediate,pigs,100
+BEN,Benin,intermediate,pigs,90
+BFA,Burkina Faso,intermediate,pigs,90
+BGD,Bangladesh,intermediate,pigs,100
+BGR,Bulgaria,intermediate,pigs,100
+BHR,Bahrain,intermediate,pigs,100
+BHS,Bahamas,intermediate,pigs,100
+BIH,Bosnia and Herzegovina,intermediate,pigs,100
+BLR,Belarus,intermediate,pigs,100
+BLZ,Belize,intermediate,pigs,100
+BMU,Bermuda,intermediate,pigs,100
+BOL,Bolivia,intermediate,pigs,100
+BRA,Brazil,intermediate,pigs,100
+BRB,Barbados,intermediate,pigs,100
+BRN,Brunei,intermediate,pigs,95
+BTN,Bhutan,intermediate,pigs,100
+BWA,Botswana,intermediate,pigs,90
+CAF,Central African Republic,intermediate,pigs,90
+CAN,Canada,intermediate,pigs,100
+CHE,Switzerland,intermediate,pigs,100
+CHL,Chile,intermediate,pigs,100
+CHN,China,intermediate,pigs,100
+CIV,Côte d'Ivoire,intermediate,pigs,90
+CMR,Cameroon,intermediate,pigs,90
+COD,Democratic Republic of the Congo,intermediate,pigs,90
+COG,Republic of Congo,intermediate,pigs,90
+COK,Cook Islands,intermediate,pigs,100
+COL,Colombia,intermediate,pigs,100
+COM,Comoros,intermediate,pigs,90
+CPV,Cape Verde,intermediate,pigs,90
+CRI,Costa Rica,intermediate,pigs,100
+CUB,Cuba,intermediate,pigs,100
+CYM,Cayman Islands,intermediate,pigs,100
+CYP,Cyprus,intermediate,pigs,100
+CZE,Czech Republic,intermediate,pigs,100
+DEU,Germany,intermediate,pigs,100
+DJI,Djibouti,intermediate,pigs,90
+DMA,Dominica,intermediate,pigs,100
+DNK,Denmark,intermediate,pigs,100
+DOM,Dominican Republic,intermediate,pigs,100
+DZA,Algeria,intermediate,pigs,90
+ECU,Ecuador,intermediate,pigs,100
+EGY,Egypt,intermediate,pigs,90
+ERI,Eritrea,intermediate,pigs,90
+ESH,Western Sahara,intermediate,pigs,90
+ESP,Spain,intermediate,pigs,100
+EST,Estonia,intermediate,pigs,100
+ETH,Ethiopia,intermediate,pigs,90
+FIN,Finland,intermediate,pigs,100
+FJI,Fiji,intermediate,pigs,100
+FLK,Falkland Islands,intermediate,pigs,100
+FRA,France,intermediate,pigs,100
+FRO,Faroe Islands,intermediate,pigs,100
+FSM,Micronesia,intermediate,pigs,100
+GAB,Gabon,intermediate,pigs,90
+GBR,United Kingdom,intermediate,pigs,100
+GEO,Georgia,intermediate,pigs,100
+GGY,Guernsey,intermediate,pigs,100
+GHA,Ghana,intermediate,pigs,90
+GIN,Guinea,intermediate,pigs,90
+GLP,Guadeloupe,intermediate,pigs,100
+GMB,Gambia,intermediate,pigs,90
+GNB,Guinea-Bissau,intermediate,pigs,90
+GNQ,Equatorial Guinea,intermediate,pigs,90
+GRC,Greece,intermediate,pigs,100
+GRD,Grenada,intermediate,pigs,100
+GRL,Greenland,intermediate,pigs,100
+GTM,Guatemala,intermediate,pigs,100
+GUF,French Guiana,intermediate,pigs,100
+GUM,Guam,intermediate,pigs,100
+GUY,Guyana,intermediate,pigs,100
+HKG,Hong Kong,intermediate,pigs,100
+HND,Honduras,intermediate,pigs,100
+HRV,Croatia,intermediate,pigs,100
+HTI,Haiti,intermediate,pigs,100
+HUN,Hungary,intermediate,pigs,100
+IDN,Indonesia,intermediate,pigs,95
+IMN,Isle of Man,intermediate,pigs,100
+IND,India,intermediate,pigs,100
+IRL,Ireland,intermediate,pigs,100
+IRN,Iran,intermediate,pigs,100
+IRQ,Iraq,intermediate,pigs,100
+ISL,Iceland,intermediate,pigs,100
+ISR,Israel,intermediate,pigs,100
+ITA,Italy,intermediate,pigs,100
+JAM,Jamaica,intermediate,pigs,100
+JEY,Jersey,intermediate,pigs,100
+JOR,Jordan,intermediate,pigs,100
+JPN,Japan,intermediate,pigs,100
+KAZ,Kazakhstan,intermediate,pigs,100
+KEN,Kenya,intermediate,pigs,90
+KGZ,Kyrgyzstan,intermediate,pigs,100
+KHM,Cambodia,intermediate,pigs,95
+KIR,Kiribati,intermediate,pigs,100
+KNA,Saint Kitts and Nevis,intermediate,pigs,100
+KOR,South Korea,intermediate,pigs,100
+KWT,Kuwait,intermediate,pigs,100
+LAO,Laos,intermediate,pigs,95
+LBN,Lebanon,intermediate,pigs,100
+LBR,Liberia,intermediate,pigs,90
+LBY,Libya,intermediate,pigs,90
+LCA,Saint Lucia,intermediate,pigs,100
+LIE,Liechtenstein,intermediate,pigs,100
+LKA,Sri Lanka,intermediate,pigs,100
+LSO,Lesotho,intermediate,pigs,90
+LTU,Lithuania,intermediate,pigs,100
+LUX,Luxembourg,intermediate,pigs,100
+LVA,Latvia,intermediate,pigs,100
+MAC,Macao,intermediate,pigs,95.7058823529412
+MAR,Morocco,intermediate,pigs,90
+MCO,Monaco,intermediate,pigs,100
+MDA,Moldova,intermediate,pigs,100
+MDG,Madagascar,intermediate,pigs,90
+MDV,Maldives,intermediate,pigs,100
+MEX,Mexico,intermediate,pigs,100
+MHL,Marshall Islands,intermediate,pigs,100
+MKD,Macedonia,intermediate,pigs,100
+MLI,Mali,intermediate,pigs,90
+MLT,Malta,intermediate,pigs,100
+MMR,Myanmar,intermediate,pigs,95
+MNE,Montenegro,intermediate,pigs,100
+MNG,Mongolia,intermediate,pigs,100
+MNP,Northern Mariana Islands,intermediate,pigs,100
+MOZ,Mozambique,intermediate,pigs,90
+MRT,Mauritania,intermediate,pigs,90
+MSR,Montserrat,intermediate,pigs,100
+MTQ,Martinique,intermediate,pigs,100
+MUS,Mauritius,intermediate,pigs,90
+MWI,Malawi,intermediate,pigs,90
+MYS,Malaysia,intermediate,pigs,95
+MYT,Mayotte,intermediate,pigs,90
+NAM,Namibia,intermediate,pigs,90
+NCL,New Caledonia,intermediate,pigs,100
+NER,Niger,intermediate,pigs,90
+NFK,Norfolk Island,intermediate,pigs,100
+NGA,Nigeria,intermediate,pigs,90
+NIC,Nicaragua,intermediate,pigs,100
+NIU,Niue,intermediate,pigs,100
+NLD,Netherlands,intermediate,pigs,100
+NOR,Norway,intermediate,pigs,100
+NPL,Nepal,intermediate,pigs,100
+NRU,Nauru,intermediate,pigs,100
+NZL,New Zealand,intermediate,pigs,100
+OMN,Oman,intermediate,pigs,100
+PAK,Pakistan,intermediate,pigs,100
+PAN,Panama,intermediate,pigs,100
+PCN,Pitcairn Islands,intermediate,pigs,100
+PER,Peru,intermediate,pigs,100
+PHL,Philippines,intermediate,pigs,87
+PLW,Palau,intermediate,pigs,100
+PNG,Papua New Guinea,intermediate,pigs,100
+POL,Poland,intermediate,pigs,100
+PRI,Puerto Rico,intermediate,pigs,100
+PRK,North Korea,intermediate,pigs,100
+PRT,Portugal,intermediate,pigs,100
+PRY,Paraguay,intermediate,pigs,100
+PSE,Palestina,intermediate,pigs,100
+PYF,French Polynesia,intermediate,pigs,100
+QAT,Qatar,intermediate,pigs,100
+REU,Reunion,intermediate,pigs,90
+ROU,Romania,intermediate,pigs,100
+RUS,Russia,intermediate,pigs,100
+RWA,Rwanda,intermediate,pigs,90
+SAU,Saudi Arabia,intermediate,pigs,100
+SDN,Sudan,intermediate,pigs,90
+SEN,Senegal,intermediate,pigs,90
+SGP,Singapore,intermediate,pigs,95
+SHN,Saint Helena,intermediate,pigs,90
+SJM,Svalbard and Jan Mayen,intermediate,pigs,100
+SLB,Solomon Islands,intermediate,pigs,100
+SLE,Sierra Leone,intermediate,pigs,90
+SLV,El Salvador,intermediate,pigs,100
+SMR,San Marino,intermediate,pigs,100
+SOM,Somalia,intermediate,pigs,90
+SPM,Saint Pierre and Miquelon,intermediate,pigs,100
+SRB,Serbia,intermediate,pigs,100
+STP,São Tomé and Príncipe,intermediate,pigs,90
+SUR,Suriname,intermediate,pigs,100
+SVK,Slovakia,intermediate,pigs,100
+SVN,Slovenia,intermediate,pigs,100
+SWE,Sweden,intermediate,pigs,100
+SWZ,Swaziland,intermediate,pigs,90
+SYC,Seychelles,intermediate,pigs,90
+SYR,Syria,intermediate,pigs,100
+TCA,Turks and Caicos Islands,intermediate,pigs,100
+TCD,Chad,intermediate,pigs,90
+TGO,Togo,intermediate,pigs,90
+THA,Thailand,intermediate,pigs,95
+TJK,Tajikistan,intermediate,pigs,100
+TKL,Tokelau,intermediate,pigs,100
+TKM,Turkmenistan,intermediate,pigs,100
+TLS,Timor-Leste,intermediate,pigs,95
+TON,Tonga,intermediate,pigs,100
+TTO,Trinidad and Tobago,intermediate,pigs,100
+TUN,Tunisia,intermediate,pigs,90
+TUR,Turkey,intermediate,pigs,100
+TUV,Tuvalu,intermediate,pigs,100
+TZA,Tanzania,intermediate,pigs,90
+UGA,Uganda,intermediate,pigs,90
+UKR,Ukraine,intermediate,pigs,100
+URY,Uruguay,intermediate,pigs,100
+USA,United States,intermediate,pigs,100
+UZB,Uzbekistan,intermediate,pigs,100
+VCT,Saint Vincent and the Grenadines,intermediate,pigs,100
+VEN,Venezuela,intermediate,pigs,100
+VGB,British Virgin Islands,intermediate,pigs,100
+VIR,"Virgin Islands, U.S.",intermediate,pigs,100
+VNM,Vietnam,intermediate,pigs,85
+VUT,Vanuatu,intermediate,pigs,100
+WLF,Wallis and Futuna,intermediate,pigs,100
+WSM,Samoa,intermediate,pigs,100
+YEM,Yemen,intermediate,pigs,100
+ZAF,South Africa,intermediate,pigs,90
+ZMB,Zambia,intermediate,pigs,90
+ZWE,Zimbabwe,intermediate,pigs,90
+AFG,Afghanistan,intermediate,pigs,100
+ALA,Åland,intermediate,pigs,100
+BES,"Bonaire, Sint Eustatius and Saba",intermediate,pigs,100
+IOT,British Indian Ocean Territory,intermediate,pigs,90
+CXR,Christmas Island,intermediate,pigs,100
+CCK,Cocos Islands,intermediate,pigs,100
+CUW,Curaçao,intermediate,pigs,100
+GIB,Gibraltar,intermediate,pigs,100
+XKO,Kosovo,intermediate,pigs,100
+XMI,Madeira Island,intermediate,pigs,90
+BLM,Saint-Barthélemy,intermediate,pigs,100
+MAF,Saint-Martin,intermediate,pigs,100
+SXM,Sint Maarten,intermediate,pigs,100
+SSD,South Sudan,intermediate,pigs,90
+TWN,Taiwan,intermediate,pigs,99.38655462184875

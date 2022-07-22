@@ -1,0 +1,306 @@
+---
+title: "Calculating feed components"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+This script divides consumption into fofm, fodder, and crop categories.
+
+```{r setup, include=FALSE}
+
+library(here)
+source(here("_workflow/common.R"))
+library(stringi)
+
+feedstuff <- read_csv(here("feed/data/total_feedstuff_consumption.csv")) %>%
+  mutate(animal_system = paste(animal, system, product, sep="_")) %>%
+  rename(source_feedname = feedstuff) %>%
+  select(iso3c, animal_system, source_feedname, tonnes_feedstuff)
+table(feedstuff$animal_system)
+
+```
+
+## cow check
+check to make sure cows make sense.  Mixed should have no fresh grass or leaves.  Grassland shouldn't have hay/fodder.
+```{r}
+
+filter(feedstuff, animal_system=="cows_mixed_meat") %>%
+  group_by(source_feedname) %>%
+  summarize(total=sum(tonnes_feedstuff)) %>%
+  arrange(total) %>%
+  data.frame()
+
+filter(feedstuff, animal_system=="cows_grassland_meat") %>%
+  group_by(source_feedname) %>%
+  summarize(total=sum(tonnes_feedstuff)) %>%
+  arrange(total) %>%
+  data.frame()
+
+filter(feedstuff, animal_system=="cows_feedlot_meat") %>%
+  group_by(source_feedname) %>%
+  summarize(total=sum(tonnes_feedstuff)) %>%
+  arrange(total) %>%
+  data.frame()
+
+filter(feedstuff, animal_system=="cows_feedlot_meat") %>%
+  filter(source_feedname == "Fresh grass") %>%
+  data.frame()
+
+```
+
+## Calculate tonnes consumption from MAPSPAM categories of feed
+
+```{r}
+
+feed_cats <- read_csv(here("feed/data/feed_category_table.csv")) %>%
+  select(-notes) 
+
+# make sure all feed is categorized...if not update the feed_category_table.csv
+setdiff(feedstuff$source_feedname, feed_cats$source_feedname)
+# make sure no duplicates, if there are: correct them:
+feed_cats[duplicated(feed_cats$source_feedname),]
+
+feedstuff_cats <- feedstuff %>%
+  left_join(feed_cats, by="source_feedname") 
+filter(feedstuff_cats, is.na(included_source)) # should be no NA values
+
+crop_feed <- feedstuff_cats %>%
+  filter(included_source == "mapspam")
+
+# see whats there, should be no blank data!
+crop_feed %>%
+  filter(tonnes_feedstuff > 0) %>%
+  select(source_feedname, product) %>%
+  unique() %>%
+  data.frame()
+
+```
+
+
+ determine processing loss
+```{r}
+
+feed_loss <- read_csv(here("feed/data/feed_extraction_rates.csv"))  %>%
+  dplyr::select(-processing, -source, -...7) %>%
+  unique()
+
+setdiff(crop_feed$product, feed_loss$product) # if anything pops up, edit feed_extraction_rates.csv to include loss data
+
+crop_feed_extract <- crop_feed %>%
+  left_join(feed_loss, by = "product") %>%
+  mutate(tonnes_product = tonnes_feedstuff * 100/(100 - crop_loss)) 
+
+
+```
+
+Convert to mapspam crops
+```{r}
+
+
+## SPAM_super categories that we have combined:
+spam_super <- vroom::vroom(here("feed/data/MapSPAM_to_FAO_v2.csv")) %>%
+  select(SPAM_short_name, SPAM_super) %>%
+  unique() %>%
+  data.frame()
+
+## feed items and corresponding spam categories
+spam <- read_csv(here("feed/data/product_to_fao_spam.csv")) %>%
+  select(product, SPAM_short_name) %>%
+  unique()
+setdiff(spam_super$SPAM_short_name, spam$SPAM_short_name) # these crops are not feed items
+setdiff(spam$SPAM_short_name, spam_super$SPAM_short_name) # should be nothing here
+## if there are differences: need to edit something to align data
+setdiff(crop_feed_extract$product, spam$product)
+
+spam <- left_join(spam, spam_super, by="SPAM_short_name")
+
+crop_feed_spam <- crop_feed_extract %>%
+  left_join(spam, by="product") %>%
+  group_by(iso3c, animal_system, SPAM_super) %>%
+  summarize(tonnes_product = sum(tonnes_product)) %>%
+  ungroup()
+
+write_csv(crop_feed_spam, here("feed/data/system_country_mapspam_tonnes_consumption.csv"))
+
+```
+
+NOTE: This is currently not implemented, but this is the theory if this is implemented in the future:  "Aquaculture and livestock go down slightly different paths.  Livestock crop data gets replaced with FAO FBS feed proportions (although total sum proportion of crops remains the same). We use reported feed proportions for aquaculture species."
+
+The issue with using FAO FBS for feed, is that there is a large component of some crops that are in the "processed" category, and a large component of this seems to be going towards feed.
+
+Separate here, and continue on:
+
+```{r}
+
+#crop_feed_aquaculture <- filter(crop_feed_spam, grepl("aquaculture", animal_system))
+#crop_feed_livestock <- filter(crop_feed_spam, !(animal_system %in%  crop_feed_aquaculture$animal_system))
+
+#filter(crop_feed_livestock, tonnes_product>0) %>%
+#  select(SPAM_super) %>%
+#  unique()
+
+#filter(crop_feed_livestock, iso3c == "USA") %>%
+#  group_by(SPAM_super) %>%
+#  summarize(total = sum(tonnes_product))
+
+```
+
+## Livestock: substitute FAO feed data from FBS
+Substitute the GLEAM consumption with the FAO FBS feed estimates:
+1. Estimate the total tonnes per country of MAPSPAM feed
+2. Multiply this value by the percents estimating using feed FAO Food Balance Sheet data
+3. Then in subsequent steps we will estimate where this feed originates
+
+```{r}
+
+#crop_feed_tonnes <- crop_feed_livestock %>%
+#  group_by(iso3c, animal_system) %>%
+#  summarize(tonnes_mapspam = sum(tonnes_product)) %>%
+#  ungroup()
+
+# fao_feed <- read_csv(here("feed/data/feed_percents_FAO_fbs_update.csv"))
+
+#crop_feed_update <- crop_feed_tonnes %>%
+#  left_join(fao_feed, by="iso3c") %>%
+#  mutate(tonnes_product = tonnes_mapspam*percent) %>%
+#  select(iso3c, animal_system, SPAM_super, tonnes_product)
+
+# outputs should be the same
+#tmp <- filter(crop_feed_tonnes, iso3c=="USA", animal_system=="chickens_industrial_meat")
+#tmp
+#tmp <- filter(crop_feed_update, iso3c=="USA", animal_system=="chickens_industrial_meat")
+#sum(tmp$tonnes_product)
+```
+
+Combine aquaculture and livestock back together
+```{r}
+
+#mapspam_consumption <- rbind(crop_feed_update, crop_feed_aquaculture)
+#write_csv(mapspam_consumption, here("feed/data/system_country_mapspam_tonnes_consumption.csv"))
+
+```
+
+## Calculate tonnes consumption from FOFM categories of feed
+
+```{r}
+
+feed_cats <- read_csv(here("feed/data/feed_category_table.csv")) %>%
+  select(-notes)
+
+feedstuff_cats <- feedstuff %>%
+  left_join(feed_cats, by="source_feedname") 
+
+filter(feedstuff_cats, is.na(included_source)) # should be no NA values
+
+fofm_feed <- feedstuff_cats %>%
+  filter(included_source == "fofm") %>%
+  mutate(feed_item = "fofm marine catch") %>%
+  select(iso3c, system=animal_system, tonnes=tonnes_feedstuff) %>%
+  filter(tonnes>0) %>%
+  filter(!is.na(system))
+
+# should see: chickens, pigs, crustaceans, marine-fish-general, salmon, shrimp, tuna
+unique(fofm_feed$system)
+
+```
+
+account for processing loss
+
+```{r}
+
+feed_loss <- read_csv(here("feed/data/feed_extraction_rates.csv"))  %>%
+  filter(crop == "forage fish") %>%
+  dplyr::select(crop_loss) %>%
+  unique() %>%
+  pull()
+
+fofm_feed_extract <- fofm_feed %>%
+  mutate(feed_loss = feed_loss) %>%
+  mutate(tonnes_product = tonnes * 100/(100 - feed_loss)) 
+
+# check to see values generally match with expectation
+fofm_feed_extract %>%
+  separate(system, c("animal", "system", "product")) %>%
+  group_by(animal) %>%
+  summarize(tonnes=sum(tonnes_product))
+
+read_csv(here("feed/data/fofm_livestock_corrected_consumption.csv")) %>%
+  select(animal, true_tonnes_fish)
+
+read_csv(here("feed/data/fofm_aquaculture_corrected_consumption.csv")) %>%
+  select(animal, true_tonnes_fish)
+
+regions <- read_csv(here("_spatial/_output/food_rgns.csv")) %>%
+  select(-ID_0)
+
+fofm_feed_final <- left_join(regions, fofm_feed_extract) %>%
+  mutate(feed_item = "forage fish") %>%
+  select(iso3c, Country, system, feed_item, tonnes = tonnes_product) %>%
+  mutate(tonnes = ifelse(is.na(tonnes), 0, tonnes)) %>%
+  filter(!is.na(system))
+
+# should be about 11.7 billion tonnes for all categories
+sum(fofm_feed_final$tonnes, na.rm=TRUE)
+
+write_csv(fofm_feed_final, here("feed/data/FMFO_country_data.csv"))
+
+```
+
+
+
+## Calculate tonnes consumption from fodder
+
+```{r}
+
+feed_cats <- read_csv(here("feed/data/feed_category_table.csv")) %>%
+  select(-notes)
+
+feedstuff_cats <- feedstuff %>%
+  left_join(feed_cats, by="source_feedname") 
+filter(feedstuff_cats, is.na(included_source)) # should be no NA values
+
+fodder_feed <- feedstuff_cats %>%
+  filter(included_source == "fao_hay") %>%
+  group_by(iso3c, animal_system) %>%
+  summarize(tonnes_product = sum(tonnes_feedstuff)) %>%
+  ungroup()
+write_csv(fodder_feed, here("feed/data/livestock_system_country_fodder_consumption.csv"))
+
+
+# not sure we need this?
+country_fodder_feed <- fodder_feed %>%
+  group_by(iso3c) %>%
+  summarize(tonnes_fodder = sum(tonnes_product))
+write_csv(country_fodder_feed, here("feed/data/livestock_country_fodder_consumption.csv"))
+
+
+```
+
+## Summary of categories
+
+```{r}
+## do we need this?
+feed_cats <- read_csv(here("feed/data/feed_category_table.csv")) %>%
+  select(-notes)
+
+feedstuff_cats <- feedstuff %>%
+  left_join(feed_cats, by="source_feedname") 
+filter(feedstuff_cats, is.na(included_source)) # should be no NA values
+
+feed <- feedstuff_cats %>%
+  separate(animal_system, c("animal", "system", "product")) %>%
+  group_by(animal, included_source) %>%
+  summarize(tonnes_by_category = sum(tonnes_feedstuff)) %>%
+  group_by(animal) %>%
+  mutate(tonnes_total = sum(tonnes_by_category)) %>%
+  ungroup() %>%
+  rowwise() %>%
+  mutate(proportion = tonnes_by_category/tonnes_total) %>%
+  data.frame()
+
+write_csv(feed, here("feed/data/system_consumption_per_category.csv"))
+
+
+```
+

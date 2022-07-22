@@ -1,0 +1,167 @@
+---
+title: "salmon_nutrient_pollution"
+author: "*Compiled on `r date()` by `r Sys.info()['user']`*"
+output: 
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_depth: 3
+    toc_float: yes
+    includes: 
+toc: true
+---
+
+This markdown uses models and species specific parameters from the paper *Hindcasts and Future Projections of Global Inland and Coastal Nitrogen and Phosphorus Loads Due to Finfish Aquaculture* (2013 Bouwman et al)
+
+## Set up
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(sf)
+library(raster)
+library(readr)
+library(data.table)
+
+source(here("_spatial/template_raster.R"))
+
+path_prep <- "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/salmon"
+path_final <-"/home/shares/food-systems/Food_footprint/all_food_systems/datalayers"
+
+production <- read_csv(file.path(path_prep, "updated/salmon_farm_updated.csv"))
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+```
+
+Salmon N/P pollution values
+
+N: 49 kg/tonne of growth
+P: 8 kg/tonne of growth
+
+Steps: 
+1. Multiply tonnes production by 0.95 (this corrects for the growth that occurs outside the seapen on land), this is the value Lex uses
+2. Then multiply growth by the N value and the P value
+3. We report in total excess nutrients: Sum the N and P.
+4. We report in tonnes, so divide by 1000. Save a total raster, a N raster, and a P raster. 
+
+```{r}
+
+salmon_pollution <- production %>%
+  dplyr::mutate(prod_growth = tonnes_production*0.95) %>%
+  dplyr::mutate(prod_growth_N_poll = prod_growth*49,
+                prod_growth_P_poll = prod_growth*8) %>% ## in kg pollution now
+  # dplyr::mutate(PO4eq_kg = prod_growth_N_poll*0.42 + prod_growth_P_poll*3.07) %>% cut (01/14/2021)
+  dplyr::mutate(total_N_P_tonnes = (prod_growth_N_poll + prod_growth_P_poll)/1000,
+                N_poll_t = prod_growth_N_poll/1000,
+                P_poll_t = prod_growth_P_poll/1000) %>%
+  dplyr::select(x, y, total_N_P_tonnes, N_poll_t, P_poll_t)
+
+sum(salmon_pollution$total_N_P_tonnes) # 149245.8
+
+## save to dataprep folder with the correct naming conventions: 
+write.csv(salmon_pollution, file.path(path_prep, "salmon_nutrient.csv"))
+
+
+
+
+## Save total N + P layer
+
+N_P_df <- salmon_pollution %>%
+  dplyr::select(x,y,total_N_P_tonnes)
+
+final_rast <- rasterFromXYZ(N_P_df, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+final_rast
+cellStats(final_rast, "sum") # 149245.8
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 149245.8
+final_rast
+
+## Save to datalayers 
+writeRaster(final_rast, file.path(path_final, "marine_salmon_aquaculture_meat_nutrient.tif"), overwrite = T)
+
+
+
+## Save total N layer
+
+N_df <- salmon_pollution %>%
+  dplyr::select(x,y,N_poll_t)
+
+final_rast <- rasterFromXYZ(N_df, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+final_rast
+cellStats(final_rast, "sum") # 128187.2
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 128299
+final_rast
+
+## Save to datalayers 
+
+writeRaster(final_rast, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/marine_salmon_aquaculture_meat_nutrientN.tif"), overwrite = T)
+
+
+## Save total P layer
+
+P_df <- salmon_pollution %>%
+  dplyr::select(x,y,P_poll_t)
+
+final_rast <- rasterFromXYZ(P_df, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+final_rast
+cellStats(final_rast, "sum") # 20946.78
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 20946.78
+final_rast
+
+## Save to datalayers 
+writeRaster(final_rast, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/marine_salmon_aquaculture_meat_nutrientP.tif"), overwrite = T)
+```
+
+Datacheck: 
+
+Values from this paper, table 7: https://www.tandfonline.com/doi/full/10.1080/10641262.2013.790340
+
+The paper doesn't include actually nutrient output estimates, but it doesn't really matter, since we just use the numbers provided for the nutrient output factors. There are no mistakes in the code, the numbers all make sense to me. 
+
+```{r}
+salmon_nutrient_N <- raster(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/marine_salmon_aquaculture_meat_nutrientN.tif"))
+cellStats(salmon_nutrient_N, "sum") # 128187.2 N tonnes
+
+salmon_nutrient_P <- raster(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/marine_salmon_aquaculture_meat_nutrientP.tif"))
+cellStats(salmon_nutrient_P, "sum") # 20928.52 P tonnes
+
+sum(production$tonnes_production) # 2753752
+
+## Total production is 2753752 tonnes for 2017
+
+## Used 49 N kg and 8 P kg for salmon
+
+2753752*0.95*49/1000 # 127830.3 N tonnes
+2753752*0.95*8/1000 # 20870.25 P tonnes
+
+## both match our final layers 
+
+final_rast <- raster(file.path(path_final, "marine_salmon_aquaculture_meat_nutrient.tif"))
+cellStats(final_rast, "sum") # 149115.7
+
+
+```
+

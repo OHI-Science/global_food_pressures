@@ -1,0 +1,177 @@
+---
+title: "Chicken diet: feeditems rates"
+author: "Juliette"
+date: "10/23/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Appears to be the model for laying chicken:
+https://www.tandfonline.com/doi/abs/10.1080/00071667308416069?journalCode=cbps20
+
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6742401/ 1.8 - 2.3
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+source(here("_workflow/common.R"))
+
+'%notin%' <- Negate('%in%')
+
+un_rgns <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>%
+  filter(!is.na(iso3c)) %>%
+  filter(iso3c %in% food_rgns$iso3c) %>%
+  select(iso3c, Region_Name, Sub_region_Name, Intermediate_Region_Name)
+table(un_rgns$Region_Name)
+table(un_rgns$Sub_region_Name)
+table(un_rgns$Intermediate_Region_Name)
+
+```
+
+```{r}
+
+chicken_total_feed <- read_csv(here("animal_farm/farm/data/chickens_GLEAMi_v2.csv")) %>% 
+  filter(Production_system != "All systems",
+         Variable %in% c("HERD: total number of animals", "INTAKE: Total intake", 
+                         "PROD: Meat - carcass weight", "PROD: Eggs - shell weight")) %>% 
+  select(-Unit) %>% 
+  pivot_wider(names_from = Variable, values_from = Value) %>% 
+  rename(kg_dm_feed_intake = 'INTAKE: Total intake',
+         count = 'HERD: total number of animals',
+         kg_meat = 'PROD: Meat - carcass weight',
+         kg_eggs = 'PROD: Eggs - shell weight') %>%
+  mutate(fcr = ifelse(Production_system == "Layers", kg_dm_feed_intake/kg_eggs, NA)) %>%
+  mutate(fcr = ifelse(Production_system == "Broilers", kg_dm_feed_intake/kg_meat, fcr)) %>%
+  mutate(fcr= ifelse(Production_system == "Backyard", kg_dm_feed_intake/(kg_eggs + kg_meat), fcr)) %>%
+  mutate(consumption_rate = ifelse(count == 0, 0, kg_dm_feed_intake/count)) %>%
+  filter(consumption_rate > 0) %>%
+  select(iso3c, species = Species, production_system = Production_system, consumption_rate) %>% 
+  mutate(species = "Chicken")
+
+# going to replace layer chickens with one global value that better matches other sources:
+chicken_total_feed <- chicken_total_feed %>%
+  mutate(consumption_rate = ifelse(production_system == "Layers", 41, consumption_rate))
+
+# gapfill missing values
+all_sites <- expand.grid(iso3c = un_rgns$iso3c, 
+                                  species = "Chicken",
+                                  production_system = c("Backyard", "Layers", "Broilers"))
+
+chicken_total_feed_gf <- left_join(all_sites, chicken_total_feed, by=c("iso3c", "species", "production_system")) %>%
+  left_join(un_rgns) %>%
+  group_by(species, production_system, Intermediate_Region_Name) %>%
+  mutate(consumption_rate = ifelse(is.na(consumption_rate), median(consumption_rate, na.rm=TRUE), consumption_rate)) %>%
+  group_by(species, production_system, Sub_region_Name) %>%
+    mutate(consumption_rate = ifelse(is.na(consumption_rate), median(consumption_rate, na.rm=TRUE), consumption_rate)) %>%
+group_by(species, production_system, Region_Name) %>%
+    mutate(consumption_rate = ifelse(is.na(consumption_rate), median(consumption_rate, na.rm=TRUE), consumption_rate)) %>%
+group_by(species, production_system) %>%
+    mutate(consumption_rate = ifelse(is.na(consumption_rate), median(consumption_rate, na.rm=TRUE), consumption_rate)) %>%
+ungroup()
+
+
+category_check <- filter(chicken_total_feed_gf, production_system == "Backyard")
+summary(category_check)
+filter(chicken_total_feed, iso3c=="USA") %>% data.frame()
+tmp <- filter(chicken_total_feed, consumption_rate>0, production_system=="Broilers")
+
+
+```
+
+```{r}
+
+livestock_diet_composition <- read_csv(here("feed/data/livestock_diet_composition.csv"))
+
+chicken_diet_composition <- livestock_diet_composition %>% 
+  filter(species == "Chicken") 
+
+tmp <- chicken_diet_composition %>%
+ group_by(production_system, iso3c) %>%
+ summarize(total = sum(percent))
+summary(tmp)
+
+chicken_diet_composition_all <- chicken_diet_composition %>%
+  select(species, orientation, production_system, raw_name) %>%
+  unique() %>%
+  merge(food_rgns$iso3c) %>%
+  select(iso3c=y, species, orientation, production_system, raw_name)
+
+chicken_diet_composition_gf <- left_join(chicken_diet_composition_all, chicken_diet_composition, by=c("iso3c", "species", "orientation", "production_system", "raw_name")) %>%
+  left_join(un_rgns) %>%
+  group_by(species, orientation, production_system, raw_name, Intermediate_Region_Name) %>%
+  mutate(percent = ifelse(is.na(percent), mean(percent, na.rm=TRUE), percent)) %>%
+  group_by(species, orientation, production_system, raw_name, Sub_region_Name) %>%
+    mutate(percent = ifelse(is.na(percent), mean(percent, na.rm=TRUE), percent)) %>%
+group_by(species, orientation, production_system, raw_name, Region_Name) %>%
+    mutate(percent = ifelse(is.na(percent), mean(percent, na.rm=TRUE), percent)) %>%
+group_by(species, orientation, production_system, raw_name) %>%
+    mutate(percent = ifelse(is.na(percent), mean(percent, na.rm=TRUE), percent)) %>%
+ungroup() %>%
+  select(iso3c, species, orientation, production_system, raw_name, percent)
+
+# check that all gapfilled sum to 100
+tmp <- chicken_diet_composition_gf %>%
+ group_by(species, orientation, production_system, iso3c) %>%
+ summarize(total = sum(percent))
+summary(tmp)
+
+```
+
+Join the total consumption per animal and the percent composition of diet data.
+```{r}
+
+chicken_combo <- left_join(chicken_total_feed_gf, chicken_diet_composition_gf, by = c("iso3c", "species", "production_system")) %>%
+  rowwise() %>% 
+  mutate(percent = percent/100,
+         feeditem_kg_per_head = percent*consumption_rate) %>%
+  select(iso3c, species, orientation, production_system, raw_name, feeditem_kg_per_head) %>% 
+  mutate(orientation = ifelse(production_system == "Backyard", "eggs&meat", orientation))
+
+```
+
+
+
+```{r}
+## check that there aren't any counties that have 0 values for all feed stuff. we might have animals that are not reported
+
+chicken_feed_check <- chicken_combo %>% 
+  group_by(iso3c, species, orientation, production_system) %>% 
+  dplyr::summarise(check = sum(feeditem_kg_per_head)) %>% 
+  ungroup() %>% 
+  filter(check == 0) %>% 
+  mutate(to_gf = "yes") %>% 
+  select(-check)
+
+
+last_check <- chicken_combo %>% 
+  group_by(iso3c, species, orientation, production_system) %>% 
+  dplyr::summarise(check = sum(feeditem_kg_per_head)) %>% 
+  ungroup()
+## there should be no 0s or NA totals
+summary(last_check)
+
+chicken_consumption <- chicken_combo %>% 
+  select(iso3c, animal = species, system = production_system, product=orientation, feedstuff = raw_name, feeditem_kg_per_head) %>% 
+  mutate(system = case_when(system == "Layers" ~ "industrial",
+                         system == "Broilers" ~ "industrial",
+                         system == "Backyard" ~ "backyard")) %>% 
+  mutate(product = tolower(product),
+         animal = "chickens")
+
+write_csv(chicken_consumption, here("feed/data/chicken_feed_consumption_rates.csv"))
+
+```
+
+```{r}
+
+tmp <- chicken_consumption %>%
+  group_by(iso3c, animal, system, product) %>%
+  summarize(kgfeed = sum(feeditem_kg_per_head))
+mean(tmp$kgfeed, na.rm=TRUE)
+
+filter(tmp, product=="meat") %>%data.frame()
+filter(tmp, product=="eggs") %>%data.frame()
+filter(tmp, product=="eggs&meat") %>%data.frame()
+
+```

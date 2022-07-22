@@ -1,0 +1,122 @@
+---
+title: "Calculating aquaculture diet consumption in tonnes"
+author: "Juliette"
+date: "10/21/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Use following data to calculate tonnes of each feedstuff item consumed by each aquaculture system in each country:
+* Tonnes of production
+* Diet composition 
+* feed conversion ratio
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(stringi)
+library(countrycode)
+
+scenario_year <- 2017
+
+```
+
+
+```{r}
+
+production <- read_csv(here("aquaculture/marine/STEP1_species_groups/int/tonnes_per_country_group.csv")) %>%
+  filter(!(aq_group %in% "bivalves")) %>%
+  mutate(aq_group = ifelse(aq_group=="marine_fish_general", "marine-fish-general", aq_group),
+         aq_group = ifelse(aq_group=="salmonids", "salmon", aq_group),
+         aq_group = ifelse(aq_group=="shrimps_prawns", "shrimp", aq_group)) %>%
+  select(country, species = aq_group, tonnes=total_tonnes)
+
+production$iso3c <- countrycode(production$country, origin="country.name", destination = "iso3c")
+summary(production)
+table(production$iso3c)
+
+diet <- read_csv(here("feed/data/aquaculture_diet_composition.csv"))
+
+fcr <- read_csv(here("feed/data/feed_conversion_aquaculture.csv")) %>%
+  select(species, fcr=value)
+
+```
+
+
+Calculate total of each product for each country based on production.
+
+```{r}
+
+tonnes_consumption <- left_join(production, fcr, by="species") %>%
+  left_join(diet, by=c("iso3c", "species")) %>%
+  mutate(tonnes_feedstuff = tonnes * fcr * prop_diet) %>%
+  mutate(product = "meat") %>%
+  dplyr::select(iso3c, animal= species, system = production_system, product, feedstuff = raw_name, tonnes_feedstuff) 
+
+write_csv(tonnes_consumption, here("feed/data/total_aquaculture_feedstuff_consumption.csv")) 
+
+```
+
+Unlike the chickens, the calculated values are very close to those from Halley et al. 2018.  
+But, here we make them match Froehlich et al.  2018.
+
+
+Check that fishoil/fishmeal matches Froehlich data.
+Specifically matching to Fig.3 in paper, data here: https://knb.ecoinformatics.org/view/doi:10.5063/F1T43R7N
+(New_Current_Taxon_Fig.csv (for figures))
+```{r}
+
+combine_feedstuff <- read_csv(here("feed/data/total_aquaculture_feedstuff_consumption.csv"))    
+
+halley_tonnes <- read.csv(here("feed/data/msleckman.45.1_fofm_consumption.csv")) %>%
+  filter(!is.na(animal)) %>%
+  group_by(animal) %>%
+  summarize(true_tonnes_fish = sum(Current_Mean)) %>%
+  mutate(true_tonnes_fofm = true_tonnes_fish*0.28)  # 0.28 converts tonnes fish to fofm
+
+fofm <- combine_feedstuff %>%
+    filter(feedstuff == "fofm" | feedstuff == "marine oil, forage fish" |feedstuff == "marine protein sources, forage fish" ) %>%
+    group_by(animal) %>%
+  summarize(tonnes_fofm=sum(tonnes_feedstuff, na.rm=TRUE)) %>%   
+  left_join(halley_tonnes) %>%
+  mutate(correction = true_tonnes_fofm/tonnes_fofm)
+
+write_csv(fofm, here("feed/data/fofm_aquaculture_corrected_consumption.csv"))
+
+```
+
+
+
+```{r}
+
+combine_feedstuff_corrected <- combine_feedstuff %>%
+ left_join(fofm) %>%
+  mutate(correction = ifelse(feedstuff %in% c("fofm", "marine oil, forage fish", "marine protein sources, forage fish" ) , correction, 1)) %>%
+  mutate(tonnes_feedstuff_fofm_correct = tonnes_feedstuff*correction) %>%
+  select(iso3c, animal, system, product, feedstuff, tonnes_feedstuff=tonnes_feedstuff_fofm_correct)
+
+write_csv(combine_feedstuff_corrected, here("feed/data/total_aquaculture_feedstuff_consumption.csv"))    
+
+# check; Halley values and ours should be similar (tonnes)
+combine_feedstuff_corrected %>%
+  filter(feedstuff == "FISHMEAL" | feedstuff == "fofm" | feedstuff == "marine oil, forage fish" |feedstuff == "marine protein sources, forage fish" ) %>%
+      group_by(animal) %>%
+  summarize(total=sum(tonnes_feedstuff, na.rm=TRUE)) %>%    #
+  left_join(halley_tonnes)
+
+# check that these are still the same
+combine_feedstuff_corrected %>%
+    group_by(animal, feedstuff) %>%
+  summarize(total=sum(tonnes_feedstuff, na.rm=TRUE)) %>%    #
+  filter(feedstuff == "wheat") 
+combine_feedstuff %>%
+    group_by(animal, feedstuff) %>%
+  summarize(total=sum(tonnes_feedstuff, na.rm=TRUE)) %>%    #
+  filter(feedstuff == "wheat") 
+
+
+```
+
+

@@ -1,0 +1,585 @@
+---
+title: "Creating global emissions from marine fisheries rasters"
+author: "Gage Clawson (UCSB, NCEAS, OHI)"
+date: "September 25, 2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+The purpose of this script is to create rasters for global emissions of marine fisheries. One will be created for all FOFM emissions, and one will be created for all catch minus the FOFM emissions.
+
+We use the data and information from:
+
+1. Watson, R. A. and Tidd, A. 2018. Mapping nearly a century and a half of global marine fishing: 1869–2015. Marine Policy, 93, pp. 171-177. [(Paper URL)](https://doi.org/10.1016/j.marpol.2018.04.023)
+
+2. [Seafood Carbon Emissions Tool](http://seafoodco2.dal.ca/(overlay:menu/5bcb48abaaea53205a2de526)
+
+## Setup
+```{r, eval = FALSE}
+#load relevant packages, etc.
+
+library(here)
+library(raster)
+library(tidyverse)
+library(countrycode)
+
+# function to project raster
+## Use correct CRS
+
+watson_raster_template <- raster::raster(ncol=720, nrow=360, vals=c(1:259200))
+source(here("fisheries/marine/ghg/raster_crs.R"))
+
+
+raw_folder <- file.path("/home/shares/food-systems/Food_footprint/_raw_data")
+raw_folder_watson <- file.path("/home/shares/food-systems/Food_footprint/_raw_data/watson_data/v5.0/")
+ghg_folder <- file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/ghg")
+final <- file.path("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers")
+```
+
+Calculate emissions
+```{r, eval = FALSE}
+## read in emissions data
+catch_emissions <- read_csv(file.path(ghg_folder, "watson_v5_emissions/all_catch_emissions_2017.csv")) 
+
+catch_emissions_df <- catch_emissions %>%
+  mutate(catch_kg = catch*1000, 
+         FOFM_catch_kg = FOFM_catch*1000)
+
+
+
+## Multiply catch by the emissions intensities to get an emissions estimates
+
+### get an estimate in kg co2eq and t co2eq 
+catch_emissions_all <- catch_emissions_df %>%
+  mutate(emissions_fofm_kgco2 = FOFM_catch_kg*ei_kgco2_kgcatch) %>%
+  mutate(emissions_fofm_tco2 = emissions_fofm_kgco2/1000) %>%
+  mutate(emissions_kgco2 =  catch_kg*ei_kgco2_kgcatch) %>%
+  mutate(emissions_tco2 = emissions_kgco2/1000)  # %>%
+  # mutate(emissions_no_fofm_kgco2 = emissions_kgco2 - emissions_fofm_kgco2,
+  #        emissions_no_fofm_tco2 = emissions_tco2 - emissions_fofm_tco2)
+
+sum(catch_emissions_all$emissions_tco2) #382823674
+
+
+```
+
+Save rasters for supplementary info by intermediate species classes
+```{r}
+#### Now lets create rasters for each intermediate category and visualize and save
+food_crs <- "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+
+## Forage fish
+allforagefish_raster <- catch_emissions_all %>%
+  dplyr::group_by(Cell) %>%
+  dplyr::summarize(forage_emissions_tonnes = sum(emissions_fofm_tco2, na.rm=TRUE), 
+                   forage_emissions_kg = sum(emissions_fofm_kgco2, na.rm = TRUE))
+
+sum(allforagefish_raster$forage_emissions_tonnes) #67529789 - 2017
+
+forage_fish_raster_t <- raster::subs(watson_raster_template, allforagefish_raster, by = "Cell", which = "forage_emissions_tonnes", subsWithNA=TRUE)
+
+plot(log(forage_fish_raster_t + 1))
+cellStats(forage_fish_raster_t, "sum", na.rm=TRUE) #67529789 - 2017
+
+forage_raster_fix_area <- forage_fish_raster_t/raster::area(forage_fish_raster_t)
+
+## Fix CRS 
+forage_fish_raster_t <- projectRaster(forage_raster_fix_area, food_raster, method = "ngb")
+
+crs(forage_fish_raster_t)
+plot(log(forage_fish_raster_t+1))
+cellStats(forage_fish_raster_t, "sum", na.rm = TRUE) # 994640.6
+
+## Now multiply by area again
+forage_fish_raster_t_final <- forage_fish_raster_t*raster::area(forage_fish_raster_t)
+crs(forage_fish_raster_t_final)
+plot(log(forage_fish_raster_t_final+1))
+cellStats(forage_fish_raster_t_final, "sum", na.rm = TRUE) # 67529616
+
+
+
+## save to intermediate dataprep folder on aurora
+writeRaster(forage_fish_raster_t_final, file.path(ghg_folder, "watson_v5_emissions/emissions_rasters/tonnes/marine_fofm_fisheries_meat_ghg.tif"), overwrite=TRUE)
+
+
+
+## Large pelagics 
+large_pelagic_raster <- catch_emissions_all %>%
+  dplyr::filter(species_class_int == "Large pelagic", forage_fish ==0) %>%
+  dplyr::group_by(Cell) %>%
+  dplyr::summarize(emissions_tonnes = sum(emissions_tco2, na.rm=TRUE), 
+                   emissions_kg = sum(emissions_kgco2, na.rm = TRUE))
+
+large_pelagic_raster_t <- raster::subs(watson_raster_template, large_pelagic_raster, by = "Cell", which = "emissions_tonnes", subsWithNA=TRUE)
+
+plot(log(large_pelagic_raster_t + 1))
+cellStats(large_pelagic_raster_t, "sum", na.rm=TRUE) #31362801 - 2017
+
+
+large_pelagic_area_fix <- large_pelagic_raster_t/raster::area(large_pelagic_raster_t)
+cellStats(large_pelagic_area_fix, "sum")
+
+## Fix CRS 
+large_pelagic_raster_t <- projectRaster(large_pelagic_area_fix, food_raster, method = "ngb")
+
+crs(large_pelagic_raster_t)
+plot(large_pelagic_raster_t)
+large_pelagic_raster_t
+cellStats(large_pelagic_raster_t, "sum")
+
+large_pelagic_raster_t_final <- large_pelagic_raster_t*raster::area(large_pelagic_raster_t)
+cellStats(large_pelagic_raster_t_final, "sum") # 31362707 - close enough
+
+## save the intermediate data prep on aurora
+writeRaster(large_pelagic_raster_t_final, file.path(ghg_folder, "watson_v5_emissions/emissions_rasters/tonnes/marine_large-pelagic_fisheries_meat_ghg.tif"), overwrite=TRUE)
+
+
+## Medium pelagics 
+med_pelagic_raster <- catch_emissions_all %>%
+  dplyr::filter(species_class_int == "Medium pelagic", forage_fish == 0) %>%
+  dplyr::group_by(Cell) %>%
+  dplyr::summarize(emissions_tonnes = sum(emissions_tco2, na.rm=TRUE), 
+                   emissions_kg = sum(emissions_kgco2, na.rm = TRUE))
+
+med_pelagic_raster_t <- raster::subs(watson_raster_template, med_pelagic_raster, by = "Cell", which = "emissions_tonnes", subsWithNA=TRUE)
+
+plot(log(med_pelagic_raster_t + 1))
+cellStats(med_pelagic_raster_t, "sum", na.rm=TRUE) # 26422906 - 2017
+
+med_pelagic_area_fix <- med_pelagic_raster_t/raster::area(med_pelagic_raster_t)
+cellStats(med_pelagic_area_fix, "sum") # 9944.209
+
+
+## Fix CRS 
+med_pelagic_raster_t <- projectRaster(med_pelagic_area_fix, food_raster, method = "ngb")
+
+crs(med_pelagic_raster_t)
+plot(med_pelagic_raster_t)
+med_pelagic_raster_t
+cellStats(med_pelagic_raster_t, "sum") # 357991.5
+
+med_pelagic_raster_t_final <- med_pelagic_raster_t*raster::area(med_pelagic_raster_t)
+cellStats(med_pelagic_raster_t_final, "sum") # 26422832
+
+## save the intermediate data prep on aurora
+writeRaster(med_pelagic_raster_t_final, file.path(ghg_folder, "watson_v5_emissions/emissions_rasters/tonnes/marine_medium-pelagic_fisheries_meat_ghg.tif"), overwrite=TRUE)
+
+
+
+## Small pelagics 
+small_pelagic_raster <- catch_emissions_all %>%
+  dplyr::filter(species_class_int == "Small pelagic", forage_fish == 0) %>%
+  dplyr::group_by(Cell) %>%
+  dplyr::summarize(emissions_tonnes = sum(emissions_tco2, na.rm=TRUE), 
+                   emissions_kg = sum(emissions_kgco2, na.rm = TRUE))
+
+small_pelagic_raster_t <- raster::subs(watson_raster_template, small_pelagic_raster, by = "Cell", which = "emissions_tonnes", subsWithNA=TRUE)
+
+plot(log(small_pelagic_raster_t + 1))
+cellStats(small_pelagic_raster_t, "sum", na.rm=TRUE) #4524598 - 2017
+
+small_pelagic_area_fix <- small_pelagic_raster_t/raster::area(small_pelagic_raster_t)
+
+## Fix CRS 
+small_pelagic_raster_t <- projectRaster(small_pelagic_area_fix, food_raster, method = "ngb")
+
+crs(small_pelagic_raster_t)
+plot(log(small_pelagic_raster_t+1))
+small_pelagic_raster_t
+cellStats(small_pelagic_raster_t, "sum")
+
+small_pelagic_raster_t_final <- small_pelagic_raster_t*raster::area(small_pelagic_raster_t)
+cellStats(small_pelagic_raster_t_final, "sum") # 4524590
+
+## save the intermediate data prep on aurora
+writeRaster(small_pelagic_raster_t_final, file.path(ghg_folder, "watson_v5_emissions/emissions_rasters/tonnes/marine_small-pelagic_fisheries_meat_ghg.tif"), overwrite=TRUE)
+
+
+
+## Large demersal
+large_dem_raster <- catch_emissions_all %>%
+  dplyr::filter(species_class_int == "Large demersal", forage_fish == 0) %>%
+  dplyr::group_by(Cell) %>%
+  dplyr::summarize(emissions_tonnes = sum(emissions_tco2, na.rm=TRUE), 
+                   emissions_kg = sum(emissions_kgco2, na.rm = TRUE))
+
+large_dem_raster_t <- raster::subs(watson_raster_template, large_dem_raster, by = "Cell", which = "emissions_tonnes", subsWithNA=TRUE)
+
+plot(log(large_dem_raster_t + 1))
+cellStats(large_dem_raster_t, "sum", na.rm=TRUE) #24044356 - 2017
+
+plot(log(large_dem_raster_t+1))
+
+
+large_dem_area_fix <- large_dem_raster_t/raster::area(large_dem_raster_t)
+
+## Fix CRS 
+large_dem_raster_t <- projectRaster(large_dem_area_fix, food_raster, method = "ngb")
+
+crs(large_dem_raster_t)
+plot(log(large_dem_raster_t + 1))
+large_dem_raster_t
+cellStats(large_dem_raster_t, "sum")
+
+large_dem_raster_t_final <- raster::area(large_dem_raster_t)*large_dem_raster_t
+cellStats(large_dem_raster_t_final, "sum") # 24044309
+
+## save the intermediate data prep on aurora
+writeRaster(large_dem_raster_t_final, file.path(ghg_folder, "watson_v5_emissions/emissions_rasters/tonnes/marine_large-demersal_fisheries_meat_ghg.tif"), overwrite=TRUE)
+
+
+
+## Medium demersal
+med_dem_raster <- catch_emissions_all %>%
+  dplyr::filter(species_class_int == "Medium demersal", forage_fish == 0) %>%
+  dplyr::group_by(Cell) %>%
+  dplyr::summarize(emissions_tonnes = sum(emissions_tco2, na.rm=TRUE), 
+                   emissions_kg = sum(emissions_kgco2, na.rm = TRUE))
+
+med_dem_raster_t <- raster::subs(watson_raster_template, med_dem_raster, by = "Cell", which = "emissions_tonnes", subsWithNA=TRUE)
+
+plot(log(med_dem_raster_t + 1))
+cellStats(med_dem_raster_t, "sum", na.rm=TRUE) #26855176 - 2017
+
+med_dem_area_fix <- med_dem_raster_t/raster::area(med_dem_raster_t)
+cellStats(med_dem_area_fix, "sum") # 11347.59
+
+## Fix CRS 
+med_dem_raster_t <- projectRaster(med_dem_area_fix, food_raster, method = "ngb")
+
+crs(med_dem_raster_t)
+plot(log(med_dem_raster_t + 1))
+med_dem_raster_t
+cellStats(med_dem_raster_t, "sum") # 408513.1
+
+med_dem_raster_t_final <- med_dem_raster_t*raster::area(med_dem_raster_t)
+cellStats(med_dem_raster_t_final, "sum") # 26855110
+
+## save the intermediate data prep on aurora
+writeRaster(med_dem_raster_t_final, file.path(ghg_folder, "watson_v5_emissions/emissions_rasters/tonnes/marine_medium-demersal_fisheries_meat_ghg.tif"), overwrite=TRUE)
+
+
+## Small demersal
+small_dem_raster <- catch_emissions_all %>%
+  dplyr::filter(species_class_int == "Small demersal", forage_fish == 0) %>%
+  dplyr::group_by(Cell) %>%
+  dplyr::summarize(emissions_tonnes = sum(emissions_tco2, na.rm=TRUE), 
+                   emissions_kg = sum(emissions_kgco2, na.rm = TRUE))
+
+small_dem_raster_t <- raster::subs(watson_raster_template, small_dem_raster, by = "Cell", which = "emissions_tonnes", subsWithNA=TRUE)
+
+plot(log(small_dem_raster_t + 1))
+cellStats(small_dem_raster_t, "sum", na.rm=TRUE) #136464334 - 2017
+
+small_dem_area_fix <- small_dem_raster_t/raster::area(small_dem_raster_t)
+cellStats(small_dem_area_fix, "sum") # 53246.32
+
+## Fix CRS 
+small_dem_raster_t <- projectRaster(small_dem_area_fix, food_raster, method = "ngb")
+
+crs(small_dem_raster_t)
+plot(log(small_dem_raster_t + 1))
+small_dem_raster_t
+cellStats(small_dem_raster_t, "sum")
+
+small_dem_raster_t_final <- small_dem_raster_t*raster::area(small_dem_raster_t)
+cellStats(small_dem_raster_t_final, "sum") # 136463965
+
+## save the intermediate data prep on aurora
+writeRaster(small_dem_raster_t_final, file.path(ghg_folder, "watson_v5_emissions/emissions_rasters/tonnes/marine_small-demersal_fisheries_meat_ghg.tif"), overwrite=TRUE)
+
+
+
+## Large reef-associated
+large_reef_associated_raster <- catch_emissions_all %>%
+  dplyr::filter(species_class_int == "Large reef-associated", forage_fish == 0) %>%
+  dplyr::group_by(Cell) %>%
+  dplyr::summarize(emissions_tonnes = sum(emissions_tco2, na.rm=TRUE), 
+                   emissions_kg = sum(emissions_kgco2, na.rm = TRUE))
+
+large_rf_raster_t <- raster::subs(watson_raster_template, large_reef_associated_raster, by = "Cell", which = "emissions_tonnes", subsWithNA=TRUE)
+
+plot(log(large_rf_raster_t + 1))
+cellStats(large_rf_raster_t, "sum", na.rm=TRUE) # 7220947 - 2017
+
+large_rf_area_fix <- large_rf_raster_t/raster::area(large_rf_raster_t)
+cellStats(large_rf_area_fix, "sum") # 2537.094
+
+
+## Fix CRS 
+large_rf_raster_t <- projectRaster(large_rf_area_fix, food_raster, method = "ngb")
+
+crs(large_rf_raster_t)
+plot(log(large_rf_raster_t + 1))
+large_rf_raster_t
+cellStats(large_rf_raster_t, "sum")
+
+large_rf_raster_t_final <- large_rf_raster_t*raster::area(large_rf_raster_t)
+cellStats(large_rf_raster_t_final, "sum") # 7220925
+
+## save the intermediate data prep on aurora
+writeRaster(large_rf_raster_t_final, file.path(ghg_folder, "watson_v5_emissions/emissions_rasters/tonnes/marine_large-reef_fisheries_meat_ghg.tif"), overwrite=TRUE)
+
+
+## Medium reef-associated
+med_rf_raster <- catch_emissions_all %>%
+  dplyr::filter(species_class_int == "Medium reef-associated", forage_fish == 0) %>%
+  dplyr::group_by(Cell) %>%
+  dplyr::summarize(emissions_tonnes = sum(emissions_tco2, na.rm=TRUE), 
+                   emissions_kg = sum(emissions_kgco2, na.rm = TRUE))
+
+med_rf_raster_t <- raster::subs(watson_raster_template, med_rf_raster, by = "Cell", which = "emissions_tonnes", subsWithNA=TRUE)
+
+plot(log(med_rf_raster_t + 1))
+cellStats(med_rf_raster_t, "sum", na.rm=TRUE) #16888647 - 2017
+
+med_rf_area_fix <- med_rf_raster_t/raster::area(med_rf_raster_t)
+cellStats(med_rf_area_fix, "sum")
+
+
+## Fix CRS 
+med_rf_raster_t <- projectRaster(med_rf_area_fix, food_raster, method = "ngb")
+
+crs(med_rf_raster_t)
+plot(log(med_rf_raster_t + 1))
+med_rf_raster_t
+cellStats(med_rf_raster_t, "sum")
+
+
+med_rf_raster_t_final <- med_rf_raster_t*raster::area(med_rf_raster_t)
+cellStats(med_rf_raster_t_final, "sum") # 16888594
+
+
+## save the intermediate data prep on aurora
+writeRaster(med_rf_raster_t_final, file.path(ghg_folder, "watson_v5_emissions/emissions_rasters/tonnes/marine_medium-reef_fisheries_meat_ghg.tif"), overwrite=TRUE)
+
+
+## Small reef-associated
+small_rf_raster <- catch_emissions_all %>%
+  dplyr::filter(species_class_int == "Small reef-associated", forage_fish == 0) %>%
+  dplyr::group_by(Cell) %>%
+  dplyr::summarize(emissions_tonnes = sum(emissions_tco2, na.rm=TRUE), 
+                   emissions_kg = sum(emissions_kgco2, na.rm = TRUE))
+
+small_rf_raster_t <- raster::subs(watson_raster_template, small_rf_raster, by = "Cell", which = "emissions_tonnes", subsWithNA=TRUE)
+
+plot(log(small_rf_raster_t + 1))
+cellStats(small_rf_raster_t, "sum", na.rm=TRUE) #4085745 - 2017
+
+small_rf_area_fix <- small_rf_raster_t/raster::area(small_rf_raster_t)
+cellStats(small_rf_area_fix, "sum")
+
+
+## Fix CRS 
+small_rf_raster_t <- projectRaster(small_rf_area_fix, food_raster, method = "ngb")
+
+crs(small_rf_raster_t)
+plot(log(small_rf_raster_t + 1))
+small_rf_raster_t
+cellStats(small_rf_raster_t, "sum")
+
+small_rf_raster_t_final <- small_rf_raster_t*raster::area(small_rf_raster_t)
+cellStats(small_rf_raster_t_final, "sum") # 4085734
+
+
+## save the intermediate data prep on aurora
+writeRaster(small_rf_raster_t_final, file.path(ghg_folder, "watson_v5_emissions/emissions_rasters/tonnes/marine_small-reef_fisheries_meat_ghg.tif"), overwrite=TRUE)
+
+
+
+## Benthic
+benthic_raster <- catch_emissions_all %>%
+  dplyr::filter(species_class_int == "Benthic", forage_fish == 0) %>%
+  dplyr::group_by(Cell) %>%
+  dplyr::summarize(emissions_tonnes = sum(emissions_tco2, na.rm=TRUE), 
+                   emissions_kg = sum(emissions_kgco2, na.rm = TRUE))
+
+benthic_raster_t <- raster::subs(watson_raster_template, benthic_raster, by = "Cell", which = "emissions_tonnes", subsWithNA=TRUE)
+
+plot(log(benthic_raster_t + 1))
+cellStats(benthic_raster_t, "sum", na.rm=TRUE) # 37424377 - 2017
+
+benthic_area_fix <- benthic_raster_t/raster::area(benthic_raster_t)
+cellStats(benthic_area_fix, "sum")
+
+
+
+## Fix CRS 
+benthic_raster_t  <- projectRaster(benthic_area_fix , food_raster, method = "ngb")
+
+crs(benthic_raster_t)
+plot(log(benthic_raster_t  + 1))
+benthic_raster_t 
+cellStats(benthic_raster_t, "sum")
+
+benthic_raster_t_final <- benthic_raster_t*raster::area(benthic_raster_t)
+cellStats(benthic_raster_t_final, "sum") # 37424276
+
+## save the intermediate data prep on aurora
+writeRaster(benthic_raster_t_final, file.path(ghg_folder, "watson_v5_emissions/emissions_rasters/tonnes/marine_benthic_fisheries_meat_ghg.tif"), overwrite=TRUE)
+   
+             
+```
+
+Save final rasters by final species classes
+
+```{r}
+## FOFM
+## save to final datalayer folder on aurora
+cellStats(forage_fish_raster_t_final, "sum") # 67529616
+writeRaster(forage_fish_raster_t_final, file.path(final, "marine_fofm_fisheries_meat_ghg.tif"), overwrite=TRUE)
+
+
+## Large pelagics
+## save the final data layer to aurora
+cellStats(large_pelagic_raster_t_final, "sum") # 31362707
+writeRaster(large_pelagic_raster_t_final, file.path(final, "marine_large-pelagic_fisheries_meat_ghg.tif"), overwrite=TRUE)
+
+## Medium pelagics
+## save the final data layer to aurora
+cellStats(med_pelagic_raster_t_final, "sum") # 26422832
+writeRaster(med_pelagic_raster_t_final, file.path(final, "marine_medium-pelagic_fisheries_meat_ghg.tif"), overwrite=TRUE)
+
+## Small pelagics 
+## save the final data layer to aurora
+cellStats(small_pelagic_raster_t_final, "sum") # 4524590
+writeRaster(small_pelagic_raster_t_final, file.path(final, "marine_small-pelagic_fisheries_meat_ghg.tif"), overwrite=TRUE)
+
+
+## Demersal
+dem_raster <- catch_emissions_all %>%
+  dplyr::filter(species_class_fin == "Demersal", forage_fish == 0) %>%
+  dplyr::group_by(Cell) %>%
+  dplyr::summarize(emissions_tonnes = sum(emissions_tco2, na.rm=TRUE), 
+                   emissions_kg = sum(emissions_kgco2, na.rm = TRUE))
+
+dem_raster_t <- raster::subs(watson_raster_template, dem_raster, by = "Cell", which = "emissions_tonnes", subsWithNA=TRUE)
+
+plot(log(dem_raster_t + 1))
+cellStats(dem_raster_t, "sum", na.rm=TRUE) #187363867 - 2017
+dem_raster_t
+
+dem_area_fix <- dem_raster_t/raster::area(dem_raster_t)
+cellStats(dem_area_fix, "sum")
+
+
+## Fix CRS
+dem_raster_t  <- projectRaster(dem_area_fix , food_raster, method = "ngb")
+
+crs(dem_raster_t)
+plot(log(dem_raster_t  + 1))
+dem_raster_t
+cellStats(dem_raster_t, "sum")
+
+dem_raster_t_final <- dem_raster_t*raster::area(dem_raster_t)
+cellStats(dem_raster_t_final, "sum") # 187363385
+
+## save the final data layer to aurora
+writeRaster(dem_raster_t_final, file.path(final, "marine_demersal_fisheries_meat_ghg.tif"), overwrite=TRUE)
+
+
+## reef-associated
+rf_raster <- catch_emissions_all %>%
+  dplyr::filter(species_class_fin == "Reef-associated", forage_fish == 0) %>%
+  dplyr::group_by(Cell) %>%
+  dplyr::summarize(emissions_tonnes = sum(emissions_tco2, na.rm=TRUE), 
+                   emissions_kg = sum(emissions_kgco2, na.rm = TRUE))
+
+rf_raster_t <- raster::subs(watson_raster_template, rf_raster, by = "Cell", which = "emissions_tonnes", subsWithNA=TRUE)
+
+plot(log(rf_raster_t + 1))
+cellStats(rf_raster_t, "sum", na.rm=TRUE) #28195338 - 2017
+
+rf_area_fix <- rf_raster_t/raster::area(rf_raster_t)
+cellStats(rf_area_fix, "sum")
+
+
+## Fix CRS
+rf_raster_t  <- projectRaster(rf_area_fix, food_raster, method = "ngb")
+
+crs(rf_raster_t)
+plot(log(rf_raster_t  + 1))
+rf_raster_t
+cellStats(rf_raster_t, "sum")
+
+rf_raster_t_final <- rf_raster_t*raster::area(rf_raster_t)
+cellStats(rf_raster_t_final, "sum") # 28195253
+
+
+## save the final data layer to aurora
+writeRaster(rf_raster_t_final, file.path(final, "marine_reef_fisheries_meat_ghg.tif"), overwrite=TRUE)
+
+
+## Benthic
+## save the final data layer to aurora
+cellStats(benthic_raster_t_final, "sum") # 37424276 
+writeRaster(benthic_raster_t_final, file.path(final, "marine_benthic_fisheries_meat_ghg.tif"), overwrite=TRUE)
+```
+
+Datacheck
+Lets do some comparing to Parker 2018 estimates 
+```{r, eval = FALSE}
+
+#load relevant packages, etc.
+
+library(here)
+library(raster)
+library(tidyverse)
+library(countrycode)
+
+# function to project raster
+## Use correct CRS
+
+watson_raster_template <- raster::raster(ncol=720, nrow=360, vals=c(1:259200))
+source(here("fisheries/marine/ghg/raster_crs.R"))
+
+
+raw_folder <- file.path("/home/shares/food-systems/Food_footprint/_raw_data")
+raw_folder_watson <- file.path("/home/shares/food-systems/Food_footprint/_raw_data/watson_data/v5.0/")
+ghg_folder <- file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/ghg")
+final <- file.path("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers")
+
+
+## read in emissions data
+catch_emissions <- read_csv(file.path(ghg_folder, "watson_v5_emissions/all_catch_emissions_2017.csv")) 
+
+sum(catch_emissions$catch)
+# [1] 111226186 tonnes = 111226186000 kg
+
+## values from final ghg rasters 
+# benthic  # reef     # demersal  #small pel # med pel # large pel # fofm
+37424276 + 28195253 + 187363385 + 4524590 + 26422832 + 31362707 + 67529616 # we estimate 382822659 tonnes co2eq total
+
+## quick check using our mean EI 
+111226186000*3.50801/10000 # 390182573 -- makes sense... the estimate seen above is using a more specific per species/rgn EI allocation, not just the mean. 
+
+
+#### Using the EI from parker et al. 
+# lets guess that with non industrial, parker wouldve had ~100 million landings. How much co2eq t can we guess from ~ 20 million tonnes landings
+mean(catch_emissions$ei_kgco2_kgcatch) # mean emissions intensities kgco2/kgcatch is 3.50801
+20*1000 #20000 million kg catch non industrial in 2011
+20000*2.2 ## estimate 44000 million kgco2eq emissions in 2011 from non industrial 
+44000/1000 ## 44 million non industrial tco2eq in 2011
+81000*2.2/1000 # 178.2 million non industrial tco2eq in 2011
+
+178.2+44 # 222.2 million tonnes co2eq in 2011 using parkers EI of 2.2 kg CO2eq per kg
+
+## this is a large difference from our estimate
+
+## this is because the EI that they used was much lower than ours. They had a mean EI of 2.2 kg CO2-eq per kg... we had a mean of 3.50801 kg CO2-eq per kg... what if we used 2.2 kg CO2eq per kg on our catch estimate: 
+
+111226186000*2.2/1000 # 244697609 ## makes sense 
+
+
+# Use our mean EI on the tonnes of production from Parker paper
+# lets guess that with non industrial, parker wouldve had ~100 million landings. How much co2eq t can we guess from ~ 20 million tonnes landings
+mean(catch_emissions$ei_kgco2_kgcatch) # mean emissions intensities kgco2/kgcatch is 3.50801
+20*1000 #20000 million kg catch non industrial in 2011
+(81000+20000)*3.50801 ## estimate 354309 kgco2eq emissions in 2011 
+354309/1000 ## 354.309 million tco2eq in 2011 from parkers tonnes estimates using OUR EI
+
+## this matches pretty well to our estimate
+```
+

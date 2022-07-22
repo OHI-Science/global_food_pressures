@@ -1,0 +1,48 @@
+---
+title: "Backyard Chicken Wrangling"
+author: "Juliette"
+date: "7/2/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(here)
+library(countrycode)
+
+source(here("_workflow/common.R"))
+```
+
+
+```{r}
+
+gleam <- read_csv(here(paste0("animal_farm/farm/data/", animal, "_GLEAMi_v2.csv")))
+      
+gleam_meat_egg_prop <- gleam %>% 
+  filter(Production_system %in% c("Layers","Broilers"),
+         Variable == "HERD: total number of animals") %>% 
+  select(Production_system, Value, iso3c) %>% 
+  group_by(iso3c) %>% 
+  mutate(total_industrial = sum(Value)) %>% 
+  spread(Production_system, Value) %>% 
+  mutate(prop_indust_egg = Layers/total_industrial,
+         prop_indust_meat = Broilers/total_industrial,
+         prop_indust_egg = ifelse(is.na(prop_indust_egg), 0, prop_indust_egg),
+         prop_indust_meat = ifelse(is.na(prop_indust_meat), 0, prop_indust_meat)) %>% 
+  select(iso3c, prop_indust_egg, prop_indust_meat)
+
+gleam_backyard_count <- gleam %>% 
+  filter(Production_system == "Backyard",
+         Variable == "HERD: total number of animals") %>% 
+  select(iso3c, Value) %>% 
+  rename(total_backyard = Value) %>% 
+  left_join(gleam_meat_egg_prop, by = "iso3c") %>% 
+  mutate(meat = total_backyard*prop_indust_meat,
+         eggs = total_backyard*prop_indust_egg) %>% 
+  select(iso3c, meat, eggs) %>% 
+  gather(product, gleam_headcount, c("meat", "eggs"))
+  
+write_csv(gleam_backyard_count, here("animal_farm/farm/data/gleam_backyard_count.csv"))       
+        
+```
+

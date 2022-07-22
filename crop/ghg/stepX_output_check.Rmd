@@ -1,0 +1,156 @@
+---
+title: "stepX_check_outputs"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(readr)
+library(raster)
+library(doParallel)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+```
+
+
+```{r}
+# Irrigation
+cats_sum <- 
+  list.files(file.path(prep, "crop/ghg/crop_irrigation_ghg/ghg_emissions", sep = ""),
+           pattern = "tnut|othr|spis",
+           full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, fun = sum) %>% 
+  cellStats(., stat = "sum")
+
+rest_sum <- 
+  list.files(file.path(prep, "crop/ghg/crop_irrigation_ghg/ghg_emissions", sep = ""),
+           pattern = "rest",
+           full.names = TRUE) %>% 
+  raster() %>% 
+  cellStats(., stat = "sum")
+
+cats_sum / rest_sum
+
+# Pesticides
+cats_sum <- 
+  list.files(file.path(prep, "crop/ghg/crop_pesticide_ghg", sep = ""),
+           pattern = "tnut|othr|spis",
+           full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, fun = sum) %>% 
+  cellStats(., stat = "sum")
+
+rest_sum <- 
+  list.files(file.path(prep, "crop/ghg/crop_pesticide_ghg", sep = ""),
+           pattern = "rest",
+           full.names = TRUE) %>% 
+  raster() %>% 
+  cellStats(., stat = "sum")
+
+cats_sum / rest_sum
+
+# Nutrient
+cats_sum <- 
+  list.files(file.path(prep, "crop/ghg/crop_nutrient_ghg", sep = ""),
+           pattern = "(tnut|othr|spis)_all",
+           full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, fun = sum) %>% 
+  cellStats(., stat = "sum")
+
+rest_sum <- 
+  list.files(file.path(prep, "crop/ghg/crop_nutrient_ghg", sep = ""),
+           pattern = "rest_all",
+           full.names = TRUE) %>% 
+  raster() %>% 
+  cellStats(., stat = "sum")
+
+cats_sum / rest_sum
+
+# Fertilizer
+
+cats_sum <- 
+  list.files(file.path(prep, "crop/ghg/crop_fertilizer_N2O/co2_eq", sep = ""),
+           pattern = "tnut|othr|spis",
+           full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, fun = sum) %>% 
+  cellStats(., stat = "sum")
+
+rest_sum <- 
+  list.files(file.path(prep, "crop/ghg/crop_fertilizer_N2O/co2_eq", sep = ""),
+           pattern = "rest",
+           full.names = TRUE) %>% 
+  raster() %>% 
+  cellStats(., stat = "sum")
+
+cats_sum / rest_sum
+
+# Residue burning ghg
+
+cats_sum <- 
+  list.files(file.path(prep, "crop/ghg/crop_residue_burning_ghg/co2eq_emitted", sep = ""),
+           pattern = "tnut|othr|spis",
+           full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, fun = sum) %>% 
+  cellStats(., stat = "sum")
+
+rest_sum <- 
+  list.files(file.path(prep, "crop/ghg/crop_residue_burning_ghg/co2eq_emitted", sep = ""),
+           pattern = "rest",
+           full.names = TRUE) %>% 
+  raster() %>% 
+  cellStats(., stat = "sum")
+
+cats_sum / rest_sum
+
+# Residue N2O
+cats_sum <- 
+  list.files(file.path(prep, "crop/ghg/crop_residue_N2O/co2_eq", sep = ""),
+           pattern = "tnut|othr|spis",
+           full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, fun = sum) %>% 
+  cellStats(., stat = "sum")
+
+rest_sum <- 
+  list.files(file.path(prep, "crop/ghg/crop_residue_N2O/co2_eq", sep = ""),
+           pattern = "rest",
+           full.names = TRUE) %>% 
+  raster() %>% 
+  cellStats(., stat = "sum")
+
+cats_sum / rest_sum
+
+# Paddy rice
+
+raster(file.path(prep, "crop/ghg/paddy_rice_CO2eq.tif"))
+```
+
+Check outputs after re-running stepZ_ghg_totals
+```{r}
+# Final
+cats_sum <- 
+  list.files(file.path(prep, "crop/farm/stressors", sep = ""),
+           pattern = "(tnut|othr|spis)_crop_produce_ghg",
+           full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, fun = sum) %>% 
+  cellStats(., stat = "sum")
+
+rest_sum <- 
+  list.files(file.path(prep, "crop/farm/stressors", sep = ""),
+             pattern = "rest_crop_produce_ghg",
+             full.names = TRUE) %>% 
+  raster() %>% 
+  cellStats(., stat = "sum")
+
+rest_sum - cats_sum
+
+(4496715+671367.8) / 5755350
+```
+

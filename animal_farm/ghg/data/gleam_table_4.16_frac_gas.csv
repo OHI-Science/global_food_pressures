@@ -1,0 +1,52 @@
+﻿animal,mms,frac_gas
+dairy cow,Pasture/Range/Paddock,0
+dairy cow,Daily spread,7
+dairy cow,Solid storage,30
+dairy cow,Dry lot,20
+dairy cow,Liquid/Slurry,40
+dairy cow,Uncovered anaerobic lagoon,35
+beef cow,Pasture/Range/Paddock,0
+beef cow,Daily spread,7
+beef cow,Solid storage,45
+beef cow,Dry lot,30
+beef cow,Liquid/Slurry,40
+beef cow,Uncovered anaerobic lagoon,35
+feedlot cow,Solid storage,45
+feedlot cow,Dry lot,30
+feedlot cow,Liquid/Slurry,40
+feedlot cow,Uncovered anaerobic lagoon,35
+feedlot cow,Pit storage,28
+buffaloes,Pasture/Range/Paddock,0
+buffaloes,Daily spread,7
+buffaloes,Solid storage,45
+buffaloes,Dry lot,30
+buffaloes,Liquid/Slurry,40
+buffaloes,Uncovered anaerobic lagoon,35
+feedlot cow,Composting - intensive windrow,30
+small_ruminants,Pasture/Range/Paddock,0
+small_ruminants,Daily spread,7
+small_ruminants,Solid storage,12
+small_ruminants,Dry lot,30
+small_ruminants,Liquid/Slurry,40
+small_ruminants,Uncovered anaerobic lagoon,35
+pigs,Pasture/Range/Paddock,20
+pigs,Daily spread,7
+pigs,Solid storage,45
+pigs,Dry lot,30
+pigs,Liquid/Slurry,48
+pigs,Liquid/Slurry with crust,48
+pigs,Uncovered anaerobic lagoon,40
+pigs,Pit storage (< 1 month),25
+pigs,Pit storage (> 1 month),25
+pigs,Anaerobic digester,0
+chickens,Pasture/Range/Paddock,20
+chickens,Daily spread,7
+chickens,Solid storage,45
+chickens,Dry lot,30
+chickens,Liquid/Slurry,48
+chickens,Liquid/Slurry with crust,48
+chickens,Uncovered anaerobic lagoon,40
+chickens,Pit storage (< 1 month),55
+chickens,Pit storage (> 1 month),55
+chickens,Anaerobic digester,0
+chickens,Poultry manure with litter,40

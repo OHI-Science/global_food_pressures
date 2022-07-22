@@ -1,0 +1,38 @@
+ISSCAAP_group;Species;Order;Continent;Geographic_region;Country;Economic_class;1995;2000;2005;2010;2020;2030;2040;2050
+Carps, barbels and other cyprinids;Bighead carp;Other;;;;;0.1;0.09;0.08;0.05;0.05;0.05;0.05;0.05
+Carps, barbels and other cyprinids;Catla;Other;;;;;0.1;0.09;0.08;0.05;0.05;0.05;0.05;0.05
+Carps, barbels and other cyprinids;Roho labeo;Other;;;;;0.1;0.09;0.08;0.05;0.05;0.05;0.05;0.05
+Carps, barbels and other cyprinids;Silver carp;Other;;;;;0.1;0.09;0.08;0.05;0.05;0.05;0.05;0.05
+Carps, barbels and other cyprinids;Other;Other;;;;;0.1;0.09;0.08;0.05;0.05;0.05;0.05;0.05
+Miscellaneous freshwater fishes;Other;SILURIFORMES;;;;;0.05;0.08;0.12;0.1;0.1;0.1;0.1;0.1
+Miscellaneous freshwater fishes;Grass-eaters nei;Other;;;;;0.05;0.08;0.12;0.1;0.1;0.1;0.1;0.1
+Miscellaneous diadromous fishes;Milkfish;Other;;;;;0.15;0.1;0.05;0.03;0.03;0.03;0.03;0.03
+Miscellaneous coastal fishes;Other;ACANTHUROIDEI;;;;;0.11;0.095;0.085;0.06;0.06;0.06;0.06;0.06
+Miscellaneous coastal fishes;Other;MUGILIFORMES;;;;;0.11;0.095;0.085;0.06;0.06;0.06;0.06;0.06
+Tilapias and other cichlids;Other;Other;;;;;0.14;0.11;0.09;0.06;0.06;0.06;0.06;0.06
+Carps, barbels and other cyprinids;Black carp;Other;;;;;0.5;0.44;0.36;0.32;0.32;0.32;0.32;0.32
+Miscellaneous freshwater fishes;Other;Other;;;;;0.55;0.5;0.45;0.4;0.4;0.4;0.4;0.4
+Miscellaneous diadromous fishes;Other;Other;;;;;0.5;0.44;0.36;0.32;0.32;0.32;0.32;0.32
+Miscellaneous coastal fishes;Other;Other;;;;;0.5;0.44;0.36;0.32;0.32;0.32;0.32;0.32
+Sturgeons, paddlefishes;Other;Other;;;;;0.5;0.44;0.36;0.32;0.32;0.32;0.32;0.32
+River eels;Other;Other;;;;;0.65;0.62;0.6;0.55;0.55;0.55;0.55;0.55
+Salmons, trouts, smelts;Atlantic salmon;Other;;;;;0.45;0.4;0.35;0.3;0.3;0.3;0.3;0.3
+Salmons, trouts, smelts;Chinook(=Spring=King)salmon;Other;;;;;0.45;0.4;0.35;0.3;0.3;0.3;0.3;0.3
+Salmons, trouts, smelts;Coho(=Silver)salmon;Other;;;;;0.45;0.4;0.35;0.3;0.3;0.3;0.3;0.3
+Salmons, trouts, smelts;Chum(=Keta=Dog)salmon;Other;;;;;0.45;0.4;0.35;0.3;0.3;0.3;0.3;0.3
+Salmons, trouts, smelts;Masu(=Cherry) salmon;Other;;;;;0.45;0.4;0.35;0.3;0.3;0.3;0.3;0.3
+Salmons, trouts, smelts;Sockeye(=Red)salmon;Other;;;;;0.45;0.4;0.35;0.3;0.3;0.3;0.3;0.3
+Salmons, trouts, smelts;Pacific salmons nei;Other;;;;;0.45;0.4;0.35;0.3;0.3;0.3;0.3;0.3
+Salmons, trouts, smelts;Brook trout;Other;;;;;0.4;0.36;0.34;0.3;0.3;0.3;0.3;0.3
+Salmons, trouts, smelts;Rainbow trout;Other;;;;;0.4;0.36;0.34;0.3;0.3;0.3;0.3;0.3
+Salmons, trouts, smelts;Sea trout;Other;;;;;0.4;0.36;0.34;0.3;0.3;0.3;0.3;0.3
+Salmons, trouts, smelts;Golden trout;Other;;;;;0.4;0.36;0.34;0.3;0.3;0.3;0.3;0.3
+Salmons, trouts, smelts;Trouts nei;Other;;;;;0.4;0.36;0.34;0.3;0.3;0.3;0.3;0.3
+Salmons, trouts, smelts;Other;Other;;;;;0.425;0.38;0.345;0.3;0.3;0.3;0.3;0.3
+Shads;Other;Other;;;;;0.5;0.44;0.36;0.32;0.32;0.32;0.32;0.32
+Flounders, halibuts, soles;Other;Other;;;;;0.5;0.44;0.36;0.32;0.32;0.32;0.32;0.32
+Cods, hakes, haddocks;Other;Other;;;;;0.5;0.44;0.36;0.32;0.32;0.32;0.32;0.32
+Miscellaneous demersal fishes;Other;Other;;;;;0.5;0.44;0.36;0.32;0.32;0.32;0.32;0.32
+Tunas, bonitos, billfishes;Other;Other;;;;;0.5;0.44;0.36;0.32;0.32;0.32;0.32;0.32
+Miscellaneous pelagic fishes;Other;Other;;;;;0.5;0.44;0.36;0.32;0.32;0.32;0.32;0.32
+Marine fishes not identified;Other;Other;;;;;0.5;0.44;0.36;0.32;0.32;0.32;0.32;0.32

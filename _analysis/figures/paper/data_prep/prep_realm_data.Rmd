@@ -1,0 +1,112 @@
+---
+title: "explore_wrangle_realm_data"
+author: "Juliette"
+date: "11/17/2020"
+output: html_document
+---
+
+Marine, terrestrial and freshwater ecoregions of the world shape files are from WWF.
+
+[Marine Ecoregions of the World (MEOW)](https://www.worldwildlife.org/publications/marine-ecoregions-of-the-world-a-bioregionalization-of-coastal-and-shelf-areas)
+[Terrestrial Ecoregions of the World (TEOW)](https://www.worldwildlife.org/publications/terrestrial-ecoregions-of-the-world)
+[Freshwater Ecoregions of the World (FEOW)](https://www.worldwildlife.org/pages/freshwater-ecoregions-of-the-world--2)
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(sf)
+library(fasterize)
+library(mapview)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+gall_peters <- "+proj=cea +lon_0=0 +x_0=0 +y_0=0 +lat_ts=45 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+template_gall_peters <- raster(file.path(prep, "spatial/gall_peters/food_rgns_gall_peters.tif"))
+
+```
+
+
+## MEOW
+```{r}
+## load in the shape file
+meow_raw <- read_sf(file.path(raw, "MEOW/meow_ecos.shp"), crs = food_crs) 
+
+meow_realm <- meow_raw %>% 
+  select(RLM_CODE) 
+
+#mapview(meow_realm)
+
+meow_gall_peters <- meow_realm %>% 
+  st_wrap_dateline(c("WRAPDATELINE=YES")) %>% 
+  st_transform(crs = gall_peters) 
+
+plot(meow_gall_peters)
+
+## make a key df for the number coded
+meow_df <- meow_raw %>% 
+  select(REALM, RLM_CODE) %>% 
+  mutate(type = "ocean")
+meow_df$area <- st_area(meow_df)
+meow_df <- meow_df %>% 
+  st_drop_geometry() %>% 
+  group_by(REALM) %>% 
+  mutate(realm_area_km2 = as.numeric(sum(area))/1000) %>% 
+  select(-area) %>% 
+  unique()
+
+meow_raster <- rasterize(meow_gall_peters, template_gall_peters, field = "RLM_CODE")
+plot(meow_raster) ## 1- 12
+
+writeRaster(meow_raster, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/ecoregions_rasters/meow_raster.tif"), format = "GTiff", overwrite = TRUE)    
+
+write_csv(meow_df, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/ecoregions_rasters/meow_key.csv"))
+
+```
+
+ECOREGIONS: 232
+PROVINCE: 62
+REALM: 12
+Lat_zone: 3
+
+## TEOW
+```{r}
+teow_raw <- read_sf(file.path(raw, "TEOW/wwf_terr_ecos.shp")) 
+teow_realm <- teow_raw %>% 
+  select(BIOME)
+#mapview(teow_realm)
+
+teow_realm_gall_peters <- teow_realm %>% 
+  st_wrap_dateline(c("WRAPDATELINE=YES")) %>% 
+  st_transform(crs = gall_peters) 
+plot(teow_realm_gall_peters)
+
+teow_raster <- rasterize(teow_realm_gall_peters, template_gall_peters, field = "BIOME", fun="first")
+plot(teow_raster)
+
+writeRaster(teow_raster, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/ecoregions_rasters/teow_raster.tif"), format = "GTiff", overwrite = TRUE) 
+
+## create df with area
+teow_df <- teow_raw %>% 
+  select(BIOME) %>% 
+  mutate(type = "land")
+teow_df$area <- st_area(teow_df)
+teow_df <- teow_df %>% 
+  st_drop_geometry() %>% 
+  group_by(BIOME) %>% 
+  mutate(realm_area_km2 = as.numeric(sum(area))/1000) %>% 
+  select(-area) %>% 
+  unique()
+
+write_csv(teow_df, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/ecoregions_rasters/teow_area.csv"))
+```
+
+ECO_NAME: 827
+REALM: 9 (but they are abbreviated, ex AA)
+BIOME: 16 (numbered)
+
+
+
+

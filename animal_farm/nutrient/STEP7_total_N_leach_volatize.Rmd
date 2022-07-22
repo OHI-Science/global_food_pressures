@@ -1,0 +1,463 @@
+---
+title: "STEP7: Combine all leaching sources and all volatization sources"
+author: "Juliette"
+date: "4/5/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(doParallel)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+
+```
+
+## All Leaching
+```{r}
+
+category_list <- c("chickens_industrial_meat", "chickens_industrial_eggs", "chickens_backyard_eggs&meat", "goats_grassland_milk", "goats_grassland_meat", "goats_mixed_milk", "goats_mixed_meat", "sheep_grassland_milk", "sheep_grassland_meat", "sheep_mixed_milk", "sheep_mixed_meat", "cows_grassland_milk", "cows_grassland_meat", "cows_mixed_milk", "cows_mixed_meat", "cows_feedlot_meat", "pigs_backyard_meat", "pigs_intermediate_meat", "pigs_industrial_meat", "buffaloes_grassland_milk", "buffaloes_mixed_milk")
+
+registerDoParallel(20)   
+
+foreach(category = category_list) %dopar% {
+  
+  # category = category_list[13]
+  
+  ## Grab the leaching N from manure first
+  N_excretion <- raster(list.files(file.path(prep, "animal_farm/nutrient/N_from_excretion"), pattern = category, full = TRUE)) %>% 
+    raster_df() %>% 
+    select(-cellindex) 
+ colnames(N_excretion) <- c("x", "y", "exc") 
+ N_excretion <- N_excretion %>% 
+   mutate(exc = ifelse(is.na(exc), 0, exc))
+  
+  mms_prop <- read_csv(list.files(file.path(prep, "animal_farm/nutrient/STEP3_N_leaching_prop_mms"), pattern = category, full = TRUE), col_types = c("ddcn")) %>% 
+    mutate(frac_leach_mms = ifelse(is.na(frac_leach_mms), 0, frac_leach_mms))
+  
+  applied_crop_prop <- read_csv(list.files(file.path(prep, "animal_farm/nutrient/STEP5_N_leached_prop_applied_crops"), pattern = category, full = TRUE), col_types = c("ddcn")) %>% 
+    mutate(N_prop_leach_applied = ifelse(is.na(N_prop_leach_applied), 0, N_prop_leach_applied))
+  
+    applied_pasture_prop <- read_csv(list.files(file.path(prep, "animal_farm/nutrient/STEP5.5_N_leached_prop_applied_pastures"), pattern = category, full = TRUE), col_types = c("ddcn")) %>% 
+    mutate(N_prop_leach_applied_pastures = ifelse(is.na(N_prop_leach_applied_pastures), 0, N_prop_leach_applied_pastures))
+  
+  pasture_prop <- read_csv(list.files(file.path(prep, "animal_farm/nutrient/STEP6.5_N_leaching_prop_pasture"), pattern = category, full = TRUE), col_types = c("ddcn")) %>% 
+    mutate(prop_leaching = ifelse(is.na(prop_leaching), 0, prop_leaching))
+  
+  tonnes_N_leached_manure <- left_join(mms_prop, pasture_prop) %>% 
+    left_join(applied_crop_prop) %>% 
+    left_join(applied_pasture_prop) %>% 
+    left_join(N_excretion) %>% 
+    mutate(prop_leach_all = (frac_leach_mms + N_prop_leach_applied + N_prop_leach_applied_pastures + prop_leaching),
+           leached_amount = exc*prop_leach_all) %>% 
+    select(x,y, leached_amount)
+  
+ tonnes_N_leached_manure_raster <- rasterFromXYZ(tonnes_N_leached_manure, crs = food_crs)
+#  tonnes_N_leached <- N_excretion *(mms_prop +pasture_prop + applied_prop)
+    names(tonnes_N_leached_manure_raster) <- "tonnes_N"
+    tonnes_N_leached_manure_raster[is.na(tonnes_N_leached_manure_raster)] <- 0
+  
+  ## Now lets grab the grassland fertilizer leached if relevant
+    if(str_detect(category, "grassland")){
+      
+    fertilizer_leached <- raster(file.path(prep, paste0("animal_farm/nutrient/grassland_nutrient_pollution/", category, "_leached_N.tif", sep = "")))
+    
+    tonnes_N_leached_raster <- sum(stack(tonnes_N_leached_manure_raster,fertilizer_leached), na.rm = TRUE)
+    
+    }else{
+      tonnes_N_leached_raster <- tonnes_N_leached_manure_raster}
+    
+    plot(log(1+ tonnes_N_leached_raster), main = category)
+  
+  raster::writeRaster(tonnes_N_leached_raster, file.path(prep, paste0("animal_farm/nutrient/STEP7_total_N_leaching/", category, "_N_leaching.tif", sep = "")), format = "GTiff", overwrite = TRUE)
+  
+}
+
+
+```
+
+Numbers check
+
+```{r}
+
+list_files <- list.files(file.path(prep, "animal_farm/nutrient/STEP7_total_N_leaching"), full = TRUE)
+
+global_leaching_total <- sum(stack(lapply(list_files, raster)))
+plot(log(1+global_leaching_total))
+total_leach <- cellStats(global_leaching_total, stat = 'sum', na.rm = TRUE)
+
+df_check <- data.frame(animal=NA,
+                       global_n = NA)
+
+animals_list <- c("cows", "chickens", "goats", "pigs", "buffaloes", "sheep")
+for(animal_oi in animals_list) {
+
+  animal_files <- str_subset(list_files, pattern = animal_oi)
+  leaching <- sum(stack(lapply(animal_files, raster)), na.rm = TRUE)
+  
+  total <- as_tibble(cellStats(leaching, stat = 'sum', na.rm = TRUE)) %>% 
+    mutate(animal = animal_oi) %>% 
+    rename(global_n = value)
+  
+  df_check <- rbind(df_check, total) %>%  filter(!is.na(animal))
+  
+}
+
+## check to see if the total leaching is 20-30%ish of total N excretion
+
+list_files <- list.files(file.path(prep, "animal_farm/nutrient/N_from_excretion"), full = TRUE)
+
+global_N_total <- sum(stack(lapply(list_files, raster)), na.rm = TRUE)
+total_exc <- cellStats(global_N_total, stat = 'sum', na.rm = TRUE)
+
+total_leach/total_exc
+## 0.1900544
+```
+
+Look at all the USA cows 
+```{r}
+
+applied_crop <- read_csv(here::here("animal_farm/nutrient/data/check/usa_cows_leached_applied_crops.csv")) %>% 
+  rename(prop_leach_applied_crop = prop_applied_leaching)
+applied_past <- read_csv(here::here("animal_farm/nutrient/data/check/usa_cows_leached_applied_pastures.csv")) %>% 
+    rename(prop_leach_applied_pasture = prop_applied_leaching)
+mms <- read_csv(here::here("animal_farm/nutrient/data/check/usa_cows_leached_mms.csv"))
+pasture <- read_csv(here::here("animal_farm/nutrient/data/check/usa_cows_leached_pasture.csv"))
+
+usa_cows <- left_join(applied_crop, mms) %>%
+  left_join(pasture) %>%
+  left_join(applied_past) %>% 
+  select(iso3c, animal_system_product,
+         prop_leach_mms,
+         prop_leach_pasture = prop_pasture_leaching,
+         prop_leach_applied_crop,
+         prop_leach_applied_pasture)
+```
+ 
+
+## All Volatization
+```{r}
+
+category_list <- c("chickens_industrial_meat", "chickens_industrial_eggs", "chickens_backyard_eggs&meat", "goats_grassland_milk", "goats_grassland_meat", "goats_mixed_milk", "goats_mixed_meat", "sheep_grassland_milk", "sheep_grassland_meat", "sheep_mixed_milk", "sheep_mixed_meat", "cows_grassland_milk", "cows_grassland_meat", "cows_mixed_milk", "cows_mixed_meat", "cows_feedlot_meat", "pigs_backyard_meat", "pigs_intermediate_meat", "pigs_industrial_meat", "buffaloes_grassland_milk", "buffaloes_mixed_milk")
+
+#registerDoParallel(5)   
+
+foreach(category = category_list) %dopar% {
+  
+  # category = category_list[13]
+  
+  ## lets deal with the manure nutrient volatization
+  N_excretion <- raster(list.files(file.path(prep, "animal_farm/nutrient/N_from_excretion"), pattern = category, full = TRUE)) %>% 
+    raster_df() %>% 
+    select(-cellindex) 
+ colnames(N_excretion) <- c("x", "y", "exc") 
+ N_excretion <- N_excretion %>% 
+   mutate(exc = ifelse(is.na(exc), 0, exc))
+  
+  mms_volt_prop <- read_csv(list.files(file.path(prep, "animal_farm/nutrient/STEP3.5_N_volatizing_prop_mms"), pattern = category, full = TRUE), col_types = c("ddcn")) %>% 
+    mutate(prop_volt = ifelse(is.na(prop_volt), 0, prop_volt))
+  
+  applied_volt_crop_prop <- read_csv(list.files(file.path(prep, "animal_farm/nutrient/STEP5_N_volatizing_prop_applied_crops"), pattern = category, full = TRUE), col_types = c("ddcn")) %>% 
+    mutate(N_prop_volt_applied = ifelse(is.na(N_prop_volt_applied), 0, N_prop_volt_applied))
+  
+    applied_volt_pasture_prop <- read_csv(list.files(file.path(prep, "animal_farm/nutrient/STEP5.5_N_volatizing_prop_applied_pasture"), pattern = category, full = TRUE), col_types = c("ddcn")) %>% 
+    mutate(N_prop_volt_applied_pastures = ifelse(is.na(N_prop_volt_applied_pastures), 0, N_prop_volt_applied_pastures))
+  
+  pasture_volt_prop <- read_csv(list.files(file.path(prep, "animal_farm/nutrient/STEP6.5_N_volatizing_prop_pasture"), pattern = category, full = TRUE), col_types = c("ddcn")) %>% 
+    rename(prop_volt_pasture = prop_volt) %>% 
+    mutate(prop_volt_pasture = ifelse(is.na(prop_volt_pasture), 0, prop_volt_pasture))
+  
+  tonnes_N_volatized <- left_join(mms_volt_prop, pasture_volt_prop) %>% 
+    left_join(applied_volt_crop_prop) %>% 
+    left_join(applied_volt_pasture_prop) %>% 
+    left_join(N_excretion) %>% 
+    mutate(prop_volt_all = (prop_volt + N_prop_volt_applied + N_prop_volt_applied_pastures + prop_volt_pasture),
+           volt_amount = exc*prop_volt_all) %>% 
+    select(x,y, volt_amount)
+  
+ tonnes_N_manure_volatized_raster <- rasterFromXYZ(tonnes_N_volatized, crs = food_crs)
+#  tonnes_N_leached <- N_excretion *(mms_prop +pasture_prop + applied_prop)
+    names(tonnes_N_manure_volatized_raster) <- "tonnes_N"
+    tonnes_N_manure_volatized_raster[is.na(tonnes_N_manure_volatized_raster)] <- 0
+    
+    ## now lets deal with the volatization from grassland fertlizer
+      ## Now lets grab the grassland fertilizer leached if relevant
+    if(str_detect(category, "grassland")){
+      
+    fertilizer_volt <- raster(file.path(prep, paste0("animal_farm/nutrient/grassland_nutrient_pollution/", category, "_volatilized_N.tif", sep = "")))
+    
+    tonnes_N_volatized_raster <- sum(stack(tonnes_N_manure_volatized_raster,fertilizer_volt), na.rm = TRUE)
+    
+    }else{
+      tonnes_N_volatized_raster <- tonnes_N_manure_volatized_raster}
+    
+    
+    plot(log(1+ tonnes_N_volatized_raster), main = category)
+  
+  raster::writeRaster(tonnes_N_volatized_raster, file.path(prep, paste0("animal_farm/nutrient/STEP7_total_N_volatizing/", category, "_N_volatizing.tif", sep = "")), format = "GTiff", overwrite = TRUE)
+  
+}
+
+list_files_1 <- list.files(file.path(prep, "animal_farm/nutrient/N_from_excretion"), full = TRUE)
+
+global_N_total <- sum(stack(lapply(list_files, raster)), na.rm = TRUE)
+total_exc <- cellStats(global_N_total, stat = 'sum', na.rm = TRUE)
+
+list_files <- list.files(file.path(prep, "animal_farm/nutrient/STEP7_total_N_volatizing/"), full = TRUE)
+
+global_total_volt <-  sum(stack(lapply(list_files, raster)))
+total_volt <- cellStats(global_total_volt, stat = 'sum', na.rm = TRUE)
+total_volt/total_exc
+## 0.2854566 old
+## 0.3460552 new
+
+
+```
+
+
+Calculate the totals for each system for leaching and volatized
+```{r}
+raster_list <- list.files(file.path(prep,"animal_farm/nutrient/STEP7_total_N_leaching/"), full.names = TRUE)
+
+df_check <- data.frame(iso3c = NA, animal = NA, system = NA, product = NA, total_N_leached = NA)
+  
+for(rast in raster_list){
+  
+#  rast <- raster_list[20]
+    ## grab the names of all the parts from the file
+    animal_name <- str_split(str_split(rast, pattern = "//")[[1]][3], pattern = "_")[[1]][1]
+    system_name <- str_split(str_split(rast, pattern = "//")[[1]][3], pattern = "_")[[1]][2]
+    product_name <- str_split(str_split(rast, pattern = "//")[[1]][3], pattern = "_")[[1]][3]
+     
+  ## values are the same throughout the country so a median or mean function won't make a difference
+    country_sum <- zonal(raster(rast), food_rgns_tif, fun="sum", progress="text", na.rm=TRUE) %>% 
+    data.frame() %>%
+    rename(ID_0 = zone, total_N_leached = sum) %>%
+    left_join(food_rgns, by="ID_0") %>% 
+      mutate(animal = animal_name,
+             system = system_name,
+             product = product_name) %>% 
+       select(iso3c,total_N_leached, animal, system, product)
+  
+    df_check <- rbind(df_check, country_sum) %>% 
+      filter(!is.na(iso3c)) 
+    
+}
+
+
+global_check <- df_check %>% 
+  group_by(animal, system, product) %>% 
+  dplyr::summarise(total_N_leached = sum(total_N_leached)) %>% 
+  ungroup()
+
+write_csv(global_check, here::here("animal_farm/nutrient/data/leaching_global_check.csv"))
+## look at it
+
+ggplot(df_check, aes(x = animal, y = total_N_leached, color = system) ) +
+  geom_point(position = "jitter") +
+  labs(title = "Total N Leached")
+```
+
+
+Calculate the totals for each system for leaching and volatized
+```{r}
+raster_list <- list.files(file.path(prep,"animal_farm/nutrient/STEP7_total_N_volatizing/"), full.names = TRUE)
+
+df_check <- data.frame(iso3c = NA, animal = NA, system = NA, product = NA, total_N_volt = NA)
+  
+for(rast in raster_list){
+  
+#  rast <- raster_list[20]
+    ## grab the names of all the parts from the file
+    animal_name <- str_split(str_split(rast, pattern = "//")[[1]][3], pattern = "_")[[1]][1]
+    system_name <- str_split(str_split(rast, pattern = "//")[[1]][3], pattern = "_")[[1]][2]
+    product_name <- str_split(str_split(rast, pattern = "//")[[1]][3], pattern = "_")[[1]][3]
+     
+  ## values are the same throughout the country so a median or mean function won't make a difference
+    country_sum <- zonal(raster(rast), food_rgns_tif, fun="sum", progress="text", na.rm=TRUE) %>% 
+    data.frame() %>%
+    rename(ID_0 = zone, total_N_volt = sum) %>%
+    left_join(food_rgns, by="ID_0") %>% 
+      mutate(animal = animal_name,
+             system = system_name,
+             product = product_name) %>% 
+       select(iso3c,total_N_volt, animal, system, product)
+  
+    df_check <- rbind(df_check, country_sum) %>% 
+      filter(!is.na(iso3c)) 
+    
+}
+
+
+global_check <- df_check %>% 
+  group_by(animal, system, product) %>% 
+  dplyr::summarise(total_N_volt = sum(total_N_volt)) %>% 
+  ungroup()
+
+write_csv(global_check, here::here("animal_farm/nutrient/data/volatized_global_check.csv"))
+## look at it
+
+ggplot(df_check, aes(x = animal, y = total_N_volt, color = system) ) +
+  geom_point(position = "jitter") +
+  labs(title = "Total N volatized")
+```
+
+
+Calculate the proportion of total N excreted that is leached and also volatized by animal-system-product 
+
+## proportion of n excreted per animal system that volatized
+```{r}
+
+category_list <- c("chickens_industrial_meat", "chickens_industrial_eggs", "chickens_backyard_eggs&meat", "goats_grassland_milk", "goats_grassland_meat", "goats_mixed_milk", "goats_mixed_meat", "sheep_grassland_milk", "sheep_grassland_meat", "sheep_mixed_milk", "sheep_mixed_meat", "cows_grassland_milk", "cows_grassland_meat", "cows_mixed_milk", "cows_mixed_meat", "cows_feedlot_meat", "pigs_backyard_meat", "pigs_intermediate_meat", "pigs_industrial_meat", "buffaloes_grassland_milk", "buffaloes_mixed_milk")
+
+volt_n_check <- data.frame(food_system = NA, N_excreted = NA, N_volatized = NA, prop_volatized=NA)
+  
+
+for(category in category_list) {
+  
+  # category = category_list[13]
+  
+  ## lets deal with the manure nutrient volatization
+  N_excretion <- raster(list.files(file.path(prep, "animal_farm/nutrient/N_from_excretion"), pattern = category, full = TRUE)) %>% 
+    raster_df() %>% 
+    select(-cellindex) 
+ colnames(N_excretion) <- c("x", "y", "exc") 
+ 
+ N_excretion_global <- N_excretion %>% 
+   dplyr::summarise(N_excreted = sum(exc, na.rm = TRUE))
+   
+  N_volat <- raster(list.files(file.path(prep, "animal_farm/nutrient/STEP7_total_N_volatizing/"), pattern = category, full = TRUE)) %>% 
+    raster_df() %>% 
+    select(-cellindex)  
+  colnames(N_volat) <- c("x", "y", "N_volt") 
+  
+  N_volat_global <- N_volat %>% 
+   dplyr::summarise(N_volatized = sum(N_volt, na.rm = TRUE))
+  
+  df_total <- cbind(N_excretion_global, N_volat_global) %>% 
+    mutate(food_system = category,
+           prop_volatized = N_volatized/N_excreted) 
+  
+ volt_n_check  <- rbind(volt_n_check, df_total)
+ 
+}
+
+ write_csv(volt_n_check, here::here("animal_farm/nutrient/data/volatized_prop_global_check.csv"))
+
+```
+
+## proportion of n excreted per animal system that leached
+```{r}
+
+category_list <- c("chickens_industrial_meat", "chickens_industrial_eggs", "chickens_backyard_eggs&meat", "goats_grassland_milk", "goats_grassland_meat", "goats_mixed_milk", "goats_mixed_meat", "sheep_grassland_milk", "sheep_grassland_meat", "sheep_mixed_milk", "sheep_mixed_meat", "cows_grassland_milk", "cows_grassland_meat", "cows_mixed_milk", "cows_mixed_meat", "cows_feedlot_meat", "pigs_backyard_meat", "pigs_intermediate_meat", "pigs_industrial_meat", "buffaloes_grassland_milk", "buffaloes_mixed_milk")
+
+n_leach_check <- data.frame(food_system = NA, N_excreted = NA, N_leached = NA, prop_leached=NA)
+  
+
+for(category in category_list) {
+  
+  # category = category_list[12]
+  
+  ## lets deal with the manure nutrient volatization
+  N_excretion <- raster(list.files(file.path(prep, "animal_farm/nutrient/N_from_excretion"), pattern = category, full = TRUE)) %>% 
+    raster_df() %>% 
+    select(-cellindex) 
+ colnames(N_excretion) <- c("x", "y", "exc") 
+ 
+ N_excretion_global <- N_excretion %>% 
+   dplyr::summarise(N_excreted = sum(exc, na.rm = TRUE))
+   
+  N_leach <- raster(list.files(file.path(prep, "animal_farm/nutrient/STEP7_total_N_leaching/"), pattern = category, full = TRUE)) %>% 
+    raster_df() %>% 
+    select(-cellindex)  
+  colnames(N_leach) <- c("x", "y", "N_leached") 
+  
+  N_leach_global <- N_leach %>% 
+   dplyr::summarise(N_leached = sum(N_leached, na.rm = TRUE))
+  
+  df_total <- cbind(N_excretion_global, N_leach_global) %>% 
+    mutate(food_system = category,
+           prop_leached = N_leached/N_excreted) 
+  
+ n_leach_check  <- rbind(n_leach_check, df_total)
+ 
+
+ 
+}
+
+
+   write_csv(n_leach_check, here::here("animal_farm/nutrient/data/leached_n_prop_global_check.csv"))
+
+```
+
+
+## proportion of np excreted per animal system that leached
+```{r}
+
+category_list <- c("chickens_industrial_meat", "chickens_industrial_eggs", "chickens_backyard_eggs&meat", "goats_grassland_milk", "goats_grassland_meat", "goats_mixed_milk", "goats_mixed_meat", "sheep_grassland_milk", "sheep_grassland_meat", "sheep_mixed_milk", "sheep_mixed_meat", "cows_grassland_milk", "cows_grassland_meat", "cows_mixed_milk", "cows_mixed_meat", "cows_feedlot_meat", "pigs_backyard_meat", "pigs_intermediate_meat", "pigs_industrial_meat", "buffaloes_grassland_milk", "buffaloes_mixed_milk")
+
+p_leach_check <- data.frame(food_system = NA, P_excreted = NA, P_leached = NA, prop_leached=NA)
+  
+
+for(category in category_list) {
+  
+  # category = category_list[12]
+  
+  ## lets deal with the manure nutrient volatization
+  P_excretion <- raster(list.files(file.path(prep, "animal_farm/nutrient/P_from_excretion"), pattern = category, full = TRUE)) %>% 
+    raster_df() %>% 
+    select(-cellindex) 
+ colnames(P_excretion) <- c("x", "y", "exc") 
+ 
+ P_excretion_global <- P_excretion %>% 
+   dplyr::summarise(P_excreted = sum(exc, na.rm = TRUE))
+ 
+  p_leach_manure <- raster(list.files(file.path(prep,"animal_farm/nutrient/STEP2_P_leach/", sep = ""), pattern = category, full = TRUE))
+
+  if(str_detect(category, "grassland")){
+      p_leach_fertilizer <- raster(list.files(file.path(prep,"animal_farm/nutrient/grassland_nutrient_pollution/", sep = ""), pattern = paste0(category, "_leached_P", sep = ""), full = TRUE))
+ 
+  }else{
+    p_leach_fertilizer <- calc(food_rgns_tif, fun = function(x){ifelse(!is.na(x), 0, x)})
+  }
+  
+ all_P_leach <- sum(stack(p_leach_manure, p_leach_fertilizer), na.rm = TRUE) %>% 
+   raster_df() %>% 
+    select(-cellindex)  
+  colnames(all_P_leach) <- c("x", "y", "P_leached") 
+  
+  P_leach_global <- all_P_leach %>% 
+   dplyr::summarise(P_leached = sum(P_leached, na.rm = TRUE))
+  
+  df_total <- cbind(P_excretion_global, P_leach_global) %>% 
+    mutate(food_system = category,
+           prop_leached = P_leached/P_excreted) 
+  
+ p_leach_check  <- rbind(p_leach_check, df_total)
+ 
+
+ 
+}
+
+
+   write_csv(p_leach_check, here::here("animal_farm/nutrient/data/leached_p_prop_global_check.csv"))
+
+```
+
+
+Combine to look at them all together
+
+```{r}
+n_leach <- read_csv(here::here("animal_farm/nutrient/data/leached_n_prop_global_check.csv")) %>% rename(prop_n_leached = prop_leached)
+p_leach <- read_csv(here::here("animal_farm/nutrient/data/leached_p_prop_global_check.csv"))%>% rename(prop_p_leached = prop_leached)
+n_volt <- read_csv(here::here("animal_farm/nutrient/data/volatized_prop_global_check.csv"))
+
+all <- left_join(n_leach, n_volt, by = c("food_system", "N_excreted")) %>% left_join(p_leach) %>% 
+  filter(!is.na(food_system)) %>% 
+  select(food_system, prop_n_leached, prop_volatized, prop_p_leached)
+```
+

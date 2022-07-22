@@ -1,0 +1,273 @@
+---
+title: "grassland_fertilizer_distribution"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+# getting packages we want
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+library(janitor)
+library(furrr)
+library(readxl)
+```
+
+# Distribute grassland fertilizer across grazers at the country-level
+```{r}
+location_list <- list.files(file.path(prep, "animal_farm/farm/location_tifs"), pattern = "grassland", full = TRUE)
+
+conversion_list <-list.files(file.path(prep, "animal_farm/disturbance/lsu_conversion_rasters"), full = TRUE)
+
+stack1 <- stack(lapply(location_list, raster))
+
+stack2 <- stack(lapply(conversion_list, raster))
+
+stack_all <- stack(stack1, stack2) %>% 
+  raster_df()
+
+df_all <- 
+  stack_all %>% 
+  rowwise() %>% 
+  mutate(cows_milk_lsu      = cows_grassland_milk  * cows_lsu_conversions,
+         cows_meat_lsu      = cows_grassland_meat  * cows_lsu_conversions,
+         sheep_meat_lsu     = sheep_grassland_meat * sheep_lsu_conversions,
+         sheep_milk_lsu     = sheep_grassland_milk * sheep_lsu_conversions,
+         goats_milk_lsu     = goats_grassland_milk * goats_lsu_conversions,
+         goats_meat_lsu     = goats_grassland_meat * goats_lsu_conversions,
+         buffaloes_milk_lsu = buffaloes_grassland_milk * buffaloes_lsu_conversions) %>% 
+  mutate(sum_lsu = sum(cows_milk_lsu, cows_meat_lsu, sheep_meat_lsu, 
+                       sheep_milk_lsu, goats_milk_lsu, goats_meat_lsu, 
+                       buffaloes_milk_lsu, buffaloes_meat_lsu, na.rm = TRUE)) %>%
+  mutate(prop_cows_milk      = cows_milk_lsu / sum_lsu,
+         prop_cows_meat      = cows_meat_lsu / sum_lsu,
+         prop_sheep_meat     = sheep_meat_lsu / sum_lsu,
+         prop_sheep_milk     = sheep_milk_lsu / sum_lsu,
+         prop_goats_milk     = goats_milk_lsu / sum_lsu,
+         prop_goats_meat     = goats_meat_lsu / sum_lsu,
+         prop_buffaloes_milk = buffaloes_milk_lsu / sum_lsu)
+```
+
+
+```{r}
+fao_nutrient_grassland_N <- 
+  vroom(here("crop/nutrient/data/fao_nutrient_grassland_2.csv")) %>% 
+    filter(nutrient %in% "N") %>% 
+    select(-nutrient)
+
+fao_nutrient_grassland_P2O5 <- 
+  vroom(here("crop/nutrient/data/fao_nutrient_grassland_2.csv")) %>% 
+    filter(nutrient %in% "P2O5") %>% 
+    select(-nutrient)
+
+fao_nutrient_grassland_K2O <- 
+  vroom(here("crop/nutrient/data/fao_nutrient_grassland_2.csv")) %>% 
+    filter(nutrient %in% "K2O") %>% 
+    select(-nutrient)
+
+df_all_2 <-
+  df_all %>% 
+  left_join(food_rgns_xy) # add iso3c
+```
+
+Loop through N and P2O5
+```{r}
+df_all_3_N <- 
+  df_all_2 %>% 
+  left_join(fao_nutrient_grassland_N) %>% #add grassland total
+  group_by(iso3c) %>%
+  mutate(iso3c_prop_sum_lsu = sum_lsu / sum(sum_lsu, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(cell_application = iso3c_prop_sum_lsu * country_application) 
+
+df_all_3_P2O5 <- 
+  df_all_2 %>% 
+  left_join(fao_nutrient_grassland_P2O5) %>% #add grassland total
+  group_by(iso3c) %>%
+  mutate(iso3c_prop_sum_lsu = sum_lsu / sum(sum_lsu, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(cell_application = iso3c_prop_sum_lsu * country_application) 
+
+df_all_3_K2O <- 
+  df_all_2 %>% 
+  left_join(fao_nutrient_grassland_K2O) %>% #add grassland total
+  group_by(iso3c) %>%
+  mutate(iso3c_prop_sum_lsu = sum_lsu / sum(sum_lsu, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(cell_application = iso3c_prop_sum_lsu * country_application)
+
+sum(df_all_3_K2O$cell_application, na.rm = TRUE)
+sum(fao_nutrient_grassland_K2O$country_application)
+```
+
+
+```{r}
+
+grassland_fertilizer_application <- function(i, nutrient) { # i = 25, nutrient = "N"
+  
+  if (nutrient == "N") { grassland_df <- df_all_3_N } else if (nutrient == "P2O5") { grassland_df <- df_all_3_P2O5 } else { grassland_df <- df_all_3_K2O } 
+   
+ prop_livestock <- colnames(grassland_df[i]) %>% str_extract(., "[^prop_].*")
+
+ grassland_df %>%
+ mutate(cell_grazer_application = .[i] * cell_application) %>%
+ select(x, y, cell_grazer_application) %>%
+ rasterFromXYZ(crs = food_crs) %>%
+ writeRaster(.,
+             file.path(prep,
+                       "animal_farm/nutrient/grassland_fertilizer_application/",
+                       str_extract(prop_livestock, ".+?(?=_)"), 
+                       "_grassland_", 
+                       str_extract(prop_livestock, "(?<=_).*$"),
+                       "_nutrient_application_",
+                       nutrient,
+                       ".tif",
+                       fsep = ""),
+             overwrite = TRUE,
+             format = "GTiff")
+  
+#   df_all_3_N %>%
+#   select(x, y, cell_application, prop_cows_milk) %>%
+#   mutate(cell_grazer_application = prop_cows_milk * cell_application) %>%
+#   select(x, y, cell_grazer_application) %>%
+#   summarise(sum(cell_grazer_application, na.rm = TRUE))
+#   rasterFromXYZ(crs = food_crs) %>%
+#   writeRaster(.,
+#               file.path(prep,
+#                         "animal_farm/nutrient/grassland_fertilizer_application/",
+#                         str_extract("prop_cows_milk", "[^prop_].*"),
+#                         "_",
+#                         nutrient,
+#                         ".tif",
+#                         fsep = ""),
+#               overwrite = TRUE,
+#               format = "GTiff")
+#   
+# df_all_3_N %>%
+#   select(x, y, cell_application, prop_cows_meat) %>%
+#   mutate(cell_grazer_application = prop_cows_meat * cell_application) %>%
+#   select(x, y, cell_grazer_application) %>%
+#   summarise(sum(cell_grazer_application, na.rm = TRUE))
+#   rasterFromXYZ(crs = food_crs) %>%
+#   writeRaster(.,
+#               file.path(prep,
+#                         "animal_farm/nutrient/grassland_fertilizer_application/",
+#                         str_extract("prop_cows_meat", "[^prop_].*"),
+#                         "_",
+#                         nutrient,
+#                         ".tif",
+#                         fsep = ""),
+#               overwrite = TRUE,
+#               format = "GTiff")
+# df_all_3 %>%
+#   select(x, y, cell_application, prop_sheep_meat) %>%
+#   mutate(cell_grazer_application = prop_sheep_meat * cell_application) %>%
+#   select(x, y, cell_grazer_application) %>%
+#   rasterFromXYZ(crs = food_crs) %>%
+#   writeRaster(.,
+#               file.path(prep,
+#                         "animal_farm/nutrient/grassland_fertilizer_application/",
+#                         str_extract("prop_sheep_meat", "[^prop_].*"),
+#                         "_",
+#                         nutrient,
+#                         ".tif",
+#                         fsep = ""),
+#               overwrite = TRUE,
+#               format = "GTiff")
+# 
+# df_all_3 %>%
+#   select(x, y, cell_application, prop_sheep_milk) %>%
+#   mutate(cell_grazer_application = prop_sheep_milk * cell_application) %>%
+#   select(x, y, cell_grazer_application) %>%
+#   rasterFromXYZ(crs = food_crs) %>%
+#   writeRaster(.,
+#               file.path(prep,
+#                         "animal_farm/nutrient/grassland_fertilizer_application/",
+#                         str_extract("prop_sheep_milk", "[^prop_].*"),
+#                         "_",
+#                         nutrient,
+#                         ".tif",
+#                         fsep = ""),
+#               overwrite = TRUE,
+#               format = "GTiff")
+# df_all_3 %>%
+#   select(x, y, cell_application, prop_goats_milk) %>%
+#   mutate(cell_grazer_application = prop_goats_milk * cell_application) %>%
+#   select(x, y, cell_grazer_application) %>%
+#   rasterFromXYZ(crs = food_crs) %>%
+#   writeRaster(.,
+#               file.path(prep,
+#                         "animal_farm/nutrient/grassland_fertilizer_application/",
+#                         str_extract("prop_goats_milk", "[^prop_].*"),
+#                         "_",
+#                         nutrient,
+#                         ".tif",
+#                         fsep = ""),
+#               overwrite = TRUE,
+#               format = "GTiff")
+# 
+# df_all_3 %>%
+#   select(x, y, cell_application, prop_goats_meat) %>%
+#   mutate(cell_grazer_application = prop_goats_meat * cell_application) %>%
+#   select(x, y, cell_grazer_application) %>%
+#   rasterFromXYZ(crs = food_crs) %>%
+#   writeRaster(.,
+#               file.path(prep,
+#                         "animal_farm/nutrient/grassland_fertilizer_application/",
+#                         str_extract("prop_goats_meat", "[^prop_].*"),
+#                         "_",
+#                         nutrient,
+#                         ".tif",
+#                         fsep = ""),
+#               overwrite = TRUE,
+#               format = "GTiff")
+# df_all_3 %>%
+#   select(x, y, cell_application, prop_buffaloes_milk) %>%
+#   mutate(cell_grazer_application = prop_buffaloes_milk * cell_application) %>%
+#   select(x, y, cell_grazer_application) %>%
+#   rasterFromXYZ(crs = food_crs) %>%
+#   writeRaster(.,
+#               file.path(prep,
+#                         "animal_farm/nutrient/grassland_fertilizer_application/",
+#                         str_extract("prop_buffaloes_milk", "[^prop_].*"),
+#                         "_",
+#                         nutrient,
+#                         ".tif",
+#                         fsep = ""),
+#               overwrite = TRUE,
+#               format = "GTiff")
+  
+}
+
+
+distinct_vars <- expand_grid(i = grep("prop", names(df_all_3_N)), 
+                             nutrient = c("N", "P2O5", "K2O"))
+
+map2(distinct_vars$i,
+     distinct_vars$nutrient,
+     grassland_fertilizer_application)
+```
+
+# Data check
+```{r}
+### output total
+list.files(file.path(prep, 
+                     "animal_farm/nutrient/grassland_fertilizer_application",
+                     fsep = ""),
+           full.names = TRUE) %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  cellStats(., stat = "sum")
+
+### dataset total
+sum(
+sum(fao_nutrient_grassland_N$country_application),
+sum(fao_nutrient_grassland_P2O5$country_application),
+sum(fao_nutrient_grassland_K2O$country_application))
+
+
+```
+Roughly the same!

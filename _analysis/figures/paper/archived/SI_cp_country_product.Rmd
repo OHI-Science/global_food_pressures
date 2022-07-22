@@ -1,0 +1,1098 @@
+---
+title: "Cost per food item per country"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+
+library(ggplot2)
+library(tidyverse)
+library(here)
+library(countrycode)
+library(cowplot)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+```
+
+Get production data for each group.
+
+### Livestock
+
+```{r}
+## Livestock animal products
+livestock_cats <- read_csv(here("_analysis/paper_stats/data/FAO_livestock_categories.csv")) %>%
+  filter(!is.na(category1_production))
+table(livestock_cats$category1_production)
+table(livestock_cats$category2_production)
+
+livestock <- read_csv(here("_analysis/paper_stats/data/FAOSTAT_data_12-18-2020_livestock_primary.csv")) %>%
+  filter(Area != "China") %>%
+  filter(!(is.na(Value))) %>%
+  filter(Item %in% livestock_cats$Item) %>%
+  left_join(livestock_cats, by="Item") %>%
+  group_by(Area, category1_production, category2_production) %>%
+  summarize(tonnes = sum(Value)) %>%
+  ungroup()
+
+livestock_iso3c <- livestock %>%
+    mutate(Area = iconv(Area, "UTF-8", "UTF-8",sub=''),
+         Area = ifelse(Area == "Eswatini", "Swaziland", Area),
+         Area = ifelse(Area == "Netherlands Antilles (former)", "Bonaire, Sint Eustatius and Saba", Area),
+         Area = ifelse(Area == "French Guyana", "French Guiana", Area),
+         Area = ifelse(Area == "China, mainland", "China", Area))
+
+## add standardized country names
+livestock_iso3c$iso3c<- countrycode(as.character(livestock_iso3c$Area), origin="country.name", destination = "iso3c")
+
+## make sure all countries have an iso3c code
+check <- filter(livestock_iso3c, is.na(iso3c))
+unique(check$Area) # these are all higher level area, safe to delete NAs
+
+livestock_iso3c <- livestock_iso3c %>%
+  select(iso3c, category1_production, category2_production, tonnes)
+
+```
+
+### Marine fisheries
+
+```{r}
+
+## this is the fofm that is only for humans, so need to replace it with what is in the file below with also includes feed
+human_fofm <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/catch_human_x_fofm.csv") %>% 
+  mutate(category1_production = "fofm_meat",
+         category2_production = "marine_fisheries") %>% 
+  select(iso3c, category1_production, category2_production, tonnes = catch)
+
+marine_fish <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/fisheries/marine/catch_extracted_final.csv") %>%
+  mutate(category1_production = recode(species_class_final, "Benthic" = "benthic_meat",
+             "Demersal" = "demersal_meat",
+             "forage_fish" = "fofm_meat",
+             "Large pelagic" = "large-pelagic_meat",
+             "Medium pelagic" = "medium-pelagic_meat",
+             "Reef-associated" = "reef_meat",
+             "Small pelagic" = "small-pelagic_meat")) %>%
+#  group_by(country_corrected, iso3c) %>%
+#  summarize(tonnes = sum(catch_tonnes, na.rm=TRUE)) %>%
+  mutate(category2_production = "marine_fisheries") %>%
+  select(iso3c, category1_production, category2_production, tonnes=catch) %>% 
+  filter(category1_production != "fofm_meat") %>% 
+  rbind(human_fofm)
+
+```
+
+### Crops for humans
+```{r}
+fao_prod <- read_csv(here("feed/data/MAPSPAMcrop_production.csv"))
+
+#human_crop_prop <- read_csv("feed/data/human_crop_prop_consume.csv")
+
+crop_tonnes <- fao_prod %>% 
+  mutate(tonnes = tonnes_producing_crop) %>%
+  #group_by(iso3c_producing) %>%
+  #summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+  mutate(category2_production = "human_crop") %>%
+  mutate(category1_production = paste(SPAM_super, "produce", sep = "_")) %>%
+  select(iso3c = iso3c_producing, category1_production, category2_production, tonnes) %>% 
+  filter(!category1_production %in% c("othr_produce", "teas_produce", "toba_produce", "xcof_produce"))
+
+
+```
+
+
+### Mariculture: 
+```{r}
+library(countrycode)
+
+mariculture <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/production_extracted_final.csv") %>%
+ # filter(!(aq_group %in% "bivalves")) %>%
+  mutate(aq_group = ifelse(aq_group=="marine_fish_general", "marine-fish-general", aq_group),
+         aq_group = ifelse(aq_group=="salmonids", "salmon", aq_group),
+         aq_group = ifelse(aq_group=="shrimps_prawns", "shrimp", aq_group)) %>%
+  select(Country, species = aq_group, tonnes=total_tonnes) %>% 
+  mutate(category1_production = paste(species, "_meat", sep = ""),
+         category2_production = "mariculture",
+         iso3c = countrycode(as.character(Country), origin="country.name", destination = "iso3c"),
+         iso3c = ifelse(Country == "High Seas", "HSX",
+                        ifelse(Country == "Kosovo", "XKO",
+                               ifelse(Country == "Madeira Island", "XMI",
+                                      ifelse(Country == "Micronesia", "FSM",
+                                             ifelse(Country == "Saint-Martin", "MAF", iso3c))))))  %>% 
+  select(iso3c, category1_production, category2_production, tonnes)
+
+```
+
+
+### Feed: Crops
+```{r}
+
+livestock_cats <- read_csv(here("_analysis/paper_stats/data/raster_livestock_cats.csv"))
+table(livestock_cats$category2_production, livestock_cats$category1_production)
+
+mapspam_feed <- read_csv(here("feed/data/tonnes_feedproduced_per_country_system.csv")) %>% 
+  left_join(livestock_cats, by="animal_system") %>%
+  filter(!(is.na(category2_production))) %>%
+    mutate(feed_source = "crops") %>%
+  group_by(iso3c_producing, feed_source, category1_production, category2_production) %>%
+  summarize(tonnes = sum(consumed_tonnes, na.rm=TRUE)) %>%
+  dplyr::select(iso3c=iso3c_producing, category1_production, category2_production, feed_source, tonnes) %>%
+  ungroup() 
+
+
+```
+
+### Feed: fodder
+
+```{r}
+
+# remove old files in folder that are created here
+do.call(file.remove, list(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/fodder_tonnes", full.names = TRUE)))
+
+fodder_prod <- sum(stack(raster(file.path(prep, "crop/farm/scaled_maps_2017/crop_fodd_I_scaled.tif")), raster(file.path(prep, "crop/farm/scaled_maps_2017/crop_fodd_H_scaled.tif"))), na.rm=TRUE)
+
+fodder_props <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/datalayers", pattern="_x_land_fodd", full=TRUE)
+
+for(fodder_prop in fodder_props){ #fodder_prop = fodder_props[1]
+  fodder_raster <- raster(fodder_prop)
+  saveName <- basename(fodder_prop)
+  saveName <- gsub("_x_land_fodd_crop_feed", "", saveName)
+  saveName <- gsub("_land_", "", saveName)
+  fodder_tonnes <- fodder_raster * fodder_prod
+  writeRaster(fodder_tonnes, sprintf("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/fodder_tonnes/%s", saveName), overwrite=TRUE)
+}
+
+## no idea why its writting the normal .tif rasters and also a .tif.aux.xml for each??!
+lf <- list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/fodder_tonnes", full=TRUE) 
+lf <- lf[!str_detect(lf, ".tif.aux.xml")]
+
+fodd_tonnes_stack <- stack(lf)
+
+rgns_eez_land <- raster(file.path(prep, "spatial/land_eez_rgns.tif"))
+# plot(rgns_eez_land)
+
+country_sum <- zonal(fodd_tonnes_stack, rgns_eez_land, fun="sum", progress="text", na.rm=TRUE) %>% 
+    data.frame() %>%
+    rename(ID_0 = zone) %>%
+    left_join(food_rgns, by="ID_0") %>%
+    select(-ID_0)
+
+country_fodder <- country_sum %>%
+   pivot_longer(cols=c(-Country, -iso3c), "animal_system") %>%
+   mutate(animal_system = gsub("^land_", "", animal_system)) %>%
+     mutate(animal_system = gsub("eggs.meat", "eggs&meat", animal_system)) %>%
+   left_join(livestock_cats, by="animal_system") %>%
+  mutate(feed_source = "fodder") %>%
+  select(iso3c, category1_production, category2_production, feed_source, tonnes=value)
+
+```
+
+Feed: FOFM
+
+```{r}
+fofm <- read_csv(here("feed/data/FMFO_bySource_2021Apr.csv")) %>%
+  mutate(feed_source = "feedfofm") %>%
+  rename(animal_system = system) %>%
+  left_join(livestock_cats, by="animal_system") %>%
+  filter(!is.na(category2_production)) %>%
+  select(iso3c, category1_production, category2_production, feed_source, tonnes) %>% 
+  group_by(iso3c, category1_production, category2_production, feed_source) %>% 
+  dplyr::summarise(tonnes = sum(tonnes))
+
+```
+
+# Calculate total tonnes of feed per country for each animal group:
+```{r}
+
+total_feed <- rbind(country_fodder, fofm, mapspam_feed) %>%
+  group_by(iso3c, category1_production, category2_production) %>%
+  summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+  mutate(category1_production = paste("feed_", category1_production, sep="")) %>%
+  mutate(category2_production = paste("feed_", category2_production, sep="")) %>%
+  filter(category1_production != "feed_NA")
+
+```
+
+
+Freshwater fish: 
+```{r}
+fresh_fish <- read_csv(here("fisheries/freshwater/data/fw_catch_per_iso3c.csv")) %>% 
+  select(-ID_0, - Country) %>% 
+  rename(tonnes = fw_catch_tonnes) %>% 
+  mutate(category1_production  = "fish_meat",
+         category2_production = "freshwater_fisheries")
+
+setdiff(food_rgns$iso3c, fresh_fish$iso3c)
+setdiff(fresh_fish$iso3c, food_rgns$iso3c)
+```
+
+## Join products
+```{r}
+
+product_tonnes <- rbind(livestock_iso3c, marine_fish, crop_tonnes, fresh_fish, mariculture, total_feed)
+
+## deal with feed backyard chickens
+product_tonnes_feed_chickens <- product_tonnes %>%
+  filter(category1_production == "feed_chickens_backyard_eggs&meat") %>%
+  mutate(tonnes = tonnes/2) 
+
+product_tonnes_feed_chickens_eggs <- product_tonnes_feed_chickens %>%
+  mutate(category1_production = "chickens_eggs")
+product_tonnes_feed_chickens_meat <- product_tonnes_feed_chickens %>%
+  mutate(category1_production = "chickens_meat")
+
+product_tonnes <- product_tonnes %>%
+  filter(category1_production != "feed_chickens_backyard_eggs&meat") %>% 
+  rbind(product_tonnes_feed_chickens_eggs, product_tonnes_feed_chickens_meat) %>% 
+  mutate(category1_production = ifelse(category1_production == "bivalves_meat", "bivalve_meat", category1_production)) 
+
+write_csv(product_tonnes, here("_efficiency/data/product_tonnes.csv"))
+
+```
+
+
+### Get costs
+
+```{r}
+
+pressures <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw_df_summary/rgn_raw_summary.csv")
+filter(pressures, organism=="cows", product=="meat", iso3c=="USA") %>% data.frame()
+
+pressures <- pressures %>%
+  mutate(feed = case_when(category %in% c("feedfofm", "feedfodd", "feedcrop") ~ "feed_",
+                          T ~ "")) %>% 
+  group_by(iso3c, organism, product, feed, pressure) %>%
+  summarize(pressure_value = sum(sum, na.rm=TRUE)) %>%
+  mutate(category1_production = paste(organism, product, sep="_")) %>% 
+  unite(category1_production, c(feed, category1_production), sep = "")
+
+## divide backyard chicken pressures equally between meat/eggs. 
+pressures_chickens <- pressures %>%
+  filter(category1_production == "chickens_eggs&meat") %>%
+  mutate(pressure_value = pressure_value/2) 
+
+pressures_chickens_eggs <- pressures_chickens %>%
+  mutate(product = "eggs",
+         category1_production = "chickens_eggs")
+
+pressures_chickens_meat <- pressures_chickens %>%
+  mutate(product = "meat",
+         category1_production = "chickens_meat")
+
+## for backyard chicken feed
+pressures_chickens <- pressures %>%
+  filter(category1_production == "feed_chickens_eggs&meat") %>%
+  mutate(pressure_value = pressure_value/2) 
+
+pressures_feed_chickens_eggs <- pressures_chickens %>%
+  mutate(product = "eggs",
+         category1_production = "feed_chickens_eggs")
+
+pressures_feed_chickens_meat <- pressures_chickens %>%
+  mutate(product = "meat",
+         category1_production = "feed_chickens_meat")
+
+## update the backyards:
+pressures_chicken_update <- pressures %>%
+  filter(category1_production != "chickens_eggs&meat",
+         category1_production != "feed_chickens_eggs&meat") %>%
+  rbind(pressures_chickens_meat) %>%
+  rbind(pressures_chickens_eggs) %>%
+  rbind(pressures_feed_chickens_meat) %>%
+  rbind(pressures_feed_chickens_eggs)
+
+
+setdiff(pressures_chicken_update$category1_production, product_tonnes$category1_production) # 
+setdiff(product_tonnes$category1_production, pressures_chicken_update$category1_production) # 
+
+```
+
+## combine and rescale pressures
+We need to create two pressures summary dfs. One with a human consumption factor (to be used for the kcal and protein efficiencies), and one without (to be used here)
+```{r}
+
+category_list <- product_tonnes %>%
+  select(category1_production, category2_production) %>%
+  unique()
+
+rescaling_values <- read_csv(here("_analysis/rescale_values.csv")) 
+
+pressures_summary_int <- pressures_chicken_update %>%
+  left_join(rescaling_values, by="pressure") %>%
+  rowwise() %>%
+  mutate(pressure_rescaled = pressure_value/global_total) %>%
+  left_join(category_list, by="category1_production") 
+
+## the crop specific one'
+crops_scaled_raw <- read_csv(here::here("_analysis/figures/paper/data_prep/crops_rescaled.csv"))
+crops_scaled_pressures <- crops_scaled_raw %>%
+  unite(category1_production, c("organism", "product"), sep = "_", remove = FALSE) %>% 
+  mutate(pressure_value = NA,
+         global_total = NA,
+         category2_production = "human_crop") %>% 
+  rename(pressure_rescaled = prop_global) %>% 
+    select(-system)
+
+pressures_summary <- pressures_summary_int %>% 
+  filter(category2_production != "human_crop") %>% 
+  rbind(crops_scaled_pressures) %>% 
+  ungroup()
+
+write_csv(pressures_summary , here("_efficiency/data/pressures_summary.csv"))
+```
+
+
+### Summarize pressures at lower resolution and compare production vs. pressures
+
+```{r}
+
+# pressures_summary_lowres <- pressures_summary %>%
+#   group_by(iso3c, category2_production) %>%
+#   summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+#   ungroup()
+# 
+# tmp <- filter(pressures_summary_lowres, iso3c=="USA") %>% data.frame()
+# sum(tmp$cumulative_pressure)/4
+# 
+# product_lowres <- product_tonnes %>%
+#   group_by(iso3c, category2_production) %>%
+#   summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+#   ungroup()
+# tmp <- filter(product_lowres, iso3c=="USA") %>% data.frame()
+# 
+# cp_rate <- left_join(pressures_summary_lowres, product_lowres, by=c("iso3c", "category2_production")) %>%
+#   filter(!is.na(tonnes)) %>%
+#     filter(!is.na(cumulative_pressure)) %>%
+#   filter(cumulative_pressure>0) %>%
+#     filter(tonnes>2000) %>%
+#   rowwise() %>%
+#   mutate(pressure_per_tonne = cumulative_pressure/tonnes * 1000000)
+# 
+# cp_rate %>%
+# group_by(category2_production) %>%
+#   summarize(mean = mean(pressure_per_tonne),
+#             sd = sd(pressure_per_tonne))
+
+
+```
+
+
+Assign colors to 5 important countries 
+```{r}
+
+country_colors <- tibble(iso3c = c("USA", "CHN", "BRA", "IND", "IDN", "RUS"),
+                         color_fill = c("#E8C533", "#7C873E", "#F6955E", "#B23539", "#7DCCD3","#62589F"),
+                         include_col = "yes")
+
+```
+
+
+### Look at crop pressures
+** Note!!! For crop pressures we will be using the values from here: crops_scaled <- read_csv(here::here("_analysis/figures/paper/data_prep/crops_rescaled.csv"))
+
+this is because we think there are some weird mismatches so for this figure we want to look at all crop 
+```{r}
+
+pressures_summary_crops <- crops_scaled_pressures %>%
+  group_by(iso3c, category1_production) %>%
+  summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+  ungroup() %>%
+  separate(col=category1_production, c("organism", "product"), sep="_") %>%
+  filter(product == "produce")
+
+tmp <- filter(pressures_summary_crops, iso3c=="USA") %>% data.frame()
+
+product_crops <- product_tonnes %>%
+  group_by(iso3c, category1_production) %>%
+  summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+  ungroup() %>%
+ # filter(., !grepl("feed",category1_production)) %>%
+  separate(col=category1_production, c("organism", "product"), sep="_") %>%
+  filter(product == "produce")  
+tmp <- filter(product_crops, iso3c=="USA") %>% data.frame()
+
+#setdiff(product_crops$organism, pressures_summary_crops$organism)
+
+cp_rate_crops_int <- left_join(pressures_summary_crops, product_crops, by=c("iso3c", "organism", "product")) %>%
+  filter(!is.na(tonnes)) %>%
+    filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>%
+    filter(tonnes>0) %>%
+  rowwise() %>%
+  mutate(pressure_per_tonne = cumulative_pressure/tonnes * 1000000) %>% 
+  ungroup() %>% 
+  ## remove other fibre crops
+  filter(organism != "ofib")
+
+cp_rate_crops_int %>%
+group_by(organism) %>%
+  summarize(mean = mean(pressure_per_tonne),
+            sd = sd(pressure_per_tonne)) 
+
+tmp <- filter(cp_rate_crops_int, pressure_per_tonne>=0.005) %>%data.frame()
+
+ggplot(cp_rate_crops_int, aes(x=organism, y=pressure_per_tonne)) +
+  geom_boxplot(outlier.fill=NA, outlier.colour = NA) +
+  geom_jitter(alpha=0.2) +
+  theme_cowplot() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+```
+
+Analyze cuttoff values
+```{r}
+# library(vroom)
+# long_name <- vroom::vroom(here::here("crop/farm/data/crop_codes_updated.csv")) %>% 
+#   select(organism = SPAM_super,
+#          long = SPAM_full_name) %>% 
+#   mutate(long = ifelse(organism == "tnut", "tree nuts",
+#                        ifelse(organism == "spis", "spices",
+#                               ifelse(organism == "xfru", "fruits",
+#                                      ifelse(organism == "xmil", "millet",
+#                                             ifelse(organism == "xoil", "oil",
+#                                                    ifelse(organism == "xpul", "pulses", long))))))) %>% 
+#   unique() 
+# 
+# cp_rate_crops <- cp_rate_crops_int %>% 
+# filter(pressure_per_tonne <= 0.2) %>% 
+#   left_join(country_colors, by = "iso3c") %>% 
+#   mutate(color_fill = ifelse(is.na(color_fill), "black", color_fill),
+#          include_col = ifelse(is.na(include_col), "no", include_col)) %>% 
+#   left_join(long_name) %>% 
+#   mutate(long = ifelse(organism == "xfru", "fruits",
+#                           ifelse(organism == "xmil", "millet",
+#                                  ifelse(organism == "xoil", "oil",
+#                                         ifelse(organism == "xpul", "pulses", long))))) %>% 
+#   select(-organism) %>% 
+#   rename(organism = long)
+# 
+# crops_quant <- quantile(cp_rate_crops$pressure_per_tonne,
+#          c(0.9, 0.95, 0.97, 0.99) )
+# crops_quant_99 <- crops_quant[4]
+# 
+#   
+# order_crop <- cp_rate_crops %>%
+#   filter(pressure_per_tonne <= 0.009) %>% 
+#   group_by(organism) %>%
+#   summarize(median = median(pressure_per_tonne)) %>% 
+#   arrange(median)
+# 
+# cp_rate_crops$organism <- factor(cp_rate_crops$organism, levels = order_crop$organism)
+# 
+# crop_tidy <- cp_rate_crops %>% 
+#   filter(pressure_per_tonne<=0.009)
+# 
+# crop_box <- ggplot(crop_tidy, aes(x=organism, y=pressure_per_tonne)) +
+#   geom_boxplot(outlier.fill=NA, outlier.colour = NA) +
+#   #geom_violin(aes(x=organism, y=pressure_per_tonne))+
+#   geom_jitter(data = filter(crop_tidy, include_col == "no"), aes(x=organism, y=pressure_per_tonne, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+#   geom_jitter(data = filter(crop_tidy, include_col == "yes"), aes(x=organism, y=pressure_per_tonne, color = color_fill, fill = color_fill), size = 2, width = 0.2) +
+#   theme_minimal() +
+#   coord_flip() +
+#   labs(y = "", x = "Crops")+
+#   scale_colour_identity()  +
+#   scale_fill_identity()  +
+#   theme(axis.text.x = element_text(margin = margin(b=20)),
+#         panel.background = element_rect(fill = "transparent",colour = NA),
+#         plot.background = element_rect(fill = "transparent",colour = NA)
+#         ) +
+#   scale_y_continuous(limits = c(0, 0.009),
+#                      breaks = c(0, 0.003, 0.006, 0.009),
+#                     labels= c(0, 0.003, 0.006, 0.009))
+# 
+# 
+# out_crops <-cp_rate_crops %>% 
+#   filter(pressure_per_tonne > 0.009)
+# 
+# add_in <- setdiff(cp_rate_crops$organism, out_crops$organism) %>% 
+#   as_tibble() %>% 
+#   rename(organism = value) %>% 
+#   mutate(iso3c = NA, product = "produce", cumulative_pressure = NA, tonnes = NA, pressure_per_tonne = NA, color_fill = "black", include_col = "no") 
+# 
+# out_crops <- rbind(out_crops, add_in) 
+# 
+# out_crops$organism <- factor(out_crops$organism, levels = order_crop$organism)
+# #out_crops$include_col <- as.character(out_crops$include_col)
+# 
+# crop_out <- ggplot(out_crops) +
+#   geom_jitter(aes(x=organism, y=pressure_per_tonne, color = color_fill, fill= color_fill), alpha=0.2, width = 0.1) +
+#   theme_minimal() +
+#   coord_flip() +
+#   labs(x = "", y = "")+ # caption = "cut out millet in SSD, pressure per tonne of 0.23"
+#   theme(axis.text.y = element_blank(),
+#         plot.caption=element_text(hjust = 1, size = 7),
+#         panel.background = element_rect(fill = "transparent",colour = NA),
+#         plot.background = element_rect(fill = "transparent",colour = NA)
+#         ) +
+#   scale_colour_identity()  +
+#   scale_fill_identity() +
+#   scale_y_continuous(limits = c(0.009, 0.13),
+#                      breaks = c(0.009, 0.07, 0.13),
+#                      labels= c(0.009,  0.7,  0.13))
+
+```
+
+
+### Look at fisheries
+
+
+```{r}
+
+fisheries_list <- c("fish", "demersal", "reef", "large-pelagic", "small-pelagic", "medium-pelagic", "benthic", "fofm")
+
+pressures_summary_fisheries <- pressures_summary %>%
+  group_by(iso3c, category1_production) %>%
+  summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+  ungroup() %>%
+  separate(col=category1_production, c("organism", "product"), sep="_") %>%
+  filter(organism %in% fisheries_list)
+
+tmp <- filter(pressures_summary_fisheries, iso3c=="USA") %>% data.frame()
+
+product_fisheries <- product_tonnes %>%
+  group_by(iso3c, category1_production) %>%
+  summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+  ungroup() %>%
+  filter(., !grepl("feed",category1_production)) %>%
+  separate(col=category1_production, c("organism", "product"), sep="_") %>%
+  filter(organism %in% fisheries_list)
+
+tmp <- filter(product_fisheries, iso3c=="USA") %>% data.frame()
+
+cp_rate_fisheries <- left_join(pressures_summary_fisheries, product_fisheries, by=c("iso3c", "organism", "product")) %>%
+  filter(!is.na(tonnes)) %>%
+    filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>%
+    filter(tonnes>0) %>%
+  rowwise() %>%
+  mutate(pressure_per_tonne = cumulative_pressure/tonnes * 1000000)
+
+cp_rate_fisheries %>%
+group_by(organism) %>%
+  summarize(mean = mean(pressure_per_tonne),
+            sd = sd(pressure_per_tonne))
+
+tmp <- filter(cp_rate_fisheries, pressure_per_tonne>=0.005) %>% data.frame()
+
+ggplot(cp_rate_fisheries, aes(x=organism, y=pressure_per_tonne)) +
+  geom_boxplot(outlier.fill=NA, outlier.colour = NA) +
+  geom_jitter(alpha=0.2) +
+  theme_cowplot() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+
+```
+
+
+```{r}
+
+# cp_rate_fisheries <- cp_rate_fisheries %>% 
+#   filter(tonnes >=10.3) %>% 
+#   left_join(country_colors, by = "iso3c") %>% 
+#   mutate(color_fill = ifelse(is.na(color_fill), "black", color_fill),
+#          include_col = ifelse(is.na(include_col), "no", include_col))
+# 
+# fisheries_quant <- quantile(cp_rate_fisheries$pressure_per_tonne,
+#          c(0.9, 0.95, 0.97, 0.99) )
+# fish_quant_99 <- fisheries_quant[1]
+# 
+# cp_rate_fisheries <- cp_rate_fisheries %>% 
+#   mutate(organism = ifelse(organism == "fofm", "forage", 
+#                            ifelse(organism == "fish", "river", organism)))
+#   
+# order_fish <- cp_rate_fisheries %>%
+#   filter(pressure_per_tonne <= 0.009) %>% 
+#   group_by(organism) %>%
+#   summarize(median = median(pressure_per_tonne)) %>% 
+#   arrange(median)
+# 
+# fish_tidy <- cp_rate_fisheries %>% 
+#   filter(pressure_per_tonne <= 0.009)
+# 
+# fish_tidy$organism <- factor(fish_tidy$organism, levels = order_fish$organism)
+# max_tidy_fish <- max(fish_tidy$pressure_per_tonne)
+# 
+# fish_box <- ggplot(fish_tidy) +
+#   geom_boxplot(aes(x=organism, y=pressure_per_tonne), outlier.fill=NA, outlier.colour = NA) +
+#  # geom_violin(aes(x=organism, y=pressure_per_tonne))+
+#   geom_jitter(data = filter(fish_tidy, include_col == "no"), aes(x=organism, y=pressure_per_tonne, color = color_fill, fill = color_fill), alpha=0.2, width = 0.2) +
+#   geom_jitter(data = filter(fish_tidy, include_col == "yes"), aes(x=organism, y=pressure_per_tonne, color = color_fill, fill = color_fill), size = 2,  width = 0.2)+
+#   theme_minimal() +
+#   coord_flip() +
+#   labs(y = "", x = "Fisheries")+
+#   scale_colour_identity()  +
+#   scale_fill_identity() + 
+#   scale_y_continuous(limits = c(0, 0.009),
+#                      breaks = c(0, 0.003, 0.006, 0.009),
+#                      labels = c(0, 0.003, 0.006, 0.009)) +
+#    theme(panel.background = element_rect(fill = "transparent",colour = NA),
+#         plot.background = element_rect(fill = "transparent",colour = NA))
+# 
+# outlier_fish_tidy <- cp_rate_fisheries %>% 
+#   filter(pressure_per_tonne > 0.009) 
+# 
+# add_back <- setdiff(fish_tidy$organism, outlier_fish_tidy$organism) %>% 
+#   as_tibble() %>% 
+#   rename(organism = value ) %>% 
+#   mutate(iso3c = NA, cumulative_pressure = NA, tonnes = NA, pressure_per_tonne = NA, product = "meat", color_fill = NA)
+# 
+# outlier_fish_tidy <- rbind(outlier_fish_tidy,add_back) %>% 
+#   as.data.frame()
+# 
+# outlier_fish_tidy$organism <- factor(outlier_fish_tidy$organism, levels = order_fish$organism)
+# 
+# min_tidy_fish_out <- min(outlier_fish_tidy$pressure_per_tonne, na.rm = TRUE)
+# max_tidy_fish_out <- max(outlier_fish_tidy$pressure_per_tonne, na.rm = TRUE)
+# 
+# fish_out <- ggplot(outlier_fish_tidy) +
+#  # geom_point()+
+#   geom_jitter(data = filter(outlier_fish_tidy, include_col == "no"), aes(x=organism, y=pressure_per_tonne, color = color_fill, fill = color_fill), alpha=0.2, width = 0.1) +
+#    geom_jitter(data = filter(outlier_fish_tidy, include_col == "yes"), aes(x=organism, y=pressure_per_tonne, color = color_fill, fill = color_fill), size = 2, width = 0.1) +
+#   theme_minimal() +
+#   coord_flip() +
+#   labs(x = "", y = "") +
+#   #labs(caption = "*cut out countries with less than 10.3 tonnes of fish") +
+#   theme(axis.text.y = element_blank(),
+#         plot.caption=element_text(hjust = 1, size = 7),
+#         panel.background = element_rect(fill = "transparent",colour = NA),
+#         plot.background = element_rect(fill = "transparent",colour = NA)
+#         ) +
+#   scale_colour_identity()  +
+#   scale_fill_identity() +
+#   scale_y_continuous(limits = c(0.009-0.0001, 0.3),
+#                      breaks = c(0.009, 0.15, 0.3),
+#                      labels = c(0.009, 0.15, 0.3))
+
+```
+
+
+### Look at mariculture 
+
+```{r}
+
+mariculture_list <- c("salmon", "shrimp", "tuna", "crustaceans", "marine-fish-general", "bivalve")
+
+pressures_summary_mariculture <- pressures_summary %>%
+  group_by(iso3c, category1_production) %>%
+  summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+  ungroup() %>%
+  separate(col=category1_production, c("organism", "product"), sep="_") %>%
+  filter(organism %in% mariculture_list)
+
+tmp <- filter(pressures_summary_mariculture, iso3c=="USA") %>% data.frame()
+
+product_mariculture <- product_tonnes %>%
+  group_by(iso3c, category1_production) %>%
+  summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+  ungroup() %>%
+  filter(., !grepl("feed",category1_production)) %>%
+  separate(col=category1_production, c("organism", "product"), sep="_") %>%
+  filter(organism %in% mariculture_list) 
+
+tmp <- filter(product_mariculture, iso3c=="USA") %>% data.frame()
+
+cp_rate_mariculture <- left_join(pressures_summary_mariculture, product_mariculture, by=c("iso3c", "organism", "product")) %>%
+  filter(!is.na(tonnes)) %>%
+    filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>%
+    filter(tonnes>0) %>%
+  mutate(iso3c = ifelse(iso3c == "HKG", "CHN", iso3c)) %>% 
+  group_by(iso3c, organism, product) %>% 
+  dplyr::summarise(cumulative_pressure = sum(cumulative_pressure),
+                   tonnes = sum(tonnes)) %>% 
+  rowwise() %>%
+  mutate(pressure_per_tonne = cumulative_pressure/tonnes * 1000000)
+
+cp_rate_mariculture %>%
+group_by(organism) %>%
+  summarize(mean = mean(pressure_per_tonne),
+            sd = sd(pressure_per_tonne))
+
+tmp <- filter(cp_rate_mariculture, pressure_per_tonne>=0.005) %>% data.frame()
+
+ggplot(cp_rate_mariculture, aes(x=organism, y=pressure_per_tonne)) +
+  geom_boxplot(outlier.fill=NA, outlier.colour = NA) +
+  geom_jitter(alpha=0.2) +
+  theme_cowplot() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+
+```
+
+```{r}
+# mariculture_quant <- quantile(cp_rate_mariculture$pressure_per_tonne,
+#          c(0.9, 0.95, 0.97, 0.99) )
+# mari_quant_99 <- mariculture_quant[4]
+# 
+# cp_rate_mariculture<- cp_rate_mariculture %>% 
+#   left_join(country_colors, by = "iso3c") %>% 
+#   mutate(color_fill = ifelse(is.na(color_fill), "black", color_fill),
+#          include_col = ifelse(is.na(include_col), "no", include_col),
+#          organism = ifelse(organism == "bivalve", "unfed/algae fed shellfish", organism))
+# 
+# 
+# order_mari <- cp_rate_mariculture %>%
+#   filter(pressure_per_tonne <= 0.009) %>% 
+#   group_by(organism) %>%
+#   summarize(median = median(pressure_per_tonne)) %>% 
+#   arrange(median)
+# 
+# mari_tidy <- cp_rate_mariculture %>% 
+#   filter(pressure_per_tonne <= 0.009)
+# 
+# mari_tidy$organism <- factor(mari_tidy$organism, levels = order_mari$organism)
+# 
+# max_tidy_mari <- max(mari_tidy$pressure_per_tonne)
+# 
+# mari_box <- ggplot(mari_tidy) +
+#   geom_boxplot(aes(x=organism, y=pressure_per_tonne), outlier.fill=NA, outlier.colour = NA) +
+#   #geom_violin(aes(x=organism, y=pressure_per_tonne)) +
+#   geom_jitter(data = filter(mari_tidy, include_col == "no"), aes(x=organism, y=pressure_per_tonne, color = color_fill, fill=color_fill)) +
+#   geom_jitter(data = filter(mari_tidy, include_col == "yes"), aes(x=organism, y=pressure_per_tonne, color = color_fill, fill = color_fill), size = 2, width = 0.2)+
+#   theme_minimal() +
+#   coord_flip() +
+#   labs(y = "", x = "Mariculture")+
+#   scale_colour_identity()  +
+#   scale_fill_identity() +
+#   scale_y_continuous(limits = c(0, 0.009),
+#                      breaks = c(0, 0.003, 0.006, 0.009),
+#                      labels = c(0, 0.003, 0.006, 0.009)) +
+#    theme(panel.background = element_rect(fill = "transparent",colour = NA),
+#         plot.background = element_rect(fill = "transparent",colour = NA))
+# 
+# outlier_mari_tidy <- cp_rate_mariculture %>% 
+#   filter(pressure_per_tonne > 0.009) 
+# 
+# add_back <- setdiff(mari_tidy$organism, outlier_mari_tidy$organism) %>% 
+#   as_tibble() %>% 
+#   rename(organism = value ) %>% 
+#   mutate(iso3c = NA, product = "meat", cumulative_pressure = NA, tonnes = NA, pressure_per_tonne = NA, color_fill = "black", include_col = "no")
+# 
+# outlier_mari_tidy <- rbind(outlier_mari_tidy, add_back) %>% 
+#   as.data.frame()
+# 
+# outlier_mari_tidy$organism <- factor(outlier_mari_tidy$organism, levels = order_mari$organism)
+# 
+# min_tidy_mari_out <- min(outlier_mari_tidy$pressure_per_tonne, na.rm = TRUE)
+# max_tidy_mari_out <- max(outlier_mari_tidy$pressure_per_tonne, na.rm = TRUE)
+# 
+# outlier_mari_tidy_fix <- outlier_mari_tidy %>% 
+#   mutate(pressure_per_tonne = ifelse(is.na(pressure_per_tonne), 0.91, pressure_per_tonne),
+#          color_fill = ifelse(color_fill == "black", "transparent", color_fill))
+# 
+# mari_out <- ggplot(outlier_mari_tidy_fix, aes(x=organism, y=pressure_per_tonne)) +
+#   geom_jitter(alpha=0.2, width = 0.1, aes(color = color_fill, fill = color_fill)) +
+#   theme_minimal()  +
+#   coord_flip() + 
+#   labs(x = "", y = "") +
+#   theme(axis.text.y = element_blank()) +
+#   scale_colour_identity()  +
+#   scale_fill_identity() +
+#   scale_y_continuous(limits = c(0.009, 0.01),
+#                      breaks = c(0.009, 0.01),
+#                      labels = c("", ""))
+#   
+# # round(max_tidy_mari, digits = 3) = 0.008
+# ## min_tidy_mari_out = 0.007575272
+
+```
+
+
+### Look at livestock 
+
+groups:  cows_meat, cows_milk, buffalo_milk, goats_milk, goats_meat, sheep_milk, sheep_meat, chickens_eggs, chickens_meat, pigs_meat
+```{r}
+
+categories <- read_csv(here("_analysis/figures/paper/data/grouping_naming_structure.csv"))
+
+livestock_list <- c("cows_meat", "cows_milk", "buffaloes_milk", "goats_milk", "goats_meat", "sheep_milk", "sheep_meat", "chickens_eggs", "chickens_meat", "pigs_meat")
+
+pressures_summary_livestock <- pressures_summary %>%
+  group_by(iso3c, category1_production) %>%
+  summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+  ungroup() %>%
+  filter(category1_production %in% livestock_list) 
+
+tmp <- filter(pressures_summary_livestock, iso3c=="USA") %>% data.frame()
+
+product_livestock <- product_tonnes %>%
+  group_by(iso3c, category1_production) %>%
+  summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+  ungroup() %>%
+  filter(., !grepl("feed",category1_production))%>%
+  filter(category1_production %in% livestock_list)
+
+tmp <- filter(product_livestock, iso3c=="USA") %>% data.frame()
+
+cp_rate_livestock <- left_join(pressures_summary_livestock, product_livestock, by=c("iso3c", "category1_production")) %>%
+  filter(!is.na(tonnes)) %>%
+    filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>%
+    filter(tonnes>0) %>%
+  rowwise() %>%
+  mutate(pressure_per_tonne = cumulative_pressure/tonnes * 1000000) %>% 
+  filter(pressure_per_tonne <1.5)
+
+# cp_rate_livestock %>%
+# group_by(category1_production) %>%
+#   summarize(mean = mean(pressure_per_tonne),
+#             sd = sd(pressure_per_tonne))
+# 
+# tmp <- filter(cp_rate_livestock, pressure_per_tonne>=0.005) %>% data.frame()
+# 
+# ggplot(cp_rate_livestock, aes(x=category1_production, y=pressure_per_tonne)) +
+#   geom_boxplot(outlier.fill=NA, outlier.colour = NA) +
+#   geom_jitter(alpha=0.2) +
+#   theme_cowplot() +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+# 
+# read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/production_extracted_final.csv")
+
+```
+
+
+Play with cutoffs and how to visualize the box plot and outliers
+```{r}
+
+# cp_rate_livestock <- cp_rate_livestock %>% 
+#   filter(tonnes >= 10) %>% 
+#   left_join(country_colors, by = "iso3c") %>% 
+#   mutate(color_fill = ifelse(is.na(color_fill), "black", color_fill),
+#          include_col = ifelse(is.na(include_col), "no", include_col))
+# 
+# livestock_quant <- quantile(cp_rate_livestock$pressure_per_tonne,
+#          c(0.9, 0.95, 0.97, 0.99) )
+# 
+# # livestock_quant_99 <- livestock_quant[3]
+# livestock_quant_99 <- 0.009
+# 
+# livestock_tidy <- cp_rate_livestock %>% 
+#   mutate(category1_production = str_replace(category1_production, "_", " "))
+# 
+# order_live <- cp_rate_livestock %>%
+#   filter(pressure_per_tonne <= livestock_quant_99) %>% 
+#   mutate(category1_production = str_replace(category1_production, "_", " ")) %>% 
+#   group_by(category1_production) %>%
+#   summarize(median = median(pressure_per_tonne)) %>% 
+#   arrange(median)
+# 
+# livestock_tidy$category1_production <- factor(livestock_tidy$category1_production, levels = order_live$category1_production)
+#   
+# livestock_tidy <- filter(livestock_tidy,  pressure_per_tonne <= livestock_quant_99)
+# 
+# max_live_tidy <- max(livestock_tidy$pressure_per_tonne)
+# 
+# live_box <- ggplot(livestock_tidy) +
+#   geom_boxplot(aes(x=category1_production, y=pressure_per_tonne), outlier.fill=NA, outlier.colour = NA) +
+# #  geom_violin(aes(x=category1_production, y=pressure_per_tonne)) +
+#   geom_jitter(data = filter(livestock_tidy, include_col == "no"), alpha=0.2, width = 0.2, aes(x=category1_production, y=pressure_per_tonne, color = color_fill, fill = color_fill)) +
+#    geom_jitter(data = filter(livestock_tidy, include_col == "yes"), size = 2, width = 0.2, aes(x=category1_production, y=pressure_per_tonne, color = color_fill, fill = color_fill)) +
+#   theme_minimal() +
+#   coord_flip() +
+#   labs(y = "", x = "Livestock primary and\n secondary products*") +
+#   scale_colour_identity()  +
+#   scale_fill_identity() +
+#   scale_y_continuous(limits = c(0, max_tidy_fish+0.000001),
+#                      breaks = c(0, 0.005, 0.010, 0.015, 0.020, round(max_tidy_fish, digits = 4)),
+#                      labels = c(0, 0.005, 0.010, 0.015, 0.020, round(max_tidy_fish, digits = 3))) +
+#    theme(panel.background = element_rect(fill = "transparent",colour = NA),
+#         plot.background = element_rect(fill = "transparent",colour = NA))
+# 
+# 
+# outlier_livestock_tidy <- cp_rate_livestock %>% 
+#   mutate(category1_production = str_replace(category1_production, "_", " ")) %>% 
+#   filter(pressure_per_tonne > livestock_quant_99) 
+# 
+# add_back <- setdiff(livestock_tidy$category1_production, outlier_livestock_tidy$category1_production) %>% 
+#   as_tibble() %>% 
+#   rename(category1_production = value ) %>% 
+#   mutate(iso3c = NA, cumulative_pressure = NA, tonnes = NA, pressure_per_tonne = NA, color_fill = "black", include_col = "no") 
+# 
+# outlier_livestock_tidy<- rbind(outlier_livestock_tidy, add_back) %>% 
+#   as.data.frame()
+# 
+# outlier_livestock_tidy$category1_production <- factor(outlier_livestock_tidy$category1_production, levels = order_live$category1_production)
+# 
+# min_live_tidy_out <- min(outlier_livestock_tidy$pressure_per_tonne, na.rm = TRUE)
+# max_live_tidy_out <- max(outlier_livestock_tidy$pressure_per_tonne, na.rm = TRUE)
+# 
+# live_out <- ggplot(outlier_livestock_tidy) +
+#   geom_jitter(data = filter(outlier_livestock_tidy, include_col == "no"), alpha=0.2, width = 0.1, aes(x=category1_production, y=pressure_per_tonne, color = color_fill, fill = color_fill)) +
+#   theme_minimal() +
+#   coord_flip() +
+#   labs(x = "", y = "") +
+#   #labs(caption = "*cut out countries with less than 10 tonnes of product") +
+#   theme(axis.text.y = element_blank(),
+#         plot.caption=element_text(hjust = 1, size = 7),
+#         panel.background = element_rect(fill = "transparent",colour = NA),
+#         plot.background = element_rect(fill = "transparent",colour = NA)) +
+#   scale_colour_identity()  +
+#   scale_fill_identity() +
+#   scale_y_continuous(limits = c(0.009, 1), 
+#                      breaks = c(0.009, 0.5, 1),
+#                      labels = c(0.009, 0.5, 1)) +
+#    geom_jitter(data = filter(outlier_livestock_tidy, include_col == "yes"), size = 2, width = 0.1, aes(x=category1_production, y=pressure_per_tonne, color = color_fill, fill = color_fill))
+
+  
+```
+
+
+## Feed
+Need to adjust pressure/tonne to reflect tonnes of final animal product. 
+
+```{r}
+categories <- read_csv(here("_analysis/figures/paper/data/grouping_naming_structure.csv"))
+
+pressures_summary_feed <- pressures_summary %>% 
+  filter(str_detect(category1_production, "feed_")) %>% 
+  group_by(iso3c, category1_production) %>%
+  summarize(cumulative_pressure = sum(pressure_rescaled, na.rm=TRUE)) %>%
+  ungroup() 
+
+product_feed <- product_tonnes %>%
+  group_by(iso3c, category1_production) %>%
+  summarize(tonnes = sum(tonnes, na.rm=TRUE)) %>%
+  ungroup() %>%
+  filter(str_detect(category1_production, "feed_")) 
+
+cp_rate_feed <- left_join(pressures_summary_feed, product_feed, by=c("iso3c", "category1_production")) %>%
+  filter(!is.na(tonnes)) %>%
+    filter(!is.na(cumulative_pressure)) %>%
+  filter(cumulative_pressure>0) %>%
+    filter(tonnes>0) %>%
+  rowwise() %>%
+  mutate(pressure_per_tonne = cumulative_pressure/tonnes * 1000000)
+
+```
+
+Play with cutoffs and how to visualize the box plot and outliers
+```{r}
+
+# cp_rate_feed_cut <- cp_rate_feed %>% 
+#   filter(tonnes >= 1) %>%  ## 1000 kg or more of feed to be included
+#   left_join(country_colors, by = "iso3c") %>% 
+#   mutate(color_fill = ifelse(is.na(color_fill), "black", color_fill),
+#          include_col = ifelse(is.na(include_col), "no", include_col))
+# 
+# feed_quant <- quantile(cp_rate_feed_cut$pressure_per_tonne,
+#          c(0.9, 0.95, 0.97, 0.99) )
+# ## 0.9 = 0.006682641
+# ## 0.95 = 0.032517584
+# ## 0.97 = 0.078901296 
+# ## 0.99 = 0.315463227 
+# 
+# 
+# 
+# feed_tidy <- cp_rate_feed_cut %>% 
+#   mutate(category1_production = str_replace(category1_production, "_", " "),
+#          category1_production = str_replace(category1_production, "_", " ")) %>% 
+#   mutate(category1_production = str_remove(category1_production, "feed ")) %>% 
+#   separate(category1_production, into = c("animal", "prod"), sep = " ", remove = TRUE) %>% 
+#   mutate(prod = ifelse(animal %in% c("buffaloes", "chickens", "cows", "pigs", "goats", "sheep"), prod, NA)) %>% 
+#   unite(category1_production,  c("animal", "prod"), sep = " ", na.rm = TRUE) %>% 
+#   mutate(category1_production = paste(category1_production, "feed", sep = " "))
+# 
+# order_feed <- feed_tidy %>%
+#   filter(pressure_per_tonne <= 0.009) %>% 
+#   mutate(category1_production = str_replace(category1_production, "_", " ")) %>% 
+#   group_by(category1_production) %>%
+#   summarize(median = median(pressure_per_tonne)) %>% 
+#   arrange(median)
+# 
+# feed_tidy$category1_production <- factor(feed_tidy$category1_production, levels = order_feed$category1_production)
+# 
+# feed_tidy_cut <- filter(feed_tidy, pressure_per_tonne <= 0.009)
+#   
+# # max_tidy_feed <- max(feed_tidy$pressure_per_tonne)
+# 
+# feed_box <- ggplot(feed_tidy_cut) +
+#   geom_boxplot(aes(x=category1_production, y=pressure_per_tonne), outlier.fill=NA, outlier.colour = NA) +
+#  # geom_violin(aes(x=category1_production, y=pressure_per_tonne)) +
+#   geom_jitter(data = filter(feed_tidy_cut, include_col == "no"), alpha=0.2, width = 0.2, aes(x=category1_production, y=pressure_per_tonne, color = color_fill, fill = color_fill)) +
+#     geom_jitter(data = filter(feed_tidy_cut,include_col == "yes"), size = 2, width = 0.2, aes(x=category1_production, y=pressure_per_tonne, color = color_fill, fill = color_fill)) +
+#   theme_minimal() +
+#   coord_flip() +
+#   labs(y = "Environmental inefficiency", x = "Livestock and mariculture feed", hjust = 0.7)+
+#   scale_colour_identity()  +
+#   scale_fill_identity() +
+#   scale_y_continuous(limits = c(0, 0.009),
+#                      breaks = c(0, 0.003, 0.006, 0.009),
+#                      labels = c(0, 0.003, 0.006, 0.009)) +
+#      theme(panel.background = element_rect(fill = "transparent",colour = NA),
+#         plot.background = element_rect(fill = "transparent",colour = NA),
+#         axis.text.x = element_text(margin = margin(b=20)))
+# 
+# outlier_feed_tidy <- feed_tidy %>% 
+#   filter(pressure_per_tonne > 0.009,
+#          pressure_per_tonne <1) 
+# 
+# add_back <- setdiff(feed_tidy$category1_production, outlier_feed_tidy$category1_production) %>% 
+#   as_tibble() %>% 
+#   rename(category1_production = value ) %>% 
+#   mutate(iso3c = NA, cumulative_pressure = NA, tonnes = NA, pressure_per_tonne = NA, color_fill = NA)
+# 
+# outlier_feed_tidy <- rbind(outlier_feed_tidy, add_back)
+# 
+# outlier_feed_tidy$category1_production <- factor(outlier_feed_tidy$category1_production, levels = order_feed$category1_production)
+# 
+# max_tidy_feed_out <- max(outlier_feed_tidy$pressure_per_tonne, na.rm = TRUE)
+# min_tidy_feed_out <- min(outlier_feed_tidy$pressure_per_tonne, na.rm = TRUE)
+# 
+# feed_out <- ggplot(outlier_feed_tidy) +
+#    geom_jitter(data = filter(outlier_feed_tidy, include_col == "yes"), aes(x=category1_production, y=pressure_per_tonne, color = color_fill, fill = color_fill), size = 2, width = 0.1) +
+#   geom_jitter(data = filter(outlier_feed_tidy, include_col == "no"), aes(x=category1_production, y=pressure_per_tonne, color = color_fill, fill = color_fill), alpha=0.2, width = 0.1) +
+#   theme_minimal() +
+#   coord_flip() +
+#   labs(x = "", y = "") +
+#   #labs(caption = "*cut out countries with less than 1 tonne of feed") +
+#   theme(axis.text.y = element_blank(),
+#         plot.caption=element_text(hjust = 1, size = 7),
+#         panel.background = element_rect(fill = "transparent",colour = NA),
+#         plot.background = element_rect(fill = "transparent",colour = NA)) +
+#   scale_colour_identity()  +
+#   scale_fill_identity()  +
+#   scale_y_continuous(limits = c(0.009, 0.8),
+#                     breaks = c(0.009, 0.4, 0.8),
+#                     labels = c(0.009, 0.4, 0.8))
+
+```
+
+## might have to do custom heights so that the spaces between grid lines are the same.
+```{r}
+# library(patchwork)
+# 
+# ((live_box + live_out + plot_layout(widths = c(3, 1)))  /
+#     (fish_box + fish_out + plot_layout(widths = c(3, 1))) / 
+#     (crop_box + crop_out + plot_layout(widths = c(3, 1))) /
+#     (mari_box + mari_out + plot_layout(widths = c(3, 1))) /
+#     (feed_box + feed_out + plot_layout(widths = c(3, 1))))  +
+#   
+#   plot_layout(heights = c(10, 8, 26, 6, 15)) ## these values are the number of elemetns in the y axis for each plot
+# 
+# #ggsave(here("_analysis/figures/paper/output/figure_5_boxplots.png"), height=15, width=9, units=c("in"), bg = "transparent")
+# ggsave(here("_analysis/figures/paper/output/figure_5_boxplots_cropsall.png"), height=15, width=9, units=c("in"), bg = "transparent")
+```
+
+
+Save the CP rates
+```{r}
+
+crops_df <- cp_rate_crops %>% 
+  select(iso3c, product = organism, tonnes, cumulative_pressure, pressure_per_tonne)
+
+fish_df <- cp_rate_fisheries %>% 
+  select(iso3c, product = organism, tonnes, cumulative_pressure, pressure_per_tonne) 
+
+live_df <- cp_rate_livestock %>% 
+  select(iso3c, product = category1_production, tonnes, cumulative_pressure, pressure_per_tonne)
+
+mari_df <- cp_rate_mariculture%>% 
+  select(iso3c, product = organism, tonnes, cumulative_pressure, pressure_per_tonne)
+
+feed_df <- cp_rate_feed %>% 
+  select(iso3c, product = category1_production, tonnes, cumulative_pressure, pressure_per_tonne)
+
+all <- rbind(crops_df, fish_df, live_df, mari_df, feed_df)
+
+write_csv(all , here("_efficiency/data/fig_6_cp_rates.csv"))
+```
+

@@ -1,0 +1,311 @@
+---
+title: "Wrangle GLEAM direct energy use tables"
+author: "Juliette"
+date: "2/26/2021"
+output: html_document
+---
+
+Can you wrangle these data so every country, animal, system, product has a value based on the data in these tables (GLEAM_2.0_Supplement_S1):
+
+Table 7.5 (take average of arid,humid, and temperate): values for dairy herd of small ruminants are assumed to be double the values of dairy herds (?? what...)
+Table 7.6
+Table 7.7: note emissions factors for pigs and chicken form backyard systems are 0
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+library(here)
+library(janitor)
+library(countrycode)
+library(stringr) 
+source(here("_workflow/common.R"))
+
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>% 
+  dplyr::select(iso3c, Global_Name, Region_Name, Sub_region_Name, Intermediate_Region_Name, Region_Name)
+
+'%!in%' <- function(x,y)!('%in%'(x,y))
+
+```
+
+We need to do some wrangling of various country grouping dfs. GLEAM specifies EU countries, countries in OCED and not, general GLEAM regions.
+
+```{r}
+
+eu_countries <- read_csv(here("animal_farm/ghg/data/gleam_country_lists/EU_countries.csv"))
+
+## developed/ developing countries
+un_dev <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>% 
+  dplyr::select(Region, Developed_Developing) %>% 
+  filter(Developed_Developing == "Developing") %>% 
+  mutate(region_grouping = "Developing countries") %>% 
+  rename(countries_2 = "Region") %>% 
+  select(-Developed_Developing) %>% 
+  mutate(source = "un_dev")
+## we have specific values for south Korea and Turkey so we can remove it from here
+
+## OCED countries
+oced <- read_csv(here("animal_farm/ghg/data/gleam_country_lists/oced_members.csv")) %>% 
+  janitor::clean_names() %>% 
+  mutate(country = str_trim(country, side = "both")) %>% 
+  mutate(iso3c = countrycode(country, origin="country.name", destination = "iso3c")) %>% 
+  right_join(food_rgns, by = "iso3c")  %>% 
+  select(country = Country, iso3c, oced_region_name = region, oced_member) %>% 
+  mutate(oced_member = ifelse(is.na(oced_member), "no", oced_member)) %>% 
+  left_join(un, by= "iso3c") %>% 
+  select(country, iso3c, oced_region_name, region = Region_Name, oced_member) %>% 
+  mutate(name_2 = ifelse(oced_member == "yes" & region == "Europe", "OECD Europe",
+                                 ifelse(oced_member == "no" & region == "Europe", "Non-OECD Europe",
+                                        ifelse(oced_member == "no" & region == "Oceania", "Non-OECD Pacific", NA)))) %>% 
+  mutate(source = "oced_countries")
+
+
+## gleam region named 
+gleam_regions <- read_csv(here("animal_farm/ghg/data/gleam_country_lists/gleam_country_list.csv"))  %>% 
+  mutate(iso3c = countrycode(country, origin="country.name", destination = "iso3c"),
+         iso3c = ifelse(country == "Madeira Islands" , "XMI",
+                        ifelse(country == "São Tome and Principe", "STP", iso3c)))
+  
+```
+
+
+Let's do Table 7.5 first
+```{r}
+table_7.5_raw <- read_csv(here("animal_farm/ghg/data/gleam_table_7.5_em_DE_rum_dairy.csv"))
+
+## there are some countries that belong to both EU and OCED. When that happens we will just go with EU values
+countries_oced_eu <- c("Austria", "Belgium", "Denmark", "Czech Republic", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Netherlands", "Poland", "Portugal", "Slovakia", "Slovenia", "Spain", "Sweden")
+
+oced_minus_eu <- oced %>% 
+  select(country, region_grouping = name_2) %>% 
+  filter(region_grouping == "OECD Europe",
+         country %!in% countries_oced_eu)
+
+## first let's get all the countries in order
+table_7.5_fix_regions <- table_7.5_raw %>% 
+  select(region_grouping, mean_grassland, mean_mixed) %>% 
+  ## specify the EU countries
+  left_join(eu_countries) %>% 
+  mutate(countries = ifelse(is.na(countries), region_grouping, countries)) %>% 
+  ## specifify the developing countries
+  left_join(un_dev) %>% 
+  mutate(countries = ifelse(!is.na(countries_2), countries_2, countries)) %>% 
+  select(-countries_2) %>% 
+  ## specify the OCED countries
+  left_join(oced_minus_eu) %>% 
+  mutate(countries = ifelse(!is.na(country), country, countries)) %>% 
+  select(-country) %>% 
+  ## grab the iso3c codes for the countries
+  mutate(iso3c = countrycode(countries, origin="country.name", destination = "iso3c"),
+         doubled_remove = ifelse(countries == "Turkey" & source == "un_dev", "remove",
+                                 ifelse(countries == "Republic of Korea" & source == "un_dev", "remove", NA))) %>% ## Turkey and South Korea has it's own specific value, so we don't need to developing designation
+  filter(is.na(doubled_remove)) %>% 
+  ## grab the rest of the missing countries in our study. 
+  right_join(food_rgns, by = "iso3c")%>% 
+  select(iso3c, grassland = mean_grassland, mixed = mean_mixed) 
+
+
+## Next let's gapfill, and then expand out the df to have all our food systems
+table_7.5_fix<- table_7.5_fix_regions %>% 
+ 
+   ## gapfilling first
+  left_join(un) %>% 
+  group_by(Intermediate_Region_Name) %>% 
+  mutate(grassland = ifelse(is.na(grassland), mean(grassland, na.rm = TRUE), grassland),
+         mixed = ifelse(is.na(mixed), mean(mixed, na.rm = TRUE), mixed)) %>% 
+  ungroup() %>% 
+  group_by(Sub_region_Name) %>% 
+  mutate(grassland = ifelse(is.na(grassland), mean(grassland, na.rm = TRUE), grassland),
+         mixed = ifelse(is.na(mixed), mean(mixed, na.rm = TRUE), mixed)) %>% 
+   ungroup() %>% 
+  
+  ## expand out
+  pivot_longer(cols = c("grassland", "mixed"), names_to = c("system")) %>% 
+  mutate(product= "milk")%>% 
+  slice(rep(1:n(), each = 4)) %>% 
+  mutate(animal = rep(c("cows", "buffaloes", "sheep", "goats"), times = 488),
+         value = ifelse(animal %in% c("sheep", "goats"), value*2, value),
+         unit = "kg CO2-eq·kg milk-1") %>% 
+  select(iso3c, animal, system, product, unit, value)
+  
+```
+
+
+Table 7.6 next. Identifying the countries will require 3 sources: EU countries list, OECED countries, and general gleam regions. They couldn't make it easy could they!
+```{r}
+table_7.6_raw <- read_csv(here("animal_farm/ghg/data/gleam_table_7.6_em_DE_rum_nondairy.csv"))
+
+countries_nonoced_eu <- c("Bulgaria", "Croatia", "Cyprus", "Malta", "Romania", "Russia")
+
+oced_fix <- oced %>% 
+  select(country, region_grouping = name_2) %>% 
+  filter(country %!in% c(countries_oced_eu, countries_nonoced_eu))
+
+gleam_regions_short <- gleam_regions %>% 
+  mutate(keep = case_when(region == "Latin America and the Caribbean" ~ "yes",
+                          str_detect(region, "Asia") ~ "yes",
+                          str_detect(region, "Africa") ~ "yes")) %>% 
+  filter(keep == "yes") %>% 
+  mutate(region = case_when(region == "Latin America and the Caribbean" ~ "Latin America and the Caribbean",
+                            str_detect(region, "Asia") ~ "Asia",
+                            region == "Near East and North Africa" ~ "Middle East",
+                            T ~ "Africa")) %>% 
+  filter(country != "Japan",
+         country != "Republic of Korea") %>% ## we have country level values for this
+  select(country, region_grouping = region) %>% 
+  ## fix west west and gaza strip
+  filter(country %!in% c("West Bank", "Gaza Strip"),
+         country != "Cyprus") %>% 
+  add_row(country = "Palestina", region_grouping = "Middle East")
+
+## lets fix the regions first
+table_7.6_fix_regions <- table_7.6_raw %>% 
+  ## let's do the EU countries first
+  left_join(eu_countries) %>% 
+  left_join(oced_fix) %>% 
+  mutate(countries = ifelse(!is.na(country), country, countries)) %>% 
+  select(-country) %>% 
+  left_join(gleam_regions_short) %>% 
+  mutate(countries = ifelse(!is.na(country), country, countries)) %>% 
+  select(-country) %>% 
+  mutate(countries = ifelse(is.na(countries), region_grouping, countries)) %>% 
+  ## grab the iso3c codes for the countries
+  mutate(iso3c = countrycode(countries, origin="country.name", destination = "iso3c"),
+         iso3c = ifelse(countries == "Kosovo", "XKO",
+                        ifelse(countries == "Micronesia", "FSM",
+                               ifelse(countries == "São Tome and Principe", "STP", iso3c)))) %>% 
+  right_join(food_rgns, by = "iso3c") %>% 
+  select(iso3c, large_rum_grassland, large_rum_mixed, small_rum) 
+  
+  
+## now lets gapfill and expand out
+table_7.6_fix <- table_7.6_fix_regions %>% 
+   ## gapfilling first
+  left_join(un) %>% 
+  group_by(Intermediate_Region_Name) %>% 
+  mutate(large_rum_grassland = ifelse(is.na(large_rum_grassland), mean(large_rum_grassland, na.rm = TRUE), large_rum_grassland),
+         large_rum_mixed = ifelse(is.na(large_rum_mixed), mean(large_rum_mixed, na.rm = TRUE), large_rum_mixed),
+         small_rum = ifelse(is.na(small_rum), mean(small_rum, na.rm = TRUE), small_rum)) %>% 
+  ungroup() %>% 
+  group_by(Sub_region_Name) %>% 
+  mutate(large_rum_grassland = ifelse(is.na(large_rum_grassland), mean(large_rum_grassland, na.rm = TRUE), large_rum_grassland),
+         large_rum_mixed = ifelse(is.na(large_rum_mixed), mean(large_rum_mixed, na.rm = TRUE), large_rum_mixed),
+         small_rum = ifelse(is.na(small_rum), mean(small_rum, na.rm = TRUE), small_rum)) %>% 
+  ungroup() %>% 
+  select(iso3c, large_rum_grassland, large_rum_mixed, small_rum) %>% 
+
+  ## expand out
+  pivot_longer(cols = c("large_rum_grassland", "large_rum_mixed", "small_rum"), names_to = c("system")) %>% 
+  mutate(product = "meat") 
+
+cows_meat <- table_7.6_fix %>% 
+  filter(system %in% c("large_rum_grassland", "large_rum_mixed")) %>% 
+  mutate(system = case_when(str_detect(system, "grassland") ~ "grassland",
+                            str_detect(system, "mixed") ~ "mixed"),
+         animal = "cows",
+         unit = "kg CO2-eq·kg LW-1")
+
+small_meat <- table_7.6_fix %>% 
+  filter(system == "small_rum") %>% 
+  select(-system) %>%
+  slice(rep(1:n(), each = 2)) %>% 
+  mutate(animal = rep(c("sheep", "goats"), times = 244))%>%
+  slice(rep(1:n(), each = 2)) %>% 
+  mutate(system = rep(c("grassland", "mixed"), times = 488),
+         unit = "kg CO2-eq·kg LW-1") %>% 
+  select(iso3c, animal, system, product, unit, value)
+
+table_7.6_fix <- rbind(cows_meat, small_meat)
+
+```
+
+
+Last but not least. Table 7.7!
+The region groupings seem to be the same as for table 7.6 so hopefully it'll be easier this time.
+
+```{r}
+table_7.7_raw <- read_csv(here("animal_farm/ghg/data/gleam_table_7.7_em_DE_pig_chick.csv")) %>% 
+  filter(!is.na(region_grouping))
+
+
+## lets fix the regions first
+table_7.7_fix_regions <- table_7.7_raw %>% 
+  ## let's do the EU countries first
+  left_join(eu_countries) %>% 
+  left_join(oced_fix) %>% 
+  mutate(countries = ifelse(!is.na(country), country, countries)) %>% 
+  select(-country) %>% 
+  left_join(gleam_regions_short) %>% 
+  mutate(countries = ifelse(!is.na(country), country, countries)) %>% 
+  select(-country) %>% 
+  mutate(countries = ifelse(is.na(countries), region_grouping, countries)) %>% 
+  ## grab the iso3c codes for the countries
+  mutate(iso3c = countrycode(countries, origin="country.name", destination = "iso3c"),
+         iso3c = ifelse(countries == "Kosovo", "XKO",
+                        ifelse(countries == "Micronesia", "FSM",
+                               ifelse(countries == "São Tome and Principe", "STP", iso3c)))) %>% 
+  right_join(food_rgns, by = "iso3c") %>% 
+  select(iso3c, pigs_intermediate, pigs_industrial, chicken_layers, chicken_broilers) 
+
+table_7.7_fix <- table_7.7_fix_regions %>% 
+  
+  ## lets gapfill first
+  left_join(un) %>% 
+  group_by(Intermediate_Region_Name) %>% 
+  mutate(pigs_intermediate = ifelse(is.na(pigs_intermediate), mean(pigs_intermediate, na.rm = TRUE), pigs_intermediate),
+         pigs_industrial = ifelse(is.na(pigs_industrial), mean(pigs_industrial, na.rm = TRUE), pigs_industrial),
+         chicken_layers = ifelse(is.na(chicken_layers), mean(chicken_layers, na.rm = TRUE), chicken_layers),
+         chicken_broilers = ifelse(is.na(chicken_broilers), mean(chicken_broilers, na.rm = TRUE), chicken_broilers)) %>% 
+  ungroup()  %>% 
+  group_by(Sub_region_Name) %>% 
+  mutate(pigs_intermediate = ifelse(is.na(pigs_intermediate), mean(pigs_intermediate, na.rm = TRUE), pigs_intermediate),
+         pigs_industrial = ifelse(is.na(pigs_industrial), mean(pigs_industrial, na.rm = TRUE), pigs_industrial),
+         chicken_layers = ifelse(is.na(chicken_layers), mean(chicken_layers, na.rm = TRUE), chicken_layers),
+         chicken_broilers = ifelse(is.na(chicken_broilers), mean(chicken_broilers, na.rm = TRUE), chicken_broilers)) %>% 
+  ungroup() %>% 
+  group_by(Region_Name) %>% 
+  mutate(pigs_intermediate = ifelse(is.na(pigs_intermediate), mean(pigs_intermediate, na.rm = TRUE), pigs_intermediate),
+         pigs_industrial = ifelse(is.na(pigs_industrial), mean(pigs_industrial, na.rm = TRUE), pigs_industrial),
+         chicken_layers = ifelse(is.na(chicken_layers), mean(chicken_layers, na.rm = TRUE), chicken_layers),
+         chicken_broilers = ifelse(is.na(chicken_broilers), mean(chicken_broilers, na.rm = TRUE), chicken_broilers)) %>% 
+  ungroup()  %>% 
+  select(iso3c, pigs_intermediate, pigs_industrial, chicken_layers, chicken_broilers) %>% 
+  
+  # now lets expand it out
+  pivot_longer(cols = c("pigs_intermediate", "pigs_industrial", "chicken_layers", "chicken_broilers"), names_to = c("full_name")) %>% 
+  mutate(product = ifelse(str_detect(full_name, c("pigs_intermediate|pigs_industrial|chicken_broilers")), "meat", "eggs"),
+         animal = case_when(str_detect(full_name, "chicken") ~ "chickens",
+                            str_detect(full_name, "pigs") ~ "pigs"),
+         system = case_when(str_detect(full_name, c("industrial|broilers|layers")) ~ "industrial",
+                            str_detect(full_name, "intermediate") ~ "intermediate")) %>% 
+  select(-full_name) %>% 
+  mutate(unit = case_when(product == "meat" ~ "kg CO2-eq·kg LW-1",
+                          product == "eggs"~ "kg CO2-eq·kg eggs-1"))
+
+
+chick_backyard_values <- food_rgns %>% 
+  select(iso3c) %>% 
+  mutate(animal = "chickens",
+         system = "backyard",
+         product = "eggs&meat",
+         value = 0,
+         unit = "kg CO2-eq·kg LW-1")
+
+pig_backyard_values <- food_rgns %>% 
+  select(iso3c) %>% 
+  mutate(animal = "pigs",
+         system = "backyard",
+         product = "meat",
+         value = 0,
+         unit = "kg CO2-eq·kg LW-1")
+  
+table_7.7_fix <- rbind(table_7.7_fix, chick_backyard_values, pig_backyard_values)
+```
+
+Combine them all!!
+
+```{r}
+de_em_factors <- rbind(table_7.5_fix, table_7.6_fix, table_7.7_fix)
+
+write_csv(de_em_factors, here("animal_farm/ghg/data/de_em_factors.csv"))
+```
+

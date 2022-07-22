@@ -1,0 +1,112 @@
+---
+title: "Freshwater Fisheries Disturbance"
+output: html_document
+---
+
+
+
+Key reference: 
+Lehner, B., Grill G. (2013). Global river hydrography and network routing: 
+baseline data and new approaches to study the world’s large river systems. 
+Hydrological Processes 27(15): 2171-2186.
+
+# Method:
+- Original sf has river area in hectares.
+- Convert values to square kilometres
+- Divide river area by basin area to calculate the proportion of river per basin area.
+- Fasterize using food_raster.tif disaggregated at 15 arc-seconds resolution using factorial of 20.
+- Check shows 367,502 km2 river area calculated from shapefile vs. 366,297 km2 from raster.
+- Aggregate raster to 5 arc-minutes resolution using factorial of 20.
+- Check shows 370,557 vs. 367,502 km2. A 0.8% difference.
+- At this point, the numbers are fine and we are confident that we have mapped river area accurately. The sum total of 370,000km2 of river area is roughly in the region we expect, though a paper from Science (2018) found that river area was about double this surface area.
+
+```{r setup, include=FALSE}
+library("here"); library("sf"); library("fasterize")
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+```
+
+# Import sf
+```{r}  
+ria_sf <- 
+  st_read(file.path(raw, 
+                    "BasinATLAS_Data_v10_shp/BasinATLAS_v10_shp/BasinATLAS_v10_lev09.shp", 
+                    fsep = "")) %>% 
+  select(ria_ha_ssu)
+
+# CRS
+crs(ria_sf) # sf is longlat
+```
+
+# Wrangling sf
+```{r}  
+# Calculate basin polygon area and create a new column with appropriate units
+basin_area <- st_area(ria_sf)
+ria_sf$basin_km2 <- basin_area / 1000000 # convert to km^2
+quantile(ria_sf$basin_km2, c(0.10)) # 37km2 > 25km2 so we are capturing most of the polygons.
+
+final_sf <- 
+  ria_sf %>% 
+  mutate(ria_km2 = ria_ha_ssu * 0.01) %>%   # convert from ha to km2
+  mutate(river_per_basin_area_km2 = ria_km2 / basin_km2)
+
+# total river area:
+sum(final_sf$ria_km2)
+```
+
+# Fasterize shp file to 15 arc-second raster
+```{r} 
+food_raster_15s <- disaggregate(food_raster, fact = 20)
+
+ria_raster_15s <- 
+  fasterize(final_sf, 
+            food_raster_15s,
+            field = "river_per_basin_area_km2")
+```
+
+# Check to see that area matches
+```{r} 
+check_15s <- ria_raster_15s * raster::area(ria_raster_15s)
+cellStats(check_15s, stat = "sum", na.rm=TRUE)
+```
+Matches 367,502 km2 river area calculated from shapefile vs. 366,297 km2 from raster.
+
+# Aggregate to our desired spatial resolution of 5 arc mins.
+```{r} 
+ria_raster_5m <- aggregate(ria_raster_15s, 
+                           fact = 20, 
+                           fun = "mean", 
+                           progress = "text")
+plot(ria_raster_5m)
+```
+
+# Check to see area matches
+```{r} 
+ria_5m_km2eq <- ria_raster_5m * raster::area(ria_raster_5m)
+cellStats(ria_5m_km2eq, stat = "sum", na.rm=TRUE)
+plot(ria_5m_km2eq)
+```
+This checks out: 370,557 vs. 367,502 km2. 0.8% difference.
+
+# Calculating disturbance
+- Calculate the proportion of each raster cell that is covered by river area.
+- Multiply this value by our disturbance estimate.
+```{r}
+# Multiply by disturbance to estimate cell disturbance
+disturbance_est <- 0.3
+ria_5m_disturbed_km2eq <- disturbance_est * ria_5m_km2eq
+plot(ria_5m_disturbed_km2eq)
+
+names(ria_5m_disturbed_km2eq) <- "km2_eq"
+```
+
+# Save 
+```{r}
+writeRaster(ria_5m_disturbed_km2eq,
+            file.path(layers, "freshwater_fish_fisheries_meat_disturbance.tif"),
+            overwrite = TRUE,
+            format = "GTiff")
+
+raster(file.path(layers, "freshwater_fish_fisheries_meat_disturbance.tif"))
+```
+

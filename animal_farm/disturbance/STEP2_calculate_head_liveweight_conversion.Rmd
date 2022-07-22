@@ -1,0 +1,82 @@
+---
+title: "Calculate a head to liveweight conversions value"
+author: "Juliette"
+date: "9/28/2020"
+output: html_document
+---
+
+We need to calculate a regional head count to live weight conversion value for broiler chickens, layer chickens, and breeder pigs (might just be regular pigs). We will use the GLEAM data to do this, and then gapfill missing countries.
+
+
+## Setup
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv"))
+
+# chickens_raw <- read_csv(here("animal_farm/farm/data/chickens_GLEAMi_v2.csv"))
+# pigs_raw <- read_csv(here("animal_farm/farm/data/pigs_GLEAMi_v2.csv"))
+
+herd_raw <- read_csv(here("animal_farm/disturbance/data/herd_GLEAMi.csv"))
+
+```
+
+
+```{r}
+herd_wt <- herd_raw %>%
+  filter(species %in% c("Chicken", "Pig"),
+         name == "Live weight of animal at slaughter (Fattening animals for meat production)",
+         production_system %in% c("Intermediate", "Broiler", "Industrial")) %>% 
+  select(iso3c, production_system, species, kg_live_wt = str_value)
+
+setdiff(food_rgns$iso3c, herd_wt$iso3c)
+setdiff(herd_wt$iso3c, food_rgns$iso3c)
+
+broiler_wt_gf <- herd_wt %>% 
+  filter(species == "Chicken") %>% 
+  right_join(food_rgns, by = "iso3c") %>% 
+  mutate(production_system = "broilers",
+         species = "chickens")
+
+industrial_wt_gf <- herd_wt %>% 
+  filter(production_system == "Industrial") %>% 
+  right_join(food_rgns, by = "iso3c") %>% 
+  mutate(production_system = "industrial",
+         species = "pigs")
+
+intermediate_wt_gf <- herd_wt %>% 
+  filter(production_system == "Intermediate") %>% 
+  right_join(food_rgns, by = "iso3c")%>% 
+  mutate(production_system = "intermediate",
+         species = "pigs")
+
+weights <- rbind(broiler_wt_gf, industrial_wt_gf, intermediate_wt_gf) %>% 
+  select(-ID_0) %>% 
+  left_join(un, by = "iso3c") %>% 
+  group_by(Intermediate_Region_Name, production_system, species) %>% 
+  mutate(kg_live_wt = ifelse(is.na(kg_live_wt), mean(kg_live_wt, na.rm = TRUE), kg_live_wt)) %>% 
+  ungroup() %>% 
+  group_by(Sub_region_Name, production_system, species) %>% 
+  mutate(kg_live_wt = ifelse(is.na(kg_live_wt), mean(kg_live_wt, na.rm = TRUE), kg_live_wt)) %>% 
+  ungroup() %>% 
+  select(iso3c, country = Country, production_system, species, kg_live_wt)
+
+write_csv(weights, here("animal_farm/disturbance/data/chicken_pigs_live_weights.csv"))
+
+ggplot(industrial_wt_gf) +
+  geom_histogram(aes(x= kg_live_wt), fill = "gray65") +
+  ggtitle("Industrial live weight distribution") +
+  theme_minimal()
+
+ggplot(intermediate_wt_gf) +
+  geom_histogram(aes(x= kg_live_wt), fill = "gray65") +
+  ggtitle("Intermediate live weight distribution") +
+  theme_minimal()
+  
+```
+

@@ -1,0 +1,1045 @@
+---
+title: "Location of Shrimp Farms"
+author: "Gage Clawson (USCB, NCEAS, OHI)"
+date: "10/28/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+This script standardizes location of shrimp farms to be lat/long point data.
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(raster)
+library(tidyverse)
+library(stringr)
+library(rgdal)
+library(PBSmapping)
+library(maptools)
+library(sf)
+library(lwgeom)
+library(data.table)
+library(here)
+library(mapview)
+library(janitor)
+
+path <- "/home/shares/food-systems/Food_footprint/_raw_data/Aquaculture_locations"
+fao_shrimp <- read_csv("aquaculture/marine/shrimp/shrimp_farms/data/fao_mariculture_shrimp.csv") %>%
+  dplyr::filter(year == 2017) 
+
+
+unique(fao_shrimp$country)
+#  [1] "Australia"                "Bangladesh"               "Belize"                   "Brazil"                  
+#  [5] "Brunei Darussalam"        "Cambodia"                 "China"                    "Colombia"                
+#  [9] "Costa Rica"               "Cuba"                     "Ecuador"                  "El Salvador"             
+# [13] "Guatemala"                "Honduras"                 "India"                    "Indonesia"               
+# [17] "Iran (Islamic Rep. of)"   "Japan"                    "Korea, Republic of"       "Madagascar"              
+# [21] "Malaysia"                 "Mexico"                   "Myanmar"                  "New Caledonia"           
+# [25] "Nicaragua"                "Panama"                   "Peru"                     "Philippines"             
+# [29] "Saudi Arabia"             "Sri Lanka"                "Taiwan Province of China" "Thailand"                
+# [33] "United States of America" "Venezuela, Boliv Rep of"  "Viet Nam" 
+```
+
+## explore
+https://gis.asc-aqua.org/arcgis_app/
+Maps from ASC
+
+```{r}
+ASC_data <- read_csv("aquaculture/data/ASC_farms.csv")
+
+unique(ASC_data$species__c)
+
+ASC_shrimp <- ASC_data %>%
+  dplyr::filter(species__c == "Shrimp")
+
+countries <- c(sort(unique(ASC_shrimp$cert_country)))
+
+#  [1] "India" (FAO)                              "Viet Nam"    (FAO)                      
+#  [3] "Ecuador"    (FAO)                        "Venezuela (Bolivarian Republic of)" (FAO)
+#  [5] "Honduras"      (FAO)                     "China"           (FAO)                  
+#  [7] "Mexico"      (FAO)                       "Thailand"                          
+#  [9] "Madagascar"    (FAO)                     "Panama"   (FAO)                         
+# [11] "Indonesia"  (FAO)                        "Nigeria"    (NO FAO)                       
+# [13] "Bangladesh" (FAO)                        "Guatemala"    (FAO)                     
+# [15] "Nicaragua"     (FAO)                     "Belize"         (FAO)                   
+# [17] "New Caledonia"  (FAO)                    "Tanzania, United Republic of"      (NO FAO)
+# [19] "Australia"      (FAO)                    "Mozambique"  (NO FAO)                      
+# [21] "Peru"    (FAO)                           "Colombia"   (FAO)
+
+
+setdiff(ASC_shrimp$cert_country, fao_shrimp$country) # don't worry about venezuela... just a mispelling mismatch
+# In ASC and not in FAO:
+# [1] "Nigeria"                           
+# [3] "Tanzania, United Republic of"       "Mozambique"  
+
+setdiff(fao_shrimp$country, ASC_shrimp$cert_country)
+## Need to find the farm locations for these countries: 
+
+#  [1] "Brazil"                   "Brunei Darussalam"        "Cambodia"                 "Costa Rica"              
+#  [5] "Cuba"                     "El Salvador"              "Iran (Islamic Rep. of)"   "Japan"                   
+#  [9] "Korea, Republic of"       "Malaysia"                 "Myanmar"                  "Philippines"             
+# [13] "Saudi Arabia"             "Sri Lanka"                "Taiwan Province of China" "United States of America"
+
+
+## Now we need to make the ASC data into an sf
+ASC_shrimp_sf <- ASC_shrimp %>%
+  mutate(geometry = str_replace_all(geom, "POINT|[()]", "")) %>%
+  mutate(geometry = trimws(geometry)) %>%
+  mutate(x= as.numeric(gsub(" .*$", "", geometry))) %>%
+  dplyr::filter(!is.na(geom)) %>%
+  mutate(y = as.numeric(sub("^\\S+\\s+", '', geometry))) %>%
+  dplyr::select(-geometry, -geom, -X10, -X11, -X12, -X13, -X14)  %>%
+  st_as_sf(coords = c("x", "y"), crs = 4326)
+
+mapview(ASC_shrimp_sf$geometry)
+
+## now we need to write as a shapefile 
+st_write(ASC_shrimp_sf, "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/shrimp/shrimp_sf.shp", overwrite = TRUE)
+
+```
+
+
+# Raster
+
+Standard raster used for this analysis 
+
+```{r}
+
+source(here::here("_spatial/template_raster.R"))
+
+```
+
+# Global regions
+
+```{r}
+
+gadm <- raster("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/gadm36mol_pyfill_10km.tif")
+
+gadm_latlon <- projectRaster(gadm, food_raster)
+
+gadm_codes <- read.csv("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/gadm_reg_codes.csv") %>% 
+  mutate(reg_id = as.numeric(reg_id))
+
+```
+
+```{r}
+
+gadm_df <- tabularaster::as_tibble(gadm_latlon, value = TRUE, cells = TRUE) %>% 
+  mutate(cellvalue = round(cellvalue, 0))
+
+gadm_reg <- dplyr::left_join(gadm_df, gadm_codes, by = c("cellvalue" = "reg_id"))
+
+```
+
+
+# Map data from ASC (contains 19/35 countries)
+
+Data comes from https://gis.asc-aqua.org/arcgis_app/ 
+
+```{r}
+
+# get iso3c codes
+iso <-   data.frame(iso3c = countrycode(ASC_shrimp_sf$cert_country, origin = 'country.name', destination = 'iso3c'))
+
+
+# read in shp and filter out countries not in FAO
+farms_all <- ASC_shrimp_sf %>%
+  cbind(iso) %>%
+  dplyr::filter(iso3c != "NGA",
+                iso3c != "TZA",
+                iso3c != "MOZ")
+
+mapview(farms_all$geometry)
+
+unique(farms_all$iso3c)
+
+all_pts <- st_centroid(farms_all)
+
+all_pts_latlon <- st_transform(all_pts, crs = "+init=epsg:4326") %>% 
+  dplyr::select(geometry, iso3c)
+
+farms_all_fin <- data.frame(do.call(rbind, st_geometry(all_pts_latlon))) 
+names(farms_all_fin) <- c("lon", "lat")
+farms_all_fin <- farms_all_fin %>%
+  cbind(iso3c = all_pts_latlon$iso3c)
+
+## save farm location
+write.csv(farms_all_fin, here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites/ASC_shrimp_farm_lat_lon.csv"), row.names = FALSE)
+
+```
+
+
+Now we will map the remaining countries with shrimp farms that are not included in the ASC dataset. Workflow will be as follows: 
+ - Try to obtain exact locations of farms from published source or dataset (such as FAO or a research paper)
+ - If there are no exact locations, but the source lists a city or state, place a point in that particular city or state
+ -  If there is enough information to know there are a specific number of shrimp farms, equally allocate the farms across the coastline. If there are estimates of farms per state/province, equally allocate them across the state/province, to be even more precise. 
+ - If there are not exact numbers of farms in the country, but you know there are a lot, randomly place points along the coast line (a non-exact number, like we did for Taiwan). 
+ - Lastly, if there is no evidence of marine shrimp farm locations, place a point on the coast of the country (preferably with some intuition/knowledge of where they might be).
+
+
+
+
+# Brazil
+ - Has a map of major shrimp farming locations (from 2001): http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.200.2425&rep=rep1&type=pdf
+ - Also has a table of number of farms and area per state. I will just place one point at on each state, and add up the area listed in the table. 
+ 
+Also a good reference:
+ http://www.akvarena.no/uploads/Ekstern%20informasjon/Aquaculture_%20Report%20Brazil15.pdf
+ 
+ - Pará: -0.952238, -48.466718: 70 hectares
+ - Maranhão: -2.365963, -44.263791: 64 hectares
+ - Piauí: -2.859201, -41.551117: 425 hectares
+ - Ceará: -3.646201, -38.627546: 982 hectares
+ - Rio G. do Norte: -5.100375, -35.667111: 1752 hectares
+ - Paraíba: -7.089602, -34.818058: 420 hectares
+ - Pernambuco: -8.115310, -34.840892: 670 hectares
+ - Alagoas: -9.700209, -35.739681: 20 hectares
+ - Sergipe: -10.991527, -37.030238: 47 hectares
+ - Bahia: -13.046432, -38.515139: 1510 hectares
+ - São Paulo: inland, don't include
+ - Paraná: -25.535885, -48.268714: 50 hectares
+ - Sta. Catarina: -27.505551, -48.393581: 200 hectares
+
+
+```{r}
+farms_bra <- data.frame(lat=c(-0.952238, -2.365963, -2.859201, -3.646201, -5.100375,  -7.089602, -8.115310, -9.700209, -10.991527, -13.046432, -25.535885, -27.505551),
+                        lon=c(-48.466718, -44.263791, -41.551117, -38.627546, -35.667111, -34.818058, -34.840892, -35.739681, -37.030238, -38.515139, -48.268714, -48.393581),
+                        area_ha = c(70, 64, 425, 982, 1752, 420, 670, 20, 47, 1510, 50, 200)) %>%
+  mutate(iso3c = "BRA")
+
+write_csv(farms_bra, here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites/farms_bra.csv"))
+
+## visualize it 
+farms_bra <-  st_as_sf(farms_bra, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_bra)
+```
+ 
+ 
+# Brunei
+Note: These are all ponds on land, that use seawater. 
+
+ - shrimp farms from this company: http://www.golden-corp.com/facilities.php?view=shrimp-farm-and-processing
+ - the above map matches well with this... https://www.slideshare.net/ridzaludin/brunei-darussalam
+ 
+ - ARDC: 4.716865, 114.535353: 14 hectares : Has a production table here: https://www.aquaculturealliance.org/advocate/brunei-project-develops-technology-for-large-black-tiger-shrimp-production-part-5/ : Uses seawater
+ - Semaun Aquaculture: 4.722253, 114.541318: [40 hectares](https://pghjismail.wixsite.com/semaunaquaculture) : produce an average total of 60 metric tons of shrimp yearly : uses seawater
+ - Keramut Shrimp Culture Industrial Site: 4.742089, 114.574539 : [92 hectares](https://borneobulletin.com.bn/2020/03/minister-visits-shrimp-farm-site-2/) :  : uses seawater
+ - Penyatang Shrimp Culture Industrial Site: 4.761099, 114.610558: 200 hectares (from the map): uses seawater
+ - Semaun Marine hatchery: 4.781321, 114.607222: 0.4 hectares (measured on google maps)
+ - TMM phase 1/2: 4.970718, 115.043816: 51.471511 hectares (measured on google maps)
+
+
+```{r}
+farms_brn <- data.frame(lat=c(4.716865, 4.722253, 4.742089, 4.761099, 4.781321, 4.970718),
+                        lon=c(114.535353, 114.541318, 114.574539, 114.610558, 114.607222, 115.043816),
+                        area_ha = c(14, 40, 92, 0.4, 200, 51.471511)) %>%
+  mutate(iso3c = "BRN")
+
+write_csv(farms_brn, here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites/farms_brn.csv"))
+
+## visualize it 
+farms_brn <-  st_as_sf(farms_brn, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_brn)
+```
+
+ 
+# Cambodia 
+ - There is a table in here that has potential. We will just place a point on the coast for each of these coastal places, and use the area noted in the paper later if needed. If the province is not coastal, it will not be placed on the map: https://clarklabs.org/wp-content/uploads/2019/01/Aquaculture-and-Coastal-Habitats-Report-No1.docx.pdf
+
+ 
+ - Kampot: 10.559329, 104.213349: 1516 hectares
+ - Kep: 10.449929, 104.404934: 459 hectare
+ - Koh Kong: 11.740932, 102.898284: 26762 hectare
+ - Preah Sihanouk: 10.743017, 103.653332: 6388 hectares
+ - Pursat: Inland, don't include
+ - Svay Rieng: Inland, don't include
+ - Takeo: Inland, don't include
+
+
+```{r}
+farms_khm <- data.frame(lat=c(10.559329, 10.449929, 11.740932, 10.743017),
+                        lon=c(104.213349, 104.404934, 102.898284, 103.653332),
+                        area_ha = c(1516, 459, 26762, 6388)) %>%
+  mutate(iso3c = "KHM")
+
+write_csv(farms_khm, here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites/farms_khm.csv"))
+
+## visualize it 
+farms_khm <-  st_as_sf(farms_khm, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_khm)
+```
+
+
+
+# Costa Rica
+ - This says there are 90 shrimp producers in Costa Rica. all located in Puntarenas and Guanacaste provinces: http://www.fao.org/fishery/countrysector/naso_costarica/en
+ - I will equally allocate the farm points along the coast line of these two provinces (90 farms total).
+
+
+```{r}
+provinces <- st_read(file.path("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/Costa_rica/gadm36_CRI_1.shp"))
+mapview(provinces)
+
+guana_punta <- provinces  %>%
+  dplyr::filter(NAME_1 %in% c("Guanacaste", "Puntarenas"))
+
+mapview(guana_punta)
+
+world <- ne_coastline(scale = 50) #world map with 50m resolution
+plot(world)
+
+world <- st_as_sf(world)
+
+costa_world_crs <- st_transform(guana_punta, crs(world))
+
+costa_world_crop <- st_crop(world, costa_world_crs) ## crop to costa rica extent 
+plot(costa_world_crop)
+mapview(costa_world_crop)
+
+costa_crop <- as(costa_world_crop, "Spatial")
+plot(costa_crop)
+mapview(costa_crop)
+
+costa_points_lines <- sample.line(costa_crop, n = 121) ## equally place the number of farms along the coastline 
+class(costa_points_lines)
+plot(costa_points_lines)
+
+costa_points <- st_as_sf(costa_points_lines)
+mapview(costa_points)
+
+## Now filter out the points that fall outside of costa rica 
+costa_points_final <- costa_points[4:93,]
+mapview(costa_points_final)
+
+
+cri_pts <- st_centroid(costa_points_final)
+
+cri_pts_latlon <- st_transform(cri_pts, crs = "+init=epsg:4326") %>%
+  dplyr::select(geometry)
+
+farms_cri <- data.frame(do.call(rbind, st_geometry(cri_pts_latlon)))
+names(farms_cri) <- c("lon", "lat")
+
+farms_cri_final <- farms_cri %>%
+  mutate(iso3c = "CRI")
+
+## visualize it 
+farms_cri <-  st_as_sf(farms_cri, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_cri)
+
+## write to farms folder 
+write_csv(farms_cri_final, here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites/farms_cri.csv"))
+
+```
+
+
+# Cuba
+
+http://www.fao.org/fishery/countrysector/naso_cuba/en
+ - "Marine cultures are being developed experimentally in conjunction with shrimp culture under the guidance of the Fisheries Research Center of the MIP.
+
+Up-to-date, investment development and activities have been directed towards two zones:
+Experimental Spawning Center at Cabo Cruz (some 100 km from Manzanillo).
+ - 19.841789, -77.737212
+
+The on-growing area in Niquero (70 km from Manzanillo), where packing facilities on land are available." 
+ - 20.047065, -77.593449
+
+
+```{r}
+farms_cub <- data.frame(lat=c(19.841789, 20.047065),
+                        lon=c(-77.737212, -77.593449),
+                        area_ha = c(NA, NA)) %>%
+  mutate(iso3c = "CUB")
+
+write_csv(farms_cub, here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites/farms_cub.csv"))
+
+## visualize it 
+farms_cub <-  st_as_sf(farms_cub, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_cub)
+```
+
+
+
+# El Salvador 
+ - Could use the table here. We would just assign one farm per each city listed: http://www.fao.org/fishery/countrysector/naso_elsalvador/en
+ 
+ - Ahuachapan: seems inland
+ - Sonsonate: seems inland
+ - La Paz: 13.336985, -89.014470: 8.2 hectares
+ - Usulután: seems inland
+ - La Unión: 13.354459, -87.863771: 50 hectares
+ 
+```{r}
+farms_slv <- data.frame(lat=c(13.336985, 13.354459),
+                        lon=c(-89.014470, -87.863771),
+                        area_ha = c(8.2, 50)) %>%
+  mutate(iso3c = "SLV")
+
+write_csv(farms_slv, here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites/farms_slv.csv"))
+
+## visualize it 
+farms_slv <-  st_as_sf(farms_slv, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_slv)
+```
+ 
+ 
+ 
+# Iran 
+ - Claims 205 farms in 2000: http://library.enaca.org/Shrimp/Case/Africa/FinalAfrica.pdf
+ - Says they are all located on the bottom(?) coast... I will equally allocate along that coast. 
+ 
+NASO Maps 
+ - This is better information, so I will use these points. 
+http://www.fao.org/fishery/naso-maps/selected-aquaculture-sites/iran/en/
+
+
+```{r}
+## read in thailand shp file
+iran_file <- file.path(path, "FAO_NASO/NASO/Point/Iran.kml")
+
+iran_aqua <- read_sf(iran_file)
+
+unique(iran_aqua$description)
+
+mapview(iran_aqua)
+
+## We need to filter for just the appropriate species of shrimp aquaculture
+
+iran_finfish <- iran_aqua %>%
+  dplyr::filter(!(str_detect(description, "Freshwater|freshwater"))) %>% ## Filter out freshwater systems
+  dplyr::filter(!is.na(description))
+
+mapview(iran_finfish) ## these are all marine shrimp farms now 
+
+irn_bivalve_mol <- st_transform(iran_finfish, crs = "+init=epsg:3035") # convert to equal area projection to find centroids. 
+irn_pts <- st_centroid(irn_bivalve_mol)
+
+irn_pts_latlon <- st_transform(irn_pts, crs = "+init=epsg:4326") 
+
+mapview(irn_pts_latlon)
+
+farms_irn <- data.frame(do.call(rbind, st_geometry(irn_pts_latlon))) 
+names(farms_irn) <- c("lon", "lat")
+farms_irn <- farms_irn %>%
+  mutate(iso3c="IRN")
+
+
+write_csv(farms_irn, here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites/farms_irn.csv"))
+
+
+farms_irn <-  st_as_sf(farms_irn, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_irn)
+```
+
+old methods: 
+```{r}
+# iran <- ne_countries(scale = 10, country = "Iran", returnclass = "sf")
+# mapview(iran)
+# 
+# world <- ne_coastline(scale = 10) #world map with 10m resolution
+# plot(world)
+# 
+# world <- st_as_sf(world)
+# 
+# iran_world_crs <- st_transform(iran, crs(world))
+# 
+# iran_world_crop <- st_crop(world, iran_world_crs) ## crop to iran extent
+# plot(iran_world_crop)
+# mapview(iran_world_crop)
+# 
+# iran_world_crop <- head(iran_world_crop, 2) ## filter out lines not in iran
+# mapview(iran_world_crop)
+# 
+# iran_world_crop <- tail(iran_world_crop, 1)
+# 
+# iran_crop <- as(iran_world_crop, "Spatial")
+# plot(iran_crop)
+# mapview(iran_crop)
+# 
+# 
+# 
+# iran_points_lines <- sample.line(iran_crop, n = 221) ## equally place the number of farms along the coastline 
+# class(iran_points_lines)
+# plot(iran_points_lines)
+# 
+# iran_points <- st_as_sf(iran_points_lines)
+# mapview(iran_points)
+# 
+# ## Now filter out the points that fall outside of iran
+# iran_points_final <- iran_points[17:221,]
+# mapview(iran_points_final)
+# 
+# 
+# irn_pts <- st_centroid(iran_points_final)
+# 
+# irn_pts_latlon <- st_transform(irn_pts, crs = "+init=epsg:4326") %>%
+#   dplyr::select(geometry)
+# 
+# farms_irn <- data.frame(do.call(rbind, st_geometry(irn_pts_latlon)))
+# names(farms_irn) <- c("lon", "lat")
+# 
+# farms_irn_final <- farms_irn %>%
+#   mutate(iso3c = "IRN")
+# 
+# ## visualize it 
+# farms_irn <-  st_as_sf(farms_irn, coords = c("lon", "lat"), 
+#                  crs = crs(gadm_latlon), agr = "constant")
+# 
+# mapview(farms_irn)
+# 
+# ## write to farms folder 
+# write_csv(farms_irn_final, here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites/farms_irn.csv"))
+
+```
+ 
+ 
+old old methods:
+ - From google maps: 
+    - Sea waves TRD: 26.790754, 55.396608: 582 hectares 
+    - Iran Aquatic: 27.135585, 56.887211: 1877 hectares 
+    - Technoshrimp: 29.227964, 50.709040: 1303 hectares 
+    - Shrimp Breeders Delvar site: 28.770827, 51.046329: 312 hectares
+    - Pars Abzistan Shrimp & Fish Hatchery: 28.781671, 51.048787: 280 hectares
+    - Shrimp Marjan: 27.851429, 51.984108: 156.5493 hectares
+    - Shrimp Aquaculture: 26.671137, 55.902159: 31 hectares 
+    - Pardis: looks like indoor, don't include
+    - Sontderaf: looks like indoor, don't include
+    
+```{r}
+# farms_irn <- data.frame(lat=c(26.790754, 27.135585, 29.227964, 28.770827, 28.781671, 27.851429, 26.671137),
+#                         lon=c(55.396608, 56.887211, 50.709040, 51.046329, 51.048787, 51.984108, 55.902159),
+#                         area_ha = c(582, 1877, 1303, 312, 280, 156.5493, 31)) %>%
+#   mutate(iso3c = "IRN")
+# 
+# write_csv(farms_irn, here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites/farms_irn.csv"))
+# 
+# ## visualize it 
+# farms_irn <-  st_as_sf(farms_irn, coords = c("lon", "lat"), 
+#                  crs = crs(gadm_latlon), agr = "constant")
+# 
+# mapview(farms_irn)
+```
+
+ 
+# Japan
+ - One shrimp farm on this companies map: https://fis.com/fis/worldnews/worldnews.asp?l=e&id=100979&ndb=1
+    - Near Minamikyūshū: 31.182129, 130.604815
+    
+```{r}
+farms_jpn <- data.frame(lat=c(31.182129),
+                        lon=c(130.604815),
+                        area_ha = c(NA)) %>%
+  mutate(iso3c = "JPN")
+
+write_csv(farms_jpn, here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites/farms_jpn.csv"))
+
+## visualize it 
+farms_jpn <-  st_as_sf(farms_jpn, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_jpn)
+```
+
+
+# Korea, Republic of
+
+
+https://www.fftc.org.tw/htmlarea_file/activities/20110719101541/13.pdf
+ - "West coast: shrimp (Penaeus japonicus, P. chinensis) is mainly cultivated in Taean, ChungNam"
+ - I will put a point there. 
+ - Taean: 36.752683, 126.150252: 672 hectares (taken from "Korean Aquaculture at a glance")
+
+```{r}
+farms_kor <- data.frame(lat=c(36.752683),
+                        lon=c(126.150252),
+                        area_ha = c(672)) %>%
+  mutate(iso3c = "KOR")
+
+write_csv(farms_kor, here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites/farms_kor.csv"))
+
+## visualize it 
+farms_kor <-  st_as_sf(farms_kor, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_kor)
+```
+ 
+# Malaysia
+ - [Seafood watch](https://www.seafoodwatch.org/-/m/sfw/pdf/reports/s/mba_seafoodwatch_malaysian_farmed_marine_shrimp_report.pdf) claims you can find the names and locations of registered shrimp farms here, but I can only find the broad suitable areas: https://www.dof.gov.my/ 
+ - Broad suitable areas https://www.dof.gov.my/index.php/pages/view/78. I'll use these and use the area as a production estimate. Saved onto aurora /home/shares/food-systems/Food_footprint/_raw_data/Aquaculture_locations/Malaysia/malaysia_shrimp_farms.csv. 
+ 
+```{r}
+malaysia_shrimp_loc <- read_csv("/home/shares/food-systems/Food_footprint/_raw_data/Aquaculture_locations/Malaysia/malaysia_shrimp_farms.csv") %>%
+  clean_names()
+
+mys_area <- c(malaysia_shrimp_loc$luas_hektar)
+```
+
+Farms: 
+ - AIR HANGAT, LANGKAWI, KEDAH: 6.433288, 99.826952
+ - TAMAN AKUAKULTUR SEBATU MELAKA: 2.108604, 102.463536
+ - TAMAN AKUAKULTUR LKIM TELAGA AIR, SARAWAK: 1.676758, 110.210032
+ - KG. MERCHONG, PEKAN, PAHANG: 3.018320, 103.430156
+ - KG. PENGKALAN GELAP, SETIU, TERENGGANU: 5.674088, 102.721589
+ - KG. PASIR PUTEH, MARANG, TERENGGANU: 4.984545, 103.328932
+ - PENARIK, SETIU, TERENGGANU: 5.596019, 102.826214
+ - TANJUNG MANIS, SARAWAK: 2.197050, 111.183470
+ - RUNGKUP HILIR, PERAK: 3.888025, 100.704595
+ - SG. NIPAH, SABAK BERNAM, SELANGOR: 3.663462, 100.975557
+ - TANJUNG BATU, PEKAN, PAHANG: 3.203638, 103.446051
+ 
+Now lets map the farms 
+```{r}
+farms_mys <- data.frame(lat=c(6.433288, 2.108604, 1.676758, 3.018320, 5.674088, 4.984545, 5.596019, 2.197050, 3.888025, 3.663462, 3.203638),
+                        lon=c(99.826952, 102.463536, 110.210032, 103.430156, 102.721589, 103.328932, 102.826214, 111.183470, 100.704595, 100.975557, 103.446051),
+                        area_ha =mys_area) %>%
+  mutate(iso3c = "MYS")
+
+write_csv(farms_mys, here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites/farms_mys.csv"))
+
+## visualize it 
+farms_mys <-  st_as_sf(farms_mys, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_mys)
+```
+ 
+
+ 
+# Myanmar
+ - http://www.fao.org/3/ad497e/ad497e05.htm
+ "The largest area of shrimp farming is found in Rakhine State (155,533 acres), followed by Ayeyarwaddy (33 373 acres), Yangon (7 394 acres), with smaller areas in Bago, Kayin, Mon and Thaninthary"
+ - We will use that for our points. One point for each state. 
+ - Rakhine State: 20.117197, 92.884433: 62941.972 hectares
+ - Ayeyarwaddy: 15.967665, 94.337465: 13505.574 hectares
+ - Yangon: 16.441903, 96.371311: 2992.246 hectares
+ - Bago: Inland, don't include
+ - Kayin: Inland, don't include
+ - Mon: 16.100756, 97.581799
+ - Thaninthary: 13.436424, 98.323120
+
+
+```{r}
+farms_mmr <- data.frame(lat=c(20.117197, 15.967665, 16.441903, 16.100756, 13.436424),
+                        lon=c(92.884433, 94.337465, 96.371311, 97.581799, 98.323120),
+                        area_ha = c(62941.972, 13505.574, 2992.246, NA, NA )) %>%
+  mutate(iso3c = "MMR")
+
+write_csv(farms_mmr, here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites/farms_mmr.csv"))
+
+## visualize it 
+farms_mmr <-  st_as_sf(farms_mmr, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_mmr)
+```
+
+
+# Phillipines
+
+https://juniperpublishers.com/ofoaj/pdf/OFOAJ.MS.ID.555668.pdf
+"There are 271 brackish water shrimp farms (3,617.8ha) registered at the Bureau of Fisheries and Aquatic Resources of the Philippines as of 2013. "
+
+ - I will equally place 271 farms along the coast of the philippines
+ - We know that there are 3617.8 hectares of farms... we will allocate that area evenly... 3617.8/271 = 13.35
+
+```{r}
+philly <- ne_countries(scale = 10, country = "Philippines", returnclass = "sf")
+mapview(philly)
+
+world <- ne_coastline(scale = 110) #world map with 110m resolution
+plot(world)
+
+world <- st_as_sf(world)
+
+philly_world_crs <- st_transform(philly, crs(world))
+
+philly_world_crop <- st_crop(world, philly_world_crs) ## crop to philippines extent
+plot(philly_world_crop)
+mapview(philly_world_crop)
+
+philly_world_crop <- philly_world_crop[-c(1), ] ## delete lines that are not in philippines
+
+mapview(philly_world_crop)
+
+
+philly_crop <- as(philly_world_crop, "Spatial")
+plot(philly_crop)
+mapview(philly_crop)
+
+
+
+philly_points_lines <- sample.line(philly_crop, n = 39) ## equally place the number of farms along the coastline 
+class(philly_points_lines)
+plot(philly_points_lines)
+
+philly_points <- st_as_sf(philly_points_lines)
+mapview(philly_points)
+
+## Now filter out the points that fall outside of 271
+philly_points_final <- philly_points[1:271,]
+mapview(philly_points_final)
+
+
+phl_pts <- st_centroid(philly_points_final)
+
+phl_pts_latlon <- st_transform(phl_pts, crs = "+init=epsg:4326") %>%
+  dplyr::select(geometry)
+
+farms_phl <- data.frame(do.call(rbind, st_geometry(phl_pts_latlon)))
+names(farms_phl) <- c("lon", "lat")
+
+farms_phl_final <- farms_phl %>%
+  mutate(iso3c = "PHL") %>%
+  mutate(area_ha = 13.35)
+
+## visualize it 
+farms_phl <-  st_as_sf(farms_phl, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_phl)
+
+## write to farms folder 
+write_csv(farms_phl_final, here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites/farms_phl.csv"))
+
+```
+
+
+
+OLD WAY:
+Since there seem to be so many farms in the Philippines, and no clear indication of where they are on the satellite images from google maps, I will just place one randomnly on the map. 15.052865, 120.057781
+
+```{r}
+
+# farms_phl <- data.frame(lat=c(15.052865),
+#                         lon=c(120.057781),
+#                         area_ha = c(3617.8)) %>%
+#   mutate(iso3c = "PHL")
+# 
+# write_csv(farms_phl, here::here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites/farms_phl.csv"))
+# 
+# ## visualize it 
+# farms_phl <-  st_as_sf(farms_phl, coords = c("lon", "lat"), 
+#                  crs = crs(gadm_latlon), agr = "constant")
+# 
+# mapview(farms_phl)
+```
+
+
+# Saudi Arabia
+http://www.naqua.com.sa/about-us.php
+"Its shrimp hatchery can produce 5.5 billion nauplii and 2.5 billion postlarvae a year, and its 4,177 hectares of shrimp ponds along 65 kilometers of coastline are capable of producing *35,000* metric tons of shrimp a year, between 120 and 140 tons a day.  From harvest to processing takes less than four hours, and its plant can process up to 140 metric tons of shrimp a day." 
+ - National aquaculture group: 16 shrimp farms (in one location): 7189 hectares (from google maps): 20.287253, 40.030864
+
+https://www.alasmak.com.sa/en/about-us-en/index.html
+ - Saudi Fisheries Company: *3000* tonnes per year: 17.806544, 41.897791: 206 hectares (taken from google maps)
+
+
+```{r}
+farms_sau <- data.frame(lat=c(20.287253, 17.806544),
+                        lon=c(40.030864, 41.897791),
+                        area_ha = c(7189, 206), 
+                        prod = c(35000, 3000)) %>%
+  mutate(iso3c = "SAU")
+
+write_csv(farms_sau, here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites/farms_sau.csv"))
+
+## visualize it 
+farms_sau <-  st_as_sf(farms_sau, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_sau)
+```
+
+
+
+# Sri Lanka 
+http://www.fao.org/fishery/countrysector/naso_sri-lanka/en#:~:text=The%20current%20shrimp%20aquaculture%20industry,of%20around%203%20000%20ha.
+"The current shrimp aquaculture industry in Sri Lanka is concentrated in the north western coastal belt **(Puttalam district)** covering a farm area of more than 4 500 ha with 70 hatcheries, of the total farm area the ponds themselves occupy an area of around 3 000 ha. There are a total of 1 344 farm establishments, of which 47.7 percent are considered to be establishments operating without proper licences (Siriwardena, 2001b). On the eastern coast in Batticaloa District, where shrimp farming in Sri Lanka first began in the late 1970s but was abandoned due to civil unrest, operations have recommenced in recent years. Over 60 small farms with an average farm area of between 1–2 ha were in operation at the end of 2002, with a total pond area of 155 ha."
+
+ - Puttalam district : 1344 farms, 4500/1344 = 3.348214 hectares per farm
+ - Batticalao district : 60 farms, 155/60 = 2.583333 hectares per farm
+
+
+```{r}
+districts <- st_read(file.path("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/Sri_Lanka/gadm36_LKA_1.shp"))
+mapview(districts)
+
+batticaloa_shp <- districts %>%
+  dplyr::filter(NAME_1 == "Batticaloa")
+
+mapview(batticaloa_shp)
+
+puttalam_shp <- districts %>%
+  dplyr::filter(NAME_1 == "Puttalam")
+mapview(puttalam_shp)
+
+
+## Start with Batticaloa
+world <- ne_coastline(scale = 50) #world map with 50m resolution
+plot(world)
+
+world <- st_as_sf(world)
+
+batticaloa_world_crs <- st_transform(batticaloa_shp, crs(world))
+
+batticaloa_world_crop <- st_crop(world, batticaloa_world_crs) ## crop to batticaloa extent
+plot(batticaloa_world_crop)
+mapview(batticaloa_world_crop)
+
+batticaloa_crop <- as(batticaloa_world_crop, "Spatial")
+plot(batticaloa_crop)
+mapview(batticaloa_crop)
+
+batticaloa_points_lines <- sample.line(batticaloa_crop, n = 60) ## equally place the number of farms along the coastline 
+class(batticaloa_points_lines)
+plot(batticaloa_points_lines)
+
+batticaloa_points <- st_as_sf(batticaloa_points_lines)
+mapview(batticaloa_points)
+
+
+bat_lka_pts <- st_centroid(batticaloa_points)
+
+bat_lka_pts_latlon <- st_transform(bat_lka_pts, crs = "+init=epsg:4326") %>%
+  dplyr::select(geometry)
+
+farms_bat_lka <- data.frame(do.call(rbind, st_geometry(bat_lka_pts_latlon)))
+names(farms_bat_lka) <- c("lon", "lat")
+
+farms_bat_lka_final <- farms_bat_lka %>%
+  mutate(area_ha = 2.583333)
+
+## visualize it 
+farms_bat_lka <-  st_as_sf(farms_bat_lka, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_bat_lka)
+
+
+## Now do puttalam
+world <- ne_coastline(scale = 50) #world map with 50m resolution
+plot(world)
+
+world <- st_as_sf(world)
+
+puttalam_world_crs <- st_transform(puttalam_shp, crs(world))
+
+puttalam_world_crop <- st_crop(world, puttalam_world_crs) ## crop to puttalam extent
+plot(puttalam_world_crop)
+mapview(puttalam_world_crop)
+
+puttalam_crop <- as(puttalam_world_crop, "Spatial")
+plot(puttalam_crop)
+mapview(puttalam_crop)
+
+puttalam_points_lines <- sample.line(puttalam_crop, n = 1344) ## equally place the number of farms along the coastline 
+class(puttalam_points_lines)
+plot(puttalam_points_lines)
+
+puttalam_points <- st_as_sf(puttalam_points_lines)
+mapview(puttalam_points)
+
+
+put_lka_pts <- st_centroid(puttalam_points)
+
+put_lka_pts_latlon <- st_transform(put_lka_pts, crs = "+init=epsg:4326") %>%
+  dplyr::select(geometry)
+
+farms_put_lka <- data.frame(do.call(rbind, st_geometry(put_lka_pts_latlon)))
+names(farms_put_lka) <- c("lon", "lat")
+
+farms_put_lka_final <- farms_put_lka %>%
+  mutate(area_ha = 3.348214)
+
+## visualize it 
+farms_put_lka <-  st_as_sf(farms_put_lka, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_put_lka)
+
+
+## combine put and bat
+
+farms_all_lka <- rbind(farms_bat_lka_final, farms_put_lka_final) %>%
+  dplyr::mutate(iso3c = "LKA")
+
+## write to farms folder 
+write_csv(farms_all_lka, here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites/farms_lka.csv"))
+
+```
+
+
+
+OLD METHODS: 
+ Taken from google map search results. The areas are measured using google maps: 
+ - Taprobane Seafood Group Shrimp Farm: 9.036484, 79.897271: 7.610872 hectares
+ - Goshen Shrimp Farm 1: 8.150476, 79.738106: 19.307263 hectares
+ - Dimo Farm: 8.110610, 79.825533: 5.299785 hectares
+ - Nilfan-Shrimp Farm: 8.093220, 79.838723: 1.343078 hectares
+ - Samro Aqua Farm: 7.967821, 79.815649: 6.102855 hectares
+ - Mahesh Aqua Research Farm: 7.773596, 79.790947: 3.467487 hectares
+
+
+```{r}
+# farms_lka <- data.frame(lat=c(9.036484, 8.150476, 8.110610,  8.093220, 7.967821, 7.773596),
+#                         lon=c(79.897271, 79.738106, 79.825533, 79.838723, 79.815649, 79.790947),
+#                         area_ha = c(7.610872, 19.307263, 5.299785, 1.343078, 6.102855, 3.467487)) %>%
+#   mutate(iso3c = "LKA")
+# 
+# write_csv(farms_lka, here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites/farms_lka.csv"))
+# 
+# ## visualize it 
+# farms_lka <-  st_as_sf(farms_lka, coords = c("lon", "lat"), 
+#                  crs = crs(gadm_latlon), agr = "constant")
+# 
+# mapview(farms_lka)
+```
+
+
+# Taiwan
+https://www.taipeitimes.com/News/taiwan/archives/2020/06/19/2003738488
+ - There are definitely a lot of farms
+ 
+ - It is unclear how many farms are in Taiwan. I will randomly place the farms along the coast. 
+ 
+```{r, evalute = F}
+
+gadm <- st_read("/home/shares/food-systems/Aquaculture_mapping/Data/Jared/Marine_Brackish/manipulated_data/GADM36/gadm36molcountries_simp.shp")
+
+ TWN_shp <- gadm %>%
+  filter(GID_0 == "TWN") %>%
+  st_transform(., food_crs) %>%
+  mutate(Region = 1)
+ mapview(TWN_shp)
+
+st_write(TWN_shp, "/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/taiwan/taiwan.shp")
+
+twn_reg_ras <- fasterize::fasterize(TWN_shp, fake_raster, fun = "sum")
+
+
+plot(fake_raster)
+plot(twn_reg_ras)
+
+writeRaster(twn_reg_ras, "/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/taiwan/taiwan.tif")
+
+
+twn_reg_ras <- raster("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/taiwan/taiwan.tif")
+
+twn_spatial <- as(TWN_shp, "Spatial")
+
+twn_coast <- rasterize(twn_spatial, twn_reg_ras, getCover = TRUE)
+
+plot(twn_coast)
+cellStats(twn_coast, "sum") #464.63
+
+# filter to include >0 <1, o.w. NA
+
+twn_coast_df <- as.data.frame(twn_coast, xy=TRUE) %>%
+  dplyr::filter(layer <1 & layer >0) %>% ## filter out anything not on taiwan coast
+  mutate(iso3c = "TWN") %>%
+  dplyr::select(lon=x, lat=y, iso3c)
+
+farms_twn <-  st_as_sf(twn_coast_df, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_twn)
+
+
+write_csv(twn_coast_df, here::here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites/farms_twn.csv"))
+
+
+twn <- read_csv(here::here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites/farms_twn.csv"))
+farms_twn <-  st_as_sf(twn, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_twn)
+```
+
+
+# United States of America
+ 
+https://www.seafoodwatch.org/-/m/sfw/pdf/reports/s/mba_seafoodwatch_usfarmedshrimpreport.pdf
+ - "Most commercial shrimp aquaculture production in the US is located in Texas, which has seven commercial farms. There is less production and fewer shrimp farms in Alabama (3), Florida (3), Hawaii (2), Nevada (1), Michigan (1), Indiana (1), Iowa (1), Maryland (1), and Massachusetts (1)."
+ - We will only map for Alabama, Texas, Hawaii, and Florida. The rest are inland/indoor farms. 
+ 
+Texas: 
+http://www.texasaquaculture.org/TxShrimpFms.html
+ - They have texas locations listed here. 
+    - Bowers Shrimp Farm: 28.709786, -96.209726: 159.4461 hectares of ponds 
+    - St. Martins Seafood: 28.731171, -96.203732: 80 hectares of ponds
+    - Austwell Aqua Farm: 28.369096, -96.813910: 40 hectares
+    - Southern Star Inc: 26.323330, -97.452599: 445 hectares
+    - Harlinger Shrimp Farms: 26.149413, -97.322755: 182 hectares
+
+ 
+ 
+Alabama: 
+ - 3 locations according to SFW. From what I can tell, one of them is inland. And can only find 1 other.... 
+ - Coordinates taken from google maps: 
+    - Graham fisheries inc: 30.403144, -88.254304
+
+Hawaii: 
+ - 2 locations according to SFW.. I can only find one
+     - [Kauai Shrimp](https://www.kauaishrimp.com/en/about-us/): 21.957597, -159.669555: 104 hectares
+     
+Florida: https://www.shrimpnews.com/FreeReportsFolder/NewsReportsFolder/USAflFiveShrimpFarmsAndHatchery.html
+ - 3 marine locations according to SFW
+    - [Gulf American Shrimp](https://www.gulfamericanshrimp.com/about-the-farm): 29.859915, -85.287438: 22 hectares
+    - American Mariculture LLC: 26.602097, -82.113475: 3 hectares
+    - Shrimp Improvement Systems: 24.972378, -80.555590: 0.88 hectares
+
+
+```{r}
+farms_usa <- data.frame(lat=c(28.709786, 28.731171, 28.369096, 26.323330, 26.149413, 30.403144, 21.957597,  29.859915, 26.602097, 24.972378),
+                        lon=c(-96.209726, -96.203732, -96.813910, -97.452599, -97.322755, -88.254304, -159.669555, -85.287438, -82.113475, -80.555590),
+                        area_ha = c(159.4461, 80, 40, 445, 182, NA, 104, 22, 3, 0.88)) %>%
+  mutate(iso3c = "USA")
+
+write_csv(farms_usa, here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites/farms_usa.csv"))
+
+## visualize it 
+farms_usa <-  st_as_sf(farms_usa, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_usa)
+```
+
+
+# Join cell count dataframes
+
+```{r}
+farm_files <- list.files(here::here("aquaculture/marine/shrimp/shrimp_farms/data/farm_sites"), full=TRUE)
+all_farms = plyr::ldply(farm_files, read_csv)
+
+all_farms_sf <- st_as_sf(all_farms, coords = c("lon", "lat"), 
+                         crs = crs(gadm_latlon), agr = "constant")
+
+mapview(all_farms_sf)
+
+write.csv(all_farms, here::here("aquaculture/marine/shrimp/shrimp_farms/data/global_shrimp_farm_lat_lon.csv"), row.names = FALSE)
+
+```
+
+
+

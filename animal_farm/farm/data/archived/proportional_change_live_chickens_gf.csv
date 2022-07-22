@@ -1,0 +1,245 @@
+iso3c,ID_0,Country,fao_country,proportional_change_headcount,gapfilled
+AFG,1,Afghanistan,Afghanistan,1.0531502172563625,NA
+CYP,61,Cyprus,Cyprus,0.9694733310969473,NA
+ALA,3,Åland,NA,1.1035311355311355,gf with mean global prop change
+ALB,4,Albania,Albania,1.4938036224976168,NA
+DZA,5,Algeria,Algeria,1.0715714285714286,NA
+ASM,6,American Samoa,American Samoa,1,NA
+AND,7,Andorra,NA,1.1035311355311355,gf with mean global prop change
+AGO,8,Angola,Angola,2.132133886325136,NA
+AIA,9,Anguilla,NA,1.1035311355311355,gf with mean global prop change
+ATG,11,Antigua and Barbuda,Antigua and Barbuda,1.0533333333333332,NA
+ARG,12,Argentina,Argentina,1.207142857142857,NA
+ARM,13,Armenia,Armenia,0.9754475703324809,NA
+ABW,14,Aruba,Aruba,1.1035311355311355,gf with mean global prop change
+AUS,15,Australia,Australia,1.1443919830410483,NA
+AUT,16,Austria,Austria,1.0693929712460064,NA
+AZE,17,Azerbaijan,Azerbaijan,1.4408037825059101,NA
+BHS,18,Bahamas,Bahamas,1.0543333333333333,NA
+BHR,19,Bahrain,Bahrain,1.0207547169811322,NA
+BGD,20,Bangladesh,Bangladesh,1.2067577345582914,NA
+BRB,21,Barbados,Barbados,1.0183333333333333,NA
+BLR,22,Belarus,Belarus,1.4375,NA
+BEL,23,Belgium,Belgium,0.7826909090909091,NA
+BLZ,24,Belize,Belize,1.0594771241830065,NA
+BEN,25,Benin,Benin,1.2473111782477342,NA
+BMU,26,Bermuda,Bermuda,1.02,NA
+BTN,27,Bhutan,Bhutan,3.0601719197707737,NA
+BOL,28,Bolivia,Bolivia (Plurinational State of),1.1395183411119298,NA
+BES,29,"Bonaire, Sint Eustatius and Saba","Bonaire, Sint Eustatius and Saba",0.9818181818181818,NA
+BIH,30,Bosnia and Herzegovina,Bosnia and Herzegovina,0.774227294341417,NA
+BWA,31,Botswana,Botswana,0.4031800113571834,NA
+BRA,33,Brazil,Brazil,1.151540907230774,NA
+IOT,34,British Indian Ocean Territory,NA,1.1035311355311355,gf with mean global prop change
+VGB,35,British Virgin Islands,NA,1.1035311355311355,gf with mean global prop change
+BRN,36,Brunei,Brunei Darussalam,1.1435949027498322,NA
+BGR,37,Bulgaria,Bulgaria,0.7779027621547306,NA
+BFA,38,Burkina Faso,Burkina Faso,1.1042051282051282,NA
+BDI,39,Burundi,Burundi,1.3372093023255813,NA
+KHM,40,Cambodia,Cambodia,0.7741861531407611,NA
+CMR,41,Cameroon,Cameroon,1.1355555555555557,NA
+CAN,42,Canada,Canada,1.0301151515151514,NA
+CPV,43,Cape Verde,Cabo Verde,1.6181229773462784,NA
+CYM,45,Cayman Islands,Cayman Islands,1,NA
+CAF,46,Central African Republic,Central African Republic,1.1645232120451694,NA
+TCD,47,Chad,Chad,1.1127927927927928,NA
+CHL,48,Chile,Chile,2.316245076770783,NA
+CHN,49,China,China,1.0010067307692307,NA
+CXR,50,Christmas Island,NA,1.1035311355311355,gf with mean global prop change
+CCK,52,Cocos Islands,NA,1.1035311355311355,gf with mean global prop change
+COL,53,Colombia,Colombia,1.0367151898734177,NA
+COM,54,Comoros,Comoros,0.9927272727272727,NA
+COK,55,Cook Islands,Cook Islands,0.9,NA
+CRI,56,Costa Rica,Costa Rica,1.0671129707112972,NA
+CIV,57,Côte d'Ivoire,Côte d'Ivoire,1.3283539021575068,NA
+HRV,58,Croatia,Croatia,1.951993652053164,NA
+CUB,59,Cuba,Cuba,0.8282714054927303,NA
+CUW,60,Curaçao,NA,1.1035311355311355,gf with mean global prop change
+CZE,62,Czech Republic,Czechia,0.856293153647783,NA
+COD,301,Democratic Republic of the Congo,Democratic Republic of the Congo,0.9604325509543031,NA
+DNK,64,Denmark,Denmark,1.1464830789648308,NA
+DJI,65,Djibouti,NA,1.1035311355311355,gf with mean global prop change
+DOM,67,Dominican Republic,Dominican Republic,1.0311993857638442,NA
+DMA,66,Dominica,Dominica,1.0473684210526315,NA
+ECU,68,Ecuador,Ecuador,0.8776909200240529,NA
+EGY,69,Egypt,Egypt,1.3951093083082022,NA
+SLV,70,El Salvador,El Salvador,1.149,NA
+GNQ,71,Equatorial Guinea,Equatorial Guinea,1.0970588235294119,NA
+ERI,72,Eritrea,Eritrea,0.9592,NA
+EST,73,Estonia,Estonia,1.2408140192198982,NA
+ETH,74,Ethiopia,Ethiopia,1.2002759348306855,NA
+FLK,75,Falkland Islands,Falkland Islands (Malvinas),1,NA
+FRO,76,Faroe Islands,NA,1.1035311355311355,gf with mean global prop change
+FJI,77,Fiji,Fiji,1.125531914893617,NA
+FIN,78,Finland,Finland,1.7432842287694974,NA
+FRA,79,France,France,0.7266668682270319,NA
+GUF,80,French Guiana,French Guiana,0.8760330578512396,NA
+PYF,81,French Polynesia,French Polynesia,1.07,NA
+GAB,83,Gabon,Gabon,1.0251612903225806,NA
+GMB,84,Gambia,Gambia,1.6,NA
+GEO,85,Georgia,Georgia,1.29983844911147,NA
+DEU,86,Germany,Germany,1.4021189522666129,NA
+GHA,87,Ghana,Ghana,1.6217750041883063,NA
+GIB,88,Gibraltar,NA,1.1035311355311355,gf with mean global prop change
+GRC,89,Greece,Greece,1.3383858338421752,NA
+GRL,90,Greenland,NA,1.1035311355311355,gf with mean global prop change
+GRD,91,Grenada,Grenada,1.0185185185185186,NA
+GLP,92,Guadeloupe,Guadeloupe,0.9833333333333333,NA
+GUM,93,Guam,Guam,1.445,NA
+GTM,94,Guatemala,Guatemala,1.1014848484848485,NA
+GGY,95,Guernsey,NA,1.1035311355311355,gf with mean global prop change
+GNB,97,Guinea-Bissau,Guinea-Bissau,1.2825814536340852,NA
+GIN,96,Guinea,Guinea,1.3392680514342234,NA
+GUY,98,Guyana,Guyana,1.3145794392523364,NA
+HTI,99,Haiti,Haiti,1.0335714285714286,NA
+HND,101,Honduras,Honduras,1.068447296735768,NA
+HKG,102,Hong Kong,"China, Hong Kong SAR",1.04,NA
+HUN,103,Hungary,Hungary,0.9968563247011952,NA
+ISL,104,Iceland,Iceland,1.055045871559633,NA
+IND,105,India,India,1.1807281772953415,NA
+IDN,106,Indonesia,Indonesia,1.6120110312042002,NA
+IRN,107,Iran,Iran (Islamic Republic of),1.1873670454545455,NA
+IRQ,108,Iraq,Iraq,1.472735294117647,NA
+IRL,109,Ireland,Ireland,1.1234782608695653,NA
+IMN,110,Isle of Man,NA,1.1035311355311355,gf with mean global prop change
+ISR,111,Israel,Israel,1.0865748022254043,NA
+ITA,112,Italy,Italy,1.1303692307692308,NA
+JAM,113,Jamaica,Jamaica,1.0494074074074073,NA
+JPN,114,Japan,Japan,1.0972832167832167,NA
+JEY,115,Jersey,NA,1.1035311355311355,gf with mean global prop change
+JOR,116,Jordan,Jordan,1.0100344827586207,NA
+KAZ,117,Kazakhstan,Kazakhstan,1.2395348837209301,NA
+KEN,118,Kenya,Kenya,1.5831633660109217,NA
+KIR,119,Kiribati,Kiribati,1.1517241379310346,NA
+XKO,120,Kosovo,NA,1.1035311355311355,gf with mean global prop change
+KWT,121,Kuwait,Kuwait,1.7347426290127295,NA
+KGZ,122,Kyrgyzstan,Kyrgyzstan,0.9984170058796924,NA
+LAO,123,Laos,Lao People's Democratic Republic,1.4722166899024098,NA
+LVA,124,Latvia,Latvia,0.8283288465520812,NA
+LBN,125,Lebanon,Lebanon,1.477387755102041,NA
+LSO,126,Lesotho,Lesotho,0.8625498007968128,NA
+LBR,127,Liberia,Liberia,1.2745588235294119,NA
+LBY,128,Libya,Libya,1.1135757575757577,NA
+LIE,129,Liechtenstein,Liechtenstein,0.9230769230769231,NA
+LTU,130,Lithuania,Lithuania,1.098836565096953,NA
+LUX,131,Luxembourg,Luxembourg,1.3666666666666667,NA
+MAC,132,Macao,"China, Macao SAR",1.1028571428571428,NA
+MKD,133,Macedonia,North Macedonia,0.9223057644110275,NA
+MDG,134,Madagascar,Madagascar,1.4610188679245284,NA
+MWI,135,Malawi,Malawi,1.1465625,NA
+MYS,136,Malaysia,Malaysia,1.4190389820833411,NA
+MDV,137,Maldives,NA,1.1035311355311355,gf with mean global prop change
+MLI,138,Mali,Mali,1.2244897959183674,NA
+MLT,139,Malta,Malta,1.0350515463917527,NA
+MHL,140,Marshall Islands,NA,1.1035311355311355,gf with mean global prop change
+MTQ,141,Martinique,Martinique,0.9005736137667304,NA
+MRT,142,Mauritania,Mauritania,1.0776744186046512,NA
+MUS,143,Mauritius,Mauritius,1.138732394366197,NA
+MYT,144,Mayotte,NA,1.1035311355311355,gf with mean global prop change
+MEX,145,Mexico,Mexico,1.0985114250497772,NA
+FSM,146,Micronesia,Micronesia (Federated States of),1.0324324324324323,NA
+MDA,147,Moldova,Republic of Moldova,1.6661593554162937,NA
+MCO,148,Monaco,NA,1.1035311355311355,gf with mean global prop change
+MNG,149,Mongolia,Mongolia,1.6314553990610328,NA
+MNE,150,Montenegro,Montenegro,1.5573122529644268,NA
+MSR,151,Montserrat,Montserrat,1,NA
+MAR,152,Morocco,Morocco,1.179370588235294,NA
+MOZ,153,Mozambique,Mozambique,0.7942479725775436,NA
+MMR,154,Myanmar,Myanmar,2.0031264585344646,NA
+NAM,155,Namibia,Namibia,0.8768627450980392,NA
+NRU,156,Nauru,Nauru,1,NA
+NPL,157,Nepal,Nepal,2.717663043478261,NA
+NLD,158,Netherlands,Netherlands,1.0388748419721872,NA
+NCL,159,New Caledonia,New Caledonia,0.8033333333333333,NA
+NZL,160,New Zealand,New Zealand,1.282753036437247,NA
+NIC,161,Nicaragua,Nicaragua,1.2206315789473685,NA
+NER,162,Niger,Niger,1.1342026782059529,NA
+NGA,163,Nigeria,Nigeria,0.744785843910708,NA
+NIU,164,Niue,Niue,1.125,NA
+NFK,165,Norfolk Island,NA,1.1035311355311355,gf with mean global prop change
+PRK,166,North Korea,Democratic People's Republic of Korea,0.9290240811153359,NA
+MNP,168,Northern Mariana Islands,NA,1.1035311355311355,gf with mean global prop change
+NOR,169,Norway,Norway,1.3196389404420448,NA
+OMN,170,Oman,Oman,1.097266514806378,NA
+PAK,171,Pakistan,Pakistan,1.555595015576324,NA
+PLW,172,Palau,NA,1.1035311355311355,gf with mean global prop change
+PSE,173,Palestina,Palestine,0.8797590361445783,NA
+PAN,174,Panama,Panama,1.474425070961015,NA
+PNG,175,Papua New Guinea,Papua New Guinea,1.14225,NA
+PRY,177,Paraguay,Paraguay,1.08781143136297,NA
+PER,178,Peru,Peru,1.1977305224844967,NA
+PHL,179,Philippines,Philippines,1.1027336084134252,NA
+PCN,180,Pitcairn Islands,NA,1.1035311355311355,gf with mean global prop change
+POL,181,Poland,Poland,1.1589399652918226,NA
+PRT,182,Portugal,Portugal,0.92675570874623,NA
+XMI,300,Madeira Island,NA,1.1035311355311355,gf with mean global prop change
+PRI,183,Puerto Rico,Puerto Rico,1.0832857142857142,NA
+QAT,184,Qatar,Qatar,1.2482191780821918,NA
+COG,185,Republic of Congo,Congo,1.1288461538461538,NA
+REU,186,Reunion,Réunion,1.1476,NA
+ROU,187,Romania,Romania,0.9027587276218647,NA
+RUS,188,Russia,Russian Federation,1.2950677789897935,NA
+RWA,189,Rwanda,Rwanda,1.4903900508762011,NA
+BLM,190,Saint-Barthélemy,NA,1.1035311355311355,gf with mean global prop change
+MAF,191,Saint-Martin,NA,1.1035311355311355,gf with mean global prop change
+SHN,192,Saint Helena,"Saint Helena, Ascension and Tristan da Cunha",1,NA
+KNA,193,Saint Kitts and Nevis,Saint Kitts and Nevis,1.1375,NA
+LCA,194,Saint Lucia,Saint Lucia,1.0266666666666666,NA
+SPM,195,Saint Pierre and Miquelon,Saint Pierre and Miquelon,1.1,NA
+VCT,196,Saint Vincent and the Grenadines,Saint Vincent and the Grenadines,0.9615384615384616,NA
+WSM,197,Samoa,Samoa,1.0913043478260869,NA
+SMR,198,San Marino,NA,1.1035311355311355,gf with mean global prop change
+STP,199,São Tomé and Príncipe,Sao Tome and Principe,1.2347826086956522,NA
+SAU,200,Saudi Arabia,Saudi Arabia,1.2891835357624832,NA
+SEN,201,Senegal,Senegal,1.2703157061979282,NA
+SRB,202,Serbia,Serbia,0.49909882388880406,NA
+SYC,203,Seychelles,Seychelles,0.7580645161290323,NA
+SLE,204,Sierra Leone,Sierra Leone,1.3213530655391121,NA
+SGP,205,Singapore,Singapore,1.1118181818181818,NA
+SXM,206,Sint Maarten,NA,1.1035311355311355,gf with mean global prop change
+SVK,207,Slovakia,Slovakia,0.8910861197071477,NA
+SVN,208,Slovenia,Slovenia,1.235653650254669,NA
+SLB,209,Solomon Islands,Solomon Islands,1.0208333333333333,NA
+SOM,210,Somalia,Somalia,1.078235294117647,NA
+ZAF,211,South Africa,South Africa,0.9016142131979695,NA
+KOR,213,South Korea,Republic of Korea,1.143103217158177,NA
+SSD,214,South Sudan,NA,1.1035311355311355,gf with mean global prop change
+ESP,215,Spain,Spain,0.9963768115942029,NA
+LKA,217,Sri Lanka,Sri Lanka,1.5177628763018975,NA
+SDN,218,Sudan,Sudan (former),1.121617877920399,NA
+SUR,219,Suriname,Suriname,0.979349593495935,NA
+SJM,220,Svalbard and Jan Mayen,NA,1.1035311355311355,gf with mean global prop change
+SWZ,221,Swaziland,Swaziland,1.0842857142857143,NA
+SWE,222,Sweden,Sweden,1.1773482096523094,NA
+CHE,223,Switzerland,Switzerland,1.275603756708408,NA
+SYR,224,Syria,Syrian Arab Republic,0.6535175780481084,NA
+TWN,225,Taiwan,"China, Taiwan Province of",0.9392378684132182,NA
+TJK,226,Tajikistan,Tajikistan,1.324784154393093,NA
+TZA,227,Tanzania,United Republic of Tanzania,1.1191641791044775,NA
+THA,228,Thailand,Thailand,1.1947369328814494,NA
+TLS,229,Timor-Leste,Timor-Leste,1.3532763532763532,NA
+TGO,230,Togo,Togo,1.2378752886836029,NA
+TKL,231,Tokelau,Tokelau,1,NA
+TON,232,Tonga,Tonga,1.0393939393939393,NA
+TTO,233,Trinidad and Tobago,Trinidad and Tobago,1.130787878787879,NA
+TUN,234,Tunisia,Tunisia,1.1403125,NA
+TUR,235,Turkey,Turkey,1.459236840088882,NA
+TKM,236,Turkmenistan,Turkmenistan,1.0531218529707955,NA
+TCA,237,Turks and Caicos Islands,NA,1.1035311355311355,gf with mean global prop change
+TUV,238,Tuvalu,Tuvalu,1.1020408163265305,NA
+UGA,239,Uganda,Uganda,1.0501441753171856,NA
+UKR,240,Ukraine,Ukraine,1.0679953650057938,NA
+ARE,241,United Arab Emirates,United Arab Emirates,1.1781,NA
+GBR,242,United Kingdom,United Kingdom of Great Britain and Northern Ireland,1.125,NA
+USA,243,United States,United States of America,1.0087285276073619,NA
+URY,245,Uruguay,Uruguay,1.9871515151515151,NA
+UZB,246,Uzbekistan,Uzbekistan,1.9325153374233128,NA
+VUT,247,Vanuatu,Vanuatu,1.4316666666666666,NA
+VEN,249,Venezuela,Venezuela (Bolivarian Republic of),1.0394700854700856,NA
+VNM,250,Vietnam,Viet Nam,1.3529223055806343,NA
+VIR,251,"Virgin Islands, U.S.",United States Virgin Islands,1.075,NA
+WLF,252,Wallis and Futuna,Wallis and Futuna Islands,1.015625,NA
+ESH,253,Western Sahara,NA,1.1035311355311355,gf with mean global prop change
+YEM,254,Yemen,Yemen,1.0833333333333333,NA
+ZMB,255,Zambia,Zambia,1.153457142857143,NA
+ZWE,256,Zimbabwe,Zimbabwe,0.91428206981589355,NA

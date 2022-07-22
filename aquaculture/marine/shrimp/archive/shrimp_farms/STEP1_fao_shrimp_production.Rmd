@@ -1,0 +1,103 @@
+---
+title: "FAO shrimp production"
+author: "Gage Clawson (UCSB, NCEAS, OHI)"
+date: "10/09/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+All data is ultimately adjusted to FAO production data.  This script cleans the fao mariculture data and subsets it to to the relevant years of data and species (shrimp).
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+library(tidyverse)
+library(data.table)
+library(countrycode)
+library(here)
+library(stringr)
+
+path <- "/home/shares/food-systems/Food_footprint/_raw_data"
+source(here('aquaculture/marine/salmon/salmon_farm/R/fao_mar_clean.R')) # functions specific to mariculture dealing with compound countries
+source('https://raw.githubusercontent.com/OHI-Science/ohiprep_v2019/gh-pages/workflow/R/fao_fxn.R') # function for cleaning FAO files
+
+
+```
+
+
+
+
+Subset the data to include only the species (shrimp) and countries we are interested in. Then summarize by total tonnes of shrimp per country/year. (There are multiple shrimp species)
+
+```{r}
+
+fao <- read.csv(here("aquaculture/data/fao_mariculture_clean.csv")) %>%
+  filter(environment %in% c("Marine", "Brackishwater"))
+
+
+## Read in fao data and get a species list for salmon 
+species_list <- read.csv(here("aquaculture/marine/STEP1_species_groups/int/marine_groups.csv"))  %>%
+  distinct(species, aq_group)
+
+# the list of species we are including
+shrimp_list <- species_list$species[species_list$aq_group=="shrimps_prawns"]
+shrimp_list
+
+## write out shrimp taxa and production for Juliette
+fao_shrimp_taxa_prod <- fao %>%
+  filter(species %in% shrimp_list) %>%  
+  filter(!is.na(value)) %>%
+  arrange(-value, country) %>%
+  filter(value>=500) %>%  # countries with less do not appear to be stable producers at this point
+  group_by(country, iso3c, species, year) %>%
+  dplyr::filter(year == 2017) %>%
+  summarize(fao_tonnes_production = sum(value)) %>%
+  arrange(country, iso3c, species, year)
+  
+write.csv(fao_shrimp_taxa_prod, here("aquaculture/marine/shrimp/shrimp_farms/data/fao_mariculture_shrimp_taxa_production.csv"), row.names=FALSE)
+
+# include only shrimp
+fao_shrimp <- fao %>%
+  filter(species %in% shrimp_list) %>%  
+  filter(!is.na(value)) %>%
+  arrange(-value, country) %>%
+  filter(value>=500) %>%  # countries with less do not appear to be stable producers at this point
+  group_by(country, iso3c, year) %>%
+  summarize(fao_tonnes_production = sum(value)) %>%
+  arrange(country, iso3c, year)
+ 
+write.csv(fao_shrimp, here("aquaculture/marine/shrimp/shrimp_farms/data/fao_mariculture_shrimp.csv"), row.names=FALSE)
+        
+ explore <- read_csv(here("aquaculture/marine/shrimp/shrimp_farms/data/fao_mariculture_shrimp.csv")) %>%
+   filter(year==2017) %>%
+   arrange(-fao_tonnes_production) %>%
+   mutate(percent = round((fao_tonnes_production/sum(fao_tonnes_production)*100),2))
+
+sum(explore$percent[1:9])
+sum(explore$fao_tonnes_production)
+
+asc_countries <- c("Australia", "Bangladesh", "Belize", "China", "Colombia", "Ecuador", "Guatemala", "Honduras", "India", "Indonesia", "Madagascar", "Mexico", "New Caledonia", "Nicaragua", "Panama", "Peru", "Thailand", "Venezuela, Boliv Rep of", "Viet Nam")
+
+explore_test <- explore %>%
+  dplyr::filter(!(country %in% asc_countries))
+
+sum(explore_test$percent) 
+ 100 - 6.38 # 93.62
+
+
+asc_explore <- explore %>%
+  dplyr::filter(country %in% asc_countries)
+
+## missing venezuela
+
+sum(asc_explore$fao_tonnes_production)
+sum(asc_explore$percent) + sum(explore_test$percent)
+sum(asc_explore$fao_tonnes_production) + sum(explore_test$fao_tonnes_production)
+
+sum(explore$fao_tonnes_production)
+```
+

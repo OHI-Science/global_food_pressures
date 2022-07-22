@@ -1,0 +1,209 @@
+---
+title: "Pigs diet: feeditems rates"
+author: "Juliette"
+date: "10/23/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+source(here("_workflow/common.R"))
+
+'%notin%' <- Negate('%in%')
+
+un_rgns <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>%
+  filter(!is.na(iso3c)) %>%
+  filter(iso3c %in% food_rgns$iso3c)
+
+livestock_diet_composition <- read_csv(here("feed/data/livestock_diet_composition.csv"))
+
+```
+NOTE: In general we use these data for other animals: animal_farm/farm/data/chickens_GLEAMi_v2.csv" (these data were from the GLEAM excel macro) and tend to be more complete.  However, there seems to be an error in the pig data in regard to food consumption.  Given this we use these data which are from the website. 
+
+
+comparing to this: https://www.researchgate.net/publication/280830285_Scientific_Opinion_on_Ergot_alkaloids_in_food_and_feed_EFSA_Panel_on_Contaminants_in_the_Food_Chain_CONTAM/figures?lo=1
+```{r}
+
+total_feed <- read_csv(here("feed/data/model_GLEAMi.csv"))
+
+pigs_total_feed <- total_feed %>% 
+  filter(Specie == "Pigs",
+         parameter %in% c("Total feed intake", "Number of heads"),
+         system != "All") %>% 
+  select(-module, -unit, -orientation,  - country) %>% 
+  pivot_wider(names_from = parameter, values_from = value) %>% 
+  rename(count = 'Number of heads', 
+         kg_dm_feed_intake = 'Total feed intake',
+         species = Specie,
+         production_system = system) %>%
+  mutate(consumption_rate = ifelse(count == 0, 0, kg_dm_feed_intake/count)) %>%
+  filter(consumption_rate > 0) %>%
+  select(iso3c, species, production_system, consumption_rate) 
+  
+  # just exploring the data here:
+tmp <- pigs_total_feed %>%
+  select(iso3c, production_system, consumption_rate) %>%
+  pivot_wider(names_from = production_system, values_from=consumption_rate)
+plot(tmp$Backyard, tmp$Broilers)
+
+category_check <- filter(pigs_total_feed, production_system == "Backyard")
+summary(category_check)
+filter(pigs_total_feed, iso3c=="USA") %>% data.frame()
+
+
+```
+
+
+Gapfill the missing values:
+```{r}
+
+# gapfill missing values
+all_sites <- expand.grid(iso3c = un_rgns$iso3c, 
+                                  species = "Pigs",
+                                  production_system = c("Backyard", "Intermediate", "Industrial"))
+
+pigs_total_feed_gf <- left_join(all_sites, pigs_total_feed, by=c("iso3c", "species", "production_system")) %>%
+  left_join(un_rgns) %>%
+  group_by(species, production_system, Intermediate_Region_Name) %>%
+  mutate(consumption_rate = ifelse(is.na(consumption_rate), median(consumption_rate, na.rm=TRUE), consumption_rate)) %>%
+  group_by(species, production_system, Sub_region_Name) %>%
+    mutate(consumption_rate = ifelse(is.na(consumption_rate), median(consumption_rate, na.rm=TRUE), consumption_rate)) %>%
+group_by(species, production_system, Region_Name) %>%
+    mutate(consumption_rate = ifelse(is.na(consumption_rate), median(consumption_rate, na.rm=TRUE), consumption_rate)) %>%
+group_by(species, production_system) %>%
+    mutate(consumption_rate = ifelse(is.na(consumption_rate), median(consumption_rate, na.rm=TRUE), consumption_rate)) %>%
+ungroup()
+
+```
+
+
+
+Gapfill diet composition data:
+```{r}
+
+pigs_diet_composition <- livestock_diet_composition %>% 
+  filter(species == "Pig") %>% 
+  mutate(species = "Pigs") 
+
+# check that all sum to 100  
+tmp <- pigs_diet_composition %>%
+ group_by(production_system, iso3c) %>%
+ summarize(total = sum(percent))
+summary(tmp)
+
+pigs_diet_composition_all <- pigs_diet_composition %>%
+  select(species, orientation, production_system, raw_name) %>%
+  unique() %>%
+  merge(food_rgns$iso3c) %>%
+  select(iso3c=y, species, orientation, production_system, raw_name)
+
+# check they are all the same:
+tmp <- pigs_diet_composition_all %>%
+  select(production_system, raw_name) %>%
+  unique()
+table(tmp$production_system)
+
+pigs_diet_composition_gf <- left_join(pigs_diet_composition_all, pigs_diet_composition, by=c("iso3c", "species", "orientation", "production_system", "raw_name")) %>%
+  left_join(un_rgns) %>%
+  group_by(species, orientation, production_system, raw_name, Intermediate_Region_Name) %>%
+  mutate(percent = ifelse(is.na(percent), mean(percent, na.rm=TRUE), percent)) %>%
+  group_by(species, orientation, production_system, raw_name, Sub_region_Name) %>%
+    mutate(percent = ifelse(is.na(percent), mean(percent, na.rm=TRUE), percent)) %>%
+group_by(species, orientation, production_system, raw_name, Region_Name) %>%
+    mutate(percent = ifelse(is.na(percent), mean(percent, na.rm=TRUE), percent)) %>%
+group_by(species, orientation, production_system, raw_name) %>%
+    mutate(percent = ifelse(is.na(percent), mean(percent, na.rm=TRUE), percent)) %>%
+ungroup() %>%
+  select(iso3c, species, orientation, production_system, raw_name, percent)
+
+# check that all gapfilled sum to 100
+tmp <- pigs_diet_composition_gf %>%
+ group_by(species, orientation, production_system, iso3c) %>%
+ summarize(total = sum(percent))
+summary(tmp)
+
+```
+
+Join the total consumption per animal and the percent composition of diet data.
+```{r}
+
+pigs_combo <- left_join(pigs_total_feed_gf, pigs_diet_composition_gf, by = c("iso3c", "species", "production_system")) %>%
+  rowwise() %>% 
+  mutate(percent = percent/100,
+         feeditem_kg_per_head = percent*consumption_rate) %>%
+  select(iso3c, species, orientation, production_system, raw_name, feeditem_kg_per_head) 
+
+```
+
+
+
+```{r}
+## check that there aren't any counties that have 0 values for all feed stuff. we might have animals that are not reported
+
+pigs_feed_check <- pigs_combo %>% 
+  group_by(iso3c, species, orientation, production_system) %>% 
+  dplyr::summarise(check = sum(feeditem_kg_per_head)) %>% 
+  ungroup() %>% 
+  filter(check == 0) %>% 
+  mutate(to_gf = "yes") %>% 
+  select(-check)
+
+last_check <- pigs_combo %>% 
+  group_by(iso3c, species, orientation, production_system) %>% 
+  dplyr::summarise(check = sum(feeditem_kg_per_head)) %>% 
+  ungroup()
+## there should be no 0s or NA totals
+
+pig_consumption <- pigs_combo %>% 
+  select(iso3c, animal = species, product = orientation, system =production_system, feedstuff= raw_name, feeditem_kg_per_head) %>% 
+  mutate(animal = tolower(animal),
+         product = tolower(product),
+         system = tolower(system)) %>%
+  mutate(feeditem_kg_per_head = round(feeditem_kg_per_head, 4))
+
+write_csv(pig_consumption, here("feed/data/pigs_feed_consumption_rates.csv"))
+
+```
+
+We want to do a check to see if the total dry matter of feed actually makes sense
+We will look just at the usa for now
+
+```{r}
+
+## do we want to include intermediate and industrial?
+consumption_check <- pigs_combo %>% 
+  filter(iso3c == "USA",
+         production_system != "Backyard") %>% 
+  group_by(production_system) %>%
+  dplyr::summarise(all_feed_kg_per_head = sum(feeditem_kg_per_head))
+
+44459937853/64972562 = 684 #kg per pig per year
+73144900 * 684  # 50031111600 total dry mass feed
+50031111600/13352922000 # fCr = 3.7
+```
+
+total feed intake 44,459,937,853 kg dm
+USA, gleam: 64,972,562 industrial pigs (close enough to FAO, this is 2010 data after all)
+684 kg feed per head
+
+according to FAO stat:
+- there are 73,144,900 pigs in the usa in 2017
+- 121,390,200 slaughtered (this is total in 2017 so will be larger than the count alive)
+
+110*121390200 = 13352922000 kg live weight slaughtered in 1 year
+
+need to go from number slaughtered to live weight -> can use GLEAM live weight at slaughter for the usa value -> industrial = 115, intermediate = 100
+we will use 110
+
+110*121390200 = 13352922000 kg live weight slaughtered in 1 year
+
+
+50031111600/13352922000 
+3.7 -> kg of feed/kg of live weight (I am assuming at slaughter. If this is a wrong assumption it might change things)
+
+
+

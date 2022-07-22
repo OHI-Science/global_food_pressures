@@ -1,0 +1,318 @@
+---
+title: "Figuring out disturbance"
+author: "Juliette"
+date: "9/28/2020"
+output: html_document
+---
+
+## Setup
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(readxl)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+space_req_raw <- read_csv(here("animal_farm/disturbance/data/livestock_space_requirements.csv"))
+lsu_raw <- read_csv(here("animal_farm/disturbance/data/LSU_Coeffs_by_Country.csv"))
+fao_code <- read_xlsx(here("animal_farm/disturbance/data/fao_codes_country.xlsx")) %>% 
+  select('Short name', iso3c = ISO3, AreaCode = FAOSTAT)
+
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv"))
+
+```
+
+## Methods
+
+Wrangle the LSU df a bit first and gapfill
+
+```{r}
+lsu <- lsu_raw %>% 
+  select(Country = AreaName, animal = ItemName, lsu_value = Value, AreaCode) %>% 
+  left_join(fao_code) %>% 
+  na.omit() %>% 
+  mutate(animal = ifelse(animal == "Cattle", "cows", tolower(animal))) %>% 
+  filter(animal %in% c("cows", "chickens", "buffaloes", "goats", "sheep", "pigs")) %>% 
+  select(iso3c, animal, lsu_value)  ## every animal has 196 countries, so we can pull out all the NAs and create a row for each animal and gapfil
+
+missing <- setdiff(food_rgns$iso3c, lsu$iso3c) %>% 
+  as_tibble() %>% 
+  rename(iso3c = value) %>% 
+  left_join(food_rgns) %>% 
+  slice(rep(1:n(), each =6)) %>% 
+  mutate(animal = rep(c("cows", "chickens", "buffaloes", "goats", "sheep", "pigs"), times = 48)) %>% 
+  mutate(lsu_value = NA) %>% 
+  select(iso3c, animal, lsu_value)
+  
+lsu_gf <- lsu %>% 
+  rbind(missing) %>% 
+  left_join(un) %>% 
+  group_by(Intermediate_Region_Name) %>% 
+  mutate(lsu_value = ifelse(is.na(lsu_value), mean(lsu_value, na.rm = TRUE), lsu_value)) %>% 
+  ungroup() %>% 
+  group_by(Sub_region_Name) %>% 
+  mutate(lsu_value = ifelse(is.na(lsu_value), mean(lsu_value, na.rm = TRUE), lsu_value)) %>% 
+  ungroup() %>% 
+  select(iso3c, animal, lsu_value)
+
+
+country_adjust <- lsu_gf %>% 
+  group_by(animal) %>% 
+  mutate(ref_value = as.numeric(lsu_value[iso3c == "USA"]),
+         ref_value = ifelse(animal == "buffaloes", 1, ref_value )) %>% 
+  ungroup() %>% 
+  rowwise() %>% 
+  mutate(adjust_multiplier = lsu_value/ref_value)
+
+write_csv(lsu_gf, here("animal_farm/disturbance/data/lsu_gf.csv"))
+
+```
+
+```{r}
+space_req <- space_req_raw %>% 
+  rename(animal_raw = animal) %>% 
+  mutate(animal = case_when(str_detect(animal_raw, "cow") ~ "cows",
+                            animal_raw == "sheep" ~ "sheep",
+                            animal_raw == "goat" ~ "goats",
+                            animal_raw == "pig" ~ "pigs",
+                            str_detect(animal_raw, "chicken") ~ "chickens")) %>% 
+  select(animal, system, acres_per_animal = space_acres) %>% 
+  add_row(animal = "buffaloes", system = "grassland", acres_per_animal = 1.5000000000) %>% 
+  add_row(animal = "buffaloes", system = "mixed", acres_per_animal = 0.0025826400) %>% 
+  unique()
+```
+
+
+For Ruminants
+```{r}
+## we still need to look for buffalo, but for now assuming they need the same space as cows
+rum_list <- c("cows", "buffaloes", "goats", "sheep")
+rum_system_list <- c("grassland", "mixed")
+rum_prod_list <- c("meat", "milk")
+
+df_stats <- tibble(animal = NA, system = NA, product = NA, km2_global = NA)
+
+for(rum_OI in rum_list) {
+  for(system_OI in rum_system_list) {
+    for(prod_OI in rum_prod_list) {
+  
+  # rum_OI <- "cows"
+  # system_OI <- "grassland"
+  # prod_OI <- "meat"
+  
+  acres_to_km2 <- 0.00404686
+  
+  raster <- raster(file.path(paste0(prep, "animal_farm/farm/location_tifs/", rum_OI, "_", system_OI, "_",prod_OI, ".tif", sep = "")))
+  
+  adjust <- country_adjust %>% 
+    filter(animal == rum_OI) %>% 
+    right_join(food_rgns_xy) %>% 
+    select(x,y, adjust_multiplier) %>% 
+    rasterFromXYZ(crs = food_crs)
+  
+  space <- as.numeric(space_req$acres_per_animal[space_req$animal == rum_OI & space_req$system == system_OI])
+  
+  calculation <- raster*adjust*space*acres_to_km2
+  
+  km2_global <- cellStats(calculation, 'sum') %>% 
+    as_tibble() %>% 
+    rename(km2_global = value) %>% 
+    mutate(animal = rum_OI,
+           system = system_OI,
+           product = prod_OI)
+  
+  df_stats <- rbind(df_stats, km2_global) %>% 
+    na.omit()
+  
+  write_csv(df_stats, here("animal_farm/disturbance/data/global_area_stats.csv"))
+
+  
+}}}
+
+
+```
+
+For chickens
+```{r}
+chicken_system_list <- c("industrial", "backyard")
+chicken_prod_list <- c("meat", "eggs", "eggs&meat")
+
+df_stats <- read_csv(here("animal_farm/disturbance/data/global_area_stats.csv"))
+
+for(system_OI in chicken_system_list) {
+  for(prod_OI in chicken_prod_list) {
+  
+   animal_OI <- "chickens"
+  # system_OI <- "industrial"
+  # prod_OI <- "meat"
+  
+  acres_to_km2 <- 0.00404686
+  
+  if((system_OI == "industrial" && prod_OI %in% c("eggs", "meat")) | (system_OI == "backyard" && prod_OI == "eggs&meat")){
+    
+  dataframe <- read_csv(file.path(paste0(prep, "animal_farm/farm/", animal_OI, "_", system_OI, "_",prod_OI, "_location_df.csv", sep = "")),  col_types = cols(.default = col_character())) %>% 
+    transmute(x = parse_number(x),
+                y = parse_number(y),
+                count = parse_number(current_count)) 
+   
+    raster <- rasterFromXYZ(dataframe, crs = food_crs)
+
+   # plot(log(1+raster))
+  
+    adjust <- country_adjust %>% 
+    filter(animal == animal_OI) %>% 
+    right_join(food_rgns_xy) %>% 
+    select(x,y, adjust_multiplier) %>% 
+    rasterFromXYZ(crs = food_crs)
+  
+  space <- as.numeric(space_req$acres_per_animal[space_req$animal == animal_OI & space_req$system == system_OI])
+  
+  calculation <- raster*adjust*space*acres_to_km2
+  
+  km2_global <- cellStats(calculation, 'sum') %>% 
+    as_tibble() %>% 
+    rename(km2_global = value) %>% 
+    mutate(animal = animal_OI,
+           system = system_OI,
+           product = prod_OI)
+  
+  df_stats  <- rbind(df_stats, km2_global) %>% 
+    na.omit()
+    
+      }else{
+        print(paste0(system_OI, " ", prod_OI, " is not one of our livestock categories, no calculations"))}
+      
+  
+  write_csv(df_stats, here("animal_farm/disturbance/data/global_area_stats.csv"))
+
+  
+  }
+  }
+
+
+```
+
+
+For pigs
+```{r}
+pigs_system_list <- c("industrial", "backyard", "intermediate")
+
+df_stats <- read_csv(here("animal_farm/disturbance/data/global_area_stats.csv"))
+
+
+for(system_OI in pigs_system_list) {
+  
+   animal_OI <- "pigs"
+   prod_OI <- "meat"
+   # pigs_system_list <- "industrial"
+  
+  acres_to_km2 <- 0.00404686
+  
+  dataframe <- read_csv(file.path(paste0(prep, "animal_farm/farm/", animal_OI, "_", system_OI, "_",prod_OI, "_location_df.csv", sep = "")),  col_types = cols(.default = col_character())) %>% 
+    transmute(x = parse_number(x),
+                y = parse_number(y),
+                count = parse_number(current_count)) 
+   
+    raster <- rasterFromXYZ(dataframe, crs = food_crs)
+
+   # plot(log(1+raster))
+  
+    adjust <- country_adjust %>% 
+    filter(animal == animal_OI) %>% 
+    right_join(food_rgns_xy) %>% 
+    select(x,y, adjust_multiplier) %>% 
+    rasterFromXYZ(crs = food_crs)
+  
+  space <- as.numeric(space_req$acres_per_animal[space_req$animal == animal_OI & space_req$system == system_OI])
+  
+  calculation <- raster*adjust*space*acres_to_km2
+  
+  km2_global <- cellStats(calculation, 'sum') %>% 
+    as_tibble() %>% 
+    rename(km2_global = value) %>% 
+    mutate(animal = animal_OI,
+           system = system_OI,
+           product = prod_OI)
+  
+  df_stats  <- rbind(df_stats, km2_global) %>% 
+    na.omit()
+      
+  
+  write_csv(df_stats, here("animal_farm/disturbance/data/global_area_stats.csv"))
+  
+  }
+
+
+```
+
+```{r}
+test <- global_area_stats %>% 
+  filter(system %in% c("grassland", "mixed")) %>% 
+  dplyr::summarise(sum = sum(km2_global))
+```
+
+
+
+
+
+
+
+---------------####
+
+```{r}
+grass_cow <- raster(file.path(prep, "animal_farm/farm/location_tifs/cows_grassland_meat.tif"))
+```
+
+
+```{r}
+lsu <- lsu_raw %>% 
+  select(Country = AreaName, animal = ItemName, lsu_value = Value, AreaCode) %>% 
+  left_join(fao_code) %>% 
+  na.omit() %>%  
+  filter(animal == "Cattle") %>% 
+  select(iso3c, lsu_value)  %>% 
+  ##this is just for now, we'll want to gapfill for real later
+  mutate(lsu_value = ifelse(is.na(lsu_value), 0.7, lsu_value)) 
+
+lsu_raster <- lsu %>% 
+  right_join(food_rgns_xy) %>% 
+  select(x,y, lsu_value) %>% 
+  rasterFromXYZ(crs=food_crs)
+
+```
+
+```{r}
+cow_space <- as.numeric(space_req$space_acres[space_req$animal == "beef cow" & space_req$system == "grassland"])
+
+acres_to_km2 <- 0.00404686
+
+## grassland
+test <- grass_cow*lsu_raster*cow_space*acres_to_km2
+
+plot(log(1+test))
+cellStats(test, 'sum')
+## grassland meat cows 781,140.7 km 2
+
+##mixed
+
+```
+
+
+~9,000 km2 global. With our last method we got ~402,500 soo I’m not sure that this is the best way to go. We used a km2/kg of live chicken as a metric, which maybe we should stick with that? I would assume there is a way to go from LSU to kg, but I haven’t looked into it. I’d need to try and find similar references for km2/kg for each of our animals as well, which I know is not super straightforward with the mixed thing. I’m gonna do some searching and keep ya posted.
+
+
+
+testing broiler math
+```{r}
+
+broiler <- read_csv(file.path(prep, "animal_farm/farm/chickens_industrial_meat_location_df.csv")) %>% 
+  select(x,y, contains("current")) %>% 
+  rasterFromXYZ(crs = food_crs)
+
+chicken_space <- as.numeric(space_req$space_acres[space_req$animal == "chicken meat"])
+acres_km2 <- 0.00404686
+```
+
+

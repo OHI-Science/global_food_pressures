@@ -1,0 +1,89 @@
+---
+title: "Wrangling across cpuntry LSU conversions"
+author: "Juliette"
+date: "9/28/2020"
+output: html_document
+---
+
+## Setup
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(readxl)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+lsu_raw <- read_csv(here("animal_farm/disturbance/data/LSU_Coeffs_by_Country.csv"))
+fao_code <- read_xlsx(here("animal_farm/disturbance/data/fao_codes_country.xlsx")) %>% 
+  select('Short name', iso3c = ISO3, AreaCode = FAOSTAT)
+
+space_req_raw <- read_csv(here("animal_farm/disturbance/data/space_rec.csv"))
+
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv"))
+
+```
+
+## Methods
+
+Wrangle the LSU df a bit first and gapfill
+
+```{r}
+lsu <- lsu_raw %>% 
+  select(Country = AreaName, animal = ItemName, lsu_value = Value, AreaCode) %>% 
+  left_join(fao_code) %>% 
+  na.omit() %>% 
+  mutate(animal = ifelse(animal == "Cattle", "cows", tolower(animal))) %>% 
+  filter(animal %in% c("cows", "chickens", "buffaloes", "goats", "sheep", "pigs")) %>% 
+  select(iso3c, animal, lsu_value)  ## every animal has 196 countries, so we can pull out all the NAs and create a row for each animal and gapfil
+
+missing <- setdiff(food_rgns$iso3c, lsu$iso3c) %>% 
+  as_tibble() %>% 
+  rename(iso3c = value) %>% 
+  left_join(food_rgns) %>% 
+  slice(rep(1:n(), each =6)) %>% 
+  mutate(animal = rep(c("cows", "chickens", "buffaloes", "goats", "sheep", "pigs"), times = 48)) %>% 
+  mutate(lsu_value = NA) %>% 
+  select(iso3c, animal, lsu_value)
+  
+lsu_gf <- lsu %>% 
+  rbind(missing) %>% 
+  left_join(un) %>% 
+  group_by(Intermediate_Region_Name) %>% 
+  mutate(lsu_value = ifelse(is.na(lsu_value), mean(lsu_value, na.rm = TRUE), lsu_value)) %>% 
+  ungroup() %>% 
+  group_by(Sub_region_Name) %>% 
+  mutate(lsu_value = ifelse(is.na(lsu_value), mean(lsu_value, na.rm = TRUE), lsu_value)) %>% 
+  ungroup() %>% 
+  select(iso3c, animal, lsu_value)
+
+country_adjust <- lsu_gf %>% 
+  group_by(animal) %>% 
+  mutate(ref_value = as.numeric(lsu_value[iso3c == "USA"]),
+         ref_value = ifelse(animal == "buffaloes", 1, ref_value )) %>% 
+  ungroup() %>% 
+  rowwise() %>% 
+  mutate(adjust_multiplier = lsu_value/ref_value)
+
+
+write_csv(country_adjust, here("animal_farm/disturbance/data/across_country_conversions.csv"))
+
+
+```
+
+Now we want to use it to calculate an area per animal in each country conversion value
+
+```{r}
+space_req <- space_req_raw %>% 
+  select(animal, system, meters_sq)
+
+space_adjusted <- left_join(space_req, country_adjust, by = "animal") %>% 
+  mutate(area_adjusted = meters_sq*adjust_multiplier) %>% 
+  select(iso3c, animal, system, meters_sq_animal = area_adjusted)
+
+write_csv(space_adjusted, here("animal_farm/disturbance/data/livestock_area_head_table.csv"))
+
+```
+
+

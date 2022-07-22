@@ -1,0 +1,158 @@
+---
+title: "Calculating proportion of each 'feedgroup' for ruminants globally and the prop feedlot out of feedlot+mixed"
+author: "Juliette"
+date: "10/19/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+For livestock: GLEAM provides feed composition data for different cohorts within a system (e.g., Cattle: Adult females, Meat animals, Replacement animals and adult males.
+
+This script estimates the proportion of animals in each cohort to weight the feed composition data to better estimate the average feed composition for the entire system.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+source(here("_workflow/common.R"))
+
+'%notin%' <- Negate('%in%')
+
+ruminants_raw <- read_csv(here("animal_farm/farm/data/ruminants_GLEAMi_v2.csv"))
+
+```
+
+
+```{r}
+
+ruminants <- ruminants_raw %>% 
+  select(-Unit) %>% 
+  mutate(Herd_type = ifelse(Production_system == "Feedlot operations", "Feedlot", Herd_type))%>% 
+  filter(Production_system != "All systems",
+         Herd_type != "Whole herd",
+         Herd_type != "Feedlot") %>% ## these have their own specific diet composition so not included in this prop breakdown 
+  filter(Variable %in% c("HERD: adult females", "HERD: adult males", "HERD: replacement females", "HERD: replacement males", "HERD: fattening females", "HERD: fattening males")) %>%
+  mutate(feedgroup = case_when(Variable == "HERD: adult females" ~ "Adult females",
+                               Variable %in% c("HERD: adult males", "HERD: replacement females", "HERD: replacement males") ~ "Replacement animals and adult males",
+                               Variable %in% c("HERD: fattening females", "HERD: fattening males") ~ "Meat animals (non feedlot)")) %>% 
+  group_by(iso3c, Species, Production_system, Herd_type, feedgroup) %>% 
+  dplyr::summarise(feedgroup_headcount = sum(Value)) %>% 
+  ungroup() %>% 
+  group_by(iso3c, Species, Production_system, Herd_type)%>% 
+  mutate(headcount = sum(feedgroup_headcount)) %>% 
+  ungroup() %>% 
+  rowwise() %>% 
+  mutate(prop = feedgroup_headcount/headcount) %>% 
+  mutate(prop = ifelse(feedgroup_headcount==0 & headcount == 0, 0, prop))
+  
+```
+
+Need to gapfill missing countries
+
+```{r}
+length(unique(ruminants$iso3c)) ## 233
+
+## figure out the global average for each species, production_system, herd_type, feedgroup 
+
+ruminants_no_zero <- ruminants %>% 
+  filter(prop != 0)
+
+## goats
+goats_plot <- ggplot(subset(ruminants_no_zero, Species == "Goats")) + 
+geom_point(aes(y = prop, x = feedgroup, color = feedgroup), 
+             position = position_jitterdodge(dodge.width = 0.8)) +
+  facet_grid(cols = vars(Production_system), rows = vars(Herd_type)) +
+  theme_light()  + 
+  theme(legend.position = "none")+
+  labs(title = "Goats") +
+  stat_summary(mapping = aes(y = prop, x = feedgroup),
+               fun = "mean", geom = "point", shape = 0, size = 4, color = "black",
+               position = position_dodge(width = 0.8)) +
+  stat_summary(mapping = aes(y = prop, x = feedgroup),
+               fun = "median", geom = "point", shape = 2, size = 4, color = "black",
+               position = position_dodge(width = 0.8)) + 
+  theme(legend.position = "none")
+
+## cows
+cows_plot <- ggplot(subset(ruminants_no_zero, Species == "Cattle")) + 
+geom_point(aes(y = prop, x = feedgroup, color = feedgroup), 
+             position = position_jitterdodge(dodge.width = 0.8)) +
+  facet_grid(cols = vars(Production_system), rows = vars(Herd_type)) +
+  theme_light()  + 
+  theme(legend.position = "none")+
+  labs(title = "Cows") +
+  stat_summary(mapping = aes(y = prop, x = feedgroup),
+               fun = "mean", geom = "point", shape = 0, size = 4, color = "black",
+               position = position_dodge(width = 0.8)) +
+  stat_summary(mapping = aes(y = prop, x = feedgroup),
+               fun = "median", geom = "point", shape = 2, size = 4, color = "black",
+               position = position_dodge(width = 0.8)) + 
+  theme(legend.position = "none")
+
+## sheep
+sheep_plot <- ggplot(subset(ruminants_no_zero, Species == "Sheep")) + 
+geom_point(aes(y = prop, x = feedgroup, color = feedgroup), 
+             position = position_jitterdodge(dodge.width = 0.8)) +
+  facet_grid(cols = vars(Production_system), rows = vars(Herd_type)) +
+  theme_light()  + 
+  theme(legend.position = "none")+
+  labs(title = "Sheep") +
+  stat_summary(mapping = aes(y = prop, x = feedgroup),
+               fun = "mean", geom = "point", shape = 0, size = 4, color = "black",
+               position = position_dodge(width = 0.8)) +
+  stat_summary(mapping = aes(y = prop, x = feedgroup),
+               fun = "median", geom = "point", shape = 2, size = 4, color = "black",
+               position = position_dodge(width = 0.8)) + 
+  theme(legend.position = "none")
+
+## buffaloes
+buffaloes_plot <- ggplot(subset(ruminants_no_zero, Species == "Buffalo")) + 
+geom_point(aes(y = prop, x = feedgroup, color = feedgroup), 
+             position = position_jitterdodge(dodge.width = 0.8)) +
+  facet_grid(cols = vars(Production_system), rows = vars(Herd_type)) +
+  theme_light()  + 
+  theme(legend.position = "none")+
+  labs(title = "Buffaloes") +
+  stat_summary(mapping = aes(y = prop, x = feedgroup),
+               fun = "mean", geom = "point", shape = 0, size = 4, color = "black",
+               position = position_dodge(width = 0.8)) +
+  stat_summary(mapping = aes(y = prop, x = feedgroup),
+               fun = "median", geom = "point", shape = 2, size = 4, color = "black",
+               position = position_dodge(width = 0.8)) + 
+  theme(legend.position = "none")
+
+
+goats_plot
+cows_plot
+sheep_plot
+buffaloes_plot
+
+```
+
+Calculate the mean and save
+
+```{r}
+
+proportions <- ruminants_no_zero %>% 
+  group_by(Species, feedgroup) %>% 
+  dplyr::summarise(mean_prop = mean(prop)) %>% 
+  ungroup() %>% 
+  mutate(mean_prop = round(mean_prop, 2)) %>% 
+  group_by(Species) %>% 
+  mutate(total_prop = sum(mean_prop)) %>% 
+  ungroup() %>% 
+  ## the prop total for cattle is 0.01. this probably wont be a big differnece later but we can just subtract the extra 
+  mutate(mean_prop = ifelse(Species == "Cattle" & feedgroup == "Adult females", mean_prop - (0.01/3),
+                            ifelse(Species == "Cattle" & feedgroup == "Meat animals (non feedlot)", mean_prop - (0.01/3),
+                                   ifelse(Species == "Cattle" & feedgroup == "Replacement animals and adult males", mean_prop - (0.01/3), mean_prop))))%>% 
+  group_by(Species) %>% 
+  mutate(total_prop = sum(mean_prop)) %>% 
+  ungroup() %>% 
+  mutate(Species = ifelse(Species == "Goats", "Goat", Species))
+
+prop_save <- proportions %>% 
+  select(Species, feedgroup, mean_prop) %>% 
+  write_csv(here("feed/data/ruminant_feedgroup_prop.csv"))
+
+```

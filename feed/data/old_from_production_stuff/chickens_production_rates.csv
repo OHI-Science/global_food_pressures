@@ -1,0 +1,1465 @@
+iso3c,country,animal,system_1,system_2,product,tonnes_per_head
+AFG,Afghanistan,chickens,backyard,backyard,eggs,0.0012337776706995193
+AFG,Afghanistan,chickens,backyard,backyard,meat,3.227924875526952e-4
+AFG,Afghanistan,chickens,layers,industrial,eggs,0.028962242962603146
+AFG,Afghanistan,chickens,layers,industrial,meat,0.0020215342183557204
+AFG,Afghanistan,chickens,broilers,industrial,eggs,0
+AFG,Afghanistan,chickens,broilers,industrial,meat,0.008571848865204503
+ALB,Albania,chickens,backyard,backyard,eggs,0.0054340103964805415
+ALB,Albania,chickens,backyard,backyard,meat,0.0012041688947888555
+ALB,Albania,chickens,layers,industrial,eggs,0.052191651682351896
+ALB,Albania,chickens,layers,industrial,meat,0.006131634159334449
+ALB,Albania,chickens,broilers,industrial,eggs,0
+ALB,Albania,chickens,broilers,industrial,meat,0.009257858295089898
+DZA,Algeria,chickens,backyard,backyard,eggs,0.0014504907887492298
+DZA,Algeria,chickens,backyard,backyard,meat,4.179025901202824e-4
+DZA,Algeria,chickens,layers,industrial,eggs,0.03404693558807806
+DZA,Algeria,chickens,layers,industrial,meat,0.005738505219308302
+DZA,Algeria,chickens,broilers,industrial,eggs,0
+DZA,Algeria,chickens,broilers,industrial,meat,0.005624594415396283
+ASM,American Samoa,chickens,backyard,backyard,eggs,0
+ASM,American Samoa,chickens,backyard,backyard,meat,0
+ASM,American Samoa,chickens,layers,industrial,eggs,0
+ASM,American Samoa,chickens,layers,industrial,meat,0
+ASM,American Samoa,chickens,broilers,industrial,eggs,0
+ASM,American Samoa,chickens,broilers,industrial,meat,0
+AND,Andorra,chickens,backyard,backyard,eggs,0.005433960711746534
+AND,Andorra,chickens,backyard,backyard,meat,0.0012041557972761832
+AND,Andorra,chickens,layers,industrial,eggs,0
+AND,Andorra,chickens,layers,industrial,meat,0
+AND,Andorra,chickens,broilers,industrial,eggs,0
+AND,Andorra,chickens,broilers,industrial,meat,0.008996962351855792
+AGO,Angola,chickens,backyard,backyard,eggs,9.927799902698742e-4
+AGO,Angola,chickens,backyard,backyard,meat,4.191356264924615e-4
+AGO,Angola,chickens,layers,industrial,eggs,0.03404695528070907
+AGO,Angola,chickens,layers,industrial,meat,0.005738508465403462
+AGO,Angola,chickens,broilers,industrial,eggs,0
+AGO,Angola,chickens,broilers,industrial,meat,0.005624594402849621
+AIA,Anguilla,chickens,backyard,backyard,eggs,0
+AIA,Anguilla,chickens,backyard,backyard,meat,0
+AIA,Anguilla,chickens,layers,industrial,eggs,0
+AIA,Anguilla,chickens,layers,industrial,meat,0
+AIA,Anguilla,chickens,broilers,industrial,eggs,0
+AIA,Anguilla,chickens,broilers,industrial,meat,0.01282626055486296
+ATG,Antigua & Barbuda,chickens,backyard,backyard,eggs,0
+ATG,Antigua & Barbuda,chickens,backyard,backyard,meat,0
+ATG,Antigua & Barbuda,chickens,layers,industrial,eggs,0.04365655834722179
+ATG,Antigua & Barbuda,chickens,layers,industrial,meat,0.004979073186804877
+ATG,Antigua & Barbuda,chickens,broilers,industrial,eggs,0
+ATG,Antigua & Barbuda,chickens,broilers,industrial,meat,0.01282628046885453
+ARG,Argentina,chickens,backyard,backyard,eggs,0.0022579438357234576
+ARG,Argentina,chickens,backyard,backyard,meat,4.4632882124063107e-4
+ARG,Argentina,chickens,layers,industrial,eggs,0.04614624601619246
+ARG,Argentina,chickens,layers,industrial,meat,0.0057525140835209656
+ARG,Argentina,chickens,broilers,industrial,eggs,0
+ARG,Argentina,chickens,broilers,industrial,meat,0.012858349772589749
+ARM,Armenia,chickens,backyard,backyard,eggs,0.0031219462277527615
+ARM,Armenia,chickens,backyard,backyard,meat,3.8224958595289437e-4
+ARM,Armenia,chickens,layers,industrial,eggs,0.043948211695556724
+ARM,Armenia,chickens,layers,industrial,meat,0.0053555121869969646
+ARM,Armenia,chickens,broilers,industrial,eggs,0
+ARM,Armenia,chickens,broilers,industrial,meat,0.00862941948307403
+ABW,Aruba,chickens,backyard,backyard,eggs,0
+ABW,Aruba,chickens,backyard,backyard,meat,0
+ABW,Aruba,chickens,layers,industrial,eggs,0
+ABW,Aruba,chickens,layers,industrial,meat,0
+ABW,Aruba,chickens,broilers,industrial,eggs,0
+ABW,Aruba,chickens,broilers,industrial,meat,0
+AUS,Australia,chickens,backyard,backyard,eggs,0
+AUS,Australia,chickens,backyard,backyard,meat,0
+AUS,Australia,chickens,layers,industrial,eggs,0.04510696017166451
+AUS,Australia,chickens,layers,industrial,meat,0.005978697076924069
+AUS,Australia,chickens,broilers,industrial,eggs,0
+AUS,Australia,chickens,broilers,industrial,meat,0.00933007879735905
+AUT,Austria,chickens,backyard,backyard,eggs,0
+AUT,Austria,chickens,backyard,backyard,meat,0
+AUT,Austria,chickens,layers,industrial,eggs,0.04195347204238058
+AUT,Austria,chickens,layers,industrial,meat,0.005450880519431413
+AUT,Austria,chickens,broilers,industrial,eggs,0
+AUT,Austria,chickens,broilers,industrial,meat,0.010183876901345947
+AZE,Azerbaijan,chickens,backyard,backyard,eggs,0.003121948514193171
+AZE,Azerbaijan,chickens,backyard,backyard,meat,3.8224988408424405e-4
+AZE,Azerbaijan,chickens,layers,industrial,eggs,0.04394819640480413
+AZE,Azerbaijan,chickens,layers,industrial,meat,0.005355510453354242
+AZE,Azerbaijan,chickens,broilers,industrial,eggs,0
+AZE,Azerbaijan,chickens,broilers,industrial,meat,0.009027700615126127
+BHS,Bahamas,chickens,backyard,backyard,eggs,0.0022579248891504674
+BHS,Bahamas,chickens,backyard,backyard,meat,4.463246441998371e-4
+BHS,Bahamas,chickens,layers,industrial,eggs,0.043657457762002416
+BHS,Bahamas,chickens,layers,industrial,meat,0.004979175042510776
+BHS,Bahamas,chickens,broilers,industrial,eggs,0
+BHS,Bahamas,chickens,broilers,industrial,meat,0.012826258737430986
+BHR,Bahrain,chickens,backyard,backyard,eggs,0.0031220324647613143
+BHR,Bahrain,chickens,backyard,backyard,meat,3.822608304863814e-4
+BHR,Bahrain,chickens,layers,industrial,eggs,0.04394794721695488
+BHR,Bahrain,chickens,layers,industrial,meat,0.005355482200807595
+BHR,Bahrain,chickens,broilers,industrial,eggs,0
+BHR,Bahrain,chickens,broilers,industrial,meat,0.009027703375133112
+BGD,Bangladesh,chickens,backyard,backyard,eggs,0.0014327392426973751
+BGD,Bangladesh,chickens,backyard,backyard,meat,3.227924878825366e-4
+BGD,Bangladesh,chickens,layers,industrial,eggs,0.007509134180624293
+BGD,Bangladesh,chickens,layers,industrial,meat,0.0016187784504236595
+BGD,Bangladesh,chickens,broilers,industrial,eggs,0
+BGD,Bangladesh,chickens,broilers,industrial,meat,0.007457947960915085
+BRB,Barbados,chickens,backyard,backyard,eggs,0.0022579533127184775
+BRB,Barbados,chickens,backyard,backyard,meat,4.4633091057862475e-4
+BRB,Barbados,chickens,layers,industrial,eggs,0.043657653504592095
+BRB,Barbados,chickens,layers,industrial,meat,0.00497919720970224
+BRB,Barbados,chickens,broilers,industrial,eggs,0
+BRB,Barbados,chickens,broilers,industrial,meat,0.0128262571259501
+BLR,Belarus,chickens,backyard,backyard,eggs,0.005434012419605459
+BLR,Belarus,chickens,backyard,backyard,meat,0.0012041694281096991
+BLR,Belarus,chickens,layers,industrial,eggs,0.05336360287580085
+BLR,Belarus,chickens,layers,industrial,meat,0.0059105858411230795
+BLR,Belarus,chickens,broilers,industrial,eggs,0
+BLR,Belarus,chickens,broilers,industrial,meat,0.009678841422066835
+BEL,Belgium,chickens,backyard,backyard,eggs,0
+BEL,Belgium,chickens,backyard,backyard,meat,0
+BEL,Belgium,chickens,layers,industrial,eggs,0.04722319828820399
+BEL,Belgium,chickens,layers,industrial,meat,0.006091129841259499
+BEL,Belgium,chickens,broilers,industrial,eggs,0
+BEL,Belgium,chickens,broilers,industrial,meat,0.010302351403904272
+BLZ,Belize,chickens,backyard,backyard,eggs,0.0022579403942637618
+BLZ,Belize,chickens,backyard,backyard,meat,4.463280625220201e-4
+BLZ,Belize,chickens,layers,industrial,eggs,0.043657810416951284
+BLZ,Belize,chickens,layers,industrial,meat,0.004979214979500395
+BLZ,Belize,chickens,broilers,industrial,eggs,0
+BLZ,Belize,chickens,broilers,industrial,meat,0.01282625208398843
+BEN,Benin,chickens,backyard,backyard,eggs,4.841979689693925e-4
+BEN,Benin,chickens,backyard,backyard,meat,2.9936062527980496e-4
+BEN,Benin,chickens,layers,industrial,eggs,0.03404695811612435
+BEN,Benin,chickens,layers,industrial,meat,0.005738508932787824
+BEN,Benin,chickens,broilers,industrial,eggs,0
+BEN,Benin,chickens,broilers,industrial,meat,0.005624595174847043
+BMU,Bermuda,chickens,backyard,backyard,eggs,0
+BMU,Bermuda,chickens,backyard,backyard,meat,0
+BMU,Bermuda,chickens,layers,industrial,eggs,0
+BMU,Bermuda,chickens,layers,industrial,meat,0
+BMU,Bermuda,chickens,broilers,industrial,eggs,0
+BMU,Bermuda,chickens,broilers,industrial,meat,0
+BTN,Bhutan,chickens,backyard,backyard,eggs,0.0015887138196014959
+BTN,Bhutan,chickens,backyard,backyard,meat,3.227938402525895e-4
+BTN,Bhutan,chickens,layers,industrial,eggs,0.007509143561483062
+BTN,Bhutan,chickens,layers,industrial,meat,0.0016187804532466648
+BTN,Bhutan,chickens,broilers,industrial,eggs,0
+BTN,Bhutan,chickens,broilers,industrial,meat,0.0074579899406226275
+BOL,Bolivia,chickens,backyard,backyard,eggs,0.002257943699790607
+BOL,Bolivia,chickens,backyard,backyard,meat,4.4632879127230567e-4
+BOL,Bolivia,chickens,layers,industrial,eggs,0.046146237229494805
+BOL,Bolivia,chickens,layers,industrial,meat,0.005752513030557626
+BOL,Bolivia,chickens,broilers,industrial,eggs,0
+BOL,Bolivia,chickens,broilers,industrial,meat,0.012858349865136334
+BIH,Bosnia & Herzegovina,chickens,backyard,backyard,eggs,0.005434010344675745
+BIH,Bosnia & Herzegovina,chickens,backyard,backyard,meat,0.0012041688811324685
+BIH,Bosnia & Herzegovina,chickens,layers,industrial,eggs,0.052191656201960444
+BIH,Bosnia & Herzegovina,chickens,layers,industrial,meat,0.006131634684073744
+BIH,Bosnia & Herzegovina,chickens,broilers,industrial,eggs,0
+BIH,Bosnia & Herzegovina,chickens,broilers,industrial,meat,0.00899707067023971
+BWA,Botswana,chickens,backyard,backyard,eggs,9.969835034798445e-4
+BWA,Botswana,chickens,backyard,backyard,meat,4.224812615067236e-4
+BWA,Botswana,chickens,layers,industrial,eggs,0.034046972454015216
+BWA,Botswana,chickens,layers,industrial,meat,0.005738511296217986
+BWA,Botswana,chickens,broilers,industrial,eggs,0
+BWA,Botswana,chickens,broilers,industrial,meat,0.0056245944538462714
+BRA,Brazil,chickens,backyard,backyard,eggs,0.002905094955003652
+BRA,Brazil,chickens,backyard,backyard,meat,4.4632879597572876e-4
+BRA,Brazil,chickens,layers,industrial,eggs,0.030871231882100444
+BRA,Brazil,chickens,layers,industrial,meat,0.001936263035517181
+BRA,Brazil,chickens,broilers,industrial,eggs,0
+BRA,Brazil,chickens,broilers,industrial,meat,0.013106734410279805
+VGB,British Virgin Islands,chickens,backyard,backyard,eggs,0
+VGB,British Virgin Islands,chickens,backyard,backyard,meat,0
+VGB,British Virgin Islands,chickens,layers,industrial,eggs,0
+VGB,British Virgin Islands,chickens,layers,industrial,meat,0
+VGB,British Virgin Islands,chickens,broilers,industrial,eggs,0
+VGB,British Virgin Islands,chickens,broilers,industrial,meat,0.012826256052240135
+BRN,Brunei,chickens,backyard,backyard,eggs,8.465319858410096e-4
+BRN,Brunei,chickens,backyard,backyard,meat,6.170915929090739e-4
+BRN,Brunei,chickens,layers,industrial,eggs,0.02967068381382765
+BRN,Brunei,chickens,layers,industrial,meat,0.0022582449762567403
+BRN,Brunei,chickens,broilers,industrial,eggs,0
+BRN,Brunei,chickens,broilers,industrial,meat,0.009564335357595427
+BGR,Bulgaria,chickens,backyard,backyard,eggs,0.005434010817476148
+BGR,Bulgaria,chickens,backyard,backyard,meat,8.841437160210831e-4
+BGR,Bulgaria,chickens,layers,industrial,eggs,0.05336359186458944
+BGR,Bulgaria,chickens,layers,industrial,meat,0.005910584661975696
+BGR,Bulgaria,chickens,broilers,industrial,eggs,0
+BGR,Bulgaria,chickens,broilers,industrial,meat,0.009678841681294435
+BFA,Burkina Faso,chickens,backyard,backyard,eggs,4.133397339410389e-4
+BFA,Burkina Faso,chickens,backyard,backyard,meat,2.993606308780728e-4
+BFA,Burkina Faso,chickens,layers,industrial,eggs,0.03404702192123432
+BFA,Burkina Faso,chickens,layers,industrial,meat,0.005738519450298576
+BFA,Burkina Faso,chickens,broilers,industrial,eggs,0
+BFA,Burkina Faso,chickens,broilers,industrial,meat,0.0056245989801169275
+BDI,Burundi,chickens,backyard,backyard,eggs,0.0010204755302640452
+BDI,Burundi,chickens,backyard,backyard,meat,4.742187929062272e-4
+BDI,Burundi,chickens,layers,industrial,eggs,0.03404732508527934
+BDI,Burundi,chickens,layers,industrial,meat,0.005738569423272616
+BDI,Burundi,chickens,broilers,industrial,eggs,0
+BDI,Burundi,chickens,broilers,industrial,meat,0.005624594453846273
+CPV,Cape Verde,chickens,backyard,backyard,eggs,4.8419739285632176e-4
+CPV,Cape Verde,chickens,backyard,backyard,meat,2.993599898687024e-4
+CPV,Cape Verde,chickens,layers,industrial,eggs,0
+CPV,Cape Verde,chickens,layers,industrial,meat,0
+CPV,Cape Verde,chickens,broilers,industrial,eggs,0
+CPV,Cape Verde,chickens,broilers,industrial,meat,0
+KHM,Cambodia,chickens,backyard,backyard,eggs,8.465310913729933e-4
+KHM,Cambodia,chickens,backyard,backyard,meat,6.170907810868093e-4
+KHM,Cambodia,chickens,layers,industrial,eggs,0.029670682942382006
+KHM,Cambodia,chickens,layers,industrial,meat,0.0022582449107299337
+KHM,Cambodia,chickens,broilers,industrial,eggs,0
+KHM,Cambodia,chickens,broilers,industrial,meat,0.009564334626552241
+CMR,Cameroon,chickens,backyard,backyard,eggs,9.92779933997943e-4
+CMR,Cameroon,chickens,backyard,backyard,meat,4.191355975488346e-4
+CMR,Cameroon,chickens,layers,industrial,eggs,0.034046897039334764
+CMR,Cameroon,chickens,layers,industrial,meat,0.005738498865008117
+CMR,Cameroon,chickens,broilers,industrial,eggs,0
+CMR,Cameroon,chickens,broilers,industrial,meat,0.005624594251510152
+CAN,Canada,chickens,backyard,backyard,eggs,0
+CAN,Canada,chickens,backyard,backyard,meat,0
+CAN,Canada,chickens,layers,industrial,eggs,0.04539670322260175
+CAN,Canada,chickens,layers,industrial,meat,0.005315848286774351
+CAN,Canada,chickens,broilers,industrial,eggs,0
+CAN,Canada,chickens,broilers,industrial,meat,0.010773665763069607
+CYM,Cayman Islands,chickens,backyard,backyard,eggs,0
+CYM,Cayman Islands,chickens,backyard,backyard,meat,0
+CYM,Cayman Islands,chickens,layers,industrial,eggs,0
+CYM,Cayman Islands,chickens,layers,industrial,meat,0
+CYM,Cayman Islands,chickens,broilers,industrial,eggs,0
+CYM,Cayman Islands,chickens,broilers,industrial,meat,0
+CAF,Central African Republic,chickens,backyard,backyard,eggs,9.927799053079237e-4
+CAF,Central African Republic,chickens,backyard,backyard,meat,4.1913558279204206e-4
+CAF,Central African Republic,chickens,layers,industrial,eggs,0.03404688301590075
+CAF,Central African Republic,chickens,layers,industrial,meat,0.005738496553412412
+CAF,Central African Republic,chickens,broilers,industrial,eggs,0
+CAF,Central African Republic,chickens,broilers,industrial,meat,0.00562459295064666
+TCD,Chad,chickens,backyard,backyard,eggs,9.927799393292746e-4
+TCD,Chad,chickens,backyard,backyard,meat,4.1913560029102e-4
+TCD,Chad,chickens,layers,industrial,eggs,0.03405141054617374
+TCD,Chad,chickens,layers,industrial,meat,0.005739242862734062
+TCD,Chad,chickens,broilers,industrial,eggs,0
+TCD,Chad,chickens,broilers,industrial,meat,0.005624648923189041
+CHL,Chile,chickens,backyard,backyard,eggs,0.0022579433969349407
+CHL,Chile,chickens,backyard,backyard,meat,4.463287245034778e-4
+CHL,Chile,chickens,layers,industrial,eggs,0.04614624556826936
+CHL,Chile,chickens,layers,industrial,meat,0.005752514029843621
+CHL,Chile,chickens,broilers,industrial,eggs,0
+CHL,Chile,chickens,broilers,industrial,meat,0.01285834972583656
+HKG,Hong Kong SAR China,chickens,backyard,backyard,eggs,0.0012403905171555654
+HKG,Hong Kong SAR China,chickens,backyard,backyard,meat,4.434378859471402e-4
+HKG,Hong Kong SAR China,chickens,layers,industrial,eggs,0
+HKG,Hong Kong SAR China,chickens,layers,industrial,meat,0
+HKG,Hong Kong SAR China,chickens,broilers,industrial,eggs,0
+HKG,Hong Kong SAR China,chickens,broilers,industrial,meat,0
+MAC,Macau SAR China,chickens,backyard,backyard,eggs,0
+MAC,Macau SAR China,chickens,backyard,backyard,meat,0
+MAC,Macau SAR China,chickens,layers,industrial,eggs,0
+MAC,Macau SAR China,chickens,layers,industrial,meat,0
+MAC,Macau SAR China,chickens,broilers,industrial,eggs,0
+MAC,Macau SAR China,chickens,broilers,industrial,meat,0
+CHN,China,chickens,backyard,backyard,eggs,0.0012407982543227469
+CHN,China,chickens,backyard,backyard,meat,4.4294722105480154e-4
+CHN,China,chickens,layers,industrial,eggs,0.04344249079432178
+CHN,China,chickens,layers,industrial,meat,0.0056146600582045935
+CHN,China,chickens,broilers,industrial,eggs,0
+CHN,China,chickens,broilers,industrial,meat,0.008410754708570624
+COL,Colombia,chickens,backyard,backyard,eggs,0.002257943748764948
+COL,Colombia,chickens,backyard,backyard,meat,4.4632880206939393e-4
+COL,Colombia,chickens,layers,industrial,eggs,0.05075675914915388
+COL,Colombia,chickens,layers,industrial,meat,0.0057024444933505385
+COL,Colombia,chickens,broilers,industrial,eggs,0
+COL,Colombia,chickens,broilers,industrial,meat,0.012901133596916173
+COM,Comoros,chickens,backyard,backyard,eggs,0.0010204758399941641
+COM,Comoros,chickens,backyard,backyard,meat,4.7421895837073476e-4
+COM,Comoros,chickens,layers,industrial,eggs,0.034047824244925064
+COM,Comoros,chickens,layers,industrial,meat,0.0057386517037818835
+COM,Comoros,chickens,broilers,industrial,eggs,0
+COM,Comoros,chickens,broilers,industrial,meat,0.005624569465241385
+COG,Congo - Brazzaville,chickens,backyard,backyard,eggs,9.927796817716054e-4
+COG,Congo - Brazzaville,chickens,backyard,backyard,meat,4.191354678155047e-4
+COG,Congo - Brazzaville,chickens,layers,industrial,eggs,0.03404673206705815
+COG,Congo - Brazzaville,chickens,layers,industrial,meat,0.005738471671297542
+COG,Congo - Brazzaville,chickens,broilers,industrial,eggs,0
+COG,Congo - Brazzaville,chickens,broilers,industrial,meat,0.005624592946928417
+COK,Cook Islands,chickens,backyard,backyard,eggs,0.001255786856446238
+COK,Cook Islands,chickens,backyard,backyard,meat,3.491904076510244e-4
+COK,Cook Islands,chickens,layers,industrial,eggs,0
+COK,Cook Islands,chickens,layers,industrial,meat,0
+COK,Cook Islands,chickens,broilers,industrial,eggs,0
+COK,Cook Islands,chickens,broilers,industrial,meat,0
+CRI,Costa Rica,chickens,backyard,backyard,eggs,0.002257944299001692
+CRI,Costa Rica,chickens,backyard,backyard,meat,4.4632892337688994e-4
+CRI,Costa Rica,chickens,layers,industrial,eggs,0.04365759034742403
+CRI,Costa Rica,chickens,layers,industrial,meat,0.004979190057364881
+CRI,Costa Rica,chickens,broilers,industrial,eggs,0
+CRI,Costa Rica,chickens,broilers,industrial,meat,0.012826256319466173
+CIV,Côte d’Ivoire,chickens,backyard,backyard,eggs,4.841979689693924e-4
+CIV,Côte d’Ivoire,chickens,backyard,backyard,meat,2.9936062527980496e-4
+CIV,Côte d’Ivoire,chickens,layers,industrial,eggs,0.034046935083029
+CIV,Côte d’Ivoire,chickens,layers,industrial,meat,0.005738505136056996
+CIV,Côte d’Ivoire,chickens,broilers,industrial,eggs,0
+CIV,Côte d’Ivoire,chickens,broilers,industrial,meat,0.005624594395890423
+HRV,Croatia,chickens,backyard,backyard,eggs,0.005434005468792159
+HRV,Croatia,chickens,backyard,backyard,meat,0.0012041675957890257
+HRV,Croatia,chickens,layers,industrial,eggs,0.05219161498155718
+HRV,Croatia,chickens,layers,industrial,meat,0.006131629898268709
+HRV,Croatia,chickens,broilers,industrial,eggs,0
+HRV,Croatia,chickens,broilers,industrial,meat,0.008997069752265899
+CUB,Cuba,chickens,backyard,backyard,eggs,0.002257943719465346
+CUB,Cuba,chickens,backyard,backyard,meat,4.463287956098809e-4
+CUB,Cuba,chickens,layers,industrial,eggs,0
+CUB,Cuba,chickens,layers,industrial,meat,0
+CUB,Cuba,chickens,broilers,industrial,eggs,0
+CUB,Cuba,chickens,broilers,industrial,meat,0
+CYP,Cyprus,chickens,backyard,backyard,eggs,0.003121930811769973
+CYP,Cyprus,chickens,backyard,backyard,meat,3.8224757584682037e-4
+CYP,Cyprus,chickens,layers,industrial,eggs,0.04394819882660643
+CYP,Cyprus,chickens,layers,industrial,meat,0.005355510727934576
+CYP,Cyprus,chickens,broilers,industrial,eggs,0
+CYP,Cyprus,chickens,broilers,industrial,meat,0.008629419042728473
+CZE,Czechia,chickens,backyard,backyard,eggs,0
+CZE,Czechia,chickens,backyard,backyard,meat,0
+CZE,Czechia,chickens,layers,industrial,eggs,0.051962973546764185
+CZE,Czechia,chickens,layers,industrial,meat,0.0061338328626835085
+CZE,Czechia,chickens,broilers,industrial,eggs,0
+CZE,Czechia,chickens,broilers,industrial,meat,0.009703782371781228
+PRK,North Korea,chickens,backyard,backyard,eggs,0.0012403893305115482
+PRK,North Korea,chickens,backyard,backyard,meat,4.434373509425409e-4
+PRK,North Korea,chickens,layers,industrial,eggs,0.028101720045002297
+PRK,North Korea,chickens,layers,industrial,meat,0.00233652219613695
+PRK,North Korea,chickens,broilers,industrial,eggs,0
+PRK,North Korea,chickens,broilers,industrial,meat,0.008085176105683725
+COD,Congo - Kinshasa,chickens,backyard,backyard,eggs,9.92779903785795e-4
+COD,Congo - Kinshasa,chickens,backyard,backyard,meat,4.191355820091308e-4
+COD,Congo - Kinshasa,chickens,layers,industrial,eggs,0.03404685930753759
+COD,Congo - Kinshasa,chickens,layers,industrial,meat,0.005738492645371745
+COD,Congo - Kinshasa,chickens,broilers,industrial,eggs,0
+COD,Congo - Kinshasa,chickens,broilers,industrial,meat,0.0056245953246855905
+DNK,Denmark,chickens,backyard,backyard,eggs,0
+DNK,Denmark,chickens,backyard,backyard,meat,0
+DNK,Denmark,chickens,layers,industrial,eggs,0.055068014021611114
+DNK,Denmark,chickens,layers,industrial,meat,0.006108511714516399
+DNK,Denmark,chickens,broilers,industrial,eggs,0
+DNK,Denmark,chickens,broilers,industrial,meat,0.009609521336283853
+DJI,Djibouti,chickens,backyard,backyard,eggs,0.0010204755446119316
+DJI,Djibouti,chickens,backyard,backyard,meat,4.742188005711776e-4
+DJI,Djibouti,chickens,layers,industrial,eggs,0
+DJI,Djibouti,chickens,layers,industrial,meat,0
+DJI,Djibouti,chickens,broilers,industrial,eggs,0
+DJI,Djibouti,chickens,broilers,industrial,meat,0.00562459464353022
+DMA,Dominica,chickens,backyard,backyard,eggs,0.002257975382325517
+DMA,Dominica,chickens,backyard,backyard,meat,4.463357761365781e-4
+DMA,Dominica,chickens,layers,industrial,eggs,0.0436568934249481
+DMA,Dominica,chickens,layers,industrial,meat,0.004979111133233021
+DMA,Dominica,chickens,broilers,industrial,eggs,0
+DMA,Dominica,chickens,broilers,industrial,meat,0.012826273905791045
+DOM,Dominican Republic,chickens,backyard,backyard,eggs,0.0016060687092744168
+DOM,Dominican Republic,chickens,backyard,backyard,meat,4.4632878161361705e-4
+DOM,Dominican Republic,chickens,layers,industrial,eggs,0.04365758569211441
+DOM,Dominican Republic,chickens,layers,industrial,meat,0.0049791895301666885
+DOM,Dominican Republic,chickens,broilers,industrial,eggs,0
+DOM,Dominican Republic,chickens,broilers,industrial,meat,0.01282625610160945
+ECU,Ecuador,chickens,backyard,backyard,eggs,0.002257943601281752
+ECU,Ecuador,chickens,backyard,backyard,meat,4.4632876955463113e-4
+ECU,Ecuador,chickens,layers,industrial,eggs,0.04614624547839745
+ECU,Ecuador,chickens,layers,industrial,meat,0.005752514019073725
+ECU,Ecuador,chickens,broilers,industrial,eggs,0
+ECU,Ecuador,chickens,broilers,industrial,meat,0.012858349850504448
+EGY,Egypt,chickens,backyard,backyard,eggs,0.0014504908416241966
+EGY,Egypt,chickens,backyard,backyard,meat,4.179026085341212e-4
+EGY,Egypt,chickens,layers,industrial,eggs,0.03404693439172581
+EGY,Egypt,chickens,layers,industrial,meat,0.005738505022103916
+EGY,Egypt,chickens,broilers,industrial,eggs,0
+EGY,Egypt,chickens,broilers,industrial,meat,0
+SLV,El Salvador,chickens,backyard,backyard,eggs,0.002257944048511665
+SLV,El Salvador,chickens,backyard,backyard,meat,4.4632886815280985e-4
+SLV,El Salvador,chickens,layers,industrial,eggs,0.0436575807776752
+SLV,El Salvador,chickens,layers,industrial,meat,0.00497918897362294
+SLV,El Salvador,chickens,broilers,industrial,eggs,0
+SLV,El Salvador,chickens,broilers,industrial,meat,0.012826256052240137
+GNQ,Equatorial Guinea,chickens,backyard,backyard,eggs,0
+GNQ,Equatorial Guinea,chickens,backyard,backyard,meat,0
+GNQ,Equatorial Guinea,chickens,layers,industrial,eggs,0.03404722838768241
+GNQ,Equatorial Guinea,chickens,layers,industrial,meat,0.005738553483828014
+GNQ,Equatorial Guinea,chickens,broilers,industrial,eggs,0
+GNQ,Equatorial Guinea,chickens,broilers,industrial,meat,0.005624605267303646
+ERI,Eritrea,chickens,backyard,backyard,eggs,0.001020475785774308
+ERI,Eritrea,chickens,backyard,backyard,meat,4.7421892940531876e-4
+ERI,Eritrea,chickens,layers,industrial,eggs,0.0340485925683006
+ERI,Eritrea,chickens,layers,industrial,meat,0.005738778352719081
+ERI,Eritrea,chickens,broilers,industrial,eggs,0
+ERI,Eritrea,chickens,broilers,industrial,meat,0.00562457566890496
+EST,Estonia,chickens,backyard,backyard,eggs,0.005434057327313665
+EST,Estonia,chickens,backyard,backyard,meat,8.841515015183063e-4
+EST,Estonia,chickens,layers,industrial,eggs,0.05506785090406411
+EST,Estonia,chickens,layers,industrial,meat,0.006108494149059319
+EST,Estonia,chickens,broilers,industrial,eggs,0
+EST,Estonia,chickens,broilers,industrial,meat,0.00960952584657048
+ETH,Ethiopia,chickens,backyard,backyard,eggs,0.0011573686012335107
+ETH,Ethiopia,chickens,backyard,backyard,meat,4.742187985735234e-4
+ETH,Ethiopia,chickens,layers,industrial,eggs,0.034046978917322945
+ETH,Ethiopia,chickens,layers,industrial,meat,0.005738512361617114
+ETH,Ethiopia,chickens,broilers,industrial,eggs,0
+ETH,Ethiopia,chickens,broilers,industrial,meat,0.0056245944538462714
+FLK,Falkland Islands,chickens,backyard,backyard,eggs,0
+FLK,Falkland Islands,chickens,backyard,backyard,meat,0
+FLK,Falkland Islands,chickens,layers,industrial,eggs,0
+FLK,Falkland Islands,chickens,layers,industrial,meat,0
+FLK,Falkland Islands,chickens,broilers,industrial,eggs,0
+FLK,Falkland Islands,chickens,broilers,industrial,meat,0
+FRO,Faroe Islands,chickens,backyard,backyard,eggs,0.005433970956646823
+FRO,Faroe Islands,chickens,backyard,backyard,meat,8.84137043532152e-4
+FRO,Faroe Islands,chickens,layers,industrial,eggs,0
+FRO,Faroe Islands,chickens,layers,industrial,meat,0
+FRO,Faroe Islands,chickens,broilers,industrial,eggs,0
+FRO,Faroe Islands,chickens,broilers,industrial,meat,0
+FSM,Micronesia (Federated States of),chickens,backyard,backyard,eggs,0.0012557632434964413
+FSM,Micronesia (Federated States of),chickens,backyard,backyard,meat,3.4918250656419615e-4
+FSM,Micronesia (Federated States of),chickens,layers,industrial,eggs,0.04925668113671671
+FSM,Micronesia (Federated States of),chickens,layers,industrial,meat,0.006229625986009021
+FSM,Micronesia (Federated States of),chickens,broilers,industrial,eggs,0
+FSM,Micronesia (Federated States of),chickens,broilers,industrial,meat,0.009369002632865777
+FJI,Fiji,chickens,backyard,backyard,eggs,0.0012557701073240466
+FJI,Fiji,chickens,backyard,backyard,meat,3.491848032572545e-4
+FJI,Fiji,chickens,layers,industrial,eggs,0.04925562042598004
+FJI,Fiji,chickens,layers,industrial,meat,0.006229496436168883
+FJI,Fiji,chickens,broilers,industrial,eggs,0
+FJI,Fiji,chickens,broilers,industrial,meat,0.009369110752817416
+FIN,Finland,chickens,backyard,backyard,eggs,0
+FIN,Finland,chickens,backyard,backyard,meat,0
+FIN,Finland,chickens,layers,industrial,eggs,0.05765357900692058
+FIN,Finland,chickens,layers,industrial,meat,0.005540150196423963
+FIN,Finland,chickens,broilers,industrial,eggs,0
+FIN,Finland,chickens,broilers,industrial,meat,0.00937299507670564
+FRA,France,chickens,backyard,backyard,eggs,0
+FRA,France,chickens,backyard,backyard,meat,0
+FRA,France,chickens,layers,industrial,eggs,0.0517606806482025
+FRA,France,chickens,layers,industrial,meat,0.005923558950439406
+FRA,France,chickens,broilers,industrial,eggs,0
+FRA,France,chickens,broilers,industrial,meat,0.010084071680897951
+GUF,French Guiana,chickens,backyard,backyard,eggs,0.0022579366908125845
+GUF,French Guiana,chickens,backyard,backyard,meat,4.463272460436705e-4
+GUF,French Guiana,chickens,layers,industrial,eggs,0.046146242890566805
+GUF,French Guiana,chickens,layers,industrial,meat,0.005752513708958264
+GUF,French Guiana,chickens,broilers,industrial,eggs,0
+GUF,French Guiana,chickens,broilers,industrial,meat,0.012858244642703706
+PYF,French Polynesia,chickens,backyard,backyard,eggs,0
+PYF,French Polynesia,chickens,backyard,backyard,meat,0
+PYF,French Polynesia,chickens,layers,industrial,eggs,0
+PYF,French Polynesia,chickens,layers,industrial,meat,0
+PYF,French Polynesia,chickens,broilers,industrial,eggs,0
+PYF,French Polynesia,chickens,broilers,industrial,meat,0
+GAB,Gabon,chickens,backyard,backyard,eggs,9.9277982867546e-4
+GAB,Gabon,chickens,backyard,backyard,meat,4.191355433759176e-4
+GAB,Gabon,chickens,layers,industrial,eggs,0.03404726724038363
+GAB,Gabon,chickens,layers,industrial,meat,0.005738559888232036
+GAB,Gabon,chickens,broilers,industrial,eggs,0
+GAB,Gabon,chickens,broilers,industrial,meat,0.0056245944538462714
+GMB,Gambia,chickens,backyard,backyard,eggs,4.8419782783271217e-4
+GMB,Gambia,chickens,backyard,backyard,meat,2.9936046961624133e-4
+GMB,Gambia,chickens,layers,industrial,eggs,0.03404658569141356
+GMB,Gambia,chickens,layers,industrial,meat,0.005738447543019778
+GMB,Gambia,chickens,broilers,industrial,eggs,0
+GMB,Gambia,chickens,broilers,industrial,meat,0.005624584216327878
+GEO,Georgia,chickens,backyard,backyard,eggs,0.003121948536283773
+GEO,Georgia,chickens,backyard,backyard,meat,3.8224988696466066e-4
+GEO,Georgia,chickens,layers,industrial,eggs,0.04394827800132375
+GEO,Georgia,chickens,layers,industrial,meat,0.0053555197046459245
+GEO,Georgia,chickens,broilers,industrial,eggs,0
+GEO,Georgia,chickens,broilers,industrial,meat,0.009027687818977184
+DEU,Germany,chickens,backyard,backyard,eggs,0
+DEU,Germany,chickens,backyard,backyard,meat,0
+DEU,Germany,chickens,layers,industrial,eggs,0.045970528119190036
+DEU,Germany,chickens,layers,industrial,meat,0.005973111026262446
+DEU,Germany,chickens,broilers,industrial,eggs,0
+DEU,Germany,chickens,broilers,industrial,meat,0.009595522482275683
+GHA,Ghana,chickens,backyard,backyard,eggs,4.841979639154497e-4
+GHA,Ghana,chickens,backyard,backyard,meat,2.993606197056712e-4
+GHA,Ghana,chickens,layers,industrial,eggs,0.03404692431480975
+GHA,Ghana,chickens,layers,industrial,meat,0.005738503361044587
+GHA,Ghana,chickens,broilers,industrial,eggs,0
+GHA,Ghana,chickens,broilers,industrial,meat,0.005624594140212314
+GRC,Greece,chickens,backyard,backyard,eggs,0.005434010750234237
+GRC,Greece,chickens,backyard,backyard,meat,0.0012041689880427212
+GRC,Greece,chickens,layers,industrial,eggs,0.052191639750935964
+GRC,Greece,chickens,layers,industrial,meat,0.006131632774063418
+GRC,Greece,chickens,broilers,industrial,eggs,0
+GRC,Greece,chickens,broilers,industrial,meat,0.008997070056215358
+GRL,Greenland,chickens,backyard,backyard,eggs,0
+GRL,Greenland,chickens,backyard,backyard,meat,0
+GRL,Greenland,chickens,layers,industrial,eggs,0
+GRL,Greenland,chickens,layers,industrial,meat,0
+GRL,Greenland,chickens,broilers,industrial,eggs,0
+GRL,Greenland,chickens,broilers,industrial,meat,0
+GRD,Grenada,chickens,backyard,backyard,eggs,0.00225793411394816
+GRD,Grenada,chickens,backyard,backyard,meat,4.463266779373526e-4
+GRD,Grenada,chickens,layers,industrial,eggs,0.043657795351007285
+GRD,Grenada,chickens,layers,industrial,meat,0.004979213273332794
+GRD,Grenada,chickens,broilers,industrial,eggs,0
+GRD,Grenada,chickens,broilers,industrial,meat,0.012826256052240137
+GLP,Guadeloupe,chickens,backyard,backyard,eggs,0.0022579401132502984
+GLP,Guadeloupe,chickens,backyard,backyard,meat,4.463280005686157e-4
+GLP,Guadeloupe,chickens,layers,industrial,eggs,0
+GLP,Guadeloupe,chickens,layers,industrial,meat,0
+GLP,Guadeloupe,chickens,broilers,industrial,eggs,0
+GLP,Guadeloupe,chickens,broilers,industrial,meat,0
+GUM,Guam,chickens,backyard,backyard,eggs,0
+GUM,Guam,chickens,backyard,backyard,meat,0
+GUM,Guam,chickens,layers,industrial,eggs,0.04925525823331342
+GUM,Guam,chickens,layers,industrial,meat,0.006229452199789976
+GUM,Guam,chickens,broilers,industrial,eggs,0
+GUM,Guam,chickens,broilers,industrial,meat,0
+GTM,Guatemala,chickens,backyard,backyard,eggs,0.002257943796633165
+GTM,Guatemala,chickens,backyard,backyard,meat,4.463288126226212e-4
+GTM,Guatemala,chickens,layers,industrial,eggs,0.043657592112626056
+GTM,Guatemala,chickens,layers,industrial,meat,0.0049791902572680884
+GTM,Guatemala,chickens,broilers,industrial,eggs,0
+GTM,Guatemala,chickens,broilers,industrial,meat,0.012826256592696686
+GGY,Guernsey,chickens,backyard,backyard,eggs,0
+GGY,Guernsey,chickens,backyard,backyard,meat,0
+GGY,Guernsey,chickens,layers,industrial,eggs,0
+GGY,Guernsey,chickens,layers,industrial,meat,0
+GGY,Guernsey,chickens,broilers,industrial,eggs,0
+GGY,Guernsey,chickens,broilers,industrial,meat,0
+GNB,Guinea-Bissau,chickens,backyard,backyard,eggs,4.8419788816417704e-4
+GNB,Guinea-Bissau,chickens,backyard,backyard,meat,2.9936053615748905e-4
+GNB,Guinea-Bissau,chickens,layers,industrial,eggs,0.03404718989217067
+GNB,Guinea-Bissau,chickens,layers,industrial,meat,0.005738547138302412
+GNB,Guinea-Bissau,chickens,broilers,industrial,eggs,0
+GNB,Guinea-Bissau,chickens,broilers,industrial,meat,0.005624585650215319
+GIN,Guinea,chickens,backyard,backyard,eggs,4.841979689693927e-4
+GIN,Guinea,chickens,backyard,backyard,meat,2.9936062527980496e-4
+GIN,Guinea,chickens,layers,industrial,eggs,0.03404694920752153
+GIN,Guinea,chickens,layers,industrial,meat,0.005738507464310988
+GIN,Guinea,chickens,broilers,industrial,eggs,0
+GIN,Guinea,chickens,broilers,industrial,meat,0.0056245970259775485
+GUY,Guyana,chickens,backyard,backyard,eggs,0.0022579452638532803
+GUY,Guyana,chickens,backyard,backyard,meat,4.4632913609211e-4
+GUY,Guyana,chickens,layers,industrial,eggs,0.04614648015716701
+GUY,Guyana,chickens,layers,industrial,meat,0.005752542142055846
+GUY,Guyana,chickens,broilers,industrial,eggs,0
+GUY,Guyana,chickens,broilers,industrial,meat,0.01285834957680663
+HTI,Haiti,chickens,backyard,backyard,eggs,0.002257943740362388
+HTI,Haiti,chickens,backyard,backyard,meat,4.4632880021693017e-4
+HTI,Haiti,chickens,layers,industrial,eggs,0.04365752835248098
+HTI,Haiti,chickens,layers,industrial,meat,0.004979183036645607
+HTI,Haiti,chickens,broilers,industrial,eggs,0
+HTI,Haiti,chickens,broilers,industrial,meat,0.012826254333931305
+HND,Honduras,chickens,backyard,backyard,eggs,0.0022579436058233014
+HND,Honduras,chickens,backyard,backyard,meat,4.4632877055588013e-4
+HND,Honduras,chickens,layers,industrial,eggs,0.04365757253969651
+HND,Honduras,chickens,layers,industrial,meat,0.004979188040699496
+HND,Honduras,chickens,broilers,industrial,eggs,0
+HND,Honduras,chickens,broilers,industrial,meat,0.012826256118778214
+HUN,Hungary,chickens,backyard,backyard,eggs,0.005434012983222099
+HUN,Hungary,chickens,backyard,backyard,meat,0.0012041695766860424
+HUN,Hungary,chickens,layers,industrial,eggs,0.04712579858624054
+HUN,Hungary,chickens,layers,industrial,meat,0.006884007870123368
+HUN,Hungary,chickens,broilers,industrial,eggs,0
+HUN,Hungary,chickens,broilers,industrial,meat,0.009614163657610449
+ISL,Iceland,chickens,backyard,backyard,eggs,0
+ISL,Iceland,chickens,backyard,backyard,meat,0
+ISL,Iceland,chickens,layers,industrial,eggs,0.05506895214495327
+ISL,Iceland,chickens,layers,industrial,meat,0.006108612737156851
+ISL,Iceland,chickens,broilers,industrial,eggs,0
+ISL,Iceland,chickens,broilers,industrial,meat,0.009609508593828536
+IND,India,chickens,backyard,backyard,eggs,0.002750462504261305
+IND,India,chickens,backyard,backyard,meat,4.539438568440114e-4
+IND,India,chickens,layers,industrial,eggs,0.030017123633526467
+IND,India,chickens,layers,industrial,meat,0.002018335609374125
+IND,India,chickens,broilers,industrial,eggs,0
+IND,India,chickens,broilers,industrial,meat,0.008201873298027358
+IDN,Indonesia,chickens,backyard,backyard,eggs,6.978414461001411e-4
+IDN,Indonesia,chickens,backyard,backyard,meat,6.162357388704459e-4
+IDN,Indonesia,chickens,layers,industrial,eggs,0.025271240706358618
+IDN,Indonesia,chickens,layers,industrial,meat,0.002045957792862249
+IDN,Indonesia,chickens,broilers,industrial,eggs,0
+IDN,Indonesia,chickens,broilers,industrial,meat,0.00518451759113303
+IRN,Iran,chickens,backyard,backyard,eggs,0.001588708333743189
+IRN,Iran,chickens,backyard,backyard,meat,3.2279249008022653e-4
+IRN,Iran,chickens,layers,industrial,eggs,0.029254211132983036
+IRN,Iran,chickens,layers,industrial,meat,0.0019966194448965448
+IRN,Iran,chickens,broilers,industrial,eggs,0
+IRN,Iran,chickens,broilers,industrial,meat,0.0085576213630938
+IRQ,Iraq,chickens,backyard,backyard,eggs,0.00312194824806702
+IRQ,Iraq,chickens,backyard,backyard,meat,3.8224984938377754e-4
+IRQ,Iraq,chickens,layers,industrial,eggs,0.04394820331659222
+IRQ,Iraq,chickens,layers,industrial,meat,0.0053555112370024666
+IRQ,Iraq,chickens,broilers,industrial,eggs,0
+IRQ,Iraq,chickens,broilers,industrial,meat,0.009027700633318151
+IRL,Ireland,chickens,backyard,backyard,eggs,0
+IRL,Ireland,chickens,backyard,backyard,meat,0
+IRL,Ireland,chickens,layers,industrial,eggs,0.05346634810439594
+IRL,Ireland,chickens,layers,industrial,meat,0.006532216077035446
+IRL,Ireland,chickens,broilers,industrial,eggs,0
+IRL,Ireland,chickens,broilers,industrial,meat,0.009594707138560074
+IMN,Isle of Man,chickens,backyard,backyard,eggs,0
+IMN,Isle of Man,chickens,backyard,backyard,meat,0
+IMN,Isle of Man,chickens,layers,industrial,eggs,0
+IMN,Isle of Man,chickens,layers,industrial,meat,0
+IMN,Isle of Man,chickens,broilers,industrial,eggs,0
+IMN,Isle of Man,chickens,broilers,industrial,meat,0.009609650678867385
+ISR,Israel,chickens,backyard,backyard,eggs,0.0031219465316987605
+ISR,Israel,chickens,backyard,backyard,meat,3.8224962558473026e-4
+ISR,Israel,chickens,layers,industrial,eggs,0.04394818407481885
+ISR,Israel,chickens,layers,industrial,meat,0.005355509055398903
+ISR,Israel,chickens,broilers,industrial,eggs,0
+ISR,Israel,chickens,broilers,industrial,meat,0.008629419395828914
+ITA,Italy,chickens,backyard,backyard,eggs,0
+ITA,Italy,chickens,backyard,backyard,meat,0
+ITA,Italy,chickens,layers,industrial,eggs,0.0335020476473017
+ITA,Italy,chickens,layers,industrial,meat,0.002400513478431923
+ITA,Italy,chickens,broilers,industrial,eggs,0
+ITA,Italy,chickens,broilers,industrial,meat,0.008993737193719467
+JAM,Jamaica,chickens,backyard,backyard,eggs,0.00225794352725476
+JAM,Jamaica,chickens,backyard,backyard,meat,4.463287532343307e-4
+JAM,Jamaica,chickens,layers,industrial,eggs,0.04365762217749779
+JAM,Jamaica,chickens,layers,industrial,meat,0.004979193662013929
+JAM,Jamaica,chickens,broilers,industrial,eggs,0
+JAM,Jamaica,chickens,broilers,industrial,meat,0.012826256320740517
+JPN,Japan,chickens,backyard,backyard,eggs,0
+JPN,Japan,chickens,backyard,backyard,meat,0
+JPN,Japan,chickens,layers,industrial,eggs,0.029095192541389113
+JPN,Japan,chickens,layers,industrial,meat,0.0023418550869019244
+JPN,Japan,chickens,broilers,industrial,eggs,0
+JPN,Japan,chickens,broilers,industrial,meat,0.008484597430318382
+JEY,Jersey,chickens,backyard,backyard,eggs,0
+JEY,Jersey,chickens,backyard,backyard,meat,0
+JEY,Jersey,chickens,layers,industrial,eggs,0
+JEY,Jersey,chickens,layers,industrial,meat,0
+JEY,Jersey,chickens,broilers,industrial,eggs,0
+JEY,Jersey,chickens,broilers,industrial,meat,0.009609415822893494
+JOR,Jordan,chickens,backyard,backyard,eggs,0.003121948829341024
+JOR,Jordan,chickens,backyard,backyard,meat,3.822499251767013e-4
+JOR,Jordan,chickens,layers,industrial,eggs,0.043948205769328605
+JOR,Jordan,chickens,layers,industrial,meat,0.0053555115150900594
+JOR,Jordan,chickens,broilers,industrial,eggs,0
+JOR,Jordan,chickens,broilers,industrial,meat,0.009027700323189695
+KAZ,Kazakhstan,chickens,backyard,backyard,eggs,0.0012403893934381737
+KAZ,Kazakhstan,chickens,backyard,backyard,meat,4.434373793133357e-4
+KAZ,Kazakhstan,chickens,layers,industrial,eggs,0.024626943931879888
+KAZ,Kazakhstan,chickens,layers,industrial,meat,0.0018108895108850142
+KAZ,Kazakhstan,chickens,broilers,industrial,eggs,0
+KAZ,Kazakhstan,chickens,broilers,industrial,meat,0.008695483859208725
+KEN,Kenya,chickens,backyard,backyard,eggs,0.0010080306965631642
+KEN,Kenya,chickens,backyard,backyard,meat,4.7421878741094606e-4
+KEN,Kenya,chickens,layers,industrial,eggs,0.03404694343066543
+KEN,Kenya,chickens,layers,industrial,meat,0.005738506512065217
+KEN,Kenya,chickens,broilers,industrial,eggs,0
+KEN,Kenya,chickens,broilers,industrial,meat,0.005624593539704533
+KIR,Kiribati,chickens,backyard,backyard,eggs,0
+KIR,Kiribati,chickens,backyard,backyard,meat,0
+KIR,Kiribati,chickens,layers,industrial,eggs,0.04925620606994051
+KIR,Kiribati,chickens,layers,industrial,meat,0.006229567963757731
+KIR,Kiribati,chickens,broilers,industrial,eggs,0
+KIR,Kiribati,chickens,broilers,industrial,meat,0.009369126153075155
+KWT,Kuwait,chickens,backyard,backyard,eggs,0.0031219453688215845
+KWT,Kuwait,chickens,backyard,backyard,meat,3.822494739559623e-4
+KWT,Kuwait,chickens,layers,industrial,eggs,0.03015458992602537
+KWT,Kuwait,chickens,layers,industrial,meat,0.0036746268306310685
+KWT,Kuwait,chickens,broilers,industrial,eggs,0
+KWT,Kuwait,chickens,broilers,industrial,meat,0.008982946507776016
+KGZ,Kyrgyzstan,chickens,backyard,backyard,eggs,0.0012403895549931473
+KGZ,Kyrgyzstan,chickens,backyard,backyard,meat,4.434374521512322e-4
+KGZ,Kyrgyzstan,chickens,layers,industrial,eggs,0.024626943287304966
+KGZ,Kyrgyzstan,chickens,layers,industrial,meat,0.001810889466013128
+KGZ,Kyrgyzstan,chickens,broilers,industrial,eggs,0
+KGZ,Kyrgyzstan,chickens,broilers,industrial,meat,0.008695466172219604
+LAO,Laos,chickens,backyard,backyard,eggs,8.465310868744968e-4
+LAO,Laos,chickens,backyard,backyard,meat,6.170907770039585e-4
+LAO,Laos,chickens,layers,industrial,eggs,0.029670659840066324
+LAO,Laos,chickens,layers,industrial,meat,0.002258243173592354
+LAO,Laos,chickens,broilers,industrial,eggs,0
+LAO,Laos,chickens,broilers,industrial,meat,0.009564335767150024
+LVA,Latvia,chickens,backyard,backyard,eggs,0.005434011880538812
+LVA,Latvia,chickens,backyard,backyard,meat,8.841438939720686e-4
+LVA,Latvia,chickens,layers,industrial,eggs,0.05506806793981608
+LVA,Latvia,chickens,layers,industrial,meat,0.006108517520745911
+LVA,Latvia,chickens,broilers,industrial,eggs,0
+LVA,Latvia,chickens,broilers,industrial,meat,0.009609524933014531
+LBN,Lebanon,chickens,backyard,backyard,eggs,0.0031219480183860685
+LBN,Lebanon,chickens,backyard,backyard,meat,3.822498194354388e-4
+LBN,Lebanon,chickens,layers,industrial,eggs,0.04394820622611697
+LBN,Lebanon,chickens,layers,industrial,meat,0.005355511566880042
+LBN,Lebanon,chickens,broilers,industrial,eggs,0
+LBN,Lebanon,chickens,broilers,industrial,meat,0.008629419295921566
+LSO,Lesotho,chickens,backyard,backyard,eggs,9.969840563516024e-4
+LSO,Lesotho,chickens,backyard,backyard,meat,4.2248154416678064e-4
+LSO,Lesotho,chickens,layers,industrial,eggs,0
+LSO,Lesotho,chickens,layers,industrial,meat,0
+LSO,Lesotho,chickens,broilers,industrial,eggs,0
+LSO,Lesotho,chickens,broilers,industrial,meat,0
+LBR,Liberia,chickens,backyard,backyard,eggs,4.841979847485294e-4
+LBR,Liberia,chickens,backyard,backyard,meat,2.9936064268305313e-4
+LBR,Liberia,chickens,layers,industrial,eggs,0.03404719296601832
+LBR,Liberia,chickens,layers,industrial,meat,0.005738547644989507
+LBR,Liberia,chickens,broilers,industrial,eggs,0
+LBR,Liberia,chickens,broilers,industrial,meat,0.005624594453846274
+LBY,Libya,chickens,backyard,backyard,eggs,0.0014504909500664804
+LBY,Libya,chickens,backyard,backyard,meat,4.1790264629941643e-4
+LBY,Libya,chickens,layers,industrial,eggs,0.034046942855349135
+LBY,Libya,chickens,layers,industrial,meat,0.005738506417231191
+LBY,Libya,chickens,broilers,industrial,eggs,0
+LBY,Libya,chickens,broilers,industrial,meat,0.005624594347756656
+LIE,Liechtenstein,chickens,backyard,backyard,eggs,0.005434107626220491
+LIE,Liechtenstein,chickens,backyard,backyard,meat,8.841599212853991e-4
+LIE,Liechtenstein,chickens,layers,industrial,eggs,0
+LIE,Liechtenstein,chickens,layers,industrial,meat,0
+LIE,Liechtenstein,chickens,broilers,industrial,eggs,0
+LIE,Liechtenstein,chickens,broilers,industrial,meat,0
+LTU,Lithuania,chickens,backyard,backyard,eggs,0.005434004447714773
+LTU,Lithuania,chickens,backyard,backyard,meat,8.841426497572097e-4
+LTU,Lithuania,chickens,layers,industrial,eggs,0.05506805723251415
+LTU,Lithuania,chickens,layers,industrial,meat,0.006108516367720644
+LTU,Lithuania,chickens,broilers,industrial,eggs,0
+LTU,Lithuania,chickens,broilers,industrial,meat,0.009609522229293318
+LUX,Luxembourg,chickens,backyard,backyard,eggs,0
+LUX,Luxembourg,chickens,backyard,backyard,meat,0
+LUX,Luxembourg,chickens,layers,industrial,eggs,0.04722277857785136
+LUX,Luxembourg,chickens,layers,industrial,meat,0.006091076714829713
+LUX,Luxembourg,chickens,broilers,industrial,eggs,0
+LUX,Luxembourg,chickens,broilers,industrial,meat,0
+MDG,Madagascar,chickens,backyard,backyard,eggs,0.0010204755208822636
+MDG,Madagascar,chickens,backyard,backyard,meat,4.742187878942775e-4
+MDG,Madagascar,chickens,layers,industrial,eggs,0.03404691873167092
+MDG,Madagascar,chickens,layers,industrial,meat,0.005738502440730798
+MDG,Madagascar,chickens,broilers,industrial,eggs,0
+MDG,Madagascar,chickens,broilers,industrial,meat,0.0056245942480505715
+XMI,Madeira Islands,chickens,backyard,backyard,eggs,0
+XMI,Madeira Islands,chickens,backyard,backyard,meat,0
+XMI,Madeira Islands,chickens,layers,industrial,eggs,0
+XMI,Madeira Islands,chickens,layers,industrial,meat,0
+XMI,Madeira Islands,chickens,broilers,industrial,eggs,0
+XMI,Madeira Islands,chickens,broilers,industrial,meat,0
+MWI,Malawi,chickens,backyard,backyard,eggs,0.0010204755353676444
+MWI,Malawi,chickens,backyard,backyard,meat,4.742187956326799e-4
+MWI,Malawi,chickens,layers,industrial,eggs,0.03404691485537255
+MWI,Malawi,chickens,layers,industrial,meat,0.00573850180176928
+MWI,Malawi,chickens,broilers,industrial,eggs,0
+MWI,Malawi,chickens,broilers,industrial,meat,0.005624594453846272
+MYS,Malaysia,chickens,backyard,backyard,eggs,8.465310967416151e-4
+MYS,Malaysia,chickens,backyard,backyard,meat,6.17090785959389e-4
+MYS,Malaysia,chickens,layers,industrial,eggs,0.029670672958776415
+MYS,Malaysia,chickens,layers,industrial,meat,0.0022582441600304502
+MYS,Malaysia,chickens,broilers,industrial,eggs,0
+MYS,Malaysia,chickens,broilers,industrial,meat,0.009142379016585829
+MDV,Maldives,chickens,backyard,backyard,eggs,0
+MDV,Maldives,chickens,backyard,backyard,meat,0
+MDV,Maldives,chickens,layers,industrial,eggs,0
+MDV,Maldives,chickens,layers,industrial,meat,0
+MDV,Maldives,chickens,broilers,industrial,eggs,0
+MDV,Maldives,chickens,broilers,industrial,meat,0
+MLI,Mali,chickens,backyard,backyard,eggs,4.062539056718806e-4
+MLI,Mali,chickens,backyard,backyard,meat,3.169686125210405e-4
+MLI,Mali,chickens,layers,industrial,eggs,0.03404672763531819
+MLI,Mali,chickens,layers,industrial,meat,0.0057384709407781115
+MLI,Mali,chickens,broilers,industrial,eggs,0
+MLI,Mali,chickens,broilers,industrial,meat,0.005624595999950075
+MLT,Malta,chickens,backyard,backyard,eggs,0
+MLT,Malta,chickens,backyard,backyard,meat,0
+MLT,Malta,chickens,layers,industrial,eggs,0.0521915313876167
+MLT,Malta,chickens,layers,industrial,meat,0.006131620192776536
+MLT,Malta,chickens,broilers,industrial,eggs,0
+MLT,Malta,chickens,broilers,industrial,meat,0.008997081159944497
+MHL,Marshall Islands,chickens,backyard,backyard,eggs,0
+MHL,Marshall Islands,chickens,backyard,backyard,meat,0
+MHL,Marshall Islands,chickens,layers,industrial,eggs,0
+MHL,Marshall Islands,chickens,layers,industrial,meat,0
+MHL,Marshall Islands,chickens,broilers,industrial,eggs,0
+MHL,Marshall Islands,chickens,broilers,industrial,meat,0
+MTQ,Martinique,chickens,backyard,backyard,eggs,0.002257951664905089
+MTQ,Martinique,chickens,backyard,backyard,meat,4.463305472947872e-4
+MTQ,Martinique,chickens,layers,industrial,eggs,0.04365735735959264
+MTQ,Martinique,chickens,layers,industrial,meat,0.004979163672274773
+MTQ,Martinique,chickens,broilers,industrial,eggs,0
+MTQ,Martinique,chickens,broilers,industrial,meat,0.012826280896966627
+MRT,Mauritania,chickens,backyard,backyard,eggs,4.8419800400068116e-4
+MRT,Mauritania,chickens,backyard,backyard,meat,3.169686534609439e-4
+MRT,Mauritania,chickens,layers,industrial,eggs,0.03404699635155103
+MRT,Mauritania,chickens,layers,industrial,meat,0.005738515235441505
+MRT,Mauritania,chickens,broilers,industrial,eggs,0
+MRT,Mauritania,chickens,broilers,industrial,meat,0.005624597592375452
+MUS,Mauritius,chickens,backyard,backyard,eggs,0.0010204750569043945
+MUS,Mauritius,chickens,backyard,backyard,meat,4.742185400272962e-4
+MUS,Mauritius,chickens,layers,industrial,eggs,0
+MUS,Mauritius,chickens,layers,industrial,meat,0
+MUS,Mauritius,chickens,broilers,industrial,eggs,0
+MUS,Mauritius,chickens,broilers,industrial,meat,0
+MYT,Mayotte,chickens,backyard,backyard,eggs,0
+MYT,Mayotte,chickens,backyard,backyard,meat,0
+MYT,Mayotte,chickens,layers,industrial,eggs,0
+MYT,Mayotte,chickens,layers,industrial,meat,0
+MYT,Mayotte,chickens,broilers,industrial,eggs,0
+MYT,Mayotte,chickens,broilers,industrial,meat,0.0056246046021999
+MEX,Mexico,chickens,backyard,backyard,eggs,0.002257943669624478
+MEX,Mexico,chickens,backyard,backyard,meat,4.463287846217545e-4
+MEX,Mexico,chickens,layers,industrial,eggs,0.029029030220622722
+MEX,Mexico,chickens,layers,industrial,meat,0.002002660037198662
+MEX,Mexico,chickens,broilers,industrial,eggs,0
+MEX,Mexico,chickens,broilers,industrial,meat,0.012831141019972563
+MCO,Monaco,chickens,backyard,backyard,eggs,0
+MCO,Monaco,chickens,backyard,backyard,meat,0
+MCO,Monaco,chickens,layers,industrial,eggs,0
+MCO,Monaco,chickens,layers,industrial,meat,0
+MCO,Monaco,chickens,broilers,industrial,eggs,0
+MCO,Monaco,chickens,broilers,industrial,meat,0
+MNG,Mongolia,chickens,backyard,backyard,eggs,0.001240391533166208
+MNG,Mongolia,chickens,backyard,backyard,meat,4.434383440207988e-4
+MNG,Mongolia,chickens,layers,industrial,eggs,0.02810176330014891
+MNG,Mongolia,chickens,layers,industrial,meat,0.0023365255716731774
+MNG,Mongolia,chickens,broilers,industrial,eggs,0
+MNG,Mongolia,chickens,broilers,industrial,meat,0.008458307079918438
+MNE,Montenegro,chickens,backyard,backyard,eggs,0.005433951202094986
+MNE,Montenegro,chickens,backyard,backyard,meat,0.0012041532904139827
+MNE,Montenegro,chickens,layers,industrial,eggs,0.052191853129925206
+MNE,Montenegro,chickens,layers,industrial,meat,0.00613165754796567
+MNE,Montenegro,chickens,broilers,industrial,eggs,0
+MNE,Montenegro,chickens,broilers,industrial,meat,0
+MSR,Montserrat,chickens,backyard,backyard,eggs,0
+MSR,Montserrat,chickens,backyard,backyard,meat,0
+MSR,Montserrat,chickens,layers,industrial,eggs,0
+MSR,Montserrat,chickens,layers,industrial,meat,0
+MSR,Montserrat,chickens,broilers,industrial,eggs,0
+MSR,Montserrat,chickens,broilers,industrial,meat,0
+MAR,Morocco,chickens,backyard,backyard,eggs,0.0014504908148686537
+MAR,Morocco,chickens,backyard,backyard,meat,4.179025992164368e-4
+MAR,Morocco,chickens,layers,industrial,eggs,0.03404693625588032
+MAR,Morocco,chickens,layers,industrial,meat,0.005738505329387533
+MAR,Morocco,chickens,broilers,industrial,eggs,0
+MAR,Morocco,chickens,broilers,industrial,meat,0.005624594437354685
+MOZ,Mozambique,chickens,backyard,backyard,eggs,0.001020475558448967
+MOZ,Mozambique,chickens,backyard,backyard,meat,4.742188079632202e-4
+MOZ,Mozambique,chickens,layers,industrial,eggs,0.03404682617368699
+MOZ,Mozambique,chickens,layers,industrial,meat,0.005738487183651984
+MOZ,Mozambique,chickens,broilers,industrial,eggs,0
+MOZ,Mozambique,chickens,broilers,industrial,meat,0.005624595113694366
+MMR,Myanmar (Burma),chickens,backyard,backyard,eggs,8.465310893646709e-4
+MMR,Myanmar (Burma),chickens,backyard,backyard,meat,6.170907792640488e-4
+MMR,Myanmar (Burma),chickens,layers,industrial,eggs,0.029670680834733697
+MMR,Myanmar (Burma),chickens,layers,industrial,meat,0.002258244752249064
+MMR,Myanmar (Burma),chickens,broilers,industrial,eggs,0
+MMR,Myanmar (Burma),chickens,broilers,industrial,meat,0.009142379041817783
+NAM,Namibia,chickens,backyard,backyard,eggs,9.969846020931679e-4
+NAM,Namibia,chickens,backyard,backyard,meat,4.2248182318147025e-4
+NAM,Namibia,chickens,layers,industrial,eggs,0.03404665237721446
+NAM,Namibia,chickens,layers,industrial,meat,0.005738458535378047
+NAM,Namibia,chickens,broilers,industrial,eggs,0
+NAM,Namibia,chickens,broilers,industrial,meat,0.005624595519227694
+NRU,Nauru,chickens,backyard,backyard,eggs,0
+NRU,Nauru,chickens,backyard,backyard,meat,0
+NRU,Nauru,chickens,layers,industrial,eggs,0
+NRU,Nauru,chickens,layers,industrial,meat,0
+NRU,Nauru,chickens,broilers,industrial,eggs,0
+NRU,Nauru,chickens,broilers,industrial,meat,0
+NPL,Nepal,chickens,backyard,backyard,eggs,0.0015887083652274389
+NPL,Nepal,chickens,backyard,backyard,meat,3.227924978290895e-4
+NPL,Nepal,chickens,layers,industrial,eggs,0.007509134554207957
+NPL,Nepal,chickens,layers,industrial,meat,0.0016187785301841559
+NPL,Nepal,chickens,broilers,industrial,eggs,0
+NPL,Nepal,chickens,broilers,industrial,meat,0.007457945313443652
+BES,"Bonaire, Sint Eustatius and Saba",chickens,backyard,backyard,eggs,0
+BES,"Bonaire, Sint Eustatius and Saba",chickens,backyard,backyard,meat,0
+BES,"Bonaire, Sint Eustatius and Saba",chickens,layers,industrial,eggs,0
+BES,"Bonaire, Sint Eustatius and Saba",chickens,layers,industrial,meat,0
+BES,"Bonaire, Sint Eustatius and Saba",chickens,broilers,industrial,eggs,0
+BES,"Bonaire, Sint Eustatius and Saba",chickens,broilers,industrial,meat,0
+NLD,Netherlands,chickens,backyard,backyard,eggs,0
+NLD,Netherlands,chickens,backyard,backyard,meat,0
+NLD,Netherlands,chickens,layers,industrial,eggs,0.0322124193122517
+NLD,Netherlands,chickens,layers,industrial,meat,0.0023862098541339726
+NLD,Netherlands,chickens,broilers,industrial,eggs,0
+NLD,Netherlands,chickens,broilers,industrial,meat,0.0100613852525583
+NCL,New Caledonia,chickens,backyard,backyard,eggs,0.0012557696026484109
+NCL,New Caledonia,chickens,backyard,backyard,meat,3.4918463438864404e-4
+NCL,New Caledonia,chickens,layers,industrial,eggs,0
+NCL,New Caledonia,chickens,layers,industrial,meat,0
+NCL,New Caledonia,chickens,broilers,industrial,eggs,0
+NCL,New Caledonia,chickens,broilers,industrial,meat,0
+NZL,New Zealand,chickens,backyard,backyard,eggs,0
+NZL,New Zealand,chickens,backyard,backyard,meat,0
+NZL,New Zealand,chickens,layers,industrial,eggs,0.05345346818077968
+NZL,New Zealand,chickens,layers,industrial,meat,0.006456647507369699
+NZL,New Zealand,chickens,broilers,industrial,eggs,0
+NZL,New Zealand,chickens,broilers,industrial,meat,0.009402335790474775
+NIC,Nicaragua,chickens,backyard,backyard,eggs,0.002257943578472404
+NIC,Nicaragua,chickens,backyard,backyard,meat,4.463287645259868e-4
+NIC,Nicaragua,chickens,layers,industrial,eggs,0.04365757800093791
+NIC,Nicaragua,chickens,layers,industrial,meat,0.0049791886591667575
+NIC,Nicaragua,chickens,broilers,industrial,eggs,0
+NIC,Nicaragua,chickens,broilers,industrial,meat,0.01282625576066952
+NER,Niger,chickens,backyard,backyard,eggs,4.8419796310983875e-4
+NER,Niger,chickens,backyard,backyard,meat,3.1696860567317464e-4
+NER,Niger,chickens,layers,industrial,eggs,0.0340470362903052
+NER,Niger,chickens,layers,industrial,meat,0.005738521818868391
+NER,Niger,chickens,broilers,industrial,eggs,0
+NER,Niger,chickens,broilers,industrial,meat,0.005624591682375261
+NGA,Nigeria,chickens,backyard,backyard,eggs,5.314367959986117e-4
+NGA,Nigeria,chickens,backyard,backyard,meat,3.169686133604137e-4
+NGA,Nigeria,chickens,layers,industrial,eggs,0.03188913787164163
+NGA,Nigeria,chickens,layers,industrial,meat,0.005740263197423879
+NGA,Nigeria,chickens,broilers,industrial,eggs,0
+NGA,Nigeria,chickens,broilers,industrial,meat,0.005347844553712046
+NIU,Niue,chickens,backyard,backyard,eggs,0
+NIU,Niue,chickens,backyard,backyard,meat,0
+NIU,Niue,chickens,layers,industrial,eggs,0
+NIU,Niue,chickens,layers,industrial,meat,0
+NIU,Niue,chickens,broilers,industrial,eggs,0
+NIU,Niue,chickens,broilers,industrial,meat,0
+NFK,Norfolk Island,chickens,backyard,backyard,eggs,0
+NFK,Norfolk Island,chickens,backyard,backyard,meat,0
+NFK,Norfolk Island,chickens,layers,industrial,eggs,0
+NFK,Norfolk Island,chickens,layers,industrial,meat,0
+NFK,Norfolk Island,chickens,broilers,industrial,eggs,0
+NFK,Norfolk Island,chickens,broilers,industrial,meat,0.009369112130055533
+MNP,Northern Mariana Islands,chickens,backyard,backyard,eggs,0
+MNP,Northern Mariana Islands,chickens,backyard,backyard,meat,0
+MNP,Northern Mariana Islands,chickens,layers,industrial,eggs,0
+MNP,Northern Mariana Islands,chickens,layers,industrial,meat,0
+MNP,Northern Mariana Islands,chickens,broilers,industrial,eggs,0
+MNP,Northern Mariana Islands,chickens,broilers,industrial,meat,0
+NOR,Norway,chickens,backyard,backyard,eggs,0
+NOR,Norway,chickens,backyard,backyard,meat,0
+NOR,Norway,chickens,layers,industrial,eggs,0.055068052943090404
+NOR,Norway,chickens,layers,industrial,meat,0.006108515905810264
+NOR,Norway,chickens,broilers,industrial,eggs,0
+NOR,Norway,chickens,broilers,industrial,meat,0.00960952386358127
+OMN,Oman,chickens,backyard,backyard,eggs,0.0031219597760081255
+OMN,Oman,chickens,backyard,backyard,meat,3.8225135252404165e-4
+OMN,Oman,chickens,layers,industrial,eggs,0.008724622367192696
+OMN,Oman,chickens,layers,industrial,meat,0.0034626648250614045
+OMN,Oman,chickens,broilers,industrial,eggs,0
+OMN,Oman,chickens,broilers,industrial,meat,0
+PAK,Pakistan,chickens,backyard,backyard,eggs,0.0015887083307215453
+PAK,Pakistan,chickens,backyard,backyard,meat,3.227924893365436e-4
+PAK,Pakistan,chickens,layers,industrial,eggs,0.02896178273617865
+PAK,Pakistan,chickens,layers,industrial,meat,0.002021502342458608
+PAK,Pakistan,chickens,broilers,industrial,eggs,0
+PAK,Pakistan,chickens,broilers,industrial,meat,0.008571830986955988
+PLW,Palau,chickens,backyard,backyard,eggs,0
+PLW,Palau,chickens,backyard,backyard,meat,0
+PLW,Palau,chickens,layers,industrial,eggs,0
+PLW,Palau,chickens,layers,industrial,meat,0
+PLW,Palau,chickens,broilers,industrial,eggs,0
+PLW,Palau,chickens,broilers,industrial,meat,0.009369082135859389
+PAN,Panama,chickens,backyard,backyard,eggs,0.0022579432109044663
+PAN,Panama,chickens,backyard,backyard,meat,4.4632868349042074e-4
+PAN,Panama,chickens,layers,industrial,eggs,0.043657581695473215
+PAN,Panama,chickens,layers,industrial,meat,0.004979189077560484
+PAN,Panama,chickens,broilers,industrial,eggs,0
+PAN,Panama,chickens,broilers,industrial,meat,0.01282625569214182
+PNG,Papua New Guinea,chickens,backyard,backyard,eggs,0.0012557699098610861
+PNG,Papua New Guinea,chickens,backyard,backyard,meat,3.49184737184527e-4
+PNG,Papua New Guinea,chickens,layers,industrial,eggs,0.049255756997472096
+PNG,Papua New Guinea,chickens,layers,industrial,meat,0.006229513116319608
+PNG,Papua New Guinea,chickens,broilers,industrial,eggs,0
+PNG,Papua New Guinea,chickens,broilers,industrial,meat,0.009369109934561587
+PRY,Paraguay,chickens,backyard,backyard,eggs,0.0022579438117935288
+PRY,Paraguay,chickens,backyard,backyard,meat,4.463288159649387e-4
+PRY,Paraguay,chickens,layers,industrial,eggs,0.04614625032795668
+PRY,Paraguay,chickens,layers,industrial,meat,0.005752514600225858
+PRY,Paraguay,chickens,broilers,industrial,eggs,0
+PRY,Paraguay,chickens,broilers,industrial,meat,0.012858345214968162
+PER,Peru,chickens,backyard,backyard,eggs,0.0022579437299074315
+PER,Peru,chickens,backyard,backyard,meat,4.4632879791198677e-4
+PER,Peru,chickens,layers,industrial,eggs,0.045581532859338164
+PER,Peru,chickens,layers,industrial,meat,0.006668221836124338
+PER,Peru,chickens,broilers,industrial,eggs,0
+PER,Peru,chickens,broilers,industrial,meat,0.012868425018716234
+PHL,Philippines,chickens,backyard,backyard,eggs,8.465310879322299e-4
+PHL,Philippines,chickens,backyard,backyard,meat,6.170907779639607e-4
+PHL,Philippines,chickens,layers,industrial,eggs,0.027966864608798627
+PHL,Philippines,chickens,layers,industrial,meat,0.0019523506355553523
+PHL,Philippines,chickens,broilers,industrial,eggs,0
+PHL,Philippines,chickens,broilers,industrial,meat,0.009551044930084282
+PCN,Pitcairn Islands,chickens,backyard,backyard,eggs,0
+PCN,Pitcairn Islands,chickens,backyard,backyard,meat,0
+PCN,Pitcairn Islands,chickens,layers,industrial,eggs,0
+PCN,Pitcairn Islands,chickens,layers,industrial,meat,0
+PCN,Pitcairn Islands,chickens,broilers,industrial,eggs,0
+PCN,Pitcairn Islands,chickens,broilers,industrial,meat,0
+POL,Poland,chickens,backyard,backyard,eggs,0.0054340118643435974
+POL,Poland,chickens,backyard,backyard,meat,0.0012041692817357798
+POL,Poland,chickens,layers,industrial,eggs,0.030242625355895565
+POL,Poland,chickens,layers,industrial,meat,0.0023392372724637114
+POL,Poland,chickens,broilers,industrial,eggs,0
+POL,Poland,chickens,broilers,industrial,meat,0.00952771354525497
+PRT,Portugal,chickens,backyard,backyard,eggs,0
+PRT,Portugal,chickens,backyard,backyard,meat,0
+PRT,Portugal,chickens,layers,industrial,eggs,0.05219162323230676
+PRT,Portugal,chickens,layers,industrial,meat,0.0061316308562039965
+PRT,Portugal,chickens,broilers,industrial,eggs,0
+PRT,Portugal,chickens,broilers,industrial,meat,0.008997070231092648
+PRI,Puerto Rico,chickens,backyard,backyard,eggs,0.0022579442960240885
+PRI,Puerto Rico,chickens,backyard,backyard,meat,4.463289227204348e-4
+PRI,Puerto Rico,chickens,layers,industrial,eggs,0.04365756726060844
+PRI,Puerto Rico,chickens,layers,industrial,meat,0.004979187442860486
+PRI,Puerto Rico,chickens,broilers,industrial,eggs,0
+PRI,Puerto Rico,chickens,broilers,industrial,meat,0.012826255603809868
+QAT,Qatar,chickens,backyard,backyard,eggs,0.0031219665836390597
+QAT,Qatar,chickens,backyard,backyard,meat,3.822522401781392e-4
+QAT,Qatar,chickens,layers,industrial,eggs,0.008724624991806686
+QAT,Qatar,chickens,layers,industrial,meat,0.003462665754601635
+QAT,Qatar,chickens,broilers,industrial,eggs,0
+QAT,Qatar,chickens,broilers,industrial,meat,0.008221322668125298
+KOR,South Korea,chickens,backyard,backyard,eggs,0
+KOR,South Korea,chickens,backyard,backyard,meat,0
+KOR,South Korea,chickens,layers,industrial,eggs,0.02376265364069701
+KOR,South Korea,chickens,layers,industrial,meat,0.001971456338661316
+KOR,South Korea,chickens,broilers,industrial,eggs,0
+KOR,South Korea,chickens,broilers,industrial,meat,0.00806083023332352
+MDA,Moldova,chickens,backyard,backyard,eggs,0.005434011114335894
+MDA,Moldova,chickens,backyard,backyard,meat,8.841437657138117e-4
+MDA,Moldova,chickens,layers,industrial,eggs,0.053363615305964444
+MDA,Moldova,chickens,layers,industrial,meat,0.005910587172220479
+MDA,Moldova,chickens,broilers,industrial,eggs,0
+MDA,Moldova,chickens,broilers,industrial,meat,0.009678841727155451
+REU,Réunion,chickens,backyard,backyard,eggs,0.0010204756794992933
+REU,Réunion,chickens,backyard,backyard,meat,4.742188726309144e-4
+REU,Réunion,chickens,layers,industrial,eggs,0
+REU,Réunion,chickens,layers,industrial,meat,0
+REU,Réunion,chickens,broilers,industrial,eggs,0
+REU,Réunion,chickens,broilers,industrial,meat,0
+ROU,Romania,chickens,backyard,backyard,eggs,0.005434010735972266
+ROU,Romania,chickens,backyard,backyard,meat,8.841437023777706e-4
+ROU,Romania,chickens,layers,industrial,eggs,0.05336360642351479
+ROU,Romania,chickens,layers,industrial,meat,0.005910586221033833
+ROU,Romania,chickens,broilers,industrial,eggs,0
+ROU,Romania,chickens,broilers,industrial,meat,0.009678841310750582
+RUS,Russia,chickens,backyard,backyard,eggs,0.005434011396550144
+RUS,Russia,chickens,backyard,backyard,meat,8.841438129549626e-4
+RUS,Russia,chickens,layers,industrial,eggs,0.06172526761027186
+RUS,Russia,chickens,layers,industrial,meat,0.0055632914466657675
+RUS,Russia,chickens,broilers,industrial,eggs,0
+RUS,Russia,chickens,broilers,industrial,meat,0.009704715762998289
+RWA,Rwanda,chickens,backyard,backyard,eggs,0.0010204756818944479
+RWA,Rwanda,chickens,backyard,backyard,meat,4.7421887391045755e-4
+RWA,Rwanda,chickens,layers,industrial,eggs,0.034047065250174716
+RWA,Rwanda,chickens,layers,industrial,meat,0.005738526592557197
+RWA,Rwanda,chickens,broilers,industrial,eggs,0
+RWA,Rwanda,chickens,broilers,industrial,meat,0.005624605092986406
+SHN,St. Helena,chickens,backyard,backyard,eggs,0
+SHN,St. Helena,chickens,backyard,backyard,meat,0
+SHN,St. Helena,chickens,layers,industrial,eggs,0
+SHN,St. Helena,chickens,layers,industrial,meat,0
+SHN,St. Helena,chickens,broilers,industrial,eggs,0
+SHN,St. Helena,chickens,broilers,industrial,meat,0
+KNA,St. Kitts & Nevis,chickens,backyard,backyard,eggs,0
+KNA,St. Kitts & Nevis,chickens,backyard,backyard,meat,0
+KNA,St. Kitts & Nevis,chickens,layers,industrial,eggs,0.04365722000892996
+KNA,St. Kitts & Nevis,chickens,layers,industrial,meat,0.004979148117773107
+KNA,St. Kitts & Nevis,chickens,broilers,industrial,eggs,0
+KNA,St. Kitts & Nevis,chickens,broilers,industrial,meat,0.012826177185828291
+LCA,St. Lucia,chickens,backyard,backyard,eggs,0.0022579663576265045
+LCA,St. Lucia,chickens,backyard,backyard,meat,4.463337865136558e-4
+LCA,St. Lucia,chickens,layers,industrial,eggs,0.04365768031820626
+LCA,St. Lucia,chickens,layers,industrial,meat,0.004979200246254071
+LCA,St. Lucia,chickens,broilers,industrial,eggs,0
+LCA,St. Lucia,chickens,broilers,industrial,meat,0.012826231323229789
+SPM,St. Pierre & Miquelon,chickens,backyard,backyard,eggs,0
+SPM,St. Pierre & Miquelon,chickens,backyard,backyard,meat,0
+SPM,St. Pierre & Miquelon,chickens,layers,industrial,eggs,0
+SPM,St. Pierre & Miquelon,chickens,layers,industrial,meat,0
+SPM,St. Pierre & Miquelon,chickens,broilers,industrial,eggs,0
+SPM,St. Pierre & Miquelon,chickens,broilers,industrial,meat,0
+VCT,St. Vincent & Grenadines,chickens,backyard,backyard,eggs,0.0022579584966525264
+VCT,St. Vincent & Grenadines,chickens,backyard,backyard,meat,4.4633205345042564e-4
+VCT,St. Vincent & Grenadines,chickens,layers,industrial,eggs,0.04365700975049188
+VCT,St. Vincent & Grenadines,chickens,layers,industrial,meat,0.004979124306710521
+VCT,St. Vincent & Grenadines,chickens,broilers,industrial,eggs,0
+VCT,St. Vincent & Grenadines,chickens,broilers,industrial,meat,0.0128262286092704
+WSM,Samoa,chickens,backyard,backyard,eggs,0.0012557698062188706
+WSM,Samoa,chickens,backyard,backyard,meat,3.491847025049911e-4
+WSM,Samoa,chickens,layers,industrial,eggs,0
+WSM,Samoa,chickens,layers,industrial,meat,0
+WSM,Samoa,chickens,broilers,industrial,eggs,0
+WSM,Samoa,chickens,broilers,industrial,meat,0
+SMR,San Marino,chickens,backyard,backyard,eggs,0.005433953223552326
+SMR,San Marino,chickens,backyard,backyard,meat,0.0012041538232952316
+SMR,San Marino,chickens,layers,industrial,eggs,0
+SMR,San Marino,chickens,layers,industrial,meat,0
+SMR,San Marino,chickens,broilers,industrial,eggs,0
+SMR,San Marino,chickens,broilers,industrial,meat,0.008997120280236083
+STP,São Tomé & Príncipe,chickens,backyard,backyard,eggs,9.92781338029511e-4
+STP,São Tomé & Príncipe,chickens,backyard,backyard,meat,4.191363197164408e-4
+STP,São Tomé & Príncipe,chickens,layers,industrial,eggs,0.03404726467013623
+STP,São Tomé & Príncipe,chickens,layers,industrial,meat,0.005738559464557432
+STP,São Tomé & Príncipe,chickens,broilers,industrial,eggs,0
+STP,São Tomé & Príncipe,chickens,broilers,industrial,meat,0.005624594453846273
+SAU,Saudi Arabia,chickens,backyard,backyard,eggs,0.0031219487959691173
+SAU,Saudi Arabia,chickens,backyard,backyard,meat,3.822499208253035e-4
+SAU,Saudi Arabia,chickens,layers,industrial,eggs,0.04394819644874878
+SAU,Saudi Arabia,chickens,layers,industrial,meat,0.005355510458336622
+SAU,Saudi Arabia,chickens,broilers,industrial,eggs,0
+SAU,Saudi Arabia,chickens,broilers,industrial,meat,0.009027700392029507
+SEN,Senegal,chickens,backyard,backyard,eggs,4.8419797239616875e-4
+SEN,Senegal,chickens,backyard,backyard,meat,3.169686165258001e-4
+SEN,Senegal,chickens,layers,industrial,eggs,0.03404692723146872
+SEN,Senegal,chickens,layers,industrial,meat,0.005738503841821005
+SEN,Senegal,chickens,broilers,industrial,eggs,0
+SEN,Senegal,chickens,broilers,industrial,meat,0.00562459459012506
+SRB,Serbia,chickens,backyard,backyard,eggs,0.005434011265767796
+SRB,Serbia,chickens,backyard,backyard,meat,0.0012041691239437673
+SRB,Serbia,chickens,layers,industrial,eggs,0.05219163320006036
+SRB,Serbia,chickens,layers,industrial,meat,0.006131632013488291
+SRB,Serbia,chickens,broilers,industrial,eggs,0
+SRB,Serbia,chickens,broilers,industrial,meat,0
+SYC,Seychelles,chickens,backyard,backyard,eggs,0
+SYC,Seychelles,chickens,backyard,backyard,meat,0
+SYC,Seychelles,chickens,layers,industrial,eggs,0
+SYC,Seychelles,chickens,layers,industrial,meat,0
+SYC,Seychelles,chickens,broilers,industrial,eggs,0
+SYC,Seychelles,chickens,broilers,industrial,meat,0
+SLE,Sierra Leone,chickens,backyard,backyard,eggs,4.841979959027996e-4
+SLE,Sierra Leone,chickens,backyard,backyard,meat,3.1696864399721866e-4
+SLE,Sierra Leone,chickens,layers,industrial,eggs,0.03404698773288344
+SLE,Sierra Leone,chickens,layers,industrial,meat,0.005738513814757033
+SLE,Sierra Leone,chickens,broilers,industrial,eggs,0
+SLE,Sierra Leone,chickens,broilers,industrial,meat,0.005624593341874698
+SGP,Singapore,chickens,backyard,backyard,eggs,0
+SGP,Singapore,chickens,backyard,backyard,meat,0
+SGP,Singapore,chickens,layers,industrial,eggs,0.02967062853423541
+SGP,Singapore,chickens,layers,industrial,meat,0.002258240819606023
+SGP,Singapore,chickens,broilers,industrial,eggs,0
+SGP,Singapore,chickens,broilers,industrial,meat,0.00956433661022994
+SVK,Slovakia,chickens,backyard,backyard,eggs,0.005434013031430457
+SVK,Slovakia,chickens,backyard,backyard,meat,0.0012041695893943642
+SVK,Slovakia,chickens,layers,industrial,eggs,0.05336362644071418
+SVK,Slovakia,chickens,layers,industrial,meat,0.005910588364597101
+SVK,Slovakia,chickens,broilers,industrial,eggs,0
+SVK,Slovakia,chickens,broilers,industrial,meat,0.009678840733714974
+SVN,Slovenia,chickens,backyard,backyard,eggs,0.005433951494816634
+SVN,Slovenia,chickens,backyard,backyard,meat,0.0012041533675790428
+SVN,Slovenia,chickens,layers,industrial,eggs,0.05219166685258952
+SVN,Slovenia,chickens,layers,industrial,meat,0.0061316359206418074
+SVN,Slovenia,chickens,broilers,industrial,eggs,0
+SVN,Slovenia,chickens,broilers,industrial,meat,0.008997070337120043
+SLB,Solomon Islands,chickens,backyard,backyard,eggs,0.001255773865845747
+SLB,Solomon Islands,chickens,backyard,backyard,meat,3.491860608894672e-4
+SLB,Solomon Islands,chickens,layers,industrial,eggs,0.04925619422031947
+SLB,Solomon Islands,chickens,layers,industrial,meat,0.0062295665165049965
+SLB,Solomon Islands,chickens,broilers,industrial,eggs,0
+SLB,Solomon Islands,chickens,broilers,industrial,meat,0.009369081777775531
+SOM,Somalia,chickens,backyard,backyard,eggs,0.0010204778375205064
+SOM,Somalia,chickens,backyard,backyard,meat,4.7422002549237364e-4
+SOM,Somalia,chickens,layers,industrial,eggs,0.03404693722379073
+SOM,Somalia,chickens,layers,industrial,meat,0.00573850548893601
+SOM,Somalia,chickens,broilers,industrial,eggs,0
+SOM,Somalia,chickens,broilers,industrial,meat,0.005624595341274124
+ZAF,South Africa,chickens,backyard,backyard,eggs,9.969844920335261e-4
+ZAF,South Africa,chickens,backyard,backyard,meat,4.224817669126083e-4
+ZAF,South Africa,chickens,layers,industrial,eggs,0.036237131304282084
+ZAF,South Africa,chickens,layers,industrial,meat,0.005857235605201351
+ZAF,South Africa,chickens,broilers,industrial,eggs,0
+ZAF,South Africa,chickens,broilers,industrial,meat,0.005642160854155224
+SSD,South Sudan,chickens,backyard,backyard,eggs,0.0014151130667849092
+SSD,South Sudan,chickens,backyard,backyard,meat,4.1790262658416443e-4
+SSD,South Sudan,chickens,layers,industrial,eggs,0.03404693722379073
+SSD,South Sudan,chickens,layers,industrial,meat,0.00573850548893601
+SSD,South Sudan,chickens,broilers,industrial,eggs,0
+SSD,South Sudan,chickens,broilers,industrial,meat,0.005624594550854127
+ESP,Spain,chickens,backyard,backyard,eggs,0
+ESP,Spain,chickens,backyard,backyard,meat,0
+ESP,Spain,chickens,layers,industrial,eggs,0.053343469010422764
+ESP,Spain,chickens,layers,industrial,meat,0.0063550364874620695
+ESP,Spain,chickens,broilers,industrial,eggs,0
+ESP,Spain,chickens,broilers,industrial,meat,0.009002664501804248
+LKA,Sri Lanka,chickens,backyard,backyard,eggs,0.0015887085881403635
+LKA,Sri Lanka,chickens,backyard,backyard,meat,3.227925526921307e-4
+LKA,Sri Lanka,chickens,layers,industrial,eggs,0.02896178456731256
+LKA,Sri Lanka,chickens,layers,industrial,meat,0.002021502469285389
+LKA,Sri Lanka,chickens,broilers,industrial,eggs,0
+LKA,Sri Lanka,chickens,broilers,industrial,meat,0.00857183149497531
+SDN,Sudan,chickens,backyard,backyard,eggs,0.001415113019288029
+SDN,Sudan,chickens,backyard,backyard,meat,4.179026096297351e-4
+SDN,Sudan,chickens,layers,industrial,eggs,0.03404692685185131
+SDN,Sudan,chickens,layers,industrial,meat,0.005738503779245605
+SDN,Sudan,chickens,broilers,industrial,eggs,0
+SDN,Sudan,chickens,broilers,industrial,meat,0.005624594811875979
+SUR,Suriname,chickens,backyard,backyard,eggs,0.002257944110113139
+SUR,Suriname,chickens,backyard,backyard,meat,4.4632888173372885e-4
+SUR,Suriname,chickens,layers,industrial,eggs,0.04614634476572028
+SUR,Suriname,chickens,layers,industrial,meat,0.0057525259172765755
+SUR,Suriname,chickens,broilers,industrial,eggs,0
+SUR,Suriname,chickens,broilers,industrial,meat,0.012858348258399476
+SJM,Svalbard & Jan Mayen,chickens,backyard,backyard,eggs,0
+SJM,Svalbard & Jan Mayen,chickens,backyard,backyard,meat,0
+SJM,Svalbard & Jan Mayen,chickens,layers,industrial,eggs,0
+SJM,Svalbard & Jan Mayen,chickens,layers,industrial,meat,0
+SJM,Svalbard & Jan Mayen,chickens,broilers,industrial,eggs,0
+SJM,Svalbard & Jan Mayen,chickens,broilers,industrial,meat,0
+SWZ,Swaziland,chickens,backyard,backyard,eggs,9.969847105756806e-4
+SWZ,Swaziland,chickens,backyard,backyard,meat,4.2248187864401274e-4
+SWZ,Swaziland,chickens,layers,industrial,eggs,0.0340470900736277
+SWZ,Swaziland,chickens,layers,industrial,meat,0.005738530684407111
+SWZ,Swaziland,chickens,broilers,industrial,eggs,0
+SWZ,Swaziland,chickens,broilers,industrial,meat,0.005624593704408497
+SWE,Sweden,chickens,backyard,backyard,eggs,0
+SWE,Sweden,chickens,backyard,backyard,meat,0
+SWE,Sweden,chickens,layers,industrial,eggs,0.05652426973421186
+SWE,Sweden,chickens,layers,industrial,meat,0.0063341958369186845
+SWE,Sweden,chickens,broilers,industrial,eggs,0
+SWE,Sweden,chickens,broilers,industrial,meat,0.009622310845906226
+CHE,Switzerland,chickens,backyard,backyard,eggs,0
+CHE,Switzerland,chickens,backyard,backyard,meat,0
+CHE,Switzerland,chickens,layers,industrial,eggs,0.02839178392844683
+CHE,Switzerland,chickens,layers,industrial,meat,0.0028548004103224997
+CHE,Switzerland,chickens,broilers,industrial,eggs,0
+CHE,Switzerland,chickens,broilers,industrial,meat,0.010260313778404301
+SYR,Syria,chickens,backyard,backyard,eggs,0.0031219485884558403
+SYR,Syria,chickens,backyard,backyard,meat,3.8224989376743087e-4
+SYR,Syria,chickens,layers,industrial,eggs,0.043948200946401686
+SYR,Syria,chickens,layers,industrial,meat,0.0053555109682738005
+SYR,Syria,chickens,broilers,industrial,eggs,0
+SYR,Syria,chickens,broilers,industrial,meat,0.008629419169885686
+TJK,Tajikistan,chickens,backyard,backyard,eggs,0.0012403895180860486
+TJK,Tajikistan,chickens,backyard,backyard,meat,4.4343743551147565e-4
+TJK,Tajikistan,chickens,layers,industrial,eggs,0.024626932458221187
+TJK,Tajikistan,chickens,layers,industrial,meat,0.0018108887121497566
+TJK,Tajikistan,chickens,broilers,industrial,eggs,0
+TJK,Tajikistan,chickens,broilers,industrial,meat,0
+THA,Thailand,chickens,backyard,backyard,eggs,8.465310936565635e-4
+THA,Thailand,chickens,backyard,backyard,meat,6.170907831593857e-4
+THA,Thailand,chickens,layers,industrial,eggs,0.04272140727165333
+THA,Thailand,chickens,layers,industrial,meat,0.005729399864301979
+THA,Thailand,chickens,broilers,industrial,eggs,0
+THA,Thailand,chickens,broilers,industrial,meat,0.009193198202464975
+MKD,Macedonia,chickens,backyard,backyard,eggs,0.005433996156119969
+MKD,Macedonia,chickens,backyard,backyard,meat,0.0012041651408530286
+MKD,Macedonia,chickens,layers,industrial,eggs,0.05219158469053714
+MKD,Macedonia,chickens,layers,industrial,meat,0.006131626381395879
+MKD,Macedonia,chickens,broilers,industrial,eggs,0
+MKD,Macedonia,chickens,broilers,industrial,meat,0.008997064273202243
+TLS,Timor-Leste,chickens,backyard,backyard,eggs,8.46530198186993e-4
+TLS,Timor-Leste,chickens,backyard,backyard,meat,6.170899704281068e-4
+TLS,Timor-Leste,chickens,layers,industrial,eggs,0.02967055349260467
+TLS,Timor-Leste,chickens,layers,industrial,meat,0.002258235176983934
+TLS,Timor-Leste,chickens,broilers,industrial,eggs,0
+TLS,Timor-Leste,chickens,broilers,industrial,meat,0.00956429894113579
+TGO,Togo,chickens,backyard,backyard,eggs,4.8419798184620467e-4
+TGO,Togo,chickens,backyard,backyard,meat,3.1696862756974307e-4
+TGO,Togo,chickens,layers,industrial,eggs,0.034046955532329747
+TGO,Togo,chickens,layers,industrial,meat,0.0057385085068801245
+TGO,Togo,chickens,broilers,industrial,eggs,0
+TGO,Togo,chickens,broilers,industrial,meat,0.005624594237433385
+TKL,Tokelau,chickens,backyard,backyard,eggs,0
+TKL,Tokelau,chickens,backyard,backyard,meat,0
+TKL,Tokelau,chickens,layers,industrial,eggs,0
+TKL,Tokelau,chickens,layers,industrial,meat,0
+TKL,Tokelau,chickens,broilers,industrial,eggs,0
+TKL,Tokelau,chickens,broilers,industrial,meat,0
+TON,Tonga,chickens,backyard,backyard,eggs,0.0012557633402662607
+TON,Tonga,chickens,backyard,backyard,meat,3.49182538944172e-4
+TON,Tonga,chickens,layers,industrial,eggs,0
+TON,Tonga,chickens,layers,industrial,meat,0
+TON,Tonga,chickens,broilers,industrial,eggs,0
+TON,Tonga,chickens,broilers,industrial,meat,0
+TTO,Trinidad & Tobago,chickens,backyard,backyard,eggs,0.002257944868046576
+TTO,Trinidad & Tobago,chickens,backyard,backyard,meat,4.4632904883090696e-4
+TTO,Trinidad & Tobago,chickens,layers,industrial,eggs,0.04365757948429423
+TTO,Trinidad & Tobago,chickens,layers,industrial,meat,0.004979188827151884
+TTO,Trinidad & Tobago,chickens,broilers,industrial,eggs,0
+TTO,Trinidad & Tobago,chickens,broilers,industrial,meat,0.012826256259743025
+TUN,Tunisia,chickens,backyard,backyard,eggs,0.0014504908509760685
+TUN,Tunisia,chickens,backyard,backyard,meat,4.1790261179093394e-4
+TUN,Tunisia,chickens,layers,industrial,eggs,0.034046933437297894
+TUN,Tunisia,chickens,layers,industrial,meat,0.005738504864777866
+TUN,Tunisia,chickens,broilers,industrial,eggs,0
+TUN,Tunisia,chickens,broilers,industrial,meat,0.005624594402121541
+TUR,Turkey,chickens,backyard,backyard,eggs,0.0031219485200200342
+TUR,Turkey,chickens,backyard,backyard,meat,3.8224988484401477e-4
+TUR,Turkey,chickens,layers,industrial,eggs,0.0312845848782934
+TUR,Turkey,chickens,layers,industrial,meat,0.0020926868361948315
+TUR,Turkey,chickens,broilers,industrial,eggs,0
+TUR,Turkey,chickens,broilers,industrial,meat,0.009061953969881733
+TKM,Turkmenistan,chickens,backyard,backyard,eggs,0.001240389300194991
+TKM,Turkmenistan,chickens,backyard,backyard,meat,4.434373372741639e-4
+TKM,Turkmenistan,chickens,layers,industrial,eggs,0.029663664955569317
+TKM,Turkmenistan,chickens,layers,industrial,meat,0.002181253978484408
+TKM,Turkmenistan,chickens,broilers,industrial,eggs,0
+TKM,Turkmenistan,chickens,broilers,industrial,meat,0.008735229254113535
+TCA,Turks & Caicos Islands,chickens,backyard,backyard,eggs,0
+TCA,Turks & Caicos Islands,chickens,backyard,backyard,meat,0
+TCA,Turks & Caicos Islands,chickens,layers,industrial,eggs,0
+TCA,Turks & Caicos Islands,chickens,layers,industrial,meat,0
+TCA,Turks & Caicos Islands,chickens,broilers,industrial,eggs,0
+TCA,Turks & Caicos Islands,chickens,broilers,industrial,meat,0
+TUV,Tuvalu,chickens,backyard,backyard,eggs,0
+TUV,Tuvalu,chickens,backyard,backyard,meat,0
+TUV,Tuvalu,chickens,layers,industrial,eggs,0
+TUV,Tuvalu,chickens,layers,industrial,meat,0
+TUV,Tuvalu,chickens,broilers,industrial,eggs,0
+TUV,Tuvalu,chickens,broilers,industrial,meat,0
+UGA,Uganda,chickens,backyard,backyard,eggs,0.0010204755401551655
+UGA,Uganda,chickens,backyard,backyard,meat,4.7421879819027694e-4
+UGA,Uganda,chickens,layers,industrial,eggs,0.03404696887370453
+UGA,Uganda,chickens,layers,industrial,meat,0.005738510706046504
+UGA,Uganda,chickens,broilers,industrial,eggs,0
+UGA,Uganda,chickens,broilers,industrial,meat,0.005624593637090035
+UKR,Ukraine,chickens,backyard,backyard,eggs,0.0054340113646463685
+UKR,Ukraine,chickens,backyard,backyard,meat,8.841438076144417e-4
+UKR,Ukraine,chickens,layers,industrial,eggs,0.06072062153773971
+UKR,Ukraine,chickens,layers,industrial,meat,0.0055602746251554504
+UKR,Ukraine,chickens,broilers,industrial,eggs,0
+UKR,Ukraine,chickens,broilers,industrial,meat,0.009699252482862672
+ARE,United Arab Emirates,chickens,backyard,backyard,eggs,0.003121954948602795
+ARE,United Arab Emirates,chickens,backyard,backyard,meat,3.822507230736256e-4
+ARE,United Arab Emirates,chickens,layers,industrial,eggs,0.04138709996800428
+ARE,United Arab Emirates,chickens,layers,industrial,meat,0.005208652178914605
+ARE,United Arab Emirates,chickens,broilers,industrial,eggs,0
+ARE,United Arab Emirates,chickens,broilers,industrial,meat,0.008992863674761188
+GBR,United Kingdom,chickens,backyard,backyard,eggs,0
+GBR,United Kingdom,chickens,backyard,backyard,meat,0
+GBR,United Kingdom,chickens,layers,industrial,eggs,0.05281225471434078
+GBR,United Kingdom,chickens,layers,industrial,meat,0.005922629893166228
+GBR,United Kingdom,chickens,broilers,industrial,eggs,0
+GBR,United Kingdom,chickens,broilers,industrial,meat,0.009516195387418713
+TZA,Tanzania,chickens,backyard,backyard,eggs,0.0010179865706044615
+TZA,Tanzania,chickens,backyard,backyard,meat,4.742187956097735e-4
+TZA,Tanzania,chickens,layers,industrial,eggs,0.034046959662274036
+TZA,Tanzania,chickens,layers,industrial,meat,0.005738509187652141
+TZA,Tanzania,chickens,broilers,industrial,eggs,0
+TZA,Tanzania,chickens,broilers,industrial,meat,0.005624594761452783
+USA,United States,chickens,backyard,backyard,eggs,0
+USA,United States,chickens,backyard,backyard,meat,0
+USA,United States,chickens,layers,industrial,eggs,0.028456010723071152
+USA,United States,chickens,layers,industrial,meat,0.0019165637931239678
+USA,United States,chickens,broilers,industrial,eggs,0
+USA,United States,chickens,broilers,industrial,meat,0.011120561935451079
+VIR,U.S. Virgin Islands,chickens,backyard,backyard,eggs,0
+VIR,U.S. Virgin Islands,chickens,backyard,backyard,meat,0
+VIR,U.S. Virgin Islands,chickens,layers,industrial,eggs,0
+VIR,U.S. Virgin Islands,chickens,layers,industrial,meat,0
+VIR,U.S. Virgin Islands,chickens,broilers,industrial,eggs,0
+VIR,U.S. Virgin Islands,chickens,broilers,industrial,meat,0
+URY,Uruguay,chickens,backyard,backyard,eggs,0.0022579445468870933
+URY,Uruguay,chickens,backyard,backyard,meat,4.46328978026743e-4
+URY,Uruguay,chickens,layers,industrial,eggs,0.04614625345712947
+URY,Uruguay,chickens,layers,industrial,meat,0.0057525149752136375
+URY,Uruguay,chickens,broilers,industrial,eggs,0
+URY,Uruguay,chickens,broilers,industrial,meat,0.012858350239993266
+UZB,Uzbekistan,chickens,backyard,backyard,eggs,0.0012403892723426859
+UZB,Uzbekistan,chickens,backyard,backyard,meat,4.4343732471680794e-4
+UZB,Uzbekistan,chickens,layers,industrial,eggs,0.024626941898149016
+UZB,Uzbekistan,chickens,layers,industrial,meat,0.0018108893693074594
+UZB,Uzbekistan,chickens,broilers,industrial,eggs,0
+UZB,Uzbekistan,chickens,broilers,industrial,meat,0.00869548559828907
+VUT,Vanuatu,chickens,backyard,backyard,eggs,0.0012557704421353396
+VUT,Vanuatu,chickens,backyard,backyard,meat,3.4918491528786134e-4
+VUT,Vanuatu,chickens,layers,industrial,eggs,0.049255943478946004
+VUT,Vanuatu,chickens,layers,industrial,meat,0.006229535892222876
+VUT,Vanuatu,chickens,broilers,industrial,eggs,0
+VUT,Vanuatu,chickens,broilers,industrial,meat,0.009369100884063116
+VEN,Venezuela,chickens,backyard,backyard,eggs,0.00225794359953857
+VEN,Venezuela,chickens,backyard,backyard,meat,4.4632876917032185e-4
+VEN,Venezuela,chickens,layers,industrial,eggs,0.04614623971270647
+VEN,Venezuela,chickens,layers,industrial,meat,0.005752513328135961
+VEN,Venezuela,chickens,broilers,industrial,eggs,0
+VEN,Venezuela,chickens,broilers,industrial,meat,0.01285834988790786
+VNM,Vietnam,chickens,backyard,backyard,eggs,8.465310887121648e-4
+VNM,Vietnam,chickens,backyard,backyard,meat,6.170907786718321e-4
+VNM,Vietnam,chickens,layers,industrial,eggs,0.029670671235522635
+VNM,Vietnam,chickens,layers,industrial,meat,0.002258244030453444
+VNM,Vietnam,chickens,broilers,industrial,eggs,0
+VNM,Vietnam,chickens,broilers,industrial,meat,0
+WLF,Wallis & Futuna,chickens,backyard,backyard,eggs,0
+WLF,Wallis & Futuna,chickens,backyard,backyard,meat,0
+WLF,Wallis & Futuna,chickens,layers,industrial,eggs,0
+WLF,Wallis & Futuna,chickens,layers,industrial,meat,0
+WLF,Wallis & Futuna,chickens,broilers,industrial,eggs,0
+WLF,Wallis & Futuna,chickens,broilers,industrial,meat,0
+ESH,Western Sahara,chickens,backyard,backyard,eggs,0.0014504913955958904
+ESH,Western Sahara,chickens,backyard,backyard,meat,4.179028014561421e-4
+ESH,Western Sahara,chickens,layers,industrial,eggs,0
+ESH,Western Sahara,chickens,layers,industrial,meat,0
+ESH,Western Sahara,chickens,broilers,industrial,eggs,0
+ESH,Western Sahara,chickens,broilers,industrial,meat,0
+YEM,Yemen,chickens,backyard,backyard,eggs,0.0031219485978034316
+YEM,Yemen,chickens,backyard,backyard,meat,3.822498949862732e-4
+YEM,Yemen,chickens,layers,industrial,eggs,0.043948197457361546
+YEM,Yemen,chickens,layers,industrial,meat,0.0053555105726916345
+YEM,Yemen,chickens,broilers,industrial,eggs,0
+YEM,Yemen,chickens,broilers,industrial,meat,0
+ZMB,Zambia,chickens,backyard,backyard,eggs,0.0010204755286148323
+ZMB,Zambia,chickens,backyard,backyard,meat,4.7421879202518236e-4
+ZMB,Zambia,chickens,layers,industrial,eggs,0.03404694085187664
+ZMB,Zambia,chickens,layers,industrial,meat,0.005738506086982668
+ZMB,Zambia,chickens,broilers,industrial,eggs,0
+ZMB,Zambia,chickens,broilers,industrial,meat,0
+ZWE,Zimbabwe,chickens,backyard,backyard,eggs,0.001020475542115795
+ZWE,Zimbabwe,chickens,backyard,backyard,meat,4.742187992376876e-4
+ZWE,Zimbabwe,chickens,layers,industrial,eggs,0.03404694518400257
+ZWE,Zimbabwe,chickens,layers,industrial,meat,0.005738506801081914
+ZWE,Zimbabwe,chickens,broilers,industrial,eggs,0
+ZWE,Zimbabwe,chickens,broilers,industrial,meat,0
+PSE,Palestinian Territories,chickens,backyard,backyard,eggs,0.0031219769092995907
+PSE,Palestinian Territories,chickens,backyard,backyard,meat,3.822535865517851e-4
+PSE,Palestinian Territories,chickens,broilers,industrial,eggs,0
+PSE,Palestinian Territories,chickens,broilers,industrial,meat,0.009027707604609391
+PSE,Palestinian Territories,chickens,layers,industrial,eggs,0.04394824391557704
+PSE,Palestinian Territories,chickens,layers,industrial,meat,0.005355515840054807
+ALA,Åland,chickens,layers,industrial,eggs,0.03672436311639455
+ALA,Åland,chickens,layers,industrial,meat,0.00406535735990358
+ALA,Åland,chickens,broilers,industrial,eggs,0
+ALA,Åland,chickens,broilers,industrial,meat,0.007665493450194901
+ALA,Åland,chickens,backyard,backyard,eggs,0.0014490696408142715
+ALA,Åland,chickens,backyard,backyard,meat,2.3577167258531577e-4
+IOT,British Indian Ocean Territory,chickens,layers,industrial,eggs,0.025535353913841888
+IOT,British Indian Ocean Territory,chickens,layers,industrial,meat,0.004303904006590021
+IOT,British Indian Ocean Territory,chickens,broilers,industrial,eggs,0
+IOT,British Indian Ocean Territory,chickens,broilers,industrial,meat,0.004218444701326112
+IOT,British Indian Ocean Territory,chickens,backyard,backyard,eggs,9.442579558616903e-4
+IOT,British Indian Ocean Territory,chickens,backyard,backyard,meat,4.239811791218116e-4
+CXR,Christmas Island,chickens,layers,industrial,eggs,0.0328534761174814
+CXR,Christmas Island,chickens,layers,industrial,meat,0.004145114861431256
+CXR,Christmas Island,chickens,broilers,industrial,eggs,0
+CXR,Christmas Island,chickens,broilers,industrial,meat,0.009367175572629786
+CXR,Christmas Island,chickens,backyard,backyard,eggs,0
+CXR,Christmas Island,chickens,backyard,backyard,meat,0
+CCK,Cocos Islands,chickens,layers,industrial,eggs,0.0328534761174814
+CCK,Cocos Islands,chickens,layers,industrial,meat,0.004145114861431256
+CCK,Cocos Islands,chickens,broilers,industrial,eggs,0
+CCK,Cocos Islands,chickens,broilers,industrial,meat,0.009367175572629786
+CCK,Cocos Islands,chickens,backyard,backyard,eggs,0
+CCK,Cocos Islands,chickens,backyard,backyard,meat,0
+CUW,Curaçao,chickens,layers,industrial,eggs,0.025466812866416177
+CUW,Curaçao,chickens,layers,industrial,meat,0.002904514528643116
+CUW,Curaçao,chickens,broilers,industrial,eggs,0
+CUW,Curaçao,chickens,broilers,industrial,meat,0.008550834980520798
+CUW,Curaçao,chickens,backyard,backyard,eggs,0.0012899747162918589
+CUW,Curaçao,chickens,backyard,backyard,meat,2.603589791210824e-4
+GIB,Gibraltar,chickens,layers,industrial,eggs,0.043482997983397546
+GIB,Gibraltar,chickens,layers,industrial,meat,0.005005134599579035
+GIB,Gibraltar,chickens,broilers,industrial,eggs,0
+GIB,Gibraltar,chickens,broilers,industrial,meat,0.007730559935913278
+GIB,Gibraltar,chickens,backyard,backyard,eggs,0.003881418643877209
+GIB,Gibraltar,chickens,backyard,backyard,meat,8.601160645081648e-4
+XKO,Kosovo,chickens,layers,industrial,eggs,0.043482997983397546
+XKO,Kosovo,chickens,layers,industrial,meat,0.005005134599579035
+XKO,Kosovo,chickens,broilers,industrial,eggs,0
+XKO,Kosovo,chickens,broilers,industrial,meat,0.007730559935913278
+XKO,Kosovo,chickens,backyard,backyard,eggs,0.003881418643877209
+XKO,Kosovo,chickens,backyard,backyard,meat,8.601160645081648e-4
+BLM,Saint-Barthélemy,chickens,layers,industrial,eggs,0.025466812866416177
+BLM,Saint-Barthélemy,chickens,layers,industrial,meat,0.002904514528643116
+BLM,Saint-Barthélemy,chickens,broilers,industrial,eggs,0
+BLM,Saint-Barthélemy,chickens,broilers,industrial,meat,0.008550834980520798
+BLM,Saint-Barthélemy,chickens,backyard,backyard,eggs,0.0012899747162918589
+BLM,Saint-Barthélemy,chickens,backyard,backyard,meat,2.603589791210824e-4
+MAF,Saint-Martin,chickens,layers,industrial,eggs,0.025466812866416177
+MAF,Saint-Martin,chickens,layers,industrial,meat,0.002904514528643116
+MAF,Saint-Martin,chickens,broilers,industrial,eggs,0
+MAF,Saint-Martin,chickens,broilers,industrial,meat,0.008550834980520798
+MAF,Saint-Martin,chickens,backyard,backyard,eggs,0.0012899747162918589
+MAF,Saint-Martin,chickens,backyard,backyard,meat,2.603589791210824e-4
+SXM,Sint Maarten,chickens,layers,industrial,eggs,0.025466812866416177
+SXM,Sint Maarten,chickens,layers,industrial,meat,0.002904514528643116
+SXM,Sint Maarten,chickens,broilers,industrial,eggs,0
+SXM,Sint Maarten,chickens,broilers,industrial,meat,0.008550834980520798
+SXM,Sint Maarten,chickens,backyard,backyard,eggs,0.0012899747162918589
+SXM,Sint Maarten,chickens,backyard,backyard,meat,2.603589791210824e-4
+TWN,Taiwan,chickens,layers,industrial,eggs,0.021786260045937016
+TWN,Taiwan,chickens,layers,industrial,meat,0.002085859893082566
+TWN,Taiwan,chickens,broilers,industrial,eggs,0
+TWN,Taiwan,chickens,broilers,industrial,meat,0.005928523651116384
+TWN,Taiwan,chickens,backyard,backyard,eggs,7.088528050222955e-4
+TWN,Taiwan,chickens,backyard,backyard,meat,2.533229717093259e-4

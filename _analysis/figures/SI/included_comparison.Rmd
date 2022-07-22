@@ -1,0 +1,16 @@
+---
+title: "included_comparison"
+author: "Juliette"
+date: "11/24/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+source(here("_workflow/common.R"))
+
+aquaculture <- read_csv(file.path(raw, "FAO_aquaculture/v_2020/FAO_GlobalAquacultureProduction_Quantity_1950_2018.csv"))
+
+```

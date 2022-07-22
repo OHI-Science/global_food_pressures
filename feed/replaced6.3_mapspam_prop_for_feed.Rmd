@@ -1,0 +1,63 @@
+---
+title: "Animal_consumption"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Combine consumption and trade matrix to get tonnes of each MAPSPAM crop that is consumed by animals in each country.
+
+Be sure to run previous scripts if changes to data.
+
+```{r}
+
+library(here)
+library(tidyverse)
+library(countrycode)
+
+focus_year = 2017
+
+trade_data <- read_csv(here("feed/data/FAO_MAPSPAMcrop_trade_data.csv"))
+```
+
+
+## total consumption by animals per country in MAPSPAM crops
+```{r}
+
+consumption <- read_csv(here("feed/data/system_country_mapspam_tonnes_consumption.csv")) %>%
+  rename(iso3c_consuming = iso3c, consuming_crop_consumed_tonnes =tonnes_product)
+
+```
+
+
+## Join consumption by country and crop to trade data
+
+```{r}
+
+production_location <- left_join(trade_data, consumption, by=c("iso3c_consuming", "SPAM_super")) %>%
+  filter(!is.na(animal_system)) %>%
+  mutate(consuming_crop_consumed_tonnes = ifelse(is.na(consuming_crop_consumed_tonnes), 0, consuming_crop_consumed_tonnes)) %>%
+  mutate(producing_crop_consumed_tonnes = consuming_crop_consumed_tonnes * prop_of_supply)
+
+# should all be equal tonnes_crop_consumed. prop_of_supply should sum to 1.
+tmp <- filter(production_location, iso3c_consuming=="USA" & SPAM_super=="maiz" & animal_system == "cows_feedlot_meat")
+tmp
+summary(tmp)
+sum(tmp$prop_of_supply)
+
+head(production_location)
+
+```
+
+
+Summarize by producing country to get the total production of feed for animal systems across all countries.
+
+```{r}
+feed_source <- production_location %>%
+  group_by(iso3c_producing, animal_system, SPAM_super) %>%
+  summarize(consumed_tonnes = sum(producing_crop_consumed_tonnes)) 
+
+write_csv(feed_source, here("feed/data/country_system_crop_tonnes_feedproduced.csv"))
+```
+
+

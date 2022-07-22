@@ -1,0 +1,57 @@
+---
+title: "SI_crop_names.Rmd"
+output: html_document
+---
+
+```{r}
+library(vroom)
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+```
+
+
+```{r setup, include=FALSE}
+SI_tbl <- 
+  vroom(here("crop/farm/data/SI_SPAM_crops_tbl.csv"), 
+        col_select = c(SPAM_short_name, FAO_item_code, SPAM_super)) 
+
+SPAM_names <- 
+  vroom::vroom(here("crop/farm/data/crop_codes_updated.csv")) %>% 
+  select(2, 4) %>% 
+  mutate(full_name = case_when(SPAM_super == "xpul" ~ "Other pulses",
+                                    SPAM_super == "xoil" ~ "Other oil crops",
+                                    SPAM_super == "xmil" ~ "Millet",
+                                    SPAM_super == "xfru" ~ "Fruits",
+                                    SPAM_super == "tnut" ~ "Treenuts",
+                                    SPAM_super == "spis" ~ "Spices",
+                                    TRUE ~ Hmisc::capitalize(SPAM_full_name))) %>% 
+  add_row(SPAM_super = "fodd",
+          SPAM_full_name = "Fodder") %>% 
+  unique() %>% 
+  arrange(.$SPAM_full_name)
+
+rest_codes <-
+  vroom(here("crop/farm/data/rest_category_codes.csv"),
+        col_select = c(SPAM_super, item_code)) %>% 
+  group_by(SPAM_super) %>% 
+  summarise(FAO_item_code = str_c(item_code, collapse = ", ")) %>% 
+  ungroup() %>% 
+  mutate(SPAM_short_name = "rest")
+
+SI_all <- bind_rows(SI_tbl, rest_codes)
+
+full_table <- 
+  left_join(SPAM_names, SI_all) %>% 
+  unique() %>% 
+  group_by(SPAM_super, full_name) %>% 
+  summarise(FAO_item_code   = str_c(unique(FAO_item_code), collapse = ", "),
+            SPAM_short_name = str_c(unique(SPAM_short_name), collapse = ", ")) %>% 
+  ungroup() %>% 
+  mutate(Inclusion = if_else(SPAM_super %in% c("ofib", "teas", "toba", "xcof"),
+                             "omitted from study",
+                             "included")) %>% 
+  arrange(SPAM_super)
+
+write_csv(full_table, here("_analysis/SI_data/output/SI_crop_names.csv"))
+```

@@ -1,0 +1,156 @@
+---
+title: "Shrimp Aquaculture GHG"
+author: "Gage Clawson (NCEAS, UCSB, OHI)"
+output: 
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_depth: 3
+    toc_float: yes
+    includes: 
+toc: true
+---
+
+# Script Description
+
+This markdown calculates the GHG emissions from shrimp aquaculture. 
+
+# Data information
+We used [Seafood Carbon Emissions Tool data](http://seafoodco2.dal.ca/) to extract ghg emissions associated with carcass weight of shrimp from shrimp farming (we used the estimate from Whiteleg shrimp, since it was the exact same as the Giant Tiger Prawn, the only other shrimp/prawn species present in the data).
+
+One factor that we added was aquatic N<sub>2</sub>O emissions as discussed in [Hu *et al*., 2012](https://pubs.acs.org/doi/full/10.1021/es300110x) and [MacLoid *et al*., 2019](http://www.fao.org/3/ca7130en/ca7130en.pdf).
+
+
+# Methods 
+ - Take midpoint of ghg low and ghg high from [seafood carbon emissions tool data](http://seafoodco2.dal.ca/):
+ - Multiply by % energy (to cut out the feed emissions)
+ - Add the N20 value from the MacLeod paper to the emissions intensity estimate we got for shrimp
+ - Multiply emissions intensity estimate by tonnes of production in each cell
+ 
+ 
+# Preamble
+```{r setup, include = FALSE}
+# getting packages we want
+library(tidyverse)
+library(here)
+library(raster)
+library(sf)
+library(janitor)
+
+# Raster templates
+source(here("_spatial/template_raster.R"))
+
+# File paths
+raw   <- "/home/shares/food-systems/Food_footprint/_raw_data/"
+prep_shrimp <- "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/shrimp"
+prep <- "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/" 
+path_final <- "/home/shares/food-systems/Food_footprint/all_food_systems/datalayers" 
+
+# Import master_rgns xy df
+master_rgns <- read_csv(here("_spatial/_output/food_rgns.csv"))
+```  
+ 
+## Import
+```{r}
+## Read in farmed emissions data 
+
+farmed_emissions <- read_csv(file.path("/home/shares/food-systems/Food_footprint/_raw_data/seafood_carbon_emmisions_tool/d2020/Specie_List_-_11_24_2020,_11_39_21_AM_Farmed.csv")) %>%
+  clean_names()
+
+shrimp_production <- read_csv(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/shrimp/updated/shrimp_farm_updated.csv"))
+```
+ 
+ 
+# Wrangle
+
+```{r}
+## Filter for shrimp aquaculture
+shrimp_emissions <- farmed_emissions %>%
+  dplyr::filter(common_name %in% c("Giant tiger prawn", "Whiteleg shrimp"))
+
+## grab the mean of ghg low and high (the 25th and 75th quantiles)
+ghg_kgCO2_kg_fish <- mean(c(2.6, 6.1))
+
+## now multiply by the percent of that which is energy emissions (61%)
+ghg_energy_kgCO2_kg_fish <- ghg_kgCO2_kg_fish*0.61 ## 2.6535 kg CO2eq/ kg fish (live/carcass weight, ratioed)
+
+# Adding Aquatic N2O
+# From MacLeod et al. 
+# "The amount of N2O per species-group was determined by multiplying the
+# production by the N2O emission factor per kg of production (Hu et al., 2012), i.e.
+# 1.69 gN2O-N per kg of production, or 0.791 kgCO2e/kgLW production. This equates
+# to a conversion rate of N to N2O-N of 1.8 percent, which is higher that the 0.71
+# percent used in Henriksson et al. (2014a). "
+
+# 0.791 kgCO2e/kgLW production 
+ghg_total_kgCO2_kg_fish <- 0.791 + ghg_energy_kgCO2_kg_fish
+
+## convert to kgco2/tfish
+GHG_kgCO2e_tfish <- ghg_total_kgCO2_kg_fish/0.001
+
+## convert to MTco2e/tfish
+GHG_MTCO2e_tfish <- GHG_kgCO2e_tfish/1000
+
+
+shrimp_ghg <- shrimp_production %>%
+  dplyr::mutate(ghg_tonnes = tonnes_production*GHG_MTCO2e_tfish) %>%
+  dplyr::select(x, y, ghg_tonnes)
+
+sum(shrimp_ghg$ghg_tonnes) # 17559450
+
+write.csv(shrimp_ghg, file.path(prep_shrimp, "shrimp_ghg.csv"), row.names = FALSE)
+
+## Now multiply this by our production raster
+shrimp_production_raster <- rasterFromXYZ(shrimp_production)
+plot(log(shrimp_production_raster + 1))
+cellStats(shrimp_production_raster, "sum") # 5094133
+
+ghg_em <- shrimp_production_raster*GHG_MTCO2e_tfish
+plot(log(ghg_em + 1))
+cellStats(ghg_em, "sum") # 17559450
+
+
+#check
+5094133*GHG_MTCO2e_tfish #17559450 
+# it worked
+
+## Transform CRS to be appropriate
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+
+crs(ghg_em) <- crs(food_raster)
+ghg_em
+
+ghg_em_final <- projectRaster(ghg_em, food_raster, method = "ngb")
+plot(log(ghg_em_final+1))
+cellStats(ghg_em_final, "sum") #17559450
+ghg_em_final
+
+
+## Save the raster to datalayers folder
+writeRaster(ghg_em_final, file.path(path_final, "marine_shrimp_aquaculture_meat_ghg.tif"), overwrite = TRUE)
+
+
+```
+
+Datacheck: 
+
+```{r}
+shrimp_production <- read_csv(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/shrimp/shrimp_farm.csv"))
+
+## sum production
+sum(shrimp_production$tonnes_production) # 5094133
+
+# now multiply that production by the ghg intensity calculated above: 
+ 
+3.4445*5094133 # 17546741
+
+
+## now check against the final ghg raster for bivalves 
+shrimp_ghg <- raster(file.path(path_final, "marine_shrimp_aquaculture_meat_ghg.tif"))
+cellStats(shrimp_ghg, "sum") # 17546741 matches perfectly
+
+
+## check our emissions against that of macleod et al... 
+
+# they estimate ~5.5 million tonnes of production and ~21 million tonnes of ghg emissions for 2013. Their emissions intensity appears to be ~3.9 kgco2/LW for on farm energy and N20, which is the only ones we include. Our EI is ~3.4445, so it it actually really close, and seems reasonable, given that shrimp farming is very energy intensive. 
+```

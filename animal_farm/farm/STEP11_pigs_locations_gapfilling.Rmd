@@ -1,0 +1,307 @@
+---
+title: "STEP 11: Pigs location gapfilling"
+author: "Juliette"
+date: "8/26/2020"
+output: html_document
+---
+
+# Objective
+To gapfill our 3 pig maps
+
+# Inputs
+backyard, intermediate and industrial pig maps created in STEP 8
+pigs_system_prop.csv calcualted in STEP 10
+fao_livestock_headcount.csv calculated in STEP 1
+
+# Output
+Gapfilled versions of our input maps
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+'%notin%' <- Negate('%in%')
+
+## our maps
+pigs_back <- read_csv(file.path(prep, "animal_farm/farm/ungapfilled_chickens_pigs/pigs_backyard_meat_location_df_ungf.csv"), col_type = "ddcccnnnnnc") %>% 
+  mutate(current_backyard_headcount = ifelse(is.na(current_backyard_headcount ), 0, current_backyard_headcount))
+
+pigs_int <- read_csv(file.path(prep, "animal_farm/farm/ungapfilled_chickens_pigs/pigs_intermediate_meat_location_df_ungf.csv"), col_type = "ddcccnnnnnc")%>% 
+  mutate(current_intermediate_headcount = ifelse(is.na(current_intermediate_headcount ), 0, current_intermediate_headcount))
+
+pigs_indu <- read_csv(file.path(prep, "animal_farm/farm/ungapfilled_chickens_pigs/pigs_industrial_meat_location_df_ungf.csv"), col_type = "ddcccnnnnnc")%>% 
+  mutate(current_industrial_headcount = ifelse(is.na(current_industrial_headcount ), 0, current_industrial_headcount))
+
+## FAO stat data
+fao_pigs <- read_csv(here("animal_farm/farm/data/fao_livestock_headcount.csv")) %>% 
+  filter(animal == "pigs")
+
+
+```
+
+Two things we want to do:
+1) see if there are FAO reported values that we lost in the process of allocating 
+2) see if there are any gridded map values we lost along the way
+
+
+## 1. Check that we didn't loose FAO stat data along the way 
+We will need to summarize the pigs since FAO doens't distinguish any of our categories further
+
+```{r}
+
+pigs_back_sum <- pigs_back  %>% 
+  group_by(iso3c) %>% 
+  dplyr::summarise(total = sum(current_backyard_headcount, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  na.omit()
+
+pigs_int_sum <- pigs_int %>% 
+  group_by(iso3c) %>% 
+  dplyr::summarise(total = sum(current_intermediate_headcount, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  na.omit()
+
+pigs_indus_sum <- pigs_indu %>% 
+  group_by(iso3c) %>% 
+  dplyr::summarise(total = sum(current_industrial_headcount, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  na.omit()
+
+our_pigs <- rbind(pigs_back_sum, pigs_int_sum, pigs_indus_sum) %>% 
+  group_by(iso3c) %>% 
+  dplyr::summarise(our_count = sum(total))
+
+##compare with FAO
+pigs_fao_lost <- left_join(our_pigs, fao_pigs, by = "iso3c") %>% 
+  filter(our_count == 0 & fao_headcount > 0) %>% 
+  select(iso3c, fao_headcount)
+## 18 countries
+pigs_fao_lost_list <- pigs_fao_lost$iso3c
+
+```
+
+In order to divvy up the FAO counts we need to allocate them to each of the systems. We will use the pigs_system_prop.csv to do this
+```{r}
+prop <- read_csv(here("animal_farm/farm/data/pigs_system_prop.csv")) %>% 
+  select(-gapfilled)
+```
+Backyard pigs first
+```{r}
+
+pigs_back_missing <- pigs_back %>% 
+  filter(iso3c %in% pigs_fao_lost_list) %>% 
+  left_join(prop, by = c("iso3c", "system")) %>% 
+  group_by(iso3c) %>% 
+  mutate(cell_total = n()) %>% 
+  ungroup() %>% 
+  mutate(current_backyard_headcount = (fao_headcount*prop)/cell_total) %>% 
+  select(-prop, -cell_total) %>% 
+  mutate(gapfilled = "gf with contiental medians")
+
+pigs_back_gf1 <- pigs_back %>% 
+  filter(iso3c %notin% pigs_fao_lost_list) %>% 
+  mutate(gapfilled = NA) %>% 
+  rbind(pigs_back_missing)
+
+```
+
+Intermediate pigs
+```{r}
+
+pigs_int_missing <- pigs_int %>% 
+  filter(iso3c %in% pigs_fao_lost_list) %>% 
+  left_join(prop, by = c("iso3c", "system")) %>% 
+  group_by(iso3c) %>% 
+  mutate(cell_total = n()) %>% 
+  ungroup() %>% 
+  mutate(current_intermediate_headcount = (fao_headcount*prop)/cell_total) %>% 
+  select(-prop, -cell_total) %>% 
+  mutate(gapfilled = "gf with contiental medians")
+
+pigs_int_gf1 <- pigs_int %>% 
+  filter(iso3c %notin% pigs_fao_lost_list) %>% 
+  mutate(gapfilled = NA) %>% 
+  rbind(pigs_int_missing)
+
+```
+
+Industrial pigs
+```{r}
+
+pigs_indu_missing <- pigs_indu %>% 
+  filter(iso3c %in% pigs_fao_lost_list) %>% 
+  left_join(prop, by = c("iso3c", "system")) %>% 
+  group_by(iso3c) %>% 
+  mutate(cell_total = n()) %>% 
+  ungroup() %>% 
+  mutate(current_industrial_headcount = (fao_headcount*prop)/cell_total) %>% 
+  select(-prop, -cell_total) %>% 
+  mutate(gapfilled = "gf with contiental medians")
+
+pigs_indu_gf1 <- pigs_indu %>% 
+  filter(iso3c %notin% pigs_fao_lost_list) %>% 
+  mutate(gapfilled = NA) %>% 
+  rbind(pigs_indu_missing)
+
+```
+
+
+Now we want to compare the countries that have sheep/goats in the gridded maps. But that we dont have in FAO
+
+We are going to want to sum up the total animals in our new gapfilled maps and check to see if there are countries where gridded reports values but FAO does not. For these will we be able to gapfil with cell_count_category and just scale from 2010 to 2016
+
+Recalculate the sum. Here we can calcualte the sum by category!
+
+```{r}
+
+pigs_back_sum <- pigs_back_gf1  %>% 
+  group_by(iso3c) %>% 
+  dplyr::summarise(our_count = sum(current_backyard_headcount, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  na.omit()
+
+pigs_int_sum <- pigs_int_gf1 %>% 
+  group_by(iso3c) %>% 
+  dplyr::summarise(our_count = sum(current_intermediate_headcount, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  na.omit()
+
+pigs_indus_sum <- pigs_indu_gf1 %>% 
+  group_by(iso3c) %>% 
+  dplyr::summarise(our_count = sum(current_industrial_headcount, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  na.omit()
+
+
+```
+
+Sum of gridded
+
+```{r}
+
+gridded_back <- raster(file.path(raw, "FAO_livestock_maps/d2019/pigs/backyard_pigs/8_PgExt_2010_Da.tif")) %>% 
+  zonal(food_rgns_tif, fun = "sum") %>% 
+  as_tibble() %>% 
+  dplyr::rename(ID_0 = zone) %>% 
+  left_join(food_rgns, by = "ID_0") %>% 
+  rename(gridded_count = sum)
+
+gridded_int <- raster(file.path(raw, "FAO_livestock_maps/d2019/pigs/semi_intensive_pigs/9_PgInt_2010_Da.tif")) %>% 
+  zonal(food_rgns_tif, fun = "sum") %>% 
+  as_tibble() %>% 
+  dplyr::rename(ID_0 = zone) %>% 
+  left_join(food_rgns, by = "ID_0") %>% 
+  rename(gridded_count = sum)
+
+gridded_ind <- raster(file.path(raw, "FAO_livestock_maps/d2019/pigs/intensive_pigs/10_PgInd_2010_Da.tif")) %>% 
+  zonal(food_rgns_tif, fun = "sum") %>% 
+  as_tibble() %>% 
+  dplyr::rename(ID_0 = zone) %>% 
+  left_join(food_rgns, by = "ID_0") %>% 
+  rename(gridded_count = sum)
+
+
+```
+
+Compare our total values with the gridded data.See if there are countries that the gridded maps include by FAO does not 
+We have already calculated a headcount by category for each cell in our maps. Now we just need to rescale it from 2010 to 2016 values
+
+```{r}
+##compare with gridded
+back_grid_lost <- left_join(pigs_back_sum, gridded_back, by = "iso3c") %>% 
+  filter(our_count == 0 & gridded_count > 0) %>% 
+  select(iso3c, gridded_count)
+## 11 countries
+back_grid_lost_list <- back_grid_lost$iso3c
+
+int_grid_lost <- left_join(pigs_int_sum, gridded_back, by = "iso3c") %>% 
+  filter(our_count == 0 & gridded_count > 0) %>% 
+  select(iso3c, gridded_count)
+## 29 countries
+int_grid_lost_list <- int_grid_lost$iso3c
+
+ind_grid_lost <- left_join(pigs_indus_sum, gridded_back, by = "iso3c") %>% 
+  filter(our_count == 0 & gridded_count > 0) %>% 
+  select(iso3c, gridded_count)
+## 15 countries
+ind_grid_lost_list <- ind_grid_lost$iso3c
+
+```
+
+Grab the scaling factor for sheep and goats 2010-2017
+
+```{r}
+prop_change <- read_csv(here("animal_farm/farm/data/prop_change_2010_2017.csv")) %>% 
+  select(iso3c, animal, prop_change)
+```
+
+
+Gapfilling round 2
+
+Backyard
+```{r}
+
+pigs_missing <- pigs_back_gf1 %>% 
+  filter(iso3c %in% back_grid_lost_list) %>% 
+  mutate(animal = "pigs") %>% 
+  left_join(prop_change, by = c("iso3c", "animal")) %>% 
+  mutate(current_backyard_headcount = prop_change*backyard_map_counts,
+         gapfilled = "2010 gridded values rescaled") %>% 
+  select(-prop_change)
+
+pigs_back_gf2 <- pigs_back_gf1 %>% 
+  filter(iso3c %notin% back_grid_lost_list) %>%
+  rbind(pigs_missing)%>% 
+  rename(current_count= current_backyard_headcount)
+  
+```
+
+Intermediate
+```{r}
+
+pigs_missing <- pigs_int_gf1 %>% 
+  filter(iso3c %in% int_grid_lost_list) %>% 
+  mutate(animal = "pigs") %>% 
+  left_join(prop_change, by = c("iso3c", "animal")) %>% 
+  mutate(current_intermediate_headcount = prop_change*intermediate_map_counts,
+         gapfilled = "2010 gridded values rescaled")%>% 
+  select(-prop_change)
+
+pigs_int_gf2 <- pigs_int_gf1 %>% 
+  filter(iso3c %notin% int_grid_lost_list) %>%
+  rbind(pigs_missing) %>% 
+  rename(current_count= current_intermediate_headcount)
+  
+```
+
+Backyard
+```{r}
+
+pigs_missing <- pigs_indu_gf1 %>% 
+  filter(iso3c %in% ind_grid_lost) %>% 
+  mutate(animal = "pigs") %>% 
+  left_join(prop_change, by = c("iso3c", "animal")) %>% 
+  mutate(current_industrial_headcount = prop_change*industrial_map_counts,
+         gapfilled = "2010 gridded values rescaled")%>% 
+  select(-prop_change)
+ 
+pigs_indu_gf2 <- pigs_indu_gf1 %>% 
+  filter(iso3c %notin% ind_grid_lost) %>%
+  rbind(pigs_missing) %>% 
+  rename(current_count= current_industrial_headcount)
+
+```
+
+Save the files
+
+```{r}
+write_csv(pigs_back_gf2, file.path(prep, "animal_farm/farm/pigs_backyard_meat_location_df.csv"))
+write_csv(pigs_int_gf2, file.path(prep, "animal_farm/farm/pigs_intermediate_meat_location_df.csv"))
+write_csv(pigs_indu_gf2, file.path(prep, "animal_farm/farm/pigs_industrial_meat_location_df.csv"))
+```
+

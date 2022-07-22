@@ -1,0 +1,84 @@
+---
+title: "Chicken count correction"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+This estimates the proportion of backyard vs. industrial chickens.
+
+```{r setup, include=FALSE}
+
+library(here)
+library(sp)
+library(raster)
+library(tidyverse)
+library(countrycode)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+```
+
+
+FAO 2010 mapped counts
+
+```{r}
+
+ind <- raster(file.path(raw, "FAO_livestock_maps/d2019/chickens/07_ChInt_2010_Da.tif"))%>% 
+  as.data.frame(xy = TRUE) %>% 
+  rename(industrial_map_counts = X07_ChInt_2010_Da)
+
+by <- raster(file.path(raw, "FAO_livestock_maps/d2019/chickens/06_ChExt_2010_Da.tif"))%>% 
+  as.data.frame(xy = TRUE)%>% 
+  rename(backyard_map_counts = X06_ChExt_2010_Da)
+
+industrial_correct <- left_join(ind, by) %>% 
+  left_join(food_rgns_xy) %>% 
+  group_by(iso3c) %>% 
+  dplyr::summarise(indu_counts = sum(industrial_map_counts, na.rm = TRUE),
+                   by_counts = sum(backyard_map_counts, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  rowwise() %>% 
+  mutate(all_counts = indu_counts+by_counts,
+         industrial_correction = indu_counts/all_counts,
+         industrial_correction = ifelse(all_counts == 0, 0, industrial_correction),
+         backyard_correction = 1-industrial_correction) %>% 
+  select(iso3c, industrial_correction, backyard_correction)
+
+write_csv(industrial_correct, here("animal_farm/farm/data/industrial_chicken_correct.csv"))
+
+```
+
+
+Create an adjusted FAO count df
+
+```{r}
+fao_counts <- read_csv(here("animal_farm/farm/data/fao_livestock_headcount.csv"))
+
+fao_indu_chickens <- fao_counts %>% 
+  filter(animal == "chickens") %>% 
+  left_join(industrial_correct) %>% 
+  mutate(fao_headcount_adj = fao_headcount*industrial_correction) %>% 
+  select(-industrial_correction, -backyard_correction, - fao_headcount) %>% 
+  rename(fao_headcount = fao_headcount_adj)
+
+fao_by_chickens <- fao_counts %>% 
+  filter(animal == "chickens") %>% 
+  left_join(industrial_correct) %>% 
+  mutate(fao_headcount_adj = fao_headcount*backyard_correction)%>% 
+  select(-industrial_correction, -backyard_correction, - fao_headcount) %>% 
+  rename(fao_headcount = fao_headcount_adj) %>% 
+  mutate(product = "eggs&meat")
+
+fao_counts_adj <- fao_counts %>% 
+  filter(animal != "chickens") %>% 
+  rbind(fao_indu_chickens, fao_by_chickens) %>% 
+  group_by(iso3c, year, animal, product) %>% 
+  dplyr::summarize(fao_headcount = sum(fao_headcount)) %>% 
+  ungroup()
+
+write_csv(fao_counts_adj, here("animal_farm/farm/data/fao_livestock_headcount_chicken_adjusted.csv"))
+
+```
+

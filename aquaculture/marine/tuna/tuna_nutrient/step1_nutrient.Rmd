@@ -1,0 +1,306 @@
+---
+title: "Tuna nutrient pollution"
+author: "Gage Clawson (NCEAS, UCSB, OHI)"
+date: "01/06/2021"
+output: 
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_depth: 3
+    toc_float: yes
+    includes: 
+toc: true
+---
+
+This markdown uses models and species specific parameters from **Nitrogen and phosphorus budget in coastal and marine cage aquaculture and impacts of effluent loading on ecosystem: review and analysis towards model development**
+
+## Set up
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(sf)
+library(raster)
+library(readr)
+library(data.table)
+
+source(here("_spatial/template_raster.R"))
+
+path_prep <- "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/tuna"
+path_final <-"/home/shares/food-systems/Food_footprint/all_food_systems/datalayers"
+path_pre <- "/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers"
+
+production <- read_csv(file.path(path_prep, "updated/tuna_farm_updated.csv"))
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+```
+
+**Nitrogen and phosphorus budget in coastal and marine cage aquaculture and impacts of effluent loading on ecosystem: review and analysis towards model development**
+https://reader.elsevier.com/reader/sd/pii/S0025326X04003042?token=FD7F20D6183C00EC61F7CEED7BA11815BFA6A54438409343DAA77A2D5DEDDAD0BF5B8B2A55EED17F347FDE6E64F4FD72
+
+ - General Cage Aquaculture
+   - 132.5 kg N / tonne
+   - 25 kg P / tonne 
+
+
+Steps: 
+1. Multiply tonnes production by 0.95 (this corrects for the growth that occurs outside the seapen on land), this is the value Lex uses
+2. Then multiply growth by the N value and the P values
+3. We report in N + P: Sum the N and P rasters. Save both N and P to predatalayers
+4. We report in tonnes, so divide by 1000
+  
+
+ USE global values: 
+  - General Cage Aquaculture
+   - 132.5 kg N / tonne
+   - 25 kg P / tonne 
+
+
+```{r}
+
+tuna_pollution <- production %>%
+  dplyr::mutate(prod_growth = tonnes_production*0.95) %>%
+  dplyr::mutate(prod_growth_N_poll = prod_growth*132.5,
+                prod_growth_P_poll = prod_growth*25) %>% ## in kg pollution now
+  # dplyr::mutate(PO4eq_kg = prod_growth_N_poll*0.42 + prod_growth_P_poll*3.07) %>% cut (01/14/2021)
+  dplyr::mutate(N_P_tonnes = (prod_growth_N_poll + prod_growth_P_poll)/1000, 
+                P_poll_t = prod_growth_P_poll/1000, 
+                N_poll_t = prod_growth_N_poll/1000) %>%
+  dplyr::select(x, y, N_P_tonnes, P_poll_t, N_poll_t)
+
+sum(tuna_pollution$N_P_tonnes) # 5546.982
+sum(production$tonnes_production) # 37072.56
+
+## save to dataprep folder with the correct naming conventions:
+write.csv(tuna_pollution, file.path(path_prep, "tuna_nutrient.csv"))
+
+
+
+## Save N + P layer
+N_P_df <- tuna_pollution %>%
+  dplyr::select(x, y, N_P_tonnes)
+
+final_rast <- rasterFromXYZ(N_P_df, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+final_rast
+cellStats(final_rast, "sum") # 5546.982
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 5546.982
+final_rast
+
+## Save to datalayers
+writeRaster(final_rast, file.path(path_final, "marine_tuna_aquaculture_meat_nutrient.tif"), overwrite = T)
+
+
+
+
+## Save N layer
+N_df <- tuna_pollution %>%
+  dplyr::select(x, y, N_poll_t)
+
+final_rast <- rasterFromXYZ(N_df, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+final_rast
+cellStats(final_rast, "sum") # 4666.508
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 4666.508
+final_rast
+
+## Save to datalayers
+writeRaster(final_rast, file.path(path_pre, "marine_tuna_aquaculture_meat_nutrientN.tif"), overwrite = T)
+
+
+
+## Save P layer
+P_df <- tuna_pollution %>%
+  dplyr::select(x, y, P_poll_t)
+
+final_rast <- rasterFromXYZ(P_df, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+final_rast
+cellStats(final_rast, "sum") # 880.4733
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 880.4733
+final_rast
+
+## Save to datalayers
+writeRaster(final_rast, file.path(path_pre, "marine_tuna_aquaculture_meat_nutrientP.tif"), overwrite = T)
+
+```
+
+Datacheck: 
+
+Values from this paper, which just gives a general cage aquaculture estimate: https://reader.elsevier.com/reader/sd/pii/S0025326X04003042?token=FD7F20D6183C00EC61F7CEED7BA11815BFA6A54438409343DAA77A2D5DEDDAD0BF5B8B2A55EED17F347FDE6E64F4FD72
+
+   - 132.5 kg N / tonne
+   - 25 kg P / tonne 
+
+The paper doesn't include actually nutrient output estimates, but it doesn't really matter, since we just use the numbers provided for the nutrient output factors. There are no mistakes in the code, the numbers all make sense to me. 
+
+
+```{r}
+tuna_nutrient_N <- raster(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/marine_tuna_aquaculture_meat_nutrientN.tif"))
+cellStats(tuna_nutrient_N, "sum") # 4666.509 N tonnes
+
+tuna_nutrient_P <- raster(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/marine_tuna_aquaculture_meat_nutrientP.tif"))
+cellStats(tuna_nutrient_P, "sum") # 880.4733 P tonnes
+
+sum(production$tonnes_production) # 37072.56
+
+## Total production is 37072.56 tonnes for 2017
+
+## Used 132.5 N kg and 25 P kg for tuna
+
+37072.56*0.95*132.5/1000 # 4666.508 N tonnes
+37072.56*0.95*25/1000 # 880.4733 P tonnes
+
+## both match our final layers 
+
+final_rast <- raster(file.path(path_final, "marine_tuna_aquaculture_meat_nutrient.tif"))
+cellStats(final_rast, "sum") # 5546.982
+
+
+```
+
+
+
+ARCHIVE: 
+**Preliminary model of nitrogen loads from southern bluefin tuna aquaculture** 
+https://pubmed.ncbi.nlm.nih.gov/17669437/ 
+ - Only lists N pollution values for Southern Bluefin Tuna in Australia. 
+ - A range from 260 - 502 kg N / tonne growth 
+ - Would use the mean: 281 kg N / tonnes growth 
+ 
+
+**Marine cage culture and the environment: effects on water quality and primary production** 
+https://www.int-res.com/articles/aei2014/6/q006p151.pdf
+ - "Some research studies have found significant increases in dissolved nitrogen. For example, AguadoGiménez et al. (2006) calculated the estimated dissolved nitrogen outputs of a bluefin tuna fattening operation in the Mediterranean could be 2−5.6 times greater than a comparable sea bream farm, with the potential for significant environmental impacts during peak production periods."
+ - From Lex: seabream is 52 kg N / tonne = [104, 291.2] kg N / tonne : This would be for Europe  
+ 
+Aguado-Giminez: https://onlinelibrary.wiley.com/doi/full/10.1111/j.1365-2109.2006.01541.x
+ 
+ 
+"The phosphorus output from a tuna fattening operation was calculated to be about 3−5 times higher than from sea
+bream or sea bass farms because of differences in digestibility and feed formulation (Aguado-Giménez et al. 2006)"
+ -  From Lex: Seabass is 17 kg P / tonne = [51, 85] kg P / tonne : for Europe
+ - From Lex: Asian Seabass is [11, 16] kg P / tonne = [(33, 48), (55, 80)] kg P / tonne
+```{r}
+# fao <- read.csv(here("aquaculture/data/fao_mariculture_clean.csv")) %>%
+#   filter(environment %in% c("Marine", "Brackishwater"))
+# 
+# 
+# ## Read in fao data and get a species list for salmon
+# species_list <- read.csv(here("aquaculture/marine/STEP1_species_groups/int/marine_groups.csv"))  %>%
+#   distinct(species, aq_group)
+# 
+# # the list of species we are including
+# tuna_list <- species_list$species[species_list$aq_group=="tuna"]
+# tuna_list
+# 
+# ## write out shrimp taxa and production for Juliette
+# fao_tuna_taxa_prod <- fao %>%
+#   filter(species %in% tuna_list) %>%
+#   filter(!is.na(value)) %>%
+#   arrange(-value, country) %>%
+#   filter(value>=500) %>%  # countries with less do not appear to be stable producers at this point
+#   group_by(country, iso3c, species, year) %>%
+#   dplyr::filter(year == 2017) %>%
+#   summarize(fao_tonnes_production = sum(value)) %>%
+#   arrange(country, iso3c, species, year)
+# 
+# ## set up lists of different regions
+# asia <- c("JPN")
+# 
+# europe <- c("HRV", "MLT", "ESP", "TUR") 
+# 
+# australia <- c("AUS")
+# 
+# mexico <- c("MEX")
+# 
+# 
+# 
+# ## Read in production data 
+# production_sf <- st_read(file.path("/home/sgclawson/github/food_systems/aquaculture/marine/tuna/tuna_nutrient/prod_data_by_cell_iso3c.shp")) %>%
+#   dplyr::rename("tonnes_per_farm" = "tnns_p_")
+# 
+# ## Now we can do the actual analysis outlined above
+# 
+# nutrient_data <- production_sf %>%
+#   dplyr::mutate(tonnes_growth = tonnes_per_farm*0.95) %>%   ## multiply by 0.95 to correct for growth outside seapen
+#   
+#   dplyr::mutate(N_poll = case_when(
+#                   iso3c %in% asia ~ tonnes_growth*132.5,
+#                   iso3c %in% europe ~ tonnes_growth*197.6,
+#                   iso3c %in% mexico ~ tonnes_growth*132.5,
+#                   iso3c %in% australia ~ tonnes_growth*281
+#                 ),
+#                 P_poll = case_when(
+#                   iso3c %in% asia ~ tonnes_growth*54,
+#                   iso3c %in% europe ~ tonnes_growth*68,
+#                   iso3c %in% australia ~ tonnes_growth*25,
+#                   iso3c %in% mexico ~ tonnes_growth*25
+#                 )) %>%  ## get all of out pollution values by species group and region
+#   
+#   dplyr::mutate(po4eq_kg = N_poll*0.42 + P_poll*3.07) %>% ## get po4eq
+#   
+#   dplyr::mutate(po4eq_tonnes = po4eq_kg/1000) %>%
+#   dplyr::select(po4eq_tonnes, geometry)
+# 
+# sum(nutrient_data$po4eq_tonnes) # 7603.354
+# sum(fao_tuna_taxa_prod$fao_tonnes_production) # 37072.56
+# 
+# tuna_raster_check <- rasterize(nutrient_data, food_raster, field = "po4eq_tonnes", fun=sum)
+# plot(log(tuna_raster_check+1))
+# cellStats(tuna_raster_check, stat = "sum", na.rm = TRUE) # 7603.354
+# 
+# 
+# tuna_raster <- rasterize(nutrient_data, food_raster, field = "po4eq_tonnes", fun=sum, background=0)
+# plot(log(tuna_raster+1))
+# 
+# tuna_raster_df <- as.data.frame(tuna_raster, xy=TRUE) %>%
+#   dplyr::select(x,y, po4eq_tonnes=layer)
+# 
+# cellStats(tuna_raster, stat = "sum") # 7603.354
+# sum(tuna_raster_df$po4eq_tonnes) # 7603.354
+# sum(nutrient_data$po4eq_tonnes, na.rm = TRUE) # 7603.354
+# 
+# ## save to dataprep folder with the correct naming conventions: 
+# write.csv(tuna_raster_df, file.path(path_prep, "tuna_nutrient.csv"))
+# 
+# 
+# final_rast <- rasterFromXYZ(tuna_raster_df, crs = food_crs)
+# crs(final_rast)
+# plot(final_rast)
+# final_rast
+# cellStats(final_rast, "sum") # 7603.354
+# 
+# final_area_fix <- final_rast/raster::area(final_rast)
+# 
+# final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+# 
+# final_rast <- final_rast_proj*raster::area(final_rast_proj)
+# cellStats(final_rast, "sum") # 7603.354
+# final_rast
+# 
+# ## Save to datalayers 
+# writeRaster(final_rast, file.path(path_final, "marine_tuna_aquaculture_meat_nutrient.tif"), overwrite = T)
+```
+

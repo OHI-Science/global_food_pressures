@@ -1,0 +1,1403 @@
+---
+title: "Location of Bivalve Farms"
+author: "Gage Clawson (USCB, NCEAS, OHI)"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+This script standardizes location of bivalve farms to be lat/long point data.
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(raster)
+library(tidyverse)
+library(stringr)
+library(rgdal)
+library(PBSmapping)
+library(maptools)
+library(sf)
+library(lwgeom)
+library(data.table)
+library(here)
+library(mapview)
+library(janitor)
+library(rnaturalearth)
+library(spatialEco)
+
+
+path <- "/home/shares/food-systems/Food_footprint/_raw_data/Aquaculture_locations"
+
+fao_bivalve_spp <- read_csv("aquaculture/marine/bivalve/bivalve_farms/data/fao_mariculture_bivalve_taxa_production.csv") %>%
+  dplyr::filter(year == 2017)
+fao_bivalve <- read_csv("aquaculture/marine/bivalve/bivalve_farms/data/fao_mariculture_bivalve.csv") %>%
+  dplyr::filter(year == 2017)
+
+unique(fao_bivalve$country)
+#  [1] "Australia"                "Brazil"                   "Bulgaria"                 "Cambodia"                
+#  [5] "Canada"                   "Chile"                    "China"                    "China, Hong Kong SAR"    
+#  [9] "Croatia"                  "Cuba"                     "Denmark"                  "France"                  
+# [13] "French Polynesia"         "Germany"                  "Greece"                   "Guernsey"                
+# [17] "India"                    "Indonesia"                "Ireland"                  "Italy"                   
+# [21] "Japan"                    "Jersey"                   "Korea, Dem. People's Rep" "Korea, Republic of"      
+# [25] "Malaysia"                 "Mexico"                   "Netherlands"              "New Zealand"             
+# [29] "Norway"                   "Peru"                     "Philippines"              "Portugal"                
+# [33] "Russian Federation"       "Slovenia"                 "South Africa"             "Spain"                   
+# [37] "Sweden"                   "Taiwan Province of China" "Thailand"                 "United Kingdom"          
+# [41] "United States of America" "Viet Nam"       
+```
+
+## explore
+https://gis.asc-aqua.org/arcgis_app/
+Maps from ASC
+
+```{r}
+ASC_data <- st_read(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/ASC_all_sf.shp"))
+
+ASC_bivalve <- ASC_data %>%
+  dplyr::filter(aq_grop == "bivalves")
+
+unique(ASC_bivalve$crt_cnt)
+#  [1] "China"                                               
+#  [2] "New Zealand"                                         
+#  [3] "South Africa"                                        
+#  [4] "Australia"                                           
+#  [5] "Korea, Republic of"                                  
+#  [6] "Japan"                                               
+#  [7] "Peru"                                                
+#  [8] "Mexico"                                              
+#  [9] "France"                                              
+# [10] "Chile"                                               
+# [11] "United Kingdom of Great Britain and Northern Ireland"
+# [12] "Viet Nam"                                            
+# [13] "Portugal"  
+
+## what is in ASC and not in FAO
+setdiff(ASC_bivalve$crt_cnt, fao_bivalve$country)
+#[1] "United Kingdom of Great Britain and Northern Ireland"
+
+## what is in FAO and not ASC -- this is what we need to find alternative data sources for (28 countries)
+setdiff(fao_bivalve$country, ASC_bivalve$crt_cnt)
+#  [1] "Brazil"                   "Bulgaria"                 "Cambodia"                 "Canada"                  
+#  [5] "China, Hong Kong SAR"     "Croatia"                  "Cuba"                     "Denmark"                 
+#  [9] "French Polynesia"         "Germany"                  "Greece"                   "Guernsey"                
+# [13] "India"                    "Indonesia"                "Ireland"                  "Italy"                   
+# [17] "Jersey"                   "Korea, Dem. People's Rep" "Malaysia"                 "Netherlands"             
+# [21] "Norway"                   "Philippines"              "Russian Federation"       "Slovenia"                
+# [25] "Spain"                    "Sweden"                   "Taiwan Province of China" "Thailand"                
+# [29] "United Kingdom"           "United States of America"
+
+
+mapview(ASC_bivalve)
+```
+
+
+# Raster
+
+Standard raster used for this analysis 
+
+```{r}
+
+source(here::here("_spatial/template_raster.R"))
+
+```
+
+# Global regions
+
+```{r}
+
+gadm <- raster("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/gadm36mol_pyfill_10km.tif")
+
+gadm_latlon <- projectRaster(gadm, food_raster)
+
+gadm_codes <- read.csv("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/gadm_reg_codes.csv") %>% 
+  mutate(reg_id = as.numeric(reg_id))
+
+```
+
+```{r}
+
+gadm_df <- tabularaster::as_tibble(gadm_latlon, value = TRUE, cells = TRUE) %>% 
+  mutate(cellvalue = round(cellvalue, 0))
+
+gadm_reg <- dplyr::left_join(gadm_df, gadm_codes, by = c("cellvalue" = "reg_id"))
+
+```
+
+
+# Map data from ASC 
+
+Data comes from https://gis.asc-aqua.org/arcgis_app/ 
+
+```{r}
+
+# get iso3c codes
+iso <-   data.frame(iso3c = countrycode(ASC_bivalve$crt_cnt, origin = 'country.name', destination = 'iso3c'))
+
+
+# read in shp
+farms_all <- ASC_bivalve %>%
+  cbind(iso) 
+
+mapview(farms_all$geometry)
+
+unique(farms_all$iso3c)
+
+all_pts <- st_centroid(farms_all)
+
+all_pts_latlon <- st_transform(all_pts, crs = "+init=epsg:4326") %>% 
+  dplyr::select(geometry, iso3c)
+
+farms_all_fin <- data.frame(do.call(rbind, st_geometry(all_pts_latlon))) 
+names(farms_all_fin) <- c("lon", "lat")
+farms_all_fin <- farms_all_fin %>%
+  cbind(iso3c = all_pts_latlon$iso3c)
+
+## save farm location
+write.csv(farms_all_fin, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/ASC_bivalve_farm_lat_lon.csv"), row.names = FALSE)
+
+```
+
+
+Now we will map the remaining countries with bivalve farms that are not included in the ASC dataset. Workflow will be as follows: 
+ - Try to obtain exact locations of farms from published source or dataset (such as FAO or a research paper)
+ - If there are no exact locations, but the source lists a city or state, place a point in that particular city or state
+ -  If there is enough information to know there are a specific number of bivalve farms, equally allocate the farms across the coastline. If there are estimates of farms per state/province, equally allocate them across the state/province, to be even more precise. 
+ - If there are not exact numbers of farms in the country, but you know there are a lot, randomly place points along the coast line (a non-exact number, like we did for Taiwan). 
+ - Lastly, if there is no evidence of marine bivalve farm locations, place a point on the coast of the country (preferably with some intuition/knowledge of where they might be, i.e. what we've done for Russia).
+
+
+
+## USA 
+This has a lot of maps, but almost all don't allow downloads: https://coastalscience.noaa.gov/research/marine-spatial-ecology/coastal-aquaculture-planning-portal-capp/?tx_category=shellfish-algae-planning-and-siting
+
+
+## US Northeast - NY, CT, ME, NH
+ - Regional Ocean Council 2018
+
+```{r}
+
+us_ne <- st_read(file.path(path,"USA/NE/US_NE_Aquaculture.shp"))
+
+unique(us_ne$allSpecies)
+
+unique(fao_bivalve_spp$species)
+
+## need to filter allSpecies for anything with "Oyster", "Mussel", "Shellfish", "Clam", "Quahog", 
+
+# id bivalves and active sites
+bivalve_species <- grep("Oyster|Mussel|Shellfish|Clam|Quahog", unique(us_ne$allSpecies), value=TRUE)
+
+
+us_ne_bivalve <- us_ne %>%
+  filter(allSpecies %in% bivalve_species) %>%
+  filter(status == "Active")
+unique(us_ne_bivalve$state)
+
+us_ne_bivalve_mol <- st_transform(us_ne_bivalve, crs = "+init=epsg:3035") # convert to equal area projection to find centroids. 
+us_ne_bivalve_pts <- st_centroid(us_ne_bivalve_mol)
+# check
+plot(st_geometry(us_ne_bivalve_mol))
+plot(st_geometry(st_centroid(us_ne_bivalve_mol)), add=TRUE)
+
+us_ne_bivalve_pts_latlon <- st_transform(us_ne_bivalve_pts, crs = "+init=epsg:4326") 
+
+farms_us_ne <- data.frame(do.call(rbind, st_geometry(us_ne_bivalve_pts_latlon))) # get lat lon
+names(farms_us_ne) <- c("lon", "lat") 
+farms_us_ne <- farms_us_ne %>%
+  mutate(iso3c = "USA")
+
+# all_farms_sf <- st_as_sf(farms_us_ne, coords = c("lon", "lat"), 
+#                          crs = crs(gadm_latlon), agr = "constant")
+# 
+# mapview(all_farms_sf)
+
+write_csv(farms_us_ne, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_ne_usa.csv"))
+
+
+
+```
+
+## USA - WA, RI 
+ - Aquaculture, Office for Coastal Management (OCM), 2018
+```{r}
+us_aqua <- st_read(file.path(path,"USA/US/us_aqua/us_aqua.shp"))
+
+mapview(us_aqua$geometry)
+
+unique(us_aqua$state)
+
+## filter for species !=NA, any that are not bivalves, those that are active or conditionally active (seasonal), and filter out those we already have (NY, ME, CT, NH)
+
+us_aqua_species <- us_aqua %>%
+   dplyr::filter(!is.na(species)) %>%
+  dplyr::filter(!(species %in% c("finfish", "Atlantic salmon", "Atlantic cod", "Seaweed", "Shrimp", "Coral", "clam seed, oyster seed", "Gelidium spp., Macrocystis pyrifera, M. angustifolia, M. intergrifolia, Pelagophycus spp. Euchema uncinatum (male plants only)", "oyster seed", "In progress", "Not Available", "Hatchery", "softshell", "softshell, butter", "softshell, varnish", "butter"))) %>%
+  dplyr::filter(state != "Federal waters") %>%
+  dplyr::filter(!(status %in% c(NA, "Pending", "Restricted-Relay", "Not Available", "Conditional Closure", "Prohibited"))) %>%
+dplyr::filter(!(state %in% c("Maine", "Connecticut", "New York")))
+
+
+
+unique(us_aqua_species$state)
+
+unique(us_aqua_species$species)
+
+unique(us_aqua_species$status)
+
+mapview(us_aqua_species$geometry)
+
+
+us_aqua_bivalve_mol <- st_transform(us_aqua_species, crs = "+init=epsg:3035") # convert to equal area projection to find centroids. 
+us_aqua_bivalve_pts <- st_centroid(us_aqua_bivalve_mol)
+# check
+plot(st_geometry(us_aqua_bivalve_mol))
+plot(st_geometry(st_centroid(us_aqua_bivalve_mol)), add=TRUE)
+
+us_aqua_bivalve_pts_latlon <- st_transform(us_aqua_bivalve_pts, crs = "+init=epsg:4326") 
+
+farms_us_aqua <- data.frame(do.call(rbind, st_geometry(us_aqua_bivalve_pts_latlon))) 
+names(farms_us_aqua) <- c("lon", "lat")
+farms_us_aqua <- farms_us_aqua %>%
+  mutate(iso3c = "USA")
+
+all_farms_sf <- st_as_sf(farms_us_aqua, coords = c("lon", "lat"),
+                         crs = crs(gadm_latlon), agr = "constant")
+
+mapview(all_farms_sf)
+
+write_csv(farms_us_ne, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_wa_ri_usa.csv"))
+
+
+```
+
+
+## HELCOM shellfish mariculture points - Sweden, Germany
+
+```{r}
+
+## Shellfish points
+enc <- readr::guess_encoding(file.path(path, "HELCOM_Baltic/Shellfish_mariculture_points/Shellfish_mariculture_points.shp"), n_max = 1000)[,"encoding"] %>% as.character()
+
+# Read in shapefile
+farms_baltic <- st_read(file.path(path, "HELCOM_Baltic/Shellfish_mariculture_points/Shellfish_mariculture_points.shp"), options = "ENCODING=WINDOWS-1252") 
+
+mapview(farms_baltic$geometry)
+
+
+baltic_pts <- st_centroid(farms_baltic)
+
+bal_pts_latlon <- st_transform(baltic_pts, crs = "+init=epsg:4326") %>%
+  dplyr::select(geometry, COUNTRY, NAME)
+
+bal_subregions <- bal_pts_latlon %>%
+  dplyr::select(COUNTRY, NAME)
+
+farms_bal <- data.frame(do.call(rbind, st_geometry(bal_pts_latlon)))
+names(farms_bal) <- c("lon", "lat")
+
+farms_bal <- cbind(farms_bal, bal_subregions) %>%
+  mutate(iso3c = ifelse(COUNTRY == "DE", "DEU", "SWE")) %>%
+  dplyr::select(lon, lat, iso3c, subregion = NAME)
+
+write.csv(farms_bal, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_swe_deu.csv"), row.names = FALSE)
+
+
+```
+
+## HELCOM shellfish mariculture areas - Denmark
+
+```{r}
+## SHELLFISH polygons
+# shape file
+farms_baltic_area <- st_read(file.path(path, "HELCOM_Baltic/Shellfish_mariculture_areas/Shellfish_mariculture_areas.shp"), options = "ENCODING=WINDOWS-1252") 
+
+mapview(farms_baltic_area$geometry)
+
+baltic_pts_area <- st_centroid(farms_baltic_area)
+
+bal_pts_latlon_area <- st_transform(baltic_pts_area, crs = "+init=epsg:4326") %>%
+  dplyr::select(geometry)
+
+farms_bal_area <- data.frame(do.call(rbind, st_geometry(bal_pts_latlon_area)))
+names(farms_bal_area) <- c("lon", "lat")
+
+farms_bal_area <- farms_bal_area %>%
+  mutate(iso3c = "DNK") %>%
+  dplyr::select(lon, lat, iso3c)
+
+
+all_farms_sf <- st_as_sf(farms_bal_area, coords = c("lon", "lat"),
+                         crs = crs(gadm_latlon), agr = "constant")
+
+mapview(all_farms_sf)
+
+write.csv(farms_bal_area, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_dnk.csv"), row.names = FALSE)
+```
+ 
+ 
+
+## British colombia
+Shellfish hatcheries: 
+https://catalogue.data.gov.bc.ca/dataset/shellfish-hatcheries-coastal-resource-information-management-system-crims/resource/f161583a-1d73-4c92-bf8d-ea67727a89d3
+
+```{r}
+
+## read shapefile
+bc <- st_read(file.path(path, "Canada/CRIMS_SHELLFISH_HATCHERIES/SHLFISH_HT_point.shp"))
+
+mapview(bc)
+bc_pts <- st_centroid(bc)
+
+bc_pts_latlon <- st_transform(bc_pts, crs = "+init=epsg:4326") %>%
+  dplyr::select(geometry)
+
+farms_bc <- data.frame(do.call(rbind, st_geometry(bc_pts_latlon)))
+names(farms_bc) <- c("lon", "lat")
+farms_bc <- farms_bc %>%
+  mutate(iso3c="CAN")
+
+ write_csv(farms_bc, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_bc_can.csv"))
+
+```
+
+
+## Nova Scotia
+Obtained data from here: https://data.novascotia.ca/Fishing-and-Aquaculture/Aquaculture-License-and-Lease-GIS-Database/h57h-p9mm
+
+```{r}
+## read shapefile
+ns <- st_read(file.path(path,"Canada/Nova_Scotia_Marine_Aquaculture_Sites/geo_export_fcc6f2ef-82bb-4445-98f0-a82a56cd0d00.shp"))
+mapview(ns)
+
+unique(ns$aqua_speci)
+                                                                                        
+# id bivalves: filter out anything that is not a bivalve
+not_bivalve <- c("Atlantic Salmon; Arctic Char; Rainbow Trout", "Rainbow Trout; Atlantic Salmon; Arctic Char; Brook Trout", "Rainbow Trout; Arctic Char; Brook Trout; Atlantic Salmon","Rainbow Trout", "Atlantic Salmon; Rainbow Trout; Atlantic Halibut; Atlantic Cod; Haddock", "Atlantic Salmon", "Atlantic Salmon; Rainbow Trout", "Rainbow Trout; Atlantic Salmon"  )
+
+ns_bivalve <- ns %>%
+  filter(!(aqua_speci %in% not_bivalve))
+
+ns_bivalve_mol <- st_transform(ns_bivalve, crs = "+init=epsg:3035") # convert to equal area projection to find centroids. 
+ns_pts <- st_centroid(ns_bivalve_mol)
+
+ns_pts_latlon <- st_transform(ns_pts, crs = "+init=epsg:4326") 
+
+mapview(ns_pts_latlon)
+
+farms_ns <- data.frame(do.call(rbind, st_geometry(ns_pts_latlon))) 
+names(farms_ns) <- c("lon", "lat")
+farms_ns <- farms_ns %>%
+  mutate(iso3c="CAN")
+
+write_csv(farms_ns, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_ns_can.csv"))
+
+```
+
+##  Europe - EMODNET: Ireland, Bulgaria, Italy, Norway, Netherlands, Greece
+https://www.emodnet-humanactivities.eu/search-results.php?dataname=Shellfish+Production
+https://www.emodnet-humanactivities.eu/view-data.php
+
+```{r}
+
+## read in shapefile
+eu <- st_read(file.path(path,"EMODnet_HA_Aquaculture_Shellfish_20191126/EMODnet_HA_Aquaculture_Shellfish_20191126.shp"))
+mapview(eu)
+
+unique(eu$COUNTRY)
+# [1] "France"         "Ireland"        "Bulgaria"       "United Kingdom" "Italy"          "Norway"        
+# [7] "Denmark"        "Netherlands"    "Greece"    
+
+unique(eu$FARM_TYPE)
+
+eu_na <- eu %>%
+  dplyr::filter(STATUS == "n.a.")
+unique(eu_na$COUNTRY)
+
+
+eu_active <- eu %>%
+  dplyr::filter(STATUS == "Active")
+
+unique(eu_active$COUNTRY)
+
+## we will use both "Active" and "n.a." as the status of the farms. I choose this because all of the denmark points are n.a., and they correspond with the HELCOM data that we used. This indicates to me that the farms denoted as "n.a." are probably actually active. 
+
+eu_active_na <- eu %>%
+  dplyr::filter(STATUS %in% c("Active", "n.a."))
+
+unique(eu_active_na$COUNTRY)
+
+# [1] "France"         "Ireland"        "Bulgaria"       "United Kingdom" "Italy"          "Norway"        
+# [7] "Denmark"        "Netherlands"    "Greece" 
+
+## Now filter for countries that we want: Ireland, Bulgaria, Italy, Norway, Netherlands, and Greece. UK and DNK are already accounted for in our other datatsets. 
+eu_fao_countries <- eu_active_na %>%
+  dplyr::filter(!(COUNTRY %in% c("France", "United Kingdom", "Denmark")))
+
+unique(eu_fao_countries$COUNTRY)
+mapview(eu_fao_countries)
+
+
+eu_pts <- st_centroid(eu_fao_countries)
+
+eu_pts_latlon <- st_transform(eu_pts, crs = "+init=epsg:4326") %>%
+  dplyr::select(COUNTRY, geometry)
+
+eu_countries <- eu_pts_latlon %>%
+  dplyr::select(COUNTRY)
+
+farms_eu <- data.frame(do.call(rbind, st_geometry(eu_pts_latlon)))
+names(farms_eu) <- c("lon", "lat")
+
+farms_eu_final <- cbind(farms_eu, eu_countries) %>%
+  dplyr::select(-geometry) %>%
+  mutate(iso3c = case_when(
+    COUNTRY == "Ireland" ~ "IRL",
+    COUNTRY == "Bulgaria" ~ "BGR", 
+    COUNTRY == "Norway" ~ "NOR", 
+    COUNTRY == "Netherlands" ~ "NLD",
+    COUNTRY == "Italy" ~ "ITA", 
+    COUNTRY == "Greece" ~ "GRC"
+  )) %>%
+  dplyr::select(-COUNTRY)
+
+ write_csv(farms_eu_final, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_IRL_BGR_NOR_NLD_ITA_GRC.csv"))
+
+```
+
+
+## Spain
+https://servicio.pesca.mapama.es/acuivisor/
+ - This is a map of all aquaculture facilities in Spain. It will not allow for download of the locations of the facilities. However, I have downloaded all of the names of each shellfish installation, with the company name, and what general location they are located in. I will filter for unique cities, and place points in each place. 
+ 
+How to download: 
+ - Make sure you only have the basemap and the "Instalaciones" layers selected.
+ - Click on the filter tab and filter for "Marina" aquaculture, and for these shellfish species: 
+ Abalón japonés, Almeja babosa, Almeja fina, Almeja japonesa, Almejas nep (Ruditapes spp), Almejas nep (Veneridae), Berberecho, Berberecho verde, Bivalvos, Bígaro, Coquina, Escupiña grabada, Lapa, Navaja recta, Navaja, Oreja de mar, Ostión u ostra japonesa, Ostra u ostra plana, Ostras u ostras planas, Vieira, Volandeira, Zamburiña
+ - Download the data and save as a csv.
+ 
+ 
+General location to place points:
+ - Alicante: 38.345509445679276, -0.48793746088812184
+ - Almeria: 36.83403538312481, -2.46312530015449
+ - Asturias: 43.6586646127094, -5.838989914402157
+ - Baleares: 39.578993240236755, 2.6312097506887446
+ - Cadiz: 36.55518316813145, -6.2759664948571094
+ - Cantabria: 43.488143305644364, -3.808940707432179
+ - Castellon: 39.98227981322492, 0.025845987383098443
+ - Gerona: 41.893397069777485, 3.1931418366760647
+ - Granada: 36.69547948740147, -3.403621978170133
+ - La Coruna: 43.36941893593161, -8.412121809979775
+ - Las Palmas: 28.17841973419213, -15.411897095500123
+ - Lugo: Inland, Don't include
+ - Malaga: 36.705816371679525, -4.422146790963811
+ - Murcia: Inland, don't include
+ - Pontevedra: 42.42511968211785, -8.658739084602496
+ - Sevilla: Inland, don't include
+ - Santa Cruz de Tenerife: 28.464013540472575, -16.25186419732133
+ - Tarragona: 41.109958666992036, 1.2538616546744752
+ - Valencia: 39.47564987283762, -0.3208672158378773
+ - Vizcaya: 43.436972390962005, -2.9200783381913014
+ 
+```{r}
+## Read in dataset of company names:
+spain_shellfish <- read_csv(here("aquaculture/marine/bivalve/bivalve_farms/data/spain_shellfish_aquaculture.csv"))
+
+head(unique(spain_shellfish$Empresa))
+
+communitiy <- data.frame(companies = unique(spain_shellfish$Provincia))
+
+## there are 21 different cities where shellfish is farmed.
+
+
+farms_esp <- data.frame(lat = c(38.345509445679276, 36.83403538312481, 43.6586646127094, 39.578993240236755, 36.55518316813145, 43.488143305644364, 39.98227981322492, 41.893397069777485, 36.69547948740147, 43.36941893593161, 28.17841973419213, 36.705816371679525, 42.42511968211785, 28.464013540472575, 41.109958666992036, 39.47564987283762, 43.436972390962005),
+                        lon = c(-0.48793746088812184, -2.46312530015449, -5.838989914402157, 2.6312097506887446, -6.2759664948571094, -3.808940707432179, 0.025845987383098443, 3.1931418366760647,-3.403621978170133,  -8.412121809979775, -15.411897095500123, -4.422146790963811, -8.658739084602496, -16.25186419732133, 1.2538616546744752, -0.3208672158378773, -2.9200783381913014)) %>%
+  mutate(iso3c = "ESP")
+
+write_csv(farms_esp, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_esp.csv"))
+
+## visualize it 
+farms_esp <-  st_as_sf(farms_esp, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_esp)
+
+```
+
+
+
+
+## Jersey 
+ - Government of Jersey: https://www.gov.je/SiteCollectionDocuments/Industry%20and%20finance/ID%20Mollusc%20farms%20registered%20businesses%20page%201.pdf
+  - https://www.gov.je/SiteCollectionDocuments/Industry%20and%20finance/ID%20Molluscs%20farms%20registered%20businesses%20page%202%2020181030%20DM.pdf
+  
+ - 5 licensed farms (only including "mollusc farm open")
+ - Jersey Oyster Company Limited: 49.17300525845569, -2.0325974703629277
+ - Seymour Oyster Company Ltd: 49.22644208989364, -2.0327040476242284
+ - La Rocque Fisheries Limited: 49.17293132589725, -2.0312731919583795
+ - Jersey Sea Farms: 49.231523271584344, -2.057638560247779
+ - Island Dived Scallops: 49.20231914535721, -2.03533532472839
+ 
+ 
+```{r, evalute = F}
+
+farms_jey <- data.frame(lat = c(49.17300525845569, 49.22644208989364, 49.17293132589725, 49.231523271584344, 49.20231914535721),
+                        lon = c(-2.0325974703629277, -2.0327040476242284, -2.0312731919583795, -2.057638560247779, -2.03533532472839)) %>%
+  mutate(iso3c = "JEY")
+
+write_csv(farms_jey, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_jey.csv"))
+
+## visualize it 
+farms_jey <-  st_as_sf(farms_jey, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_jey)
+
+```
+
+ 
+## Guernsey 
+ - https://www.gov.gg/fishing#:~:text=Sea%20Fisheries%20is%20responsible%20for,one%20licensed%20site%20on%20Herm.
+ - Sea Fisheries is responsible for the licensing of all shellfish farms within the Bailiwick. There are a total of seven licensed aquaculture sites distributed around Guernsey's west and north coasts, as well as one licensed site on Herm. There is also an oyster farm located in a disused quarry in the north of the island.
+ - Allocate 7 farms equally across coastline
+
+```{r}
+world <- rnaturalearth::ne_coastline(scale = 10) # world map with 10m resolution
+plot(world)
+
+Guernsey <- ne_countries(scale = 10, country = "Guernsey", returnclass = "sf")
+
+#info of our spatial vector object
+Guernsey
+mapview(Guernsey)
+plot(Guernsey)
+
+world <- st_as_sf(world)
+
+Guernsey_world_crs <- st_transform(Guernsey, crs(world))
+
+Guernsey_world_crop <- st_crop(world, Guernsey_world_crs) %>%
+  dplyr::filter(scalerank == 5) ## filter for the appropriate island
+plot(Guernsey_world_crop)
+mapview(Guernsey_world_crop)
+
+Guernsey_crop <- as(Guernsey_world_crop, "Spatial")
+
+
+Guernsey_points_lines <- sample.line(Guernsey_crop, n = 7) ## equally place the number of farms along the coastline 
+class(Guernsey_points_lines)
+plot(Guernsey_points_lines)
+
+Guernsey_points <- st_as_sf(Guernsey_points_lines)
+mapview(Guernsey_points)
+
+## now prep dataframe for lat lon points
+ggy_pts <- st_centroid(Guernsey_points)
+
+ggy_pts_latlon <- st_transform(ggy_pts, crs = "+init=epsg:4326") %>%
+  dplyr::select(geometry)
+
+farms_ggy <- data.frame(do.call(rbind, st_geometry(ggy_pts_latlon)))
+names(farms_ggy) <- c("lon", "lat")
+
+farms_ggy_final <- farms_ggy %>%
+  mutate(iso3c = "GGY")
+
+## visualize it 
+farms_ggy <-  st_as_sf(farms_ggy, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_ggy)
+
+## write to farms folder 
+write_csv(farms_ggy_final, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_ggy.csv"))
+```
+
+
+
+## Slovenia
+ - http://www.fao.org/fishery/countrysector/naso_slovenia/en#:~:text=From%20the%20345%20aquaculture%20facilities,facilities%20are%20for%20shellfish%20farming.
+ - From the 345 aquaculture facilities in Slovenia, there are 26 marine aquaculture facilities, 1 of which is for fish farming, while the remaining **20 facilities are for shellfish farming**. 
+
+```{r}
+world <- rnaturalearth::ne_coastline(scale = 10) #world map with 10m resolution
+plot(world)
+
+slovenia <- ne_countries(scale = 10, country = "Slovenia", returnclass = "sf")
+
+#info of our spatial vector object
+slovenia
+mapview(slovenia)
+plot(slovenia)
+
+world <- st_as_sf(world)
+
+slovenia_world_crs <- st_transform(slovenia, crs(world))
+
+slovenia_world_crop <- st_crop(world, slovenia_world_crs) ## crop to slovenia extent
+plot(slovenia_world_crop)
+mapview(slovenia_world_crop)
+
+slovenia_crop <- as(slovenia_world_crop, "Spatial")
+plot(slovenia_crop)
+mapview(slovenia_crop)
+
+slovenia_points_lines <- sample.line(slovenia_crop, n = 86) ## equally place the number of farms along the coastline 
+class(slovenia_points_lines)
+plot(slovenia_points_lines)
+
+slovenia_points <- st_as_sf(slovenia_points_lines)
+mapview(slovenia_points)
+
+## Now filter out the points that fall outside of Slovenia
+slovenia_points_final <- slovenia_points[12:31,]
+mapview(slovenia_points_final)
+
+
+## prep to get lat lon 
+svn_pts <- st_centroid(slovenia_points_final)
+
+svn_pts_latlon <- st_transform(svn_pts, crs = "+init=epsg:4326") %>%
+  dplyr::select(geometry)
+
+farms_svn <- data.frame(do.call(rbind, st_geometry(svn_pts_latlon)))
+names(farms_svn) <- c("lon", "lat")
+
+farms_svn_final <- farms_svn %>%
+  mutate(iso3c = "SVN")
+
+## visualize it 
+farms_svn <-  st_as_sf(farms_svn, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_svn)
+
+## write to farms folder 
+write_csv(farms_svn_final, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_svn.csv"))
+```
+
+
+## Croatia
+ - This states there are 266 shellfish farm locations in Croatia: https://ec.europa.eu/fisheries/sites/fisheries/files/docs/pages/spatial-planning-for-aquaculture-hr.pdf
+ - However, I can't find much else information. Due to this, I will allocate the 266 farms equally along the coast of Croatia. 
+ 
+
+```{r}
+world <- ne_coastline(scale = 110) #world map with 110m resolution
+plot(world)
+
+croatia <- ne_countries(scale = 110, country = "Croatia", returnclass = "sf")
+
+#info of our spatial vector object
+croatia
+mapview(croatia)
+plot(croatia)
+
+world <- st_as_sf(world)
+
+croatia_world_crs <- st_transform(croatia, crs(world))
+
+croatia_world_crop <- st_crop(world, croatia_world_crs) ## crop to croatia extent
+plot(croatia_world_crop)
+mapview(croatia_world_crop)
+
+croatia_crop <- as(croatia_world_crop, "Spatial")
+plot(croatia_crop)
+mapview(croatia_crop)
+
+croatia_points_lines <- sample.line(croatia_crop, n = 340) ## equally place the number of farms along the coastline 
+class(croatia_points_lines)
+plot(croatia_points_lines)
+
+croatia_points <- st_as_sf(croatia_points_lines)
+mapview(croatia_points)
+
+## Now filter out the points that fall outside of croatia: rows 57-70
+croatia_points_final <- croatia_points[2:267,]
+mapview(croatia_points_final)
+
+## get lat lon
+hrv_pts <- st_centroid(croatia_points_final)
+
+hrv_pts_latlon <- st_transform(hrv_pts, crs = "+init=epsg:4326") %>%
+  dplyr::select(geometry)
+
+farms_hrv <- data.frame(do.call(rbind, st_geometry(hrv_pts_latlon)))
+names(farms_hrv) <- c("lon", "lat")
+
+farms_hrv_final <- farms_hrv %>%
+  mutate(iso3c = "HRV")
+
+## visualize it 
+farms_hrv <-  st_as_sf(farms_hrv, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_hrv)
+
+## write to farms folder 
+write_csv(farms_hrv_final, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_hrv.csv"))
+```
+ 
+ 
+## Cuba
+ - Four sites taken from this paper: https://scielo.conicyt.cl/scielo.php?script=sci_arttext&pid=S0718-560X2017000100024
+ 
+Cayo Esquivel del Sur: 23.034188, -80.082047
+Cayo de la Cruz: 22.994283, -79.994291
+Cayo Hachuela: 22.952677, -79.963228
+Cayos de la Enfermeria: 22.910246, -79.958924
+ 
+```{r}
+
+farms_cub <- data.frame(lat = c(23.0341889, 22.994283, 22.952677, 22.910246),
+                        lon = c(-80.082047, -79.994291, -79.963228, -79.958924)) %>%
+  mutate(iso3c = "CUB")
+
+write_csv(farms_cub, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_cub.csv"))
+
+## visualize it 
+farms_cub <-  st_as_sf(farms_cub, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_cub)
+```
+
+ 
+## Taiwan
+ - I can't find any information on the locations of shellfish farms in Taiwan, however, they have a lot of production. We will allocate the cells equally along the coastline (like we did for shrimp).
+ - https://www.newsecuritybeat.org/2019/10/taiwan-beach-snow/
+ 
+```{r}
+
+gadm <- st_read("/home/shares/food-systems/Aquaculture_mapping/Data/Jared/Marine_Brackish/manipulated_data/GADM36/gadm36molcountries_simp.shp")
+
+ TWN_shp <- gadm %>%
+  filter(GID_0 == "TWN") %>%
+  st_transform(., food_crs) %>%
+  mutate(Region = 1)
+ mapview(TWN_shp)
+
+st_write(TWN_shp, "/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/taiwan/taiwan.shp")
+
+twn_reg_ras <- fasterize::fasterize(TWN_shp, fake_raster, fun = "sum")
+
+
+plot(fake_raster)
+plot(twn_reg_ras)
+
+writeRaster(twn_reg_ras, "/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/taiwan/taiwan.tif")
+
+
+twn_reg_ras <- raster("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/taiwan/taiwan.tif")
+
+twn_spatial <- as(TWN_shp, "Spatial")
+
+twn_coast <- rasterize(twn_spatial, twn_reg_ras, getCover = TRUE)
+
+plot(twn_coast)
+cellStats(twn_coast, "sum") #464.63
+
+# filter to include >0 <1, o.w. NA
+
+twn_coast_df <- as.data.frame(twn_coast, xy=TRUE) %>%
+  dplyr::filter(layer <1 & layer >0) %>% ## filter out anything not on taiwan coast
+  mutate(iso3c = "TWN") %>%
+  dplyr::select(lon=x, lat=y, iso3c)
+
+farms_twn <-  st_as_sf(twn_coast_df, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_twn)
+
+
+write_csv(twn_coast_df, here::here("aquaculture/marine/bivalve/bivalve_farms/data/farm_sites/farms_twn.csv"))
+
+
+twn <- read_csv(here::here("aquaculture/marine/bivalve/bivalve_farms/data/farm_sites/farms_twn.csv"))
+farms_twn <-  st_as_sf(twn, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_twn)
+```
+
+ 
+## French Polynesia
+ - http://www.fao.org/3/t5816e/t5816e04.htm
+
+ - http://www.ressources-marines.gov.pf/aquaculteurs/laquaculture-en-polynesie-francaise/les-filieres-de-laquaculture-en-polynesie-francaise/
+ - Aquaculture is: for molluscs: the giant clam (Tridacna maxima).
+ - To date (2019), two lagoons are authorized for the collection of giant clam spat, the lagoon of Reao and that of Tatakoto.
+ 
+Backed up by this: https://aquaculture.spc.int/index.php?option=com_countries&view=country&id=6
+Giant clams (Tridacna mamoibroodies_bxima) spat collection and stock enhancement techniques are mastered in Eastern Tuamotu atolls. Small scale collectors should be born in 2007.
+
+
+I will place the two points at these two lagoons (the production is really small, 1200 tonnes):
+ - Tatakoto: -17.349601342130857, -138.40992718639146
+ - Reao: -18.50754847683744, -136.38467411084235
+ 
+```{r}
+farms_pyf <- data.frame(lat = c(-17.349601342130857, -18.50754847683744),
+                        lon = c(-138.40992718639146, -136.38467411084235)) %>%
+  mutate(iso3c = "PYF")
+
+write_csv(farms_pyf, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_pyf.csv"))
+
+## visualize it 
+farms_pyf <-  st_as_sf(farms_pyf, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_pyf)
+```
+
+ 
+ 
+## India 
+https://www.researchgate.net/publication/285488252_Mussel_Farming_and_Its_Potential_in_India
+ - Has a potential map.
+ 
+http://www.fao.org/fishery/countrysector/naso_india/en
+ - Among maritime states, Kerala was the first to recognize the advantages of utilizing mussel farming technology in rural development, from a meagre production in 1997 where cultured mussel production rose to 1 250 tonnes in 2002 with over 250 mussel farms being established in the estuaries of Kerala.
+ 
+Based on this, I will place 250 mussel farms along the coast in the Kerala state in India. 
+
+
+```{r}
+world <- ne_coastline(scale = 10) #world map with 10m resolution
+plot(world)
+
+## read in state shapefile
+kerala_state <- st_read(file.path("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/India/Kerala/state.shp"))
+
+#info of our spatial vector object
+kerala_state
+mapview(kerala_state)
+plot(kerala_state)
+
+world <- st_as_sf(world)
+
+kerala_state_world_crs <- st_transform(kerala_state, crs(world))
+
+kerala_state_world_crop <- st_crop(world, kerala_state_world_crs) ## crop to kerala extent
+plot(kerala_state_world_crop)
+mapview(kerala_state_world_crop)
+
+kerala_state_crop <- as(kerala_state_world_crop, "Spatial")
+plot(kerala_state_crop)
+mapview(kerala_state_crop)
+
+kerala_state_points_lines <- sample.line(kerala_state_crop, n = 250) ## equally place the number of farms along the coastline 
+class(kerala_state_points_lines)
+plot(kerala_state_points_lines)
+
+kerala_state_points <- st_as_sf(kerala_state_points_lines)
+mapview(kerala_state_points)
+
+## Now filter out the points that fall outside of kerala_state: rows 57-70
+# kerala_state_points_final <- kerala_state_points[c(1:34,42:67), ]
+# mapview(kerala_state_points_final)
+
+## get lat lon
+ind_pts <- st_centroid(kerala_state_points)
+
+ind_pts_latlon <- st_transform(ind_pts, crs = "+init=epsg:4326") %>%
+  dplyr::select(geometry)
+
+farms_ind <- data.frame(do.call(rbind, st_geometry(ind_pts_latlon)))
+names(farms_ind) <- c("lon", "lat")
+
+farms_ind_final <- farms_ind %>%
+  mutate(iso3c = "IND")
+
+## visualize it 
+farms_ind <-  st_as_sf(farms_ind, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_ind)
+
+## write to farms folder 
+write_csv(farms_ind_final, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_ind.csv"))
+```
+
+
+## Thailand
+NASO Maps by FAO: 
+http://www.fao.org/fishery/naso-maps/selected-aquaculture-sites/thailand/en/
+ - This shows both Shrimp and Bivalve aquaculture sites in Thailand. Although it is not comprehensive, it is the best information I could find. I'll filter for the bivalve sites.
+ 
+ 
+```{r}
+## read in thailand shp file
+thai_file <- file.path(path, "Thailand/Thailand.kmz")
+
+thai_aqua <- read_sf(thai_file)
+
+mapview(thai_aqua)
+
+## We need to filter for just bivalve aquaculture. The best way that I found to do this was to look at the .kmz file in google earth pro, and determine with rows are bivalves..
+
+## NASO 4,5,6,7 are the bivalves:
+unique(thai_aqua$Name)
+
+thai_bivalve <- thai_aqua %>%
+  dplyr::filter(Name %in% c("[NASO / 4]", "[NASO / 5]", "[NASO / 6]", "[NASO / 7]"))
+
+mapview(thai_bivalve)
+
+tha_bivalve_mol <- st_transform(thai_bivalve, crs = "+init=epsg:3035") # convert to equal area projection to find centroids. 
+tha_pts <- st_centroid(tha_bivalve_mol)
+
+tha_pts_latlon <- st_transform(tha_pts, crs = "+init=epsg:4326") 
+
+mapview(tha_pts_latlon)
+
+farms_tha <- data.frame(do.call(rbind, st_geometry(tha_pts_latlon))) 
+names(farms_tha) <- c("lon", "lat")
+farms_tha <- farms_tha %>%
+  mutate(iso3c="THA")
+
+
+write_csv(farms_tha, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_tha.csv"))
+
+
+farms_tha <-  st_as_sf(farms_tha, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_tha)
+```
+
+ 
+## Indonesia 
+http://www.fao.org/3/AB716E/AB716E08.htm#:~:text=The%20commercially%20important%20bivalve%20species,is%20largely%20experimental%20at%20present.&text=Total%20shellfish%20production%20for%201984,for%20about%202.2%20%25%20of%20this.
+
+ - This has a map of major oyster capture and culture areas in Indonesia... This will have to do. Approximate locations listed below.
+ 
+ From left to right on the map: 
+ 3.2182751224662542, 99.69952320753342
+ -5.964150035506321, 106.35924782378112
+ -6.2646012824936275, 108.0659620387556
+ -6.75680397048712, 108.64496221771543
+ -6.975573928794459, 112.61871244712762
+ -4.984732967006041, 120.31326531641196
+ 0.8890896205268102, 123.52557614041675
+ -3.436748178542682, 129.1920950239657
+ -5.142358892765042, 137.4727448207172
+ 
+```{r}
+farms_idn <- data.frame(lat = c(3.2182751224662542, -5.964150035506321, -6.2646012824936275, -6.75680397048712, -6.975573928794459, -4.984732967006041, 0.889089620526810, -3.436748178542682, -5.142358892765042),
+                        lon = c(99.69952320753342, 106.35924782378112, 108.0659620387556, 108.64496221771543, 112.61871244712762, 120.31326531641196, 123.52557614041675, 129.1920950239657, 137.4727448207172)) %>%
+  mutate(iso3c = "IDN")
+
+write_csv(farms_idn, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_idn.csv"))
+
+## visualize it 
+farms_idn <-  st_as_sf(farms_idn, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_idn)
+
+
+```
+
+
+## Russia
+ - This probably doesn't really matter, because the production is so low, and the coastline is so big...
+ - I can't find any good information on shellfish farming in Russia. I will place a point along the coast.
+ - It does seem like scallop farming primarily occurs on the east coast, so I will place it there. 
+ 
+```{r}
+
+farms_rus <- data.frame(lat = c(43.053493816917545),
+                        lon = c(131.95698485517275)) %>%
+  mutate(iso3c = "RUS")
+
+write_csv(farms_rus, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_rus.csv"))
+
+## visualize it 
+farms_rus <-  st_as_sf(farms_rus, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_rus)
+
+```
+ 
+
+## Korea, Dem. People's Rep
+**Revisiting Changing Patterns of North Koreaʹs Fisheries Production: 1990s‐2000s**
+"By the 1980s, there has been 60 or more fish farming companies in North
+Korea's national distribution" 
+
+ - I'll place 60 farms along the coast of north korea. Although this specifies "fish farms", it is better than nothing. And there are probably more than 60 farms (shell fish or not), nowadays.
+
+```{r}
+world <- ne_coastline(scale = 110) #world map with 110m resolution
+plot(world)
+
+north_korea <- ne_countries(scale = 110, country = "North Korea", returnclass = "sf")
+
+#info of our spatial vector object
+north_korea
+mapview(north_korea)
+plot(north_korea)
+
+world <- st_as_sf(world)
+
+north_korea_world_crs <- st_transform(north_korea, crs(world))
+
+north_korea_world_crop <- st_crop(world, north_korea_world_crs) ## crop to north korea extent
+plot(north_korea_world_crop)
+mapview(north_korea_world_crop)
+
+north_korea_crop <- as(north_korea_world_crop, "Spatial")
+plot(north_korea_crop)
+mapview(north_korea_crop)
+
+north_korea_points_lines <- sample.line(north_korea_crop, n = 67) ## equally place the number of farms along the coastline 
+class(north_korea_points_lines)
+plot(north_korea_points_lines)
+
+north_korea_points <- st_as_sf(north_korea_points_lines)
+mapview(north_korea_points)
+
+## Now filter out the points that fall outside of north_korea: rows 57-70
+north_korea_points_final <- north_korea_points[c(1:34,42:67), ]
+mapview(north_korea_points_final)
+
+# extract lat lon
+prk_pts <- st_centroid(north_korea_points_final)
+
+prk_pts_latlon <- st_transform(prk_pts, crs = "+init=epsg:4326") %>%
+  dplyr::select(geometry)
+
+farms_prk <- data.frame(do.call(rbind, st_geometry(prk_pts_latlon)))
+names(farms_prk) <- c("lon", "lat")
+
+farms_prk_final <- farms_prk %>%
+  mutate(iso3c = "PRK")
+
+## visualize it 
+farms_prk <-  st_as_sf(farms_prk, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_prk)
+
+## write to farms folder 
+write_csv(farms_prk_final, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_prk.csv"))
+```
+ 
+ 
+## Brazil 
+http://www.fao.org/fishery/countrysector/naso_brazil/en
+"Mollusc farming was introduced into Brazil in the 1960s but only since 1989 has this activity developed as an important economic alternative for small-scale fishermen. Besides the generation of income and employment, bivalve culture has had a noticeable effect in contributing to the stabilisation of traditional communities on their original lands. Today, there are no large companies in this sector and small farmers are organized into associations and cooperatives. Santa Catarina State in the South region is responsible for 93 percent of Brazilian bivalve mollusc production."
+ 
+https://onlinelibrary.wiley.com/doi/full/10.1111/raq.12107
+ "Currently, the total bivalve production reaches 19 082 tons, with **729 marine farmers** scattered among the 12 municipalities mentioned above, and marine aquaculture has now reached an important position in Santa Catarina State as a significant contributor to food production, providing employment and livelihood opportunities and representing a legitimate use of the marine environment for sustainable food production"
+ 
+ 
+Of the 837 aquaculture areas grouped inside the **27 aquaculture parks** originally proposed by the PLDM, 798 areas and 24 parks are already licensed and attended by **618 shellfish farmers** who represent 74% of all shellfish farmers in Santa Catarina State 
+
+
+ - Based on this paper, I will assign 27 points along the coastline of Santa Catarina state. I'm assuming that the 3 remaining unlicensed aquaculture parks are licensed now. 
+ 
+```{r}
+
+## read in state shape 
+sta_catarina <- st_read(file.path("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/Brazil/Santa_Catarina/dc172qt8462.shp"))
+mapview(sta_catarina)
+
+world <- ne_coastline(scale = 110) #world map with 110m resolution
+plot(world)
+
+#info of our spatial vector object
+sta_catarina
+mapview(sta_catarina)
+plot(sta_catarina)
+
+world <- st_as_sf(world)
+
+sta_catarina_world_crs <- st_transform(sta_catarina, crs(world))
+
+sta_catarina_world_crop <- st_crop(world, sta_catarina_world_crs) ## crop to santa catarina extent
+plot(sta_catarina_world_crop)
+mapview(sta_catarina_world_crop)
+
+sta_catarina_crop <- as(sta_catarina_world_crop, "Spatial")
+plot(sta_catarina_crop)
+mapview(sta_catarina_crop)
+
+sta_catarina_points_lines <- sample.line(sta_catarina_crop, n = 27) ## equally place the number of farms along the coastline 
+class(sta_catarina_points_lines)
+plot(sta_catarina_points_lines)
+
+sta_catarina_points <- st_as_sf(sta_catarina_points_lines)
+mapview(sta_catarina_points)
+
+
+## get lat lon
+bra_pts <- st_centroid(sta_catarina_points)
+
+bra_pts_latlon <- st_transform(bra_pts, crs = "+init=epsg:4326") %>%
+  dplyr::select(geometry)
+
+farms_bra <- data.frame(do.call(rbind, st_geometry(bra_pts_latlon)))
+names(farms_bra) <- c("lon", "lat")
+
+farms_bra_final <- farms_bra %>%
+  mutate(iso3c = "BRA")
+
+## visualize it 
+farms_bra <-  st_as_sf(farms_bra, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_bra)
+
+## write to farms folder 
+write_csv(farms_bra_final, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_bra.csv"))
+```
+ 
+ 
+## Philippines
+
+http://www.fao.org/3/AB710E/AB710E18.htm#ann12
+ - This has the number of farms per province. I will allocate those number equally along the coastline of each province that has farms 
+
+LOCATION	Number of farms	
+Zambales	 	 	NA
+Bulacan	 	 	NA
+Mindoro Oriental	 NA
+Palawan	 	 	NA
+Quezon	 	  NA
+Capiz	**300**		NA
+Iloilo	 	 	NA
+Aklan	 	 	NA
+Negros Occidental	**6** 
+Cebu	 	 	NA
+Bohol	 	 	NA
+Leyte	 	 	NA
+Samar	**250**	
+Total	**556**
+
+```{r}
+## read in province shape
+provinces <- st_read(file.path("/home/shares/food-systems/Food_footprint/_raw_data/Country_regions/philippines/provinces/Provinces.shp"))
+
+mapview(provinces)
+
+## filter provinces for the ones we want
+provinces_farms <- provinces %>%
+  dplyr::filter(NAME_1 %in% c("Capiz", "Negros Occidental", "Samar"))
+
+mapview(provinces_farms)
+
+
+world <- ne_coastline(scale = 50) #world map with 50m resolution
+plot(world)
+
+# start with Capiz
+capiz <- provinces_farms %>%
+  dplyr::filter(NAME_1 == "Capiz")
+mapview(capiz)
+plot(capiz)
+
+world <- st_as_sf(world)
+
+capiz_world_crs <- st_transform(capiz, crs(world))
+
+capiz_world_crop <- st_crop(world, capiz_world_crs) ## crop to extent
+plot(capiz_world_crop)
+mapview(capiz_world_crop)
+
+capiz_crop <- as(capiz_world_crop, "Spatial")
+plot(capiz_crop)
+mapview(capiz_crop)
+
+capiz_points_lines <- sample.line(capiz_crop, n = 300) ## equally place the number of farms along the coastline 
+class(capiz_points_lines)
+plot(capiz_points_lines)
+
+capiz_points <- st_as_sf(capiz_points_lines)
+mapview(capiz_points)
+
+
+
+world <- ne_coastline(scale = 110) #world map with 110m resolution
+plot(world)
+
+# now do negros
+negros <- provinces_farms %>%
+  dplyr::filter(NAME_1 == "Negros Occidental")
+mapview(negros)
+plot(negros)
+
+world <- st_as_sf(world)
+
+negros_world_crs <- st_transform(negros, crs(world))
+
+negros_world_crop <- st_crop(world, negros_world_crs)
+
+negros_world_crop <- head(negros_world_crop, 1)
+plot(negros_world_crop)
+mapview(negros_world_crop)
+
+negros_crop <- as(negros_world_crop, "Spatial")
+plot(negros_crop)
+mapview(negros_crop)
+
+negros_points_lines <- sample.line(negros_crop, n = 6) ## equally place the number of farms along the coastline 
+class(negros_points_lines)
+plot(negros_points_lines)
+
+negros_points <- st_as_sf(negros_points_lines)
+mapview(negros_points)
+
+
+world <- ne_coastline(scale = 110) #world map with 50m resolution
+plot(world)
+
+# now do samar 
+samar <- provinces_farms %>%
+  dplyr::filter(NAME_1 == "Samar")
+mapview(samar)
+plot(samar)
+
+world <- st_as_sf(world)
+
+samar_world_crs <- st_transform(samar, crs(world))
+
+samar_world_crop <- st_crop(world, samar_world_crs)
+
+samar_world_crop <- head(samar_world_crop, 1)
+plot(samar_world_crop)
+mapview(samar_world_crop)
+
+samar_crop <- as(samar_world_crop, "Spatial")
+plot(samar_crop)
+mapview(samar_crop)
+
+samar_points_lines <- sample.line(samar_crop, n = 250) ## equally place the number of farms along the coastline 
+class(samar_points_lines)
+plot(samar_points_lines)
+
+samar_points <- st_as_sf(samar_points_lines)
+mapview(samar_points)
+
+
+
+## bind all three states together
+all_points <- rbind(samar_points, negros_points, capiz_points)
+mapview(all_points)
+
+# get lat lon points
+phl_pts <- st_centroid(all_points)
+
+phl_pts_latlon <- st_transform(phl_pts, crs = "+init=epsg:4326") %>%
+  dplyr::select(geometry)
+
+farms_phl <- data.frame(do.call(rbind, st_geometry(phl_pts_latlon)))
+names(farms_phl) <- c("lon", "lat")
+
+farms_phl_final <- farms_phl %>%
+  mutate(iso3c = "PHL")
+
+## visualize it 
+farms_phl <-  st_as_sf(farms_phl, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_phl)
+
+## write to farms folder 
+write_csv(farms_phl_final, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_phl.csv"))
+```
+
+
+## Malaysia
+http://www.fao.org/fishery/countrysector/naso_malaysia/en
+"Brackish water aquaculture is characterized by the extensive culture of bivalve molluscs, occupying an area of 7 659 ha, mostly in the western coastal waters where there is an abundance of mud flats suitable for the culture of blood cockles"
+
+ - I'll place a point on the western coast:
+ - 4.074359958576369, 100.73343376478226
+ 
+```{r}
+
+farms_mys <- data.frame(lat = c(4.074359958576369),
+                        lon = c(100.73343376478226)) %>%
+  mutate(iso3c = "MYS")
+
+write_csv(farms_mys, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_mys.csv"))
+
+## visualize it 
+farms_mys <-  st_as_sf(farms_mys, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_mys)
+
+```
+
+## Cambodia 
+http://www.fao.org/fishery/countrysector/naso_cambodia/en
+ - There is no good information on the location of farms, I will just place a point on the coast. 
+ - 11.069927194335508, 103.64594001534627
+
+```{r}
+
+farms_khm <- data.frame(lat = c(11.069927194335508),
+                        lon = c(103.64594001534627)) %>%
+  mutate(iso3c = "KHM")
+
+write_csv(farms_khm, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_khm.csv"))
+
+## visualize it 
+farms_khm <-  st_as_sf(farms_khm, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_khm)
+
+```
+
+
+## Hong Kong
+https://www.afcd.gov.hk/english/fisheries/fish_aqu/fish_aqu_mpo/fish_aqu_mpo.html
+
+All farms are located in Deep Bay, specifically shown in the map. 
+
+ - I will place a point in Deep Bay 
+ 
+```{r}
+
+
+farms_hkg <- data.frame(lat = c(22.48384043911231),
+                        lon = c(113.98143449612208)) %>%
+  mutate(iso3c = "HKG")
+
+write_csv(farms_hkg, here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites/farms_hkg.csv"))
+
+## visualize it 
+farms_hkg <-  st_as_sf(farms_hkg, coords = c("lon", "lat"), 
+                 crs = crs(gadm_latlon), agr = "constant")
+
+mapview(farms_hkg)
+
+```
+
+ 
+# Join cell count dataframes
+
+```{r}
+farm_files <- list.files(here::here("aquaculture/marine/bivalve/bivalve_farms/data/bivalve_sites"), full=TRUE)
+all_farms = plyr::ldply(farm_files, read_csv)
+
+all_farms_sf <- st_as_sf(all_farms, coords = c("lon", "lat"), 
+                         crs = crs(gadm_latlon), agr = "constant")
+
+mapview(all_farms_sf)
+
+write.csv(all_farms, here::here("aquaculture/marine/bivalve/bivalve_farms/data/global_bivalve_farm_lat_lon.csv"), row.names = FALSE)
+
+
+```
+
+
+

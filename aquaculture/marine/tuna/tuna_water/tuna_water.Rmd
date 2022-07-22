@@ -1,0 +1,64 @@
+---
+title: "Creating a file for tuna farming water usage"
+author: "Gage Clawson (NCEAS, UCSB, OHI)"
+date: "12/22/2020"
+output: html_document
+---
+
+This markdown creates a water useage impact layer for tuna aquaculture. This impact is zero, so we will use the tuna ghg layer to create the water impact one. The ghg layer is created from the spatial production data. We can assume that the areas with 0 mean that there is no farm/tuna so no water impact (if there was one)
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readr)
+library(raster)
+
+path_prep <- "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/tuna/"
+food_crs <- "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"
+path_final <- "/home/shares/food-systems/Food_footprint/all_food_systems/datalayers"
+
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+
+
+```
+
+
+```{r}
+ghg <- raster::raster(file.path(path_final, "marine_tuna_aquaculture_meat_ghg.tif"))
+
+ghg_df <- as.data.frame(ghg, xy = TRUE)
+
+water <- ghg_df %>%
+  mutate(tuna_water_m3 = ifelse(marine_tuna_aquaculture_meat_ghg == 0, NA,
+                                  ifelse(marine_tuna_aquaculture_meat_ghg > 0, 0, marine_tuna_aquaculture_meat_ghg))) %>%
+  dplyr::select(x, y, tuna_water_m3)
+
+write.csv(water, file.path(path_prep, "tuna_water.csv"), row.names = FALSE)
+
+## save to datalayers folder with the correct naming conventions:
+# final_layer_water <- read_csv(file.path(path_prep, "tuna_water.csv"))
+
+final_rast <- raster::rasterFromXYZ(water, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+cellStats(final_rast, "sum") # 0
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 0
+final_rast
+
+writeRaster(final_rast, file.path(path_final, "marine_tuna_aquaculture_meat_water.tif"), overwrite = T)
+
+```
+
+
+
+
+

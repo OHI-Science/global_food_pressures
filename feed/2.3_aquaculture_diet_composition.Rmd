@@ -1,0 +1,122 @@
+---
+title: "Aquaculture diet composition wrangling"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Wrangling and aggragating some aquaculture diet composition data.
+
+```{r}
+library(tidyverse)
+library(readxl)
+
+regions <- read_csv(here("_spatial/_output/food_rgns.csv")) %>%
+  select(iso3c) %>%
+  unique()
+
+# Halley diet data
+diet <- read_excel(here("feed/diet_composition_wrangling/Final_DietCrop_Numbers.xlsx"), sheet = "% type of crop input")
+
+```
+
+Shrimp: see scripts for "shrimp_mariculture_diet...". (regional data is the average shrimp feed, weighted by most common species)
+Salmon: diet from Aas source, global values used for regions
+Tuna: Halley data, average marine fish data
+
+### shrimp
+```{r}
+
+shrimp <- read_csv(here("feed/diet_composition_wrangling/shrimp_aquaculture_diet_composition.csv"))
+
+```
+
+### marine-fish-general
+```{r}
+
+other_fish <- read_csv(here("feed/diet_composition_wrangling/marine-fish-general_aquaculture_diet_composition.csv"))
+
+```
+
+### salmon
+
+```{r}
+
+salmon <- read_csv(here("feed/diet_composition_wrangling/salmon_aquaculture_diet_composition.csv")) %>%
+  mutate(prop_diet = per_diet * 0.01) %>%
+  merge(regions) %>%
+  select(iso3c, raw_name, prop_diet, production_system, species)
+
+```
+
+### tuna
+```{r}
+
+tuna_prop_fofm <- 0.85
+
+tuna <- filter(diet, common_name=="Tunas") %>%
+  filter(prop_crop_inputs > 0) %>%
+  mutate(species = "tuna",
+         production_system = "aquaculture") %>%
+  group_by(species) %>%
+  mutate(total_input_prop = sum(prop_crop_inputs)) %>%
+  ungroup() %>%
+  rowwise() %>%
+  mutate(prop_diet = prop_crop_inputs/total_input_prop * tuna_prop_fofm) %>%
+  merge(regions) %>%
+  select(iso3c, raw_name = crop, prop_diet, production_system, species)
+
+# should be 0.85
+tuna %>%  
+group_by(iso3c) %>%
+  summarize(sum(prop_diet))
+
+tuna_fofm <- select(tuna, iso3c) %>%
+  unique() %>%
+  mutate(raw_name = "fofm",
+         prop_diet = 1-tuna_prop_fofm,
+         production_system = "aquaculture",
+         species="tuna") 
+  
+tuna <- rbind(tuna, tuna_fofm)
+
+# should now be one:
+tuna %>%  
+group_by(iso3c) %>%
+  summarize(sum(prop_diet))
+
+```
+
+
+## crustaceans
+```{r}
+
+crusts_prop_fofm <- 0.885
+
+crusts <- filter(diet, group=="Crustacean") %>%
+  filter(!comment %in% "freshwater") %>%
+  filter(common_name != "Chinese mitten crab") %>%
+  group_by(crop) %>%
+  summarize(prop_crop = sum(prop_crop_inputs)/3 * crusts_prop_fofm)  # three species, but check this in future iterations
+
+sum(crusts$prop_crop)
+
+crusts <- rbind(crusts,
+                data.frame(crop="fofm", prop_crop = 1-crusts_prop_fofm))
+sum(crusts$prop_crop) # should now be 1
+
+crusts <- merge(crusts, regions) %>%
+  mutate(production_system = "aquaculture",
+         species="crustaceans") %>%
+   select(iso3c, raw_name = crop, prop_diet = prop_crop, production_system, species)
+
+```
+
+
+## Combine everything
+```{r}
+
+aquaculture_diet <- rbind(shrimp, salmon, tuna, crusts, other_fish)
+
+
+write_csv(aquaculture_diet, here("feed/data/aquaculture_diet_composition.csv"))

@@ -1,0 +1,17 @@
+Parameter,Unit,Value,Description_long,Description_short,Reference
+Fish_Prod,tonne,1,The tonnage of fish production,Production,
+Frac_WG,tonne/tonne,0.95,This factor excludes weight gained during hatchery/nursery stage,Weight gain,Bouwman et al. 2013
+FCR_Comp,tonne/tonne,1.1,Feed conversion ratio: tonnes food/tonnes salmon,FCR,Aas et al. 2019
+FCR_NonComp,tonne/tonne,0,Feed conversion ratio for non-compound feed (not appliable for salmon since they're fed exclusively compound feed),FCR non-compound,
+Frac_Comp,,1,"Proportion of compound to non-compound feed, for salmon it is all compound",Fraction compound feed,
+Frac_Comp_N,g/g,0.07,The proportion of nitrogen present in compound feed,N content compound feed,Bouwman et al. 2013
+Frac_Comp_P,g/g,0.011,The proportion of phosphorus present in compound feed,P content compound feed,Bouwman et al. 2013
+Frac_NonComp,,0,"Proportion of non-compoundto compound feed, for salmon it is all compound",Fraction non-compound feed,
+Frac_NonComp_N,g/g,0.06,The proportion of nitrogen present in non-compound feed,N content non-compound feed,Bouwman et al. 2013
+Frac_NonComp_P,g/g,0.004,The proportion of phosphorus present in non- compound feed,P content non-compound feed,Bouwman et al. 2013
+Frac_Fish_N,g/g,0.028,Proportion of nitrogen content in fish biomass,N content fish,Bouwman et al. 2013
+Frac_Fish_P,g/g,0.004,Proportion of phosphorus content in fish biomass,P content fish,Bouwman et al. 2013
+ADC_Comp_N,g/g,0.9,"Proportion of N that is digested (compound feed), contributing to dissolved N vs. particulate N",ADC for N in compound feed,Bouwman et al. 2013
+ADC_Comp_P,g/g,0.6,"Proportion of P that is digested (compound feed), contributing to dissolved P vs. particulate P",ADC for P in compound feed,Bouwman et al. 2013
+ADC_NonComp_N,g/g,0.7,"Proportion of N that is digested (non-compound feed), contributing to dissolved N vs. particulate N",ADC for N in non-compound feed,Bouwman et al. 2013
+ADC_NonComp_P,g/g,0.45,"Proportion of P that is digested (non-compound feed), contributing to dissolved P vs. particulate P",ADC for P in non-compound feed,Bouwman et al. 2013

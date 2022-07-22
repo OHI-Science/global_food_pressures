@@ -1,0 +1,429 @@
+---
+title: "STEP 9: Mapping cows, buffaloes, goats, and sheep locations"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+## Objectives
+Create 4 maps each for all our ruminants by grassland/mixed and dairy/nondairy.
+
+# Inputs:
+animal_all_counts.tif files calculated in STEP 7
+ruminant_dairy.tif and ruminant_nondairy.tif files calculated in STEP 6
+ruminant_system_prod_system.tif files calculated in STEP 5
+
+# Outputs: ruminant_system_product.csv and tif files for every combination of cows/buffaloes/goats/sheep, grassland/mixed, and milk/meat. located in the prep folder on the server
+
+## Setup
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(countrycode)
+library(readxl)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+
+## load libraries, read in data
+food_rgns_area <- area(food_rgns_tif)
+
+```
+
+## Map them!
+
+```{r}
+
+ruminant_list <- c("sheep", "goats", "buffaloes")
+
+
+for(ruminant in ruminant_list) {
+  
+   # ruminant <- ruminant_list[1]
+  
+  map_all <- raster(file.path(paste0(prep, "animal_farm/farm/updated_gridded_map_tifs/", ruminant, "_all_counts.tif", sep = "")))
+  
+  dairy <- raster(file.path(paste0(prep, "animal_farm/farm/production_system1_tifs/", ruminant, "_dairy.tif", sep = "")))
+  nondairy <- raster(file.path(paste0(prep, "animal_farm/farm/production_system1_tifs/", ruminant, "_nondairy.tif", sep = "")))
+  
+  grass <- raster(file.path(prep, "animal_farm/farm/production_system2_tifs/grassland_prod_system.tif"))
+  mixed <- raster(file.path(prep, "animal_farm/farm/production_system2_tifs/mixed_prod_system.tif"))
+  
+  
+  dairy_grass <- map_all*dairy*grass
+    names(dairy_grass) <- "current_count"
+  dairy_mixed <- map_all*dairy*mixed
+    names(dairy_mixed) <- "current_count"
+  
+  nondairy_grass <- map_all*nondairy*grass
+    names(nondairy_grass) <- "current_count"
+  nondairy_mixed <- map_all*nondairy*mixed
+    names(nondairy_mixed) <- "current_count"
+    
+    ## save them as rasters
+    writeRaster(dairy_grass, file.path(paste0(prep, "animal_farm/farm/location_tifs/", ruminant, "_grassland_milk.tif", sep = "")), format = "GTiff", overwrite = TRUE )
+    writeRaster(dairy_mixed, file.path(paste0(prep, "animal_farm/farm/location_tifs/", ruminant, "_mixed_milk.tif", sep = "")), format = "GTiff", overwrite = TRUE )
+    writeRaster(nondairy_grass, file.path(paste0(prep, "animal_farm/farm/location_tifs/", ruminant, "_grassland_meat.tif", sep = "")), format = "GTiff", overwrite = TRUE )
+    writeRaster(nondairy_mixed, file.path(paste0(prep, "animal_farm/farm/location_tifs/", ruminant, "_mixed_meat.tif", sep = "")), format = "GTiff", overwrite = TRUE )
+
+  
+## convert to csvs so it remains consistent with the chickens and pigs. don't make the map for meat buffalo 
+
+    ## grassland milk
+    dairy_grass_df <- dairy_grass %>% 
+        raster_df() %>% 
+      left_join(food_rgns_xy, by = c("x", "y", "cellindex")) %>% 
+      mutate(system = "grassland",
+             product = "milk") %>% 
+      select(x,y, iso3c, country = Country, system, product, current_count)
+    
+    write_csv(dairy_grass_df, file.path(paste0(prep, "animal_farm/farm/", ruminant, "_grassland_milk_location_df.csv", sep = "")))
+    
+    ## grassland meat   
+    nondairy_grass_df <- nondairy_grass %>% 
+        raster_df() %>% 
+      left_join(food_rgns_xy, by = c("x", "y", "cellindex")) %>% 
+      mutate(system = "grassland",
+             product = "meat") %>% 
+      select(x,y, iso3c, country = Country, system, product, current_count)
+    
+    write_csv(nondairy_grass_df, file.path(paste0(prep, "animal_farm/farm/", ruminant, "_grassland_meat_location_df.csv", sep = "")))
+    
+    
+        ## mixed milk
+    dairy_mixed_df <- dairy_mixed %>% 
+        raster_df() %>% 
+      left_join(food_rgns_xy, by = c("x", "y", "cellindex")) %>% 
+      mutate(system = "mixed",
+             product = "milk") %>% 
+      select(x,y, iso3c, country = Country, system, product, current_count)
+    
+    write_csv(dairy_mixed_df, file.path(paste0(prep, "animal_farm/farm/", ruminant, "_mixed_milk_location_df.csv", sep = "")))
+    
+    ## mixed meat   
+    nondairy_mixed_df <- nondairy_mixed %>% 
+        raster_df() %>% 
+      left_join(food_rgns_xy, by = c("x", "y", "cellindex")) %>% 
+      mutate(system = "mixed",
+             product = "meat") %>% 
+      select(x,y, iso3c, country = Country, system, product, current_count)
+    
+    write_csv(nondairy_mixed_df, file.path(paste0(prep, "animal_farm/farm/", ruminant, "_mixed_meat_location_df.csv", sep = "")))
+    
+}
+
+```
+
+
+Cows are a little different
+```{r}
+
+product_list <- c("milk", "meat")
+
+
+for(product_OI in product_list) {
+  
+   # product_OI <- product_list[2]
+  
+  map_all <- raster(file.path(paste0(prep, "animal_farm/farm/updated_gridded_map_tifs/cows_", product_OI, "_all_counts.tif", sep = "")))
+  
+  grass <- raster(file.path(prep, "animal_farm/farm/production_system2_tifs/grassland_prod_system.tif"))
+  mixed <- raster(file.path(prep, "animal_farm/farm/production_system2_tifs/mixed_prod_system.tif"))
+  
+  grass_map <- map_all*grass
+    names(grass_map) <- "current_count"
+  mixed_map <- map_all*mixed
+    names(mixed_map) <- "current_count"
+  
+
+    ## save them as rasters
+    writeRaster(grass_map, file.path(paste0(prep, "animal_farm/farm/location_tifs/cows_grassland_", product_OI, ".tif", sep = "")), format = "GTiff", overwrite = TRUE )
+    writeRaster(mixed_map, file.path(paste0(prep, "animal_farm/farm/location_tifs/cows_mixed_", product_OI, ".tif", sep = "")), format = "GTiff", overwrite = TRUE )
+
+  
+## convert to csvs so it remains consistent with the chickens and pigs. don't make the map for meat buffalo 
+
+    ## grassland
+    grass_df <- grass_map %>% 
+        raster_df() %>% 
+      left_join(food_rgns_xy, by = c("x", "y", "cellindex")) %>% 
+      mutate(animal = "cows", 
+             system = "grassland",
+             product = product_OI) %>% 
+      select(x,y, iso3c, country = Country, system, product, current_count)
+    
+    write_csv(grass_df, file.path(paste0(prep, "animal_farm/farm/cows_grassland_", product_OI, "_location_df.csv", sep = "")))
+    
+    ## mixed   
+    mixed_map_df <- mixed_map %>% 
+        raster_df() %>% 
+      left_join(food_rgns_xy, by = c("x", "y", "cellindex")) %>% 
+      mutate(animal = "cows", 
+             system = "mixed",
+             product = product_OI) %>% 
+      select(x,y, iso3c, country = Country, system, product, current_count)
+    
+    write_csv(mixed_map_df, file.path(paste0(prep, "animal_farm/farm/cows_mixed_", product_OI, "_location_df.csv", sep = "")))
+  
+}
+
+```
+
+
+The mixed cow maps do not include feedlot cows. We want to have a separate map representing feedlot cow numbers, but in the locations where it is identified as mixed. This will replace the mixed meat cow raster created above after adjusting for feedlot counts.
+
+```{r}
+mixed_meat_cattle <- read_csv("/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/animal_farm/farm/cows_mixed_meat_location_df.csv", col_types = "ddccccd")
+total_count_mixed <- mixed_meat_cattle %>%
+  group_by(iso3c, country, system, product) %>%
+  summarize(current_count = sum(current_count, na.rm=TRUE))
+
+feedlot_counts <- read_csv(here("animal_farm/farm/data/mixed_to_feedlot_factor.csv"))  
+
+feedlot_factor <- left_join(feedlot_counts, total_count_mixed) %>%
+  mutate(prop_feedlot = feedlot_count/current_count) %>%
+  select(iso3c, prop_feedlot) 
+
+feedlot_factor_raster <- feedlot_factor %>%
+  right_join(food_rgns) %>% 
+  mutate(prop_feedlot = ifelse(is.na(prop_feedlot), 0, prop_feedlot)) %>% 
+  right_join(food_rgns_xy) %>% 
+  select(x,y,prop_feedlot) %>% 
+  rasterFromXYZ(crs = food_crs)
+
+plot(feedlot_factor_raster)
+
+cows_mixed_meat <- raster(file.path(prep, "animal_farm/farm/location_tifs/cows_mixed_meat.tif"))
+
+cows_feedlots <-  cows_mixed_meat*feedlot_factor_raster
+plot(cows_feedlots)
+writeRaster(cows_feedlots, file.path(paste0(prep, "animal_farm/farm/location_tifs/cows_feedlot_meat.tif")), format = "GTiff", overwrite = TRUE) 
+
+## save the location_df.csv
+
+## feedlot 
+df_feedlot_rast <- raster(file.path(prep, "animal_farm/farm/location_tifs/cows_feedlot_meat.tif"))
+
+df_feedlot <- df_feedlot_rast %>% 
+  raster_df() %>%
+  left_join(food_rgns_xy, by = c("x", "y", "cellindex")) %>% 
+  mutate(animal = "cows", 
+         system = "feedlot",
+         product = "meat") %>% 
+  select(x,y, iso3c, country = Country, system, product, current_count = cows_feedlot_meat)
+    
+write_csv(df_feedlot, file.path(prep, "animal_farm/farm/cows_feedlot_meat_location_df.csv"))
+    
+#####
+## now we have to remove the feedlot cows from the mixed cows
+cows_mixed_meat <- raster(file.path(prep, "animal_farm/farm/location_tifs/cows_mixed_meat.tif"))
+
+cows_mixed_meat <-  cows_mixed_meat*(1 - feedlot_factor_raster)
+plot(cows_mixed_meat)
+writeRaster(cows_mixed_meat, file.path(paste0(prep, "animal_farm/farm/location_tifs/cows_mixed_meat.tif")), format = "GTiff", overwrite = TRUE) 
+
+## save the location_df.csv
+df_mixed_rast <- raster(file.path(prep, "animal_farm/farm/location_tifs/cows_mixed_meat.tif"))
+
+df_mixed <- df_mixed_rast %>% 
+  raster_df() %>%
+  left_join(food_rgns_xy, by = c("x", "y", "cellindex")) %>% 
+  mutate(animal = "cows", 
+         system = "mixed",
+         product = "meat") %>% 
+  select(x,y, iso3c, country = Country, system, product, current_count = cows_mixed_meat)
+    
+write_csv(df_mixed, file.path(prep, "animal_farm/farm/cows_mixed_meat_location_df.csv"))
+
+```
+
+
+
+
+
+Data checks and plots
+
+Cows 
+```{r}
+cw_gr_mk <- raster(file.path(prep, "animal_farm/farm/location_tifs/cows_grassland_milk.tif"))
+cw_gr_mt <- raster(file.path(prep, "animal_farm/farm/location_tifs/cows_grassland_meat.tif"))
+cw_mx_mk <- raster(file.path(prep, "animal_farm/farm/location_tifs/cows_mixed_milk.tif"))
+cw_mx_mt <- raster(file.path(prep, "animal_farm/farm/location_tifs/cows_mixed_meat.tif"))
+```
+
+Plot
+```{r}
+
+plot(log(cw_gr_mk+1),
+     main= "Log Cows Grassland Milk")
+
+plot(log(cw_gr_mt+1),
+     main= "Log Cows Grassland Meat")
+
+plot(log(cw_mx_mk+1),
+     main= "Log Cows Mixed Milk")
+
+plot(log(cw_mx_mt+1),
+     main= "Log Cows Mixed Meat")
+
+```
+
+
+Data check
+
+```{r}
+## milk cows
+fao_dairy <- read_csv(here("animal_farm/farm/data/fao_livestock_headcount.csv")) %>% 
+  filter(animal == "cows" &
+         product == "milk",
+         year == 2017) %>% 
+  dplyr::summarise(total_fao = sum(fao_headcount))
+# 275,405,738			
+
+our_dairy <- stack(cw_gr_mk,cw_mx_mk)
+our_dairy <- sum(our_dairy)
+raster::cellStats(our_dairy, stat = 'sum')
+# 273,165,632
+
+## meat cows
+fao_meat <- read_csv(here("animal_farm/farm/data/fao_livestock_headcount.csv")) %>% 
+  filter(animal == "cows" &
+         product == "meat",
+         year == 2017) %>% 
+  dplyr::summarise(total_fao = sum(fao_headcount, na.rm = TRUE))
+# 1,197,881,390			
+
+our_meat <- stack(cw_gr_mt,cw_mx_mt)
+our_meat <- sum(our_meat)
+raster::cellStats(our_meat, stat = 'sum')
+
+# 1,186,951,806
+
+summary(our_meat)
+
+```
+
+Buffaloes
+** note: while we have meat rasters we are not including it in our analysis. I am just including it here to be able to check that the numbers add up and nothing wonky happened.
+```{r}
+bf_gr_mk <- raster(file.path(prep, "animal_farm/farm/location_tifs/buffaloes_grassland_milk.tif"))
+bf_gr_mt <- raster(file.path(prep, "animal_farm/farm/location_tifs/buffaloes_grassland_meat.tif"))
+bf_mx_mk <- raster(file.path(prep, "animal_farm/farm/location_tifs/buffaloes_mixed_milk.tif"))
+bf_mx_mt <- raster(file.path(prep, "animal_farm/farm/location_tifs/buffaloes_mixed_meat.tif"))
+```
+
+Plot
+```{r}
+
+plot(log(bf_gr_mk+1),
+     main= "Log Buffaloes Grassland Milk")
+
+plot(log(bf_mx_mk+1),
+     main= "Log Buffaloes Mixed Milk")
+
+
+```
+
+
+Data check
+
+```{r}
+## buff
+fao_buffalo <- read_csv(here("animal_farm/farm/data/fao_livestock_headcount.csv")) %>% 
+  filter(animal == "buffaloes" ) %>% 
+  dplyr::summarise(total_fao = sum(fao_headcount))
+# 398,298,997	
+
+our_buff <- bf_gr_mk + bf_mx_mk 
+sum <- raster::cellStats(our_buff, 'sum')
+# 175,767,486
+
+```
+
+
+
+Sheep
+```{r}
+sh_gr_mk <- raster(file.path(prep, "animal_farm/farm/location_tifs/sheep_grassland_milk.tif"))
+sh_gr_mt <- raster(file.path(prep, "animal_farm/farm/location_tifs/sheep_grassland_meat.tif"))
+sh_mx_mk <- raster(file.path(prep, "animal_farm/farm/location_tifs/sheep_mixed_milk.tif"))
+sh_mx_mt <- raster(file.path(prep, "animal_farm/farm/location_tifs/sheep_mixed_meat.tif"))
+```
+
+Plot
+```{r}
+
+plot(log(sh_gr_mk+1),
+     main= "Log Sheep Grassland Milk")
+
+plot(log(sh_gr_mt+1),
+     main= "Log Sheep Grassland Meat")
+
+plot(log(sh_mx_mk+1),
+     main= "Log Sheep Mixed Milk")
+
+plot(log(sh_mx_mt+1),
+     main= "Log Sheep Mixed Meat")
+
+```
+
+
+Data check
+
+```{r}
+## sheep
+fao_sheep <- read_csv(here("animal_farm/farm/data/fao_livestock_headcount.csv")) %>% 
+  filter(animal == "sheep",
+         year == 2017) %>% 
+  dplyr::summarise(total_fao = sum(fao_headcount))
+# 1,201,076,128		
+
+our_sheep <- sh_gr_mk + sh_mx_mk + sh_gr_mt + sh_mx_mt
+sum <- raster::cellStats(our_sheep, 'sum')
+# 1,201,639,086
+
+```
+
+
+Goats
+```{r}
+gt_gr_mk <- raster(file.path(prep, "animal_farm/farm/location_tifs/goats_grassland_milk.tif"))
+gt_gr_mt <- raster(file.path(prep, "animal_farm/farm/location_tifs/goats_grassland_meat.tif"))
+gt_mx_mk <- raster(file.path(prep, "animal_farm/farm/location_tifs/goats_mixed_milk.tif"))
+gt_mx_mt <- raster(file.path(prep, "animal_farm/farm/location_tifs/goats_mixed_meat.tif"))
+```
+
+Plot
+```{r}
+
+plot(log(sh_gr_mk+1),
+     main= "Log Goats Grassland Milk")
+
+plot(log(sh_gr_mt+1),
+     main= "Log Goats Grassland Meat")
+
+plot(log(sh_mx_mk+1),
+     main= "Log Goats Mixed Milk")
+
+plot(log(sh_mx_mt+1),
+     main= "Log Goats Mixed Meat")
+
+```
+
+
+Data check
+
+```{r}
+## buff
+fao_goats <- read_csv(here("animal_farm/farm/data/fao_livestock_headcount.csv")) %>% 
+  filter(animal == "goats" ) %>% 
+  dplyr::summarise(total_fao = sum(fao_headcount))
+# 1,021,738,193
+
+our_goats <- gt_gr_mk + gt_mx_mk + gt_gr_mt + gt_mx_mt
+sum <- raster::cellStats(our_goats, 'sum')
+# 1,022,516,691
+
+```

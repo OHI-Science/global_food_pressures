@@ -1,0 +1,139 @@
+---
+title: "Wrangle and calculate FAO protein and calories CF livestock"
+author: "Juliette"
+date: "3/8/2021"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(countrycode)
+source(here("_workflow/common.R"))
+
+livestock_raw <- read_csv(file.path(raw, "FAO_data/v2021/supply_utlilization_accounts/livestock_primary/FAOSTAT_data_2-5-2021.csv"))
+
+```
+
+# Livestock 
+
+## Wrangle, calculate conversion factors, and calculate tonnes product to tonnes protein and million kcals
+```{r}
+
+nutri_contents_livestock <- livestock_raw %>% 
+  select(Area, Element, Item, Year, Unit, Value) %>% 
+  filter(Year == 2017,
+         Element %in% c("Food supply quantity (tonnes)", "Calories/Year", "Proteins/Year")) %>% 
+  
+  ## wrangle the item names so we can easily choose what we want to keep
+  separate(Item, c("product", "animal"), remove = FALSE) %>% 
+  mutate(animal = ifelse(product == "Beeswax", "bee", animal),
+         animal = ifelse(str_detect(Item, "goat"), "goat", animal),
+         animal = ifelse(str_detect(Item, "cow"), "cow", animal),
+         animal = ifelse(str_detect(Item, "sheep"), "sheep", animal),
+         animal = ifelse(str_detect(Item, "buffalo"), "buffalo", animal),
+         animal = ifelse(str_detect(Item, "camel"), "camel", animal),
+         animal = ifelse(str_detect(Item, "bird nes"), "bird nes", animal),
+         animal = ifelse(str_detect(Item, "other bird"), "other bird", animal),
+         animal = ifelse(str_detect(Item, "other rodents"), "other rodents", animal),
+         animal = ifelse(str_detect(Item, "goose and guinea"), "goose and guinea", animal),
+         animal = ifelse(str_detect(Item, "Snails"), "snails", animal),
+         animal = ifelse(str_detect(Item, "other camelids"), "other camelids", animal),
+         product = ifelse(str_detect(Item, "Snails"), "Meat", product)) %>% 
+  filter(animal %in% c("hen", "cattle", "goat", "sheep", "chicken", "cow", "buffalo", "pig"),
+         product %in% c("Milk", "Meat", "Eggs")) %>% 
+  mutate(product = tolower(product)) %>% 
+  unite(animal_prod, c(animal, product)) %>% 
+   
+  ## grab the iso3c 
+  filter(Area != "China") %>% 
+  mutate(Area = ifelse(Area == "Eswatini", "Swaziland", Area),
+         Area = ifelse(Area == "Netherlands Antilles (former)", "Bonaire, Sint Eustatius and Saba", Area),
+         Area = ifelse(Area == "French Guyana", "French Guiana", Area),
+         Area = ifelse(Area == "China, mainland", "China", Area),
+         iso3c = countrycode(Area, origin="country.name", destination = "iso3c")) %>% 
+  
+  ## final wrangling
+  select(-Area, -Year, -Unit, -Item) %>% ##units for production are tonnes, protein is tonnes, and calories is million kcals
+  pivot_wider(names_from = "Element", values_from = "Value") %>% 
+  select(iso3c, animal_prod, production = 'Food supply quantity (tonnes)' , million_kcal_year = 'Calories/Year', tonnes_protein_year = 'Proteins/Year') %>% 
+  filter(!is.na(million_kcal_year),
+         !is.na(production),
+         production > 0) %>% 
+  
+  ## calculate the mult factor
+  mutate(million_kcal_per_prod_tonne = million_kcal_year/production,
+         tonne_protein_per_prod_tonne = tonnes_protein_year/production)
+
+
+```
+
+Lets see what it looks like
+
+```{r}
+ggplot(nutri_contents_livestock, aes(x = production, y = million_kcal_year)) +
+  geom_point()+
+  theme_minimal()+
+  geom_smooth(method='lm', formula= y~x) +
+  facet_wrap(vars(animal_prod), scales = "free")
+
+#lm(data = nutri_contents_livestock, million_kcal_year~production)
+
+ggplot(nutri_contents_livestock, aes(x = production, y = tonnes_protein_year)) +
+  geom_point()+
+  theme_minimal()+
+  geom_smooth(method='lm', formula= y~x) +
+  facet_wrap(vars(animal_prod), scales = "free")
+```
+
+The relationship is super solid! yay! I feel comfortable calculating a conversion factor from these data.
+
+```{r}
+
+live_protein_cfs <- nutri_contents_livestock %>% 
+  group_by(animal_prod) %>% 
+  filter(tonne_protein_per_prod_tonne > 0) %>% 
+  dplyr::summarise(tonne_protein_per_prod_tonne = mean(tonne_protein_per_prod_tonne, na.rm = TRUE))
+
+live_calorie_cfs <- nutri_contents_livestock %>% 
+  group_by(animal_prod) %>% 
+  filter(million_kcal_per_prod_tonne > 0) %>% 
+  dplyr::summarise(million_kcal_per_prod_tonne = mean(million_kcal_per_prod_tonne, na.rm = TRUE))
+
+live_cfs <- left_join(live_protein_cfs, live_calorie_cfs)
+
+conversion_rates_livestock <- nutri_contents_livestock %>% 
+  group_by(animal_prod) %>% 
+  dplyr::summarise(product_tonnes_to_mill_kcal = mean(million_kcal_per_prod_tonne, na.rm = TRUE),
+                   product_tonnes_to_tonnes_protein = mean(tonne_protein_per_prod_tonne, na.rm = TRUE)) %>% 
+  rename(product = animal_prod) %>% 
+  mutate(product = ifelse(product == "cattle_meat", "cows_meat",
+                          ifelse(product == "cow_milk", "cows_milk",
+                                 ifelse(product == "chicken_meat", "chickens_meat",
+                                        ifelse(product == "hen_eggs", "chickens_eggs",
+                                               ifelse(product == "pig_meat", "pigs_meat", 
+                                               ifelse(product == "goat_meat", "goats_meat",
+                                                      ifelse(product == "buffalo_milk", "buffaloes_milk",
+                                                      ifelse(product == "goat_milk", "goats_milk", product))))))))) %>% 
+  filter(product != "buffalo_meat")
+
+live_prod_list <- unique(conversion_rates_livestock$product)
+
+livestock_product_tonnes <- read_csv(here("_efficiency/data/product_tonnes.csv")) %>% 
+  rename(product = category1_production) %>% 
+  filter(product %in% live_prod_list) %>% 
+  select(-category2_production)  %>% 
+  group_by(iso3c, product) %>%
+  dplyr::summarise(tonnes = sum(tonnes, na.rm = TRUE)) %>%  ## combine chicken eggs and meat that were from backyard
+  left_join(conversion_rates_livestock) %>% 
+  mutate(million_kcal = tonnes*product_tonnes_to_mill_kcal,
+         tonnes_protein = tonnes*product_tonnes_to_tonnes_protein)
+
+## gapfill missing products in countries
+livestock_product_tonnes_gf <- livestock_product_tonnes
+
+
+write_csv(livestock_product_tonnes, here::here("_efficiency", "data", "livestock_protein_calories.csv"))
+
+```
+

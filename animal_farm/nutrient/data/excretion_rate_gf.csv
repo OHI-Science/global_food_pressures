@@ -1,0 +1,2380 @@
+iso3c,country,animal,product,tonnes_N_head
+AFG,Afghanistan,cows,milk,0.047176249999999996
+AFG,Afghanistan,cows,meat,0.013651000000000002
+AFG,Afghanistan,chickens,meat,3.6135000000000003e-4
+AFG,Afghanistan,chickens,eggs,5.3874e-4
+AFG,Afghanistan,goats,milk,0.015001500000000001
+AFG,Afghanistan,goats,meat,0.015001500000000001
+AFG,Afghanistan,sheep,milk,0.0119574
+AFG,Afghanistan,sheep,meat,0.0119574
+AFG,Afghanistan,chickens,eggs&meat,4.5004500000000005e-4
+CYP,Cyprus,cows,milk,0.07026249999999999
+CYP,Cyprus,cows,meat,0.04988455
+CYP,Cyprus,chickens,meat,3.6135000000000003e-4
+CYP,Cyprus,chickens,eggs,5.3874e-4
+CYP,Cyprus,pigs,meat,0.01500295106855121
+CYP,Cyprus,goats,milk,0.015001500000000001
+CYP,Cyprus,goats,meat,0.015001500000000001
+CYP,Cyprus,sheep,milk,0.0119574
+CYP,Cyprus,sheep,meat,0.0119574
+CYP,Cyprus,chickens,eggs&meat,4.5004500000000005e-4
+ALB,Albania,buffaloes,milk,0.044384
+ALB,Albania,cows,milk,0.10511999999999999
+ALB,Albania,cows,meat,0.050589
+ALB,Albania,chickens,meat,3.6135000000000003e-4
+ALB,Albania,chickens,eggs,6.3072e-4
+ALB,Albania,pigs,meat,0.011412125059554547
+ALB,Albania,goats,milk,0.0179872
+ALB,Albania,goats,meat,0.0179872
+ALB,Albania,sheep,milk,0.015047124999999998
+ALB,Albania,sheep,meat,0.015047124999999998
+ALB,Albania,chickens,eggs&meat,4.96035e-4
+DZA,Algeria,cows,milk,0.060225
+DZA,Algeria,cows,meat,0.03978135
+DZA,Algeria,chickens,meat,3.6135e-4
+DZA,Algeria,chickens,eggs,5.3874e-4
+DZA,Algeria,pigs,meat,0.015002742326164128
+DZA,Algeria,goats,milk,0.015001500000000001
+DZA,Algeria,goats,meat,0.015001500000000001
+DZA,Algeria,sheep,milk,0.0119574
+DZA,Algeria,sheep,meat,0.0119574
+DZA,Algeria,chickens,eggs&meat,4.50045e-4
+ASM,American Samoa,cows,milk,0.0803
+ASM,American Samoa,cows,meat,0.060224999999999994
+ASM,American Samoa,chickens,meat,3.6135000000000003e-4
+ASM,American Samoa,chickens,eggs,5.3874e-4
+ASM,American Samoa,pigs,meat,0.010856925
+ASM,American Samoa,chickens,eggs&meat,4.5004500000000005e-4
+AGO,Angola,cows,milk,0.060225
+AGO,Angola,cows,meat,0.03978135
+AGO,Angola,chickens,meat,3.6135000000000003e-4
+AGO,Angola,chickens,eggs,5.3874e-4
+AGO,Angola,pigs,meat,0.01500295847129723
+AGO,Angola,goats,milk,0.0150015
+AGO,Angola,goats,meat,0.0150015
+AGO,Angola,sheep,milk,0.0119574
+AGO,Angola,sheep,meat,0.0119574
+AGO,Angola,chickens,eggs&meat,4.5004500000000005e-4
+ATG,Antigua and Barbuda,cows,milk,0.07008
+ATG,Antigua and Barbuda,cows,meat,0.040077
+ATG,Antigua and Barbuda,chickens,meat,3.6135000000000003e-4
+ATG,Antigua and Barbuda,chickens,eggs,5.387400000000001e-4
+ATG,Antigua and Barbuda,pigs,meat,0.015002960000000001
+ATG,Antigua and Barbuda,goats,milk,0.015001500000000004
+ATG,Antigua and Barbuda,goats,meat,0.015001500000000004
+ATG,Antigua and Barbuda,sheep,milk,0.0119574
+ATG,Antigua and Barbuda,sheep,meat,0.0119574
+ATG,Antigua and Barbuda,chickens,eggs&meat,4.5004500000000005e-4
+ARG,Argentina,cows,milk,0.07008
+ARG,Argentina,cows,meat,0.040077
+ARG,Argentina,chickens,meat,3.6135000000000003e-4
+ARG,Argentina,chickens,eggs,5.3874e-4
+ARG,Argentina,pigs,meat,0.015002960000000001
+ARG,Argentina,goats,milk,0.015001500000000001
+ARG,Argentina,goats,meat,0.015001500000000001
+ARG,Argentina,sheep,milk,0.0119574
+ARG,Argentina,sheep,meat,0.0119574
+ARG,Argentina,chickens,eggs&meat,4.5004500000000005e-4
+ARM,Armenia,buffaloes,milk,0.044384
+ARM,Armenia,cows,milk,0.0702625
+ARM,Armenia,cows,meat,0.04988455
+ARM,Armenia,chickens,meat,3.6135000000000003e-4
+ARM,Armenia,chickens,eggs,5.3874e-4
+ARM,Armenia,pigs,meat,0.015002954061828892
+ARM,Armenia,goats,milk,0.0150015
+ARM,Armenia,goats,meat,0.0150015
+ARM,Armenia,sheep,milk,0.0119574
+ARM,Armenia,sheep,meat,0.0119574
+ARM,Armenia,chickens,eggs&meat,4.5004500000000005e-4
+AUS,Australia,cows,milk,0.0803
+AUS,Australia,cows,meat,0.060225
+AUS,Australia,chickens,meat,3.6135000000000003e-4
+AUS,Australia,chickens,eggs,5.387399999999999e-4
+AUS,Australia,pigs,meat,0.010856925865621701
+AUS,Australia,goats,milk,0.019954549999999998
+AUS,Australia,goats,meat,0.019954549999999998
+AUS,Australia,sheep,milk,0.020003825
+AUS,Australia,sheep,meat,0.020003825
+AUS,Australia,chickens,eggs&meat,4.5004499999999994e-4
+AUT,Austria,cows,milk,0.10511999999999998
+AUT,Austria,cows,meat,0.050588999999999995
+AUT,Austria,chickens,meat,3.6135e-4
+AUT,Austria,chickens,eggs,6.307199999999999e-4
+AUT,Austria,pigs,meat,0.011412087739271262
+AUT,Austria,goats,milk,0.0179872
+AUT,Austria,goats,meat,0.0179872
+AUT,Austria,sheep,milk,0.015047124999999998
+AUT,Austria,sheep,meat,0.015047124999999998
+AUT,Austria,chickens,eggs&meat,4.960349999999999e-4
+AZE,Azerbaijan,buffaloes,milk,0.044384
+AZE,Azerbaijan,cows,milk,0.0702625
+AZE,Azerbaijan,cows,meat,0.04988455
+AZE,Azerbaijan,chickens,meat,3.6135000000000003e-4
+AZE,Azerbaijan,chickens,eggs,5.387399999999999e-4
+AZE,Azerbaijan,pigs,meat,0.015002101317957168
+AZE,Azerbaijan,goats,milk,0.015001500000000003
+AZE,Azerbaijan,goats,meat,0.015001500000000003
+AZE,Azerbaijan,sheep,milk,0.011957399999999998
+AZE,Azerbaijan,sheep,meat,0.011957399999999998
+AZE,Azerbaijan,chickens,eggs&meat,4.5004499999999994e-4
+BHS,Bahamas,cows,milk,0.07008
+BHS,Bahamas,cows,meat,0.040077
+BHS,Bahamas,chickens,meat,3.6135e-4
+BHS,Bahamas,chickens,eggs,5.3874e-4
+BHS,Bahamas,pigs,meat,0.015003375977653633
+BHS,Bahamas,goats,milk,0.0150015
+BHS,Bahamas,goats,meat,0.0150015
+BHS,Bahamas,sheep,milk,0.0119574
+BHS,Bahamas,sheep,meat,0.0119574
+BHS,Bahamas,chickens,eggs&meat,4.50045e-4
+BHR,Bahrain,cows,milk,0.07026249999999999
+BHR,Bahrain,cows,meat,0.04988455
+BHR,Bahrain,chickens,meat,3.6135e-4
+BHR,Bahrain,chickens,eggs,5.387400000000001e-4
+BHR,Bahrain,goats,milk,0.015001500000000001
+BHR,Bahrain,goats,meat,0.015001500000000001
+BHR,Bahrain,sheep,milk,0.0119574
+BHR,Bahrain,sheep,meat,0.0119574
+BHR,Bahrain,chickens,eggs&meat,4.5004500000000005e-4
+BGD,Bangladesh,buffaloes,milk,0.034455999999999994
+BGD,Bangladesh,cows,milk,0.04717625
+BGD,Bangladesh,cows,meat,0.013651
+BGD,Bangladesh,chickens,meat,3.6135e-4
+BGD,Bangladesh,chickens,eggs,5.3874e-4
+BGD,Bangladesh,goats,milk,0.0150015
+BGD,Bangladesh,goats,meat,0.0150015
+BGD,Bangladesh,sheep,milk,0.0119574
+BGD,Bangladesh,sheep,meat,0.0119574
+BGD,Bangladesh,chickens,eggs&meat,4.50045e-4
+BRB,Barbados,cows,milk,0.07008
+BRB,Barbados,cows,meat,0.040077
+BRB,Barbados,chickens,meat,3.6135e-4
+BRB,Barbados,chickens,eggs,5.3874e-4
+BRB,Barbados,pigs,meat,0.015003094664771994
+BRB,Barbados,goats,milk,0.0150015
+BRB,Barbados,goats,meat,0.0150015
+BRB,Barbados,sheep,milk,0.0119574
+BRB,Barbados,sheep,meat,0.0119574
+BRB,Barbados,chickens,eggs&meat,4.50045e-4
+BLR,Belarus,cows,milk,0.0702625
+BLR,Belarus,cows,meat,0.04995025
+BLR,Belarus,chickens,meat,3.6135e-4
+BLR,Belarus,chickens,eggs,5.3874e-4
+BLR,Belarus,pigs,meat,0.012055950000000003
+BLR,Belarus,goats,milk,0.0179872
+BLR,Belarus,goats,meat,0.0179872
+BLR,Belarus,sheep,milk,0.01593225
+BLR,Belarus,sheep,meat,0.01593225
+BLR,Belarus,chickens,eggs&meat,4.50045e-4
+BEL,Belgium,cows,milk,0.10511999999999999
+BEL,Belgium,cows,meat,0.050589
+BEL,Belgium,chickens,meat,3.6135e-4
+BEL,Belgium,chickens,eggs,6.3072e-4
+BEL,Belgium,pigs,meat,0.011412091033675577
+BEL,Belgium,goats,milk,0.0179872
+BEL,Belgium,goats,meat,0.0179872
+BEL,Belgium,sheep,milk,0.015047125
+BEL,Belgium,sheep,meat,0.015047125
+BEL,Belgium,chickens,eggs&meat,4.960349999999999e-4
+BLZ,Belize,cows,milk,0.07008
+BLZ,Belize,cows,meat,0.04007700000000001
+BLZ,Belize,chickens,meat,3.6135000000000003e-4
+BLZ,Belize,chickens,eggs,5.3874e-4
+BLZ,Belize,pigs,meat,0.015002778120910757
+BLZ,Belize,goats,milk,0.015001500000000001
+BLZ,Belize,goats,meat,0.015001500000000001
+BLZ,Belize,sheep,milk,0.011957400000000002
+BLZ,Belize,sheep,meat,0.011957400000000002
+BLZ,Belize,chickens,eggs&meat,4.5004500000000005e-4
+BEN,Benin,cows,milk,0.06022500000000001
+BEN,Benin,cows,meat,0.03978135
+BEN,Benin,chickens,meat,3.6135e-4
+BEN,Benin,chickens,eggs,5.3874e-4
+BEN,Benin,pigs,meat,0.015002959999999997
+BEN,Benin,goats,milk,0.0150015
+BEN,Benin,goats,meat,0.0150015
+BEN,Benin,sheep,milk,0.011957399999999998
+BEN,Benin,sheep,meat,0.011957399999999998
+BEN,Benin,chickens,eggs&meat,4.50045e-4
+BMU,Bermuda,cows,milk,0.0970024
+BMU,Bermuda,cows,meat,0.044015349999999995
+BMU,Bermuda,chickens,meat,3.6135000000000003e-4
+BMU,Bermuda,chickens,eggs,5.453099999999999e-4
+BMU,Bermuda,pigs,meat,0.008078564778325123
+BMU,Bermuda,goats,milk,0.006323625
+BMU,Bermuda,goats,meat,0.006323625
+BMU,Bermuda,chickens,eggs&meat,4.5332999999999994e-4
+BTN,Bhutan,buffaloes,milk,0.034456
+BTN,Bhutan,cows,milk,0.04717625
+BTN,Bhutan,cows,meat,0.013651
+BTN,Bhutan,chickens,meat,3.6135000000000003e-4
+BTN,Bhutan,chickens,eggs,5.3874e-4
+BTN,Bhutan,pigs,meat,0.004108400892857143
+BTN,Bhutan,goats,milk,0.015001500000000003
+BTN,Bhutan,goats,meat,0.015001500000000003
+BTN,Bhutan,sheep,milk,0.0119574
+BTN,Bhutan,sheep,meat,0.0119574
+BTN,Bhutan,chickens,eggs&meat,4.5004500000000005e-4
+BOL,Bolivia,cows,milk,0.07008
+BOL,Bolivia,cows,meat,0.040076999999999995
+BOL,Bolivia,chickens,meat,3.6135e-4
+BOL,Bolivia,chickens,eggs,5.3874e-4
+BOL,Bolivia,pigs,meat,0.015002960000000001
+BOL,Bolivia,goats,milk,0.015001500000000001
+BOL,Bolivia,goats,meat,0.015001500000000001
+BOL,Bolivia,sheep,milk,0.0119574
+BOL,Bolivia,sheep,meat,0.0119574
+BOL,Bolivia,chickens,eggs&meat,4.50045e-4
+BES,"Bonaire, Sint Eustatius and Saba",cows,milk,0.07008
+BES,"Bonaire, Sint Eustatius and Saba",cows,meat,0.040077
+BES,"Bonaire, Sint Eustatius and Saba",chickens,meat,3.6135000000000003e-4
+BES,"Bonaire, Sint Eustatius and Saba",chickens,eggs,5.3874e-4
+BES,"Bonaire, Sint Eustatius and Saba",pigs,meat,0.015001515176715179
+BES,"Bonaire, Sint Eustatius and Saba",goats,milk,0.0150015
+BES,"Bonaire, Sint Eustatius and Saba",goats,meat,0.0150015
+BES,"Bonaire, Sint Eustatius and Saba",sheep,milk,0.0119574
+BES,"Bonaire, Sint Eustatius and Saba",sheep,meat,0.0119574
+BES,"Bonaire, Sint Eustatius and Saba",chickens,eggs&meat,4.5004500000000005e-4
+BIH,Bosnia and Herzegovina,cows,milk,0.10511999999999999
+BIH,Bosnia and Herzegovina,cows,meat,0.050589
+BIH,Bosnia and Herzegovina,chickens,meat,3.6135000000000003e-4
+BIH,Bosnia and Herzegovina,chickens,eggs,6.307199999999999e-4
+BIH,Bosnia and Herzegovina,pigs,meat,0.011412086159584391
+BIH,Bosnia and Herzegovina,goats,milk,0.017987199999999995
+BIH,Bosnia and Herzegovina,goats,meat,0.017987199999999995
+BIH,Bosnia and Herzegovina,sheep,milk,0.015047125
+BIH,Bosnia and Herzegovina,sheep,meat,0.015047125
+BIH,Bosnia and Herzegovina,chickens,eggs&meat,4.960349999999999e-4
+BWA,Botswana,cows,milk,0.060225
+BWA,Botswana,cows,meat,0.03978135000000001
+BWA,Botswana,chickens,meat,3.6135000000000003e-4
+BWA,Botswana,chickens,eggs,5.3874e-4
+BWA,Botswana,pigs,meat,0.015000783716075158
+BWA,Botswana,goats,milk,0.015001500000000003
+BWA,Botswana,goats,meat,0.015001500000000003
+BWA,Botswana,sheep,milk,0.011957399999999998
+BWA,Botswana,sheep,meat,0.011957399999999998
+BWA,Botswana,chickens,eggs&meat,4.5004500000000005e-4
+BRA,Brazil,buffaloes,milk,0.044384
+BRA,Brazil,cows,milk,0.07008
+BRA,Brazil,cows,meat,0.040076999999999995
+BRA,Brazil,chickens,meat,3.6135e-4
+BRA,Brazil,chickens,eggs,5.3874e-4
+BRA,Brazil,pigs,meat,0.015002959974809965
+BRA,Brazil,goats,milk,0.015001499999999997
+BRA,Brazil,goats,meat,0.015001499999999997
+BRA,Brazil,sheep,milk,0.011957400000000002
+BRA,Brazil,sheep,meat,0.011957400000000002
+BRA,Brazil,chickens,eggs&meat,4.50045e-4
+VGB,British Virgin Islands,cows,milk,0.07008
+VGB,British Virgin Islands,cows,meat,0.040076999999999995
+VGB,British Virgin Islands,pigs,meat,0.015002960000000001
+VGB,British Virgin Islands,goats,milk,0.0150015
+VGB,British Virgin Islands,goats,meat,0.0150015
+VGB,British Virgin Islands,sheep,milk,0.0119574
+VGB,British Virgin Islands,sheep,meat,0.0119574
+BRN,Brunei,buffaloes,milk,0.044384
+BRN,Brunei,cows,milk,0.060042500000000006
+BRN,Brunei,cows,meat,0.0395879
+BRN,Brunei,chickens,meat,3.613499999999999e-4
+BRN,Brunei,chickens,eggs,5.387399999999999e-4
+BRN,Brunei,pigs,meat,0.00410844
+BRN,Brunei,goats,milk,0.015001500000000001
+BRN,Brunei,goats,meat,0.015001500000000001
+BRN,Brunei,sheep,milk,0.011957399999999998
+BRN,Brunei,sheep,meat,0.011957399999999998
+BRN,Brunei,chickens,eggs&meat,4.5004499999999994e-4
+BGR,Bulgaria,buffaloes,milk,0.04438400000000001
+BGR,Bulgaria,cows,milk,0.0702625
+BGR,Bulgaria,cows,meat,0.049950249999999995
+BGR,Bulgaria,chickens,meat,3.6135000000000003e-4
+BGR,Bulgaria,chickens,eggs,5.3874e-4
+BGR,Bulgaria,pigs,meat,0.012055963097760317
+BGR,Bulgaria,goats,milk,0.017987200000000002
+BGR,Bulgaria,goats,meat,0.017987200000000002
+BGR,Bulgaria,sheep,milk,0.01593225
+BGR,Bulgaria,sheep,meat,0.01593225
+BGR,Bulgaria,chickens,eggs&meat,4.5004500000000005e-4
+BFA,Burkina Faso,cows,milk,0.060225
+BFA,Burkina Faso,cows,meat,0.03978134999999999
+BFA,Burkina Faso,chickens,meat,3.6135000000000003e-4
+BFA,Burkina Faso,chickens,eggs,5.3874e-4
+BFA,Burkina Faso,pigs,meat,0.015002958743703596
+BFA,Burkina Faso,goats,milk,0.015001500000000001
+BFA,Burkina Faso,goats,meat,0.015001500000000001
+BFA,Burkina Faso,sheep,milk,0.0119574
+BFA,Burkina Faso,sheep,meat,0.0119574
+BFA,Burkina Faso,chickens,eggs&meat,4.5004500000000005e-4
+BDI,Burundi,cows,milk,0.060225
+BDI,Burundi,cows,meat,0.03978135000000001
+BDI,Burundi,chickens,meat,3.6135e-4
+BDI,Burundi,chickens,eggs,5.3874e-4
+BDI,Burundi,pigs,meat,0.015002953254736514
+BDI,Burundi,goats,milk,0.015001500000000001
+BDI,Burundi,goats,meat,0.015001500000000001
+BDI,Burundi,sheep,milk,0.011957399999999998
+BDI,Burundi,sheep,meat,0.011957399999999998
+BDI,Burundi,chickens,eggs&meat,4.50045e-4
+KHM,Cambodia,buffaloes,milk,0.044384
+KHM,Cambodia,cows,milk,0.0600425
+KHM,Cambodia,cows,meat,0.0395879
+KHM,Cambodia,chickens,meat,3.6135e-4
+KHM,Cambodia,chickens,eggs,5.3874e-4
+KHM,Cambodia,pigs,meat,0.0041084400940817395
+KHM,Cambodia,chickens,eggs&meat,4.50045e-4
+CMR,Cameroon,cows,milk,0.060224999999999994
+CMR,Cameroon,cows,meat,0.03978135
+CMR,Cameroon,chickens,meat,3.6135e-4
+CMR,Cameroon,chickens,eggs,5.3874e-4
+CMR,Cameroon,pigs,meat,0.01500295838249069
+CMR,Cameroon,goats,milk,0.0150015
+CMR,Cameroon,goats,meat,0.0150015
+CMR,Cameroon,sheep,milk,0.0119574
+CMR,Cameroon,sheep,meat,0.0119574
+CMR,Cameroon,chickens,eggs&meat,4.50045e-4
+CAN,Canada,cows,milk,0.0970024
+CAN,Canada,cows,meat,0.044015349999999995
+CAN,Canada,chickens,meat,3.6135000000000003e-4
+CAN,Canada,chickens,eggs,5.4531e-4
+CAN,Canada,pigs,meat,0.0080811
+CAN,Canada,goats,milk,0.006323625
+CAN,Canada,goats,meat,0.006323625
+CAN,Canada,sheep,milk,0.0074350499999999995
+CAN,Canada,sheep,meat,0.0074350499999999995
+CAN,Canada,chickens,eggs&meat,4.5333000000000005e-4
+CPV,Cape Verde,cows,milk,0.060224999999999994
+CPV,Cape Verde,cows,meat,0.03978135
+CPV,Cape Verde,chickens,meat,3.6135e-4
+CPV,Cape Verde,chickens,eggs,5.387399999999999e-4
+CPV,Cape Verde,pigs,meat,0.015002897677338357
+CPV,Cape Verde,goats,milk,0.015001500000000003
+CPV,Cape Verde,goats,meat,0.015001500000000003
+CPV,Cape Verde,sheep,milk,0.0119574
+CPV,Cape Verde,sheep,meat,0.0119574
+CPV,Cape Verde,chickens,eggs&meat,4.5004499999999994e-4
+CYM,Cayman Islands,cows,milk,0.07008
+CYM,Cayman Islands,cows,meat,0.040077
+CYM,Cayman Islands,chickens,meat,3.6135000000000003e-4
+CYM,Cayman Islands,chickens,eggs,5.387400000000001e-4
+CYM,Cayman Islands,pigs,meat,0.015000325358045493
+CYM,Cayman Islands,goats,milk,0.0150015
+CYM,Cayman Islands,goats,meat,0.0150015
+CYM,Cayman Islands,chickens,eggs&meat,4.5004500000000005e-4
+CAF,Central African Republic,cows,milk,0.06022500000000001
+CAF,Central African Republic,cows,meat,0.03978135
+CAF,Central African Republic,chickens,meat,3.6135e-4
+CAF,Central African Republic,chickens,eggs,5.387399999999999e-4
+CAF,Central African Republic,pigs,meat,0.015002956196779209
+CAF,Central African Republic,goats,milk,0.015001500000000001
+CAF,Central African Republic,goats,meat,0.015001500000000001
+CAF,Central African Republic,sheep,milk,0.011957400000000002
+CAF,Central African Republic,sheep,meat,0.011957400000000002
+CAF,Central African Republic,chickens,eggs&meat,4.5004499999999994e-4
+TCD,Chad,cows,milk,0.060225
+TCD,Chad,cows,meat,0.03978135
+TCD,Chad,chickens,meat,3.6135000000000003e-4
+TCD,Chad,chickens,eggs,5.3874e-4
+TCD,Chad,pigs,meat,0.015002960000000001
+TCD,Chad,goats,milk,0.015001500000000001
+TCD,Chad,goats,meat,0.015001500000000001
+TCD,Chad,sheep,milk,0.0119574
+TCD,Chad,sheep,meat,0.0119574
+TCD,Chad,chickens,eggs&meat,4.5004500000000005e-4
+CHL,Chile,cows,milk,0.07008
+CHL,Chile,cows,meat,0.040077
+CHL,Chile,chickens,meat,3.6135e-4
+CHL,Chile,chickens,eggs,5.3874e-4
+CHL,Chile,pigs,meat,0.015002961248180506
+CHL,Chile,goats,milk,0.015001500000000003
+CHL,Chile,goats,meat,0.015001500000000003
+CHL,Chile,sheep,milk,0.0119574
+CHL,Chile,sheep,meat,0.0119574
+CHL,Chile,chickens,eggs&meat,4.50045e-4
+CHN,China,buffaloes,milk,0.044384
+CHN,China,cows,milk,0.06004249999999999
+CHN,China,cows,meat,0.0395879
+CHN,China,chickens,meat,3.6135000000000003e-4
+CHN,China,chickens,eggs,5.3874e-4
+CHN,China,pigs,meat,0.00410844
+CHN,China,goats,milk,0.0150015
+CHN,China,goats,meat,0.0150015
+CHN,China,sheep,milk,0.0119574
+CHN,China,sheep,meat,0.0119574
+CHN,China,chickens,eggs&meat,4.5004500000000005e-4
+COL,Colombia,cows,milk,0.07008
+COL,Colombia,cows,meat,0.040077
+COL,Colombia,chickens,meat,3.6135e-4
+COL,Colombia,chickens,eggs,5.3874e-4
+COL,Colombia,pigs,meat,0.015002959999999997
+COL,Colombia,goats,milk,0.015001500000000001
+COL,Colombia,goats,meat,0.015001500000000001
+COL,Colombia,sheep,milk,0.0119574
+COL,Colombia,sheep,meat,0.0119574
+COL,Colombia,chickens,eggs&meat,4.50045e-4
+COM,Comoros,cows,milk,0.060225
+COM,Comoros,cows,meat,0.03978135
+COM,Comoros,chickens,meat,3.6135000000000003e-4
+COM,Comoros,chickens,eggs,5.387399999999999e-4
+COM,Comoros,goats,milk,0.015001500000000001
+COM,Comoros,goats,meat,0.015001500000000001
+COM,Comoros,sheep,milk,0.011957399999999998
+COM,Comoros,sheep,meat,0.011957399999999998
+COM,Comoros,chickens,eggs&meat,4.5004499999999994e-4
+COK,Cook Islands,cows,milk,0.0803
+COK,Cook Islands,cows,meat,0.060224999999999994
+COK,Cook Islands,chickens,meat,3.6135e-4
+COK,Cook Islands,chickens,eggs,5.3874e-4
+COK,Cook Islands,pigs,meat,0.010857059110882574
+COK,Cook Islands,goats,milk,0.015549
+COK,Cook Islands,goats,meat,0.015549
+COK,Cook Islands,chickens,eggs&meat,4.50045e-4
+CRI,Costa Rica,cows,milk,0.07008
+CRI,Costa Rica,cows,meat,0.040077
+CRI,Costa Rica,chickens,meat,3.6135000000000003e-4
+CRI,Costa Rica,chickens,eggs,5.3874e-4
+CRI,Costa Rica,pigs,meat,0.01500296858639606
+CRI,Costa Rica,goats,milk,0.015001500000000001
+CRI,Costa Rica,goats,meat,0.015001500000000001
+CRI,Costa Rica,sheep,milk,0.0119574
+CRI,Costa Rica,sheep,meat,0.0119574
+CRI,Costa Rica,chickens,eggs&meat,4.5004500000000005e-4
+CIV,Côte d'Ivoire,cows,milk,0.060225
+CIV,Côte d'Ivoire,cows,meat,0.03978135
+CIV,Côte d'Ivoire,chickens,meat,3.6135e-4
+CIV,Côte d'Ivoire,chickens,eggs,5.3874e-4
+CIV,Côte d'Ivoire,pigs,meat,0.015002956975971734
+CIV,Côte d'Ivoire,goats,milk,0.015001500000000001
+CIV,Côte d'Ivoire,goats,meat,0.015001500000000001
+CIV,Côte d'Ivoire,sheep,milk,0.011957399999999998
+CIV,Côte d'Ivoire,sheep,meat,0.011957399999999998
+CIV,Côte d'Ivoire,chickens,eggs&meat,4.50045e-4
+HRV,Croatia,cows,milk,0.10511999999999999
+HRV,Croatia,cows,meat,0.050589
+HRV,Croatia,chickens,meat,3.6135000000000003e-4
+HRV,Croatia,chickens,eggs,6.3072e-4
+HRV,Croatia,pigs,meat,0.011412086245263292
+HRV,Croatia,goats,milk,0.0179872
+HRV,Croatia,goats,meat,0.0179872
+HRV,Croatia,sheep,milk,0.015047125
+HRV,Croatia,sheep,meat,0.015047125
+HRV,Croatia,chickens,eggs&meat,4.96035e-4
+CUB,Cuba,cows,milk,0.07008
+CUB,Cuba,cows,meat,0.040077
+CUB,Cuba,chickens,meat,3.6135e-4
+CUB,Cuba,chickens,eggs,5.387399999999999e-4
+CUB,Cuba,pigs,meat,0.015002960000000001
+CUB,Cuba,goats,milk,0.015001500000000001
+CUB,Cuba,goats,meat,0.015001500000000001
+CUB,Cuba,sheep,milk,0.011957400000000002
+CUB,Cuba,sheep,meat,0.011957400000000002
+CUB,Cuba,chickens,eggs&meat,4.5004499999999994e-4
+CZE,Czech Republic,cows,milk,0.07026249999999999
+CZE,Czech Republic,cows,meat,0.04995025
+CZE,Czech Republic,chickens,meat,3.6135000000000003e-4
+CZE,Czech Republic,chickens,eggs,5.387399999999999e-4
+CZE,Czech Republic,pigs,meat,0.012055955415837122
+CZE,Czech Republic,goats,milk,0.0179872
+CZE,Czech Republic,goats,meat,0.0179872
+CZE,Czech Republic,sheep,milk,0.01593225
+CZE,Czech Republic,sheep,meat,0.01593225
+CZE,Czech Republic,chickens,eggs&meat,4.5004499999999994e-4
+COD,Democratic Republic of the Congo,cows,milk,0.060225
+COD,Democratic Republic of the Congo,cows,meat,0.03978135
+COD,Democratic Republic of the Congo,chickens,meat,3.6135e-4
+COD,Democratic Republic of the Congo,chickens,eggs,5.3874e-4
+COD,Democratic Republic of the Congo,pigs,meat,0.015002957874930691
+COD,Democratic Republic of the Congo,goats,milk,0.0150015
+COD,Democratic Republic of the Congo,goats,meat,0.0150015
+COD,Democratic Republic of the Congo,sheep,milk,0.0119574
+COD,Democratic Republic of the Congo,sheep,meat,0.0119574
+COD,Democratic Republic of the Congo,chickens,eggs&meat,4.50045e-4
+DNK,Denmark,cows,milk,0.10511999999999999
+DNK,Denmark,cows,meat,0.050589
+DNK,Denmark,chickens,meat,3.6135e-4
+DNK,Denmark,chickens,eggs,6.3072e-4
+DNK,Denmark,pigs,meat,0.011412090512994869
+DNK,Denmark,sheep,milk,0.015047125
+DNK,Denmark,sheep,meat,0.015047125
+DNK,Denmark,chickens,eggs&meat,4.960349999999999e-4
+DJI,Djibouti,cows,milk,0.060224999999999994
+DJI,Djibouti,cows,meat,0.03978135
+DJI,Djibouti,goats,milk,0.015001500000000001
+DJI,Djibouti,goats,meat,0.015001500000000001
+DJI,Djibouti,sheep,milk,0.0119574
+DJI,Djibouti,sheep,meat,0.0119574
+DOM,Dominican Republic,cows,milk,0.07007999999999999
+DOM,Dominican Republic,cows,meat,0.040077
+DOM,Dominican Republic,chickens,meat,3.6135000000000003e-4
+DOM,Dominican Republic,chickens,eggs,5.3874e-4
+DOM,Dominican Republic,pigs,meat,0.015002960000000001
+DOM,Dominican Republic,goats,milk,0.015001500000000001
+DOM,Dominican Republic,goats,meat,0.015001500000000001
+DOM,Dominican Republic,sheep,milk,0.0119574
+DOM,Dominican Republic,sheep,meat,0.0119574
+DOM,Dominican Republic,chickens,eggs&meat,4.5004500000000005e-4
+DMA,Dominica,cows,milk,0.07008
+DMA,Dominica,cows,meat,0.04007700000000001
+DMA,Dominica,chickens,meat,3.6135e-4
+DMA,Dominica,chickens,eggs,5.3874e-4
+DMA,Dominica,pigs,meat,0.015002547805456703
+DMA,Dominica,goats,milk,0.0150015
+DMA,Dominica,goats,meat,0.0150015
+DMA,Dominica,sheep,milk,0.0119574
+DMA,Dominica,sheep,meat,0.0119574
+DMA,Dominica,chickens,eggs&meat,4.50045e-4
+ECU,Ecuador,cows,milk,0.07007999999999999
+ECU,Ecuador,cows,meat,0.040077
+ECU,Ecuador,chickens,meat,3.6135000000000003e-4
+ECU,Ecuador,chickens,eggs,5.3874e-4
+ECU,Ecuador,pigs,meat,0.01500296280358198
+ECU,Ecuador,goats,milk,0.0150015
+ECU,Ecuador,goats,meat,0.0150015
+ECU,Ecuador,sheep,milk,0.0119574
+ECU,Ecuador,sheep,meat,0.0119574
+ECU,Ecuador,chickens,eggs&meat,4.5004500000000005e-4
+EGY,Egypt,buffaloes,milk,0.044384
+EGY,Egypt,cows,milk,0.060224999999999994
+EGY,Egypt,cows,meat,0.03978135
+EGY,Egypt,chickens,meat,3.6135000000000003e-4
+EGY,Egypt,chickens,eggs,5.3874e-4
+EGY,Egypt,pigs,meat,0.015002533032971532
+EGY,Egypt,goats,milk,0.015001500000000001
+EGY,Egypt,goats,meat,0.015001500000000001
+EGY,Egypt,sheep,milk,0.0119574
+EGY,Egypt,sheep,meat,0.0119574
+EGY,Egypt,chickens,eggs&meat,4.5004500000000005e-4
+SLV,El Salvador,cows,milk,0.07008
+SLV,El Salvador,cows,meat,0.040076999999999995
+SLV,El Salvador,chickens,meat,3.6135e-4
+SLV,El Salvador,chickens,eggs,5.3874e-4
+SLV,El Salvador,pigs,meat,0.015002964083660107
+SLV,El Salvador,goats,milk,0.015001500000000001
+SLV,El Salvador,goats,meat,0.015001500000000001
+SLV,El Salvador,sheep,milk,0.0119574
+SLV,El Salvador,sheep,meat,0.0119574
+SLV,El Salvador,chickens,eggs&meat,4.50045e-4
+GNQ,Equatorial Guinea,cows,milk,0.06022500000000001
+GNQ,Equatorial Guinea,cows,meat,0.03978135000000001
+GNQ,Equatorial Guinea,chickens,meat,3.6135e-4
+GNQ,Equatorial Guinea,chickens,eggs,5.3874e-4
+GNQ,Equatorial Guinea,pigs,meat,0.015002355336426913
+GNQ,Equatorial Guinea,goats,milk,0.015001500000000001
+GNQ,Equatorial Guinea,goats,meat,0.015001500000000001
+GNQ,Equatorial Guinea,sheep,milk,0.0119574
+GNQ,Equatorial Guinea,sheep,meat,0.0119574
+GNQ,Equatorial Guinea,chickens,eggs&meat,4.50045e-4
+ERI,Eritrea,cows,milk,0.060225
+ERI,Eritrea,cows,meat,0.03978135
+ERI,Eritrea,chickens,meat,3.6135000000000003e-4
+ERI,Eritrea,chickens,eggs,5.3874e-4
+ERI,Eritrea,goats,milk,0.015001500000000001
+ERI,Eritrea,goats,meat,0.015001500000000001
+ERI,Eritrea,sheep,milk,0.011957399999999998
+ERI,Eritrea,sheep,meat,0.011957399999999998
+ERI,Eritrea,chickens,eggs&meat,4.5004500000000005e-4
+EST,Estonia,cows,milk,0.10512
+EST,Estonia,cows,meat,0.050588999999999995
+EST,Estonia,chickens,meat,3.6135e-4
+EST,Estonia,chickens,eggs,6.3072e-4
+EST,Estonia,pigs,meat,0.01141209
+EST,Estonia,goats,milk,0.0179872
+EST,Estonia,goats,meat,0.0179872
+EST,Estonia,sheep,milk,0.015047124999999998
+EST,Estonia,sheep,meat,0.015047124999999998
+EST,Estonia,chickens,eggs&meat,4.960349999999999e-4
+ETH,Ethiopia,cows,milk,0.060225
+ETH,Ethiopia,cows,meat,0.03978135
+ETH,Ethiopia,chickens,meat,3.6135e-4
+ETH,Ethiopia,chickens,eggs,5.3874e-4
+ETH,Ethiopia,pigs,meat,0.015002901085113598
+ETH,Ethiopia,goats,milk,0.0150015
+ETH,Ethiopia,goats,meat,0.0150015
+ETH,Ethiopia,sheep,milk,0.0119574
+ETH,Ethiopia,sheep,meat,0.0119574
+ETH,Ethiopia,chickens,eggs&meat,4.50045e-4
+FLK,Falkland Islands,cows,milk,0.07008
+FLK,Falkland Islands,cows,meat,0.040077
+FLK,Falkland Islands,chickens,meat,3.6135e-4
+FLK,Falkland Islands,chickens,eggs,5.387400000000001e-4
+FLK,Falkland Islands,pigs,meat,0.014912313043478261
+FLK,Falkland Islands,sheep,milk,0.0119574
+FLK,Falkland Islands,sheep,meat,0.0119574
+FLK,Falkland Islands,chickens,eggs&meat,4.5004500000000005e-4
+FRO,Faroe Islands,cows,milk,0.10512
+FRO,Faroe Islands,cows,meat,0.050588999999999995
+FRO,Faroe Islands,sheep,milk,0.015047124999999998
+FRO,Faroe Islands,sheep,meat,0.015047124999999998
+FJI,Fiji,cows,milk,0.08030000000000001
+FJI,Fiji,cows,meat,0.060225
+FJI,Fiji,chickens,meat,3.6135e-4
+FJI,Fiji,chickens,eggs,5.3874e-4
+FJI,Fiji,pigs,meat,0.010856896972815257
+FJI,Fiji,goats,milk,0.015549
+FJI,Fiji,goats,meat,0.015549
+FJI,Fiji,sheep,milk,0.0115486
+FJI,Fiji,sheep,meat,0.0115486
+FJI,Fiji,chickens,eggs&meat,4.50045e-4
+FIN,Finland,cows,milk,0.10511999999999999
+FIN,Finland,cows,meat,0.050588999999999995
+FIN,Finland,chickens,meat,3.6135000000000003e-4
+FIN,Finland,chickens,eggs,6.3072e-4
+FIN,Finland,pigs,meat,0.011412093706575744
+FIN,Finland,goats,milk,0.017987200000000002
+FIN,Finland,goats,meat,0.017987200000000002
+FIN,Finland,sheep,milk,0.015047124999999998
+FIN,Finland,sheep,meat,0.015047124999999998
+FIN,Finland,chickens,eggs&meat,4.96035e-4
+FRA,France,cows,milk,0.10511999999999999
+FRA,France,cows,meat,0.050589
+FRA,France,chickens,meat,3.6135e-4
+FRA,France,chickens,eggs,6.3072e-4
+FRA,France,pigs,meat,0.011412090488271581
+FRA,France,goats,milk,0.0179872
+FRA,France,goats,meat,0.0179872
+FRA,France,sheep,milk,0.015047124999999998
+FRA,France,sheep,meat,0.015047124999999998
+FRA,France,chickens,eggs&meat,4.960349999999999e-4
+GUF,French Guiana,cows,milk,0.07008
+GUF,French Guiana,cows,meat,0.040077
+GUF,French Guiana,chickens,meat,3.6135e-4
+GUF,French Guiana,chickens,eggs,5.3874e-4
+GUF,French Guiana,pigs,meat,0.01500339689857502
+GUF,French Guiana,goats,milk,0.015001500000000001
+GUF,French Guiana,goats,meat,0.015001500000000001
+GUF,French Guiana,sheep,milk,0.0119574
+GUF,French Guiana,sheep,meat,0.0119574
+GUF,French Guiana,chickens,eggs&meat,5.3874e-4
+PYF,French Polynesia,cows,milk,0.0803
+PYF,French Polynesia,cows,meat,0.060224999999999994
+PYF,French Polynesia,chickens,meat,3.6135e-4
+PYF,French Polynesia,chickens,eggs,5.3874e-4
+PYF,French Polynesia,pigs,meat,0.010857214826912714
+PYF,French Polynesia,goats,milk,0.015548999999999999
+PYF,French Polynesia,goats,meat,0.015548999999999999
+PYF,French Polynesia,sheep,milk,0.011548600000000001
+PYF,French Polynesia,sheep,meat,0.011548600000000001
+PYF,French Polynesia,chickens,eggs&meat,4.50045e-4
+GAB,Gabon,cows,milk,0.060225
+GAB,Gabon,cows,meat,0.03978135
+GAB,Gabon,chickens,meat,3.6135000000000003e-4
+GAB,Gabon,chickens,eggs,5.3874e-4
+GAB,Gabon,pigs,meat,0.015002969396345805
+GAB,Gabon,goats,milk,0.015001500000000001
+GAB,Gabon,goats,meat,0.015001500000000001
+GAB,Gabon,sheep,milk,0.0119574
+GAB,Gabon,sheep,meat,0.0119574
+GAB,Gabon,chickens,eggs&meat,4.5004500000000005e-4
+GMB,Gambia,cows,milk,0.060225
+GMB,Gambia,cows,meat,0.03978135
+GMB,Gambia,chickens,meat,3.6135e-4
+GMB,Gambia,chickens,eggs,5.3874e-4
+GMB,Gambia,pigs,meat,0.015002959999999997
+GMB,Gambia,goats,milk,0.0150015
+GMB,Gambia,goats,meat,0.0150015
+GMB,Gambia,sheep,milk,0.0119574
+GMB,Gambia,sheep,meat,0.0119574
+GMB,Gambia,chickens,eggs&meat,4.50045e-4
+GEO,Georgia,buffaloes,milk,0.044384
+GEO,Georgia,cows,milk,0.0702625
+GEO,Georgia,cows,meat,0.04988455
+GEO,Georgia,chickens,meat,3.6135000000000003e-4
+GEO,Georgia,chickens,eggs,5.3874e-4
+GEO,Georgia,pigs,meat,0.015002959999999997
+GEO,Georgia,goats,milk,0.015001500000000003
+GEO,Georgia,goats,meat,0.015001500000000003
+GEO,Georgia,sheep,milk,0.0119574
+GEO,Georgia,sheep,meat,0.0119574
+GEO,Georgia,chickens,eggs&meat,4.5004500000000005e-4
+DEU,Germany,buffaloes,milk,0.044384
+DEU,Germany,cows,milk,0.10511999999999999
+DEU,Germany,cows,meat,0.050588999999999995
+DEU,Germany,chickens,meat,3.6135e-4
+DEU,Germany,chickens,eggs,6.3072e-4
+DEU,Germany,pigs,meat,0.011412090000000001
+DEU,Germany,goats,milk,0.0179872
+DEU,Germany,goats,meat,0.0179872
+DEU,Germany,sheep,milk,0.015047125
+DEU,Germany,sheep,meat,0.015047125
+DEU,Germany,chickens,eggs&meat,4.960349999999999e-4
+GHA,Ghana,cows,milk,0.06022500000000001
+GHA,Ghana,cows,meat,0.03978135
+GHA,Ghana,chickens,meat,3.6135000000000003e-4
+GHA,Ghana,chickens,eggs,5.3874e-4
+GHA,Ghana,pigs,meat,0.015002963814535225
+GHA,Ghana,goats,milk,0.015001500000000003
+GHA,Ghana,goats,meat,0.015001500000000003
+GHA,Ghana,sheep,milk,0.0119574
+GHA,Ghana,sheep,meat,0.0119574
+GHA,Ghana,chickens,eggs&meat,4.5004500000000005e-4
+GRC,Greece,buffaloes,milk,0.04438400000000001
+GRC,Greece,cows,milk,0.10511999999999999
+GRC,Greece,cows,meat,0.050589
+GRC,Greece,chickens,meat,3.6135000000000003e-4
+GRC,Greece,chickens,eggs,6.3072e-4
+GRC,Greece,pigs,meat,0.011412101743446383
+GRC,Greece,goats,milk,0.0179872
+GRC,Greece,goats,meat,0.0179872
+GRC,Greece,sheep,milk,0.015047125
+GRC,Greece,sheep,meat,0.015047125
+GRC,Greece,chickens,eggs&meat,4.96035e-4
+GRL,Greenland,cows,milk,0.0970024
+GRL,Greenland,cows,meat,0.04401535
+GRL,Greenland,sheep,milk,0.0074350499999999995
+GRL,Greenland,sheep,meat,0.0074350499999999995
+GRD,Grenada,cows,milk,0.07008
+GRD,Grenada,cows,meat,0.040077
+GRD,Grenada,chickens,meat,3.6135e-4
+GRD,Grenada,chickens,eggs,5.3874e-4
+GRD,Grenada,pigs,meat,0.01500441592178771
+GRD,Grenada,goats,milk,0.015001500000000001
+GRD,Grenada,goats,meat,0.015001500000000001
+GRD,Grenada,sheep,milk,0.011957399999999998
+GRD,Grenada,sheep,meat,0.011957399999999998
+GRD,Grenada,chickens,eggs&meat,4.50045e-4
+GLP,Guadeloupe,cows,milk,0.07008
+GLP,Guadeloupe,cows,meat,0.040076999999999995
+GLP,Guadeloupe,chickens,meat,3.6135000000000003e-4
+GLP,Guadeloupe,chickens,eggs,5.3874e-4
+GLP,Guadeloupe,pigs,meat,0.015003026266607333
+GLP,Guadeloupe,goats,milk,0.0150015
+GLP,Guadeloupe,goats,meat,0.0150015
+GLP,Guadeloupe,sheep,milk,0.0119574
+GLP,Guadeloupe,sheep,meat,0.0119574
+GLP,Guadeloupe,chickens,eggs&meat,4.5004500000000005e-4
+GUM,Guam,buffaloes,milk,0.044384
+GUM,Guam,cows,milk,0.08030000000000001
+GUM,Guam,cows,meat,0.060225
+GUM,Guam,chickens,meat,3.6135000000000003e-4
+GUM,Guam,chickens,eggs,5.3874e-4
+GUM,Guam,pigs,meat,0.010856156818993216
+GUM,Guam,goats,milk,0.015549
+GUM,Guam,goats,meat,0.015549
+GUM,Guam,chickens,eggs&meat,4.5004500000000005e-4
+GTM,Guatemala,cows,milk,0.07008
+GTM,Guatemala,cows,meat,0.040077
+GTM,Guatemala,chickens,meat,3.6135000000000003e-4
+GTM,Guatemala,chickens,eggs,5.3874e-4
+GTM,Guatemala,pigs,meat,0.015002958545153093
+GTM,Guatemala,goats,milk,0.015001500000000001
+GTM,Guatemala,goats,meat,0.015001500000000001
+GTM,Guatemala,sheep,milk,0.0119574
+GTM,Guatemala,sheep,meat,0.0119574
+GTM,Guatemala,chickens,eggs&meat,4.5004500000000005e-4
+GNB,Guinea-Bissau,cows,milk,0.060225
+GNB,Guinea-Bissau,cows,meat,0.03978135
+GNB,Guinea-Bissau,chickens,meat,3.613499999999999e-4
+GNB,Guinea-Bissau,chickens,eggs,5.3874e-4
+GNB,Guinea-Bissau,pigs,meat,0.01500295773623257
+GNB,Guinea-Bissau,goats,milk,0.015001500000000001
+GNB,Guinea-Bissau,goats,meat,0.015001500000000001
+GNB,Guinea-Bissau,sheep,milk,0.011957399999999998
+GNB,Guinea-Bissau,sheep,meat,0.011957399999999998
+GNB,Guinea-Bissau,chickens,eggs&meat,4.5004499999999994e-4
+GIN,Guinea,cows,milk,0.060225
+GIN,Guinea,cows,meat,0.03978135
+GIN,Guinea,chickens,meat,3.6135000000000003e-4
+GIN,Guinea,chickens,eggs,5.3874e-4
+GIN,Guinea,pigs,meat,0.015002960000000001
+GIN,Guinea,goats,milk,0.0150015
+GIN,Guinea,goats,meat,0.0150015
+GIN,Guinea,sheep,milk,0.0119574
+GIN,Guinea,sheep,meat,0.0119574
+GIN,Guinea,chickens,eggs&meat,4.5004500000000005e-4
+GUY,Guyana,cows,milk,0.07008
+GUY,Guyana,cows,meat,0.040077
+GUY,Guyana,chickens,meat,3.6135000000000003e-4
+GUY,Guyana,chickens,eggs,5.3874e-4
+GUY,Guyana,pigs,meat,0.015002960000000001
+GUY,Guyana,goats,milk,0.0150015
+GUY,Guyana,goats,meat,0.0150015
+GUY,Guyana,sheep,milk,0.0119574
+GUY,Guyana,sheep,meat,0.0119574
+GUY,Guyana,chickens,eggs&meat,4.5004500000000005e-4
+HTI,Haiti,cows,milk,0.07008
+HTI,Haiti,cows,meat,0.040076999999999995
+HTI,Haiti,chickens,meat,3.6135000000000003e-4
+HTI,Haiti,chickens,eggs,5.387399999999999e-4
+HTI,Haiti,pigs,meat,0.015002964012224033
+HTI,Haiti,goats,milk,0.015001500000000001
+HTI,Haiti,goats,meat,0.015001500000000001
+HTI,Haiti,sheep,milk,0.0119574
+HTI,Haiti,sheep,meat,0.0119574
+HTI,Haiti,chickens,eggs&meat,4.5004499999999994e-4
+HND,Honduras,cows,milk,0.07008
+HND,Honduras,cows,meat,0.040077
+HND,Honduras,chickens,meat,3.6135000000000003e-4
+HND,Honduras,chickens,eggs,5.3874e-4
+HND,Honduras,pigs,meat,0.0150029509853942
+HND,Honduras,goats,milk,0.0150015
+HND,Honduras,goats,meat,0.0150015
+HND,Honduras,sheep,milk,0.0119574
+HND,Honduras,sheep,meat,0.0119574
+HND,Honduras,chickens,eggs&meat,4.5004500000000005e-4
+HKG,Hong Kong,buffaloes,milk,0.04438399999999999
+HKG,Hong Kong,cows,milk,0.0600425
+HKG,Hong Kong,cows,meat,0.039587899999999995
+HKG,Hong Kong,chickens,meat,3.6135000000000003e-4
+HKG,Hong Kong,chickens,eggs,5.387399999999999e-4
+HKG,Hong Kong,pigs,meat,0.00410844
+HKG,Hong Kong,goats,milk,0.015001500000000001
+HKG,Hong Kong,goats,meat,0.015001500000000001
+HKG,Hong Kong,sheep,milk,0.0119574
+HKG,Hong Kong,sheep,meat,0.0119574
+HKG,Hong Kong,chickens,eggs&meat,4.5004499999999994e-4
+HUN,Hungary,cows,milk,0.07026249999999999
+HUN,Hungary,cows,meat,0.049950249999999995
+HUN,Hungary,chickens,meat,3.6135000000000003e-4
+HUN,Hungary,chickens,eggs,5.3874e-4
+HUN,Hungary,pigs,meat,0.012055950000000001
+HUN,Hungary,goats,milk,0.017987199999999995
+HUN,Hungary,goats,meat,0.017987199999999995
+HUN,Hungary,sheep,milk,0.015932250000000002
+HUN,Hungary,sheep,meat,0.015932250000000002
+HUN,Hungary,chickens,eggs&meat,4.5004500000000005e-4
+ISL,Iceland,cows,milk,0.10511999999999999
+ISL,Iceland,cows,meat,0.050588999999999995
+ISL,Iceland,chickens,meat,3.6135e-4
+ISL,Iceland,chickens,eggs,6.307200000000001e-4
+ISL,Iceland,pigs,meat,0.011412090000000001
+ISL,Iceland,goats,milk,0.0179872
+ISL,Iceland,goats,meat,0.0179872
+ISL,Iceland,sheep,milk,0.015047125
+ISL,Iceland,sheep,meat,0.015047125
+ISL,Iceland,chickens,eggs&meat,6.307200000000001e-4
+IND,India,buffaloes,milk,0.034456
+IND,India,cows,milk,0.04717625000000001
+IND,India,cows,meat,0.013651
+IND,India,chickens,meat,3.6135e-4
+IND,India,chickens,eggs,5.3874e-4
+IND,India,pigs,meat,0.004108440020963886
+IND,India,goats,milk,0.0150015
+IND,India,goats,meat,0.0150015
+IND,India,sheep,milk,0.0119574
+IND,India,sheep,meat,0.0119574
+IND,India,chickens,eggs&meat,4.50045e-4
+IDN,Indonesia,buffaloes,milk,0.044384
+IDN,Indonesia,cows,milk,0.06004249999999999
+IDN,Indonesia,cows,meat,0.03958790000000001
+IDN,Indonesia,chickens,meat,3.6135000000000003e-4
+IDN,Indonesia,chickens,eggs,5.3874e-4
+IDN,Indonesia,pigs,meat,0.0041084399095828155
+IDN,Indonesia,goats,milk,0.015001500000000004
+IDN,Indonesia,goats,meat,0.015001500000000004
+IDN,Indonesia,sheep,milk,0.011957399999999998
+IDN,Indonesia,sheep,meat,0.011957399999999998
+IDN,Indonesia,chickens,eggs&meat,4.5004500000000005e-4
+IRN,Iran,buffaloes,milk,0.034456
+IRN,Iran,cows,milk,0.04717625
+IRN,Iran,cows,meat,0.013651
+IRN,Iran,chickens,meat,3.6135000000000003e-4
+IRN,Iran,chickens,eggs,5.3874e-4
+IRN,Iran,goats,milk,0.015001500000000001
+IRN,Iran,goats,meat,0.015001500000000001
+IRN,Iran,sheep,milk,0.0119574
+IRN,Iran,sheep,meat,0.0119574
+IRN,Iran,chickens,eggs&meat,4.5004500000000005e-4
+IRQ,Iraq,buffaloes,milk,0.044384
+IRQ,Iraq,cows,milk,0.0702625
+IRQ,Iraq,cows,meat,0.04988455
+IRQ,Iraq,chickens,meat,3.6135000000000003e-4
+IRQ,Iraq,chickens,eggs,5.3874e-4
+IRQ,Iraq,goats,milk,0.015001500000000001
+IRQ,Iraq,goats,meat,0.015001500000000001
+IRQ,Iraq,sheep,milk,0.0119574
+IRQ,Iraq,sheep,meat,0.0119574
+IRQ,Iraq,chickens,eggs&meat,4.5004500000000005e-4
+IRL,Ireland,cows,milk,0.10512
+IRL,Ireland,cows,meat,0.050588999999999995
+IRL,Ireland,chickens,meat,3.6135e-4
+IRL,Ireland,chickens,eggs,6.307199999999999e-4
+IRL,Ireland,pigs,meat,0.011412090000000001
+IRL,Ireland,goats,milk,0.017987200000000002
+IRL,Ireland,goats,meat,0.017987200000000002
+IRL,Ireland,sheep,milk,0.015047125
+IRL,Ireland,sheep,meat,0.015047125
+IRL,Ireland,chickens,eggs&meat,4.960349999999999e-4
+ISR,Israel,cows,milk,0.0702625
+ISR,Israel,cows,meat,0.04988455
+ISR,Israel,chickens,meat,3.6135000000000003e-4
+ISR,Israel,chickens,eggs,5.3874e-4
+ISR,Israel,pigs,meat,0.015002959999999997
+ISR,Israel,goats,milk,0.015001500000000001
+ISR,Israel,goats,meat,0.015001500000000001
+ISR,Israel,sheep,milk,0.0119574
+ISR,Israel,sheep,meat,0.0119574
+ISR,Israel,chickens,eggs&meat,4.5004500000000005e-4
+ITA,Italy,buffaloes,milk,0.044384
+ITA,Italy,cows,milk,0.10511999999999999
+ITA,Italy,cows,meat,0.050588999999999995
+ITA,Italy,chickens,meat,3.6135000000000003e-4
+ITA,Italy,chickens,eggs,6.3072e-4
+ITA,Italy,pigs,meat,0.01141209073665992
+ITA,Italy,goats,milk,0.0179872
+ITA,Italy,goats,meat,0.0179872
+ITA,Italy,sheep,milk,0.015047124999999998
+ITA,Italy,sheep,meat,0.015047124999999998
+ITA,Italy,chickens,eggs&meat,4.96035e-4
+JAM,Jamaica,cows,milk,0.07007999999999999
+JAM,Jamaica,cows,meat,0.040076999999999995
+JAM,Jamaica,chickens,meat,3.6135000000000003e-4
+JAM,Jamaica,chickens,eggs,5.3874e-4
+JAM,Jamaica,pigs,meat,0.015002959999999997
+JAM,Jamaica,goats,milk,0.015001500000000001
+JAM,Jamaica,goats,meat,0.015001500000000001
+JAM,Jamaica,sheep,milk,0.0119574
+JAM,Jamaica,sheep,meat,0.0119574
+JAM,Jamaica,chickens,eggs&meat,4.5004500000000005e-4
+JPN,Japan,cows,milk,0.06004249999999999
+JPN,Japan,cows,meat,0.0395879
+JPN,Japan,chickens,meat,3.6135000000000003e-4
+JPN,Japan,chickens,eggs,5.3874e-4
+JPN,Japan,pigs,meat,0.00410844
+JPN,Japan,goats,milk,0.019251925
+JPN,Japan,goats,meat,0.019251925
+JPN,Japan,sheep,milk,0.020711925
+JPN,Japan,sheep,meat,0.020711925
+JPN,Japan,chickens,eggs&meat,4.5004500000000005e-4
+JOR,Jordan,buffaloes,milk,0.044384
+JOR,Jordan,cows,milk,0.0702625
+JOR,Jordan,cows,meat,0.04988455
+JOR,Jordan,chickens,meat,3.6135e-4
+JOR,Jordan,chickens,eggs,5.3874e-4
+JOR,Jordan,goats,milk,0.0150015
+JOR,Jordan,goats,meat,0.0150015
+JOR,Jordan,sheep,milk,0.0119574
+JOR,Jordan,sheep,meat,0.0119574
+JOR,Jordan,chickens,eggs&meat,4.50045e-4
+KAZ,Kazakhstan,buffaloes,milk,0.04438400000000001
+KAZ,Kazakhstan,cows,milk,0.060042499999999985
+KAZ,Kazakhstan,cows,meat,0.0395879
+KAZ,Kazakhstan,chickens,meat,3.6135000000000003e-4
+KAZ,Kazakhstan,chickens,eggs,5.3874e-4
+KAZ,Kazakhstan,pigs,meat,0.004108440225684284
+KAZ,Kazakhstan,goats,milk,0.015001500000000003
+KAZ,Kazakhstan,goats,meat,0.015001500000000003
+KAZ,Kazakhstan,sheep,milk,0.0119574
+KAZ,Kazakhstan,sheep,meat,0.0119574
+KAZ,Kazakhstan,chickens,eggs&meat,4.5004500000000005e-4
+KEN,Kenya,cows,milk,0.060225
+KEN,Kenya,cows,meat,0.03978135
+KEN,Kenya,chickens,meat,3.6135e-4
+KEN,Kenya,chickens,eggs,5.3874e-4
+KEN,Kenya,pigs,meat,0.015002961880638856
+KEN,Kenya,goats,milk,0.015001500000000001
+KEN,Kenya,goats,meat,0.015001500000000001
+KEN,Kenya,sheep,milk,0.0119574
+KEN,Kenya,sheep,meat,0.0119574
+KEN,Kenya,chickens,eggs&meat,4.50045e-4
+KIR,Kiribati,chickens,meat,3.6135e-4
+KIR,Kiribati,chickens,eggs,5.3874e-4
+KIR,Kiribati,pigs,meat,0.010856318210659898
+KIR,Kiribati,chickens,eggs&meat,4.50045e-4
+KWT,Kuwait,cows,milk,0.07026249999999999
+KWT,Kuwait,cows,meat,0.04988455
+KWT,Kuwait,chickens,meat,3.6135000000000003e-4
+KWT,Kuwait,chickens,eggs,5.387399999999999e-4
+KWT,Kuwait,goats,milk,0.015001500000000003
+KWT,Kuwait,goats,meat,0.015001500000000003
+KWT,Kuwait,sheep,milk,0.0119574
+KWT,Kuwait,sheep,meat,0.0119574
+KWT,Kuwait,chickens,eggs&meat,4.5004499999999994e-4
+KGZ,Kyrgyzstan,cows,milk,0.0600425
+KGZ,Kyrgyzstan,cows,meat,0.0395879
+KGZ,Kyrgyzstan,chickens,meat,3.6135e-4
+KGZ,Kyrgyzstan,chickens,eggs,5.3874e-4
+KGZ,Kyrgyzstan,pigs,meat,0.004108436473767947
+KGZ,Kyrgyzstan,goats,milk,0.015001500000000003
+KGZ,Kyrgyzstan,goats,meat,0.015001500000000003
+KGZ,Kyrgyzstan,sheep,milk,0.011957399999999998
+KGZ,Kyrgyzstan,sheep,meat,0.011957399999999998
+KGZ,Kyrgyzstan,chickens,eggs&meat,4.50045e-4
+LAO,Laos,buffaloes,milk,0.044384
+LAO,Laos,cows,milk,0.0600425
+LAO,Laos,cows,meat,0.0395879
+LAO,Laos,chickens,meat,3.6135000000000003e-4
+LAO,Laos,chickens,eggs,5.3874e-4
+LAO,Laos,pigs,meat,0.00410844
+LAO,Laos,goats,milk,0.015001500000000003
+LAO,Laos,goats,meat,0.015001500000000003
+LAO,Laos,chickens,eggs&meat,4.5004500000000005e-4
+LVA,Latvia,cows,milk,0.10511999999999999
+LVA,Latvia,cows,meat,0.050589
+LVA,Latvia,chickens,meat,3.6135e-4
+LVA,Latvia,chickens,eggs,6.3072e-4
+LVA,Latvia,pigs,meat,0.011412115025892873
+LVA,Latvia,goats,milk,0.0179872
+LVA,Latvia,goats,meat,0.0179872
+LVA,Latvia,sheep,milk,0.015047125
+LVA,Latvia,sheep,meat,0.015047125
+LVA,Latvia,chickens,eggs&meat,4.960349999999999e-4
+LBN,Lebanon,cows,milk,0.0702625
+LBN,Lebanon,cows,meat,0.04988454999999999
+LBN,Lebanon,chickens,meat,3.6135e-4
+LBN,Lebanon,chickens,eggs,5.3874e-4
+LBN,Lebanon,pigs,meat,0.015003128925619834
+LBN,Lebanon,goats,milk,0.0150015
+LBN,Lebanon,goats,meat,0.0150015
+LBN,Lebanon,sheep,milk,0.0119574
+LBN,Lebanon,sheep,meat,0.0119574
+LBN,Lebanon,chickens,eggs&meat,4.50045e-4
+LSO,Lesotho,cows,milk,0.060225
+LSO,Lesotho,cows,meat,0.03978134999999999
+LSO,Lesotho,chickens,meat,3.6135000000000003e-4
+LSO,Lesotho,chickens,eggs,5.3874e-4
+LSO,Lesotho,pigs,meat,0.015002933055907365
+LSO,Lesotho,goats,milk,0.015001500000000001
+LSO,Lesotho,goats,meat,0.015001500000000001
+LSO,Lesotho,sheep,milk,0.011957399999999998
+LSO,Lesotho,sheep,meat,0.011957399999999998
+LSO,Lesotho,chickens,eggs&meat,4.5004500000000005e-4
+LBR,Liberia,cows,milk,0.06022500000000001
+LBR,Liberia,cows,meat,0.03978135
+LBR,Liberia,chickens,meat,3.6135000000000003e-4
+LBR,Liberia,chickens,eggs,5.3874e-4
+LBR,Liberia,pigs,meat,0.01500294644183309
+LBR,Liberia,goats,milk,0.015001500000000001
+LBR,Liberia,goats,meat,0.015001500000000001
+LBR,Liberia,sheep,milk,0.0119574
+LBR,Liberia,sheep,meat,0.0119574
+LBR,Liberia,chickens,eggs&meat,4.5004500000000005e-4
+LBY,Libya,cows,milk,0.060225
+LBY,Libya,cows,meat,0.03978135
+LBY,Libya,chickens,meat,3.6135000000000003e-4
+LBY,Libya,chickens,eggs,5.3874e-4
+LBY,Libya,goats,milk,0.015001500000000001
+LBY,Libya,goats,meat,0.015001500000000001
+LBY,Libya,sheep,milk,0.0119574
+LBY,Libya,sheep,meat,0.0119574
+LBY,Libya,chickens,eggs&meat,4.5004500000000005e-4
+LIE,Liechtenstein,cows,milk,0.10511999999999999
+LIE,Liechtenstein,cows,meat,0.050589
+LIE,Liechtenstein,chickens,meat,3.6135e-4
+LIE,Liechtenstein,chickens,eggs,6.3072e-4
+LIE,Liechtenstein,pigs,meat,0.011416577398720682
+LIE,Liechtenstein,goats,milk,0.017987200000000002
+LIE,Liechtenstein,goats,meat,0.017987200000000002
+LIE,Liechtenstein,sheep,milk,0.015047125
+LIE,Liechtenstein,sheep,meat,0.015047125
+LIE,Liechtenstein,chickens,eggs&meat,6.3072e-4
+LTU,Lithuania,cows,milk,0.10511999999999999
+LTU,Lithuania,cows,meat,0.050588999999999995
+LTU,Lithuania,chickens,meat,3.6135e-4
+LTU,Lithuania,chickens,eggs,6.3072e-4
+LTU,Lithuania,pigs,meat,0.011412102679857091
+LTU,Lithuania,goats,milk,0.0179872
+LTU,Lithuania,goats,meat,0.0179872
+LTU,Lithuania,sheep,milk,0.015047124999999998
+LTU,Lithuania,sheep,meat,0.015047124999999998
+LTU,Lithuania,chickens,eggs&meat,4.960349999999999e-4
+LUX,Luxembourg,cows,milk,0.10511999999999998
+LUX,Luxembourg,cows,meat,0.050588999999999995
+LUX,Luxembourg,chickens,meat,3.6135000000000003e-4
+LUX,Luxembourg,chickens,eggs,6.3072e-4
+LUX,Luxembourg,pigs,meat,0.011412068249604695
+LUX,Luxembourg,goats,milk,0.0179872
+LUX,Luxembourg,goats,meat,0.0179872
+LUX,Luxembourg,sheep,milk,0.015047125
+LUX,Luxembourg,sheep,meat,0.015047125
+LUX,Luxembourg,chickens,eggs&meat,4.96035e-4
+MAC,Macao,chickens,meat,3.6135000000000003e-4
+MAC,Macao,chickens,eggs,5.3874e-4
+MAC,Macao,chickens,eggs&meat,4.5004500000000005e-4
+MKD,Macedonia,buffaloes,milk,0.044384
+MKD,Macedonia,cows,milk,0.10512
+MKD,Macedonia,cows,meat,0.050588999999999995
+MKD,Macedonia,chickens,meat,3.6135000000000003e-4
+MKD,Macedonia,chickens,eggs,6.3072e-4
+MKD,Macedonia,pigs,meat,0.011412121225834213
+MKD,Macedonia,goats,milk,0.0179872
+MKD,Macedonia,goats,meat,0.0179872
+MKD,Macedonia,sheep,milk,0.015047125
+MKD,Macedonia,sheep,meat,0.015047125
+MKD,Macedonia,chickens,eggs&meat,4.96035e-4
+MDG,Madagascar,cows,milk,0.060225
+MDG,Madagascar,cows,meat,0.03978135
+MDG,Madagascar,chickens,meat,3.6135e-4
+MDG,Madagascar,chickens,eggs,5.387399999999999e-4
+MDG,Madagascar,pigs,meat,0.015002960000000001
+MDG,Madagascar,goats,milk,0.015001500000000001
+MDG,Madagascar,goats,meat,0.015001500000000001
+MDG,Madagascar,sheep,milk,0.0119574
+MDG,Madagascar,sheep,meat,0.0119574
+MDG,Madagascar,chickens,eggs&meat,4.5004499999999994e-4
+MWI,Malawi,cows,milk,0.060225
+MWI,Malawi,cows,meat,0.03978135
+MWI,Malawi,chickens,meat,3.6135e-4
+MWI,Malawi,chickens,eggs,5.3874e-4
+MWI,Malawi,pigs,meat,0.015002960275392304
+MWI,Malawi,goats,milk,0.015001500000000003
+MWI,Malawi,goats,meat,0.015001500000000003
+MWI,Malawi,sheep,milk,0.0119574
+MWI,Malawi,sheep,meat,0.0119574
+MWI,Malawi,chickens,eggs&meat,4.50045e-4
+MYS,Malaysia,buffaloes,milk,0.04438400000000001
+MYS,Malaysia,cows,milk,0.0600425
+MYS,Malaysia,cows,meat,0.039587899999999995
+MYS,Malaysia,chickens,meat,3.6135000000000003e-4
+MYS,Malaysia,chickens,eggs,5.3874e-4
+MYS,Malaysia,pigs,meat,0.004108440446614883
+MYS,Malaysia,goats,milk,0.015001500000000001
+MYS,Malaysia,goats,meat,0.015001500000000001
+MYS,Malaysia,sheep,milk,0.0119574
+MYS,Malaysia,sheep,meat,0.0119574
+MYS,Malaysia,chickens,eggs&meat,4.5004500000000005e-4
+MLI,Mali,cows,milk,0.06022500000000001
+MLI,Mali,cows,meat,0.03978135
+MLI,Mali,chickens,meat,3.6135e-4
+MLI,Mali,chickens,eggs,5.3874e-4
+MLI,Mali,pigs,meat,0.015002959999999997
+MLI,Mali,goats,milk,0.015001500000000003
+MLI,Mali,goats,meat,0.015001500000000003
+MLI,Mali,sheep,milk,0.0119574
+MLI,Mali,sheep,meat,0.0119574
+MLI,Mali,chickens,eggs&meat,4.50045e-4
+MLT,Malta,cows,milk,0.10511999999999999
+MLT,Malta,cows,meat,0.050588999999999995
+MLT,Malta,chickens,meat,3.6135000000000003e-4
+MLT,Malta,chickens,eggs,6.3072e-4
+MLT,Malta,pigs,meat,0.011412028120314015
+MLT,Malta,goats,milk,0.017987200000000002
+MLT,Malta,goats,meat,0.017987200000000002
+MLT,Malta,sheep,milk,0.015047125
+MLT,Malta,sheep,meat,0.015047125
+MLT,Malta,chickens,eggs&meat,4.96035e-4
+MTQ,Martinique,cows,milk,0.07008
+MTQ,Martinique,cows,meat,0.040077
+MTQ,Martinique,chickens,meat,3.6135000000000003e-4
+MTQ,Martinique,chickens,eggs,5.3874e-4
+MTQ,Martinique,pigs,meat,0.015002960000000001
+MTQ,Martinique,goats,milk,0.015001500000000001
+MTQ,Martinique,goats,meat,0.015001500000000001
+MTQ,Martinique,sheep,milk,0.011957400000000002
+MTQ,Martinique,sheep,meat,0.011957400000000002
+MTQ,Martinique,chickens,eggs&meat,4.5004500000000005e-4
+MRT,Mauritania,cows,milk,0.060225
+MRT,Mauritania,cows,meat,0.03978135
+MRT,Mauritania,chickens,meat,3.613499999999999e-4
+MRT,Mauritania,chickens,eggs,5.3874e-4
+MRT,Mauritania,goats,milk,0.0150015
+MRT,Mauritania,goats,meat,0.0150015
+MRT,Mauritania,sheep,milk,0.011957400000000002
+MRT,Mauritania,sheep,meat,0.011957400000000002
+MRT,Mauritania,chickens,eggs&meat,4.5004499999999994e-4
+MUS,Mauritius,buffaloes,milk,0.044384
+MUS,Mauritius,cows,milk,0.060225
+MUS,Mauritius,cows,meat,0.03978135
+MUS,Mauritius,chickens,meat,3.6135000000000003e-4
+MUS,Mauritius,chickens,eggs,5.3874e-4
+MUS,Mauritius,pigs,meat,0.015002765569336942
+MUS,Mauritius,goats,milk,0.015001500000000003
+MUS,Mauritius,goats,meat,0.015001500000000003
+MUS,Mauritius,sheep,milk,0.0119574
+MUS,Mauritius,sheep,meat,0.0119574
+MUS,Mauritius,chickens,eggs&meat,4.5004500000000005e-4
+MEX,Mexico,cows,milk,0.07008
+MEX,Mexico,cows,meat,0.040077
+MEX,Mexico,chickens,meat,3.6135e-4
+MEX,Mexico,chickens,eggs,5.3874e-4
+MEX,Mexico,pigs,meat,0.015002959939429187
+MEX,Mexico,goats,milk,0.015001500000000001
+MEX,Mexico,goats,meat,0.015001500000000001
+MEX,Mexico,sheep,milk,0.0119574
+MEX,Mexico,sheep,meat,0.0119574
+MEX,Mexico,chickens,eggs&meat,4.50045e-4
+FSM,Micronesia,buffaloes,milk,0.044384
+FSM,Micronesia,cows,milk,0.0803
+FSM,Micronesia,cows,meat,0.06022500000000001
+FSM,Micronesia,chickens,meat,3.6135000000000003e-4
+FSM,Micronesia,chickens,eggs,5.3874e-4
+FSM,Micronesia,pigs,meat,0.010857097423671767
+FSM,Micronesia,goats,milk,0.015549
+FSM,Micronesia,goats,meat,0.015549
+FSM,Micronesia,chickens,eggs&meat,4.5004500000000005e-4
+MDA,Moldova,cows,milk,0.0702625
+MDA,Moldova,cows,meat,0.04995025
+MDA,Moldova,chickens,meat,3.6135000000000003e-4
+MDA,Moldova,chickens,eggs,5.3874e-4
+MDA,Moldova,pigs,meat,0.012055963793288032
+MDA,Moldova,goats,milk,0.0179872
+MDA,Moldova,goats,meat,0.0179872
+MDA,Moldova,sheep,milk,0.015932250000000002
+MDA,Moldova,sheep,meat,0.015932250000000002
+MDA,Moldova,chickens,eggs&meat,4.5004500000000005e-4
+MNG,Mongolia,cows,milk,0.0600425
+MNG,Mongolia,cows,meat,0.0395879
+MNG,Mongolia,chickens,meat,3.6135000000000003e-4
+MNG,Mongolia,chickens,eggs,5.3874e-4
+MNG,Mongolia,pigs,meat,0.00410844
+MNG,Mongolia,goats,milk,0.015001500000000003
+MNG,Mongolia,goats,meat,0.015001500000000003
+MNG,Mongolia,sheep,milk,0.0119574
+MNG,Mongolia,sheep,meat,0.0119574
+MNG,Mongolia,chickens,eggs&meat,4.5004500000000005e-4
+MNE,Montenegro,cows,milk,0.10511999999999999
+MNE,Montenegro,cows,meat,0.050589
+MNE,Montenegro,chickens,meat,3.6135e-4
+MNE,Montenegro,chickens,eggs,6.3072e-4
+MNE,Montenegro,pigs,meat,0.011411837882841513
+MNE,Montenegro,goats,milk,0.017987200000000002
+MNE,Montenegro,goats,meat,0.017987200000000002
+MNE,Montenegro,sheep,milk,0.015047125
+MNE,Montenegro,sheep,meat,0.015047125
+MNE,Montenegro,chickens,eggs&meat,4.960349999999999e-4
+MSR,Montserrat,cows,milk,0.07008
+MSR,Montserrat,cows,meat,0.040077
+MSR,Montserrat,chickens,meat,3.6135e-4
+MSR,Montserrat,chickens,eggs,5.3874e-4
+MSR,Montserrat,pigs,meat,0.015001262214983713
+MSR,Montserrat,goats,milk,0.0150015
+MSR,Montserrat,goats,meat,0.0150015
+MSR,Montserrat,sheep,milk,0.011957400000000002
+MSR,Montserrat,sheep,meat,0.011957400000000002
+MSR,Montserrat,chickens,eggs&meat,4.50045e-4
+MAR,Morocco,cows,milk,0.060225
+MAR,Morocco,cows,meat,0.03978135
+MAR,Morocco,chickens,meat,3.6135e-4
+MAR,Morocco,chickens,eggs,5.3874e-4
+MAR,Morocco,pigs,meat,0.015002439170622035
+MAR,Morocco,goats,milk,0.015001500000000003
+MAR,Morocco,goats,meat,0.015001500000000003
+MAR,Morocco,sheep,milk,0.0119574
+MAR,Morocco,sheep,meat,0.0119574
+MAR,Morocco,chickens,eggs&meat,4.50045e-4
+MOZ,Mozambique,cows,milk,0.060224999999999994
+MOZ,Mozambique,cows,meat,0.03978135000000001
+MOZ,Mozambique,chickens,meat,3.6135000000000003e-4
+MOZ,Mozambique,chickens,eggs,5.3874e-4
+MOZ,Mozambique,pigs,meat,0.015002961254454019
+MOZ,Mozambique,goats,milk,0.0150015
+MOZ,Mozambique,goats,meat,0.0150015
+MOZ,Mozambique,sheep,milk,0.0119574
+MOZ,Mozambique,sheep,meat,0.0119574
+MOZ,Mozambique,chickens,eggs&meat,4.5004500000000005e-4
+MMR,Myanmar,buffaloes,milk,0.044384
+MMR,Myanmar,cows,milk,0.06004249999999999
+MMR,Myanmar,cows,meat,0.0395879
+MMR,Myanmar,chickens,meat,3.6135e-4
+MMR,Myanmar,chickens,eggs,5.3874e-4
+MMR,Myanmar,pigs,meat,0.004108440013993619
+MMR,Myanmar,goats,milk,0.015001500000000001
+MMR,Myanmar,goats,meat,0.015001500000000001
+MMR,Myanmar,sheep,milk,0.0119574
+MMR,Myanmar,sheep,meat,0.0119574
+MMR,Myanmar,chickens,eggs&meat,4.50045e-4
+NAM,Namibia,cows,milk,0.060225
+NAM,Namibia,cows,meat,0.03978135
+NAM,Namibia,chickens,meat,3.6135000000000003e-4
+NAM,Namibia,chickens,eggs,5.3874e-4
+NAM,Namibia,pigs,meat,0.015002947995716212
+NAM,Namibia,goats,milk,0.0150015
+NAM,Namibia,goats,meat,0.0150015
+NAM,Namibia,sheep,milk,0.011957399999999998
+NAM,Namibia,sheep,meat,0.011957399999999998
+NAM,Namibia,chickens,eggs&meat,4.5004500000000005e-4
+NRU,Nauru,chickens,meat,3.6135000000000003e-4
+NRU,Nauru,chickens,eggs,5.3874e-4
+NRU,Nauru,pigs,meat,0.010854088249835202
+NRU,Nauru,chickens,eggs&meat,4.5004500000000005e-4
+NPL,Nepal,buffaloes,milk,0.034455999999999994
+NPL,Nepal,cows,milk,0.04717625000000001
+NPL,Nepal,cows,meat,0.013651000000000002
+NPL,Nepal,chickens,meat,3.6135000000000003e-4
+NPL,Nepal,chickens,eggs,5.3874e-4
+NPL,Nepal,pigs,meat,0.004108439445918635
+NPL,Nepal,goats,milk,0.015001500000000003
+NPL,Nepal,goats,meat,0.015001500000000003
+NPL,Nepal,sheep,milk,0.0119574
+NPL,Nepal,sheep,meat,0.0119574
+NPL,Nepal,chickens,eggs&meat,4.5004500000000005e-4
+NLD,Netherlands,cows,milk,0.10511999999999998
+NLD,Netherlands,cows,meat,0.050589
+NLD,Netherlands,chickens,meat,3.6135000000000003e-4
+NLD,Netherlands,chickens,eggs,6.3072e-4
+NLD,Netherlands,pigs,meat,0.011412090000000003
+NLD,Netherlands,goats,milk,0.0179872
+NLD,Netherlands,goats,meat,0.0179872
+NLD,Netherlands,sheep,milk,0.015047124999999998
+NLD,Netherlands,sheep,meat,0.015047124999999998
+NLD,Netherlands,chickens,eggs&meat,4.96035e-4
+NCL,New Caledonia,cows,milk,0.0803
+NCL,New Caledonia,cows,meat,0.060225
+NCL,New Caledonia,chickens,meat,3.6135e-4
+NCL,New Caledonia,chickens,eggs,5.387399999999999e-4
+NCL,New Caledonia,pigs,meat,0.010856925
+NCL,New Caledonia,goats,milk,0.015549
+NCL,New Caledonia,goats,meat,0.015549
+NCL,New Caledonia,sheep,milk,0.011548600000000001
+NCL,New Caledonia,sheep,meat,0.011548600000000001
+NCL,New Caledonia,chickens,eggs&meat,4.5004499999999994e-4
+NZL,New Zealand,cows,milk,0.0803
+NZL,New Zealand,cows,meat,0.060225
+NZL,New Zealand,chickens,meat,3.6135000000000003e-4
+NZL,New Zealand,chickens,eggs,5.3874e-4
+NZL,New Zealand,pigs,meat,0.010856925
+NZL,New Zealand,goats,milk,0.019954549999999998
+NZL,New Zealand,goats,meat,0.019954549999999998
+NZL,New Zealand,sheep,milk,0.020003825000000003
+NZL,New Zealand,sheep,meat,0.020003825000000003
+NZL,New Zealand,chickens,eggs&meat,4.5004500000000005e-4
+NIC,Nicaragua,cows,milk,0.07008
+NIC,Nicaragua,cows,meat,0.040076999999999995
+NIC,Nicaragua,chickens,meat,3.6135e-4
+NIC,Nicaragua,chickens,eggs,5.3874e-4
+NIC,Nicaragua,pigs,meat,0.015002951897179592
+NIC,Nicaragua,goats,milk,0.015001500000000001
+NIC,Nicaragua,goats,meat,0.015001500000000001
+NIC,Nicaragua,sheep,milk,0.0119574
+NIC,Nicaragua,sheep,meat,0.0119574
+NIC,Nicaragua,chickens,eggs&meat,4.50045e-4
+NER,Niger,cows,milk,0.060225
+NER,Niger,cows,meat,0.03978134999999999
+NER,Niger,chickens,meat,3.6135e-4
+NER,Niger,chickens,eggs,5.3874e-4
+NER,Niger,pigs,meat,0.015002862475442042
+NER,Niger,goats,milk,0.015001500000000001
+NER,Niger,goats,meat,0.015001500000000001
+NER,Niger,sheep,milk,0.0119574
+NER,Niger,sheep,meat,0.0119574
+NER,Niger,chickens,eggs&meat,4.50045e-4
+NGA,Nigeria,cows,milk,0.060224999999999994
+NGA,Nigeria,cows,meat,0.03978135
+NGA,Nigeria,chickens,meat,3.613499999999999e-4
+NGA,Nigeria,chickens,eggs,5.3874e-4
+NGA,Nigeria,pigs,meat,0.015002960278045468
+NGA,Nigeria,goats,milk,0.0150015
+NGA,Nigeria,goats,meat,0.0150015
+NGA,Nigeria,sheep,milk,0.0119574
+NGA,Nigeria,sheep,meat,0.0119574
+NGA,Nigeria,chickens,eggs&meat,4.5004499999999994e-4
+NIU,Niue,cows,milk,0.0803
+NIU,Niue,cows,meat,0.060224999999999994
+NIU,Niue,chickens,meat,3.6135000000000003e-4
+NIU,Niue,chickens,eggs,5.3874e-4
+NIU,Niue,pigs,meat,0.010855960555804574
+NIU,Niue,chickens,eggs&meat,4.5004500000000005e-4
+PRK,North Korea,cows,milk,0.0600425
+PRK,North Korea,cows,meat,0.039587899999999995
+PRK,North Korea,chickens,meat,3.6135000000000003e-4
+PRK,North Korea,chickens,eggs,5.3874e-4
+PRK,North Korea,pigs,meat,0.00410844
+PRK,North Korea,goats,milk,0.015001500000000001
+PRK,North Korea,goats,meat,0.015001500000000001
+PRK,North Korea,sheep,milk,0.0119574
+PRK,North Korea,sheep,meat,0.0119574
+PRK,North Korea,chickens,eggs&meat,4.5004500000000005e-4
+NOR,Norway,cows,milk,0.10512
+NOR,Norway,cows,meat,0.050588999999999995
+NOR,Norway,chickens,meat,3.6135e-4
+NOR,Norway,chickens,eggs,6.307200000000001e-4
+NOR,Norway,pigs,meat,0.01141209494036371
+NOR,Norway,goats,milk,0.017987200000000002
+NOR,Norway,goats,meat,0.017987200000000002
+NOR,Norway,sheep,milk,0.015047125
+NOR,Norway,sheep,meat,0.015047125
+NOR,Norway,chickens,eggs&meat,4.96035e-4
+OMN,Oman,cows,milk,0.0702625
+OMN,Oman,cows,meat,0.04988455
+OMN,Oman,chickens,meat,3.6135e-4
+OMN,Oman,chickens,eggs,5.3874e-4
+OMN,Oman,goats,milk,0.015001500000000003
+OMN,Oman,goats,meat,0.015001500000000003
+OMN,Oman,sheep,milk,0.0119574
+OMN,Oman,sheep,meat,0.0119574
+OMN,Oman,chickens,eggs&meat,4.50045e-4
+PAK,Pakistan,buffaloes,milk,0.034455999999999994
+PAK,Pakistan,cows,milk,0.04717625
+PAK,Pakistan,cows,meat,0.013651
+PAK,Pakistan,chickens,meat,3.6135e-4
+PAK,Pakistan,chickens,eggs,5.3874e-4
+PAK,Pakistan,goats,milk,0.0150015
+PAK,Pakistan,goats,meat,0.0150015
+PAK,Pakistan,sheep,milk,0.0119574
+PAK,Pakistan,sheep,meat,0.0119574
+PAK,Pakistan,chickens,eggs&meat,4.50045e-4
+PSE,Palestina,cows,milk,0.0702625
+PSE,Palestina,cows,meat,0.04988455
+PSE,Palestina,chickens,meat,3.6135e-4
+PSE,Palestina,chickens,eggs,5.3874e-4
+PSE,Palestina,goats,milk,0.015001500000000003
+PSE,Palestina,goats,meat,0.015001500000000003
+PSE,Palestina,sheep,milk,0.0119574
+PSE,Palestina,sheep,meat,0.0119574
+PSE,Palestina,chickens,eggs&meat,4.50045e-4
+PAN,Panama,cows,milk,0.07008
+PAN,Panama,cows,meat,0.040077
+PAN,Panama,chickens,meat,3.6135000000000003e-4
+PAN,Panama,chickens,eggs,5.3874e-4
+PAN,Panama,pigs,meat,0.015002960000000001
+PAN,Panama,goats,milk,0.0150015
+PAN,Panama,goats,meat,0.0150015
+PAN,Panama,chickens,eggs&meat,4.5004500000000005e-4
+PNG,Papua New Guinea,cows,milk,0.0803
+PNG,Papua New Guinea,cows,meat,0.060225
+PNG,Papua New Guinea,chickens,meat,3.6135000000000003e-4
+PNG,Papua New Guinea,chickens,eggs,5.387399999999999e-4
+PNG,Papua New Guinea,pigs,meat,0.010856920950920074
+PNG,Papua New Guinea,goats,milk,0.015549
+PNG,Papua New Guinea,goats,meat,0.015549
+PNG,Papua New Guinea,sheep,milk,0.011548600000000001
+PNG,Papua New Guinea,sheep,meat,0.011548600000000001
+PNG,Papua New Guinea,chickens,eggs&meat,4.5004499999999994e-4
+PRY,Paraguay,cows,milk,0.07008
+PRY,Paraguay,cows,meat,0.040076999999999995
+PRY,Paraguay,chickens,meat,3.6135e-4
+PRY,Paraguay,chickens,eggs,5.3874e-4
+PRY,Paraguay,pigs,meat,0.015002958412303867
+PRY,Paraguay,goats,milk,0.015001500000000001
+PRY,Paraguay,goats,meat,0.015001500000000001
+PRY,Paraguay,sheep,milk,0.0119574
+PRY,Paraguay,sheep,meat,0.0119574
+PRY,Paraguay,chickens,eggs&meat,4.50045e-4
+PER,Peru,cows,milk,0.07007999999999999
+PER,Peru,cows,meat,0.040076999999999995
+PER,Peru,chickens,meat,3.6135e-4
+PER,Peru,chickens,eggs,5.3874e-4
+PER,Peru,pigs,meat,0.015002961308260966
+PER,Peru,goats,milk,0.015001500000000001
+PER,Peru,goats,meat,0.015001500000000001
+PER,Peru,sheep,milk,0.0119574
+PER,Peru,sheep,meat,0.0119574
+PER,Peru,chickens,eggs&meat,4.50045e-4
+PHL,Philippines,buffaloes,milk,0.044384
+PHL,Philippines,cows,milk,0.0600425
+PHL,Philippines,cows,meat,0.039587899999999995
+PHL,Philippines,chickens,meat,3.6135e-4
+PHL,Philippines,chickens,eggs,5.3874e-4
+PHL,Philippines,pigs,meat,0.00410844
+PHL,Philippines,goats,milk,0.015001500000000001
+PHL,Philippines,goats,meat,0.015001500000000001
+PHL,Philippines,sheep,milk,0.0119574
+PHL,Philippines,sheep,meat,0.0119574
+PHL,Philippines,chickens,eggs&meat,4.50045e-4
+POL,Poland,cows,milk,0.0702625
+POL,Poland,cows,meat,0.049950249999999995
+POL,Poland,chickens,meat,3.6135000000000003e-4
+POL,Poland,chickens,eggs,5.387399999999999e-4
+POL,Poland,pigs,meat,0.012055950177794412
+POL,Poland,goats,milk,0.0179872
+POL,Poland,goats,meat,0.0179872
+POL,Poland,sheep,milk,0.01593225
+POL,Poland,sheep,meat,0.01593225
+POL,Poland,chickens,eggs&meat,4.5004499999999994e-4
+PRT,Portugal,cows,milk,0.10511999999999999
+PRT,Portugal,cows,meat,0.050588999999999995
+PRT,Portugal,chickens,meat,3.6135000000000003e-4
+PRT,Portugal,chickens,eggs,6.3072e-4
+PRT,Portugal,pigs,meat,0.011412090000000003
+PRT,Portugal,goats,milk,0.0179872
+PRT,Portugal,goats,meat,0.0179872
+PRT,Portugal,sheep,milk,0.015047125000000001
+PRT,Portugal,sheep,meat,0.015047125000000001
+PRT,Portugal,chickens,eggs&meat,4.96035e-4
+PRI,Puerto Rico,cows,milk,0.07008
+PRI,Puerto Rico,cows,meat,0.040077
+PRI,Puerto Rico,chickens,meat,3.6135e-4
+PRI,Puerto Rico,chickens,eggs,5.387399999999999e-4
+PRI,Puerto Rico,pigs,meat,0.015002959999999997
+PRI,Puerto Rico,goats,milk,0.0150015
+PRI,Puerto Rico,goats,meat,0.0150015
+PRI,Puerto Rico,sheep,milk,0.0119574
+PRI,Puerto Rico,sheep,meat,0.0119574
+PRI,Puerto Rico,chickens,eggs&meat,4.5004499999999994e-4
+QAT,Qatar,cows,milk,0.0702625
+QAT,Qatar,cows,meat,0.04988455
+QAT,Qatar,chickens,meat,3.6135000000000003e-4
+QAT,Qatar,chickens,eggs,5.387399999999999e-4
+QAT,Qatar,goats,milk,0.0150015
+QAT,Qatar,goats,meat,0.0150015
+QAT,Qatar,sheep,milk,0.0119574
+QAT,Qatar,sheep,meat,0.0119574
+QAT,Qatar,chickens,eggs&meat,4.5004499999999994e-4
+COG,Republic of Congo,cows,milk,0.060225
+COG,Republic of Congo,cows,meat,0.03978135
+COG,Republic of Congo,chickens,meat,3.6135000000000003e-4
+COG,Republic of Congo,chickens,eggs,5.3874e-4
+COG,Republic of Congo,pigs,meat,0.015002959999999997
+COG,Republic of Congo,goats,milk,0.0150015
+COG,Republic of Congo,goats,meat,0.0150015
+COG,Republic of Congo,sheep,milk,0.011957400000000002
+COG,Republic of Congo,sheep,meat,0.011957400000000002
+COG,Republic of Congo,chickens,eggs&meat,4.5004500000000005e-4
+REU,Reunion,cows,milk,0.060224999999999994
+REU,Reunion,cows,meat,0.03978135
+REU,Reunion,chickens,meat,3.6135e-4
+REU,Reunion,chickens,eggs,5.387399999999999e-4
+REU,Reunion,pigs,meat,0.015003004464476135
+REU,Reunion,goats,milk,0.015001500000000001
+REU,Reunion,goats,meat,0.015001500000000001
+REU,Reunion,sheep,milk,0.011957400000000002
+REU,Reunion,sheep,meat,0.011957400000000002
+REU,Reunion,chickens,eggs&meat,4.5004499999999994e-4
+ROU,Romania,cows,milk,0.0702625
+ROU,Romania,cows,meat,0.04995025
+ROU,Romania,chickens,meat,3.6135000000000003e-4
+ROU,Romania,chickens,eggs,5.3874e-4
+ROU,Romania,pigs,meat,0.012055950000000003
+ROU,Romania,goats,milk,0.0179872
+ROU,Romania,goats,meat,0.0179872
+ROU,Romania,sheep,milk,0.015932250000000002
+ROU,Romania,sheep,meat,0.015932250000000002
+ROU,Romania,chickens,eggs&meat,4.5004500000000005e-4
+RUS,Russia,buffaloes,milk,0.044384
+RUS,Russia,cows,milk,0.0702625
+RUS,Russia,cows,meat,0.04995025
+RUS,Russia,chickens,meat,3.6135000000000003e-4
+RUS,Russia,chickens,eggs,5.3874e-4
+RUS,Russia,pigs,meat,0.012055949815873847
+RUS,Russia,goats,milk,0.0179872
+RUS,Russia,goats,meat,0.0179872
+RUS,Russia,sheep,milk,0.01593225
+RUS,Russia,sheep,meat,0.01593225
+RUS,Russia,chickens,eggs&meat,4.5004500000000005e-4
+RWA,Rwanda,cows,milk,0.06022500000000001
+RWA,Rwanda,cows,meat,0.03978135
+RWA,Rwanda,chickens,meat,3.6135000000000003e-4
+RWA,Rwanda,chickens,eggs,5.3874e-4
+RWA,Rwanda,pigs,meat,0.015002958785344998
+RWA,Rwanda,goats,milk,0.0150015
+RWA,Rwanda,goats,meat,0.0150015
+RWA,Rwanda,sheep,milk,0.0119574
+RWA,Rwanda,sheep,meat,0.0119574
+RWA,Rwanda,chickens,eggs&meat,4.5004500000000005e-4
+SHN,Saint Helena,cows,milk,0.06022500000000001
+SHN,Saint Helena,cows,meat,0.03978134999999999
+SHN,Saint Helena,chickens,meat,3.6135000000000003e-4
+SHN,Saint Helena,chickens,eggs,5.387399999999999e-4
+SHN,Saint Helena,pigs,meat,0.015007979775280896
+SHN,Saint Helena,goats,milk,0.0150015
+SHN,Saint Helena,goats,meat,0.0150015
+SHN,Saint Helena,sheep,milk,0.0119574
+SHN,Saint Helena,sheep,meat,0.0119574
+SHN,Saint Helena,chickens,eggs&meat,4.5004499999999994e-4
+KNA,Saint Kitts and Nevis,cows,milk,0.07008
+KNA,Saint Kitts and Nevis,cows,meat,0.040077
+KNA,Saint Kitts and Nevis,chickens,meat,3.6135000000000003e-4
+KNA,Saint Kitts and Nevis,chickens,eggs,5.387400000000001e-4
+KNA,Saint Kitts and Nevis,pigs,meat,0.015002960000000001
+KNA,Saint Kitts and Nevis,goats,milk,0.0150015
+KNA,Saint Kitts and Nevis,goats,meat,0.0150015
+KNA,Saint Kitts and Nevis,sheep,milk,0.0119574
+KNA,Saint Kitts and Nevis,sheep,meat,0.0119574
+KNA,Saint Kitts and Nevis,chickens,eggs&meat,4.5004500000000005e-4
+LCA,Saint Lucia,cows,milk,0.07008
+LCA,Saint Lucia,cows,meat,0.040076999999999995
+LCA,Saint Lucia,chickens,meat,3.6135e-4
+LCA,Saint Lucia,chickens,eggs,5.3874e-4
+LCA,Saint Lucia,pigs,meat,0.015002860211554107
+LCA,Saint Lucia,goats,milk,0.015001500000000001
+LCA,Saint Lucia,goats,meat,0.015001500000000001
+LCA,Saint Lucia,sheep,milk,0.0119574
+LCA,Saint Lucia,sheep,meat,0.0119574
+LCA,Saint Lucia,chickens,eggs&meat,4.50045e-4
+SPM,Saint Pierre and Miquelon,cows,milk,0.0970024
+SPM,Saint Pierre and Miquelon,cows,meat,0.04401535
+SPM,Saint Pierre and Miquelon,chickens,meat,3.6135e-4
+SPM,Saint Pierre and Miquelon,chickens,eggs,5.4531e-4
+SPM,Saint Pierre and Miquelon,sheep,milk,0.00743505
+SPM,Saint Pierre and Miquelon,sheep,meat,0.00743505
+SPM,Saint Pierre and Miquelon,chickens,eggs&meat,4.5333e-4
+VCT,Saint Vincent and the Grenadines,cows,milk,0.07008
+VCT,Saint Vincent and the Grenadines,cows,meat,0.040077
+VCT,Saint Vincent and the Grenadines,chickens,meat,3.6135000000000003e-4
+VCT,Saint Vincent and the Grenadines,chickens,eggs,5.3874e-4
+VCT,Saint Vincent and the Grenadines,pigs,meat,0.01500261922196796
+VCT,Saint Vincent and the Grenadines,goats,milk,0.0150015
+VCT,Saint Vincent and the Grenadines,goats,meat,0.0150015
+VCT,Saint Vincent and the Grenadines,sheep,milk,0.011957399999999998
+VCT,Saint Vincent and the Grenadines,sheep,meat,0.011957399999999998
+VCT,Saint Vincent and the Grenadines,chickens,eggs&meat,4.5004500000000005e-4
+WSM,Samoa,cows,milk,0.08030000000000001
+WSM,Samoa,cows,meat,0.06022500000000001
+WSM,Samoa,chickens,meat,3.6135e-4
+WSM,Samoa,chickens,eggs,5.387400000000001e-4
+WSM,Samoa,pigs,meat,0.010856873871291601
+WSM,Samoa,chickens,eggs&meat,4.5004500000000005e-4
+STP,São Tomé and Príncipe,cows,milk,0.06022500000000001
+STP,São Tomé and Príncipe,cows,meat,0.03978135
+STP,São Tomé and Príncipe,chickens,meat,3.6135e-4
+STP,São Tomé and Príncipe,chickens,eggs,5.3874e-4
+STP,São Tomé and Príncipe,pigs,meat,0.015003063973668462
+STP,São Tomé and Príncipe,goats,milk,0.015001500000000001
+STP,São Tomé and Príncipe,goats,meat,0.015001500000000001
+STP,São Tomé and Príncipe,sheep,milk,0.0119574
+STP,São Tomé and Príncipe,sheep,meat,0.0119574
+STP,São Tomé and Príncipe,chickens,eggs&meat,4.50045e-4
+SAU,Saudi Arabia,cows,milk,0.07026249999999999
+SAU,Saudi Arabia,cows,meat,0.04988454999999999
+SAU,Saudi Arabia,chickens,meat,3.6135000000000003e-4
+SAU,Saudi Arabia,chickens,eggs,5.3874e-4
+SAU,Saudi Arabia,goats,milk,0.015001500000000001
+SAU,Saudi Arabia,goats,meat,0.015001500000000001
+SAU,Saudi Arabia,sheep,milk,0.0119574
+SAU,Saudi Arabia,sheep,meat,0.0119574
+SAU,Saudi Arabia,chickens,eggs&meat,4.5004500000000005e-4
+SEN,Senegal,cows,milk,0.060225
+SEN,Senegal,cows,meat,0.03978135
+SEN,Senegal,chickens,meat,3.6135000000000003e-4
+SEN,Senegal,chickens,eggs,5.3874e-4
+SEN,Senegal,pigs,meat,0.01500296250231042
+SEN,Senegal,goats,milk,0.0150015
+SEN,Senegal,goats,meat,0.0150015
+SEN,Senegal,sheep,milk,0.011957400000000002
+SEN,Senegal,sheep,meat,0.011957400000000002
+SEN,Senegal,chickens,eggs&meat,4.5004500000000005e-4
+SRB,Serbia,cows,milk,0.10511999999999999
+SRB,Serbia,cows,meat,0.050589
+SRB,Serbia,chickens,meat,3.6135e-4
+SRB,Serbia,chickens,eggs,6.3072e-4
+SRB,Serbia,pigs,meat,0.011412092892384401
+SRB,Serbia,goats,milk,0.0179872
+SRB,Serbia,goats,meat,0.0179872
+SRB,Serbia,sheep,milk,0.015047125
+SRB,Serbia,sheep,meat,0.015047125
+SRB,Serbia,chickens,eggs&meat,4.960349999999999e-4
+SYC,Seychelles,cows,milk,0.060225
+SYC,Seychelles,cows,meat,0.03978135
+SYC,Seychelles,chickens,meat,3.6135e-4
+SYC,Seychelles,chickens,eggs,5.3874e-4
+SYC,Seychelles,pigs,meat,0.015002048776223777
+SYC,Seychelles,goats,milk,0.0150015
+SYC,Seychelles,goats,meat,0.0150015
+SYC,Seychelles,chickens,eggs&meat,4.50045e-4
+SLE,Sierra Leone,cows,milk,0.060225
+SLE,Sierra Leone,cows,meat,0.03978135
+SLE,Sierra Leone,chickens,meat,3.6135e-4
+SLE,Sierra Leone,chickens,eggs,5.3874e-4
+SLE,Sierra Leone,pigs,meat,0.015003001981394226
+SLE,Sierra Leone,goats,milk,0.015001500000000003
+SLE,Sierra Leone,goats,meat,0.015001500000000003
+SLE,Sierra Leone,sheep,milk,0.0119574
+SLE,Sierra Leone,sheep,meat,0.0119574
+SLE,Sierra Leone,chickens,eggs&meat,4.50045e-4
+SGP,Singapore,cows,milk,0.0600425
+SGP,Singapore,cows,meat,0.0395879
+SGP,Singapore,chickens,meat,3.6135e-4
+SGP,Singapore,chickens,eggs,5.3874e-4
+SGP,Singapore,goats,milk,0.0150015
+SGP,Singapore,goats,meat,0.0150015
+SGP,Singapore,chickens,eggs&meat,4.50045e-4
+SVK,Slovakia,cows,milk,0.0702625
+SVK,Slovakia,cows,meat,0.049950249999999995
+SVK,Slovakia,chickens,meat,3.6135e-4
+SVK,Slovakia,chickens,eggs,5.387399999999999e-4
+SVK,Slovakia,pigs,meat,0.01205593966386899
+SVK,Slovakia,goats,milk,0.0179872
+SVK,Slovakia,goats,meat,0.0179872
+SVK,Slovakia,sheep,milk,0.01593225
+SVK,Slovakia,sheep,meat,0.01593225
+SVK,Slovakia,chickens,eggs&meat,4.5004499999999994e-4
+SVN,Slovenia,cows,milk,0.10511999999999998
+SVN,Slovenia,cows,meat,0.050588999999999995
+SVN,Slovenia,chickens,meat,3.6135e-4
+SVN,Slovenia,chickens,eggs,6.3072e-4
+SVN,Slovenia,pigs,meat,0.011412058321542538
+SVN,Slovenia,goats,milk,0.017987200000000002
+SVN,Slovenia,goats,meat,0.017987200000000002
+SVN,Slovenia,sheep,milk,0.015047124999999998
+SVN,Slovenia,sheep,meat,0.015047124999999998
+SVN,Slovenia,chickens,eggs&meat,4.960349999999999e-4
+SLB,Solomon Islands,cows,milk,0.0803
+SLB,Solomon Islands,cows,meat,0.060225
+SLB,Solomon Islands,chickens,meat,3.6135000000000003e-4
+SLB,Solomon Islands,chickens,eggs,5.3874e-4
+SLB,Solomon Islands,pigs,meat,0.010857083164877978
+SLB,Solomon Islands,chickens,eggs&meat,4.5004500000000005e-4
+SOM,Somalia,cows,milk,0.060225
+SOM,Somalia,cows,meat,0.03978135
+SOM,Somalia,chickens,meat,3.6135000000000003e-4
+SOM,Somalia,chickens,eggs,5.3874e-4
+SOM,Somalia,pigs,meat,0.015002960000000001
+SOM,Somalia,goats,milk,0.0150015
+SOM,Somalia,goats,meat,0.0150015
+SOM,Somalia,sheep,milk,0.0119574
+SOM,Somalia,sheep,meat,0.0119574
+SOM,Somalia,chickens,eggs&meat,4.5004500000000005e-4
+ZAF,South Africa,cows,milk,0.060225
+ZAF,South Africa,cows,meat,0.03978135
+ZAF,South Africa,chickens,meat,3.6135e-4
+ZAF,South Africa,chickens,eggs,5.3874e-4
+ZAF,South Africa,pigs,meat,0.015002959296047714
+ZAF,South Africa,goats,milk,0.015001500000000001
+ZAF,South Africa,goats,meat,0.015001500000000001
+ZAF,South Africa,sheep,milk,0.011957400000000002
+ZAF,South Africa,sheep,meat,0.011957400000000002
+ZAF,South Africa,chickens,eggs&meat,4.50045e-4
+KOR,South Korea,cows,milk,0.06004249999999999
+KOR,South Korea,cows,meat,0.03958790000000001
+KOR,South Korea,chickens,meat,3.6135000000000003e-4
+KOR,South Korea,chickens,eggs,5.3874e-4
+KOR,South Korea,pigs,meat,0.0041084399673626615
+KOR,South Korea,goats,milk,0.015001500000000001
+KOR,South Korea,goats,meat,0.015001500000000001
+KOR,South Korea,sheep,milk,0.0119574
+KOR,South Korea,sheep,meat,0.0119574
+KOR,South Korea,chickens,eggs&meat,4.5004500000000005e-4
+SSD,South Sudan,cows,milk,0.060225
+SSD,South Sudan,cows,meat,0.03978134999999999
+SSD,South Sudan,chickens,meat,3.6135000000000003e-4
+SSD,South Sudan,chickens,eggs,5.3874e-4
+SSD,South Sudan,goats,milk,0.015001500000000001
+SSD,South Sudan,goats,meat,0.015001500000000001
+SSD,South Sudan,sheep,milk,0.011957399999999998
+SSD,South Sudan,sheep,meat,0.011957399999999998
+SSD,South Sudan,chickens,eggs&meat,4.5004500000000005e-4
+ESP,Spain,cows,milk,0.10511999999999999
+ESP,Spain,cows,meat,0.050589
+ESP,Spain,chickens,meat,3.6135e-4
+ESP,Spain,chickens,eggs,6.3072e-4
+ESP,Spain,pigs,meat,0.011412090210660133
+ESP,Spain,goats,milk,0.0179872
+ESP,Spain,goats,meat,0.0179872
+ESP,Spain,sheep,milk,0.015047125
+ESP,Spain,sheep,meat,0.015047125
+ESP,Spain,chickens,eggs&meat,4.960349999999999e-4
+LKA,Sri Lanka,buffaloes,milk,0.034456
+LKA,Sri Lanka,cows,milk,0.047176249999999996
+LKA,Sri Lanka,cows,meat,0.013651000000000002
+LKA,Sri Lanka,chickens,meat,3.6135000000000003e-4
+LKA,Sri Lanka,chickens,eggs,5.3874e-4
+LKA,Sri Lanka,pigs,meat,0.00410844
+LKA,Sri Lanka,goats,milk,0.0150015
+LKA,Sri Lanka,goats,meat,0.0150015
+LKA,Sri Lanka,sheep,milk,0.0119574
+LKA,Sri Lanka,sheep,meat,0.0119574
+LKA,Sri Lanka,chickens,eggs&meat,4.5004500000000005e-4
+SDN,Sudan,cows,milk,0.060225
+SDN,Sudan,cows,meat,0.03978135
+SDN,Sudan,chickens,meat,3.6135e-4
+SDN,Sudan,chickens,eggs,5.3874e-4
+SDN,Sudan,goats,milk,0.0150015
+SDN,Sudan,goats,meat,0.0150015
+SDN,Sudan,sheep,milk,0.0119574
+SDN,Sudan,sheep,meat,0.0119574
+SDN,Sudan,chickens,eggs&meat,4.50045e-4
+SUR,Suriname,buffaloes,milk,0.044384
+SUR,Suriname,cows,milk,0.07008
+SUR,Suriname,cows,meat,0.040077
+SUR,Suriname,chickens,meat,3.6135e-4
+SUR,Suriname,chickens,eggs,5.3874e-4
+SUR,Suriname,pigs,meat,0.01500307997928296
+SUR,Suriname,goats,milk,0.015001500000000001
+SUR,Suriname,goats,meat,0.015001500000000001
+SUR,Suriname,sheep,milk,0.0119574
+SUR,Suriname,sheep,meat,0.0119574
+SUR,Suriname,chickens,eggs&meat,4.50045e-4
+SWZ,Swaziland,cows,milk,0.060224999999999994
+SWZ,Swaziland,cows,meat,0.03978135000000001
+SWZ,Swaziland,chickens,meat,3.6135000000000003e-4
+SWZ,Swaziland,chickens,eggs,5.3874e-4
+SWZ,Swaziland,pigs,meat,0.015002989355410997
+SWZ,Swaziland,goats,milk,0.015001500000000001
+SWZ,Swaziland,goats,meat,0.015001500000000001
+SWZ,Swaziland,sheep,milk,0.0119574
+SWZ,Swaziland,sheep,meat,0.0119574
+SWZ,Swaziland,chickens,eggs&meat,4.5004500000000005e-4
+SWE,Sweden,cows,milk,0.10511999999999999
+SWE,Sweden,cows,meat,0.050588999999999995
+SWE,Sweden,chickens,meat,3.6135e-4
+SWE,Sweden,chickens,eggs,6.3072e-4
+SWE,Sweden,pigs,meat,0.01141209
+SWE,Sweden,sheep,milk,0.015047125
+SWE,Sweden,sheep,meat,0.015047125
+SWE,Sweden,chickens,eggs&meat,4.960349999999999e-4
+CHE,Switzerland,cows,milk,0.10511999999999999
+CHE,Switzerland,cows,meat,0.050588999999999995
+CHE,Switzerland,chickens,meat,3.6135000000000003e-4
+CHE,Switzerland,chickens,eggs,6.307199999999999e-4
+CHE,Switzerland,pigs,meat,0.01141208854312397
+CHE,Switzerland,goats,milk,0.0179872
+CHE,Switzerland,goats,meat,0.0179872
+CHE,Switzerland,sheep,milk,0.015047125
+CHE,Switzerland,sheep,meat,0.015047125
+CHE,Switzerland,chickens,eggs&meat,4.960349999999999e-4
+SYR,Syria,buffaloes,milk,0.044384
+SYR,Syria,cows,milk,0.07026249999999999
+SYR,Syria,cows,meat,0.04988455000000001
+SYR,Syria,chickens,meat,3.6135e-4
+SYR,Syria,chickens,eggs,5.3874e-4
+SYR,Syria,pigs,meat,0.01524352307692308
+SYR,Syria,goats,milk,0.0150015
+SYR,Syria,goats,meat,0.0150015
+SYR,Syria,sheep,milk,0.0119574
+SYR,Syria,sheep,meat,0.0119574
+SYR,Syria,chickens,eggs&meat,4.50045e-4
+TWN,Taiwan,buffaloes,milk,0.044384
+TWN,Taiwan,cows,milk,0.06004249999999999
+TWN,Taiwan,cows,meat,0.03958790000000001
+TWN,Taiwan,chickens,meat,3.6135000000000003e-4
+TWN,Taiwan,chickens,eggs,5.387399999999999e-4
+TWN,Taiwan,pigs,meat,0.004108440033801382
+TWN,Taiwan,goats,milk,0.015001500000000003
+TWN,Taiwan,goats,meat,0.015001500000000003
+TWN,Taiwan,sheep,milk,0.0119574
+TWN,Taiwan,sheep,meat,0.0119574
+TWN,Taiwan,chickens,eggs&meat,4.5004499999999994e-4
+TJK,Tajikistan,buffaloes,milk,0.04438400000000001
+TJK,Tajikistan,cows,milk,0.060042500000000006
+TJK,Tajikistan,cows,meat,0.039587899999999995
+TJK,Tajikistan,chickens,meat,3.6135e-4
+TJK,Tajikistan,chickens,eggs,5.3874e-4
+TJK,Tajikistan,pigs,meat,0.00410844
+TJK,Tajikistan,goats,milk,0.015001500000000001
+TJK,Tajikistan,goats,meat,0.015001500000000001
+TJK,Tajikistan,sheep,milk,0.0119574
+TJK,Tajikistan,sheep,meat,0.0119574
+TJK,Tajikistan,chickens,eggs&meat,4.50045e-4
+TZA,Tanzania,cows,milk,0.060225
+TZA,Tanzania,cows,meat,0.03978135
+TZA,Tanzania,chickens,meat,3.6135000000000003e-4
+TZA,Tanzania,chickens,eggs,5.3874e-4
+TZA,Tanzania,pigs,meat,0.015002962009015557
+TZA,Tanzania,goats,milk,0.015001500000000003
+TZA,Tanzania,goats,meat,0.015001500000000003
+TZA,Tanzania,sheep,milk,0.0119574
+TZA,Tanzania,sheep,meat,0.0119574
+TZA,Tanzania,chickens,eggs&meat,4.5004500000000005e-4
+THA,Thailand,buffaloes,milk,0.044384
+THA,Thailand,cows,milk,0.0600425
+THA,Thailand,cows,meat,0.0395879
+THA,Thailand,chickens,meat,3.6135e-4
+THA,Thailand,chickens,eggs,5.3874e-4
+THA,Thailand,pigs,meat,0.004108439976660772
+THA,Thailand,goats,milk,0.0150015
+THA,Thailand,goats,meat,0.0150015
+THA,Thailand,sheep,milk,0.0119574
+THA,Thailand,sheep,meat,0.0119574
+THA,Thailand,chickens,eggs&meat,4.50045e-4
+TLS,Timor-Leste,buffaloes,milk,0.044384
+TLS,Timor-Leste,cows,milk,0.060042500000000006
+TLS,Timor-Leste,cows,meat,0.0395879
+TLS,Timor-Leste,chickens,meat,3.6135000000000003e-4
+TLS,Timor-Leste,chickens,eggs,5.3874e-4
+TLS,Timor-Leste,pigs,meat,0.004108439055035598
+TLS,Timor-Leste,goats,milk,0.015001500000000001
+TLS,Timor-Leste,goats,meat,0.015001500000000001
+TLS,Timor-Leste,sheep,milk,0.0119574
+TLS,Timor-Leste,sheep,meat,0.0119574
+TLS,Timor-Leste,chickens,eggs&meat,4.5004500000000005e-4
+TGO,Togo,cows,milk,0.060224999999999994
+TGO,Togo,cows,meat,0.03978135
+TGO,Togo,chickens,meat,3.6135000000000003e-4
+TGO,Togo,chickens,eggs,5.3874e-4
+TGO,Togo,pigs,meat,0.01500295386796393
+TGO,Togo,goats,milk,0.0150015
+TGO,Togo,goats,meat,0.0150015
+TGO,Togo,sheep,milk,0.011957399999999998
+TGO,Togo,sheep,meat,0.011957399999999998
+TGO,Togo,chickens,eggs&meat,4.5004500000000005e-4
+TKL,Tokelau,chickens,meat,3.6135e-4
+TKL,Tokelau,chickens,eggs,5.3874e-4
+TKL,Tokelau,pigs,meat,0.010856925
+TKL,Tokelau,chickens,eggs&meat,4.50045e-4
+TON,Tonga,cows,milk,0.0803
+TON,Tonga,cows,meat,0.060225
+TON,Tonga,chickens,meat,3.6135e-4
+TON,Tonga,chickens,eggs,5.387399999999999e-4
+TON,Tonga,pigs,meat,0.010856925000000002
+TON,Tonga,goats,milk,0.015549
+TON,Tonga,goats,meat,0.015549
+TON,Tonga,chickens,eggs&meat,4.5004499999999994e-4
+TTO,Trinidad and Tobago,buffaloes,milk,0.04438400000000001
+TTO,Trinidad and Tobago,cows,milk,0.07008
+TTO,Trinidad and Tobago,cows,meat,0.040077
+TTO,Trinidad and Tobago,chickens,meat,3.6135000000000003e-4
+TTO,Trinidad and Tobago,chickens,eggs,5.3874e-4
+TTO,Trinidad and Tobago,pigs,meat,0.015002922201675185
+TTO,Trinidad and Tobago,goats,milk,0.0150015
+TTO,Trinidad and Tobago,goats,meat,0.0150015
+TTO,Trinidad and Tobago,sheep,milk,0.0119574
+TTO,Trinidad and Tobago,sheep,meat,0.0119574
+TTO,Trinidad and Tobago,chickens,eggs&meat,4.5004500000000005e-4
+TUN,Tunisia,cows,milk,0.060225
+TUN,Tunisia,cows,meat,0.03978135
+TUN,Tunisia,chickens,meat,3.6135000000000003e-4
+TUN,Tunisia,chickens,eggs,5.3874e-4
+TUN,Tunisia,pigs,meat,0.015002960000000001
+TUN,Tunisia,goats,milk,0.0150015
+TUN,Tunisia,goats,meat,0.0150015
+TUN,Tunisia,sheep,milk,0.0119574
+TUN,Tunisia,sheep,meat,0.0119574
+TUN,Tunisia,chickens,eggs&meat,4.5004500000000005e-4
+TUR,Turkey,buffaloes,milk,0.044384
+TUR,Turkey,cows,milk,0.0702625
+TUR,Turkey,cows,meat,0.04988454999999999
+TUR,Turkey,chickens,meat,3.6135000000000003e-4
+TUR,Turkey,chickens,eggs,5.3874e-4
+TUR,Turkey,pigs,meat,0.015002157505773673
+TUR,Turkey,goats,milk,0.015001500000000001
+TUR,Turkey,goats,meat,0.015001500000000001
+TUR,Turkey,sheep,milk,0.0119574
+TUR,Turkey,sheep,meat,0.0119574
+TUR,Turkey,chickens,eggs&meat,4.5004500000000005e-4
+TKM,Turkmenistan,cows,milk,0.0600425
+TKM,Turkmenistan,cows,meat,0.0395879
+TKM,Turkmenistan,chickens,meat,3.6135e-4
+TKM,Turkmenistan,chickens,eggs,5.3874e-4
+TKM,Turkmenistan,pigs,meat,0.004108439999999999
+TKM,Turkmenistan,goats,milk,0.015001500000000001
+TKM,Turkmenistan,goats,meat,0.015001500000000001
+TKM,Turkmenistan,sheep,milk,0.0119574
+TKM,Turkmenistan,sheep,meat,0.0119574
+TKM,Turkmenistan,chickens,eggs&meat,4.50045e-4
+TUV,Tuvalu,chickens,meat,3.6135000000000003e-4
+TUV,Tuvalu,chickens,eggs,5.3874e-4
+TUV,Tuvalu,pigs,meat,0.010857524102046498
+TUV,Tuvalu,chickens,eggs&meat,4.5004500000000005e-4
+UGA,Uganda,cows,milk,0.060224999999999994
+UGA,Uganda,cows,meat,0.03978135
+UGA,Uganda,chickens,meat,3.6135e-4
+UGA,Uganda,chickens,eggs,5.3874e-4
+UGA,Uganda,pigs,meat,0.015002958441465243
+UGA,Uganda,goats,milk,0.0150015
+UGA,Uganda,goats,meat,0.0150015
+UGA,Uganda,sheep,milk,0.0119574
+UGA,Uganda,sheep,meat,0.0119574
+UGA,Uganda,chickens,eggs&meat,4.50045e-4
+UKR,Ukraine,cows,milk,0.07026249999999999
+UKR,Ukraine,cows,meat,0.04995024999999999
+UKR,Ukraine,chickens,meat,3.6135e-4
+UKR,Ukraine,chickens,eggs,5.3874e-4
+UKR,Ukraine,pigs,meat,0.012055950000000003
+UKR,Ukraine,goats,milk,0.0179872
+UKR,Ukraine,goats,meat,0.0179872
+UKR,Ukraine,sheep,milk,0.015932250000000002
+UKR,Ukraine,sheep,meat,0.015932250000000002
+UKR,Ukraine,chickens,eggs&meat,4.50045e-4
+ARE,United Arab Emirates,cows,milk,0.0702625
+ARE,United Arab Emirates,cows,meat,0.04988455000000001
+ARE,United Arab Emirates,chickens,meat,3.6135e-4
+ARE,United Arab Emirates,chickens,eggs,5.3874e-4
+ARE,United Arab Emirates,goats,milk,0.015001500000000001
+ARE,United Arab Emirates,goats,meat,0.015001500000000001
+ARE,United Arab Emirates,sheep,milk,0.0119574
+ARE,United Arab Emirates,sheep,meat,0.0119574
+ARE,United Arab Emirates,chickens,eggs&meat,4.50045e-4
+GBR,United Kingdom,cows,milk,0.10511999999999998
+GBR,United Kingdom,cows,meat,0.050588999999999995
+GBR,United Kingdom,chickens,meat,3.6135e-4
+GBR,United Kingdom,chickens,eggs,6.3072e-4
+GBR,United Kingdom,pigs,meat,0.011412090000000003
+GBR,United Kingdom,goats,milk,0.0179872
+GBR,United Kingdom,goats,meat,0.0179872
+GBR,United Kingdom,sheep,milk,0.015047125
+GBR,United Kingdom,sheep,meat,0.015047125
+GBR,United Kingdom,chickens,eggs&meat,4.960349999999999e-4
+USA,United States,cows,milk,0.09700239999999999
+USA,United States,cows,meat,0.04401535
+USA,United States,chickens,meat,3.6135e-4
+USA,United States,chickens,eggs,5.4531e-4
+USA,United States,pigs,meat,0.0080811
+USA,United States,goats,milk,0.006323625000000001
+USA,United States,goats,meat,0.006323625000000001
+USA,United States,sheep,milk,0.0074350499999999995
+USA,United States,sheep,meat,0.0074350499999999995
+USA,United States,chickens,eggs&meat,4.5333e-4
+URY,Uruguay,cows,milk,0.07008
+URY,Uruguay,cows,meat,0.040077
+URY,Uruguay,chickens,meat,3.6135e-4
+URY,Uruguay,chickens,eggs,5.3874e-4
+URY,Uruguay,pigs,meat,0.015002960000000001
+URY,Uruguay,goats,milk,0.015001500000000003
+URY,Uruguay,goats,meat,0.015001500000000003
+URY,Uruguay,sheep,milk,0.011957400000000002
+URY,Uruguay,sheep,meat,0.011957400000000002
+URY,Uruguay,chickens,eggs&meat,4.50045e-4
+UZB,Uzbekistan,cows,milk,0.060042500000000006
+UZB,Uzbekistan,cows,meat,0.039587899999999995
+UZB,Uzbekistan,chickens,meat,3.6135000000000003e-4
+UZB,Uzbekistan,chickens,eggs,5.3874e-4
+UZB,Uzbekistan,pigs,meat,0.004108430222174976
+UZB,Uzbekistan,goats,milk,0.015001500000000001
+UZB,Uzbekistan,goats,meat,0.015001500000000001
+UZB,Uzbekistan,sheep,milk,0.0119574
+UZB,Uzbekistan,sheep,meat,0.0119574
+UZB,Uzbekistan,chickens,eggs&meat,4.5004500000000005e-4
+VUT,Vanuatu,cows,milk,0.0803
+VUT,Vanuatu,cows,meat,0.060225
+VUT,Vanuatu,chickens,meat,3.6135e-4
+VUT,Vanuatu,chickens,eggs,5.387399999999999e-4
+VUT,Vanuatu,pigs,meat,0.010856990033448522
+VUT,Vanuatu,goats,milk,0.015549
+VUT,Vanuatu,goats,meat,0.015549
+VUT,Vanuatu,chickens,eggs&meat,4.5004499999999994e-4
+VEN,Venezuela,cows,milk,0.07008
+VEN,Venezuela,cows,meat,0.040077
+VEN,Venezuela,chickens,meat,3.6135e-4
+VEN,Venezuela,chickens,eggs,5.3874e-4
+VEN,Venezuela,pigs,meat,0.015002958788873021
+VEN,Venezuela,goats,milk,0.015001500000000003
+VEN,Venezuela,goats,meat,0.015001500000000003
+VEN,Venezuela,sheep,milk,0.0119574
+VEN,Venezuela,sheep,meat,0.0119574
+VEN,Venezuela,chickens,eggs&meat,4.50045e-4
+VNM,Vietnam,buffaloes,milk,0.044384
+VNM,Vietnam,cows,milk,0.06004249999999999
+VNM,Vietnam,cows,meat,0.03958790000000001
+VNM,Vietnam,chickens,meat,3.6135000000000003e-4
+VNM,Vietnam,chickens,eggs,5.387400000000001e-4
+VNM,Vietnam,pigs,meat,0.004108439993287783
+VNM,Vietnam,goats,milk,0.015001500000000001
+VNM,Vietnam,goats,meat,0.015001500000000001
+VNM,Vietnam,chickens,eggs&meat,4.5004500000000005e-4
+VIR,"Virgin Islands, U.S.",cows,milk,0.07008
+VIR,"Virgin Islands, U.S.",cows,meat,0.040077
+VIR,"Virgin Islands, U.S.",chickens,meat,3.6135000000000003e-4
+VIR,"Virgin Islands, U.S.",chickens,eggs,5.3874e-4
+VIR,"Virgin Islands, U.S.",pigs,meat,0.015004525225225225
+VIR,"Virgin Islands, U.S.",goats,milk,0.015001500000000001
+VIR,"Virgin Islands, U.S.",goats,meat,0.015001500000000001
+VIR,"Virgin Islands, U.S.",sheep,milk,0.0119574
+VIR,"Virgin Islands, U.S.",sheep,meat,0.0119574
+VIR,"Virgin Islands, U.S.",chickens,eggs&meat,5.3874e-4
+WLF,Wallis and Futuna,cows,milk,0.0803
+WLF,Wallis and Futuna,cows,meat,0.06022500000000001
+WLF,Wallis and Futuna,chickens,meat,3.6135e-4
+WLF,Wallis and Futuna,chickens,eggs,5.387399999999999e-4
+WLF,Wallis and Futuna,pigs,meat,0.010856925
+WLF,Wallis and Futuna,goats,milk,0.015549
+WLF,Wallis and Futuna,goats,meat,0.015549
+WLF,Wallis and Futuna,chickens,eggs&meat,4.5004499999999994e-4
+ESH,Western Sahara,goats,milk,0.0150015
+ESH,Western Sahara,goats,meat,0.0150015
+ESH,Western Sahara,sheep,milk,0.0119574
+ESH,Western Sahara,sheep,meat,0.0119574
+YEM,Yemen,cows,milk,0.0702625
+YEM,Yemen,cows,meat,0.04988455
+YEM,Yemen,chickens,meat,3.6135000000000003e-4
+YEM,Yemen,chickens,eggs,5.3874e-4
+YEM,Yemen,goats,milk,0.0150015
+YEM,Yemen,goats,meat,0.0150015
+YEM,Yemen,sheep,milk,0.0119574
+YEM,Yemen,sheep,meat,0.0119574
+YEM,Yemen,chickens,eggs&meat,4.5004500000000005e-4
+ZMB,Zambia,cows,milk,0.060225
+ZMB,Zambia,cows,meat,0.03978135
+ZMB,Zambia,chickens,meat,3.6135e-4
+ZMB,Zambia,chickens,eggs,5.3874e-4
+ZMB,Zambia,pigs,meat,0.015002957275609225
+ZMB,Zambia,goats,milk,0.015001500000000001
+ZMB,Zambia,goats,meat,0.015001500000000001
+ZMB,Zambia,sheep,milk,0.0119574
+ZMB,Zambia,sheep,meat,0.0119574
+ZMB,Zambia,chickens,eggs&meat,4.50045e-4
+ZWE,Zimbabwe,cows,milk,0.060225
+ZWE,Zimbabwe,cows,meat,0.03978135
+ZWE,Zimbabwe,chickens,meat,3.6135000000000003e-4
+ZWE,Zimbabwe,chickens,eggs,5.3874e-4
+ZWE,Zimbabwe,pigs,meat,0.015002960000000001
+ZWE,Zimbabwe,goats,milk,0.015001500000000001
+ZWE,Zimbabwe,goats,meat,0.015001500000000001
+ZWE,Zimbabwe,sheep,milk,0.0119574
+ZWE,Zimbabwe,sheep,meat,0.0119574
+ZWE,Zimbabwe,chickens,eggs&meat,4.5004500000000005e-4
+ALA,Åland,goats,milk,0.0179872
+ALA,Åland,goats,meat,0.0179872
+ALA,Åland,cows,milk,0.10511999999999999
+ALA,Åland,cows,meat,0.050588999999999995
+ALA,Åland,sheep,milk,0.015047125
+ALA,Åland,sheep,meat,0.015047125
+AND,Andorra,goats,milk,0.0179872
+AND,Andorra,goats,meat,0.0179872
+AND,Andorra,cows,milk,0.10511999999999999
+AND,Andorra,cows,meat,0.050589
+AND,Andorra,sheep,milk,0.015047125
+AND,Andorra,sheep,meat,0.015047125
+AIA,Anguilla,goats,milk,0.015001500000000001
+AIA,Anguilla,goats,meat,0.015001500000000001
+AIA,Anguilla,cows,milk,0.07008
+AIA,Anguilla,cows,meat,0.040077
+AIA,Anguilla,sheep,milk,0.0119574
+AIA,Anguilla,sheep,meat,0.0119574
+ABW,Aruba,goats,milk,0.015001500000000001
+ABW,Aruba,goats,meat,0.015001500000000001
+ABW,Aruba,cows,milk,0.07008
+ABW,Aruba,cows,meat,0.040077
+ABW,Aruba,sheep,milk,0.0119574
+ABW,Aruba,sheep,meat,0.0119574
+IOT,British Indian Ocean Territory,goats,milk,0.015001500000000001
+IOT,British Indian Ocean Territory,goats,meat,0.015001500000000001
+IOT,British Indian Ocean Territory,cows,milk,0.060225
+IOT,British Indian Ocean Territory,cows,meat,0.03978135
+IOT,British Indian Ocean Territory,sheep,milk,0.0119574
+IOT,British Indian Ocean Territory,sheep,meat,0.0119574
+CXR,Christmas Island,goats,milk,0.019954549999999998
+CXR,Christmas Island,goats,meat,0.019954549999999998
+CXR,Christmas Island,cows,milk,0.0803
+CXR,Christmas Island,cows,meat,0.060225
+CXR,Christmas Island,sheep,milk,0.020003825000000003
+CXR,Christmas Island,sheep,meat,0.020003825000000003
+CCK,Cocos Islands,goats,milk,0.019954549999999998
+CCK,Cocos Islands,goats,meat,0.019954549999999998
+CCK,Cocos Islands,cows,milk,0.0803
+CCK,Cocos Islands,cows,meat,0.060225
+CCK,Cocos Islands,sheep,milk,0.020003825000000003
+CCK,Cocos Islands,sheep,meat,0.020003825000000003
+CUW,Curaçao,goats,milk,0.015001500000000001
+CUW,Curaçao,goats,meat,0.015001500000000001
+CUW,Curaçao,cows,milk,0.07008
+CUW,Curaçao,cows,meat,0.040077
+CUW,Curaçao,sheep,milk,0.0119574
+CUW,Curaçao,sheep,meat,0.0119574
+GIB,Gibraltar,goats,milk,0.0179872
+GIB,Gibraltar,goats,meat,0.0179872
+GIB,Gibraltar,cows,milk,0.10511999999999999
+GIB,Gibraltar,cows,meat,0.050589
+GIB,Gibraltar,sheep,milk,0.015047125
+GIB,Gibraltar,sheep,meat,0.015047125
+GGY,Guernsey,goats,milk,0.0179872
+GGY,Guernsey,goats,meat,0.0179872
+GGY,Guernsey,cows,milk,0.10511999999999999
+GGY,Guernsey,cows,meat,0.050588999999999995
+GGY,Guernsey,sheep,milk,0.015047125
+GGY,Guernsey,sheep,meat,0.015047125
+IMN,Isle of Man,goats,milk,0.0179872
+IMN,Isle of Man,goats,meat,0.0179872
+IMN,Isle of Man,cows,milk,0.10511999999999999
+IMN,Isle of Man,cows,meat,0.050588999999999995
+IMN,Isle of Man,sheep,milk,0.015047125
+IMN,Isle of Man,sheep,meat,0.015047125
+JEY,Jersey,goats,milk,0.0179872
+JEY,Jersey,goats,meat,0.0179872
+JEY,Jersey,cows,milk,0.10511999999999999
+JEY,Jersey,cows,meat,0.050588999999999995
+JEY,Jersey,sheep,milk,0.015047125
+JEY,Jersey,sheep,meat,0.015047125
+XKO,Kosovo,goats,milk,0.0179872
+XKO,Kosovo,goats,meat,0.0179872
+XKO,Kosovo,cows,milk,0.10511999999999999
+XKO,Kosovo,cows,meat,0.050589
+XKO,Kosovo,sheep,milk,0.015047125
+XKO,Kosovo,sheep,meat,0.015047125
+MDV,Maldives,goats,milk,0.015001500000000001
+MDV,Maldives,goats,meat,0.015001500000000001
+MDV,Maldives,cows,milk,0.04717625
+MDV,Maldives,cows,meat,0.013651
+MDV,Maldives,sheep,milk,0.0119574
+MDV,Maldives,sheep,meat,0.0119574
+MHL,Marshall Islands,goats,milk,0.015549
+MHL,Marshall Islands,goats,meat,0.015549
+MHL,Marshall Islands,cows,milk,0.08030000000000001
+MHL,Marshall Islands,cows,meat,0.060225
+MHL,Marshall Islands,sheep,milk,0.0157762125
+MHL,Marshall Islands,sheep,meat,0.0157762125
+MYT,Mayotte,goats,milk,0.015001500000000001
+MYT,Mayotte,goats,meat,0.015001500000000001
+MYT,Mayotte,cows,milk,0.060225
+MYT,Mayotte,cows,meat,0.03978135
+MYT,Mayotte,sheep,milk,0.0119574
+MYT,Mayotte,sheep,meat,0.0119574
+MCO,Monaco,goats,milk,0.0179872
+MCO,Monaco,goats,meat,0.0179872
+MCO,Monaco,cows,milk,0.10511999999999999
+MCO,Monaco,cows,meat,0.050588999999999995
+MCO,Monaco,sheep,milk,0.015047125
+MCO,Monaco,sheep,meat,0.015047125
+NFK,Norfolk Island,goats,milk,0.019954549999999998
+NFK,Norfolk Island,goats,meat,0.019954549999999998
+NFK,Norfolk Island,cows,milk,0.0803
+NFK,Norfolk Island,cows,meat,0.060225
+NFK,Norfolk Island,sheep,milk,0.020003825000000003
+NFK,Norfolk Island,sheep,meat,0.020003825000000003
+MNP,Northern Mariana Islands,goats,milk,0.015549
+MNP,Northern Mariana Islands,goats,meat,0.015549
+MNP,Northern Mariana Islands,cows,milk,0.08030000000000001
+MNP,Northern Mariana Islands,cows,meat,0.060225
+MNP,Northern Mariana Islands,sheep,milk,0.0157762125
+MNP,Northern Mariana Islands,sheep,meat,0.0157762125
+PLW,Palau,goats,milk,0.015549
+PLW,Palau,goats,meat,0.015549
+PLW,Palau,cows,milk,0.08030000000000001
+PLW,Palau,cows,meat,0.060225
+PLW,Palau,sheep,milk,0.0157762125
+PLW,Palau,sheep,meat,0.0157762125
+PCN,Pitcairn Islands,goats,milk,0.015549
+PCN,Pitcairn Islands,goats,meat,0.015549
+PCN,Pitcairn Islands,cows,milk,0.0803
+PCN,Pitcairn Islands,cows,meat,0.060225
+PCN,Pitcairn Islands,sheep,milk,0.011548600000000001
+PCN,Pitcairn Islands,sheep,meat,0.011548600000000001
+XMI,Madeira Island,goats,milk,0.015001500000000001
+XMI,Madeira Island,goats,meat,0.015001500000000001
+XMI,Madeira Island,cows,milk,0.060225
+XMI,Madeira Island,cows,meat,0.03978135
+XMI,Madeira Island,sheep,milk,0.0119574
+XMI,Madeira Island,sheep,meat,0.0119574
+BLM,Saint-Barthélemy,goats,milk,0.015001500000000001
+BLM,Saint-Barthélemy,goats,meat,0.015001500000000001
+BLM,Saint-Barthélemy,cows,milk,0.07008
+BLM,Saint-Barthélemy,cows,meat,0.040077
+BLM,Saint-Barthélemy,sheep,milk,0.0119574
+BLM,Saint-Barthélemy,sheep,meat,0.0119574
+MAF,Saint-Martin,goats,milk,0.015001500000000001
+MAF,Saint-Martin,goats,meat,0.015001500000000001
+MAF,Saint-Martin,cows,milk,0.07008
+MAF,Saint-Martin,cows,meat,0.040077
+MAF,Saint-Martin,sheep,milk,0.0119574
+MAF,Saint-Martin,sheep,meat,0.0119574
+SMR,San Marino,goats,milk,0.0179872
+SMR,San Marino,goats,meat,0.0179872
+SMR,San Marino,cows,milk,0.10511999999999999
+SMR,San Marino,cows,meat,0.050589
+SMR,San Marino,sheep,milk,0.015047125
+SMR,San Marino,sheep,meat,0.015047125
+SXM,Sint Maarten,goats,milk,0.015001500000000001
+SXM,Sint Maarten,goats,meat,0.015001500000000001
+SXM,Sint Maarten,cows,milk,0.07008
+SXM,Sint Maarten,cows,meat,0.040077
+SXM,Sint Maarten,sheep,milk,0.0119574
+SXM,Sint Maarten,sheep,meat,0.0119574
+SJM,Svalbard and Jan Mayen,goats,milk,0.0179872
+SJM,Svalbard and Jan Mayen,goats,meat,0.0179872
+SJM,Svalbard and Jan Mayen,cows,milk,0.10511999999999999
+SJM,Svalbard and Jan Mayen,cows,meat,0.050588999999999995
+SJM,Svalbard and Jan Mayen,sheep,milk,0.015047125
+SJM,Svalbard and Jan Mayen,sheep,meat,0.015047125
+TCA,Turks and Caicos Islands,goats,milk,0.015001500000000001
+TCA,Turks and Caicos Islands,goats,meat,0.015001500000000001
+TCA,Turks and Caicos Islands,cows,milk,0.07008
+TCA,Turks and Caicos Islands,cows,meat,0.040077
+TCA,Turks and Caicos Islands,sheep,milk,0.0119574
+TCA,Turks and Caicos Islands,sheep,meat,0.0119574
+ALA,Åland,chickens,eggs,6.3072e-4
+ALA,Åland,chickens,meat,3.6135e-4
+ALA,Åland,chickens,eggs&meat,5.095035e-4
+AND,Andorra,chickens,eggs,6.3072e-4
+AND,Andorra,chickens,meat,3.6135000000000003e-4
+AND,Andorra,chickens,eggs&meat,4.96035e-4
+AIA,Anguilla,chickens,eggs,5.3874e-4
+AIA,Anguilla,chickens,meat,3.6135000000000003e-4
+AIA,Anguilla,chickens,eggs&meat,4.5447975e-4
+ABW,Aruba,chickens,eggs,5.3874e-4
+ABW,Aruba,chickens,meat,3.6135000000000003e-4
+ABW,Aruba,chickens,eggs&meat,4.5447975e-4
+IOT,British Indian Ocean Territory,chickens,eggs,5.3874e-4
+IOT,British Indian Ocean Territory,chickens,meat,3.6135e-4
+IOT,British Indian Ocean Territory,chickens,eggs&meat,4.50045e-4
+CXR,Christmas Island,chickens,eggs,5.3874e-4
+CXR,Christmas Island,chickens,meat,3.6135000000000003e-4
+CXR,Christmas Island,chickens,eggs&meat,4.50045e-4
+CCK,Cocos Islands,chickens,eggs,5.3874e-4
+CCK,Cocos Islands,chickens,meat,3.6135000000000003e-4
+CCK,Cocos Islands,chickens,eggs&meat,4.50045e-4
+CUW,Curaçao,chickens,eggs,5.3874e-4
+CUW,Curaçao,chickens,meat,3.6135000000000003e-4
+CUW,Curaçao,chickens,eggs&meat,4.5447975e-4
+GIB,Gibraltar,chickens,eggs,6.3072e-4
+GIB,Gibraltar,chickens,meat,3.6135000000000003e-4
+GIB,Gibraltar,chickens,eggs&meat,4.96035e-4
+GGY,Guernsey,chickens,eggs,6.3072e-4
+GGY,Guernsey,chickens,meat,3.6135e-4
+GGY,Guernsey,chickens,eggs&meat,5.095035e-4
+IMN,Isle of Man,chickens,eggs,6.3072e-4
+IMN,Isle of Man,chickens,meat,3.6135e-4
+IMN,Isle of Man,chickens,eggs&meat,5.095035e-4
+JEY,Jersey,chickens,eggs,6.3072e-4
+JEY,Jersey,chickens,meat,3.6135e-4
+JEY,Jersey,chickens,eggs&meat,5.095035e-4
+XKO,Kosovo,chickens,eggs,6.3072e-4
+XKO,Kosovo,chickens,meat,3.6135000000000003e-4
+XKO,Kosovo,chickens,eggs&meat,4.96035e-4
+MDV,Maldives,chickens,eggs,5.3874e-4
+MDV,Maldives,chickens,meat,3.6135000000000003e-4
+MDV,Maldives,chickens,eggs&meat,4.5004500000000005e-4
+MHL,Marshall Islands,chickens,eggs,5.3874e-4
+MHL,Marshall Islands,chickens,meat,3.6135000000000003e-4
+MHL,Marshall Islands,chickens,eggs&meat,4.5004500000000005e-4
+MYT,Mayotte,chickens,eggs,5.3874e-4
+MYT,Mayotte,chickens,meat,3.6135e-4
+MYT,Mayotte,chickens,eggs&meat,4.50045e-4
+MCO,Monaco,chickens,eggs,6.3072e-4
+MCO,Monaco,chickens,meat,3.6135e-4
+MCO,Monaco,chickens,eggs&meat,5.12870625e-4
+NFK,Norfolk Island,chickens,eggs,5.3874e-4
+NFK,Norfolk Island,chickens,meat,3.6135000000000003e-4
+NFK,Norfolk Island,chickens,eggs&meat,4.50045e-4
+MNP,Northern Mariana Islands,chickens,eggs,5.3874e-4
+MNP,Northern Mariana Islands,chickens,meat,3.6135000000000003e-4
+MNP,Northern Mariana Islands,chickens,eggs&meat,4.5004500000000005e-4
+PLW,Palau,chickens,eggs,5.3874e-4
+PLW,Palau,chickens,meat,3.6135000000000003e-4
+PLW,Palau,chickens,eggs&meat,4.5004500000000005e-4
+PCN,Pitcairn Islands,chickens,eggs,5.3874e-4
+PCN,Pitcairn Islands,chickens,meat,3.6135e-4
+PCN,Pitcairn Islands,chickens,eggs&meat,4.50045e-4
+XMI,Madeira Island,chickens,eggs,5.3874e-4
+XMI,Madeira Island,chickens,meat,3.6135e-4
+XMI,Madeira Island,chickens,eggs&meat,4.5004500000000005e-4
+BLM,Saint-Barthélemy,chickens,eggs,5.3874e-4
+BLM,Saint-Barthélemy,chickens,meat,3.6135000000000003e-4
+BLM,Saint-Barthélemy,chickens,eggs&meat,4.5447975e-4
+MAF,Saint-Martin,chickens,eggs,5.3874e-4
+MAF,Saint-Martin,chickens,meat,3.6135000000000003e-4
+MAF,Saint-Martin,chickens,eggs&meat,4.5447975e-4
+SMR,San Marino,chickens,eggs,6.3072e-4
+SMR,San Marino,chickens,meat,3.6135000000000003e-4
+SMR,San Marino,chickens,eggs&meat,4.96035e-4
+SXM,Sint Maarten,chickens,eggs,5.3874e-4
+SXM,Sint Maarten,chickens,meat,3.6135000000000003e-4
+SXM,Sint Maarten,chickens,eggs&meat,4.5447975e-4
+SJM,Svalbard and Jan Mayen,chickens,eggs,6.3072e-4
+SJM,Svalbard and Jan Mayen,chickens,meat,3.6135e-4
+SJM,Svalbard and Jan Mayen,chickens,eggs&meat,5.095035e-4
+TCA,Turks and Caicos Islands,chickens,eggs,5.3874e-4
+TCA,Turks and Caicos Islands,chickens,meat,3.6135000000000003e-4
+TCA,Turks and Caicos Islands,chickens,eggs&meat,4.5447975e-4
+ALA,Åland,buffaloes,milk,0.044384
+ALA,Åland,pigs,meat,0.01141209468656843
+AND,Andorra,buffaloes,milk,0.044384
+AND,Andorra,pigs,meat,0.011412067383173779
+AIA,Anguilla,buffaloes,milk,0.04438400000000001
+AIA,Anguilla,pigs,meat,0.015002815917079441
+ABW,Aruba,buffaloes,milk,0.04438400000000001
+ABW,Aruba,pigs,meat,0.015002815917079441
+IOT,British Indian Ocean Territory,buffaloes,milk,0.044384
+IOT,British Indian Ocean Territory,pigs,meat,0.015002884871453811
+CXR,Christmas Island,buffaloes,milk,0.044384
+CXR,Christmas Island,pigs,meat,0.01085692543281085
+CCK,Cocos Islands,buffaloes,milk,0.044384
+CCK,Cocos Islands,pigs,meat,0.01085692543281085
+CUW,Curaçao,buffaloes,milk,0.04438400000000001
+CUW,Curaçao,pigs,meat,0.015002815917079441
+GIB,Gibraltar,buffaloes,milk,0.044384
+GIB,Gibraltar,pigs,meat,0.011412067383173779
+GGY,Guernsey,buffaloes,milk,0.044384
+GGY,Guernsey,pigs,meat,0.01141209468656843
+IMN,Isle of Man,buffaloes,milk,0.044384
+IMN,Isle of Man,pigs,meat,0.01141209468656843
+JEY,Jersey,buffaloes,milk,0.044384
+JEY,Jersey,pigs,meat,0.01141209468656843
+XKO,Kosovo,buffaloes,milk,0.044384
+XKO,Kosovo,pigs,meat,0.011412067383173779
+MDV,Maldives,buffaloes,milk,0.034456
+MDV,Maldives,pigs,meat,0.004108430089934916
+MHL,Marshall Islands,buffaloes,milk,0.044384
+MHL,Marshall Islands,pigs,meat,0.01085591517579002
+MYT,Mayotte,buffaloes,milk,0.044384
+MYT,Mayotte,pigs,meat,0.015002884871453811
+MCO,Monaco,buffaloes,milk,0.044384
+MCO,Monaco,pigs,meat,0.011412647931583472
+NFK,Norfolk Island,buffaloes,milk,0.044384
+NFK,Norfolk Island,pigs,meat,0.01085692543281085
+MNP,Northern Mariana Islands,buffaloes,milk,0.044384
+MNP,Northern Mariana Islands,pigs,meat,0.01085591517579002
+PLW,Palau,buffaloes,milk,0.044384
+PLW,Palau,pigs,meat,0.01085591517579002
+PCN,Pitcairn Islands,buffaloes,milk,0.044384
+PCN,Pitcairn Islands,pigs,meat,0.010856925829659773
+XMI,Madeira Island,buffaloes,milk,0.044384
+XMI,Madeira Island,pigs,meat,0.015002668632439424
+BLM,Saint-Barthélemy,buffaloes,milk,0.04438400000000001
+BLM,Saint-Barthélemy,pigs,meat,0.015002815917079441
+MAF,Saint-Martin,buffaloes,milk,0.04438400000000001
+MAF,Saint-Martin,pigs,meat,0.015002815917079441
+SMR,San Marino,buffaloes,milk,0.044384
+SMR,San Marino,pigs,meat,0.011412067383173779
+SXM,Sint Maarten,buffaloes,milk,0.04438400000000001
+SXM,Sint Maarten,pigs,meat,0.015002815917079441
+SJM,Svalbard and Jan Mayen,buffaloes,milk,0.044384
+SJM,Svalbard and Jan Mayen,pigs,meat,0.01141209468656843
+TCA,Turks and Caicos Islands,buffaloes,milk,0.04438400000000001
+TCA,Turks and Caicos Islands,pigs,meat,0.015002815917079441

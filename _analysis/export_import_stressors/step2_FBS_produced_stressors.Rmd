@@ -1,0 +1,188 @@
+---
+title: "Production stressors"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+This script determines production cumulative stress based on the FAO Food Balance Sheets.
+
+```{r}
+
+library(here)
+library(tidyverse)
+library(countrycode)
+
+focus_year = 2017
+
+
+```
+
+
+# Production vs. import
+Consolidate data to determine the proportional amount of local production and total imports for each crop and country.
+
+
+```{r}
+
+feed_products <- read_csv(here("feed/data/MapSPAM_to_FAO_v2.csv")) %>%
+  filter(!is.na(FAO_item_code_NFB)) %>%
+    filter(is.na(non_food)) %>%
+  select(SPAM_super, FAO_Item_Code_NFB = FAO_item_code_NFB) %>%
+  unique()
+feed_products[duplicated(feed_products$FAO_Item_Code_NFB), ] # mostly FAO_item_code is unique, but be aware of duplicates: occurs when MAPSPAM reports crops with more specificity (e.g. millet = small millet and pearl millet in MapSPAM)
+summary(feed_products)
+
+```
+
+```{r}
+
+fbs <- read_csv(file.path("/home/shares/food-systems/Food_footprint/_raw_data/FAO_FoodBalanceSheets/d2021/FAOSTAT_FBS_6-3-2021.csv")) %>%
+  filter(Year == focus_year) %>%
+  dplyr::select(consuming_area_code=`Area Code (FAO)`, consuming_country = Area, Element, FAO_Item_Code_NFB = `Item Code`, Item, Value)
+
+## provides China average that we want to delete
+dim(fbs)
+fbs <- fbs %>%
+  filter(!(consuming_country %in% "China")) %>%
+  filter(!(consuming_country %in% "Australia and New Zealand"))
+dim(fbs)
+
+# make sure that all relevant product codes match up
+setdiff(feed_products$FAO_Item_Code_NFB, fbs$FAO_Item_Code_NFB)
+missing <- setdiff(fbs$FAO_Item_Code_NFB, feed_products$FAO_Item_Code_NFB)
+missing2 <- filter(fbs, FAO_Item_Code_NFB %in% missing) %>% 
+  select(FAO_Item_Code_NFB, Item) %>%
+  unique() %>% 
+  data.frame()   ## this seems fine, none appear to be crops here
+missing2
+
+# convert products to MAPSPAM crop and combine
+fbs <- fbs %>%
+  filter(FAO_Item_Code_NFB %in% feed_products$FAO_Item_Code_NFB) %>%
+  left_join(feed_products, by = "FAO_Item_Code_NFB") %>%
+  group_by(consuming_area_code, consuming_country, SPAM_super, Element) %>%
+  summarize(Value = sum(Value, na.rm=TRUE)) %>%
+  ungroup()
+
+# some cleaning
+local_pressures <- fbs %>%
+  mutate(Value = Value * 1000) %>%  # fao reports in 1000 tonnes
+  spread(Element, Value) %>%
+  rename(imported=`Import Quantity`, exported=`Export Quantity`, produced=Production, feed = "Feed") %>%
+  replace(is.na(.), 0) %>%
+  select(country=consuming_country, SPAM_super, imported, exported, produced, feed)
+
+
+```
+
+
+Get iso3c codes
+
+```{r}
+
+local_pressures_iso <- local_pressures %>%
+    mutate(country = iconv(country, "UTF-8", "UTF-8",sub=''),
+         country = ifelse(country == "Eswatini", "Swaziland", country),
+         country = ifelse(country == "Netherlands Antilles (former)", "Bonaire, Sint Eustatius and Saba", country),
+         country = ifelse(country == "French Guyana", "French Guiana", country),
+         country = ifelse(country == "China, mainland", "China", country))
+
+## add standardized country names
+local_pressures_iso$iso3c <- countrycode(as.character(local_pressures_iso$country), origin="country.name", destination = "iso3c")
+
+## make sure all countries have an iso3c code
+check <- filter(local_pressures_iso, is.na(iso3c))
+unique(check$country) # these are all higher level area, safe to delete NAs
+
+local_pressures_iso <- local_pressures_iso %>%
+  filter(!is.na(iso3c))
+
+summary(local_pressures_iso)
+head(local_pressures_iso)
+
+
+
+stressor_check<-filter(local_pressures_iso, iso3c=="USA") %>%
+ select(iso3c, country, SPAM_super, produced)
+
+production <-filter(crop_production, iso3c=="USA")
+
+full_join(stressor_check, production, by=c("SPAM_super", "iso3c")) %>% data.frame()
+
+full_join(select(local_pressures_iso, iso3c, country, SPAM_super, produced_FBS=produced), crop_production) %>%
+ pivot_longer(cols=c(-iso3c, -country, -SPAM_super), names_to="dataset") %>%
+  group_by(SPAM_super, dataset) %>%
+  summarize(value = sum(value, na.rm=TRUE)) %>%
+  pivot_wider(names_from=c("dataset"),values_from = value) %>% data.frame()
+
+
+
+```
+
+
+## Export prop
+We calculate stressors from imports directly, and we calculate stressors from local production directly.  Exports can come from a combination of locally produced and imported product.  So we determine the proportion of exports from (imports + production) and multiply the pressures from these by export prop to get the estimated pressures that are exported.
+```{r}
+
+export_prop <- local_pressures_iso %>%
+  mutate(export_prop = ifelse(imported == 0 & produced == 0, 0, exported/(imported + produced))) %>%
+  mutate(export_prop = ifelse(export_prop > 1, 1, export_prop))
+
+
+summary(export_prop)         
+
+export_prop <- export_prop %>%
+  select(country, iso3c, SPAM_super,produced, export_prop)
+
+write_csv(export_prop, here("_analysis/export_import_stressors/data/fbs_export_prop.csv"))
+
+```
+
+
+## Now determine the locally used pressures vs. exported pressures
+```{r}
+
+stressor_rates <- read_csv(
+here("_analysis/export_import_stressors/data/cumulative_stressor_rates.csv")) %>%
+  select(iso3c, SPAM_super, cumulative_pressure_rate)
+
+export_prop <- read_csv(here("_analysis/export_import_stressors/data/fbs_export_prop.csv"))
+
+stressor_production <- left_join(stressor_rates, export_prop, by = c("iso3c", "SPAM_super")) %>%
+  filter(produced > 0) %>%
+  mutate(produced_all = produced * cumulative_pressure_rate) %>%
+  mutate(produced_used_cumstress = 
+           produced * cumulative_pressure_rate * (1-export_prop)) %>%
+  mutate(produced_exported_cumstress = produced * cumulative_pressure_rate * export_prop) %>%
+  select(country, iso3c, SPAM_super, produced_used_cumstress, produced_exported_cumstress, produced_all)
+
+# these should be in the same ballpark (with tmp x 1,000,000)
+sum(stressor_production$produced_all)
+tmp <- cumulative_pressure_df %>%  #created in step 1
+  filter(SPAM_super != "ofib")
+sum(tmp$cumulative_pressure, na.rm=TRUE)
+write_csv(stressor_production, here("_analysis/export_import_stressors/data/produced_cum_stress.csv"))
+```
+
+## Feed
+Going to ignore this for now.  But, I think we will want:
+prop_ds_feed = feed/(import + produced - export)
+
+This will need to be paired with:
+prop_ds_imports = imports/(production + imports - exports)
+prop_ds_production = 1 - prop_ds_imports
+
+
+## Import check
+This will just be used to make sure the imports are all accounted for in the trade matrix data.
+
+```{r}
+
+imported_tonnes <- local_pressures_iso %>%
+  select(country, iso3c, SPAM_super, imported)
+
+write_csv(imported_tonnes, here("_analysis/export_import_stressors/data/fbs_imported_tonnes.csv"))
+
+```
+

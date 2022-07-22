@@ -1,0 +1,49 @@
+---
+title: "country_codes"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+# Open libraries
+library(tidyverse)
+library(here)
+```
+
+# Wrangle dfs and define which food_rgns iso3c codes don't have respective FAO country codes
+```{r}
+# Import FAO country codes and rename
+FAOSTAT_country_codes <- read_csv(here("_spatial/raw/FAOSTAT_countrycodes.csv")) %>% 
+  rename(iso3c = `ISO3 Code`, country = Country, area_code = `Country Code`) %>% 
+  dplyr::select(iso3c, country, area_code) %>% 
+  unique()
+# Import food_rgns and rename
+food_rgns <- read_csv(here("_spatial/_output/food_rgns.csv")) %>% 
+  rename(country = Country)
+# Define food_rgns iso3c missing from FAO country codes
+missing_rgns_list <- setdiff(food_rgns$iso3c, FAOSTAT_country_codes$iso3c)
+missing_rgns_list <- food_rgns %>% 
+  filter(iso3c %in% missing_rgns_list)
+missing_rgns_list # Take note
+```
+
+# Match food_rgns to FAO country codes
+```{r}
+# Add Madeira and Guernsey to FAO country codes
+FAOSTAT_country_codes <- FAOSTAT_country_codes %>% 
+  add_row(iso3c = "GGY", country = "Guernsey", area_code = 229) %>% 
+  add_row(iso3c = "XMI", country = "Madeira Island", area_code = 174)
+# Kosovo is in the list, but does not have our custom iso3c code.
+FAOSTAT_country_codes$iso3c[FAOSTAT_country_codes$country %in% "Kosovo"] <- "XKO"
+# We are only interested in Serbia, so we modify this iso3c
+FAOSTAT_country_codes$iso3c[FAOSTAT_country_codes$country %in% "Serbia (exc Kosovo)"] <- "SRB"
+FAOSTAT_country_codes$iso3c[FAOSTAT_country_codes$country %in% "Serbia"]              <- NA_character_
+# Reformat for merging
+FAOSTAT_country_codes <- FAOSTAT_country_codes %>% 
+  dplyr::select(iso3c, area_code)
+# Join country code to food_rgns
+FAO_rgn_codes <- left_join(food_rgns, FAOSTAT_country_codes)
+# Save
+write_csv(FAO_rgn_codes, here("_spatial/_output/FAO_rgn_codes.csv"))
+```

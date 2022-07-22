@@ -1,0 +1,45 @@
+crop_number,SPAM_short_name,SPAM_full_name,FAONAMES,FAOCODE,GROUP,SPAM_super,food_group
+1,whea,wheat,wheat,15,cereals,whea,cereals_grains
+2,rice,rice,rice,27,cereals,rice,rice
+3,maiz,maize,maize,56,cereals,maiz,cereals_grains
+4,barl,barley,barley,44,cereals,barl,cereals_grains
+5,pmil,pearl millet,millet,79,cereals,xmil,cereals_grains
+6,smil,small millet,millet,79,cereals,xmil,cereals_grains
+7,sorg,sorghum,sorghum,83,cereals,sorg,cereals_grains
+8,ocer,other cereals,other cereals ++,"68, 71, 75, 89, 92, 94, 97, 101, 103, 108",cereals,ocer,cereals_grains
+9,pota,potato,potato,116,roots&tubers or starchy roots,pota,starch_roots
+10,swpo,sweet potato,sweet potato,122,roots&tubers or starchy roots,swpo,starch_roots
+11,yams,yams,yam,137,roots&tubers or starchy roots,yams,starch_roots
+12,cass,cassava,cassava,125,roots&tubers or starchy roots,cass,starch_roots
+13,orts,other roots,yautia ++,"135, 136, 149",roots&tubers or starchy roots,orts,starch_roots
+14,bean,bean,"beans, dry",176,pulses,xpul,pulses_beans
+15,chic,chickpea,chickpea,191,pulses,xpul,pulses_beans
+16,cowp,cowpea,cowpea,195,pulses,xpul,pulses_beans
+17,pige,pigeonpea,pigeon pea,197,pulses,xpul,pulses_beans
+18,lent,lentil,lentils,201,pulses,xpul,pulses_beans
+19,opul,other pulses,broad beans ++,"181, 187, 203, 205, 210, 211",pulses,xpul,pulses_beans
+20,soyb,soybean,soybean,236,oilcrops,soyb,soy
+21,grou,groundnut,"groundnut, with shell",242,oilcrops,xoil,oil_seeds
+22,cnut,coconut,coconut,249,oilcrops,cnut,oil_seeds
+23,oilp,oilpalm,palmoil,254,oilcrops,oilp,oil_seeds
+24,sunf,sunflower,sunflower seed,267,oilcrops,xoil,oil_seeds
+25,rape,rapeseed,rapeseed,"270, 292",oilcrops,xoil,oil_seeds
+26,sesa,sesameseed,sesame seed,289,oilcrops,xoil,oil_seeds
+27,ooil,other oil crops,olives ++,"260 - 339, not 311 and the other oilcrops above",oilcrops,xoil,oil_seeds
+28,sugc,sugarcane,sugar cane,156,sugar crops,sugc,sugar
+29,sugb,sugarbeet,sugarbeet,157,sugar crops,sugb,sugar
+30,cott,cotton,seed cotton,328,fibres,xoil,oil_seeds
+31,ofib,other fibre crops,other fibres ++,773 - 821,fibres,ofib,exclude
+32,acof,arabica coffee,coffee,656,stimulant,xcof,exclude
+33,rcof,robusta coffee,coffee,656,stimulant,xcof,exclude
+34,coco,cocoa,cocoa,661,stimulant,coco,fruits_veg
+35,teas,tea,tea,667,stimulant,teas,exclude
+36,toba,tobacco,tobacco leaves,826,stimulant,toba,exclude
+37,bana,banana,banana,486,fruits,bana,fruits_veg
+38,plnt,plantain,plantain,489,fruits,plnt,fruits_veg
+39,trof,tropical fruit,oranges ++,"490 - 512, 567 - 591, 600 - 603",fruits,xfru,fruits_veg
+40,temf,temperate fruit,apples ++,"515 - 560, 592, 619",fruits,xfru,fruits_veg
+41,vege,vegetables,cabbages and other brassicas ++,358 - 463,vegetables,vege,fruits_veg
+42.1,spis,spices,spices,"687, 689, 692, 693, 698, 702, 711, 720, 723, 748",spices,spis,other
+42.2,tnut,treenut,treenut,"216, 217, 220-226, 229-234",treenuts,tnut,other
+42.3,othr,other,"hops, rubber, oil of cintronella, natural gums","677, 737, 753-756, 771, 828, 829, 831, 836, 837, 839",other,othr,other

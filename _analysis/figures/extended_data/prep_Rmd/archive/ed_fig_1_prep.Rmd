@@ -1,0 +1,802 @@
+---
+title: "CI_per_food_type"
+output: html_document
+---
+ 
+```{r setup, include = FALSE}
+library(rgdal)
+library(sp)
+library(sf)
+library(raster)
+library(tidyverse)
+library(here)
+library(rnaturalearth)
+library(scales)
+library(rnaturalearthdata)
+library(future)
+library(furrr)
+library(cowplot)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_analysis/figures/paper/colors_stressors_fig_1_2.R"))
+```
+
+water and land prep
+```{r}
+## save the gall peters projection
+gall_peters <- "+proj=cea +lon_0=0 +x_0=0 +y_0=0 +lat_ts=45 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+
+## create a water raster
+water <- readOGR(dsn = here("_analysis/raw/rgn_all_gcs_med_res.shp"))
+water <- water[!water$rgn_nam == "Antarctica",]
+proj4string(water) <- CRS("+proj=longlat +datum=WGS84")
+water <- spTransform(water, CRS("+proj=cea +lon_0=0 +x_0=0 +y_0=0 +lat_ts=45 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
+
+## create a land raster
+land <- ne_countries(scale = "medium", returnclass = "sp") 
+land <- land[!land$sov_a3 == "ATA",]
+land <- st_as_sf(land)
+land <- st_transform(land, crs = gall_peters)
+land <- as(land, "Spatial")
+```
+
+Filtering and splitting the food list
+```{r}
+# Group rasters based on SI tables
+
+# Livestock based on S3 (9 cats)
+ # Chicken meat
+ # Chicken egg
+ # Cattle meat
+ # Cattle milk
+ # Sheep meat
+ # Sheep milk
+ # Goat meat
+ # Goat milk
+ # Pig meat
+
+# group buffalo with cow meat,
+# remove eggs & meat
+# food_list <- food_list[!grepl(food_list, pattern = "buffaloes_milk|chickens_eggs&meat|fodd_crop")]
+# livestock_list <- unique(food_list[!grepl(food_list, pattern = "wildcaught|fisheries|aquaculture|crop")])
+# 
+# # Marine fisheries based on S6 (7 + 1 cats)
+# CF_check <- 
+#    unique(food_list) %>% 
+#    str_detect(., pattern = "wildcaught|fisheries")
+# table(CF_check)["TRUE"] # 8
+# CF_list <- unique(food_list[grepl(food_list, pattern = "wildcaught|fisheries")])
+# 
+# # Mariculture based on S7 (6 cats)
+# mariculture_check <- 
+#    unique(food_list) %>% 
+#    str_detect(., pattern = "aquaculture")
+# table(mariculture_check)["TRUE"] # 6
+# mariculture_list <- unique(food_list[grepl(food_list, pattern = "aquaculture")])
+# 
+# # Crop_list
+# crop_check <- 
+#    unique(food_list) %>% 
+#    str_detect(., pattern = "crop")
+# table(crop_check)["TRUE"] # 26
+# crop_list <- unique(food_list[grepl(food_list, pattern = "crop")])
+```
+
+
+```{r}
+food_list        <- 
+  str_extract(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps"),
+              pattern = "(?<=._).*(?=.tif)")
+
+food_list        <- na.omit(food_list)
+#food_list        <- food_list[!grepl(food_list, pattern = "buffaloes_milk|chickens_eggs&meat|chickens_eggs|fodd")]
+crop_list        <- unique(food_list[grepl(food_list, pattern = "crop")])
+livestock_list   <- unique(food_list[!grepl(food_list, pattern = "chickens|wildcaught|fisheries|aquaculture|crop")])
+CF_list          <- unique(food_list[grepl(food_list, pattern = "wildcaught|fisheries")])
+mariculture_list <- unique(food_list[grepl(food_list, pattern = "aquaculture")])
+list_without_fisheries <- c(crop_list, livestock_list, mariculture_list, "chickens_eggs&meat", "chickens_eggs", "chickens_meat")
+full_list        <- c(crop_list, livestock_list, CF_list, mariculture_list)
+setdiff(full_list, unique(food_list)) # should be zero.
+```
+
+Save rasters as PNGs.
+```{r} 
+png_save <- function(food) { 
+  
+  cpi_raster <- 
+    raster(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps",
+                      pattern = paste("cpi", food, sep = "_"),
+                      full.names = TRUE))
+  
+  quant <- quantile(cpi_raster, 0.999) # this identifies the raster cell value that corresponds the 99.9th quantile
+
+  cpi_raster
+  cpi_raster[cpi_raster > quant] <- quant # this will replace the values that exceed the 99.9th quantile with value that   corresponds the 99.9th quantile
+  
+  disturbance_raster <- 
+     raster(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps",
+                       pattern = paste("disturbance", food, sep = "_"),
+                       full.names = TRUE))
+  
+  quant <- quantile(disturbance_raster, 0.999) # this identifies the raster cell value that corresponds the 99.9th quantile
+
+  disturbance_raster[disturbance_raster > quant] <- quant # this will replace the values that exceed the 99.9th quantile with value that   corresponds the 99.9th quantile
+  
+  water_raster <- 
+    raster(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps",
+                      pattern = paste("water", food, sep = "_"),
+                      full.names = TRUE))
+  
+  quant <- quantile(water_raster, 0.999) # this identifies the raster cell value that corresponds the 99.9th quantile
+  
+  water_raster[water_raster > quant] <- quant # this will replace the values that exceed the 99.9th quantile with value that   corresponds the 99.9th quantile
+  
+  ghg_raster <- 
+    raster(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps",
+                      pattern = paste("ghg", food, sep = "_"),
+                      full.names = TRUE))
+  
+  quant <- quantile(ghg_raster, 0.999) # this identifies the raster cell value that corresponds the 99.9th quantile
+
+  ghg_raster[ghg_raster > quant] <- quant # this will replace the values that exceed the 99.9th quantile with value that   corresponds the 99.9th quantile
+  
+  nutrient_raster <- 
+    raster(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps",
+                      pattern = paste("nutrient", food, sep = "_"),
+                      full.names = TRUE))
+  
+  quant <- quantile(nutrient_raster, 0.999) # this identifies the raster cell value that corresponds the 99.9th quantile
+
+  nutrient_raster[nutrient_raster > quant] <- quant # this will replace the values that exceed the 99.9th quantile with value that   corresponds the 99.9th quantile
+  
+  if (food == "bivalve_aquaculture") {
+    
+    
+    water_raster[water_raster == 0] <- NA
+    disturbance_raster[disturbance_raster == 0] <- NA
+    nutrient_raster[nutrient_raster == 0] <- NA
+    ghg_raster[ghg_raster == 0] <- NA
+    cpi_raster[cpi_raster == 0] <- NA
+    
+    }
+  
+  if (str_detect(food, "wildcaught|fisheries") == FALSE) {
+     
+    # CPI
+
+     png(here(sprintf("_analysis/figures/extended_data/output/ed_fig_1_png/%s_cpi.png", food)), 
+         res    = 80, 
+         width  = 16, 
+         height = 9, 
+         units  = "in")
+    
+     par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+     
+     plot(water, main = 'Cumulative Pressure', adj = 0, cex.main=1.5, border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+
+     plot(cpi_raster,
+          col = dist_palette,
+          legend.width = 1.2,
+          axis.args = list(cex=2, cex.axis = 2),  
+          add = TRUE)
+     
+     plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+     
+     dev.off()
+
+     # Water
+
+     png(here(sprintf("_analysis/figures/extended_data/output/ed_fig_1_png/%s_water.png", food)), 
+         res = 80, 
+         width = 16, 
+         height = 9, 
+         units = "in")
+     
+    par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+     
+     plot(water, main = 'Water', adj = 0, cex.main=3, border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+     
+     plot(water_raster,
+          col = dist_palette,
+          legend.width = 2,
+          axis.args = list(cex = 3, cex.axis = 3),  
+          add = TRUE)
+     
+     plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+     
+     dev.off()
+     
+     # GHG
+     
+     png(here(sprintf("_analysis/figures/extended_data/output/ed_fig_1_png/%s_ghg.png", food)), 
+         res = 80, 
+         width = 16, 
+         height = 9, 
+         units = "in")
+     
+     par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+     
+     plot(water, main = 'GHG', adj = 0, cex.main=3, border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+     
+     plot(ghg_raster,
+          col = dist_palette,
+          legend.width=2,
+          axis.args = list(cex=3, cex.axis = 3),  
+          add = TRUE)
+     
+     plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+     
+     dev.off()
+     
+     # Disturbance
+     
+     png(here(sprintf("_analysis/figures/extended_data/output/ed_fig_1_png/%s_dist.png", food)), 
+         res = 80, 
+         width = 16, 
+         height = 9, 
+         units = "in")
+     
+    par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+     
+     plot(water, main = 'Disturbance', adj = 0, cex.main=3, border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+     
+     plot(disturbance_raster,
+          col = dist_palette,
+          legend.width=2,
+          axis.args = list(cex=3, cex.axis = 3),  
+          add = TRUE) 
+     
+     plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+     
+     dev.off()
+     
+     # Nutrient 
+     
+     png(here(sprintf("_analysis/figures/extended_data/output/ed_fig_1_png/%s_nut.png", food)), 
+         res = 80, 
+         width = 16, 
+         height = 9, 
+         units = "in")
+     
+    par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+     
+     plot(water, main = 'Nutrient', adj = 0, cex.main = 3, border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+     
+     plot(nutrient_raster,
+          col = dist_palette,
+          legend.width=2,
+          axis.args = list(cex=3, cex.axis = 3),  
+          add = TRUE)
+     
+     plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+     
+     dev.off()
+    
+     } else {
+       
+       # CPI
+       
+       png(here(sprintf("_analysis/figures/extended_data/output/ed_fig_1_png/%s_cpi.png", food)), 
+           res = 80, 
+           width = 16, 
+           height = 9, 
+           units = "in")
+       
+      par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+       
+       plot(water, main = 'Cumulative Pressure', adj = 0, cex.main=2, border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+       
+       plot(cpi_raster,
+            col = dist_palette, 
+            legend.width=1.2,
+            axis.args = list(cex=2, cex.axis = 2),  
+            add = TRUE)
+       
+       plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+       
+       dev.off()
+       
+       # GHG
+          
+       png(here(sprintf("_analysis/figures/extended_data/output/ed_fig_1_png/%s_ghg.png", food)), 
+           res = 80, 
+           width = 16, 
+           height = 9, 
+           units = "in")
+       
+      par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+       
+       plot(water, main = 'GHG', adj = 0, cex.main=3, border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+       
+       plot(ghg_raster,
+            col = dist_palette,
+            legend.width=2,
+            axis.args = list(cex=3, cex.axis = 3),  
+            add = TRUE)
+       
+       plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+       dev.off()
+       
+       # Disturbance
+       
+       png(here(sprintf("_analysis/figures/extended_data/output/ed_fig_1_png/%s_dist.png", food)), 
+           res = 80, 
+           width = 16, 
+           height = 9, 
+           units = "in")
+       
+       par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+       
+       plot(water, main = 'Disturbance', adj = 0, cex.main=3,  border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+       
+       plot(disturbance_raster,
+            col = dist_palette,
+            legend.width=2,
+            axis.args = list(cex=3, cex.axis = 3),  
+            add = TRUE)
+       
+       plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+       
+       dev.off()
+       
+       }
+}
+```
+
+# Map function
+```{r}
+
+plan(multisession, workers = 12)
+options <- furrr_options(seed = 54232)
+future_map(full_list, png_save,
+           .options = options)
+```
+
+# Chicken eggs
+```{r}
+cpi_raster <- 
+    raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/cpi_chickens_eggs.tif")
+  
+  quant <- quantile(cpi_raster, 0.999) # this identifies the raster cell value that corresponds the 99.9th quantile
+
+  cpi_raster
+  cpi_raster[cpi_raster > quant] <- quant # this will replace the values that exceed the 99.9th quantile with value that corresponds the 99.9th quantile
+  
+  disturbance_raster <- 
+     raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/disturbance_chickens_eggs.tif")
+  
+  quant <- quantile(disturbance_raster, 0.999) # this identifies the raster cell value that corresponds the 99.9th quantile
+
+  disturbance_raster[disturbance_raster > quant] <- quant # this will replace the values that exceed the 99.9th quantile with value that   corresponds the 99.9th quantile
+  
+  water_raster <- 
+    raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/water_chickens_eggs.tif")
+  
+  quant <- quantile(water_raster, 0.999) # this identifies the raster cell value that corresponds the 99.9th quantile
+  
+  water_raster[water_raster > quant] <- quant # this will replace the values that exceed the 99.9th quantile with value that   corresponds the 99.9th quantile
+  
+  ghg_raster <- 
+    raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/ghg_chickens_eggs.tif")
+  
+  quant <- quantile(ghg_raster, 0.999) # this identifies the raster cell value that corresponds the 99.9th quantile
+
+  ghg_raster[ghg_raster > quant] <- quant # this will replace the values that exceed the 99.9th quantile with value that   corresponds the 99.9th quantile
+  
+  nutrient_raster <- 
+    raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/nutrient_chickens_eggs.tif")
+  
+  quant <- quantile(nutrient_raster, 0.999) # this identifies the raster cell value that corresponds the 99.9th quantile
+
+  nutrient_raster[nutrient_raster > quant] <- quant 
+  
+  # CPI
+    
+     png(here("_analysis/figures/extended_data/output/ed_fig_1_png/chickens_eggs_cpi.png"), 
+         res    = 80, 
+         width  = 16, 
+         height = 9, 
+         units  = "in")
+    
+    par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+     
+     plot(water, main = 'Cumulative Pressure', adj = 0, cex.main=1.5, border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+     
+     plot(cpi_raster,
+          col = dist_palette,
+          legend.width = 1.2,
+          axis.args = list(cex=2, cex.axis = 2),  
+          add = TRUE)
+     
+     plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+     
+     dev.off()
+
+     # Water
+     
+     png(here("_analysis/figures/extended_data/output/ed_fig_1_png/chickens_eggs_water.png"), 
+         res = 80, 
+         width = 16, 
+         height = 9, 
+         units = "in")
+     
+    par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+     
+     plot(water, main = 'Water', adj = 0, cex.main=3, border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+     
+     plot(water_raster,
+          col = dist_palette,
+          legend.width = 2,
+          axis.args = list(cex = 3, cex.axis = 3),  
+          add = TRUE)
+     
+     plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+     
+     dev.off()
+     
+     # GHG
+     
+     png(here("_analysis/figures/extended_data/output/ed_fig_1_png/chickens_eggs_ghg.png"),  
+         res = 80, 
+         width = 16, 
+         height = 9, 
+         units = "in")
+     
+     par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+     
+     plot(water, main = 'GHG', adj = 0, cex.main=3, border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+     
+     plot(ghg_raster,
+          col = dist_palette,
+          legend.width=2,
+          axis.args = list(cex=3, cex.axis = 3),  
+          add = TRUE)
+     
+     plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+     
+     dev.off()
+     
+     # Disturbance
+     
+     png(here("_analysis/figures/extended_data/output/ed_fig_1_png/chickens_eggs_dist.png"),  
+         res = 80, 
+         width = 16, 
+         height = 9, 
+         units = "in")
+     
+    par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+     
+     plot(water, main = 'Disturbance', adj = 0, cex.main=3, border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+     
+     plot(disturbance_raster,
+          col = dist_palette,
+          legend.width=2,
+          axis.args = list(cex=3, cex.axis = 3),  
+          add = TRUE) 
+     
+     plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+     
+     dev.off()
+     
+     # Nutrient 
+     
+     png(here("_analysis/figures/extended_data/output/ed_fig_1_png/chickens_eggs_nut.png"), 
+         res = 80, 
+         width = 16, 
+         height = 9, 
+         units = "in")
+     
+    par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+     
+     plot(water, main = 'Nutrient', adj = 0, cex.main = 3, border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+     
+     plot(nutrient_raster,
+          col = dist_palette,
+          legend.width=2,
+          axis.args = list(cex=3, cex.axis = 3),  
+          add = TRUE)
+     
+     plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+     
+     dev.off()
+```
+
+# Chicken eggs and meat
+```{r}
+cpi_raster <- 
+    raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/cpi_chickens_eggs&meat.tif")
+  
+  quant <- quantile(cpi_raster, 0.999) # this identifies the raster cell value that corresponds the 99.9th quantile
+
+  cpi_raster
+  cpi_raster[cpi_raster > quant] <- quant # this will replace the values that exceed the 99.9th quantile with value that corresponds the 99.9th quantile
+  
+  disturbance_raster <- 
+     raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/disturbance_chickens_eggs&meat.tif")
+  
+  quant <- quantile(disturbance_raster, 0.999) # this identifies the raster cell value that corresponds the 99.9th quantile
+
+  disturbance_raster[disturbance_raster > quant] <- quant # this will replace the values that exceed the 99.9th quantile with value that   corresponds the 99.9th quantile
+  
+  water_raster <- 
+    raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/water_chickens_eggs&meat.tif")
+  
+  quant <- quantile(water_raster, 0.999) # this identifies the raster cell value that corresponds the 99.9th quantile
+  
+  water_raster[water_raster > quant] <- quant # this will replace the values that exceed the 99.9th quantile with value that   corresponds the 99.9th quantile
+  
+  ghg_raster <- 
+    raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/ghg_chickens_eggs&meat.tif")
+  
+  quant <- quantile(ghg_raster, 0.999) # this identifies the raster cell value that corresponds the 99.9th quantile
+
+  ghg_raster[ghg_raster > quant] <- quant # this will replace the values that exceed the 99.9th quantile with value that   corresponds the 99.9th quantile
+  
+  nutrient_raster <- 
+    raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/nutrient_chickens_eggs&meat.tif")
+  
+  quant <- quantile(nutrient_raster, 0.999) # this identifies the raster cell value that corresponds the 99.9th quantile
+
+  nutrient_raster[nutrient_raster > quant] <- quant 
+  
+  # CPI
+    
+     png(here("_analysis/figures/extended_data/output/ed_fig_1_png/chickens_eggs_and_meat_cpi.png"), 
+         res    = 80, 
+         width  = 16, 
+         height = 9, 
+         units  = "in")
+    
+    par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+     
+     plot(water, main = 'Cumulative Pressure', adj = 0, cex.main=1.5, border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+     
+     plot(cpi_raster,
+          col = dist_palette,
+          legend.width = 1.2,
+          axis.args = list(cex=2, cex.axis = 2),  
+          add = TRUE)
+     
+     plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+     
+     dev.off()
+
+     # Water
+     
+     png(here("_analysis/figures/extended_data/output/ed_fig_1_png/chickens_eggs_and_meat_water.png"), 
+         res = 80, 
+         width = 16, 
+         height = 9, 
+         units = "in")
+     
+    par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+     
+     plot(water, main = 'Water', adj = 0, cex.main=3, border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+     
+     plot(water_raster,
+          col = dist_palette,
+          legend.width = 2,
+          axis.args = list(cex = 3, cex.axis = 3),  
+          add = TRUE)
+     
+     plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+     
+     dev.off()
+     
+     # GHG
+     
+     png(here("_analysis/figures/extended_data/output/ed_fig_1_png/chickens_eggs_and_meat_ghg.png"),  
+         res = 80, 
+         width = 16, 
+         height = 9, 
+         units = "in")
+     
+     par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+     
+     plot(water, main = 'GHG', adj = 0, cex.main=3, border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+     
+     plot(ghg_raster,
+          col = dist_palette,
+          legend.width=2,
+          axis.args = list(cex=3, cex.axis = 3),  
+          add = TRUE)
+     
+     plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+     
+     dev.off()
+     
+     # Disturbance
+     
+     png(here("_analysis/figures/extended_data/output/ed_fig_1_png/chickens_eggs_and_meat_dist.png"),  
+         res = 80, 
+         width = 16, 
+         height = 9, 
+         units = "in")
+     
+    par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+     
+     plot(water, main = 'Disturbance', adj = 0, cex.main=3, border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+     
+     plot(disturbance_raster,
+          col = dist_palette,
+          legend.width=2,
+          axis.args = list(cex=3, cex.axis = 3),  
+          add = TRUE) 
+     
+     plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+     
+     dev.off()
+     
+     # Nutrient 
+     
+     png(here("_analysis/figures/extended_data/output/ed_fig_1_png/chickens_eggs_and_meat_nut.png"), 
+         res = 80, 
+         width = 16, 
+         height = 9, 
+         units = "in")
+     
+    par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+     
+     plot(water, main = 'Nutrient', adj = 0, cex.main = 3, border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+     
+     plot(nutrient_raster,
+          col = dist_palette,
+          legend.width=2,
+          axis.args = list(cex=3, cex.axis = 3),  
+          add = TRUE)
+     
+     plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+     
+     dev.off()
+```
+
+# Chicken meat
+```{r}
+  cpi_raster <- 
+      raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/cpi_chickens_meat.tif")
+    
+    quant <- quantile(cpi_raster, 0.999) # this identifies the raster cell value that corresponds the 99.9th quantile
+  
+    cpi_raster
+    cpi_raster[cpi_raster > quant] <- quant # this will replace the values that exceed the 99.9th quantile with value that corresponds the 99.9th quantile
+    
+    disturbance_raster <- 
+       raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/disturbance_chickens_meat.tif")
+    
+    quant <- quantile(disturbance_raster, 0.999) # this identifies the raster cell value that corresponds the 99.9th quantile
+  
+    disturbance_raster[disturbance_raster > quant] <- quant # this will replace the values that exceed the 99.9th quantile with value that   corresponds the 99.9th quantile
+    
+    water_raster <- 
+      raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/water_chickens_meat.tif")
+    
+    quant <- quantile(water_raster, 0.999) # this identifies the raster cell value that corresponds the 99.9th quantile
+    
+    water_raster[water_raster > quant] <- quant # this will replace the values that exceed the 99.9th quantile with value that   corresponds the 99.9th quantile
+    
+    ghg_raster <- 
+      raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/ghg_chickens_meat.tif")
+    
+    quant <- quantile(ghg_raster, 0.999) # this identifies the raster cell value that corresponds the 99.9th quantile
+  
+    ghg_raster[ghg_raster > quant] <- quant # this will replace the values that exceed the 99.9th quantile with value that   corresponds the 99.9th quantile
+    
+    nutrient_raster <- 
+      raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps/nutrient_chickens_meat.tif")
+    
+    quant <- quantile(nutrient_raster, 0.999) # this identifies the raster cell value that corresponds the 99.9th quantile
+  
+    nutrient_raster[nutrient_raster > quant] <- quant 
+    
+    # CPI
+      
+       png(here("_analysis/figures/extended_data/output/ed_fig_1_png/chickens_meat_cpi.png"), 
+           res    = 80, 
+           width  = 16, 
+           height = 9, 
+           units  = "in")
+      
+      par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+       
+       plot(water, main = 'Cumulative Pressure', adj = 0, cex.main=1.5, border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+       
+       plot(cpi_raster,
+            col = dist_palette,
+            legend.width = 1.2,
+            axis.args = list(cex=2, cex.axis = 2),  
+            add = TRUE)
+       
+       plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+       
+       dev.off()
+  
+       # Water
+       
+       png(here("_analysis/figures/extended_data/output/ed_fig_1_png/chickens_meat_water.png"), 
+           res = 80, 
+           width = 16, 
+           height = 9, 
+           units = "in")
+       
+      par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+       
+       plot(water, main = 'Water', adj = 0, cex.main=3, border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+       
+       plot(water_raster,
+            col = dist_palette,
+            legend.width = 2,
+            axis.args = list(cex = 3, cex.axis = 3),  
+            add = TRUE)
+       
+       plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+       
+       dev.off()
+       
+       # GHG
+       
+       png(here("_analysis/figures/extended_data/output/ed_fig_1_png/chickens_meat_ghg.png"),  
+           res = 80, 
+           width = 16, 
+           height = 9, 
+           units = "in")
+       
+       par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+       
+       plot(water, main = 'GHG', adj = 0, cex.main=3, border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+       
+       plot(ghg_raster,
+            col = dist_palette,
+            legend.width=2,
+            axis.args = list(cex=3, cex.axis = 3),  
+            add = TRUE)
+       
+       plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+       
+       dev.off()
+       
+       # Disturbance
+       
+       png(here("_analysis/figures/extended_data/output/ed_fig_1_png/chickens_meat_dist.png"),  
+           res = 80, 
+           width = 16, 
+           height = 9, 
+           units = "in")
+       
+      par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+       
+       plot(water, main = 'Disturbance', adj = 0, cex.main=3, border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+       
+       plot(disturbance_raster,
+            col = dist_palette,
+            legend.width=2,
+            axis.args = list(cex=3, cex.axis = 3),  
+            add = TRUE) 
+       
+       plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+       
+       dev.off()
+       
+       # Nutrient 
+       
+       png(here("_analysis/figures/extended_data/output/ed_fig_1_png/chickens_meat_nut.png"), 
+           res = 80, 
+           width = 16, 
+           height = 9, 
+           units = "in")
+       
+      par(oma = c(0,0,0,6), mar=c(0, 0, 4, 3))
+       
+       plot(water, main = 'Nutrient', adj = 0, cex.main = 3, border= "#FFFFFF", col="#FFFFFF", lwd=1.5)
+       
+       plot(nutrient_raster,
+            col = dist_palette,
+            legend.width=2,
+            axis.args = list(cex=3, cex.axis = 3),  
+            add = TRUE)
+       
+       plot(land, border = "#BCBEB1", col= "#F8F9FA00", lwd=0.8, add=TRUE)
+       
+       dev.off()
+```
+

@@ -1,0 +1,79 @@
+---
+title: "aligning_EEZ"
+author: "Juliette"
+date: "4/14/2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+This markdown aligns EEZs to our region list.
+
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(raster)
+library(rgdal)
+library(sf)
+library(fasterize)
+library(readr)
+library(here)
+library(mapview)
+library(countrycode)
+
+source(here::here("_workflow/common.R"))
+
+eez <- st_read(file.path(prep, "spatial/eez_regions_2017_update.shp"))
+food_rgns <- read_csv(here("_spatial/_output/food_rgns.csv"))
+```
+
+
+## Prepare eez raster
+The first step is to merge the eez spatial data with the eez_food_rgns.csv.  Then rasterize using the ID_0 value.  This value is mostly the same as the ID_0 values in gadm36, however, there are a few mismatches:
+
+* a couple eezs combine multiple regions (eventually we will want to separate these out)
+Addioional ocean areas
+* ID_0 10 is Antarctica oceans
+* ID_0 355 is disputed eezs
+* >=2600 FAO areas
+* 400, 244 (US outlying islands), 82 (French Southern Territories) are all uninhabited islands
+* 183251 Puerto Rico and US Virgin Islands
+* 16893 Northern Mariana and Guam
+* 92141 Guadaloupe and Martinique
+* 49 or China includes Macao and Hong Kong
+
+```{r}
+## this was a list of of EEZ regions that we modified to match our food systems regions
+eez_translate <- read_csv(here("_spatial/_output/eez_food_rgns_translate.csv"), col_types = "dccdc") %>%
+  dplyr::select(rgn_id, iso3c, ID_0)
+eez_rgns <- eez %>% 
+  mutate(rgn_id = as.numeric(as.character(rgn_id))) %>%
+  dplyr::select(rgn_typ, rgn_id) %>%
+  filter(rgn_id %in% eez_translate$rgn_id) %>%
+  left_join(eez_translate, by="rgn_id") %>%
+  filter(rgn_typ %in% c("eez", "eez-disputed", "fao"))
+summary(eez_rgns)
+## check that everything matches as well as can be expected
+# additional EEZs
+setdiff(eez_rgns$iso3c, food_rgns$iso3c) # these should not have matches additional EEZS: [1] "uninhabited_island" # "PRI/VIR"            "UMI"                "MNP/GUM"            "GLP/MTQ"           
+#  [6] "disputed"           "CHN/MAC/HKG"        "ATA"                "FAO"                "ATF" 
+no_eez <- setdiff(food_rgns$iso3c, eez_rgns$iso3c)
+landlocked <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>%
+  filter(Land_Locked == "x") 
+setdiff(no_eez, landlocked$iso3c)
+# known problems"ALA" "CHN" "GLP" "GUM" "HKG" "IMN" "MAC" "MTQ" "MNP" "PSE" "PRI" "BLM" "SJM" "VIR"
+```
+
+Rasterize
+
+```{r}
+EEZ_raster <- fasterize(eez_rgns, food_raster, field="ID_0")
+writeRaster(EEZ_raster, "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/spatial/eez_food_rgns.tif", overwrite=TRUE)
+# save food eez regions file
+eez_translate <- read_csv(here("_spatial/_output/eez_food_rgns_translate.csv"), col_types = "dccdc") %>%
+  dplyr::select(ID_0, iso3c) %>%
+  unique()
+write_csv(eez_translate, here("_spatial/_output/eez_food_rgns.csv"))
+```
+

@@ -1,0 +1,74 @@
+---
+title: "step2c_crop_matching_tbl"
+output: html_document
+---
+# Preamble
+```{r setup, include = FALSE}
+# getting packages we want
+library(here)
+library(janitor)
+library(vroom)
+source(here("_workflow/common.R"))
+``` 
+
+# Make a crop-matching table
+
+| split_rest_names | FUBC_2017_crop | FUBC_2002_crop  | SPAM_items  |
+
+```{r}
+crop_categories <- 
+  vroom(here("crop/farm/data/crop_codes_updated.csv")) %>% 
+  select(split_rest_names) %>% 
+  unique()
+
+crop_codes <- 
+  vroom(here("crop/farm/data/crop_codes_updated.csv")) %>% 
+  select(split_rest_names) %>% 
+  unique()
+
+crop_defs <- 
+  vroom(here("crop/farm/data/FAO_crop_definitions.csv"), 
+        .name_repair = make_clean_names)
+
+fubc_2002_crop_list <- vroom(here("crop/nutrient/data/fubc_2002_crop_list.csv"))
+fubc_2017_crop_list <- vroom(here("crop/nutrient/data/fubc_2017_crop_list.csv"))
+
+crop_matching_tbl <- 
+  crop_codes %>% 
+  left_join(., fubc_2017_crop_list, by = "split_rest_names") %>% 
+  left_join(., fubc_2002_crop_list, by = "split_rest_names") %>% 
+  group_by(split_rest_names, fubc_2017_crop) %>% 
+  summarise(fubc_2002_crop = str_c(fubc_2002_crop, collapse = ", ")) %>% 
+  ungroup() %>% 
+  mutate(report_year = if_else(is.na(fubc_2017_crop),
+                               2002,
+                               2017),
+         crop_name = if_else(is.na(fubc_2017_crop),
+                             fubc_2002_crop,
+                             fubc_2017_crop)) %>% 
+  select(- c(fubc_2017_crop, fubc_2002_crop)) %>% 
+  arrange(split_rest_names)
+crop_matching_tbl
+
+SPAM_names <- 
+  vroom::vroom(here("crop/farm/data/crop_codes_updated.csv")) %>% 
+  select(2, 4, 5) %>% 
+  mutate(SPAM_full_name = case_when(SPAM_super == "xpul" ~ "Other pulses",
+                                    SPAM_super == "xoil" ~ "Other oil crops",
+                                    SPAM_super == "xmil" ~ "Millet",
+                                    SPAM_super == "xfru" ~ "Fruits",
+                                    SPAM_super == "tnut" ~ "Treenuts",
+                                    SPAM_super == "spis" ~ "Spices",
+                                    TRUE ~ Hmisc::capitalize(SPAM_full_name))) %>% 
+  add_row(SPAM_super = "fodd",
+          SPAM_full_name = "Fodder") %>% 
+  unique() %>% 
+  arrange(.$SPAM_full_name)
+
+crop_matching_tbl2 <- 
+  crop_matching_tbl %>% 
+  left_join(., SPAM_names) %>%
+  relocate(split_rest_names, SPAM_super, full_name = SPAM_full_name, report_year, FUBC_crop_name = crop_name)
+
+write_csv(crop_matching_tbl2, here("crop/nutrient/data/crop_matching_tbl.csv"))
+```

@@ -1,0 +1,211 @@
+---
+title: "Finfish mariculture diets"
+author: "Gage Clawson"
+date: "01/12/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Determining the percent composition of finfish diet.
+
+1. Filter out the production data that gage gave me by xxxx
+2. We have diet compositions of xxxxx species, look to see how different they are
+3. Look to see how much of total production do these species account for 
+ 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(here)
+library(readxl)
+
+diet <- read_excel(here("feed/diet_composition_wrangling/Final_DietCrop_Numbers.xlsx"), sheet = "% type of crop input")
+finfish_prod <- read_csv(here('aquaculture/marine/marine_fish_general/finfish_farms/data/fao_mariculture_finfish_taxa_production.csv'))
+
+```
+
+
+```{r}
+
+all_finfish <- unique(finfish_prod$species)
+## there are 39 species
+
+over_k_finfish_global <- finfish_prod %>% 
+  group_by(species) %>% 
+  dplyr::summarise(sum_global = sum(fao_tonnes_production, na.rm = TRUE)) %>% 
+  filter(sum_global > 1000) %>% 
+  select(species) %>% 
+  unique() %>% 
+  pull()
+
+## there are 34 species where global production is 1000 tonnes or more. This is the same as per country, so I think that we can figure out diet composition for all finfish from these species
+
+```
+
+Explore the diet compositon for the species we have from Halley
+```{r}
+
+## definitely filter for "Flounders, halibuts, soles", "Miscellaneous coastal fishes", "Miscellaneous demersal fishes", "Miscellaneous diadromous fishes", "Miscellaneous pelagic fishes"
+
+
+## what we have covered, that almost match exactly in common name (10 out of 39 FAO species): 
+# FAO Common name - ISCAAP group (halley common name)
+# Righteye flounders nei - Flounders, halibuts, soles (European flounder) X 
+# European seabass - Miscellaneous coastal fishes (European seabass) X 
+# Gilthead seabream - Miscellaneous coastal fishes (Gilthead seabream) X 
+# Groupers nei - Miscellaneous coastal fishes (Grouper) X 
+# Red drum - Miscellaneous coastal fishes (Red drum) X 
+# Mullets nei - Miscellaneous coastal fishes (Mullet) X 
+# Korean rockfish - Miscellaneous demersal fishes (Wolfishes & rockfish) X 
+# Milkfish - Miscellaneous diadromous fishes (Milk fish) X 
+# Barramundi(=Giant seaperch) - Miscellaneous diadromous fishes (Barramundi) X 
+# Japanese amberjack - Miscellaneous pelagic fishes (Japanese amberjack) X 
+
+
+## what we could add to that potentially (adding this would cover 21/39 FAO species)
+# common_name : Category
+# Atlantic halibut - Flounders, halibuts, soles (same as European flounder) X 
+# Bastard halibut - Flounders, halibuts, soles (same as European flounder) X 
+# Amberjacks nei - Miscellaneous pelagic fishes (same as japanese amberjack) X 
+# Blackhead seabream - Miscellaneous coastal fishes (same as gilthead seabream) X 
+# Jacks crevalles nei - Miscellaneous pelagic fishes (same as japanese amberjack) X 
+# Japanese seabass - Miscellaneous coastal fishes (same as european seabass) X 
+# Japanese seabream - Miscellaneous coastal fishes (same as gilthead seabream) X 
+# Porgies, seabreams nei - Miscellaneous coastal fishes (same as gilthead seabream) X 
+# Senegalese sole - Flounders, halibuts, soles (same as European flounder) X 
+# Silver seabream - Miscellaneous coastal fishes (same as gilthead seabream) X
+# Marine fishes nei - same as japanese amberjack (this is just the average of marine species listed) X 
+
+# then the rest will be given the average (which is the japanese amberjack number)
+
+
+
+diet_finfish_1 <- diet %>% 
+  filter(ISSCAAP_Group %in% c("Flounders, halibuts, soles", "Miscellaneous coastal fishes", "Miscellaneous demersal fishes", "Miscellaneous diadromous fishes")) %>% 
+  select(common_name, crop, prop_crop_inputs)
+
+diet_finfish_2 <- diet %>%
+  filter(ISSCAAP_Group == "Miscellaneous pelagic fishes") %>%
+  group_by(common_name) %>% 
+  mutate(total_input_prop = sum(prop_crop_inputs)) %>%
+  ungroup() %>%
+  rowwise() %>%
+  mutate(prop_diet = prop_crop_inputs/total_input_prop) %>%
+  dplyr::select(common_name, crop, prop_crop_inputs = prop_diet)
+
+diet_finfish <- rbind(diet_finfish_1, diet_finfish_2)
+
+##compare the diet compositions
+
+ggplot(diet_finfish) +
+  geom_col(aes(x = prop_crop_inputs, y = common_name , fill = crop)) +
+  theme_minimal() + ggtitle("Diet compositon crop breakdown")
+## ok so there are for sure some differences, so we should probably account for that with a weighted proportion of raised species in each country. 
+
+```
+
+
+Now we need to figure out how to assign diet compositions to the species we don't have info one. 
+
+I will use the gapfilling outlined above. I.e. we dont have diet comp data for Silver seabream, but I will assign it the gilthead seabream values... anything that falls out of what i have outlined will be given the marine fish average 
+
+
+Which countries and which species are countries raising?
+
+```{r}
+
+ggplot(finfish_prod)  +
+  geom_col(aes(x = fao_tonnes_production, y = country , fill = species)) +
+  theme_minimal() +
+  ggtitle("Tonnes fish aquaculture production")
+
+
+
+```
+
+
+## Create a diet compositon for all finfish using weighted proportions
+```{r}
+
+species_prop <- finfish_prod %>% 
+  mutate(diet_species = case_when(species == "Milkfish"  ~ "Milk fish",
+                                  species == "Righteye flounders nei" ~ "European flounder",
+                                  species == "Groupers nei" ~ "Grouper",
+                                  str_detect(species, "Mullets nei|mullet") ~ "Mullet", 
+                                  species == "Korean rockfish" ~ "Wolfishes & rockfish",
+                                  species == "Barramundi(=Giant seaperch)" ~ "Barramundi",
+                                  str_detect(species, "seabream") ~ "Gilthead seabream",
+                                  str_detect(species, "Jack|jack|Marine fishes nei") ~ "Japanese amberjack",
+                                  str_detect(species, "seabass|bass") ~ "European seabass",
+                                  str_detect(species, "halibut|sole") ~ "European flounder",
+                                  species == "Red drum" ~ "Red drum",
+                                  species == "Gilthead seabream" ~ "Gilthead seabream",
+                                  species == "European seabass" ~ "European seabass", 
+                                  species == "Japanese amberjack" ~ "Japanese amberjack",
+                                  TRUE ~ "Japanese amberjack" # This is just the average of marine fish
+                                  )) %>% 
+  group_by(diet_species, iso3c) %>% 
+  dplyr::summarise(species_rgn_tonnes = sum(fao_tonnes_production)) %>% 
+  ungroup() %>% 
+  group_by(iso3c) %>% 
+  mutate(rgn_tonnes = sum(species_rgn_tonnes)) %>% 
+  ungroup() %>% 
+  rowwise() %>% 
+  mutate(prop = species_rgn_tonnes/rgn_tonnes) %>% 
+  ungroup() %>% 
+  select(iso3c, common_name = diet_species, prop)
+  
+check <- species_prop %>%
+  group_by(iso3c) %>%
+  summarise(sum(prop))
+
+## fofm is 1 - 0.885 for everything
+
+prop_fofm = 1 - 0.885
+
+# prop_diadromous = 1 - 0.975
+
+weighted_diet <- diet_finfish %>% 
+  left_join(species_prop, by ="common_name") %>% 
+  rowwise() %>% 
+  mutate(weight_prop_int = prop_crop_inputs*prop) %>% 
+  group_by(iso3c, crop) %>%
+  dplyr::summarise(weighted_crop_prop = sum(weight_prop_int) * (1 - prop_fofm)) %>%
+  ungroup()
+
+
+check <- weighted_diet %>% 
+  group_by(iso3c) %>% 
+  dplyr::summarise(perc_check = sum(weighted_crop_prop))
+  ## all per_check values should be 0.885 after incorporating fofm!
+
+```
+
+Adding in fofm component to diet.  This will be later adjusted to match Halley final tonnes. 
+```{r}
+fofm_addition <- dplyr::select(weighted_diet, iso3c) %>% 
+  unique() %>%
+  mutate(crop = "fofm") %>%
+  mutate(weighted_crop_prop = prop_fofm)
+
+weighted_diet <- rbind(weighted_diet, fofm_addition)
+unique(weighted_diet$crop)
+
+check <- weighted_diet %>% 
+  group_by(iso3c) %>% 
+  dplyr::summarise(perc_check = sum(weighted_crop_prop))
+  ## all per_check values should be 1, after incorporating fofm!
+
+
+## need to make sure these are added to the feed_category_table.csv, product_to_fao_spam.csv
+weighted_diet %>% select(crop) %>% unique()
+
+finfish_diet_comp <- weighted_diet %>% 
+  rename(raw_name = crop, prop_diet = weighted_crop_prop) %>% 
+  mutate(production_system ="aquaculture",
+         species = "marine-fish-general")
+
+write_csv(finfish_diet_comp, here("feed/diet_composition_wrangling/marine-fish-general_aquaculture_diet_composition.csv"))
+
+```

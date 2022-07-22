@@ -1,0 +1,81 @@
+---
+title: "river_mapping"
+output: html_document
+
+# Inputs
+---
+
+## Script Author
+Paul-Eric Rayner
+@prayner96
+
+## Objectives
+Map global inland fisheries.
+
+## Inputs
+McIntyre et al., 2016 (to be updated) raster map of major lake and riverine FW fish
+for the year 2016 and at a 10km2 resolution. Data accessed 09/14/20.
+
+## Outputs
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+predatalayers_path <- "/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/"
+```
+
+# Exploratory analysis
+```{r}
+file.path(prep, "fisheries/freshwater/fnl_catch.tif") %>% 
+  raster() %>%
+  cellStats(., stat = "sum")
+
+fnl_catch <- 
+  file.path(prep, "fisheries/freshwater/fnl_catch.tif") %>% 
+  raster()
+
+cellStats(fnl_catch, stat = "sum")
+
+catch_rate <- fnl_catch / (8.872082 * 8.872082)
+
+catch_rate <- projectRaster(catch_rate, food_raster, method = "ngb")
+
+catch <- catch_rate * area(catch_rate)
+
+catch <- catch * (cellStats(fnl_catch, stat = "sum") / cellStats(catch, stat = "sum"))
+
+cellStats(catch, stat = "sum")
+
+writeRaster(catch,
+            file.path(predatalayers_path, "fw_fisheries_catch", fsep = ""),
+            format = "GTiff", 
+            overwrite = TRUE)
+
+plot(catch, main = "riverine fish catch (tons / year)")
+
+plot(log10(catch + 1), main = "log10 riverine fish catch")
+```
+
+# Catch per country
+```{r}
+fw_catch_per_iso3c <- 
+  zonal(catch, 
+        food_rgns_tif, 
+        fun      = "sum", 
+        progress = "text", 
+        na.rm    = TRUE) %>% 
+  as_tibble() %>% 
+  rename(ID_0 = zone) %>% 
+  left_join(food_rgns) %>% 
+  rename(fw_catch_tonnes = sum)
+
+write_csv(fw_catch_per_iso3c, 
+          here("fisheries/freshwater/data/fw_catch_per_iso3c.csv"))
+```
+
+assume 30% of river area is disturbed. 
+
+## Data Checks
+

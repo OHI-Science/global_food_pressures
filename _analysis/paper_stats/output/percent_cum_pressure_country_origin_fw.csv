@@ -1,0 +1,736 @@
+"iso3c","country","origin","cum_pressure_prop_final","cum_pressure_percent_final"
+"ABW","Aruba","freshwater",0.000335950489918006,0.03
+"ABW","Aruba","land",0.0335369334949346,3.35
+"ABW","Aruba","marine",0.966127116015147,96.61
+"AFG","Afghanistan","freshwater",0.00198304404488951,0.2
+"AFG","Afghanistan","land",0.998016955955111,99.8
+"AFG","Afghanistan","marine",0,0
+"AGO","Angola","freshwater",0.00496038587068651,0.5
+"AGO","Angola","land",0.731153976130953,73.12
+"AGO","Angola","marine",0.263885637998361,26.39
+"AIA","Anguilla","freshwater",0.000996835506011013,0.1
+"AIA","Anguilla","land",0.0301968842603404,3.02
+"AIA","Anguilla","marine",0.968806280233649,96.88
+"ALA","Åland","freshwater",0.000594940477667547,0.06
+"ALA","Åland","land",0.826491739176527,82.65
+"ALA","Åland","marine",0.172913320345805,17.29
+"ALB","Albania","freshwater",0.00107966523337306,0.11
+"ALB","Albania","land",0.961479048131208,96.15
+"ALB","Albania","marine",0.0374412866354192,3.74
+"AND","Andorra","freshwater",0.00266578329250645,0.27
+"AND","Andorra","land",0.997334216707494,99.73
+"AND","Andorra","marine",0,0
+"ARE","United Arab Emirates","freshwater",0.000476172995660667,0.05
+"ARE","United Arab Emirates","land",0.623119887520638,62.31
+"ARE","United Arab Emirates","marine",0.376403939483702,37.64
+"ARG","Argentina","freshwater",0.0012830098826512,0.13
+"ARG","Argentina","land",0.892928186543468,89.29
+"ARG","Argentina","marine",0.105788803573881,10.58
+"ARM","Armenia","freshwater",0.000518496495999482,0.05
+"ARM","Armenia","land",0.999481503504001,99.95
+"ARM","Armenia","marine",0,0
+"ASM","American Samoa","freshwater",0,0
+"ASM","American Samoa","land",0.0590545395954526,5.91
+"ASM","American Samoa","marine",0.940945460404547,94.09
+"ATG","Antigua and Barbuda","freshwater",0.000887524466037509,0.09
+"ATG","Antigua and Barbuda","land",0.473358278199369,47.34
+"ATG","Antigua and Barbuda","marine",0.525754197334594,52.58
+"AUS","Australia","freshwater",0.00236798842929553,0.24
+"AUS","Australia","land",0.965903184027934,96.59
+"AUS","Australia","marine",0.0317288275427701,3.17
+"AUT","Austria","freshwater",0.00150854057629294,0.15
+"AUT","Austria","land",0.998491459423707,99.85
+"AUT","Austria","marine",0,0
+"AZE","Azerbaijan","freshwater",0.00055476983652675,0.06
+"AZE","Azerbaijan","land",0.999445230163473,99.94
+"AZE","Azerbaijan","marine",0,0
+"BDI","Burundi","freshwater",0.000405951603104213,0.04
+"BDI","Burundi","land",0.999594048396896,99.96
+"BDI","Burundi","marine",0,0
+"BEL","Belgium","freshwater",0.000342604423064879,0.03
+"BEL","Belgium","land",0.937379500786583,93.74
+"BEL","Belgium","marine",0.0622778947903515,6.23
+"BEN","Benin","freshwater",0.000656491716201468,0.07
+"BEN","Benin","land",0.978220443370337,97.82
+"BEN","Benin","marine",0.021123064913462,2.11
+"BES","Bonaire, Sint Eustatius and Saba","freshwater",0.00123446001385196,0.12
+"BES","Bonaire, Sint Eustatius and Saba","land",0.21766018677813,21.77
+"BES","Bonaire, Sint Eustatius and Saba","marine",0.781105353208018,78.11
+"BFA","Burkina Faso","freshwater",0.000287122801761485,0.03
+"BFA","Burkina Faso","land",0.999712877198238,99.97
+"BFA","Burkina Faso","marine",0,0
+"BGD","Bangladesh","freshwater",0.00066995333976768,0.07
+"BGD","Bangladesh","land",0.928920463092834,92.89
+"BGD","Bangladesh","marine",0.0704095835673984,7.04
+"BGR","Bulgaria","freshwater",0.00114736776487435,0.11
+"BGR","Bulgaria","land",0.982947445727337,98.29
+"BGR","Bulgaria","marine",0.015905186507789,1.59
+"BHR","Bahrain","freshwater",4.72310871968853e-06,0
+"BHR","Bahrain","land",0.0531487129958131,5.31
+"BHR","Bahrain","marine",0.946846563895467,94.68
+"BHS","Bahamas","freshwater",0.00416262310236884,0.42
+"BHS","Bahamas","land",0.426413417301652,42.64
+"BHS","Bahamas","marine",0.569423959595979,56.94
+"BIH","Bosnia and Herzegovina","freshwater",0.00214749358348024,0.21
+"BIH","Bosnia and Herzegovina","land",0.991223114813712,99.12
+"BIH","Bosnia and Herzegovina","marine",0.00662939160280811,0.66
+"BLM","Saint-Barthélemy","freshwater",0.00186988778791008,0.19
+"BLM","Saint-Barthélemy","land",0,0
+"BLM","Saint-Barthélemy","marine",0.99813011221209,99.81
+"BLR","Belarus","freshwater",0.00120257342783951,0.12
+"BLR","Belarus","land",0.998797426572161,99.88
+"BLR","Belarus","marine",0,0
+"BLZ","Belize","freshwater",0.00519046566175705,0.52
+"BLZ","Belize","land",0.814765600635838,81.48
+"BLZ","Belize","marine",0.180043933702405,18
+"BMU","Bermuda","freshwater",0,0
+"BMU","Bermuda","land",0.565175398047074,56.52
+"BMU","Bermuda","marine",0.434824601952926,43.48
+"BOL","Bolivia","freshwater",0.00316420661201472,0.32
+"BOL","Bolivia","land",0.996835793387985,99.68
+"BOL","Bolivia","marine",0,0
+"BRA","Brazil","freshwater",0.00372614271756923,0.37
+"BRA","Brazil","land",0.98266634620652,98.27
+"BRA","Brazil","marine",0.0136075110759104,1.36
+"BRB","Barbados","freshwater",0.000432895941824345,0.04
+"BRB","Barbados","land",0.863031583522125,86.3
+"BRB","Barbados","marine",0.136535520536051,13.65
+"BRN","Brunei","freshwater",0.0013018391354418,0.13
+"BRN","Brunei","land",0.140135988700699,14.01
+"BRN","Brunei","marine",0.858562172163859,85.86
+"BTN","Bhutan","freshwater",0.0060414288580194,0.6
+"BTN","Bhutan","land",0.993958571141981,99.4
+"BTN","Bhutan","marine",0,0
+"BWA","Botswana","freshwater",0.00965865577481445,0.97
+"BWA","Botswana","land",0.990341344225185,99.03
+"BWA","Botswana","marine",0,0
+"CAF","Central African Republic","freshwater",0.00726027405778739,0.73
+"CAF","Central African Republic","land",0.992739725942213,99.27
+"CAF","Central African Republic","marine",0,0
+"CAN","Canada","freshwater",0.0109974711210992,1.1
+"CAN","Canada","land",0.919528866102477,91.95
+"CAN","Canada","marine",0.0694736627764241,6.95
+"CCK","Cocos Islands","freshwater",0,0
+"CCK","Cocos Islands","land",0,0
+"CCK","Cocos Islands","marine",1,100
+"CHE","Switzerland","freshwater",0.00164230640700778,0.16
+"CHE","Switzerland","land",0.998357693592992,99.84
+"CHE","Switzerland","marine",0,0
+"CHL","Chile","freshwater",0.00192615092932484,0.19
+"CHL","Chile","land",0.613505638432996,61.35
+"CHL","Chile","marine",0.384568210637679,38.46
+"CHN","China","freshwater",0.000697307871681876,0.07
+"CHN","China","land",0.902670510441333,90.27
+"CHN","China","marine",0.0966321816869849,9.66
+"CIV","Côte d'Ivoire","freshwater",0.0011830536426292,0.12
+"CIV","Côte d'Ivoire","land",0.925372150059589,92.54
+"CIV","Côte d'Ivoire","marine",0.0734447962977817,7.34
+"CMR","Cameroon","freshwater",0.00196475877617788,0.2
+"CMR","Cameroon","land",0.919323064451989,91.93
+"CMR","Cameroon","marine",0.078712176771833,7.87
+"COD","Democratic Republic of the Congo","freshwater",0.0183226303675497,1.83
+"COD","Democratic Republic of the Congo","land",0.973717592483194,97.37
+"COD","Democratic Republic of the Congo","marine",0.00795977714925646,0.8
+"COG","Republic of Congo","freshwater",0.0300286646585216,3
+"COG","Republic of Congo","land",0.687644151536504,68.76
+"COG","Republic of Congo","marine",0.282327183804975,28.23
+"COK","Cook Islands","freshwater",0,0
+"COK","Cook Islands","land",0.261730373481826,26.17
+"COK","Cook Islands","marine",0.738269626518174,73.83
+"COL","Colombia","freshwater",0.00535882622639686,0.54
+"COL","Colombia","land",0.989605435714143,98.96
+"COL","Colombia","marine",0.00503573805946067,0.5
+"COM","Comoros","freshwater",0.000928671781193385,0.09
+"COM","Comoros","land",0.284746314325209,28.47
+"COM","Comoros","marine",0.714325013893597,71.43
+"CPV","Cape Verde","freshwater",0,0
+"CPV","Cape Verde","land",0.704604516921355,70.46
+"CPV","Cape Verde","marine",0.295395483078645,29.54
+"CRI","Costa Rica","freshwater",0.0015730406474979,0.16
+"CRI","Costa Rica","land",0.961664911073444,96.17
+"CRI","Costa Rica","marine",0.0367620482790582,3.68
+"CUB","Cuba","freshwater",0.000653337720986707,0.07
+"CUB","Cuba","land",0.979089762849983,97.91
+"CUB","Cuba","marine",0.0202568994290307,2.03
+"CUW","Curaçao","freshwater",0.000914695955449566,0.09
+"CUW","Curaçao","land",0.120530163140396,12.05
+"CUW","Curaçao","marine",0.878555140904155,87.86
+"CXR","Christmas Island","freshwater",6.43215222592817e-05,0.01
+"CXR","Christmas Island","land",0.85820469980721,85.82
+"CXR","Christmas Island","marine",0.14173097867053,14.17
+"CYM","Cayman Islands","freshwater",0.0179290392250073,1.79
+"CYM","Cayman Islands","land",0.222516950467402,22.25
+"CYM","Cayman Islands","marine",0.759554010307591,75.96
+"CYP","Cyprus","freshwater",0.000504181802414907,0.05
+"CYP","Cyprus","land",0.876737511729165,87.67
+"CYP","Cyprus","marine",0.12275830646842,12.28
+"CZE","Czech Republic","freshwater",0.00064103734002743,0.06
+"CZE","Czech Republic","land",0.999358962659973,99.94
+"CZE","Czech Republic","marine",0,0
+"DEU","Germany","freshwater",0.000692721649550924,0.07
+"DEU","Germany","land",0.947451091036355,94.75
+"DEU","Germany","marine",0.0518561873140938,5.19
+"DJI","Djibouti","freshwater",0.00130262380046589,0.13
+"DJI","Djibouti","land",0.703854275621743,70.39
+"DJI","Djibouti","marine",0.294843100577791,29.48
+"DMA","Dominica","freshwater",0.000896645008115302,0.09
+"DMA","Dominica","land",0.844588472452197,84.46
+"DMA","Dominica","marine",0.154514882539688,15.45
+"DNK","Denmark","freshwater",0.000203510724495,0.02
+"DNK","Denmark","land",0.653154750184728,65.32
+"DNK","Denmark","marine",0.346641739090777,34.66
+"DOM","Dominican Republic","freshwater",0.000197981841133389,0.02
+"DOM","Dominican Republic","land",0.977262043240855,97.73
+"DOM","Dominican Republic","marine",0.0225399749180118,2.25
+"DZA","Algeria","freshwater",0.00095614952964976,0.1
+"DZA","Algeria","land",0.981501523710659,98.15
+"DZA","Algeria","marine",0.017542326759691,1.75
+"ECU","Ecuador","freshwater",0.00123355092431261,0.12
+"ECU","Ecuador","land",0.708005991246063,70.8
+"ECU","Ecuador","marine",0.290760457829624,29.08
+"EGY","Egypt","freshwater",0.000201367255262341,0.02
+"EGY","Egypt","land",0.988145433946195,98.81
+"EGY","Egypt","marine",0.0116531987985426,1.17
+"ERI","Eritrea","freshwater",0.00162393418321931,0.16
+"ERI","Eritrea","land",0.871534564191635,87.15
+"ERI","Eritrea","marine",0.126841501625145,12.68
+"ESH","Western Sahara","freshwater",0.00429386823440518,0.43
+"ESH","Western Sahara","land",0.0385681408402915,3.86
+"ESH","Western Sahara","marine",0.957137990925303,95.71
+"ESP","Spain","freshwater",0.000343237288854527,0.03
+"ESP","Spain","land",0.89977918009884,89.98
+"ESP","Spain","marine",0.0998775826123054,9.99
+"EST","Estonia","freshwater",0.00266245001394989,0.27
+"EST","Estonia","land",0.858323861978161,85.83
+"EST","Estonia","marine",0.139013688007889,13.9
+"ETH","Ethiopia","freshwater",0.000917607341513263,0.09
+"ETH","Ethiopia","land",0.999082392658487,99.91
+"ETH","Ethiopia","marine",0,0
+"FIN","Finland","freshwater",0.00778834863496338,0.78
+"FIN","Finland","land",0.901926391730931,90.19
+"FIN","Finland","marine",0.0902852596341057,9.03
+"FJI","Fiji","freshwater",0.00142517470430312,0.14
+"FJI","Fiji","land",0.639009560271844,63.9
+"FJI","Fiji","marine",0.359565265023853,35.96
+"FLK","Falkland Islands","freshwater",0.000254990106773191,0.03
+"FLK","Falkland Islands","land",0.0512065924695487,5.12
+"FLK","Falkland Islands","marine",0.948538417423678,94.85
+"FRA","France","freshwater",0.000482663311527373,0.05
+"FRA","France","land",0.912343643186758,91.23
+"FRA","France","marine",0.0871736935017143,8.72
+"FRO","Faroe Islands","freshwater",8.1338143940334e-05,0.01
+"FRO","Faroe Islands","land",0.00667461943725097,0.67
+"FRO","Faroe Islands","marine",0.993244042418809,99.32
+"FSM","Micronesia","freshwater",0.000368180307526614,0.04
+"FSM","Micronesia","land",0.146432718116729,14.64
+"FSM","Micronesia","marine",0.853199101575745,85.32
+"GAB","Gabon","freshwater",0.0406444691969772,4.06
+"GAB","Gabon","land",0.671657594062409,67.17
+"GAB","Gabon","marine",0.287697936740614,28.77
+"GBR","United Kingdom","freshwater",0.00034912024161891,0.03
+"GBR","United Kingdom","land",0.623366074431956,62.34
+"GBR","United Kingdom","marine",0.376284805326425,37.63
+"GEO","Georgia","freshwater",0.0025992205750345,0.26
+"GEO","Georgia","land",0.966279968341337,96.63
+"GEO","Georgia","marine",0.0311208110836283,3.11
+"GGY","Guernsey","freshwater",6.622824680723e-05,0.01
+"GGY","Guernsey","land",7.70984924425e-06,0
+"GGY","Guernsey","marine",0.999926061903949,99.99
+"GHA","Ghana","freshwater",0.000654528884148774,0.07
+"GHA","Ghana","land",0.961096998503474,96.11
+"GHA","Ghana","marine",0.038248472612377,3.82
+"GIB","Gibraltar","freshwater",5.68238122987283e-05,0.01
+"GIB","Gibraltar","land",0,0
+"GIB","Gibraltar","marine",0.999943176187701,99.99
+"GIN","Guinea","freshwater",0.00143112594133438,0.14
+"GIN","Guinea","land",0.90640221529081,90.64
+"GIN","Guinea","marine",0.092166658767856,9.22
+"GLP","Guadeloupe","freshwater",0.000427619718940003,0.04
+"GLP","Guadeloupe","land",0.987991508458361,98.8
+"GLP","Guadeloupe","marine",0.0115808718226992,1.16
+"GMB","Gambia","freshwater",0.000875849695449315,0.09
+"GMB","Gambia","land",0.689616884018218,68.96
+"GMB","Gambia","marine",0.309507266286332,30.95
+"GNB","Guinea-Bissau","freshwater",0.00130439029847586,0.13
+"GNB","Guinea-Bissau","land",0.555363161748269,55.54
+"GNB","Guinea-Bissau","marine",0.443332447953255,44.33
+"GNQ","Equatorial Guinea","freshwater",0.00571272057771534,0.57
+"GNQ","Equatorial Guinea","land",0.153321059190079,15.33
+"GNQ","Equatorial Guinea","marine",0.840966220232206,84.1
+"GRC","Greece","freshwater",0.000462486300989452,0.05
+"GRC","Greece","land",0.773547030469416,77.35
+"GRC","Greece","marine",0.225990483229595,22.6
+"GRD","Grenada","freshwater",0.000470776067072713,0.05
+"GRD","Grenada","land",0.736454032178397,73.65
+"GRD","Grenada","marine",0.26307519175453,26.31
+"GRL","Greenland","freshwater",0.0342009314488551,3.42
+"GRL","Greenland","land",0.0005102390194559,0.05
+"GRL","Greenland","marine",0.965288829531689,96.53
+"GTM","Guatemala","freshwater",0.00109422644617404,0.11
+"GTM","Guatemala","land",0.975875586695773,97.59
+"GTM","Guatemala","marine",0.0230301868580534,2.3
+"GUF","French Guiana","freshwater",0.0241264370497337,2.41
+"GUF","French Guiana","land",0.0887818495701868,8.88
+"GUF","French Guiana","marine",0.88709171338008,88.71
+"GUM","Guam","freshwater",0.00152542052364139,0.15
+"GUM","Guam","land",0.984069371408345,98.41
+"GUM","Guam","marine",0.0144052080680132,1.44
+"GUY","Guyana","freshwater",0.0169348826144287,1.69
+"GUY","Guyana","land",0.775000629886553,77.5
+"GUY","Guyana","marine",0.208064487499018,20.81
+"HKG","Hong Kong","freshwater",0.0001600093082183,0.02
+"HKG","Hong Kong","land",0.325230279935502,32.52
+"HKG","Hong Kong","marine",0.67460971075628,67.46
+"HND","Honduras","freshwater",0.00139059784142263,0.14
+"HND","Honduras","land",0.942331790711983,94.23
+"HND","Honduras","marine",0.0562776114465942,5.63
+"HRV","Croatia","freshwater",0.00120589703365638,0.12
+"HRV","Croatia","land",0.639162580856691,63.92
+"HRV","Croatia","marine",0.359631522109652,35.96
+"HSX","High Seas","freshwater",3.35831182615414e-05,0
+"HSX","High Seas","land",1.48438135405547e-06,0
+"HSX","High Seas","marine",0.999964932500384,100
+"HTI","Haiti","freshwater",0.000280257050296016,0.03
+"HTI","Haiti","land",0.891813907106577,89.18
+"HTI","Haiti","marine",0.107905835843127,10.79
+"HUN","Hungary","freshwater",0.00116979458536942,0.12
+"HUN","Hungary","land",0.998830205414631,99.88
+"HUN","Hungary","marine",0,0
+"IDN","Indonesia","freshwater",0.00105809480313651,0.11
+"IDN","Indonesia","land",0.671378249809058,67.14
+"IDN","Indonesia","marine",0.327563655387806,32.76
+"IMN","Isle of Man","freshwater",0.000371252857953875,0.04
+"IMN","Isle of Man","land",0.557712647741395,55.77
+"IMN","Isle of Man","marine",0.441916099400652,44.19
+"IND","India","freshwater",0.000445042198939379,0.04
+"IND","India","land",0.966322338990021,96.63
+"IND","India","marine",0.0332326188110394,3.32
+"IOT","British Indian Ocean Territory","freshwater",0,0
+"IOT","British Indian Ocean Territory","land",0,0
+"IOT","British Indian Ocean Territory","marine",1,100
+"IRL","Ireland","freshwater",0.000346442879286142,0.03
+"IRL","Ireland","land",0.742554362662534,74.26
+"IRL","Ireland","marine",0.25709919445818,25.71
+"IRN","Iran","freshwater",0.000636215686575915,0.06
+"IRN","Iran","land",0.973160382635213,97.32
+"IRN","Iran","marine",0.0262034016782117,2.62
+"IRQ","Iraq","freshwater",0.00142718774252097,0.14
+"IRQ","Iraq","land",0.996818865963474,99.68
+"IRQ","Iraq","marine",0.0017539462940045,0.18
+"ISL","Iceland","freshwater",0.00210849799390547,0.21
+"ISL","Iceland","land",0.0418641699940844,4.19
+"ISL","Iceland","marine",0.95602733201201,95.6
+"ISR","Israel","freshwater",7.64987469954322e-05,0.01
+"ISR","Israel","land",0.979746410719394,97.97
+"ISR","Israel","marine",0.0201770905336106,2.02
+"ITA","Italy","freshwater",0.000555826046469234,0.06
+"ITA","Italy","land",0.766278577237487,76.63
+"ITA","Italy","marine",0.233165596716044,23.32
+"JAM","Jamaica","freshwater",0.000581883334870736,0.06
+"JAM","Jamaica","land",0.820674662587099,82.07
+"JAM","Jamaica","marine",0.17874345407803,17.87
+"JEY","Jersey","freshwater",0.000278392878461131,0.03
+"JEY","Jersey","land",0.0419981767647533,4.2
+"JEY","Jersey","marine",0.957723430356786,95.77
+"JOR","Jordan","freshwater",0.000314460966934756,0.03
+"JOR","Jordan","land",0.995218336209696,99.52
+"JOR","Jordan","marine",0.00446720282336935,0.45
+"JPN","Japan","freshwater",0.00161258406665717,0.16
+"JPN","Japan","land",0.591374625508127,59.14
+"JPN","Japan","marine",0.407012790425216,40.7
+"KAZ","Kazakhstan","freshwater",0.00186349424323526,0.19
+"KAZ","Kazakhstan","land",0.998136505756765,99.81
+"KAZ","Kazakhstan","marine",0,0
+"KEN","Kenya","freshwater",0.000670253206930163,0.07
+"KEN","Kenya","land",0.988078835145748,98.81
+"KEN","Kenya","marine",0.0112509116473215,1.13
+"KGZ","Kyrgyzstan","freshwater",0.00203585809256996,0.2
+"KGZ","Kyrgyzstan","land",0.99796414190743,99.8
+"KGZ","Kyrgyzstan","marine",0,0
+"KHM","Cambodia","freshwater",0.00278128157532056,0.28
+"KHM","Cambodia","land",0.93406663290791,93.41
+"KHM","Cambodia","marine",0.0631520855167694,6.32
+"KIR","Kiribati","freshwater",3.24963774997109e-05,0
+"KIR","Kiribati","land",0.217738868894746,21.77
+"KIR","Kiribati","marine",0.782228634727754,78.22
+"KNA","Saint Kitts and Nevis","freshwater",0.000925129893689476,0.09
+"KNA","Saint Kitts and Nevis","land",0.398952091300619,39.9
+"KNA","Saint Kitts and Nevis","marine",0.600122778805691,60.01
+"KOR","South Korea","freshwater",0.000716281753736664,0.07
+"KOR","South Korea","land",0.760845362414441,76.08
+"KOR","South Korea","marine",0.238438355831822,23.84
+"KWT","Kuwait","freshwater",8.36722586293894e-05,0.01
+"KWT","Kuwait","land",0.500067018847225,50.01
+"KWT","Kuwait","marine",0.499849308894146,49.98
+"LAO","Laos","freshwater",0.00599575762669838,0.6
+"LAO","Laos","land",0.993951158086308,99.4
+"LAO","Laos","marine",5.30842869939978e-05,0.01
+"LBN","Lebanon","freshwater",0.000229680815850015,0.02
+"LBN","Lebanon","land",0.957376471348712,95.74
+"LBN","Lebanon","marine",0.0423938478354382,4.24
+"LBR","Liberia","freshwater",0.00476994772861162,0.48
+"LBR","Liberia","land",0.939698834570557,93.97
+"LBR","Liberia","marine",0.0555312177008314,5.55
+"LBY","Libya","freshwater",0.00206395973565715,0.21
+"LBY","Libya","land",0.913306744697892,91.33
+"LBY","Libya","marine",0.0846292955664507,8.46
+"LCA","Saint Lucia","freshwater",0.0010781691792179,0.11
+"LCA","Saint Lucia","land",0.809432146038637,80.94
+"LCA","Saint Lucia","marine",0.189489684782145,18.95
+"LIE","Liechtenstein","freshwater",0.00352403464951679,0.35
+"LIE","Liechtenstein","land",0.996475965350483,99.65
+"LIE","Liechtenstein","marine",0,0
+"LKA","Sri Lanka","freshwater",0.000796322349872099,0.08
+"LKA","Sri Lanka","land",0.840079378812878,84.01
+"LKA","Sri Lanka","marine",0.15912429883725,15.91
+"LSO","Lesotho","freshwater",0.00150566199449759,0.15
+"LSO","Lesotho","land",0.998494338005502,99.85
+"LSO","Lesotho","marine",0,0
+"LTU","Lithuania","freshwater",0.000948266351937606,0.09
+"LTU","Lithuania","land",0.985792734630901,98.58
+"LTU","Lithuania","marine",0.0132589990171609,1.33
+"LUX","Luxembourg","freshwater",0.000419511462972661,0.04
+"LUX","Luxembourg","land",0.999580488537027,99.96
+"LUX","Luxembourg","marine",0,0
+"LVA","Latvia","freshwater",0.00202054786817645,0.2
+"LVA","Latvia","land",0.920416056078271,92.04
+"LVA","Latvia","marine",0.0775633960535522,7.76
+"MAC","Macao","freshwater",0.00030775164483154,0.03
+"MAC","Macao","land",0.23981279023657,23.98
+"MAC","Macao","marine",0.759879458118599,75.99
+"MAF","Saint-Martin","freshwater",0.000398964009841258,0.04
+"MAF","Saint-Martin","land",0.0452435806371426,4.52
+"MAF","Saint-Martin","marine",0.954357455353016,95.44
+"MAR","Morocco","freshwater",0.00026242309465974,0.03
+"MAR","Morocco","land",0.888229084370649,88.82
+"MAR","Morocco","marine",0.111508492534691,11.15
+"MCO","Monaco","freshwater",0.00949574294995281,0.95
+"MCO","Monaco","land",0,0
+"MCO","Monaco","marine",0.990504257050047,99.05
+"MDA","Moldova","freshwater",0.000435326845609047,0.04
+"MDA","Moldova","land",0.999564673154391,99.96
+"MDA","Moldova","marine",0,0
+"MDG","Madagascar","freshwater",0.00262611856520974,0.26
+"MDG","Madagascar","land",0.929524176658128,92.95
+"MDG","Madagascar","marine",0.067849704776662,6.78
+"MDV","Maldives","freshwater",0,0
+"MDV","Maldives","land",0,0
+"MDV","Maldives","marine",1,100
+"MEX","Mexico","freshwater",0.000971265934964091,0.1
+"MEX","Mexico","land",0.917883648627757,91.79
+"MEX","Mexico","marine",0.0811450854372793,8.11
+"MHL","Marshall Islands","freshwater",3.63192939977504e-05,0
+"MHL","Marshall Islands","land",0.00135329937601422,0.14
+"MHL","Marshall Islands","marine",0.998610381329988,99.86
+"MKD","Macedonia","freshwater",0.00115158509385164,0.12
+"MKD","Macedonia","land",0.998848414906148,99.88
+"MKD","Macedonia","marine",0,0
+"MLI","Mali","freshwater",0.00112509888306925,0.11
+"MLI","Mali","land",0.998874901116931,99.89
+"MLI","Mali","marine",0,0
+"MLT","Malta","freshwater",2.52042215693065e-05,0
+"MLT","Malta","land",0.136702834145264,13.67
+"MLT","Malta","marine",0.863271961633167,86.33
+"MMR","Myanmar","freshwater",0.00219154329307412,0.22
+"MMR","Myanmar","land",0.865097546642316,86.51
+"MMR","Myanmar","marine",0.132710910064609,13.27
+"MNE","Montenegro","freshwater",0.0045610172588511,0.46
+"MNE","Montenegro","land",0.797917475775485,79.79
+"MNE","Montenegro","marine",0.197521506965664,19.75
+"MNG","Mongolia","freshwater",0.00213996250661084,0.21
+"MNG","Mongolia","land",0.997860037493389,99.79
+"MNG","Mongolia","marine",0,0
+"MNP","Northern Mariana Islands","freshwater",0.0416898305361016,4.17
+"MNP","Northern Mariana Islands","land",0.589162765448059,58.92
+"MNP","Northern Mariana Islands","marine",0.36914740401584,36.91
+"MOZ","Mozambique","freshwater",0.00450710933561713,0.45
+"MOZ","Mozambique","land",0.854341118406143,85.43
+"MOZ","Mozambique","marine",0.14115177225824,14.12
+"MRT","Mauritania","freshwater",0.00286396710290378,0.29
+"MRT","Mauritania","land",0.27630309369724,27.63
+"MRT","Mauritania","marine",0.720832939199856,72.08
+"MSR","Montserrat","freshwater",0.000451963642058346,0.05
+"MSR","Montserrat","land",0.807987404443091,80.8
+"MSR","Montserrat","marine",0.191560631914851,19.16
+"MTQ","Martinique","freshwater",0.000697776442588278,0.07
+"MTQ","Martinique","land",0.955064057951383,95.51
+"MTQ","Martinique","marine",0.0442381656060286,4.42
+"MUS","Mauritius","freshwater",0,0
+"MUS","Mauritius","land",0.677568298928822,67.76
+"MUS","Mauritius","marine",0.322431701071178,32.24
+"MWI","Malawi","freshwater",0.000787654065628252,0.08
+"MWI","Malawi","land",0.999212345934372,99.92
+"MWI","Malawi","marine",0,0
+"MYS","Malaysia","freshwater",0.0015616512654801,0.16
+"MYS","Malaysia","land",0.505183047858721,50.52
+"MYS","Malaysia","marine",0.493255300875799,49.33
+"MYT","Mayotte","freshwater",0.000824278877160029,0.08
+"MYT","Mayotte","land",0.629164240915445,62.92
+"MYT","Mayotte","marine",0.370011480207395,37
+"NAM","Namibia","freshwater",0.00243630844692738,0.24
+"NAM","Namibia","land",0.57981400705915,57.98
+"NAM","Namibia","marine",0.417749684493923,41.77
+"NCL","New Caledonia","freshwater",0.00746164602088348,0.75
+"NCL","New Caledonia","land",0.71612566550549,71.61
+"NCL","New Caledonia","marine",0.276412688473626,27.64
+"NER","Niger","freshwater",0.000834088554729933,0.08
+"NER","Niger","land",0.99916591144527,99.92
+"NER","Niger","marine",0,0
+"NFK","Norfolk Island","freshwater",0.000224369445877685,0.02
+"NFK","Norfolk Island","land",0.25856241942755,25.86
+"NFK","Norfolk Island","marine",0.741213211126573,74.12
+"NGA","Nigeria","freshwater",0.000908006731439616,0.09
+"NGA","Nigeria","land",0.964500508065211,96.45
+"NGA","Nigeria","marine",0.034591485203349,3.46
+"NIC","Nicaragua","freshwater",0.00164559869617856,0.16
+"NIC","Nicaragua","land",0.940891502928934,94.09
+"NIC","Nicaragua","marine",0.0574628983748873,5.75
+"NIU","Niue","freshwater",0,0
+"NIU","Niue","land",0.790431910979988,79.04
+"NIU","Niue","marine",0.209568089020012,20.96
+"NLD","Netherlands","freshwater",0.000328416004464102,0.03
+"NLD","Netherlands","land",0.761500354857172,76.15
+"NLD","Netherlands","marine",0.238171229138364,23.82
+"NOR","Norway","freshwater",0.00164442238592157,0.16
+"NOR","Norway","land",0.114411850396518,11.44
+"NOR","Norway","marine",0.883943727217561,88.39
+"NPL","Nepal","freshwater",0.00102353410057656,0.1
+"NPL","Nepal","land",0.998976465899423,99.9
+"NPL","Nepal","marine",0,0
+"NRU","Nauru","freshwater",9.62167440031308e-05,0.01
+"NRU","Nauru","land",0.0578892644172116,5.79
+"NRU","Nauru","marine",0.942014518838785,94.2
+"NZL","New Zealand","freshwater",0.000986944559885851,0.1
+"NZL","New Zealand","land",0.833138519575423,83.31
+"NZL","New Zealand","marine",0.165874535864691,16.59
+"OMN","Oman","freshwater",0.00116822796919359,0.12
+"OMN","Oman","land",0.396925130514627,39.69
+"OMN","Oman","marine",0.60190664151618,60.19
+"PAK","Pakistan","freshwater",0.000287306372048685,0.03
+"PAK","Pakistan","land",0.987148263715524,98.71
+"PAK","Pakistan","marine",0.0125644299124273,1.26
+"PAN","Panama","freshwater",0.00279646152342565,0.28
+"PAN","Panama","land",0.861244916048011,86.12
+"PAN","Panama","marine",0.135958622428563,13.6
+"PCN","Pitcairn Islands","freshwater",0,0
+"PCN","Pitcairn Islands","land",0,0
+"PCN","Pitcairn Islands","marine",1,100
+"PER","Peru","freshwater",0.00590390648402013,0.59
+"PER","Peru","land",0.70133819903567,70.13
+"PER","Peru","marine",0.29275789448031,29.28
+"PHL","Philippines","freshwater",0.000632044513257175,0.06
+"PHL","Philippines","land",0.787631908932677,78.76
+"PHL","Philippines","marine",0.211736046554066,21.17
+"PLW","Palau","freshwater",0.000737609977521699,0.07
+"PLW","Palau","land",0.0141754329002027,1.42
+"PLW","Palau","marine",0.985086957122276,98.51
+"PNG","Papua New Guinea","freshwater",0.013234480791909,1.32
+"PNG","Papua New Guinea","land",0.558655556839897,55.87
+"PNG","Papua New Guinea","marine",0.428109962368194,42.81
+"POL","Poland","freshwater",0.000741621715861546,0.07
+"POL","Poland","land",0.978216345850246,97.82
+"POL","Poland","marine",0.0210420324338924,2.1
+"PRI","Puerto Rico","freshwater",0.000664256587269112,0.07
+"PRI","Puerto Rico","land",0.985836930234225,98.58
+"PRI","Puerto Rico","marine",0.0134988131785062,1.35
+"PRK","North Korea","freshwater",0.00112824772618564,0.11
+"PRK","North Korea","land",0.834065330631299,83.41
+"PRK","North Korea","marine",0.164806421642516,16.48
+"PRT","Portugal","freshwater",0.000756247318354854,0.08
+"PRT","Portugal","land",0.804496607911668,80.45
+"PRT","Portugal","marine",0.194747144769977,19.47
+"PRY","Paraguay","freshwater",0.00148147906300838,0.15
+"PRY","Paraguay","land",0.998518520936992,99.85
+"PRY","Paraguay","marine",0,0
+"PSE","Palestina","freshwater",0.00139549115491022,0.14
+"PSE","Palestina","land",0.954484268425319,95.45
+"PSE","Palestina","marine",0.0441202404197707,4.41
+"PYF","French Polynesia","freshwater",0,0
+"PYF","French Polynesia","land",0.46514597763248,46.51
+"PYF","French Polynesia","marine",0.53485402236752,53.49
+"QAT","Qatar","freshwater",4.08354199080521e-05,0
+"QAT","Qatar","land",0.335436929330757,33.54
+"QAT","Qatar","marine",0.664522235249335,66.45
+"REU","Reunion","freshwater",0,0
+"REU","Reunion","land",0.987801785005282,98.78
+"REU","Reunion","marine",0.0121982149947174,1.22
+"ROU","Romania","freshwater",0.00124425559689621,0.12
+"ROU","Romania","land",0.996213966596521,99.62
+"ROU","Romania","marine",0.00254177780658321,0.25
+"RUS","Russia","freshwater",0.0107050479971995,1.07
+"RUS","Russia","land",0.74043389905617,74.04
+"RUS","Russia","marine",0.248861052946631,24.89
+"RWA","Rwanda","freshwater",0.000314236200790504,0.03
+"RWA","Rwanda","land",0.999685763799209,99.97
+"RWA","Rwanda","marine",0,0
+"SAU","Saudi Arabia","freshwater",0.00136155365177141,0.14
+"SAU","Saudi Arabia","land",0.488326662671514,48.83
+"SAU","Saudi Arabia","marine",0.510311783676715,51.03
+"SDN","Sudan","freshwater",0.00128992802939676,0.13
+"SDN","Sudan","land",0.95483280035805,95.48
+"SDN","Sudan","marine",0.0438772716125532,4.39
+"SEN","Senegal","freshwater",0.000417052747744432,0.04
+"SEN","Senegal","land",0.865082106828831,86.51
+"SEN","Senegal","marine",0.134500840423424,13.45
+"SGP","Singapore","freshwater",0.000403906159749215,0.04
+"SGP","Singapore","land",0.370213976334366,37.02
+"SGP","Singapore","marine",0.629382117505884,62.94
+"SHN","Saint Helena","freshwater",0,0
+"SHN","Saint Helena","land",0.00480439772191615,0.48
+"SHN","Saint Helena","marine",0.995195602278084,99.52
+"SJM","Svalbard and Jan Mayen","freshwater",0.0256497304031895,2.56
+"SJM","Svalbard and Jan Mayen","land",0.0179409384306207,1.79
+"SJM","Svalbard and Jan Mayen","marine",0.95640933116619,95.64
+"SLB","Solomon Islands","freshwater",0.00526432524705628,0.53
+"SLB","Solomon Islands","land",0.300420043752236,30.04
+"SLB","Solomon Islands","marine",0.694315631000707,69.43
+"SLE","Sierra Leone","freshwater",0.00224716743909895,0.22
+"SLE","Sierra Leone","land",0.827979439858192,82.8
+"SLE","Sierra Leone","marine",0.16977339270271,16.98
+"SLV","El Salvador","freshwater",0.000788798996808091,0.08
+"SLV","El Salvador","land",0.979860319388626,97.99
+"SLV","El Salvador","marine",0.0193508816145661,1.94
+"SMR","San Marino","freshwater",0.000462802733327625,0.05
+"SMR","San Marino","land",0.999537197266672,99.95
+"SMR","San Marino","marine",0,0
+"SOM","Somalia","freshwater",0.00188025255601414,0.19
+"SOM","Somalia","land",0.830246797103013,83.02
+"SOM","Somalia","marine",0.167872950340973,16.79
+"SPM","Saint Pierre and Miquelon","freshwater",0.0034216435864832,0.34
+"SPM","Saint Pierre and Miquelon","land",0.02482601447132,2.48
+"SPM","Saint Pierre and Miquelon","marine",0.971752341942197,97.18
+"SRB","Serbia","freshwater",0.00185497562405786,0.19
+"SRB","Serbia","land",0.998145024375942,99.81
+"SRB","Serbia","marine",0,0
+"SSD","South Sudan","freshwater",0.00244614776374272,0.24
+"SSD","South Sudan","land",0.997553852236257,99.76
+"SSD","South Sudan","marine",0,0
+"STP","São Tomé and Príncipe","freshwater",0.000549617980390841,0.05
+"STP","São Tomé and Príncipe","land",0.672918948067295,67.29
+"STP","São Tomé and Príncipe","marine",0.326531433952314,32.65
+"SUR","Suriname","freshwater",0.0174305439964522,1.74
+"SUR","Suriname","land",0.69961267171984,69.96
+"SUR","Suriname","marine",0.282956784283708,28.3
+"SVK","Slovakia","freshwater",0.00138837067076352,0.14
+"SVK","Slovakia","land",0.998611629329236,99.86
+"SVK","Slovakia","marine",0,0
+"SVN","Slovenia","freshwater",0.00169568787026338,0.17
+"SVN","Slovenia","land",0.952064762790428,95.21
+"SVN","Slovenia","marine",0.0462395493393086,4.62
+"SWE","Sweden","freshwater",0.00453770804057428,0.45
+"SWE","Sweden","land",0.753063124363989,75.31
+"SWE","Sweden","marine",0.242399167595437,24.24
+"SWZ","Swaziland","freshwater",0.0008270707773916,0.08
+"SWZ","Swaziland","land",0.999172929222608,99.92
+"SWZ","Swaziland","marine",0,0
+"SXM","Sint Maarten","freshwater",0.00185670286049275,0.19
+"SXM","Sint Maarten","land",0,0
+"SXM","Sint Maarten","marine",0.998143297139507,99.81
+"SYC","Seychelles","freshwater",7.33965810816553e-05,0.01
+"SYC","Seychelles","land",0.177071096679797,17.71
+"SYC","Seychelles","marine",0.822855506739122,82.29
+"SYR","Syria","freshwater",0.000431678411281814,0.04
+"SYR","Syria","land",0.996976689448547,99.7
+"SYR","Syria","marine",0.00259163214017158,0.26
+"TCA","Turks and Caicos Islands","freshwater",0.00152936589624638,0.15
+"TCA","Turks and Caicos Islands","land",0.0649769895906251,6.5
+"TCA","Turks and Caicos Islands","marine",0.933493644513128,93.35
+"TCD","Chad","freshwater",0.00142159261092191,0.14
+"TCD","Chad","land",0.998578407389078,99.86
+"TCD","Chad","marine",0,0
+"TGO","Togo","freshwater",0.000489605701985468,0.05
+"TGO","Togo","land",0.978156806910971,97.82
+"TGO","Togo","marine",0.0213535873870435,2.14
+"THA","Thailand","freshwater",0.000692604659013784,0.07
+"THA","Thailand","land",0.906176719882403,90.62
+"THA","Thailand","marine",0.0931306754585828,9.31
+"TJK","Tajikistan","freshwater",0.0013438347944998,0.13
+"TJK","Tajikistan","land",0.9986561652055,99.87
+"TJK","Tajikistan","marine",0,0
+"TKL","Tokelau","freshwater",0,0
+"TKL","Tokelau","land",0.342119676512436,34.21
+"TKL","Tokelau","marine",0.657880323487564,65.79
+"TKM","Turkmenistan","freshwater",0.00114696753442993,0.11
+"TKM","Turkmenistan","land",0.99885303246557,99.89
+"TKM","Turkmenistan","marine",0,0
+"TLS","Timor-Leste","freshwater",0.000955363853699983,0.1
+"TLS","Timor-Leste","land",0.628120363033353,62.81
+"TLS","Timor-Leste","marine",0.370924273112947,37.09
+"TON","Tonga","freshwater",0,0
+"TON","Tonga","land",0.5778751402569,57.79
+"TON","Tonga","marine",0.4221248597431,42.21
+"TTO","Trinidad and Tobago","freshwater",0.000553473343491653,0.06
+"TTO","Trinidad and Tobago","land",0.837808171209621,83.78
+"TTO","Trinidad and Tobago","marine",0.161638355446888,16.16
+"TUN","Tunisia","freshwater",0.000261037116137991,0.03
+"TUN","Tunisia","land",0.88310010542318,88.31
+"TUN","Tunisia","marine",0.116638857460682,11.66
+"TUR","Turkey","freshwater",0.000580299813235872,0.06
+"TUR","Turkey","land",0.960297951828748,96.03
+"TUR","Turkey","marine",0.0391217483580164,3.91
+"TUV","Tuvalu","freshwater",6.35465615441973e-05,0.01
+"TUV","Tuvalu","land",0.0684945170129427,6.85
+"TUV","Tuvalu","marine",0.931441936425513,93.14
+"TWN","Taiwan","freshwater",0.00028202684093175,0.03
+"TWN","Taiwan","land",0.709354862447385,70.94
+"TWN","Taiwan","marine",0.290363110711683,29.04
+"TZA","Tanzania","freshwater",0.00107794777843518,0.11
+"TZA","Tanzania","land",0.96868117232031,96.87
+"TZA","Tanzania","marine",0.0302408799012551,3.02
+"UGA","Uganda","freshwater",0.000526405800789569,0.05
+"UGA","Uganda","land",0.99947359419921,99.95
+"UGA","Uganda","marine",0,0
+"UKR","Ukraine","freshwater",0.000695023635505524,0.07
+"UKR","Ukraine","land",0.994487546956905,99.45
+"UKR","Ukraine","marine",0.00481742940758921,0.48
+"URY","Uruguay","freshwater",0.000971827442604714,0.1
+"URY","Uruguay","land",0.92234018645614,92.23
+"URY","Uruguay","marine",0.0766879861012552,7.67
+"USA","United States","freshwater",0.00182430097509362,0.18
+"USA","United States","land",0.923669607860782,92.37
+"USA","United States","marine",0.0745060911641239,7.45
+"UZB","Uzbekistan","freshwater",0.000339765634244799,0.03
+"UZB","Uzbekistan","land",0.999660234365755,99.97
+"UZB","Uzbekistan","marine",0,0
+"VCT","Saint Vincent and the Grenadines","freshwater",0.000926294385499649,0.09
+"VCT","Saint Vincent and the Grenadines","land",0.699729020583244,69.97
+"VCT","Saint Vincent and the Grenadines","marine",0.299344685031256,29.93
+"VEN","Venezuela","freshwater",0.00701006153520383,0.7
+"VEN","Venezuela","land",0.943920020176982,94.39
+"VEN","Venezuela","marine",0.0490699182878141,4.91
+"VGB","British Virgin Islands","freshwater",0.00110246533320362,0.11
+"VGB","British Virgin Islands","land",0.0160575289687511,1.61
+"VGB","British Virgin Islands","marine",0.982840005698045,98.28
+"VIR","Virgin Islands, U.S.","freshwater",0.000743320914599503,0.07
+"VIR","Virgin Islands, U.S.","land",0.97560715979847,97.56
+"VIR","Virgin Islands, U.S.","marine",0.0236495192869301,2.36
+"VNM","Vietnam","freshwater",0.000653631893394702,0.07
+"VNM","Vietnam","land",0.734534769734366,73.45
+"VNM","Vietnam","marine",0.264811598372239,26.48
+"VUT","Vanuatu","freshwater",0.0023539610529045,0.24
+"VUT","Vanuatu","land",0.836234219209557,83.62
+"VUT","Vanuatu","marine",0.161411819737538,16.14
+"WLF","Wallis and Futuna","freshwater",0,0
+"WLF","Wallis and Futuna","land",0.738123192692299,73.81
+"WLF","Wallis and Futuna","marine",0.261876807307701,26.19
+"WSM","Samoa","freshwater",0,0
+"WSM","Samoa","land",0.69996376026591,70
+"WSM","Samoa","marine",0.30003623973409,30
+"XKO","Kosovo","freshwater",0.00114995487390238,0.11
+"XKO","Kosovo","land",0.998850045126098,99.89
+"XKO","Kosovo","marine",0,0
+"XMI","Madeira Island","freshwater",0.000175982381715415,0.02
+"XMI","Madeira Island","land",0.126235082898664,12.62
+"XMI","Madeira Island","marine",0.873588934719621,87.36
+"YEM","Yemen","freshwater",0.000729868079964659,0.07
+"YEM","Yemen","land",0.857877889302992,85.79
+"YEM","Yemen","marine",0.141392242617044,14.14
+"ZAF","South Africa","freshwater",0.000857640322886658,0.09
+"ZAF","South Africa","land",0.932415564899976,93.24
+"ZAF","South Africa","marine",0.0667267947771378,6.67
+"ZMB","Zambia","freshwater",0.00345065134162148,0.35
+"ZMB","Zambia","land",0.996549348658379,99.65
+"ZMB","Zambia","marine",0,0
+"ZWE","Zimbabwe","freshwater",0.00145717777861283,0.15
+"ZWE","Zimbabwe","land",0.998542822221387,99.85
+"ZWE","Zimbabwe","marine",0,0

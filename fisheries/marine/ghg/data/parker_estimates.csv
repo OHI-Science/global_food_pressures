@@ -1,0 +1,20 @@
+﻿sector,sub_sector,fuel_use_intensity_l_t,emissions_intensity_parker
+Global Fisheries,global,489,2.2
+Vessel type,motorized,532,2.3
+Vessel type,non motorized,0,0.7
+Product type,human consumption,592,2.7
+Product type,non-food products,246,1.1
+Product type,meal and oil,82,0.4
+Species group,pelagic > 30,42,0.2
+Species group,pelagic < 30,430,1.9
+Species group,demersal molluscs,523,2.4
+Species group,demersal fish,539,2.4
+Species group,cephalopods,613,2.8
+Species group,crustaceans,1739,7.9
+Region,latin america,235,1
+Region,north america,380,1.7
+Region,europe,390,1.7
+Region,africa,385,1.8
+Region,asia (no china),554,2.5
+Region,oceania,636,2.8
+Region,china,809,3.7

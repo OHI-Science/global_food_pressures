@@ -1,0 +1,33 @@
+---
+title: "empty_stressors"
+output: html_document
+---
+
+Aim: Produce water and nutrient pollution rasters with zero values.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("here")
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+```
+
+```{r}
+# Allocate a value of zero to raster cells with rivers.
+river_raster <- raster(file.path(layers, "freshwater_fisheries_disturbance.tif"))
+values(river_raster)[values(river_raster) == 0] <- NA
+values(river_raster)[values(river_raster) > 0] <- 0
+
+# Water layer
+writeRaster(river_raster,
+            file.path(layers, "freshwater_fish_fisheries_meat_water.tif"),
+            overwrite = TRUE,
+            format = "GTiff")
+
+# Nutrient pollution layer
+writeRaster(river_raster,
+            file.path(layers, "freshwater_fish_fisheries_meat_nutrient.tif"),
+            overwrite = TRUE,
+            format = "GTiff")
+```
+

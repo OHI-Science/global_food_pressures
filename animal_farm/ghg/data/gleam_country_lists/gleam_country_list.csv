@@ -1,0 +1,203 @@
+﻿country,region,abb
+Antigua and Barbuda,Latin America and the Caribbean,LAC
+Argentina,Latin America and the Caribbean,LAC
+Bahamas,Latin America and the Caribbean,LAC
+Barbados,Latin America and the Caribbean,LAC
+Belize,Latin America and the Caribbean,LAC
+Bolivia,Latin America and the Caribbean,LAC
+Brazil,Latin America and the Caribbean,LAC
+Chile,Latin America and the Caribbean,LAC
+Colombia,Latin America and the Caribbean,LAC
+Costa Rica,Latin America and the Caribbean,LAC
+Cuba,Latin America and the Caribbean,LAC
+Dominica,Latin America and the Caribbean,LAC
+Dominican Republic,Latin America and the Caribbean,LAC
+Ecuador,Latin America and the Caribbean,LAC
+El Salvador,Latin America and the Caribbean,LAC
+Grenada,Latin America and the Caribbean,LAC
+Guatemala,Latin America and the Caribbean,LAC
+Guyana ,Latin America and the Caribbean,LAC
+Haiti ,Latin America and the Caribbean,LAC
+Honduras ,Latin America and the Caribbean,LAC
+Jamaica ,Latin America and the Caribbean,LAC
+Mexico ,Latin America and the Caribbean,LAC
+Nicaragua ,Latin America and the Caribbean,LAC
+Panama ,Latin America and the Caribbean,LAC
+Paraguay ,Latin America and the Caribbean,LAC
+Peru ,Latin America and the Caribbean,LAC
+Puerto Rico ,Latin America and the Caribbean,LAC
+Saint Kitts and Nevis ,Latin America and the Caribbean,LAC
+Saint Lucia ,Latin America and the Caribbean,LAC
+Saint Vincent and the Grenadines ,Latin America and the Caribbean,LAC
+Suriname ,Latin America and the Caribbean,LAC
+Trinidad and Tobago ,Latin America and the Caribbean,LAC
+Uruguay ,Latin America and the Caribbean,LAC
+Venezuela ,Latin America and the Caribbean,LAC
+Angola,Sub-Saharam Africa,SSA
+Benin,Sub-Saharam Africa,SSA
+Botswana,Sub-Saharam Africa,SSA
+Burkina Faso,Sub-Saharam Africa,SSA
+Burundi,Sub-Saharam Africa,SSA
+Cameroon,Sub-Saharam Africa,SSA
+Cape Verde,Sub-Saharam Africa,SSA
+Central African Republic,Sub-Saharam Africa,SSA
+Chad,Sub-Saharam Africa,SSA
+Comoros,Sub-Saharam Africa,SSA
+Congo,Sub-Saharam Africa,SSA
+Côte d'Ivoire,Sub-Saharam Africa,SSA
+Democratic Republic of the Congo,Sub-Saharam Africa,SSA
+Djibouti,Sub-Saharam Africa,SSA
+Equatorial Guinea,Sub-Saharam Africa,SSA
+Eritrea,Sub-Saharam Africa,SSA
+Ethiopia,Sub-Saharam Africa,SSA
+Gabon,Sub-Saharam Africa,SSA
+Gambia,Sub-Saharam Africa,SSA
+Ghana,Sub-Saharam Africa,SSA
+Guinea-Bissau,Sub-Saharam Africa,SSA
+Guinea,Sub-Saharam Africa,SSA
+Kenya,Sub-Saharam Africa,SSA
+Lesotho,Sub-Saharam Africa,SSA
+Liberia ,Sub-Saharam Africa,SSA
+Madagascar ,Sub-Saharam Africa,SSA
+Malawi ,Sub-Saharam Africa,SSA
+Mali ,Sub-Saharam Africa,SSA
+Mauritania ,Sub-Saharam Africa,SSA
+Mauritius ,Sub-Saharam Africa,SSA
+Mozambique ,Sub-Saharam Africa,SSA
+Namibia ,Sub-Saharam Africa,SSA
+Niger ,Sub-Saharam Africa,SSA
+Nigeria ,Sub-Saharam Africa,SSA
+Rwanda ,Sub-Saharam Africa,SSA
+São Tome and Principe ,Sub-Saharam Africa,SSA
+Senegal ,Sub-Saharam Africa,SSA
+Seychelles ,Sub-Saharam Africa,SSA
+Sierra Leone ,Sub-Saharam Africa,SSA
+Somalia ,Sub-Saharam Africa,SSA
+South Africa ,Sub-Saharam Africa,SSA
+Swaziland ,Sub-Saharam Africa,SSA
+Togo ,Sub-Saharam Africa,SSA
+Uganda ,Sub-Saharam Africa,SSA
+United Republic of Tanzania ,Sub-Saharam Africa,SSA
+Zambia ,Sub-Saharam Africa,SSA
+Zimbabwe ,Sub-Saharam Africa,SSA
+Algeria,Near East and North Africa,NENA
+Armenia,Near East and North Africa,NENA
+Azerbaijan,Near East and North Africa,NENA
+Bahrain,Near East and North Africa,NENA
+Cyprus,Near East and North Africa,NENA
+Egypt,Near East and North Africa,NENA
+Gaza Strip ,Near East and North Africa,NENA
+Georgia,Near East and North Africa,NENA
+Iraq,Near East and North Africa,NENA
+Jordan,Near East and North Africa,NENA
+Kazakhstan,Near East and North Africa,NENA
+Kuwait,Near East and North Africa,NENA
+Israel ,Near East and North Africa,NENA
+Morocco ,Near East and North Africa,NENA
+Oman ,Near East and North Africa,NENA
+Qatar ,Near East and North Africa,NENA
+Saudi Arabia ,Near East and North Africa,NENA
+South Sudan ,Near East and North Africa,NENA
+Sudan ,Near East and North Africa,NENA
+Syrian Arab Republic ,Near East and North Africa,NENA
+Tajikistan ,Near East and North Africa,NENA
+Tunisia ,Near East and North Africa,NENA
+Turkey,Near East and North Africa,NENA
+Turkmenistan,Near East and North Africa,NENA
+United Arab Emirates,Near East and North Africa,NENA
+ Uzbekistan ,Near East and North Africa,NENA
+Kyrgyzstan ,Near East and North Africa,NENA
+Libya,Near East and North Africa,NENA
+Lebanon,Near East and North Africa,NENA
+West Bank ,Near East and North Africa,NENA
+Western Sahara ,Near East and North Africa,NENA
+Yemen ,Near East and North Africa,NENA
+Afghanistan   ,South Asia,SA
+Bangladesh,South Asia,SA
+India,South Asia,SA
+"Iran, Islamic Republic of",South Asia,SA
+Maldives ,South Asia,SA
+Bhutan,South Asia,SA
+Nepal ,South Asia,SA
+Pakistan ,South Asia,SA
+Sri Lanka ,South Asia,SA
+Belarus,Eastern Europe,EE
+Bulgaria,Eastern Europe,EE
+Czech Republic,Eastern Europe,EE
+Hungary,Eastern Europe,EE
+"Moldova, Republic of",Eastern Europe,EE
+Poland ,Eastern Europe,EE
+Romania ,Eastern Europe,EE
+Slovakia ,Eastern Europe,EE
+Ukraine ,Eastern Europe,EE
+Russian Federation,Russian Federation,RUS
+Brunei Darussalam,East Asia and South-East Asia,ESEA
+Cambodia,East Asia and South-East Asia,ESEA
+China,East Asia and South-East Asia,ESEA
+Democratic People’s Republic of Korea,East Asia and South-East Asia,ESEA
+Indonesia,East Asia and South-East Asia,ESEA
+Japan,East Asia and South-East Asia,ESEA
+Lao People’s Democratic Republic ,East Asia and South-East Asia,ESEA
+ Hong Kong,East Asia and South-East Asia,ESEA
+Malaysia,East Asia and South-East Asia,ESEA
+Mongolia ,East Asia and South-East Asia,ESEA
+Myanmar ,East Asia and South-East Asia,ESEA
+Philippines ,East Asia and South-East Asia,ESEA
+Republic of Korea ,East Asia and South-East Asia,ESEA
+Singapore ,East Asia and South-East Asia,ESEA
+Thailand ,East Asia and South-East Asia,ESEA
+Timor-Leste ,East Asia and South-East Asia,ESEA
+Viet Nam ,East Asia and South-East Asia,ESEA
+Australia,Oceania,OCE
+Fiji,Oceania,OCE
+Kiribati,Oceania,OCE
+Marshall Islands,Oceania,OCE
+"Micronesia, Federated States of",Oceania,OCE
+Nauru,Oceania,OCE
+New Zealand,Oceania,OCE
+Northern Mariana Islands,Oceania,OCE
+Palau ,Oceania,OCE
+Papua New Guinea ,Oceania,OCE
+Samoa ,Oceania,OCE
+Solomon Islands ,Oceania,OCE
+Tonga ,Oceania,OCE
+Tuvalu ,Oceania,OCE
+Vanuatu ,Oceania,OCE
+Bermuda,North America,NA
+Canada ,North America,NA
+Greenland ,North America,NA
+United States of America ,North America,NA
+Albania,Western Europe,WE
+Andorra,Western Europe,WE
+Austria,Western Europe,WE
+Belgium,Western Europe,WE
+Bosnia and Herzegovina ,Western Europe,WE
+Croatia ,Western Europe,WE
+Denmark ,Western Europe,WE
+Estonia,Western Europe,WE
+Finland ,Western Europe,WE
+France ,Western Europe,WE
+Germany ,Western Europe,WE
+Greece ,Western Europe,WE
+Iceland ,Western Europe,WE
+Ireland ,Western Europe,WE
+Italy ,Western Europe,WE
+Latvia,Western Europe,WE
+Liechtenstein,Western Europe,WE
+Lithuania ,Western Europe,WE
+Luxemburg ,Western Europe,WE
+Madeira Islands ,Western Europe,WE
+Malta ,Western Europe,WE
+Monaco ,Western Europe,WE
+Montenegro ,Western Europe,WE
+Netherlands ,Western Europe,WE
+Norway ,Western Europe,WE
+Portugal ,Western Europe,WE
+Republic of Serbia ,Western Europe,WE
+San Marino ,Western Europe,WE
+Slovenia ,Western Europe,WE
+Spain ,Western Europe,WE
+Sweden ,Western Europe,WE
+Switzerland ,Western Europe,WE
+The former Yugoslav Republic of Macedonia ,Western Europe,WE
+United Kingdom of Great Britain and Northern Ireland ,Western Europe,WE

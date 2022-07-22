@@ -1,0 +1,187 @@
+---
+title: "ghg_enteric_fermentation"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Set-up
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+
+## load libraries, read in data
+library(janitor)
+library(doParallel)
+library(here)
+library(tidyverse)
+library(countrycode)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R") )
+source(here("_spatial/template_raster.R"))
+food_rgns_FAO <- rename(food_rgns, "area_code" = "ID_0")
+
+ch4_to_co2 <- 25
+
+```
+
+We use FAO enteric fermentation rates.
+--------------------------------------------------------------------------------
+## Methods
+Wrangle and gapfill CH4 emission rates from FAO:
+
+```{r}
+
+ef_fao <- read_csv(here("animal_farm/ghg/data/FAOSTAT_enteric_fermentation_2-5-2021.csv")) %>%
+  filter(Element == "Implied emission factor for CH4 (Enteric)") %>%
+  mutate(kg_co2eq_head = Value * ch4_to_co2) %>%
+  select(Area, Item, kg_co2eq_head) %>%
+  filter(Area != "China")%>%
+  mutate(Area = ifelse(Area == "Netherlands Antilles (former)", "Bonaire, Sint Eustatius and Saba", Area))
+
+ef_fao$iso3c <- countrycode(as.character(ef_fao$Area), origin="country.name", destination = "iso3c")
+ef_fao <- ef_fao %>%
+  mutate(iso3c = ifelse(Area == "French Guyana", "GUF", iso3c))
+
+summary(ef_fao)
+table(ef_fao$iso3c)
+filter(ef_fao, iso3c=="USA")
+
+```
+
+Gapfill missing values
+```{r}
+un <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>% 
+  dplyr::select(iso3c, Global_Name, Region_Name, Sub_region_Name, Intermediate_Region_Name)
+length(table(un$Intermediate_Region_Name)) #24
+length(table(un$Sub_region_Name)) #18
+table(un$Region_Name) # 6
+
+
+all_cats <- expand.grid(iso3c = un$iso3c, Item = unique(ef_fao$Item))
+
+ef_fao_gf <- left_join(all_cats, ef_fao, by=c("iso3c", "Item")) %>%
+  left_join(un, by="iso3c") %>% #NA=531
+  group_by(Item, Intermediate_Region_Name) %>%
+  mutate(kg_co2eq_head = ifelse(is.na(kg_co2eq_head), median(kg_co2eq_head, na.rm=TRUE), kg_co2eq_head)) %>% #NA=104
+  group_by(Item, Sub_region_Name) %>%
+  mutate(kg_co2eq_head = ifelse(is.na(kg_co2eq_head), median(kg_co2eq_head, na.rm=TRUE), kg_co2eq_head)) %>%    # NA=58
+  group_by(Item, Region_Name) %>%
+  mutate(kg_co2eq_head = ifelse(is.na(kg_co2eq_head), median(kg_co2eq_head, na.rm=TRUE), kg_co2eq_head)) %>%    # NA=7
+  group_by(Item) %>%
+  mutate(kg_co2eq_head = ifelse(is.na(kg_co2eq_head), median(kg_co2eq_head, na.rm=TRUE), kg_co2eq_head)) %>% # NA=0
+  ungroup()
+
+summary(ef_fao_gf)
+```
+
+
+Wrangle some more and save:
+```{r}
+
+buffaloes_milk <- filter(ef_fao_gf, Item=="Buffaloes") %>%
+  mutate(species = "buffaloes") %>%
+  mutate(product = "milk") %>%
+  select(iso3c, species, product, kg_co2eq_head)
+buffaloes_meat <- buffaloes_milk %>%
+  mutate(product = "meat") 
+
+chickens <- expand.grid(iso3c = un$iso3c, species = "chickens", product = c("meat", "eggs", "eggs&meat")) 
+chickens$kg_co2eq_head <- 0
+
+pigs_meat <- filter(ef_fao_gf, Item %in% c("Swine, breeding", "Swine, market")) %>% 
+  pivot_wider(names_from = Item, values_from = kg_co2eq_head) %>%
+  rowwise() %>%
+  mutate(kg_co2eq_head = (`Swine, breeding`*0.1 + `Swine, market`*0.9)) %>%
+  mutate(species = "pigs") %>%
+  mutate(product = "meat") %>%
+  select(iso3c, species, product, kg_co2eq_head)
+
+cows_milk <- filter(ef_fao_gf, Item=="Cattle, dairy") %>% 
+  mutate(species = "cows") %>%
+  mutate(product = "milk") %>%
+  select(iso3c, species, product, kg_co2eq_head)
+cows_meat <- filter(ef_fao_gf, Item=="Cattle, non-dairy") %>%
+  mutate(species = "cows") %>%
+  mutate(product = "meat") %>%
+  select(iso3c, species, product, kg_co2eq_head)
+
+sheep_milk <- filter(ef_fao_gf, Item=="Sheep") %>% 
+  mutate(species = "sheep") %>%
+  mutate(product = "milk") %>%
+  select(iso3c, species, product, kg_co2eq_head)
+sheep_meat <- sheep_milk %>%
+  mutate(product = "meat")
+
+goats_milk <- filter(ef_fao_gf, Item=="Goats") %>% 
+  mutate(species = "goats") %>%
+  mutate(product = "milk") %>%
+  select(iso3c, species, product, kg_co2eq_head)
+goats_meat <- goats_milk %>%
+  mutate(product = "meat")
+
+ef_all <- rbind(buffaloes_milk, buffaloes_meat, chickens,
+                        pigs_meat, cows_meat, cows_milk, sheep_meat, sheep_milk, goats_milk, goats_meat)
+table(ef_all$product, ef_all$species)
+
+write_csv(ef_all, here("animal_farm/ghg/data/enteric_fermentation_em_rates_gf.csv"))
+
+```
+
+
+```{r}
+
+livestock <- read_csv(here("animal_farm/ghg/data/enteric_fermentation_em_rates_gf.csv"))
+
+library(doParallel)
+
+map_df_list <- list.files(file.path(prep, "animal_farm/farm"), pattern = "location_df",  full = TRUE)
+
+registerDoParallel(5)   
+foreach(file = map_df_list)  %dopar%  {
+
+      #file <- map_df_list[11]
+     
+    ## grab the names of all the parts from the file
+    animal_name <- str_split(str_split(file, pattern = "/")[[1]][11], pattern = "_")[[1]][1]
+    system_name <- str_split(str_split(file, pattern = "/")[[1]][11], pattern = "_")[[1]][2]
+    product_name <- str_split(str_split(file, pattern = "/")[[1]][11], pattern = "_")[[1]][3]
+
+    ### each animal group has slightly different map_df, so we need to specify the column types for each
+    
+    if(animal_name == "chickens"){
+      col_type = c("ddnnnccnnccncnnc")
+      
+      }else{
+      if(animal_name %in% c("goats", "sheep", "cows", "buffaloes")) {    
+      col_type = c("ddccccn")
+        
+      }else{
+        ## this is pigs
+        (col_type = c("ddcccnnnnncn")) } } 
+    
+    ## read in the map_df we want
+    map_df <- read_csv(file, col_types = col_type) %>% 
+      select(x, y, iso3c, current = contains("current")) 
+      
+    cat(if(dim(map_df)[1] != 9331200)("merge of data went wrong"))  
+    em <- livestock %>% 
+      filter(species == animal_name,
+               product == product_name)
+    
+    map_em <- left_join(map_df, em, by = "iso3c") %>% 
+      mutate(tonnes_em = kg_co2eq_head * current * 0.001) %>% 
+      select(x,y, tonnes_em) %>% 
+      rasterFromXYZ(crs = food_crs)
+    
+        cat(if(ncell(map_em) != 9331200)("merge of data went wrong"))  
+        
+    writeRaster(map_em, filename = paste(prep, "animal_farm/ghg/", animal_name, "_", system_name, "_", product_name, "_enteric_fermentation.tif", sep = ""), format = "GTiff", overwrite = TRUE)
+    
+}
+
+```
+
+
+

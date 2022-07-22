@@ -1,0 +1,91 @@
+---
+title: "GeNuS Compiling"
+author: "Juliette"
+date: "3/4/2021"
+output: html_document
+---
+
+The GeNUS data base has information about nutritional values of various species. The data is collected from US, Asean, India, Latin, NEAsia, Old Africa, West Africa.
+
+Paper reference:
+https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0146976#pone.0146976.ref023
+
+Dataset reference:
+https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/GNFVTT
+
+
+```{r setup, include=FALSE}
+
+library(here)
+source(here("_workflow/common.R"))
+
+'%!in%' <- function(x,y)!('%in%'(x,y))
+
+```
+
+
+Create a list of all the general fish categies in the dataset
+```{r}
+fish_categories <- c("Freshwater Fish",
+                "Pelagic Fish", 
+                "Demersal Fish" , 
+                "Marine Fish; Other", 
+                "Crustaceans", 
+                "Cephalopods",   
+                "Molluscs; Other", 
+                "Aquatic Animals; Others", 
+                "Demersal Fish")
+```
+
+
+```{r}
+
+files <- list.files(here("_efficiency/data/GENuS/"), pattern = ".csv", full.names = TRUE)
+compiled <- data.frame(GENuS_foodID = NA, GENuS_FoodName = NA, FCT_FoodName = NA, Calories = NA, Protein = NA, Region = NA)
+
+for(region_file in files) {
+  
+ # region_file <- files[7]
+  region <- substr(region_file, 70, 100) %>% 
+    str_remove("Foods_v2.csv") %>% 
+    str_remove("_v2.csv")
+  
+  region_df <- read_csv(region_file) %>% 
+    filter(GENuS_FoodName %in% fish_categories) %>% 
+    select(GENuS_foodID, GENuS_FoodName, FCT_FoodName, Calories, Protein) %>% 
+    mutate(Region = region)
+  
+  compiled <- rbind(compiled, region_df)
+  
+  return(compiled)
+}
+
+save_compiled <- unique(compiled) %>% 
+  filter(!is.na(Region)) 
+
+#write_csv(save_compiled, here("_efficiency/data/genus_compiled_fisheries.csv"))
+
+```
+
+
+Let's do a little exploration of this data
+```{r}
+
+# remove <- c("raw" , "w/ skin")
+# mutate(name_clean = str_remove(FCT_FoodName, paste(remove, collapse = "|")))
+
+wrangle_compiled <- save_compiled %>% 
+  separate(FCT_FoodName, c("main_name", "rest"), sep = ",")
+
+unique_names <- unique(wrangle_compiled$main_name)
+length(unique(unique_names))
+#528
+
+```
+
+see if there is a relationship
+```{r}
+ggplot(save_compiled, aes(x = Calories, y = Protein))+
+  geom_point()+
+  geom_smooth(method = "lm")
+```

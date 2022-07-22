@@ -1,0 +1,86 @@
+---
+title: "Extended Data Figs. 3 to 7"
+output: 
+  pdf_document:
+  fig_width: 7.20472
+  fig_height: 6.3
+  fig.align: "center"
+  mainfont: Helvetica
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+library(tidyverse)
+library(here)
+library(stringr)
+library(cowplot)
+library(png)
+library(grid)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+```
+
+```{r, echo = FALSE, fig.dim = c(7.2, 6.3)}
+img3 <- readPNG(here("_analysis/figures/extended_data/output/ed_fig_3.png"))
+grid.raster(img3)
+```
+
+**Extended Data Fig. 3:** The proportional contribution of each pressure to the cumulative pressure across all included food types. 
+
+\newpage
+
+```{r, warning = FALSE, echo = FALSE, message = FALSE, fig.dim = c(7.2, 6.3)}
+img4 <- readPNG(here("_analysis/figures/extended_data/output/ed_fig_4_circle_country.png"))
+grid.raster(img4)
+```
+
+**Extended Data Fig. 4:** Proportional contribution of each pressure to the cumulative food footprint in each country, summed across all foods. These countries collectively account for about 28% of pressure from food production (top countries are presented in Fig. 2a in the text). Stacked bars show the proportional contribution of marine (lighter colours, calculated as the Exclusive Economic Zone) and terrestrial (darker colours) pressures from all foods combined, including the high seas (labelled red).  
+
+\newpage
+    
+```{r, warning = FALSE, echo = FALSE, message = FALSE, fig.dim = c(7.2, 6.3)}
+img5 <- readPNG(here("_analysis/figures/extended_data/output/ed_fig_5_circle_foods.png"))
+grid.raster(img5)
+```
+
+**Extended Data Fig. 5:** Proportional contribution of each food group to the cumulative food footprint in each country. These countries collectively account for about 28% of pressure from food production (top countries are presented in Fig. 2b in the text). Stacked bars are the proportional contribution of each major food group, including feed for livestock and aquaculture, summed for all four pressures in each country and the high seas.
+
+\newpage
+ 
+```{r, warning = FALSE, echo = FALSE, message = FALSE, fig.dim = c(7.2, 6.3)}
+img6a <- readPNG(here("_analysis/figures/extended_data/output/ed_fig_3_kcal_efficiency.png"))
+grid.raster(img6a)
+```
+
+**Extended Data Fig. 6a:** Environmental efficiency (cumulative environmental pressure per million kcal produced) for major food types. Larger values represent less efficient foods. Each point is a country (jittered for visibility), with median and interquartile range indicated by the boxes. Plots to the right show extreme positive values and are on separate scales. Feed is not included in livestock primary and secondary products or mariculture. 
+
+\newpage
+
+```{r, warning = FALSE, echo = FALSE, message = FALSE, fig.dim = c(7.2, 6.3)}
+img6b <- readPNG(here("_analysis/figures/extended_data/output/ed_fig_4_tonnes_efficiency.png"))
+grid.raster(img6b)
+```
+
+**Extended Data Fig. 6b:** Environmental efficiency (cumulative environmental pressure per tonne of protein produced) for major food types. Larger values represent less efficient foods. Each point is a country (jittered for visibility), with median and interquartile range indicated by the boxes. Plots to the right show extreme positive values and are on separate scales. Feed is not included in livestock primary and secondary products or mariculture.  
+
+\newpage
+ 
+
+```{r, warning = FALSE, echo = FALSE, message = FALSE, fig.dim = c(7.2, 6.3)}
+img7a <- readPNG(here("_analysis/figures/extended_data/output/ed_fig_7a_data_quality_assessment.png"))
+grid.raster(img7a)
+```
+
+**Extended Data Fig. 7a:** Data quality assessment of each food system and pressure scored on a scale ranging from 1-5. Data quality was assessed using a bottom-up approach, where each data source was scored on spatial resolution, spatial extent, system specificity, and temporal accuracy. 
+
+\newpage
+
+
+```{r, warning = FALSE, echo = FALSE, message = FALSE, fig.dim = c(7.2, 6.3)}
+img7b <- readPNG(here("_analysis/figures/extended_data/output/ed_fig_7b_data_quality_assessment_full.png"))
+grid.raster(img7b)
+```
+
+**Extended Data Fig. 7b:** Data quality assessment breakdown for each food system, pressure, and score 
+scored on a scale from 1-5. Data quality was assessed using a bottom-up approach, 
+where each data source was scored on spatial resolution, spatial extent,
+system specificity, and temporal accuracy.  

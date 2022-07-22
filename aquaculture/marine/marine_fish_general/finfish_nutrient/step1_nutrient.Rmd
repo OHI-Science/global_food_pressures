@@ -1,0 +1,335 @@
+---
+title: "marine_fish_general_nutrient_pollution"
+author: "Gage Clawson (NCEAS, UCSB, OHI)"
+date: 12/22/2020
+output: 
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_depth: 3
+    toc_float: yes
+    includes: 
+toc: true
+---
+
+This markdown uses models and species specific parameters from the paper *Hindcasts and Future Projections of Global Inland and Coastal Nitrogen and Phosphorus Loads Due to Finfish Aquaculture* (2013 Bouwman et al)
+
+## Set up
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(sf)
+library(raster)
+library(readr)
+library(data.table)
+library(here())
+
+source(here("_spatial/template_raster.R"))
+
+path_prep <- "/home/shares/food-systems/Food_footprint/all_food_systems/dataprep/aquaculture/marine/marine_fish_general"
+path_final <-"/home/shares/food-systems/Food_footprint/all_food_systems/datalayers"
+
+production <- read_csv(file.path(path_prep, "updated/marine_fish_general_farm_updated.csv"))
+food_raster <- raster(nrows=2160, ncols=4320, xmn=-180, xmx=180, ymn=-90, ymx=90)
+```
+
+
+Because we have multiple values and species for nutrient pollution for general marine fish, we will have to do this analysis in a series of steps. Workflow will follow these rules: 
+
+1. Apply the general pelagic species pollution numbers to areas with those species
+2. Any remaining species apply the regional values for Asia and Europe
+3. Any remaining species or areas that don't fall in the above steps, take the average of the Asia and Europe nutrient pollution values. 
+
+Steps: 
+1. Multiply tonnes production by 0.95 (this corrects for the growth that occurs outside the seapen on land), this is the value Lex uses
+2. Then multiply growth by the N value and the P value
+3. We report in total excess nutrient: add N and P together.
+4. We report in tonnes, so divide by 1000. Save N tonnes, P tonnes, and N + P tonnes layers.
+
+
+**Numbers for each category:** 
+Other finfish - pelagics:  Amberjacks, nei, Cobia, Japanese amberjacks
+N = 152, P = 25	P assumes 
+
+Other finfish - coastal, Europe: 
+N = 80, P =	16	
+
+Other finfish - coastal, Asia:
+N = 112, P = 18	
+
+
+```{r}
+fao <- read.csv(here("aquaculture/data/fao_mariculture_clean.csv")) %>%
+  filter(environment %in% c("Marine", "Brackishwater"))
+
+
+## Read in fao data and get a species list for salmon
+species_list <- read.csv(here("aquaculture/marine/STEP1_species_groups/int/marine_groups.csv"))  %>%
+  distinct(species, aq_group)
+
+# the list of species we are including
+finfish_list <- species_list$species[species_list$aq_group=="marine_fish_general"]
+finfish_list
+
+## write out shrimp taxa and production for Juliette
+fao_finfish_taxa_prod <- fao %>%
+  filter(species %in% finfish_list) %>%
+  filter(!is.na(value)) %>%
+  arrange(-value, country) %>%
+  filter(value>=500) %>%  # countries with less do not appear to be stable producers at this point
+  group_by(country, iso3c, species, year) %>%
+  dplyr::filter(year == 2017) %>%
+  summarize(fao_tonnes_production = sum(value)) %>%
+  arrange(country, iso3c, species, year)
+
+unique(fao_finfish_taxa_prod$iso3c)
+
+## set up lists of different regions
+asia <- c("BGD", "CHN", "HKG", "IDN", "IND", "JPN", "KHM", "KOR", "MYS", "PHL", "SGP", "THA", "TWN", "VNM")
+
+europe <- c("ALB", "HRV", "CYP", "FRA", "GRC", "ITA", "MLT", "NOR", "PRT", "ESP", "TUR") 
+
+other <- c("AUS", "CRI", "EGY", "IRN", "ISR", "MUS", "MEX", "PAN", "SAU", "TUN", "ARE", "USA")
+
+## Now we need to get the proportion of catch that falls into each species category (i.e. pelagic or non-pelagic) 
+prop_df <- fao_finfish_taxa_prod %>%
+  dplyr::mutate(species_cat = ifelse(str_detect(species, "obia|mberjack|Marine fishes nei"), "pelagic", "non_pelagic")) %>%
+  group_by(iso3c, species_cat) %>%
+  summarise(tonnes = sum(fao_tonnes_production)) %>%
+  ungroup() %>%
+  group_by(iso3c) %>%
+  mutate(total_tonnes = sum(tonnes)) %>%
+  ungroup()
+
+prop_pel_df <- prop_df %>%
+  dplyr::filter(species_cat == "pelagic") %>%
+  dplyr::mutate(prop_pelagic = tonnes/total_tonnes) %>%
+  dplyr::mutate(prop_non_pelagic = 1-prop_pelagic) %>%
+  dplyr::select(iso3c, prop_pelagic, prop_non_pelagic, total_tonnes) %>%
+  dplyr::filter(prop_pelagic == 1)
+
+prop_non_pel_df <- prop_df %>%
+  dplyr::filter(species_cat == "non_pelagic") %>%
+  dplyr::mutate(prop_non_pelagic = tonnes/total_tonnes) %>%
+  dplyr::mutate(prop_pelagic = 1-prop_non_pelagic) %>%
+  dplyr::select(iso3c, prop_pelagic, prop_non_pelagic, total_tonnes)
+
+prop_total_iso3c <- rbind(prop_pel_df, prop_non_pel_df) ## rbind them 
+
+sum(prop_total_iso3c$total_tonnes) # 3901214
+sum(fao_finfish_taxa_prod$fao_tonnes_production) # 3901214
+
+
+## Read in production data 
+production_sf <- st_read(file.path(path_prep, "updated/prod_data_by_cell_iso3c.shp")) %>%
+  dplyr::rename("tonnes_per_farm" = "tnns_p_")
+
+## join with our proportion data so that we can get tonnes of pelagic and tonnes of non-pelagic per farm 
+production_spp_props <- production_sf %>%
+  left_join(prop_total_iso3c, by = "iso3c") %>%
+  dplyr::mutate(tonnes_pelagic = prop_pelagic*tonnes_per_farm, 
+                tonnes_non_pelagic = prop_non_pelagic*tonnes_per_farm)
+
+## Now we can do the actual analysis outlined above
+
+nutrient_data <- production_spp_props %>%
+  dplyr::mutate(tonnes_pelagic_growth = tonnes_pelagic*0.95,
+                tonnes_non_pelagic_growth = tonnes_non_pelagic*0.95) %>%   ## multiply by 0.95 to correct for growth outside seapen
+  
+  dplyr::mutate(N_poll_pel = tonnes_pelagic_growth*152,
+                P_poll_pel = tonnes_pelagic_growth*25,
+                N_poll_non_pel = case_when(
+                  iso3c %in% asia ~ tonnes_non_pelagic_growth*112,
+                  iso3c %in% europe ~ tonnes_non_pelagic_growth*80,
+                  iso3c %in% other ~ tonnes_non_pelagic_growth*96
+                ),
+                P_poll_non_pel = case_when(
+                  iso3c %in% asia ~ tonnes_non_pelagic_growth*18,
+                  iso3c %in% europe ~ tonnes_non_pelagic_growth*16,
+                  iso3c %in% other ~ tonnes_non_pelagic_growth*17
+                )) %>%  ## get all of out pollution values by species group and region
+  
+  dplyr::mutate(N_poll = N_poll_pel + N_poll_non_pel,
+                P_poll = P_poll_pel + P_poll_non_pel) %>% ## get total pollution values for each cell in kg
+  
+  # dplyr::mutate(po4eq_kg = N_poll*0.42 + P_poll*3.07) %>% ## get po4eq: cut this (01/14/2021)
+  
+  dplyr::mutate(total_N_P_t = (N_poll + P_poll)/1000,
+                N_poll_t = N_poll/1000, 
+                P_poll_t = P_poll/1000) %>%
+  dplyr::select(total_N_P_t, N_poll_t, P_poll_t, geometry)
+
+sum(nutrient_data$total_N_P_t) # 509062.5
+
+
+
+## Save final N+P layer
+finfish_raster_check <- rasterize(nutrient_data, food_raster, field = "total_N_P_t", fun=sum)
+plot(log(finfish_raster_check+1))
+cellStats(finfish_raster_check, stat = "sum", na.rm = TRUE) # 509062.5
+
+
+finfish_raster <- rasterize(nutrient_data, food_raster, field = "total_N_P_t", fun=sum, background=0)
+plot(log(finfish_raster+1))
+
+finfish_raster_df <- as.data.frame(finfish_raster, xy=TRUE) %>%
+  dplyr::select(x,y, N_P_tonnes=layer)
+
+cellStats(finfish_raster, stat = "sum") # 509062.5
+sum(finfish_raster_df$N_P_tonnes) # 509062.5
+sum(nutrient_data$total_N_P_t, na.rm = TRUE) # 509062.5
+
+## save to dataprep folder with the correct naming conventions: 
+write.csv(finfish_raster_df, file.path(path_prep, "marine_fish_general_nutrient.csv"))
+
+
+final_rast <- rasterFromXYZ(finfish_raster_df, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+final_rast
+cellStats(final_rast, "sum") # 509062.5
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 509062.5
+final_rast
+
+## Save to datalayers 
+writeRaster(final_rast, file.path(path_final, "marine_marine-fish-general_aquaculture_meat_nutrient.tif"), overwrite = T)
+
+
+
+
+## Save final N layer
+finfish_raster_check <- rasterize(nutrient_data, food_raster, field = "N_poll_t", fun=sum)
+plot(log(finfish_raster_check+1))
+cellStats(finfish_raster_check, stat = "sum", na.rm = TRUE) # 436791.2
+
+
+finfish_raster <- rasterize(nutrient_data, food_raster, field = "N_poll_t", fun=sum, background=0)
+plot(log(finfish_raster+1))
+
+finfish_raster_df <- as.data.frame(finfish_raster, xy=TRUE) %>%
+  dplyr::select(x,y, N_tonnes=layer)
+
+cellStats(finfish_raster, stat = "sum") # 436791.2
+sum(finfish_raster_df$N_tonnes) # 436791.2
+sum(nutrient_data$N_poll_t, na.rm = TRUE) # 436791.2
+
+## save to dataprep folder with the correct naming conventions: 
+write.csv(finfish_raster_df, file.path(path_prep, "marine_fish_general_nutrient_N.csv"))
+
+
+final_rast <- rasterFromXYZ(finfish_raster_df, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+final_rast
+cellStats(final_rast, "sum") # 436791.2
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 436791.2
+final_rast
+
+## Save to datalayers 
+writeRaster(final_rast, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/marine_marine-fish-general_aquaculture_meat_nutrientN.tif"), overwrite = T)
+
+
+
+## Save final P layer
+finfish_raster_check <- rasterize(nutrient_data, food_raster, field = "P_poll_t", fun=sum)
+plot(log(finfish_raster_check+1))
+cellStats(finfish_raster_check, stat = "sum", na.rm = TRUE) # 72271.3
+
+
+finfish_raster <- rasterize(nutrient_data, food_raster, field = "P_poll_t", fun=sum, background=0)
+plot(log(finfish_raster+1))
+
+finfish_raster_df <- as.data.frame(finfish_raster, xy=TRUE) %>%
+  dplyr::select(x,y, P_tonnes=layer)
+
+cellStats(finfish_raster, stat = "sum") # 72271.3
+sum(finfish_raster_df$P_tonnes) # 72271.3
+sum(nutrient_data$P_poll_t, na.rm = TRUE) # 72271.3
+
+## save to dataprep folder with the correct naming conventions: 
+write.csv(finfish_raster_df, file.path(path_prep, "marine_fish_general_nutrient_P.csv"))
+
+
+final_rast <- rasterFromXYZ(finfish_raster_df, crs = food_crs)
+crs(final_rast)
+plot(final_rast)
+final_rast
+cellStats(final_rast, "sum") # 72271.3
+
+final_area_fix <- final_rast/raster::area(final_rast)
+
+final_rast_proj <- projectRaster(final_area_fix, food_raster, method = "ngb")
+
+final_rast <- final_rast_proj*raster::area(final_rast_proj)
+cellStats(final_rast, "sum") # 72271.3
+final_rast
+
+## Save to datalayers 
+writeRaster(final_rast, file.path("/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/marine_marine-fish-general_aquaculture_meat_nutrientP.tif"), overwrite = T)
+```
+
+Datacheck: 
+
+Values from this paper, table 7: https://www.tandfonline.com/doi/full/10.1080/10641262.2013.790340
+
+The paper doesn't include actually nutrient output estimates, but it doesn't really matter, since we just use the numbers provided for the nutrient output factors. There are no mistakes in the code, the numbers all make sense to me. 
+
+
+```{r}
+mf_nutrient_N <- read_csv(file.path(path_prep, "marine_fish_general_nutrient_N.csv"))
+sum(mf_nutrient_N$N_tonnes) # 435852.5 N tonnes
+
+mf_nutrient_P <- read_csv(file.path(path_prep, "marine_fish_general_nutrient_P.csv"))
+sum(mf_nutrient_P$P_tonnes) # 72113.4 P tonnes 
+
+sum(production$tonnes_production)
+## Total production is 3901214 tonnes for 2017
+
+## Used a tiered more specialized estimate of N and P pollution values:
+
+# 1. Apply the general pelagic species pollution numbers to areas with those species
+# Other finfish - pelagics:  Amberjacks, nei, Cobia, Japanese amberjacks
+# N = 152, P = 25	P assumes 
+
+# 2. Any remaining species apply the regional values for Asia and Europe
+# Other finfish - coastal, Europe: 
+# N = 80, P =	16	
+# 
+# Other finfish - coastal, Asia:
+# N = 112, P = 18	
+
+# 3. Any remaining species or areas that don't fall in the above steps, take the average of the Asia and Europe nutrient pollution values. 
+# N = 96, P = 17
+
+## do a check with the average of all of these
+# average overall N = 
+avg_n = (152 + 80 + 112)/3 # 114.6667
+avg_p = (25+16+18)/3 # 19.66667
+
+
+3901214*0.95*avg_n/1000 # 424972.2 N tonnes
+3901214*0.95*avg_p/1000 # 72887.68 P tonnes
+
+424972.2 + 72887.68 # 497859.9
+
+## Using the average of all of those numbers matches well to what we actually did... leading me to believe that nothing went wrong in the code. 
+
+final_rast <- raster(file.path(path_final, "marine_marine-fish-general_aquaculture_meat_nutrient.tif"))
+cellStats(final_rast, "sum") # 507965.9
+
+```
+

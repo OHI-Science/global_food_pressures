@@ -1,0 +1,260 @@
+---
+title: "livestock_production_maps"
+output: html_document
+---
+
+```{r}
+# getting packages we want
+library(here)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_spatial/template_raster.R"))
+library(janitor)
+```
+
+
+# Get files
+```{r}
+livestock_counts_path <- "/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/livestock_counts"
+
+livestock_counts_paths <- 
+  list.files(livestock_counts_path,
+             full.names = TRUE)
+
+fao_livestock_tonnes <- 
+  vroom(here("animal_farm/farm/data/fao_production.csv"))
+
+predatalayers_path <- "/home/shares/food-systems/Food_footprint/all_food_systems/predatalayers/"
+```
+
+# Cows/goats/sheep meat
+```{r}
+livestock_cell_prop <- 
+  livestock_counts_paths %>% 
+  str_subset("(cows|goats|sheep)_.*_meat") %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  raster_df() %>% 
+  left_join(., food_rgns_xy) %>% # add iso3c
+  group_by(iso3c) %>% 
+  mutate(cell_prop = index_1 / sum(index_1, na.rm = TRUE)) %>% 
+  ungroup()
+
+ruminant_meat <- 
+  fao_livestock_tonnes %>% 
+  filter(animal %in% c("cows", "goats", "sheep") & product == "meat") %>% 
+  group_by(iso3c) %>% 
+  summarise(fao_product_tonnes = sum(fao_product_tonnes, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  left_join(livestock_cell_prop, .) %>% 
+  mutate(localized_fao_tonnes = cell_prop * fao_product_tonnes) %>% 
+  select(x, y, localized_fao_tonnes) %>% 
+  rasterFromXYZ(crs = food_crs) 
+
+cellStats(ruminant_meat, stat = "sum")
+
+fao_livestock_tonnes %>% 
+  unite(col = food_system, c(animal, product), sep = "_") %>% 
+  filter(food_system %in% c("cows_meat",
+                            "sheep_meat",
+                            "goats_meat")) %>%
+  summarise(sum(fao_product_tonnes, na.rm = TRUE))
+
+writeRaster(ruminant_meat, 
+            file.path(predatalayers_path,
+                      "ruminant_meat_production.tif",
+                      fsep = ""),
+            format = "GTiff", 
+            overwrite = TRUE)
+```
+
+# Cows/goats/sheep milk
+```{r}
+livestock_cell_prop <- 
+  livestock_counts_paths %>% 
+  str_subset("(cows|goats|sheep)_.*_milk") %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  raster_df() %>% 
+  left_join(., food_rgns_xy) %>% # add iso3c
+  group_by(iso3c) %>% 
+  mutate(cell_prop = index_1 / sum(index_1, na.rm = TRUE)) %>% 
+  ungroup()
+
+ruminant_milk <- 
+  fao_livestock_tonnes %>% 
+  filter(animal %in% c("cows", "goats", "sheep") & product == "milk") %>% 
+  group_by(iso3c) %>% 
+  summarise(fao_product_tonnes = sum(fao_product_tonnes, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  left_join(livestock_cell_prop, .) %>% 
+  mutate(localized_fao_tonnes = cell_prop * fao_product_tonnes) %>% 
+  select(x, y, localized_fao_tonnes) %>% 
+  rasterFromXYZ(crs = food_crs)
+
+fao_livestock_tonnes %>% 
+  unite(col = food_system, c(animal, product), sep = "_") %>% 
+  filter(food_system %in% c("cows_milk",
+                            "sheep_milk",
+                            "goats_milk")) %>%
+  summarise(sum(fao_product_tonnes, na.rm = TRUE))
+
+cellStats(ruminant_milk, stat = "sum")
+
+writeRaster(ruminant_milk, 
+            file.path(predatalayers_path,
+                      "ruminant_milk_production.tif",
+                      fsep = ""),
+            format = "GTiff", 
+            overwrite = TRUE)
+```
+
+# Pigs meat
+```{r}
+livestock_cell_prop <- 
+  livestock_counts_paths %>% 
+  str_subset("pigs_.*_meat") %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  raster_df() %>% 
+  left_join(., food_rgns_xy) %>% # add iso3c
+  group_by(iso3c) %>% 
+  mutate(cell_prop = index_1 / sum(index_1, na.rm = TRUE)) %>% 
+  ungroup()
+
+fao_livestock_tonnes %>% 
+  filter(animal == "pigs" & product == "meat") %>% 
+  left_join(livestock_cell_prop, .) %>% 
+  mutate(localized_fao_tonnes = cell_prop * fao_product_tonnes) %>% 
+  select(x, y, localized_fao_tonnes) %>% 
+  rasterFromXYZ(crs = food_crs) %>% 
+  writeRaster(., 
+              file.path(predatalayers_path,
+                        "pigs_meat_production.tif",
+                        fsep = ""),
+              format = "GTiff", 
+              overwrite = TRUE)
+```
+
+# Chicken meat
+```{r}
+livestock_cell_prop <- 
+  livestock_counts_paths %>% 
+  str_subset("chickens_.*_meat") %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  raster_df() %>% 
+  left_join(., food_rgns_xy) %>% # add iso3c
+  group_by(iso3c) %>% 
+  mutate(cell_prop = index_1 / sum(index_1, na.rm = TRUE)) %>% 
+  ungroup()
+
+fao_livestock_tonnes %>% 
+  filter(animal == "chickens" & product == "meat") %>%  
+  left_join(livestock_cell_prop, .) %>% 
+  mutate(localized_fao_tonnes = cell_prop * fao_product_tonnes) %>% 
+  select(x, y, localized_fao_tonnes) %>% 
+  rasterFromXYZ(crs = food_crs) %>% 
+  writeRaster(., 
+              file.path(predatalayers_path,
+                        "chickens_meat_production.tif",
+                        fsep = ""),
+              format = "GTiff", 
+              overwrite = TRUE)
+```
+
+# Chicken eggs
+```{r}
+livestock_cell_prop <- 
+  livestock_counts_paths %>% 
+  str_subset("chickens_.*_eggs") %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  raster_df() %>% 
+  left_join(., food_rgns_xy) %>% # add iso3c
+  group_by(iso3c) %>% 
+  mutate(cell_prop = index_1 / sum(index_1, na.rm = TRUE)) %>% 
+  ungroup()
+
+fao_livestock_tonnes %>% 
+  filter(animal == "chickens" & product == "eggs") %>%  
+  left_join(livestock_cell_prop, .) %>% 
+  mutate(localized_fao_tonnes = cell_prop * fao_product_tonnes) %>% 
+  select(x, y, localized_fao_tonnes) %>% 
+  rasterFromXYZ(crs = food_crs) %>% 
+  writeRaster(., 
+              file.path(predatalayers_path,
+                        "chickens_eggs_production.tif",
+                        fsep = ""),
+              format = "GTiff", 
+              overwrite = TRUE)
+```
+
+# Buffalo milk
+```{r}
+livestock_cell_prop <- 
+  livestock_counts_paths %>% 
+  str_subset("buffaloes_.*_milk") %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  raster_df() %>% 
+  left_join(., food_rgns_xy) %>% # add iso3c
+  group_by(iso3c) %>% 
+  mutate(cell_prop = index_1 / sum(index_1, na.rm = TRUE)) %>% 
+  ungroup()
+
+fao_livestock_tonnes %>% 
+  filter(animal == "buffaloes" & product == "milk") %>%  
+  left_join(livestock_cell_prop, .) %>% 
+  mutate(localized_fao_tonnes = cell_prop * fao_product_tonnes) %>% 
+  select(x, y, localized_fao_tonnes) %>% 
+  rasterFromXYZ(crs = food_crs) %>% 
+  writeRaster(., 
+              file.path(predatalayers_path,
+                        "buffalo_milk_production.tif",
+                        fsep = ""),
+              format = "GTiff", 
+              overwrite = TRUE)
+```
+
+# data check
+```{r}
+production_files <- list.files(predatalayers_path,
+           pattern = "production.tif",
+           full.names = TRUE)
+
+production_files[!grepl(pattern = "marine", production_files)] %>% 
+  stack() %>% 
+  stackApply(., 1, fun = "sum") %>% 
+  cellStats(., stat = "sum")
+
+fao_livestock_tonnes %>% 
+  unite(col = food_system, c(animal, product), sep = "_") %>% 
+  filter(food_system %in% c("chickens_eggs",
+                            "chickens_meat",
+                            "cows_meat",
+                            "cows_milk",
+                            "buffaloes_milk",
+                            "pigs_meat",
+                            "sheep_milk",
+                            "sheep_meat",
+                            "goats_milk",
+                            "goats_meat")) %>%
+  group_by(food_system) %>% 
+  summarise(sum(fao_product_tonnes, na.rm = TRUE))
+
+fao_livestock_tonnes %>% 
+  unite(col = food_system, c(animal, product), sep = "_") %>% 
+  filter(food_system %in% c("chickens_eggs",
+                            "chickens_meat",
+                            "cows_meat",
+                            "cows_milk",
+                            "buffaloes_milk",
+                            "pigs_meat",
+                            "sheep_milk",
+                            "sheep_meat",
+                            "goats_milk",
+                            "goats_meat")) %>%
+  summarise(sum(fao_product_tonnes, na.rm = TRUE))
+```
+
