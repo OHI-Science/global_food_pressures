@@ -12,7 +12,7 @@ output:
 toc: true
 ---
 
-This markdown uses models and species specific parameters from the paper *Hindcasts and Future Projections of Global Inland and Coastal Nitrogen and Phosphorus Loads Due to Finfish Aquaculture* (2013 Bouwman et al)
+This markdown uses models and species specific parameters from the paper *Hindcasts and Future Projections of Global Inland and Coastal Nitrogen and Phosphorus Loads Due to Finfish Aquaculture* (Bouwman *et al.* 2013)
 
 ## Set up
 

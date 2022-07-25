@@ -14,5 +14,5 @@ Calculate the ghg emissions of tuna farming. We used [Parker *et al.* 2020](http
 | |Final dataset|ghg emissions measured in tCO<sub>2</sub>-eq/tLW |Output from STEP1_ghg_emissions.Rmd|
 
 ## Contributors
-[Gage](clawson@nceas.ucsb.edu)
+[Gage Clawson](clawson@nceas.ucsb.edu)
 @gclawson1

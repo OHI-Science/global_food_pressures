@@ -1,6 +1,6 @@
 # crustacean_ghg
 
-Calculate the ghg emissions of crustacean farming. We used [Parker *et al.* 2020](http://seafoodco2.dal.ca/)'s data to extract ghg emissions associated with live weight of crustacean from crustacean farming (we had to use the shrimp estimates for crustaceans, since there were no marine crustacean estimates). One factor that we considered adding was aquatic N<sub>2</sub>O emissions as discussed in [Hu *et al*., 2012](https://pubs.acs.org/doi/full/10.1021/es300110x) and [MacLoid *et al*., 2019](http://www.fao.org/3/ca7130en/ca7130en.pdf).
+Calculate the ghg emissions of crustacean farming. We used [Parker *et al.* 2020](http://seafoodco2.dal.ca/)'s data to extract ghg emissions associated with live weight of crustacean from crustacean farming (we had to use the shrimp estimates for crustaceans, since there were no marine crustacean estimates). One factor that we considered adding was aquatic N<sub>2</sub>O emissions as discussed in [Hu *et al*., 2012](https://pubs.acs.org/doi/full/10.1021/es300110x) and [MacLeod *et al*., 2019](http://www.fao.org/3/ca7130en/ca7130en.pdf).
 
 ## Scripts
 |File Name|Description|Output|
@@ -15,5 +15,5 @@ Calculate the ghg emissions of crustacean farming. We used [Parker *et al.* 2020
 
 ## Contributors
 
-[Gage](clawson@nceas.ucsb.edu)
+[Gage Clawson](clawson@nceas.ucsb.edu)
 @gclawson1

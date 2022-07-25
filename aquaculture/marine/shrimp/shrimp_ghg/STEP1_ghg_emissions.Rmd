@@ -18,7 +18,7 @@ This markdown calculates the GHG emissions from shrimp aquaculture.
 # Data information
 We used [Seafood Carbon Emissions Tool data](http://seafoodco2.dal.ca/) to extract ghg emissions associated with carcass weight of shrimp from shrimp farming (we used the estimate from Whiteleg shrimp, since it was the exact same as the Giant Tiger Prawn, the only other shrimp/prawn species present in the data).
 
-One factor that we added was aquatic N<sub>2</sub>O emissions as discussed in [Hu *et al*., 2012](https://pubs.acs.org/doi/full/10.1021/es300110x) and [MacLoid *et al*., 2019](http://www.fao.org/3/ca7130en/ca7130en.pdf).
+One factor that we added was aquatic N<sub>2</sub>O emissions as discussed in [Hu *et al*., 2012](https://pubs.acs.org/doi/full/10.1021/es300110x) and [MacLeod *et al*., 2019](http://www.fao.org/3/ca7130en/ca7130en.pdf).
 
 
 # Methods 

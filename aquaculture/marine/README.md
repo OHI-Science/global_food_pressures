@@ -36,8 +36,12 @@ I completed the species folders in the following order:
    - crustacean_disturbance
    - crustacean_nutrient
    - crustacean_water
+   
+   
+Root directory: 
+ - production_rasters_extract.Rmd; extracts production from rasters to avoid reporting mismatches when calculating efficiency. 
  
- The farm location and production data used in these scripts are taken from the [mariculture mapping project](https://github.com/OHI-Science/aquaculture_mapping/tree/main/marine) at NCEAS. 
+ The farm location and production data used in these scripts are taken from the [mariculture mapping project](https://github.com/OHI-Science/aquaculture_mapping/tree/main/marine) led by Gage Clawson. [Mapping the Spatial Distribution of Global Mariculute Production](https://doi.org/10.1016/j.aquaculture.2022.738066); Clawson et al. 2022
  
 Good luck! 
 

@@ -11,5 +11,5 @@ We used **Nitrogen and phosphorus budget in coastal and marine cage aquaculture 
 Taken from Islam 2005. 
 
 ## Contributors
-[Gage](clawson@nceas.ucsb.edu)
+[Gage Clawson](clawson@nceas.ucsb.edu)
 @gclawson1

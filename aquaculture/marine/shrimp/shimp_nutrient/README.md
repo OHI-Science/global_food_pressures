@@ -11,5 +11,5 @@ We used *Aquaculture Production is a Large, Spatially Concentrated Source of Nut
 Taken from Wang et al. 2020. 
 
 ## Contributors
-[Gage](clawson@nceas.ucsb.edu)
+[Gage Clawson](clawson@nceas.ucsb.edu)
 @gclawson1

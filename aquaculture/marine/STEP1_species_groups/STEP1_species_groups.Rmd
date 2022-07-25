@@ -58,7 +58,8 @@ write.csv(fao, here("aquaculture/data/fao_mariculture_clean.csv"), row.names=FAL
 ```
 
 
-## explore freshwater
+## explore freshwater data 
+
 ```{r}
 
 fao <- read_csv("aquaculture/data/fao_mariculture_clean.csv")
@@ -78,8 +79,9 @@ write.csv(fw, "aquaculture/marine/STEP1_species_groups/int/fw_spp.csv", row.name
 ```
 
 
-## explore marine
-```{r}
+## Prep marine data
+
+```{r} 
 
 marine <- fao %>%
   filter(environment %in% c("Marine", "Brackishwater")) %>%

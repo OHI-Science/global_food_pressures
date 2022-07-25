@@ -11,5 +11,5 @@ We used *Hindcasts and Future Projections of Global Inland and Coastal Nitrogen 
 Taken from Bouwman *et al.* 2013. 
 
 ## Contributors
-[Gage](clawson@nceas.ucsb.edu)
+[Gage Clawson](clawson@nceas.ucsb.edu)
 @gclawson1

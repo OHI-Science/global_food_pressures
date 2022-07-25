@@ -5,6 +5,8 @@ output: html_document
 
 Prep the aquaculture stewardship data and save as a shp to use for the different species groups.
 
+Source: https://www.asc-aqua.org/
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
