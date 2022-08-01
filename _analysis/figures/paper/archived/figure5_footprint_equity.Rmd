@@ -1,0 +1,263 @@
+---
+title: 'Figure 6: Food footprint equity'
+author: "Juliette"
+date: "11/17/2020"
+output: html_document
+---
+
+Figure 6. Food footprint equity. Plot per capita country-level CI, CI vs. nutritional status (indicator), economic development status (or Gini Index?), food security index
+
+NOTE: I have not gapfilled any of these figures yet
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(hrbrthemes)
+library(naniar)
+library(plotly)
+library(patchwork)
+library(ggrepel)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+rgns <- raster(file.path(prep, "spatial/gall_peters/land_eez_rgns_gall_peters.tif"))
+#plot(rgns)
+
+chi <- raster("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/cumulative_stress/all_systems_cumulative_stress.tif")
+plot(log(1+chi))
+
+country_population <- read_csv(here("_analysis/figures/paper/data/population_region_count_2017.csv"))
+
+un_geopolitical <- read_csv(here("_spatial/_output/UNSD_Methodology.csv")) %>%
+  dplyr::select(iso3c, georegion=Region_Name)
+
+```
+
+```{r}
+
+country_summary <- zonal(chi, rgns, fun = 'sum') %>% 
+  data.frame() %>%
+  rename(ID_0 = zone, chi = sum) %>%
+  left_join(food_rgns, by="ID_0")
+
+##rgn 500 and 10 have no iso3 associated with them but have chi
+
+```
+
+Human Development Index compared to CI per captita
+```{r}
+hdi <- read_csv(here("_analysis/figures/paper/data/hdi_ungf.csv")) %>% 
+  left_join(country_summary, by = "iso3c") %>% 
+  select(-country)
+
+### per cap
+hdi_per_cap <- left_join(hdi, country_population, by = "iso3c") %>% 
+  mutate(ci_per_cap = chi/population,
+         ci_per_cap = ifelse(population == 0, 0, ci_per_cap)) %>% 
+  filter(!is.na(hdi_index)) %>% 
+  select(-Country) %>% 
+  left_join(un_geopolitical, by = "iso3c")
+
+## grab the top countries for CI/per cap and CI
+label_per_cap<- hdi_per_cap %>% 
+  arrange(-ci_per_cap) %>% 
+  head(7) %>% 
+  pull(country)
+
+label_CI <- hdi_per_cap %>% 
+  arrange(-chi) %>% 
+  head(5) %>% 
+  pull(country)
+
+labels <- c(label_per_cap, label_CI)
+
+hdi_per_cap <- hdi_per_cap %>% 
+  mutate(circle_outline = case_when(country %in% labels ~ "black",
+                                    T ~ "white"),
+         georegion_color = case_when(georegion == "Americas" ~ "#00A2CE",
+                                      georegion == "Africa" ~ "#B3331D",
+                                      georegion == "Oceania" ~ "#B6A756",
+                                      georegion == "Europe" ~ "#122753",
+                                      georegion == "Asia" ~ "#B86117"))
+
+
+hdi_plot <- ggplot(hdi_per_cap, aes(y = hdi_index, x = ci_per_cap)) +
+  geom_point(aes(fill = georegion_color, color = circle_outline,  size = chi), shape = 21)+
+ #       geom_smooth(aes(group = georegion, color = georegion_color), method = "lm", se = FALSE,  size = 0.5) +
+ theme_ipsum_es()+
+  theme(legend.position = "none")+
+  labs(title = "Human Development Index",
+       y = "HDI", x = "Cummulative Impact per capita")+
+   scale_color_identity() +
+  scale_fill_identity() +
+  geom_text_repel(aes(y = hdi_index, x = ci_per_cap, label = country), data = hdi_per_cap[hdi_per_cap$country %in% labels,], size = 3) +
+  scale_x_log10(breaks=c(0,20, 40, 70, 120, 240, 480, 960, 1920, 5000,13000),labels=c(0,20, 40, 70, 120, 240, 480, 960, 1920, 5000,13000))
+
+ggsave(here("_analysis/figures/paper/output/SI_hdi.jpg"),width = 9, height = 7, dpi=300)
+
+```
+
+
+
+Social Progress Index
+```{r}
+spi <- read_csv(here("_analysis/figures/paper/data/spi_ungf.csv")) %>% 
+  left_join(country_summary, by = "iso3c") %>% 
+  left_join(country_population, by = "iso3c") %>% 
+  left_join(un_geopolitical, by = "iso3c")
+
+spi_per_cap <- spi %>% 
+  mutate(ci_per_cap = chi/population,
+         ci_per_cap = ifelse(population == 0, 0, ci_per_cap)) %>% 
+  filter(!is.na(spi))
+
+## grab the labels
+label_per_cap<- spi_per_cap %>% 
+  arrange(-ci_per_cap) %>% 
+  head(11) %>% 
+  pull(Country)
+
+label_CI<- spi_per_cap %>% 
+  arrange(-chi) %>% 
+  head(5) %>% 
+  pull(Country)
+
+labels <- c(label_per_cap, label_CI)
+
+spi_per_cap <- spi_per_cap %>% 
+  mutate(circle_outline = case_when(Country %in% labels ~ "black",
+                                    T ~ "white"),
+         georegion_color = case_when(georegion == "Americas" ~ "#00A2CE",
+                                      georegion == "Africa" ~ "#B3331D",
+                                      georegion == "Oceania" ~ "#B6A756",
+                                      georegion == "Europe" ~ "#122753",
+                                      georegion == "Asia" ~ "#B86117"))
+
+## make the plot
+spi_plot <- ggplot(spi_per_cap, aes(y = spi, x = ci_per_cap, )) +
+  geom_point(aes(fill = georegion_color, color = circle_outline, size = chi), shape = 21)+
+ #     geom_smooth(aes(group = georegion, color = georegion_color), method = "lm", se = FALSE,  size = 0.5) +
+   theme_ipsum_es() +
+  theme(legend.position = "none")+
+  labs(title = "Social Progress Index",
+       y = "SPI", x = "Cummulative Impact per capita") +
+   scale_color_identity() +
+  scale_fill_identity() +
+  geom_text_repel(aes(y = spi, x = ci_per_cap, label = Country), data = spi_per_cap[spi_per_cap$Country %in% labels,], size = 3)+
+  scale_x_log10(breaks=c(0,20, 40, 70, 120, 240, 480, 960, 1920, 5000,13000),labels=c(0,20, 40, 70, 120, 240, 480, 960, 1920, 5000,13000))
+
+ggsave(here("_analysis/figures/paper/output/SI_spi.jpg"),width = 9, height = 7, dpi=300)
+
+```
+
+
+GINI Index
+
+```{r}
+gini <- read_csv(here("_analysis/figures/paper/data/gini_ungf.csv")) %>% 
+  left_join(country_summary, by = "iso3c") %>% 
+  left_join(country_population, by = "iso3c") %>% 
+  left_join(un_geopolitical, by = "iso3c")
+
+### per cap
+gini_per_cap <- gini %>% 
+mutate(ci_per_cap = chi/population,
+         ci_per_cap = ifelse(population == 0, 0, ci_per_cap)) %>% 
+  filter(!is.na(gini_index))
+
+## labels
+label_per_cap <- gini_per_cap %>% 
+  arrange(-ci_per_cap) %>% 
+  head(16) %>% 
+  pull(Country)
+
+label_CI<- gini_per_cap %>% 
+  arrange(-chi) %>% 
+  head(5) %>% 
+  pull(country)
+
+labels <- c(label_per_cap, label_CI)
+
+gini_per_cap <- gini_per_cap %>% 
+  mutate(circle_outline = case_when(country %in% labels ~ "black",
+                                    T ~ "white"),
+         georegion_color = case_when(georegion == "Americas" ~ "#00A2CE",
+                                      georegion == "Africa" ~ "#B3331D",
+                                      georegion == "Oceania" ~ "#B6A756",
+                                      georegion == "Europe" ~ "#122753",
+                                      georegion == "Asia" ~ "#B86117"))
+
+gini_plot <- ggplot(gini_per_cap, aes(y = gini_index, x = ci_per_cap)) +
+  geom_point(aes(fill = georegion_color, color = circle_outline, size = chi), shape = 21)+
+ #  geom_smooth(aes(group = georegion, color = georegion_color), method = "lm", se = FALSE,  size = 0.5) +
+   theme_ipsum_es() +
+  theme(legend.position = "none") + 
+  labs(title = "GINI Index",
+       y = "GINI", x = "Cummulative Impact per capita") +
+  scale_color_identity() +
+  scale_fill_identity() +
+  geom_text_repel(aes(y = gini_index, x = ci_per_cap, label = country), data = gini_per_cap[gini_per_cap$country %in% labels,], size = 3)+
+  scale_x_log10(breaks=c(0,20, 40, 70, 120, 240, 480, 960, 1920, 5000,13000),labels=c(0,20, 40, 70, 120, 240, 480, 960, 1920, 5000,13000))
+
+ggsave(here("_analysis/figures/paper/output/SI_gini.jpg"),width = 9, height = 7, dpi=300)
+
+```
+
+
+Food Security Index
+
+```{r}
+fsi <- read_csv(here("_analysis/figures/paper/data/fsi_ungf.csv"))  %>% 
+  select(-Country) %>% 
+  left_join(country_summary, by = "iso3c") %>% 
+  left_join(country_population, by = "iso3c") %>% 
+  left_join(un_geopolitical, by = "iso3c")
+
+fsi_per_cap <- fsi %>% 
+  mutate(ci_per_cap = chi/population,
+         ci_per_cap = ifelse(population == 0, 0, ci_per_cap)) %>% 
+  filter(!is.na(fsi_score)) %>% 
+  select(-Country)
+
+## grab the labels
+label_per_cap<- fsi_per_cap %>% 
+  arrange(-ci_per_cap) %>% 
+  head(12) %>% 
+  pull(country)
+
+label_CI<- fsi_per_cap %>% 
+  arrange(-chi) %>% 
+  head(5) %>% 
+  pull(country)
+
+labels <- c(label_per_cap, label_CI)
+
+fsi_per_cap <- fsi_per_cap %>% 
+  mutate(circle_outline = case_when(country %in% labels ~ "black",
+                                    T ~ "white"),
+         georegion_color = case_when(georegion == "Americas" ~ "#00A2CE",
+                                      georegion == "Africa" ~ "#B3331D",
+                                      georegion == "Oceania" ~ "#B6A756",
+                                      georegion == "Europe" ~ "#122753",
+                                      georegion == "Asia" ~ "#B86117"))
+
+fsi_plot <- ggplot(fsi_per_cap, aes(y = fsi_score, x = ci_per_cap)) +
+  geom_point(aes(fill = georegion_color, color = circle_outline, size = chi), shape= 21)+
+ #   geom_smooth(aes(group = georegion, color = georegion_color), method = "lm", se = FALSE,  size = 0.5) +
+   theme_minimal() +
+  theme(legend.position = "none")+
+  labs(title = "Food Security Index",
+       y = "", x = "millionths of per capita cumulative pressure")+
+   scale_color_identity() +
+ scale_fill_identity() +
+  geom_text_repel(aes(y = fsi_score, x = ci_per_cap, label = country), data = fsi_per_cap[fsi_per_cap$country %in% labels,], size = 4)+
+  scale_x_log10(breaks=c(0,20, 40, 70, 120, 240, 480, 960, 1920, 3200),labels=c(0,20, 40, 70, 120, 240, 480, 960, 1920, 3200))
+
+fsi_plot
+
+ggsave(here("_analysis/figures/paper/output/figure_5_fsi.jpg"),width = 11, height = 7, dpi=300)
+  
+```
+
+

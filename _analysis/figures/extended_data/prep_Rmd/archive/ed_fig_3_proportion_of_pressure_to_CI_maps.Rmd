@@ -1,0 +1,184 @@
+---
+title: Map of % contribution of each pressure to the cumulative environmental footprint
+  for each location
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(rgdal)
+library(sp)
+library(sf)
+library(raster)
+library(tidyverse)
+library(here)
+library(cowplot)
+library(rnaturalearth)
+library(rnaturalearthdata)
+
+source(here("_analysis/figures/paper/colors_stressors_fig_1_2.R"))
+```
+
+```{r}
+## save the gall peters projection
+gall_peters <- "+proj=cea +lon_0=0 +x_0=0 +y_0=0 +lat_ts=45 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
+
+## create a water raster
+water <- readOGR(dsn = here("_analysis/raw/rgn_all_gcs_med_res.shp"))
+water <- water[!water$rgn_nam == "Antarctica",]
+proj4string(water) <- CRS("+proj=longlat +datum=WGS84")
+water <- spTransform(water, CRS("+proj=cea +lon_0=0 +x_0=0 +y_0=0 +lat_ts=45 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
+
+## create a land raster
+land <- ne_countries(scale = "medium", returnclass = "sp") 
+land <- land[!land$sov_a3 == "ATA",]
+land <- st_as_sf(land)
+land <- st_transform(land, crs = gall_peters)
+land <- as(land, "Spatial")
+
+n_global_cells <- 14208000
+```
+
+
+Map of % contribution of each pressure to the cumulative environmental footprint 
+for each location
+
+```{r}
+pressure_stack <- stack(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/stressor_summary/equal_area/rescaled/stressors", full=TRUE))
+
+pressure_df <- as.data.frame(pressure_stack, xy = TRUE)
+
+pressure_df_total <- 
+  pressure_df %>%
+  rowwise() %>% 
+  mutate(total = sum(c(disturbance, ghg, nutrient, water), na.rm = TRUE))
+
+pressure_df_prop <-
+  pressure_df_total %>%
+  rowwise() %>% 
+  mutate(disturbance_prop = disturbance / total,
+         ghg_prop         = ghg / total,
+         nutrient_prop    = nutrient / total,
+         water_prop       = water / total)
+
+pressure_df_prop[8:11][is.na(pressure_df_prop[8:11])] <- 0
+
+# 
+pressure_df_disturbance_xy <- 
+  pressure_df_prop %>%
+  dplyr::select(x, y, disturbance_prop) 
+
+pressure_df_nutrient_xy <- 
+  pressure_df_prop %>%
+  dplyr::select(x, y, nutrient_prop)
+
+pressure_df_water_xy <- 
+  pressure_df_prop %>%
+  dplyr::select(x, y, water_prop)
+
+pressure_df_ghg_xy <- 
+  pressure_df_prop %>%
+  dplyr::select(x, y, ghg_prop)
+  
+# Rasterize
+disturbance_raster <- rasterFromXYZ(pressure_df_disturbance_xy)
+ghg_raster         <- rasterFromXYZ(pressure_df_ghg_xy)
+water_raster       <- rasterFromXYZ(pressure_df_water_xy)
+nutrient_raster    <- rasterFromXYZ(pressure_df_nutrient_xy)
+
+# Visualize
+png(here("_analysis/figures/extended_data/output/ed_fig_3_disturbance.png"), 
+         res = 100, 
+         width = 16, 
+         height = 9, 
+         units = "in")
+par(oma=c(0,0,0,0)) # bottom, left, top, and right
+par(mfrow=c(1, 1), mar=c(1, 0, 3, 0))
+plot(water, main = 'Disturbance', adj = 0, cex.main = 4, border= "#F8F9FA", col="#F8F9FA", lwd=1.5)
+plot(land, border="#BCBEB1", col="#F8F9FA", lwd=0.8, add=TRUE)
+plot(disturbance_raster,
+     col = dist_palette,
+     legend.width = 2,
+     axis.args = list(cex = 3, cex.axis = 3, 
+                      at = c(0, 1),
+                      labels = c("0", "1")),  
+     add = TRUE)
+dev.off()
+
+png(here("_analysis/figures/extended_data/output/ed_fig_3_water.png"), 
+         res = 100, 
+         width = 16, 
+         height = 9, 
+         units = "in")
+
+par(oma=c(0,0,0,0),mfrow=c(1, 1), mar=c(1, 0, 3, 0))
+plot(water, main = 'Water', adj = 0, cex.main = 4, border= "#F8F9FA", col="#F8F9FA", lwd=1.5)
+plot(land, border="#BCBEB1", col="#F8F9FA", lwd=0.8, add=TRUE)
+plot(water_raster,
+     col = dist_palette,
+     legend.width = 2,
+     axis.args = list(cex = 3, 
+                      cex.axis = 3, 
+                      at = c(0, 0.995),
+                      labels = c("0", "1")), 
+     add = TRUE)
+dev.off()
+
+png(here("_analysis/figures/extended_data/output/ed_fig_3_nutrient.png"), 
+         res = 100, 
+         width = 16, 
+         height = 9, 
+         units = "in")
+par(oma=c(0,0,0,0),mfrow=c(1, 1), mar=c(1, 0, 3, 0))
+plot(water, main = 'Nutrient', adj = 0, cex.main = 4, border= "#F8F9FA", col="#F8F9FA", lwd=1.5)
+plot(land, border="#BCBEB1", col="#F8F9FA", lwd=0.8, add=TRUE)
+plot(nutrient_raster,
+     col = dist_palette,
+     legend.width=2,
+     axis.args = list(cex = 3, cex.axis = 3, 
+                      at = c(0, 0.936),
+                      labels = c("0", "1")),  
+     add = TRUE) 
+dev.off()
+
+png(here("_analysis/figures/extended_data/output/ed_fig_3_ghg.png"), 
+         res = 100, 
+         width = 16, 
+         height = 9, 
+         units = "in")
+par(oma=c(0,0,0,0)) # bottom, left, top, and right
+par(mfrow=c(1, 1), mar=c(1, 0, 3, 0))
+plot(water, main = 'GHG', adj = 0, cex.main = 4, border= "#F8F9FA", col="#F8F9FA", lwd=1.5)
+plot(land, border="#BCBEB1", col="#F8F9FA", lwd=0.8, add=TRUE)
+plot(ghg_raster,
+     col = dist_palette,
+     legend.width = 2,
+     axis.args = list(cex = 3, 
+                      cex.axis = 3, 
+                      at = c(0, 1),
+                      labels = c("0", "1")),  
+     add = TRUE)
+dev.off()
+```
+
+# Stitch
+```{r}
+  dist  <- ggdraw() + draw_image(here("_analysis/figures/extended_data/output/ed_fig_3_disturbance.png"))
+  
+  wat   <- ggdraw() + draw_image(here("_analysis/figures/extended_data/output/ed_fig_3_water.png"))
+  
+  nut   <- ggdraw() + draw_image(here("_analysis/figures/extended_data/output/ed_fig_3_nutrient.png"))
+  
+  ghg   <- ggdraw() + draw_image(here("_analysis/figures/extended_data/output/ed_fig_3_ghg.png"))
+
+  plot_grid(dist, ghg, wat, nut,
+            ncol = 2,
+            nrow = 2)
+  
+  ggsave(here("_analysis/figures/extended_data/output/ed_fig_3.png"), 
+     dpi = 100,
+     width = 16, 
+     height = 10, 
+     units = "in")
+```
+
+

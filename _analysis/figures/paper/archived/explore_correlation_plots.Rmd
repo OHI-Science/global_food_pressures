@@ -1,0 +1,121 @@
+---
+title: "Explore correlation plots"
+author: "Juliette"
+date: "5/14/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(hrbrthemes)
+library(RColorBrewer)
+library(colorspace)
+library(patchwork)
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+
+summary_df_raw <- read_csv(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw_df_summary/rgn_raw_summary.csv"))
+
+rescaling_values <- read_csv(here("_analysis/rescale_values.csv"))
+
+```
+
+
+```{r}
+summary_df <- summary_df_raw %>% 
+  group_by(iso3c, pressure) %>% 
+  dplyr::summarise(sum = sum(sum)) %>% 
+  left_join(rescaling_values) %>% 
+  mutate(rescaled = sum/global_total) %>% 
+  group_by(pressure) %>% 
+  ## just a check
+  mutate(check = sum(rescaled)) %>% 
+  ungroup()
+```
+
+df for plotting
+```{r}
+plot_df <- summary_df %>% 
+  select(iso3c, pressure, rescaled) %>% 
+  pivot_wider(names_from = pressure, values_from = rescaled) %>% 
+  add_column(filler_x = NA,
+             filler_y = NA,) 
+```
+
+
+```{r}
+
+cor_df <- plot_df%>% 
+  select(-iso3c)
+library(corrplot)
+c <- cor(plot_df)
+corrplot(c)
+ ## hm maybe not
+```
+
+
+Lets try making a scatterplot for each
+Now we are going to make 6 graphs
+wat-ghg
+wat-dis
+wat-np
+ghg-dis
+ghg-np
+dis-np
+```{r}
+
+np_wat <- ggplot(plot_df) +
+  geom_point(aes(x=water, y = nutrient)) +
+  coord_cartesian(xlim = c(0,0.25), ylim = c(0,0.25)) +
+  theme_minimal() +
+  geom_abline(intercept=0, slope=1, color="#BB7B80")
+
+np_ghg<- ggplot(plot_df) +
+  geom_point(aes(x=ghg, y = nutrient)) +
+  coord_cartesian(xlim = c(0,0.25), ylim = c(0,0.25)) +
+  theme_minimal()+
+  geom_abline(intercept=0, slope=1, color="#BB7B80")
+
+np_dis <- ggplot(plot_df) +
+  geom_point(aes(x=disturbance, y = nutrient)) +
+  coord_cartesian(xlim = c(0,0.25), ylim = c(0,0.25)) +
+  theme_minimal()+
+  geom_abline(intercept=0, slope=1, color="#BB7B80")
+
+wat_dis <- ggplot(plot_df) +
+  geom_point(aes(x=water, y = disturbance)) +
+  coord_cartesian(xlim = c(0,0.25), ylim = c(0,0.25)) +
+  theme_minimal()+
+  geom_abline(intercept=0, slope=1, color="#BB7B80")
+
+ghg_dis <- ggplot(plot_df) +
+  geom_point(aes(x=ghg, y = disturbance)) +
+  coord_cartesian(xlim = c(0,0.25), ylim = c(0,0.25)) +
+  theme_minimal()+
+  geom_abline(intercept=0, slope=1, color="#BB7B80")
+
+ghg_wat <- ggplot(plot_df) +
+  geom_point(aes(x=water, y = ghg)) +
+  coord_cartesian(xlim = c(0,0.25), ylim = c(0,0.25)) +
+  theme_minimal()+
+  geom_abline(intercept=0, slope=1, color="#BB7B80")
+
+filler <- ggplot(plot_df) +
+  geom_point(aes(x=filler_x, y = filler_y), color = "white") +
+  theme_void()
+
+
+## combine 
+
+combine <- (np_wat + np_ghg +np_dis)/
+           (wat_dis + ghg_dis +filler)/
+            (ghg_wat + filler +filler)
+
+ggsave(here::here("_analysis/figures/paper/output/explore_corr.png"), width = 10, height = 5, dpi=300)
+
+
+```
+
+

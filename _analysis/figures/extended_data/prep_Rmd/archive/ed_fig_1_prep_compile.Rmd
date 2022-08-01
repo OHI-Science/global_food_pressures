@@ -1,0 +1,114 @@
+---
+title: "ed_fig_1_prep_composite"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+library(tidyverse)
+library(here)
+library(future)
+library(furrr)
+library(cowplot)
+
+source(here("_workflow/common.R"))
+source(here("_workflow/common_spatial.R"))
+source(here("_analysis/figures/paper/colors_stressors_fig_1_2.R"))
+```
+
+# Extract lists
+```{r}
+food_list        <- 
+  str_extract(list.files("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/figures/SI_pressure_maps"),
+              pattern = "(?<=._).*(?=.tif)")
+
+food_list        <- na.omit(food_list)
+#food_list        <- food_list[!grepl(food_list, pattern = "buffaloes_milk|chickens_eggs&meat|chickens_eggs|fodd")]
+crop_list        <- unique(food_list[grepl(food_list, pattern = "crop")])
+livestock_list   <- unique(food_list[!grepl(food_list, pattern = "chickens|wildcaught|fisheries|aquaculture|crop")])
+CF_list          <- unique(food_list[grepl(food_list, pattern = "wildcaught|fisheries")])
+mariculture_list <- unique(food_list[grepl(food_list, pattern = "aquaculture")])
+list_without_fisheries <- c(crop_list, livestock_list, mariculture_list, "chickens_eggs&meat", "chickens_eggs", "chickens_meat")
+full_list        <- c(crop_list, livestock_list, CF_list, mariculture_list)
+setdiff(full_list, unique(food_list)) # should be zero.
+```
+
+# png_bundle
+```{r}
+png_bundle <- function(food) {
+
+ # food = list_without_fisheries[[1]]
+  
+    cpi   <- ggdraw() + draw_image(here(sprintf("_analysis/figures/extended_data/output/ed_fig_1_png/%s_cpi.png", food)))
+    
+    dist  <- ggdraw() + draw_image(here(sprintf("_analysis/figures/extended_data/output/ed_fig_1_png/%s_dist.png", food)))
+    
+    ghg   <- ggdraw() + draw_image(here(sprintf("_analysis/figures/extended_data/output/ed_fig_1_png/%s_ghg.png", food)))
+    
+    water <- ggdraw() + draw_image(here(sprintf("_analysis/figures/extended_data/output/ed_fig_1_png/%s_water.png", food)))
+    
+    nut   <- ggdraw() + draw_image(here(sprintf("_analysis/figures/extended_data/output/ed_fig_1_png/%s_nut.png", food)))
+  
+    bottom_row <- 
+      plot_grid(dist, ghg, 
+                water, nut,
+                ncol = 2,
+                nrow = 2)
+    
+    plot_grid(cpi, 
+              bottom_row,
+              nrow = 2)
+  
+    ggsave(here(sprintf("_analysis/figures/extended_data/output/ed_fig_1_png/%s_final.png", food)), 
+           dpi = 100,
+           width = 16, 
+           height = 18, 
+           units = "in")
+    
+}
+```
+
+# Map function
+```{r}
+options <- furrr_options(seed = 54232)
+future_map(list_without_fisheries, 
+           png_bundle,
+           .options = options)
+```
+
+# png_bundle_fisheries
+```{r}
+png_bundle_fisheries <- function(food) {
+  
+  # food = CF_list[[3]]
+
+    cpi   <- ggdraw() + draw_image(here(sprintf("_analysis/figures/extended_data/output/ed_fig_1_png/%s_cpi.png", food)))
+    
+    dist  <- ggdraw() + draw_image(here(sprintf("_analysis/figures/extended_data/output/ed_fig_1_png/%s_dist.png", food)))
+    
+    ghg   <- ggdraw() + draw_image(here(sprintf("_analysis/figures/extended_data/output/ed_fig_1_png/%s_ghg.png", food)))
+  
+    bottom_row <- 
+      plot_grid(dist, ghg, 
+                ncol = 2)
+    
+    plot_grid(cpi, 
+              bottom_row,
+              nrow = 2,
+              rel_heights = c(2,1))
+  
+    ggsave(here(sprintf("_analysis/figures/extended_data/output/ed_fig_1_png/%s_final.png", food)), 
+           dpi = 100,
+           width = 16, 
+           height = 14, 
+           units = "in")
+    
+}
+```
+
+```{r}
+
+
+future_map(CF_list, 
+           png_bundle_fisheries,
+           .options = options)
+```
