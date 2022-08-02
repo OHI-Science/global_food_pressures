@@ -18,7 +18,7 @@ library(colorspace)
 source(here("_workflow/common.R"))
 source(here("_workflow/common_spatial.R"))
 
-summary_df_raw <- read_csv(file.path("/home/shares/food-systems/Food_footprint/all_food_systems/analysis/raw_df_summary/rgn_raw_summary.csv"))
+summary_df_raw <- read_csv(file.path("_analysis/rgn_raw_summary.csv"))
 
 rescaling_values <- read_csv(here("_analysis/rescale_values.csv"))
 
